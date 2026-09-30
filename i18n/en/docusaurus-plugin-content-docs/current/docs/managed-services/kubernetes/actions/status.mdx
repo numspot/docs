@@ -1,0 +1,86 @@
+---
+title: Get the status of a Kubernetes cluster - Managed Kubernetes
+sidebar_label: Get the status of a Kubernetes cluster
+sidebar_position: 3
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Get the status of a Kubernetes cluster
+
+Get the status of your [Kubernetes clusters](/docs/managed-services/kubernetes/concepts/).
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **kubernetes.cluster.get**
+
+:::
+<Tabs>
+
+<TabItem value="console" label="Console" default>
+
+1. From the left-hand side menu, click **Managed Services** → **Kubernetes** to access the list of Kubernetes clusters.
+
+   ![Managed Services menu](/img/console/managed-services/en-menu-managed-services.png)
+
+2. The list of clusters is displayed with their status in the "Status" column.
+
+   ![List of Kubernetes clusters](/img/console/managed-services/kubernetes/en-kubernetes-cluster-list.png)
+
+3. Click the name of a cluster to access its details page.
+4. The status of the cluster is displayed in the page header, next to its name.
+
+   ![Cluster details with status](/img/console/managed-services/kubernetes/en-kubernetes-cluster-details-status.png)
+
+The status can take the following values:
+
+| Status | Description |
+|--------|-------------|
+| In progress | The cluster is operating normally |
+| Active | The cluster is operational |
+| Creating | The cluster is being created |
+| Deleting | The cluster is being deleted |
+| Failed | An error has occurred |
+| Pending | The cluster is pending |
+| Repairing | The cluster is being repaired |
+
+In the **General** section, you will find additional information:
+
+- **Creation date**: date and time the cluster was created
+- **Kubernetes version**: full version of the cluster
+- **Message**: detailed status message
+- **IP range**: CIDR range of the cluster
+- **Control plane size**: control plane profile
+
+</TabItem>
+
+<TabItem value="api" label="API">
+
+The `GET /kubernetes/spaces/{spaceId}/clusters/{clusterId}` request returns the current status of a Kubernetes cluster.
+
+**Example response**
+
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "name": "my-cluster-kubernetes",
+  "version": "1.34",
+  "fullVersion": "1.34.0",
+  "cidr": "10.0.0.0/16",
+  "profile": "small",
+  "visibility": "EXTERNAL",
+  "createdOn": "2026-04-05T10:30:00Z",
+  "status": {
+    "state": "RUNNING",
+    "message": "Cluster is healthy and operational"
+  }
+}
+```
+
+[See the full specification](/openapi/#tag/kubernetes/GET/kubernetes/spaces/{spaceId}/clusters/{clusterId})
+</TabItem>
+</Tabs>

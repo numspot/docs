@@ -1,0 +1,45 @@
+---
+title: Supprimer une registry Harbor
+sidebar_label: Supprimer une instance Harbor
+sidebar_position: 9
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer une instance Harbor
+
+Vous pouvez supprimer une registry Harbor au sein de votre espace, quel que soit son statut.
+
+:::warning
+Vérifiez que le Container Registry n'est pas en cours d'utilisation avant de le supprimer.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **registry.instance.delete**
+
+:::
+<Tabs>
+
+{/* </TabItem> */}
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+    La requête `DELETE /registry/spaces/{spaceId}/registries/{registryId}` permet de supprimer un Container Registry.
+    Le Container Registry passe dans l'état `deleting` le temps de la suppression.
+
+    ### Exemple de réponse
+
+    ```http
+    HTTP/1.1 204 No Content
+    ```
+
+    [Voir la spécification complète](/openapi/#tag/registry/DELETE/registry/spaces/{spaceId}/registries/{registryId})
+
+</TabItem>
+</Tabs>

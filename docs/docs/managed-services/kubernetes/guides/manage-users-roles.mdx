@@ -1,0 +1,479 @@
+---
+title: Gérer les utilisateurs et les rôles Kubernetes - Kubernetes managé
+sidebar_label: Gérer les utilisateurs et les rôles Kubernetes
+description: Gérer les utilisateurs et les rôles Kubernetes avec RBAC
+sidebar_position: 1
+draft: false
+---
+
+# Gérer les utilisateurs et les rôles Kubernetes
+
+Le service managé Kubernetes utilise RBAC (Role-Based Access Control) pour gérer les permissions d'un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/). Cette page explique comment créer et gérer les utilisateurs, les rôles et les permissions.
+
+:::note
+L'API Numspot fournit un `kubeconfig` avec des droits administrateur. La gestion fine des permissions s'effectue via des manifests Kubernetes.
+:::
+
+## Se connecter au cluster Kubernetes
+
+Avant de créer des utilisateurs ou des rôles, connectez-vous à votre cluster :
+
+```bash
+export KUBECONFIG=~/chemin/vers/kubeconfig
+kubectl get nodes
+```
+
+Pour télécharger le `kubeconfig`, consultez [Télécharger le kubeconfig](/docs/managed-services/kubernetes/actions/kubeconfig/).
+
+## Concepts RBAC
+
+### Composants RBAC
+
+| Composant | Portée | Description |
+| --- | --- | --- |
+| Role | Namespace | Permissions dans un namespace |
+| ClusterRole | Cluster | Permissions dans tout le cluster |
+| RoleBinding | Namespace | Lie un Role à un utilisateur/groupe |
+| ClusterRoleBinding | Cluster | Lie un ClusterRole à un utilisateur/groupe |
+
+### Utilisateurs et groupes
+
+Kubernetes distingue :
+
+- **Utilisateurs** : Comptes humains (gestion externe) ;
+- **ServiceAccounts** : Comptes pour les applications ;
+- **Groupes** : Collections d'utilisateurs.
+
+## Créer un Role {#creer-un-role}
+
+Un Role définit des permissions dans un namespace.
+
+### Syntaxe de base
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: <nom_role>
+  namespace: <namespace>
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+```
+
+### Exemples de Roles
+
+**Role lecture seule**
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: readonly
+  namespace: production
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets", "statefulsets"]
+  verbs: ["get", "list", "watch"]
+```
+
+**Role développeur**
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: developer
+  namespace: production
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "secrets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: [""]
+  resources: ["pods/log", "pods/exec"]
+  verbs: ["get"]
+```
+
+**Role administrateur namespace**
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: namespace-admin
+  namespace: production
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
+```
+
+## Créer un ClusterRole {#creer-un-clusterrole}
+
+Un ClusterRole définit des permissions à l'échelle du cluster.
+
+### Exemples de ClusterRoles
+
+**ClusterRole lecture seule cluster**
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cluster-readonly
+rules:
+- apiGroups: [""]
+  resources: ["nodes", "namespaces", "persistentvolumes"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses"]
+  verbs: ["get", "list", "watch"]
+```
+
+**ClusterRole visualiseur**
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: view
+rules:
+- apiGroups: [""]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["batch"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+```
+
+## Créer un ServiceAccount {#creer-un-serviceaccount}
+
+Les ServiceAccounts sont utilisés par les applications pour s'authentifier.
+
+### Créer un ServiceAccount {#creer-un-serviceaccount-sous-section}
+
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: app-sa
+  namespace: production
+```
+
+```bash
+kubectl apply -f serviceaccount.yaml
+```
+
+### Créer un ServiceAccount via CLI
+
+```bash
+kubectl create serviceaccount <nom> -n <namespace>
+```
+
+## Attribuer un rôle {#attribuer-un-role}
+
+### RoleBinding (namespace)
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: readonly-binding
+  namespace: production
+subjects:
+- kind: User
+  name: <utilisateur>
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: readonly
+  apiGroup: rbac.authorization.k8s.io
+```
+
+### ClusterRoleBinding (cluster)
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: cluster-view-binding
+subjects:
+- kind: User
+  name: <utilisateur>
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: view
+  apiGroup: rbac.authorization.k8s.io
+```
+
+### Attribuer à un ServiceAccount
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: app-sa-binding
+  namespace: production
+subjects:
+- kind: ServiceAccount
+  name: app-sa
+  namespace: production
+roleRef:
+  kind: Role
+  name: developer
+  apiGroup: rbac.authorization.k8s.io
+```
+
+## Modifier un utilisateur ou un rôle {#modifier-un-utilisateur-ou-un-role}
+
+### Modifier un Role
+
+```bash
+kubectl edit role <nom_role> -n <namespace>
+```
+
+### Modifier un ClusterRole
+
+```bash
+kubectl edit clusterrole <nom_clusterrole>
+```
+
+### Modifier un RoleBinding
+
+```bash
+kubectl edit rolebinding <nom_rolebinding> -n <namespace>
+```
+
+## Gérer les permissions {#gerer-les-permissions}
+
+### Vérifier les permissions
+
+```bash
+#Vérifier si un utilisateur peut effectuer une action
+kubectl auth can-i <verbe> <ressource> --as=<utilisateur> -n <namespace>
+
+#Exemples
+kubectl auth can-i create pods --as=dev-user -n production
+kubectl auth can-i delete secrets --as=dev-user -n production
+kubectl auth can-i list nodes --as=dev-user
+```
+
+### Lister les permissions d'un utilisateur
+
+```bash
+kubectl auth can-i --list --as=<utilisateur> -n <namespace>
+```
+
+### Révoquer des permissions {#revoquer-des-permissions}
+
+Supprimez le RoleBinding pour révoquer les permissions :
+
+```bash
+kubectl delete rolebinding <nom_rolebinding> -n <namespace>
+```
+
+## Supprimer un utilisateur ou un rôle {#supprimer-un-utilisateur-ou-un-role}
+
+### Supprimer un ServiceAccount
+
+```bash
+kubectl delete serviceaccount <nom> -n <namespace>
+```
+
+### Supprimer un Role
+
+```bash
+kubectl delete role <nom_role> -n <namespace>
+```
+
+### Supprimer un ClusterRole
+
+```bash
+kubectl delete clusterrole <nom_clusterrole>
+```
+
+### Supprimer un RoleBinding
+
+```bash
+kubectl delete rolebinding <nom_rolebinding> -n <namespace>
+```
+
+:::warning
+La suppression d'un Role ou ClusterRole est irréversible. Vérifiez qu'aucun RoleBinding ne dépend de ce rôle avant la suppression.
+:::
+
+## Bonnes pratiques
+
+### Principe du moindre privilège
+
+Accordez uniquement les permissions nécessaires :
+
+- Utilisez des Roles namespace plutôt que des ClusterRoles ;
+- Limitez les verbes (`get`, `list` plutôt que `*`) ;
+- Évitez les permissions `*` sur toutes les ressources.
+
+### Organisation des rôles {#organisation-des-roles}
+
+| Type d'utilisateur | Role recommandé |
+| --- | --- |
+| Développeur | Role dans namespace avec pods/deployments |
+| Ops | ClusterRole avec nodes/pvs en lecture |
+| Admin namespace | Role avec permissions étendues |
+
+### Rotation des identifiants
+
+Pour les ServiceAccounts :
+
+```bash
+# Créer un token temporaire pour le ServiceAccount
+kubectl create token <nom_sa> -n <namespace>
+```
+
+### Audit des accès {#audit-des-acces}
+
+Utilisez `kubectl` et les API Kubernetes pour auditer les rôles, les bindings, les ServiceAccounts et les permissions effectives.
+
+**Lister les rôles par namespace**
+
+```bash
+kubectl get roles --all-namespaces
+```
+
+**Lister les rôles cluster**
+
+```bash
+kubectl get clusterroles
+```
+
+**Lister les RoleBindings**
+
+```bash
+kubectl get rolebindings --all-namespaces
+```
+
+**Lister les ClusterRoleBindings**
+
+```bash
+kubectl get clusterrolebindings
+```
+
+**Lister les ServiceAccounts**
+
+```bash
+kubectl get serviceaccounts --all-namespaces
+```
+
+**Lister les sujets référencés dans les bindings**
+
+```bash
+kubectl get rolebindings,clusterrolebindings --all-namespaces -o json | jq '
+  .items[] | {
+    binding: .metadata.name,
+    namespace: .metadata.namespace,
+    role_kind: .roleRef.kind,
+    role_name: .roleRef.name,
+    subjects: (.subjects // [] | map({kind: .kind, name: .name, namespace: .namespace}))
+  }
+'
+```
+
+**Détailler les règles d'un Role ou ClusterRole**
+
+```bash
+kubectl describe role <nom_role> -n <namespace>
+kubectl describe clusterrole <nom_clusterrole>
+```
+
+**Vérifier les permissions d'un utilisateur**
+
+```bash
+kubectl auth can-i --list --as=<utilisateur> -n <namespace>
+```
+
+**Vérifier les permissions d'un ServiceAccount**
+
+```bash
+kubectl auth can-i --list --as=system:serviceaccount:<namespace>:<nom_sa> -n <namespace>
+```
+
+**Identifier les accès sensibles**
+
+```bash
+# Vérifier si un utilisateur peut créer des pods dans tous les namespaces
+kubectl auth can-i create pods --as=<utilisateur> --all-namespaces
+
+# Vérifier si un utilisateur peut lire les secrets dans tous les namespaces
+kubectl auth can-i get secrets --as=<utilisateur> --all-namespaces
+
+# Vérifier si un utilisateur peut lister les nodes
+kubectl auth can-i list nodes --as=<utilisateur>
+
+# Vérifier si un utilisateur peut créer des ClusterRoles
+kubectl auth can-i create clusterroles --as=<utilisateur>
+```
+
+## Audit et extraction des droits {#audit-et-extraction-des-droits}
+
+### Exporter toutes les règles RBAC
+
+```bash
+kubectl get roles,rolebindings,clusterroles,clusterrolebindings --all-namespaces -o yaml > rbac-backup.yaml
+```
+
+### Lister les accès par utilisateur
+
+```bash
+kubectl get rolebindings,clusterrolebindings --all-namespaces -o json | jq '.items[] | select(.subjects[]?.name != null) | {name: .metadata.name, namespace: .metadata.namespace, subjects: .subjects, roleRef: .roleRef}'
+```
+
+### Vérifier les accès sensibles
+
+```bash
+# Vérifier si l'utilisateur courant peut créer des pods dans tous les namespaces
+kubectl auth can-i create pods --all-namespaces
+
+# Vérifier si l'utilisateur courant peut lire les secrets dans tous les namespaces
+kubectl auth can-i get secrets --all-namespaces
+
+# Vérifier si l'utilisateur courant peut lister les nodes
+kubectl auth can-i list nodes
+```
+
+## Utilisation avec des systèmes externes
+
+### Intégration OIDC {#integration-oidc}
+
+Pour les déploiements critiques, configurez un fournisseur d'identité externe OIDC (OpenID Connect) pour l'authentification des utilisateurs.
+
+### Bastion et proxy
+
+Pour les architectures sensibles, utilisez un bastion SSH ou un proxy d'accès :
+
+- Centralisez les connexions ;
+- Appliquez des logs d'audit ;
+- Implémentez une authentification MFA.
+
+## Limitations
+
+| Action | Support |
+| --- | --- |
+| Télécharger le kubeconfig | Via l'API ou la console |
+| Créer des Roles | Via kubectl uniquement |
+| Créer des ServiceAccounts | Via kubectl uniquement |
+| Gérer les ClusterRoles | Via kubectl uniquement |
+| Configurer les permissions | Via manifests YAML |
+
+:::tip
+Automatisez la gestion des RBAC avec des manifests versionnés dans votre système de contrôle de source. Utilisez des outils comme `kustomize` ou `helm` pour gérer les configurations RBAC par environnement.
+:::

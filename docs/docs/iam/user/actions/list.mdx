@@ -1,0 +1,135 @@
+---
+title: Lister les utilisateurs - IAM
+description: "Listez les utilisateurs de votre organisation ou d'un espace Numspot et accédez à leurs actions, via la console ou l'API."
+sidebar_label: Lister les utilisateurs
+sidebar_position: 3
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Lister les utilisateurs
+
+La liste des utilisateurs s'obtient au niveau de l'organisation ou de l'espace.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **iam.user.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/user/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Utilisateurs.", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/user/create-01-list.png", text: "Depuis IAM → Utilisateurs, le tableau liste tous les utilisateurs de votre organisation (ID, prénom, nom, e-mail, statut d'activation).", hotspot: { x: 0.2229, y: 0.3012, w: 0.7493, h: 0.55 } },
+    { img: "/img/walkthrough/user/list-02-menu.png", text: "Le menu « Actions » d'un utilisateur donne accès à ses opérations : créer un utilisateur à partir de ce profil, gérer ses espaces, rôles et permissions, ou le supprimer.", hotspot: { x: 0.7708, y: 0.4198, w: 0.1929, h: 0.2691 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, cliquez sur **IAM** → **Utilisateurs**.
+2. Le tableau **Utilisateurs** affiche, pour chaque utilisateur de l'organisation : l'ID, le prénom, le nom, l'adresse e-mail, le statut d'activation et les actions disponibles.
+
+Le menu **Actions** d'un utilisateur donne accès aux opérations suivantes :
+
+- **Créer un utilisateur à partir de ce profil** ;
+- **Gérer les espaces** ;
+- **Gérer les rôles** ;
+- **Gérer les permissions** ;
+- **Supprimer**.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+### Lister les utilisateurs d'une organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/users
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users'
+```
+
+### Réponse
+
+```json
+{
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "totalSize": 150,
+  "items": [
+    {
+      "email": "john.smith@acme.org",
+      "firstname": "…",
+      "lastname": "…",
+      "id": "123e4567-e89b-12d3-a456-426614174000",
+      "active": true,
+      "createdOn": "2018-11-13T20:20:39+00:00",
+      "updatedOn": "2018-11-13T20:20:39+00:00"
+    }
+  ]
+}
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+### Lister les utilisateurs d'un espace
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/users
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/users'
+```
+
+### Réponse
+
+```json
+{
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "totalSize": 150,
+  "items": [
+    {
+      "email": "john.smith@acme.org",
+      "firstname": "…",
+      "lastname": "…",
+      "id": "123e4567-e89b-12d3-a456-426614174000",
+      "active": true,
+      "createdOn": "2018-11-13T20:20:39+00:00",
+      "updatedOn": "2018-11-13T20:20:39+00:00"
+    }
+  ]
+}
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/user).
+
+</TabItem>
+</Tabs>

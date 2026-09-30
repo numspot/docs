@@ -1,0 +1,208 @@
+---
+title: Obtenir les informations d'un utilisateur - IAM
+description: "Consultez les informations d'un utilisateur IAM, son statut de compte, ses espaces assignés et ses rôles et permissions, via la console ou l'API."
+sidebar_label: Obtenir les informations d'un utilisateur
+sidebar_position: 4
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Obtenir les informations d'un utilisateur
+
+Vous pouvez retrouver toutes les informations de base d'un utilisateur, y compris l'état de son compte dans le système.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **iam.user.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/user/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Utilisateurs.", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/user/create-01-list.png", text: "Dans le tableau « Utilisateurs », cliquez sur l'identifiant de l'utilisateur (le champ « Rechercher » permet de le filtrer).", hotspot: { x: 0.234, y: 0.32, w: 0.11, h: 0.035 } },
+    { img: "/img/walkthrough/user/detail.png", text: "La page « Détails utilisateur » affiche ses informations générales : prénom, nom, e-mail et statut du compte.", hotspot: { x: 0.2451, y: 0.3255, w: 0.7049, h: 0.17 } },
+    { img: "/img/walkthrough/user/detail.png", text: "La section « Espaces assignés » liste ses espaces ; cliquez sur « X rôles » ou « X permissions » pour détailler les rôles et permissions par espace.", hotspot: { x: 0.223, y: 0.5362, w: 0.76, h: 0.35 } },
+  ]}
+/>
+
+1. Dans le tableau **Utilisateurs**, cliquez sur l'identifiant associé à l'utilisateur pour lequel vous souhaitez obtenir des informations.
+:::tip
+Vous avez la possibilité de rechercher un utilisateur en particulier en utilisant le champ **Rechercher**.
+:::
+
+2. La page "Détails utilisateur" s'affiche, avec les informations générales de l'utilisateur : prénom, nom, e-mail et statut du compte.
+
+3. Vous pouvez aussi voir la liste des espaces assignés à cet utilisateur, ainsi que les rôles et les permissions qui lui sont attribués, pour un espace donné.
+
+4. En cliquant sur **X rôles**, vous pourrez voir la liste des rôles attribués à cet utilisateur sur un des espaces auxquels il est associé.
+
+5. En cliquant sur **X permissions**, vous pourrez afficher la liste des permissions attribuées à cet utilisateur sur un des espaces auxquels il est associé.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+### Obtenir les détails d'un utilisateur dans une organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/users/{userId}
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users/{userId}'
+```
+
+### Réponse
+
+```json
+{
+  "email": "john.smith@acme.org",
+  "firstname": "…",
+  "lastname": "…",
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "active": true,
+  "createdOn": "2018-11-13T20:20:39+00:00",
+  "updatedOn": "2018-11-13T20:20:39+00:00"
+}
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+### Obtenir les détails d'un utilisateur dans un espace
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/users/{userId}
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/users/{userId}'
+```
+
+### Réponse
+
+```json
+{
+  "email": "john.smith@acme.org",
+  "firstname": "…",
+  "lastname": "…",
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "active": true,
+  "createdOn": "2018-11-13T20:20:39+00:00",
+  "updatedOn": "2018-11-13T20:20:39+00:00"
+}
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+### Obtenir la liste des espaces assignés à un utilisateur
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/users/{userId}/spaces
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users/{userId}/spaces'
+```
+
+### Réponse
+
+```json
+{
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "totalSize": 150,
+  "items": [
+    {
+      "id": "123e4567-e89b-12d3-a456-426614174000"
+    }
+  ]
+}
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+### Obtenir les rôles et permissions d'un compte utilisateur dans une organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}'
+```
+
+### Réponse
+
+```json
+{
+  "roles": [
+    "123e4567-e89b-12d3-a456-426614174000"
+  ],
+  "permissions": [
+    "123e4567-e89b-12d3-a456-426614174000"
+  ]
+}
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+### Obtenir les rôles et permissions d'un compte utilisateur dans un espace
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}'
+```
+
+### Réponse
+
+```json
+{
+  "roles": [
+    "123e4567-e89b-12d3-a456-426614174000"
+  ],
+  "permissions": [
+    "123e4567-e89b-12d3-a456-426614174000"
+  ]
+}
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/user).
+
+</TabItem>
+</Tabs>

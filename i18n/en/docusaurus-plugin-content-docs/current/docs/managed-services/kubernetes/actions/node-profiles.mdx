@@ -1,0 +1,41 @@
+---
+title: List available node profiles - Managed Kubernetes
+sidebar_label: List available node profiles
+sidebar_position: 1.5
+draft: false
+last_update:
+  date: 2026-09-30
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# List available node profiles
+
+You can list the node profiles available to create your [Kubernetes cluster](/docs/managed-services/kubernetes/concepts/).
+
+When creating, specify the desired profile to size the cluster nodes.
+
+## Permissions
+
+No **IAM** (Identity and Access Management) permission is required to perform this action.
+
+<Tabs>
+
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+    The request `GET /kubernetes/nodeProfiles` lists the node profiles offered by Numspot.
+
+### Example response
+
+    ```json
+    {
+      "profiles": ["small", "medium", "large"]
+    }
+    ```
+
+    [View the full specification](/openapi/#tag/kubernetes/GET/kubernetes/nodeProfiles)
+</TabItem>
+</Tabs>

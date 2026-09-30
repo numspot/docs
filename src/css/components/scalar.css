@@ -1,0 +1,76 @@
+/**
+ * scalar.css — Numspot theme for the OpenAPI pages rendered by Scalar.
+ *
+ * The `src/pages/openapi*.js` pages load the standalone CDN build of
+ * `@scalar/api-reference` (light DOM, no Shadow DOM), configured with
+ * `theme: "none"` to disable the Scalar preset. We therefore map the
+ * `--scalar-*` variables onto our theme-aware brand tokens (see
+ * tokens/azure.css): the API reference follows the brand automatically, in
+ * light and dark mode, and stays in sync if the brand direction changes.
+ *
+ * `!important` on custom properties: guarantees our values win over Scalar's
+ * internal fallbacks whatever the injection order of its styles.
+ */
+
+.scalar-api-reference,
+.scalar-app,
+.light-mode,
+.dark-mode {
+  /* Typography */
+  --scalar-font: var(--ns-font-family) !important;
+  --scalar-font-code: var(--ns-font-mono) !important;
+
+  /* Accent / links */
+  --scalar-color-accent: var(--accent-primary) !important;
+  --scalar-link-color: var(--text-link) !important;
+
+  /* Text */
+  --scalar-color-1: var(--text-primary) !important;
+  --scalar-color-2: var(--text-secondary) !important;
+  --scalar-color-3: var(--text-muted) !important;
+  --scalar-color-ghost: var(--text-muted) !important;
+
+  /* Backgrounds */
+  --scalar-background-1: var(--bg-primary) !important;
+  --scalar-background-2: var(--bg-secondary) !important;
+  --scalar-background-3: var(--bg-tertiary) !important;
+  --scalar-background-accent: var(--bg-active) !important;
+
+  /* Borders & radii */
+  --scalar-border-color: var(--border-primary) !important;
+  --scalar-radius: var(--ns-radius-sm) !important;
+  --scalar-radius-lg: var(--ns-radius-md) !important;
+  --scalar-radius-xl: var(--ns-radius-lg) !important;
+
+  /* Primary button (Test request, Send…) */
+  --scalar-button-1: var(--accent-primary) !important;
+  --scalar-button-1-color: var(--ns-polar) !important;
+  --scalar-button-1-hover: var(--accent-secondary) !important;
+
+  /* Semantic colors (HTTP methods, status badges) */
+  --scalar-color-green: var(--ns-success) !important;
+  --scalar-color-red: var(--ns-error) !important;
+  --scalar-color-yellow: var(--ns-warning) !important;
+  --scalar-color-blue: var(--ns-info) !important;
+  --scalar-color-orange: var(--ns-warning) !important;
+  --scalar-color-purple: var(--accent-primary) !important;
+
+  /* Sidebar */
+  --scalar-sidebar-background-1: var(--bg-sidebar) !important;
+  --scalar-sidebar-color-1: var(--text-primary) !important;
+  --scalar-sidebar-color-2: var(--text-secondary) !important;
+  --scalar-sidebar-color-active: var(--accent-primary) !important;
+  --scalar-sidebar-item-hover-background: var(--bg-hover) !important;
+  --scalar-sidebar-item-hover-color: var(--text-primary) !important;
+  --scalar-sidebar-item-active-background: var(--bg-active) !important;
+  --scalar-sidebar-border-color: var(--border-primary) !important;
+  --scalar-sidebar-search-background: var(--bg-tertiary) !important;
+  --scalar-sidebar-search-border-color: var(--border-primary) !important;
+  --scalar-sidebar-search-color: var(--text-muted) !important;
+}
+
+/* Font smoothing, consistent with the rest of the site. */
+.scalar-api-reference {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

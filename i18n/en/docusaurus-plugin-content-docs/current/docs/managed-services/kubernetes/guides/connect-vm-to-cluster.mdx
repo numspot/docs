@@ -1,0 +1,113 @@
+---
+title: Connect a VM to a managed Kubernetes cluster
+description: Reach the API server of a managed Kubernetes cluster from a VM in a VPC through a Hybrid Bridge, with routes, firewall rules and the kubeconfig file
+sidebar_position: 5
+draft: false
+---
+
+# Connect a VM to a managed Kubernetes cluster
+
+When you create a managed [Kubernetes cluster](/docs/managed-services/kubernetes/concepts/), the network choice determines the exposure of the API server: **Public** network (`"visibility": "EXTERNAL"`) or **Private** network (`"visibility": "INTERNAL"`). With a Private network, the API server is only reachable from Numspot's internal network: to administer it with `kubectl` from a [VM (Virtual Machine)](/docs/compute/concept/), connect the VM to the cluster network through a private connection.
+
+This guide describes the complete path from a VM located in a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/): creation of the [Hybrid Bridge](/docs/connectivity/hybrid-bridge/concepts/), routing update, traffic opening, kubeconfig file deployment and connection with `kubectl`.
+
+## Prerequisites
+
+:::info
+- [Have an operational Numspot Kubernetes cluster ↗](/docs/managed-services/kubernetes/concepts/)
+- [Have a VPC and an operational VM inside this VPC ↗](/docs/compute/vms/actions/create/)
+- [Create a Hybrid Bridge ↗](/docs/connectivity/hybrid-bridge/actions/create/)
+- [Download the kubeconfig file ↗](/docs/managed-services/kubernetes/actions/kubeconfig/)
+- `kubectl` installed on the VM
+:::
+
+## Procedure
+
+### Step 1: Create the bridge between the VPC and the space
+
+A bridge connects a VPC to all the managed services of the space. Hybrid Bridges are managed through the API only: follow the [Create a Hybrid Bridge ↗](/docs/connectivity/hybrid-bridge/actions/create/) procedure.
+
+The `POST /connectivity/spaces/{spaceId}/bridges` command creates the bridge: `left` targets the VPC, `right` targets the space.
+
+Creation is asynchronous: the API returns a **202 Accepted** code and the bridge then reaches a `READY` state. Wait for this state before continuing.
+
+### Step 2: Add the routes towards the managed services
+
+Once the bridge is created, read its configuration: each entry of the `routes` table of the bridge contains the `ipRange` of the network to reach and the `vpcPeeringId` identifier to use as a route target.
+
+Create one route for each entry, in the [route table](/docs/network/route-table/concepts/) associated with the VM subnet (subnetwork):
+
+- the `ipRange` of the bridge as destination;
+- the `vpcPeeringId` of the bridge as a VPC peering target.
+
+Follow the [Create a route ↗](/docs/network/route-table/actions/route/create/) procedure in the console or through the `POST /compute/spaces/{spaceId}/routeTables/{id}/routes` API command.
+
+### Step 3: Allow the flow towards the API server
+
+In the [security group](/docs/compute/security-groups/concepts/concept-sg/) associated with the VM, add an outbound rule allowing the `ipRange` of the control plane towards port `443`. Follow the [Add a rule to a security group ↗](/docs/compute/security-groups/actions/add-rule/) procedure.
+
+Traffic is bidirectional: the containers of the worker nodes of the cluster can reach the VM. If the VM must receive traffic from the cluster, add a dedicated inbound rule with the appropriate sources.
+
+### Step 4: Deploy the kubeconfig on the VM
+
+Download the kubeconfig file from the console then transfer it to the VM:
+
+```bash
+scp kubeconfig-<cluster-id>.yaml outscale@<vm-ip>:~
+```
+
+On the VM, place the file at the default location and restrict its permissions:
+
+```bash
+mkdir -p ~/.kube
+mv kubeconfig-<cluster-id>.yaml ~/.kube/config
+chmod 600 ~/.kube/config
+```
+
+### Step 5: Connect to the cluster
+
+From the VM, check the connection to the cluster:
+
+```bash
+kubectl get nodes
+```
+
+:::warning
+The API server URL in the kubeconfig file must be kept as is: it designates a fully qualified domain name that carries the TLS (Transport Layer Security) [SNI (Server Name Indication)] extension required by the platform. Replacing this URL with the IP address of the API server results in a connection reset.
+:::
+
+## Verification
+
+The `kubectl get nodes` command returns the worker nodes of the cluster with the `Ready` status:
+
+```text
+NAME                         STATUS   ROLES    AGE   VERSION
+nodepool-1-8f4f9cabc-12xyz   Ready    worker   10m   v1.30.4
+nodepool-1-8f4f9cabc-34xyz   Ready    worker   10m   v1.30.4
+```
+
+You can then deploy your workloads and reach them from the VM through their private IP addresses in the cluster network.
+
+## Troubleshooting
+
+### The connection stays pending or expires
+
+**Cause**: routing or filtering blocks the traffic between the VM and the API server.
+
+**Solution**: check in order:
+
+1. the state of the bridge, which must be `READY`;
+2. the existence of one route per entry of the `routes` table of the bridge, in the route table associated with the VM subnet;
+3. the outbound rule of the VM security group, which allows the `ipRange` of the control plane towards port `443`.
+
+### The TLS connection is reset
+
+**Cause**: the API server URL has been replaced with an IP address — the SNI extension is then not transmitted.
+
+**Solution**: keep the URL of the kubeconfig file as is and run the command again.
+
+### The API server rejects the request
+
+**Cause**: the kubeconfig file is expired or no longer matches the cluster.
+
+**Solution**: download the kubeconfig file again from the console then replace the file on the VM.

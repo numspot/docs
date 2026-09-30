@@ -1,0 +1,46 @@
+---
+title: Créer une image
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Créer une image
+
+Vous pouvez créer une Image privée à partir d'une [VM (Virtual Machine)](/docs/compute/concept/). L'image créée contient toutes les données de la VM, y compris le système d'exploitation, les applications et les données utilisateur.
+
+Cette action crée également un snapshot (instantané) du volume système de la VM, ainsi qu'un snapshot de chaque volume de [block storage (stockage bloc)](/docs/storage/block-storage/concepts/) attaché à la VM. Ces snapshots sont utilisés pour créer l'image et peuvent être utilisés pour créer de nouvelles VM à partir de cette image.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.image.create**
+
+:::
+
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+    La création d'image depuis la Console n'est pas encore disponible. Utilisez l'API ou Terraform.
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+La commande `POST /compute/spaces/{spaceId}/images` crée une Image, elle offre plusieurs façons de générer une nouvelle Image.
+
+[Exemple de requête : Création d'une Image](/openapi/#tag/compute/POST/compute/spaces/%7BspaceId%7D/images)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/image).
+  </TabItem>
+</Tabs>

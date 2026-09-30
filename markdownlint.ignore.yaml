@@ -1,0 +1,13 @@
+# Default state for all rules
+default: true
+
+# https://github.com/markdownlint/markdownlint/blob/main/docs/RULES.md#md013---line-length
+MD013: false
+
+# https://github.com/markdownlint/markdownlint/blob/main/docs/RULES.md#md024---multiple-headers-with-the-same-content
+MD024: false
+
+# https://github.com/markdownlint/markdownlint/blob/main/docs/RULES.md#md033---inline-html
+MD033: false
+
+MD034: false

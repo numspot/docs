@@ -1,0 +1,54 @@
+---
+title: Detach a virtual gateway
+description: Detach a virtual gateway from its VPC to reassign or delete it.
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Detach a virtual gateway
+
+You can detach a [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/) from a [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud).
+
+This action changes the attachment state of the virtual gateway from `attached` to `detached`, but the state of the virtual gateway remains `available`.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **connectivity.bridge.update**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+1. Click in the **Virtual Gateways** dashboard to display checkboxes.
+2. Tick the checkbox of the virtual gateway you want to detach from a VPC.
+   The virtual gateway is selected and an actions menu appears.
+3. Click **Detach from a VPC**.
+   The "Detach from a VPC" dialog box appears.
+4. Click **Detach**.
+   The virtual gateway is detached from the VPC.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `DELETE /connectivity/spaces/{spaceId}/virtualGateways/{id}/link` command detaches a virtual gateway from a VPC.
+
+:::info
+You must wait for the virtual gateway to be in the `detached` state before you can attach another VPC to it or delete the VPC to which it was previously attached.
+:::
+
+[Example request: Detach a virtual gateway from a VPC](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/virtualGateways/{id}/link)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/virtual_gateway).
+
+</TabItem>
+</Tabs>

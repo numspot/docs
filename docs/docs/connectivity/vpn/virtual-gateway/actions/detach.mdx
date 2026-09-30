@@ -1,0 +1,63 @@
+---
+title: Détacher une virtual gateway
+description: Détachez une virtual gateway de son VPC pour la réaffecter ou la supprimer.
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Détacher une virtual gateway
+
+Vous pouvez détacher une [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/) d'un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+
+Cette action modifie l'état d'attachement de la virtual gateway de `attached` en `detached`, mais l'état de la virtual gateway reste `available`.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **connectivity.bridge.update**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+
+1. Cliquez dans le dashboard **Virtual Gateways** pour faire apparaître des cases à cocher.
+2. Cochez la case de la virtual gateway que vous voulez détacher d'un VPC.
+   La virtual gateway est sélectionnée et un menu d'actions apparaît.
+3. Cliquez sur **Détacher d'un VPC**.
+   La boîte de dialogue "Détacher d'un VPC" apparaît.
+4. Cliquez sur **Détacher**.
+   La virtual gateway est détachée du VPC.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `DELETE /connectivity/spaces/{spaceId}/virtualGateways/{id}/link` détache une virtual gateway d'un VPC.
+
+:::info
+Vous devez attendre que la virtual gateway soit dans l'état `detached` avant de pouvoir y attacher un autre VPC ou de supprimer le VPC auquel elle était précédemment attachée.
+:::
+
+[Exemple de requête : Détacher une virtual gateway d'un VPC](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/virtualGateways/{id}/link)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/virtual_gateway).
+
+</TabItem>
+</Tabs>

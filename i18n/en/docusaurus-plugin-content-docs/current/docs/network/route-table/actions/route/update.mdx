@@ -1,0 +1,44 @@
+---
+title: Update a route
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Update a route
+
+You can update a route that you created in a [route table](/docs/network/route-table/concepts/) by replacing it with another one. This action automatically changes the way traffic is routed for the [VM (Virtual Machines)](/docs/compute/concept/) placed in the subnets associated with this route table.
+
+## Permissions
+
+No **IAM** (Identity and Access Management) permission is required to perform this action.
+
+<Tabs>
+  <TabItem value="Console" default>
+
+  :::info
+  See the **[VPC](/docs/network/vpc/concepts/)** dashboard, from the **Route Table** tab.
+  :::
+
+  </TabItem>
+  <TabItem value="API">
+      The `PUT /compute/spaces/{spaceId}/routeTables/{id}/routes` command replaces an existing route in a route table of a VPC (Virtual Private Cloud).
+You must specify one of the following as the target:
+
+- VPC Peering
+- `NAT VM` (NAT virtual machine)
+- [internet gateway](/docs/network/internet-gateway/concepts/)
+- [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/)
+- [nat gateway](/docs/network/nat/concepts/)
+- NIC (Network Interface Card)
+
+The routing algorithm is based on the most specific match.
+
+[Example request: Updating a route](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/routeTables/{id}/routes)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
+  </TabItem>
+</Tabs>

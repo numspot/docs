@@ -1,0 +1,71 @@
+---
+title: "Secret Manager - Concepts"
+sidebar_label: "Concepts"
+description: "Secret Manager managé de Numspot basé sur OpenBao : stockez, gérez et contrôlez l'accès à vos secrets (mots de passe, clés API, certificats) de façon souveraine."
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# Concepts du Secret Manager
+
+<ActionsSummary />
+
+## Introduction
+
+Le Secret Manager est un service managé par Numspot, basé sur [OpenBao](https://openbao.org/), permettant de stocker, gérer et contrôler l'accès aux secrets (mots de passe, clés API, certificats, tokens, etc.) utilisés par vos applications et infrastructures.
+
+Le Secret Manager centralise la gestion des secrets au sein d'une instance dédiée OpenBao, offrant un point de contrôle unique pour la distribution des informations sensibles, tout en garantissant la souveraineté des données.
+
+### Avantages du service managé Secret Manager
+
+- **Gestion simplifiée** : Pas besoin de gérer l'infrastructure sous-jacente d'OpenBao.
+- **Centralisation** : Un point unique de gestion et de distribution des secrets pour l'ensemble de vos services.
+- **Sécurité** : L'accès à l'instance est contrôlé par des politiques IAM.
+
+## Fonctionnalités clés
+
+### 1. Création d'une instance Secret Manager
+
+Une instance Secret Manager est une instance OpenBao dédiée au sein de votre espace. Elle fournit un endpoint unique accessible par vos applications pour lire et écrire des secrets.
+
+**Étapes pour créer une instance Secret Manager via la Console Numspot** :
+
+1. Se connecter à la Console Numspot.
+2. Sélectionner l'option de création d'une instance Secret Manager managée.
+3. Spécifier le nom de l'instance.
+4. Valider la création de l'instance.
+
+### 2. Gestion du cycle de vie des instances
+
+Le Secret Manager offre un cycle de vie complet pour la gestion des instances :
+
+- **Création** : L'instance passe par les états `PENDING` puis `CREATING` avant d'atteindre l'état `RUNNING`.
+- **Supervision** : Consultez le statut et les informations de votre instance à tout moment.
+- **Suppression** : Supprimez une instance lorsque vous n'en avez plus besoin.
+
+### 3. Intégration avec les services managés
+
+Le Secret Manager s'intègre nativement avec les autres services managés Numspot. Vos applications déployées sur un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) ou une [VM](/docs/compute/concept/) peuvent récupérer leurs secrets directement depuis l'instance Secret Manager en utilisant l'host de l'instance.
+
+## Cas d'utilisation
+
+### 1. Gestion des identifiants d'application
+
+- Centralisez les mots de passe de base de données, les clés API et les tokens d'authentification dans un coffre unique et sécurisé.
+
+### 2. Séparation des environnements
+
+- Créez des instances Secret Manager distinctes pour les environnements de développement, staging et production afin d'isoler les secrets.
+
+### 3. Conformité et audit
+
+- Utilisez la traçabilité des accès pour répondre aux exigences de conformité SecNumCloud et aux audits de sécurité.
+
+## Bonnes pratiques
+
+- **Rotation des secrets** : Mettez en place une politique de rotation régulière des secrets pour limiter l'impact d'une éventuelle compromission.
+- **Principe du moindre privilège** : Accordez uniquement les permissions IAM nécessaires pour accéder aux secrets.
+- **Isolation des environnements** : Utilisez des instances distinctes pour chaque environnement (développement, production).
+- **Ne pas stocker les secrets en clair** : Évitez de stocker des secrets dans des variables d'environnement non chiffrées ou dans du code source.

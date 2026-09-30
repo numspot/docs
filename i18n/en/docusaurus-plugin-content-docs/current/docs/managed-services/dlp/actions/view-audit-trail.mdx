@@ -1,0 +1,101 @@
+---
+title: View the DLP audit trail - Managed DLP
+sidebar_label: View the DLP audit trail
+sidebar_position: 15
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# View the DLP audit trail
+
+View the audit trail to track all administration actions performed on the [DLP](/docs/managed-services/dlp/concepts) service. Each action — creation, modification, deletion of [DLP rules](/docs/managed-services/dlp/concepts), [DLP policies](/docs/managed-services/dlp/concepts), [DLP detectors](/docs/managed-services/dlp/concepts), [ruleset](/docs/managed-services/dlp/concepts) publication and user management — is recorded with the user, timestamp and action details.
+
+## Permissions
+
+:::info
+This action requires the following [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) role:
+
+- **viewer**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "In the DLP console, click Audit Logs in the side menu.", hotspot: { x: 0.006, y: 0.530, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/audit-logs.png", text: "Use the filter to refine the search by action type.", hotspot: { x: 0.201, y: 0.159, w: 0.122, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/audit-logs.png", text: "Browse the list of audit events.", hotspot: { x: 0.201, y: 0.349, w: 0.786, h: 0.300 } },
+  ]}
+/>
+
+1. In the [DLP](/docs/managed-services/dlp/concepts) console, click **Audit Logs** in the sidebar.
+
+### Filtering events
+
+Use the available filters to refine the search:
+
+- **Action**: filter by action type — `rule_create`, `rule_update`, `rule_delete`, `ruleset_publish`, `ruleset_rollback`, `detector_create`, `detector_update`, `detector_delete`, `policy_create`, `policy_update`, `policy_delete`, `user_create`, `user_update`, `user_delete`, `user_password_reset`;
+- **Time range**: filter by time period.
+
+### Event details
+
+Each event displays:
+
+- the user who performed the action;
+- the action type;
+- the action target (rule, detector, policy, user, ruleset);
+- the target name;
+- the action details;
+- the timestamp.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `GET /api/v1/audit` request queries the audit trail.
+
+### Query parameters
+
+| Parameter | Description |
+|-----------|-------------|
+| `action` | Filter by action type |
+| `time_start` | Start date of the period (ISO 8601) |
+| `time_end` | End date of the period (ISO 8601) |
+
+### Response example
+
+```json
+{
+  "entries": [
+    {
+      "id": "audit-001",
+      "user_name": "admin",
+      "action": "rule_create",
+      "event": "Created rule block-aws-keys",
+      "target_type": "rule",
+      "target_name": "block-aws-keys",
+      "details": "Platform: mistral-platform, Action: block",
+      "created_at": "2026-08-27T10:00:00Z"
+    },
+    {
+      "id": "audit-002",
+      "user_name": "admin",
+      "action": "ruleset_publish",
+      "event": "Published ruleset v3",
+      "target_type": "ruleset",
+      "target_name": "v3",
+      "details": "Description: Added AWS key blocking rule",
+      "created_at": "2026-08-27T10:30:00Z"
+    }
+  ],
+  "total": 2
+}
+```
+
+</TabItem>
+</Tabs>

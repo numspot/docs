@@ -1,0 +1,103 @@
+---
+title: "PostgreSQL - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# Concepts
+
+<ActionsSummary />
+
+## Introduction
+
+The **PostgreSQL managed service** enables companies to deploy, manage and scale PostgreSQL databases in a highly available cloud environment.
+With this service, customers can create a PostgreSQL instance in a **service Cluster** without having to manage the underlying infrastructure.
+They can also manage the databases, and use advanced features to optimize performance and security.
+
+### Benefits of the PostgreSQL managed service
+
+- **High availability**: Instances are designed to minimize downtime as much as possible.
+- **Simplified management**: There is no need to manage the PostgreSQL infrastructure.
+- **Scalability**: Resources can be added or removed depending on needs.
+- **Security**: Security updates and patches are managed by Numspot. For more details on the supported versions and their lifecycle, see [Versions and lifecycle](/docs/managed-services/postgresql/supported-versions/).
+- **Automatic backups**: Data is protected with regular backups.
+
+## Key features
+
+### 1. Creating a highly available instance
+
+A **highly available PostgreSQL instance** is designed to provide high availability.
+This means that the instance is replicated across several nodes, thereby guaranteeing service continuity even if a component fails.
+
+**Steps to create a highly available instance through the Numspot Console**:
+
+1. Log in to the Numspot Console.
+2. Select the option to create a PostgreSQL instance.
+3. Specify a number of replicas greater than 0 to obtain a highly available configuration of the instance.
+4. Specify the volume type for the data.
+5. Configure the backups: retention, WAL (Write-Ahead Logging) archiving, automatic backups.
+6. Confirm the creation of the instance.
+
+### 2. Backup management
+
+The PostgreSQL service offers several types of backups:
+
+- **Automatic backups**: scheduled according to a defined frequency (cron format)
+- **On-demand backups**: triggered manually at any time
+
+:::warning
+To be able to perform backups, WAL (Write-Ahead Logging) archiving (that is, the continuous archiving of transaction logs) must be enabled on your cluster.
+:::
+
+**Characteristics**:
+
+- Configurable retention from 1 to 90 days
+- Optional compression and encryption (server-side encryption only, custom keys are not supported)
+- Configurable backup target (primary, standby, standby preference)
+- Restoration possible at any point in time (PITR - Point-In-Time Recovery) with WAL archiving
+
+### 3. Retrieving the connection details
+
+The **connection details** include the host, the port, the username, and the password required to connect to the PostgreSQL instance.
+
+**Steps to retrieve the connection details through the Numspot Console**:
+
+1. Access the Numspot Console.
+2. Navigate to the section dedicated to the PostgreSQL instance.
+3. Retrieve the host, the port (5432 by default), the cluster name (which will be the database name) and the name of the primary user from the user interface.
+4. Also retrieve the password of the primary user from the Numspot Console.
+5. Use this information to connect to the database with the cluster name using a PostgreSQL client, such as psql:
+
+```bash
+psql "host=<host> port=<port> dbname=<database> user=<user> sslmode=require"
+```
+
+:::note
+It is also possible to generate a new password for the primary user in the event that the existing password is forgotten or compromised.
+:::
+
+## Use cases
+
+### 1. Business-critical applications
+
+- Highly available PostgreSQL instances are ideal for applications requiring high availability, such as management systems or transactional platforms.
+
+### 2. Data analysis
+
+- PostgreSQL can be used to store and analyze large amounts of data.
+
+### 3. Development and testing environments
+
+- Create isolated database environments for development and testing, with specific configurations.
+
+## Best practices
+
+- **Backups**: Configure WAL archiving from creation to enable on-demand backups. Schedule daily automatic backups.
+- **Retention**: Adapt the retention period to your compliance needs (a minimum of 7 days is recommended).
+- **Monitoring**: Use monitoring tools to track the state of the instance and of the queries.
+- **Security**: Apply security best practices, such as data encryption and access control.
+- **Optimization**: Adjust the configuration parameters to optimize performance according to the load.
+- **Restoration testing**: Regularly test the restoration procedures to ensure the validity of the backups.

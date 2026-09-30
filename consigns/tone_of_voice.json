@@ -1,0 +1,83 @@
+{
+  "document_title": "Numspot user tone of voice",
+  "introduction": [
+    "You do not speak to a banker the way you speak to a child; our tone adapts to the situation.",
+    "The goal is a uniform, clear and professional experience, suited to a large-account B2B context."
+  ],
+  "criteres_tone_of_voice_numspot": {
+    "proximite": {
+      "principes": [
+        "Present, without being distant. Empathetic.",
+        "Accessible but not familiar (no informal address)",
+        "No emojis, no \u201cfun\u201d tone, no puns, avoid humour",
+        "Suited to a professional audience"
+      ],
+      "on_utilise": [
+        "the formal \u201cyou\u201d (vous, never \u201ctu\u201d)",
+        "a direct tone, without emphasis."
+      ],
+      "do": [
+        "Suivez les étapes ci-dessous",
+        "Définit les règles d’accès",
+        "Cette action entraîne une interruption",
+        "Action irréversible"
+      ],
+      "dont": [
+        "Nous allons vous guider pas à pas",
+        "Cette option vous permet de gérer facilement vos accès",
+        "Cette action peut entraîner des impacts",
+        "Attention, cette action est irréversible"
+      ]
+    },
+    "clarte": {
+      "principes": [
+        "Simple terms, direct sentences",
+        "Avoid marketing phrasing",
+        "Prefer factual, action-oriented sentences",
+        "Consistent vocabulary between the console, the documentation and the internal teams",
+        "Acronyms when they are industry standards, no jargon. In the public documentation, spell the acronym out.",
+        "Define our own lexicon/glossary.",
+        "Careful: AK/SK is not a standard. Sponsor means commanditaire (regulatory jargon is best avoided)."
+      ],
+      "do": [
+        "Échec de la configuration",
+        "La création d’un projet nécessite les informations suivantes : nom, description et clé d’accès.",
+        "La mise à jour nécessite un redémarrage de l’application.",
+        "Action requise"
+      ],
+      "dont": [
+        "L’opération n’a pas pu aboutir",
+        "Vous devez entrer votre nom, votre description et votre clé d’accès pour créer un projet.",
+        "Vous allez devoir redémarrer l’application.",
+        "Que souhaitez-vous faire ?"
+      ]
+    },
+    "energie": {
+      "principes": [
+        "Dynamic but controlled style. Not austere. No embellishment, stay factual and action-oriented.",
+        "Short sentences",
+        "Positive and direct feedback (e.g. « Action validée » rather than « Félicitations… »)",
+        "No artificial tension."
+      ],
+      "do": [
+        "Action validée",
+        "Cluster en cours de création",
+        "Configuration enregistrée",
+        "Paramètres modifiables"
+      ],
+      "dont": [
+        "Félicitations ! Votre action a été exécutée avec succès 🎉",
+        "Votre cluster est en train d'être créé, merci de patienter",
+        "Les modifications ont été enregistrées avec succès",
+        "N’hésitez pas à modifier ces paramètres"
+      ]
+    }
+  },
+  "anglicismes_et_acronymes": [
+    "Anglicisms and acronyms are accepted once they have become industry standards (e.g. VM, VPC, Public IP). CAREFUL: in the public documentation, remember to give the French translations.",
+    "Vendor-specific or ambiguous terms must be avoided (e.g. \u201csponsor\u201d).",
+    "Acronyms take no plural s",
+    "Shared glossary",
+    "Format of anglicisms: the same as for French words"
+  ]
+}

@@ -1,0 +1,62 @@
+---
+title: Delete a key pair
+sidebar_position: 6
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Delete a key pair
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.keypair.delete**
+
+:::
+
+You can delete a specified [key pair](/docs/compute/keypairs/concept/). This action deletes the public key kept by Numspot.
+
+Deleting a key pair does not delete the private key saved on your computer, and does not delete the public key in the metadata of other [VM](/docs/compute/concept/) (Virtual Machine) created with the same key pair. You cannot create new VM using the deleted key pair. However, you can still connect to other VM already created with the same key pair, as long as you can provide its private key.
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/keypair/list.png", text: "From the left-hand side menu, click Compute → Key Pairs.", hotspot: { x: 0, y: 0.5086, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/en/keypair/actions.png", text: "Tick the key pair to delete, or open its “Actions” menu, then click “Delete”.", hotspot: { x: 0.8931, y: 0.5136, w: 0.07, h: 0.0457 } },
+    { img: "/img/walkthrough/en/keypair/delete-modal.png", text: "Strong confirmation: enter the exact key pair name, then click “Delete”.", hotspot: { x: 0.6403, y: 0.7145, w: 0.0458, h: 0.0494 } },
+  ]}
+/>
+
+1. Log in to the Numspot console.
+
+2. From the left-hand side menu, click **Compute → Key pairs**.
+
+3. Tick the box of the key pair you want to delete or click the "Actions" drop-down menu on the same line.
+  The key pair is selected or an actions menu appears.
+
+4. Click **Delete**.
+  A confirmation dialog box appears.
+
+5. Confirm the deletion by typing the name of the key pair.
+
+6. Click **Delete**.
+
+  The key pair is deleted and a confirmation message appears at the bottom of the page.
+
+</TabItem>
+  <TabItem value="api" label="API">
+The `DELETE /compute/spaces/{spaceId}/keypairs/{id}` command deletes the specified key pair. This action deletes the public key stored by Numspot, which results in the deletion of the key pair.
+
+[Example request: Deleting a key pair](/openapi/#tag/compute/delete/compute/spaces/{spaceId}/keypairs/{id})
+  </TabItem>
+
+{/*   ## Delete a key pair with Terraform */}
+{/*   </TabItem> */}
+</Tabs>

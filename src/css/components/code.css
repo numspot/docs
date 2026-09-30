@@ -1,0 +1,50 @@
+/**
+ * Code blocks & inline code — Brand Book 2026
+ * Syntax colors stay managed by the Prism themes (config).
+ */
+
+/* Code blocks */
+.theme-code-block,
+div[class*="codeBlockContainer"] {
+  border-radius: var(--ns-radius-md);
+  box-shadow: none;
+  border: 1px solid var(--border-secondary);
+}
+
+pre code {
+  font-family: var(--ns-font-mono);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* Block header (title + copy button) */
+div[class*="codeBlockTitle"] {
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: var(--ns-font-weight-semibold);
+  border-bottom: 1px solid var(--border-secondary);
+}
+
+button[class*="copyButton"] {
+  border-radius: var(--ns-radius-sm);
+}
+
+/* Inline code */
+code {
+  font-family: var(--ns-font-mono);
+  background: var(--bg-code);
+  color: var(--text-code);
+  border: 1px solid var(--border-secondary);
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-size: 0.9em;
+}
+
+/* Inline code inside a <pre> block must not carry those decorations */
+pre code {
+  background: transparent;
+  color: inherit;
+  border: none;
+  padding: 0;
+}

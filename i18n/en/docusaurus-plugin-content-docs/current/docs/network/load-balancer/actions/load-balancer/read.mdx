@@ -1,0 +1,56 @@
+---
+title: Obtain information about your load balancers - Numspot
+sidebar_label: Obtain information about your load balancers
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Obtain information about your load balancers
+
+You can view the information about one or more [load balancers](/docs/network/load-balancer/concepts/) in your space.
+
+## Permissions
+
+:::info
+This action requires the following **IAM** (Identity and Access Management) permissions:
+
+- **compute.loadBalancer.get**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/load-balancer/lb-01-list.png", text: "From the left-hand side menu, click Network → Load Balancers.", hotspot: { x: 0, y: 0.6136, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/load-balancer/lb-01-list.png", text: "The list shows your load balancers with their name, type, associated VPC, DNS name and security group.", hotspot: { x: 0.22, y: 0.32, w: 0.76, h: 0.36 } },
+  ]}
+/>
+
+
+1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
+2. The list displays the information of each load balancer: name, ID, type, status, associated [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud), etc.
+3. To display the details of a specific load balancer, click its name.
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+The `GET /compute/spaces/{spaceId}/loadBalancers` command lists your load balancers.
+
+[Example request: List all your load balancers](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/loadBalancers)
+
+The `GET /compute/spaces/{spaceId}/loadBalancers/{id}` command retrieves information about a load balancer.
+
+[Example request: Retrieve the information of a load balancer](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/loadBalancers/{id})
+
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
+
+  </TabItem>
+</Tabs>

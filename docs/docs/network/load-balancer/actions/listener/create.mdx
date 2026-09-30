@@ -1,0 +1,54 @@
+---
+title: Créer un listener de load balancer - Numspot
+sidebar_label: Créer un listener de load balancer
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Créer un listener de load balancer
+
+Vous pouvez créer un listener (écouteur) pour un [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) afin de vérifier les demandes de connexion et de les transférer aux [VM (Virtual Machine)](/docs/compute/concept/) de backend.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.loadBalancer.create**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+La création d'un listener n'est pas disponible depuis la console Numspot.
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `POST /compute/spaces/{spaceId}/loadBalancers/{id}/listeners` crée un ou plusieurs listener pour un load balancer spécifié.
+
+[Exemple de requête : Création d'un listener](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/loadBalancers/{id}/listeners)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/listener).
+
+</TabItem>
+</Tabs>

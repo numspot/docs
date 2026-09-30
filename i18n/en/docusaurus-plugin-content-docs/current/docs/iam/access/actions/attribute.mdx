@@ -1,0 +1,143 @@
+---
+title: Assign or remove access for an identity
+description: "Add or remove roles, permissions and ACLs for a user or a service account, via the console or the API."
+sidebar_position: 1
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Assign or remove access for an identity
+
+You can add or remove roles and permissions individually or in bulk. These operations can be carried out via the portal or the API. An API for **ACLs** (Access Control List) lets you associate ACLs with resources to finely adjust which accounts are allowed to perform operations on them.
+
+## Prerequisites
+
+* An account with the permissions required to manage **ACLs** (**IAM.getPolicy** and **IAM.setPolicy**)
+* A connection token associated with the Numspot account used: [Documentation link - obtain a token](/docs/iam/concepts/api/)
+* The identifier of the organisation or the space
+* The identifier (UUID) of the resource
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **iam.permission.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/user/list.png", text: "From the left-hand side menu, click IAM → Users (the journey is the same for Service Accounts).", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/user/list-02-menu.png", text: "On the identity's row, open the “Actions” menu, then click “Manage roles” or “Manage permissions”.", hotspot: { x: 0.7972, y: 0.5, w: 0.1667, h: 0.045 } },
+    { img: "/img/walkthrough/en/user/roles.png", text: "In the “Role assignment” wizard, select the “Organisation” tab or the relevant space, tick the role or roles to assign, then click “Save and continue”.", hotspot: { x: 0.8665, y: 0.921, w: 0.1001, h: 0.0494 } },
+  ]}
+/>
+
+1. From the left-hand side menu, click **IAM** → **Users** (or **Service Accounts**).
+2. Open the identity's **Actions** menu, then select **Manage roles** or **Manage permissions**.
+:::tip
+You can assign one or several roles in a single operation.
+:::
+
+3. In the wizard, select the "Organisation" tab or the relevant space, tick the items to assign, then click **Save and continue** (roles) or **Save and quit** (permissions). You can also remove roles or permissions already assigned by unticking them.
+
+</TabItem>
+
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+You can add or remove roles and permissions individually or in bulk.
+You need to know the UUID (Universally Unique Identifier) of the items to add or remove.
+
+```console title="Example for a space"
+export REGION="myregion"
+curl -X 'PATCH' \
+  'https://api.$REGION.numspot.com/iam/spaces/{spaceId}/iampolicy/users/b7bdb002-e737-46a6-b282-f5fe55aad110' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "add": {
+    "roles": [
+      "208f2800-574d-4c24-a84c-c341019fd351"
+    ],
+    "permissions": [
+      "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    ]
+  }
+}'
+```
+
+### ACLs or granular permissions
+
+The **ACL** (Access Control List) mechanism lets you assign permissions finely to a user on a resource.
+
+A set of APIs lets you create, delete and finally list the **ACLs** for a user.
+The API follows the general behaviour of the Numspot APIs:
+- it can address a user account or a service account.
+
+The elements to provide are:
+```json title="Associate an ACL with a resource"
+{
+  "items": [
+    {
+      "service": "string",
+      "resource": "string",
+      "subresource": "string",
+      "resourceId": "string",
+      "permissionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    }
+  ]
+}
+```
+
+The request looks like this:
+
+Example: openshift.cluster.get
+```console
+export REGION="myregion"
+curl -X 'POST' \
+  'https://api.$REGION.numspot.com/iam/organisations/{organisationId}/serviceAccounts/b85743e8-3f68-4341-a6ce-0df969cfd7bf/bulk/acl' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "items": [
+    {
+      "service": "openshift",
+      "resource": "cluster",
+      "resourceId": "05414b98-5226-4ecd-acc8-6417e9e24a40",
+      "permissionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    }
+  ]
+}
+```
+:::info
+Items being a list, you can manipulate several **ACLs** in a single request.
+
+See the [API usage page](/docs/iam/concepts/api/) for details.
+:::
+
+Rights and permissions are assigned to the identity associated with the identifier in the request.
+
+The API can address user accounts (users) as well as service accounts (serviceAccounts).
+
+```console title="Example for a service account"
+
+https://..../iam/organisations/{organisationId}/serviceAccounts/3abcfff1-97fa-4016-832d-f63852e87bac/bulk/acl
+
+```
+
+</TabItem>
+</Tabs>

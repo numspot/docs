@@ -1,0 +1,168 @@
+---
+title: Create a DLP rule - Managed DLP
+sidebar_label: Create a DLP rule
+sidebar_position: 1
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Create a DLP rule
+
+Create a [DLP rule](/docs/managed-services/dlp/concepts) to inspect requests flowing through platforms and apply an action when sensitive data is detected.
+
+A rule consists of a condition — expressed in DSL — and an action from `pass`, `block`, `modify` or `monitor`. The rule is created as a draft. To activate it, publish it in a [ruleset](/docs/managed-services/dlp/concepts).
+
+## Permissions
+
+:::info
+This action requires the following [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) role:
+
+- **rule_editor**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "In the DLP console, click Rules in the sidebar.", hotspot: { x: 0.006, y: 0.233, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/02-rules-list.png", text: "Click \"New Rule\" to open the rule editor.", hotspot: { x: 0.901, y: 0.030, w: 0.082, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/03-rule-new.png", text: "Fill in the rule name, Platform Type and description.", hotspot: { x: 0.201, y: 0.214, w: 0.765, h: 0.167 } },
+    { img: "/img/walkthrough/dlp/03-rule-condition.png", text: "Configure the condition: add a field, an operator and a detector.", hotspot: { x: 0.201, y: 0.325, w: 0.765, h: 0.270 } },
+    { img: "/img/walkthrough/dlp/03-rule-action.png", text: "Select the action (Pass, Block, Modify or Monitor).", hotspot: { x: 0.201, y: 0.774, w: 0.285, h: 0.091 } },
+    { img: "/img/walkthrough/dlp/03-rule-save.png", text: "Click Save as Draft to save the rule as a draft.", hotspot: { x: 0.900, y: 0.956, w: 0.083, h: 0.044 } },
+  ]}
+/>
+
+1. In the [DLP](/docs/managed-services/dlp/concepts) console, click **Rules** in the sidebar.
+2. Click the **New Rule** button to open the rule editor.
+
+### General information
+
+Fill in the rule information:
+
+| Field | Example value | Description |
+|-------|---------------|-------------|
+| Name | `block-aws-keys` | Name of the rule |
+| Description | Block AWS access keys | Description of the rule |
+| Platform type | `mistral-platform` | Target platform type |
+
+### Condition configuration
+
+Build the rule condition using the visual editor or by entering the DSL directly.
+
+**Visual editor**:
+
+1. Click **Add condition** to add a condition;
+2. Select the field to inspect from the dropdown list (`tool_arguments`, `tool_called` or `request_time`);
+3. Select the operator: `matches_detector` or `not_matches_detector`;
+4. Enter the [DLP detector](/docs/managed-services/dlp/concepts) reference: `@preset:<id>` for a predefined detector, `@custom:<id>` for a custom detector;
+5. To combine conditions, use the **AND** or **OR** operators;
+6. To group conditions, use parentheses.
+
+**DSL editor**:
+
+Enter the DSL expression directly. Example:
+
+```text
+tool_arguments matches_detector @preset:aws_access_key_id
+```
+
+To inspect all fields in the request with a detector:
+
+```text
+* matches_detector @preset:aws_access_key_id
+```
+
+### Action configuration
+
+Select the type of action to apply when the condition is met:
+
+| Action | Additional configuration |
+|--------|--------------------------|
+| `pass` | None |
+| `block` | Mandatory block message |
+| `modify` | Add modifications: field, detector, operation (`redact` or `remove`), replacement text if `redact` |
+| `monitor` | None — the request is allowed but the event is logged |
+
+### Rule testing
+
+Before saving the rule, test it against sample data:
+
+1. Click **Test rule**;
+2. Fill in the sample fields according to the platform schema;
+3. Click **Run test** to see the evaluation result.
+
+### Saving
+
+Click **Save** to save the rule as a draft. The rule appears in the list with the "Draft" status.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `POST /api/v1/rules` request creates a draft [DLP rule](/docs/managed-services/dlp/concepts).
+
+### Request example
+
+```json
+{
+  "name": "block-aws-keys",
+  "description": "Block AWS access keys",
+  "platform_type": "mistral-platform",
+  "condition": "tool_arguments matches_detector @preset:aws_access_key_id",
+  "action": {
+    "type": "block",
+    "message": "Request contains an AWS access key"
+  }
+}
+```
+
+### Response example
+
+```json
+{
+  "id": "rule-550e8400",
+  "name": "block-aws-keys",
+  "description": "Block AWS access keys",
+  "platform_type": "mistral-platform",
+  "condition": "tool_arguments matches_detector @preset:aws_access_key_id",
+  "action": {
+    "type": "block",
+    "message": "Request contains an AWS access key"
+  },
+  "draft": true,
+  "version": 1,
+  "created_at": "2026-08-27T10:00:00Z",
+  "updated_at": "2026-08-27T10:00:00Z"
+}
+```
+
+### Example with modify action
+
+```json
+{
+  "name": "redact-github-tokens",
+  "description": "Redact GitHub tokens",
+  "platform_type": "mistral-platform",
+  "condition": "* matches_detector @preset:github_token",
+  "action": {
+    "type": "modify",
+    "modifications": [
+      {
+        "field": "*",
+        "detector": "@preset:github_token",
+        "operation": "redact",
+        "replacement": "***"
+      }
+    ]
+  }
+}
+```
+
+</TabItem>
+</Tabs>

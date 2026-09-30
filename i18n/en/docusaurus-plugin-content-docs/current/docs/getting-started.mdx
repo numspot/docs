@@ -1,0 +1,59 @@
+---
+title: First steps with Numspot - Documentation
+sidebar_label: First steps
+description: "The first user's journey on the Numspot console: rights verification, first space creation, user creation, rights and space assignment, first VMs and managed services."
+last_update:
+  date: 2026-09-30
+---
+
+# First steps with Numspot
+
+This guide describes the first user's journey in your organization, from signing in to the console to creating the first resources: rights verification, creation of a first space, creation of the users, assignment of rights and spaces, then creation of your first VMs and managed services.
+
+:::note
+Before this journey, Numspot created your organization and your first user, then sent an activation email titled "Action required: Numspot password creation or reset", to click within 48 hours; if the link has expired, Numspot sends the email again with a new 48-hour window. Since the first user is the super admin and cannot be changed, a generic email address is recommended to cope with staff turnover. The full process is described on the [First sign-in to the Numspot console](/docs/iam/connection/first-connection/) page.
+:::
+
+## 1. Sign in to the console
+
+Sign in to the [Numspot console](/docs/iam/connection/first-connection/) with your password and your MFA (Multi-Factor Authentication). You land on the portal of your organization.
+
+## 2. Check your rights
+
+The Numspot platform follows the principle of least privilege: every console or API action requires specific permissions.
+
+Before performing an action, check the permissions it requires:
+
+- every action page of this documentation lists them in its Permissions section, in the **Domain.Permission** format, for example **iam.space.create**;
+- to view the roles and permissions granted to your account, follow the [access management quickstart](/docs/iam/access/quickstart/).
+
+The first user is the super admin of the organization: they have the rights needed to grant themselves all rights, but they hold none by default. Before each action of this guide, check the required permissions and grant them to yourself through the [Add or remove roles, permissions and ACLs](/docs/iam/access/actions/attribute/) page.
+
+## 3. Create your first space
+
+The space is the basic partition of your resources: VMs, managed services and users are attached to it.
+
+1. Follow the [Create a space](/docs/iam/space/actions/create/) page: in the **IAM** → **Spaces** menu, click **Create a space**, enter the name and description, then click **Create the space**.
+2. Creation may take a few seconds: the space may only appear after refreshing the list.
+
+## 4. Create the users
+
+Follow the [Create a user](/docs/iam/user/actions/create/) page to provide your organization with the accounts it needs. The creation wizard walks you through assigning spaces, roles and permissions.
+
+After creation, [generate an activation link](/docs/iam/user/actions/generate/) for each user: they set their password and their MFA (Multi-Factor Authentication) from that link.
+
+## 5. Assign rights and spaces
+
+Users only have access to the spaces assigned to them, and only with the rights granted there:
+
+- to add or remove roles, permissions and ACLs (Access Control Lists), follow the [Add or remove roles, permissions and ACLs](/docs/iam/access/actions/attribute/) page;
+- to restrict rights per space, see the [access management quickstart](/docs/iam/access/quickstart/): each space being isolated from the others, rights are defined space by space.
+
+## 6. Create your first resources
+
+Your organization and spaces are ready; you can now create your first resources:
+
+- **Create your first VM**: follow the [Quickstart: create a VM](/docs/compute/vms/quickstart/) which covers the creation of a [VM](/docs/compute/concept), from the [VPC](/docs/network/vpc/concepts) (Virtual Private Cloud) to the [security group](/docs/compute/security-groups/concepts/concept-sg);
+- **Create your first managed services**: see the creation of a [Kubernetes cluster](/docs/managed-services/kubernetes/actions/create/) or a [PostgreSQL cluster](/docs/managed-services/postgresql/actions/create/).
+
+Your organization is up and running: you can now build your infrastructures on the Numspot sovereign cloud.

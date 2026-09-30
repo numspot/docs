@@ -1,0 +1,61 @@
+/**
+ * Footer — Brand Book 2026
+ * Same color as the page background (theme-aware) + top separator border.
+ * We drive the --ifm-footer-* variables to cover every state without a
+ * specificity fight with the footer--dark class set by the config.
+ */
+
+.footer {
+  /* Same color as the sidebar (menu/footer parity) in both themes. */
+  --ifm-footer-background-color: var(--bg-sidebar);
+  --ifm-footer-color: var(--text-secondary);
+  --ifm-footer-link-color: var(--text-secondary);
+  --ifm-footer-link-hover-color: var(--text-link);
+  --ifm-footer-title-color: var(--text-muted);
+
+  background: var(--bg-sidebar);
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-secondary);
+  padding-top: var(--ns-space-12);
+  padding-bottom: var(--ns-space-6);
+  font-size: 14px;
+  transition: background var(--ns-transition-theme),
+    border-color var(--ns-transition-theme);
+}
+
+.footer__title,
+.footer__section-title {
+  font-size: 14px;
+  font-weight: var(--ns-font-weight-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--ns-space-2);
+}
+
+.footer__link-item {
+  color: var(--text-secondary);
+  transition: color var(--ns-transition-hover);
+}
+
+.footer__link-item:hover {
+  color: var(--text-link);
+  text-decoration: none;
+}
+
+.footer__links {
+  margin-bottom: var(--ns-space-4);
+}
+
+.footer__item {
+  margin-bottom: 4px;
+}
+
+.footer__bottom {
+  margin-top: var(--ns-space-6);
+}
+
+.footer__copyright {
+  font-size: 14px;
+  color: var(--text-muted);
+}

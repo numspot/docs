@@ -1,0 +1,119 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+}
+
+.content {
+  text-align: center;
+  padding: 2rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: 4rem;
+  font-weight: 700;
+  background: linear-gradient(to right, #002d9c, #00c6ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+  animation: fadeIn 0.7s ease-in-out;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  animation: fadeIn 0.7s ease-in-out;
+}
+
+.description {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  animation: fadeIn 0.7s ease-in-out;
+}
+
+.button {
+  display: inline-block;
+  font-size: 1rem;
+  color: #ffffff;
+  background: linear-gradient(to right, #002d9c, #009dff);
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 45, 156, 0.3);
+  animation: fadeIn 0.7s ease-in-out;
+}
+
+.button:hover {
+  background: linear-gradient(to right, #0033b3, #009dff);
+  transform: translateY(-1px);
+  text-decoration: none;
+  color: #ffffff;
+}
+
+/* Dark Mode */
+html[data-theme="dark"] .content {
+  background: #282829;
+  box-shadow: 0 8px 24px rgba(30, 30, 30, 0.3);
+}
+
+html[data-theme="dark"] .title {
+  filter: brightness(0) saturate(100%) invert(68%) sepia(87%) saturate(1400%)
+    hue-rotate(0deg) brightness(103%) contrast(103%);
+}
+
+html[data-theme="dark"] .subtitle {
+  color: #e0e7ff;
+}
+
+html[data-theme="dark"] .description {
+  color: #b0b8cc;
+}
+
+html[data-theme="dark"] .button {
+  background: linear-gradient(to right, #004d99, #009dff);
+}
+
+html[data-theme="dark"] .button:hover {
+  background: linear-gradient(to right, #0033b3, #00d4ff);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 996px) {
+  .title {
+    font-size: 3rem;
+  }
+  .subtitle {
+    font-size: 1.25rem;
+  }
+  .description {
+    font-size: 1rem;
+  }
+  .button {
+    font-size: 1rem;
+    padding: 0.4rem 1rem;
+  }
+}

@@ -1,0 +1,75 @@
+---
+title: Lire un ou plusieurs tags
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Lire un ou plusieurs tags
+
+Vous pouvez rechercher des informations sur vos tags.
+
+:::info
+Pour rechercher des ressources par rapport à leurs tags, reportez-vous à la section de lecture de la ressource concernée.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite la permission **IAM** (Identity and Access Management) de lecture de chaque ressource dont vous souhaitez consulter les tags. Par exemple :
+
+- **compute.vm.get** pour une [VM (virtual machine)](/docs/compute/concept/) ;
+- **compute.blockStorage.get** pour un [volume (block storage)](/docs/storage/block-storage/concepts/) ;
+- **compute.loadBalancer.get** pour un [load balancer](/docs/network/load-balancer/concepts/) ;
+- **compute.vpc.get** pour un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+
+Cette liste est donnée à titre d'exemple et n'est pas exhaustive : pour chaque ressource, reportez-vous à sa page d'action.
+
+Seuls les tags des ressources que vous êtes autorisé à lire sont renvoyés.
+
+:::
+
+<Tabs>
+<TabItem value="Console" label="Console" default>
+
+## Console {#tabhead-Console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/load-balancer/lb-02-actions.png", text: "Depuis la liste de la ressource concernée, ouvrez le menu « Actions » de sa ligne, puis cliquez sur « Gérer les tags ».", hotspot: { x: 0.875, y: 0.4358, w: 0.0884, h: 0.0457 } },
+    { img: "/img/walkthrough/load-balancer/lb-tags-panel.png", text: "Le panneau « Gérer les tags » affiche la liste des tags (clé/valeur) associés à la ressource.", hotspot: { x: 0.6, y: 0.28, w: 0.35, h: 0.1 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, accédez à la liste de la ressource dont vous souhaitez consulter les tags ;
+2. Sur la ligne de la ressource, ouvrez le menu **Actions**, puis cliquez sur **Gérer les tags**.
+
+Le panneau **Gérer les tags** affiche la liste des tags associés à la ressource.
+
+:::info
+Le parcours est identique pour toutes les ressources qui supportent les tags (VM, volume, load balancer, VPC…). L'exemple ci-dessus est pris sur un load balancer.
+:::
+
+</TabItem>
+<TabItem value="API" label="API">
+
+## API {#tabhead-API}
+
+
+La commande `GET /compute/spaces/{spaceId}/tags` liste les tags d'un espace. La liste ne contient que les tags des ressources auxquelles vous avez la permission d'accéder.
+
+[Exemple de requête : Lister les tags ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/tags)
+
+</TabItem>
+<TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-Terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
+
+</TabItem>
+</Tabs>

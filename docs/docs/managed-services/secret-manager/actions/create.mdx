@@ -1,0 +1,80 @@
+---
+title: Créer une instance Secret Manager
+sidebar_position: 2
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Créer une instance Secret Manager
+
+Vous pouvez créer une [instance Secret Manager](/docs/managed-services/secret-manager/concepts/) au sein de votre espace.
+
+Lors de la création, vous devez définir le nom de l'instance et choisir sa visibilité réseau.
+
+Une fois l'instance Secret Manager créée, vous pouvez vous y connecter pour y stocker et gérer vos secrets.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **secrets.instance.create**
+
+:::
+
+:::warning Choix du type de réseau
+Le choix entre réseau **Privé** et **Public** détermine qui peut accéder à votre instance Secret Manager :
+
+- **Privé** (`INTERNAL`) : votre instance n'est accessible qu'au sein du réseau interne Numspot. Seules vos autres ressources présentes dans le même réseau peuvent s'y connecter. Cette option est recommandée pour les environnements de production, notamment les environnements SecNumCloud. Pour y accéder de façon sécurisée, vous pouvez utiliser une [VM](/docs/compute/concept/) de rebond et un VPN (Virtual Private Network) Numspot.
+
+- **Public** (`EXTERNAL`) : votre instance est accessible depuis Internet. Toute personne disposant du jeton d'administration peut s'y connecter, où qu'elle se trouve. Cette option convient aux développements, tests ou environnements où la sécurité réseau n'est pas critique.
+
+**Recommandation** : Pour garantir la sécurité de vos secrets en production, privilégiez toujours le réseau **Privé**.
+:::
+
+<Tabs>
+    
+    <TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+        La requête `POST /secrets/spaces/{spaceId}/instances` permet de créer et lancer une instance Secret Manager.
+        L'instance est dans un état `CREATING` puis `PENDING` jusqu'à sa création, puis passe à l'état `RUNNING`.
+
+        **Choix du type de réseau** :
+
+        - **Public** : spécifiez `"visibility": "EXTERNAL"`
+        - **Privé** : spécifiez `"visibility": "INTERNAL"`
+
+        ### Exemple de requête
+
+        ```json
+        {
+          "name": "mon-secret-manager",
+          "visibility": "EXTERNAL"
+        }
+        ```
+
+        ### Exemple de réponse
+
+        ```json
+        {
+          "id": "550e8400-e29b-41d4-a716-446655440002",
+          "name": "mon-secret-manager",
+          "status": {
+            "state": "RUNNING",
+            "message": "instance is healthy"
+          },
+          "version": "1.0.0",
+          "host": "mon-secret-manager.secrets.eu-west-2.numspot.com",
+          "visibility": "EXTERNAL"
+        }
+        ```
+
+        [Voir la spécification complète](/openapi/#tag/Secret/POST/secrets/spaces/{spaceId}/instances)
+
+    </TabItem>
+    
+    {/* </TabItem> */}
+</Tabs>

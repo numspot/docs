@@ -1,0 +1,422 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.docsSidebar.category.Réversibilité": {
+    "message": "Reversibility",
+    "description": "The label for category 'Réversibilité' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Plateforme IA Mistral": {
+    "message": "Mistral AI Platform",
+    "description": "The label for category 'Plateforme IA Mistral' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.OpenAPI": {
+    "message": "OpenAPI",
+    "description": "The label for category 'OpenAPI' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Terraform": {
+    "message": "Terraform",
+    "description": "The label for category 'Terraform' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-terraform": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Glossaire": {
+    "message": "Glossary",
+    "description": "The label for category 'Glossaire' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Support": {
+    "message": "Support",
+    "description": "The label for category 'Support' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Ressources": {
+    "message": "Resources",
+    "description": "The label for category 'Ressources' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Tags": {
+    "message": "Tags",
+    "description": "The label for category 'Tags' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-tags": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Foire aux questions": {
+    "message": "Frequently Asked Questions",
+    "description": "The label for category 'Foire aux questions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Services Managés": {
+    "message": "Managed Services",
+    "description": "The label for category 'Services Managés' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Kubernetes": {
+    "message": "Kubernetes",
+    "description": "The label for category 'Kubernetes' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-kubernetes": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.guides-kubernetes": {
+    "message": "Guides",
+    "description": "The label for category 'Guides' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.PostgreSQL": {
+    "message": "PostgreSQL",
+    "description": "The label for category 'PostgreSQL' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-postgresql": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.guides-postgresql": {
+    "message": "Guides",
+    "description": "The label for category 'Guides' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Container Registry": {
+    "message": "Container Registry",
+    "description": "The label for category 'Container Registry' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-registry": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.guides-registry": {
+    "message": "Guides",
+    "description": "The label for category 'Guides' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Compute": {
+    "message": "Compute",
+    "description": "The label for category 'Compute' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.VM": {
+    "message": "VM",
+    "description": "The label for category 'VM' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-vms": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.GPU": {
+    "message": "GPU",
+    "description": "The label for category 'GPU' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-gpu": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Key pairs": {
+    "message": "Key pairs",
+    "description": "The label for category 'Key pairs' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-keypairs": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Security Groups": {
+    "message": "Security Groups",
+    "description": "The label for category 'Security Groups' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.concepts-security-groups": {
+    "message": "Concepts",
+    "description": "The label for category 'Concepts' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-security-groups": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Images": {
+    "message": "Images",
+    "description": "The label for category 'Images' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-images": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Réseau": {
+    "message": "Networking",
+    "description": "The label for category 'Réseau' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.VPC": {
+    "message": "VPC",
+    "description": "The label for category 'VPC' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-vpc": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Subnets": {
+    "message": "Subnets",
+    "description": "The label for category 'Subnets' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-subnets": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Route Table": {
+    "message": "Route Table",
+    "description": "The label for category 'Route Table' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-route-table": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Créer et gérer les routes dans une route table": {
+    "message": "Create and manage routes in a route table",
+    "description": "The label for category 'Créer et gérer les routes dans une route table' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Administration d'une route table": {
+    "message": "Route table administration",
+    "description": "The label for category 'Administration d'une route table' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.DHCP": {
+    "message": "DHCP",
+    "description": "The label for category 'DHCP' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-dhcp": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Internet Gateway": {
+    "message": "Internet Gateway",
+    "description": "The label for category 'Internet Gateway' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-internet-gateway": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Administration d'une Internet Gateway": {
+    "message": "Internet Gateway administration",
+    "description": "The label for category 'Administration d'une Internet Gateway' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.NAT": {
+    "message": "NAT",
+    "description": "The label for category 'NAT' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-nat": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Public IP": {
+    "message": "Public IP",
+    "description": "The label for category 'Public IP' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-public-ip": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.load-balancer-main": {
+    "message": "Load Balancer",
+    "description": "The label for category 'Load Balancer' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-load-balancer": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.load-balancer-actions": {
+    "message": "Load Balancer",
+    "description": "The label for category 'Load Balancer' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.lb-listener": {
+    "message": "Listener",
+    "description": "The label for category 'Listener' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.lb-load-balancer-tags": {
+    "message": "Load Balancer Tags",
+    "description": "The label for category 'Load Balancer Tags' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Stockage": {
+    "message": "Storage",
+    "description": "The label for category 'Stockage' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Block storage": {
+    "message": "Block storage",
+    "description": "The label for category 'Block storage' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Volumes": {
+    "message": "Volumes",
+    "description": "The label for category 'Volumes' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-volumes": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Snapshots": {
+    "message": "Snapshots",
+    "description": "The label for category 'Snapshots' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-snapshots": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Object storage": {
+    "message": "Object storage",
+    "description": "The label for category 'Object storage' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Buckets": {
+    "message": "Buckets",
+    "description": "The label for category 'Buckets' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-buckets": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Objets": {
+    "message": "Objects",
+    "description": "The label for category 'Objets' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-objects": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Connectivité": {
+    "message": "Connectivity",
+    "description": "The label for category 'Connectivité' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.DirectLink": {
+    "message": "DirectLink",
+    "description": "The label for category 'DirectLink' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-direct-link": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.VPN": {
+    "message": "VPN",
+    "description": "The label for category 'VPN' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Client Gateway": {
+    "message": "Client Gateway",
+    "description": "The label for category 'Client Gateway' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-client-gateway": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Virtual Gateway": {
+    "message": "Virtual Gateway",
+    "description": "The label for category 'Virtual Gateway' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-virtual-gateway": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.VPN Connection": {
+    "message": "VPN Connection",
+    "description": "The label for category 'VPN Connection' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-connection-vpn": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Route VPN": {
+    "message": "VPN Route",
+    "description": "The label for category 'Route VPN' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-route-vpn": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Utiliser la route propagation": {
+    "message": "Using route propagation",
+    "description": "The label for category 'Utiliser la route propagation' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Gérer les routes manuellement": {
+    "message": "Managing routes manually",
+    "description": "The label for category 'Gérer les routes manuellement' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Compute Bridge": {
+    "message": "Compute Bridge",
+    "description": "The label for category 'Compute Bridge' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-compute-bridge": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Hybrid Bridge": {
+    "message": "Hybrid Bridge",
+    "description": "The label for category 'Hybrid Bridge' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-hybrid-bridge": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.IAM": {
+    "message": "IAM",
+    "description": "The label for category 'IAM' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Connexion": {
+    "message": "Sign in",
+    "description": "The label for category 'Connexion' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.concepts-iam": {
+    "message": "Concepts",
+    "description": "The label for category 'Concepts' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Gestion des utilisateurs": {
+    "message": "User management",
+    "description": "The label for category 'Gestion des utilisateurs' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-user": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Comptes de service": {
+    "message": "Service accounts",
+    "description": "The label for category 'Comptes de service' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-service-account": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Gestion des accès": {
+    "message": "Access management",
+    "description": "The label for category 'Gestion des accès' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-access": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Gestion des organisations et des espaces": {
+    "message": "Organisation and space management",
+    "description": "The label for category 'Gestion des organisations et des espaces' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-space": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Server Certificates": {
+    "message": "Server Certificates",
+    "description": "The label for category 'Server Certificates' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-server-certificate": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Catalogue": {
+    "message": "Catalogue",
+    "description": "The label for category 'Catalogue' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-catalog": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Inventaire": {
+    "message": "Inventory",
+    "description": "The label for category 'Inventaire' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.actions-inventory": {
+    "message": "Actions",
+    "description": "The label for category 'Actions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.link.Global": {
+    "message": "Global",
+    "description": "The label for link 'Global' in sidebar 'docsSidebar', linking to '/openapi/'"
+  },
+  "sidebar.docsSidebar.link.Object Storage": {
+    "message": "Object Storage",
+    "description": "The label for link 'Object Storage' in sidebar 'docsSidebar', linking to '/openapi-object-storage/'"
+  }
+}

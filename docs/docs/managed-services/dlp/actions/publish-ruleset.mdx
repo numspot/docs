@@ -1,0 +1,131 @@
+---
+title: Publier un ruleset DLP - DLP managé
+sidebar_label: Publier un ruleset DLP
+sidebar_position: 10
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Publier un ruleset DLP
+
+Publiez un [ruleset](/docs/managed-services/dlp/concepts) (ensemble de règles) pour activer les règles et policies en brouillon. La publication crée une nouvelle version immuable du ruleset, immédiatement synchronisée avec les workers.
+
+## Permissions
+
+:::info
+Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+
+- **rule_publisher**
+
+:::
+
+:::warning
+La publication est irréversible. Une version publiée ne peut pas être modifiée. Pour revenir à une version précédente, utilisez le rollback.
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Dans la console DLP, cliquez sur Publish dans le menu latéral.", hotspot: { x: 0.006, y: 0.135, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/06-publish.png", text: "Consultez les informations de version et les modifications en attente.", hotspot: { x: 0.201, y: 0.135, w: 0.765, h: 0.619 } },
+    { img: "/img/walkthrough/dlp/06-publish.png", text: "Cliquez sur le bouton « Publish » (ici « Publish v2 ») pour publier la nouvelle version des règles et policies.", hotspot: { x: 0.897, y: 0.030, w: 0.086, h: 0.044 } },
+  ]}
+/>
+
+1. Dans la console [DLP](/docs/managed-services/dlp/concepts), cliquez sur **Publish** dans le menu latéral.
+
+### Révision des modifications
+
+La page de publication affiche :
+
+- la version actuellement publiée ;
+- le nombre de règles en brouillon ;
+- le nombre de policies en brouillon ;
+- la liste détaillée des modifications par rapport à la version en cours.
+
+Vérifiez les modifications avant de publier.
+
+### Publication
+
+1. Renseignez une description pour la nouvelle version — par exemple, `Ajout de la règle de blocage des clés AWS` ;
+2. Cliquez sur **Publish** pour publier la nouvelle version ;
+3. Un message de confirmation s'affiche indiquant que le ruleset est publié et que les workers se synchronisent.
+
+Les workers récupèrent la nouvelle version dans un délai de 30 secondes.
+
+### Rollback
+
+Pour restaurer une version précédente :
+
+1. Sur la page **Publish**, consultez l'historique des versions ;
+2. Cliquez sur **Rollback** à côté de la version à restaurer ;
+3. Confirmez le rollback.
+
+Le rollback crée une nouvelle version (N+1) identique à la version sélectionnée.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+### Publier un ruleset
+
+La requête `POST /api/v1/rulesets/publish` permet de publier une nouvelle version du [ruleset](/docs/managed-services/dlp/concepts).
+
+#### Exemple de requête
+
+```json
+{
+  "description": "Ajout de la règle de blocage des clés AWS"
+}
+```
+
+#### Exemple de réponse
+
+```json
+{
+  "version": 3,
+  "description": "Ajout de la règle de blocage des clés AWS",
+  "rules": [
+    {
+      "id": "rule-550e8400",
+      "name": "block-aws-keys",
+      "condition": "tool_arguments matches_detector @preset:aws_access_key_id",
+      "action": { "type": "block", "message": "Clé AWS détectée" }
+    }
+  ],
+  "policies": [
+    {
+      "id": "policy-9f8e7d6c",
+      "name": "mistral-prod-policy",
+      "rule_ids": ["rule-550e8400"],
+      "default_action": "block"
+    }
+  ],
+  "custom_detectors": [],
+  "schema_version": "1.0",
+  "published_by": "admin",
+  "published_at": "2026-08-27T10:30:00Z"
+}
+```
+
+### Effectuer un rollback
+
+La requête `POST /api/v1/rulesets/rollback` permet de restaurer une version précédente.
+
+#### Exemple de requête
+
+```json
+{
+  "version": 2
+}
+```
+
+Le rollback crée une nouvelle version (N+1) identique à la version 2.
+
+</TabItem>
+</Tabs>

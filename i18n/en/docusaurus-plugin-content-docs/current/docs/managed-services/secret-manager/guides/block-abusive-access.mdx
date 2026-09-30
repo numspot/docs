@@ -1,0 +1,204 @@
+---
+title: Block abusive access - managed Secret Manager
+sidebar_label: Block abusive access
+description: Guide to blocking abusive access on a managed Secret Manager instance
+sidebar_position: 3
+draft: false
+---
+
+# Block abusive access
+
+The managed [Secret Manager](/docs/managed-services/secret-manager/concepts/) service includes mechanisms to limit failed connection attempts and block compromised accounts. This guide explains how to configure automatic lockout, delete an account and revoke its access in the event of abusive use.
+
+## Prerequisites
+
+:::note
+- A [Secret Manager instance](/docs/managed-services/secret-manager/concepts/) in the `RUNNING` state;
+- The instance admin token;
+- The `bao` CLI installed, or `curl` for direct API calls.
+:::
+
+Configure access to the instance:
+
+```bash
+export BAO_ADDR="https://{instance-host}"
+export BAO_TOKEN="{admin-token}"
+```
+
+## Automatic lockout after repeated failures
+
+OpenBao enables user lockout by default for the **userpass**, **LDAP** and **AppRole** authentication methods. After several failed connection attempts in quick succession, the account is temporarily blocked and OpenBao immediately returns a `permission denied` error without validating the password.
+
+### Default behavior
+
+| Parameter | Default value | Description |
+| --- | --- | --- |
+| Lockout threshold | 5 attempts | Number of failures before blocking; |
+| Lockout duration | 15 minutes | Length of time the account stays blocked; |
+| Counter reset | 15 minutes | Period without an attempt after which the failure counter returns to zero.
+
+The failure counter also returns to zero after a successful connection.
+
+### Check the configuration
+
+Replace `userpass/` with the path of the relevant authentication method.
+
+Via the CLI:
+
+```bash
+bao read sys/auth/userpass/tune
+```
+
+Via the API:
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  $BAO_ADDR/v1/sys/auth/userpass/tune
+```
+
+The following fields indicate the lockout state:
+
+- `user_lockout_threshold`: lockout threshold;
+- `user_lockout_duration`: lockout duration;
+- `user_lockout_counter_reset_duration`: counter reset period;
+- `user_lockout_disable`: `true` if lockout is disabled.
+
+### Change the lockout thresholds
+
+To lock an account after 10 failures in 10 minutes and reset the counter after 10 minutes of inactivity:
+
+Via the CLI:
+
+```bash
+bao auth tune \
+  -user-lockout-threshold=10 \
+  -user-lockout-duration=10m \
+  -user-lockout-counter-reset-duration=10m \
+  userpass/
+```
+
+Via the API:
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request POST \
+  --data '{
+    "user_lockout_threshold": "10",
+    "user_lockout_duration": "10m",
+    "user_lockout_counter_reset_duration": "10m"
+  }' \
+  $BAO_ADDR/v1/sys/auth/userpass/tune
+```
+
+:::warning
+These settings apply to the entire authentication method enabled at the given path. Reduce the lockout duration with care so as not to weaken protection against brute-force attacks.
+:::
+
+### Disable lockout
+
+You can disable lockout at the level of an authentication method without affecting the rest of the instance.
+
+Via the CLI:
+
+```bash
+bao auth tune -user-lockout-disable=true userpass/
+```
+
+Via the API:
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request POST \
+  --data '{"user_lockout_disable": true}' \
+  $BAO_ADDR/v1/sys/auth/userpass/tune
+```
+
+## Block or delete an account
+
+When an account is compromised or used abusively, you can delete it and immediately revoke its active tokens.
+
+### Delete a user
+
+Replace `{username}` with the name of the relevant user.
+
+Via the CLI:
+
+```bash
+bao delete auth/userpass/users/{username}
+```
+
+Via the API:
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request DELETE \
+  $BAO_ADDR/v1/auth/userpass/users/{username}
+```
+
+:::danger
+Deleting a user is irreversible. Tokens already issued remain valid until they expire.
+:::
+
+### Revoke active tokens
+
+After deleting a user, revoke their tokens to immediately invalidate their access.
+
+List the token accessors:
+
+```bash
+bao list auth/token/accessors
+```
+
+Revoke a specific token:
+
+```bash
+bao token revoke -accessor {accessor}
+```
+
+Via the API:
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request POST \
+  --data '{"accessor": "{accessor}"}' \
+  $BAO_ADDR/v1/auth/token/revoke-accessor
+```
+
+### Disable an authentication method
+
+In the event of a widespread attack against an authentication method, you can disable it completely.
+
+Via the CLI:
+
+```bash
+bao auth disable userpass
+```
+
+:::danger
+Disabling an authentication method blocks all users that use it. This operation is irreversible: you will have to recreate the method and reconfigure the users.
+:::
+
+## Detect abusive use
+
+Monitor the following events in the instance audit logs:
+
+- multiple consecutive failed connection attempts for the same user;
+- repeated `403` or `permission denied` response codes;
+- connections from unusual IP addresses;
+- secret retrieval outside the usual time ranges.
+
+Configure an alert or automatic handling on these patterns to react quickly. For sensitive environments, combine this monitoring with IP restriction and access via VPN with MFA.
+
+## Summary of best practices
+
+| Situation | Recommended action |
+| --- | --- |
+| Brute-force attack | Keep automatic lockout with thresholds suited to your usage; |
+| Compromised account | Delete the user and revoke their tokens; |
+| Targeted auth method | Adjust the lockout thresholds or temporarily disable the method; |
+| Monitoring | Regularly audit access logs and failed connection attempts. |

@@ -1,0 +1,60 @@
+---
+title: Obtenir des informations sur vos VPC
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Obtenir des informations sur vos VPC
+
+Vous pouvez obtenir des informations à propos d'un ou plusieurs de vos [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/), comme leur bloc CIDR (Classless Inter-Domain Routing) ou leur option d'allocation.
+Des informations sur vos VPC sont également disponibles depuis les [VM (Virtual Machines)](/docs/compute/concept/) elles-mêmes.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.vpc.get**
+
+:::
+<Tabs>
+   <TabItem value="Console" default> 
+
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/vpc/vpc-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC.", hotspot: { x: 0, y: 0.5222, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/vpc/vpc-list.png", text: "Dans la liste des VPC (Réseau → VPC → VPC), cliquez sur l'ID du VPC à consulter.", hotspot: { x: 0.2083, y: 0.4514, w: 0.5556, h: 0.1074 } },
+    { img: "/img/walkthrough/vpc/vpc-detail.png", text: "La page de détail affiche les informations du VPC : plage d'IP, DHCP, route tables et tags.", hotspot: { x: 0.2083, y: 0.155, w: 0.5556, h: 0.34 } },
+  ]}
+/>
+  1. Connectez-vous sur la console Numspot.   
+
+  2. Depuis le menu latéral gauche, cliquez sur **Réseau** → **VPC** → **VPC**.
+
+  3. La liste des VPC apparaît. Cliquez sur l'**ID du VPC** concerné.
+
+  4. La page **Détails VPC** apparaît.
+
+   </TabItem> 
+   <TabItem value="API">
+
+La commande `GET /compute/spaces/{spaceId}/vpcs` permet de lister les VPC.
+
+[Exemple de requête : Lister tous les VPC ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/vpcs)
+
+La commande `GET /compute/spaces/{spaceId}/vpcs/{id}` permet de récupérer les informations d'un VPC.
+
+[Exemple de requête : Récupérer les informations d'un VPC ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/vpcs/{id})
+  </TabItem>
+  <TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-Terraform}
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpc).
+  </TabItem>
+</Tabs>

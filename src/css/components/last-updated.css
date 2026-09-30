@@ -1,0 +1,14 @@
+/**
+ * Review date ("Mise à jour le ..." / "Reviewed on ...") rendered by
+ * src/components/LastUpdatedDate under each doc page title.
+ */
+
+.doc-last-updated {
+  font-size: 0.85rem;
+  color: #3f3f46;
+  margin: -1.25rem 0 1.5rem;
+}
+
+[data-theme='dark'] .doc-last-updated {
+  color: #a1a1aa;
+}

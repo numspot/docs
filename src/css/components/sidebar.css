@@ -1,0 +1,446 @@
+/**
+ * Docs sidebar — 2026 Brand Book
+ * Icons: mask-image + background-color (token) → color driven by the theme,
+ * no more CSS filters or dark-mode-only -w (white) files.
+ */
+
+@media (min-width: 997px) {
+  .menu {
+    padding: 0.8rem;
+  }
+}
+
+.menu__list-item {
+  font-size: 0.875rem;
+  margin: 0 auto 0 0;
+  transition: all 0.3s ease;
+}
+
+/* Links (generic) */
+.menu__link {
+  color: var(--text-secondary);
+  border-radius: var(--ns-radius-sm);
+}
+
+.menu__link:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+/* No distinct hover background on the caret button of linked categories:
+   this aligns it with OpenAPI (unlinked category, no separate .menu__caret). */
+.menu__caret:hover {
+  color: var(--text-primary);
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  color: var(--accent-primary);
+  background: var(--bg-active);
+}
+
+/* Level-1 categories (section titles) */
+.section-title.theme-doc-sidebar-item-category-level-1
+  .menu__list-item-collapsible {
+  font-size: 14px;
+  font-weight: var(--ns-font-weight-semibold);
+  color: var(--text-secondary);
+}
+
+.theme-doc-sidebar-item-category-level-1.section-title .menu__link--active {
+  color: var(--accent-primary);
+}
+
+/* OpenAPI can never become "active" (label without href, and its /openapi/
+   pages are standalone, with no sidebar): display it as selected as soon as
+   its category is expanded, so its expanded state reads consistently with
+   the other sections. */
+.theme-doc-sidebar-item-category-level-1.section-title.openapi:not(.menu__list-item--collapsed)
+  > .menu__list-item-collapsible
+  > a.menu__link {
+  color: var(--accent-primary);
+}
+.theme-doc-sidebar-item-category-level-1.section-title.openapi:not(.menu__list-item--collapsed)
+  > .menu__list-item-collapsible
+  > a.menu__link::before {
+  background-color: var(--icon-active);
+}
+
+/* Single selection: when OpenAPI is expanded (= selected), turn off the
+   highlight of the actually active item (current page) — label, icon and
+   leaf item — so only one selection is visible at a time. */
+.theme-doc-sidebar-menu:has(
+    > li.section-title.openapi:not(.menu__list-item--collapsed)
+  )
+  a.menu__link--active {
+  color: var(--text-secondary);
+  background: transparent;
+}
+.theme-doc-sidebar-menu:has(
+    > li.section-title.openapi:not(.menu__list-item--collapsed)
+  )
+  a.menu__link--active::before {
+  background-color: var(--icon-color);
+}
+
+/* Level-2 categories */
+.theme-doc-sidebar-item-category-level-2 .menu__list-item-collapsible {
+  text-transform: none;
+  font-size: 0.875rem;
+  letter-spacing: 0;
+  color: var(--text-secondary);
+}
+
+.theme-doc-sidebar-item-category-level-2
+  .menu__list-item-collapsible
+  .menu__link {
+  line-height: 1.38;
+  color: var(--text-secondary);
+}
+
+.theme-doc-sidebar-item-category-level-2
+  .menu__list-item-collapsible:hover {
+  background: var(--bg-hover);
+}
+
+/* Nested ul of level-2 sub-items */
+.theme-doc-sidebar-item-category.theme-doc-sidebar-item-category-level-2
+  ul.menu__list {
+  border-left: 1px solid var(--border-primary);
+  padding-left: 0;
+  margin-left: 16px;
+  margin-bottom: 24px;
+}
+
+/* Level-3 links */
+.theme-doc-sidebar-item-link-level-3 a {
+  color: var(--text-secondary);
+}
+
+.theme-doc-sidebar-item-link-level-3:hover {
+  color: var(--text-primary);
+  border-radius: var(--ns-radius-sm);
+}
+
+/* Carets — brand chevron (chevron-right.svg) recolored via mask.
+   Rotation follows the Infima logic (.menu__list-item--collapsed, which wins
+   on specificity): expanded → points down (⌄), collapsed → right (›). */
+.menu__caret::before,
+.menu__link.menu__link--sublist:not(:has(+ .menu__caret))::after {
+  content: "";
+  display: inline-block;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-left: auto;
+  vertical-align: middle;
+  background-color: currentColor;
+  background-image: none; /* neutralizes the Infima sublist icon under the mask */
+  -webkit-mask: url(../../../static/img/ui/chevron-right.svg) center / 0.95rem
+    0.95rem no-repeat;
+  mask: url(../../../static/img/ui/chevron-right.svg) center / 0.95rem 0.95rem
+    no-repeat;
+  transition: transform 0.2s ease;
+  transform: rotate(90deg); /* expanded → ⌄ */
+}
+.menu__list-item--collapsed .menu__caret::before,
+.menu__list-item--collapsed
+  .menu__link.menu__link--sublist:not(:has(+ .menu__caret))::after {
+  transform: rotate(0deg); /* collapsed → › */
+}
+
+/* ----- Section icons (mask-image, color = token) ----- */
+.section-title > div > a::before,
+.menu > ul > li > a::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  background-color: var(--icon-color);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  transition: background-color 0.2s ease;
+}
+
+/* Active icon → accent color */
+.section-title > div > a.menu__link--active::before,
+.menu > ul > li > a.menu__link--active::before {
+  background-color: var(--icon-active);
+}
+
+/* Section → icon file mapping (single set, recolored via mask) */
+.menu > ul > li > a::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/home.svg);
+  mask-image: url(../../../static/img/sidebar/home.svg);
+}
+a.menu__link[href^="/docs/changelog"]::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/changelog.svg);
+  mask-image: url(../../../static/img/sidebar/changelog.svg);
+}
+a.menu__link[href^="/docs/getting-started"]::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/footprints.svg);
+  mask-image: url(../../../static/img/sidebar/footprints.svg);
+}
+.section-title.openapi > div > a::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/openapi.svg);
+  mask-image: url(../../../static/img/sidebar/openapi.svg);
+}
+.section-title.terraform > div > a::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/terraform.svg);
+  mask-image: url(../../../static/img/sidebar/terraform.svg);
+}
+.section-title.compute > div > a::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/compute.svg);
+  mask-image: url(../../../static/img/sidebar/compute.svg);
+}
+.section-title.connectivity > div > a::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/connectivity.svg);
+  mask-image: url(../../../static/img/sidebar/connectivity.svg);
+}
+.section-title.resource > div > a::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/governance.svg);
+  mask-image: url(../../../static/img/sidebar/governance.svg);
+}
+.section-title.storage > div > a::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/storage.svg);
+  mask-image: url(../../../static/img/sidebar/storage.svg);
+}
+.section-title.faq > div > a::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/faq.svg);
+  mask-image: url(../../../static/img/sidebar/faq.svg);
+}
+.section-title.support > div > a::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/support.svg);
+  mask-image: url(../../../static/img/sidebar/support.svg);
+}
+.section-title.network > div > a::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/network.svg);
+  mask-image: url(../../../static/img/sidebar/network.svg);
+}
+.section-title.iam > div > a::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/iam.svg);
+  mask-image: url(../../../static/img/sidebar/iam.svg);
+}
+.section-title.security > div > a::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/security.svg);
+  mask-image: url(../../../static/img/sidebar/security.svg);
+}
+.section-title.managed-services > div > a::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/managed-services.svg);
+  mask-image: url(../../../static/img/sidebar/managed-services.svg);
+}
+/* The glossary is a level-1 direct link (category whose only child is its
+   index, converted to a doc by Docusaurus): the href-based selector covers
+   FR (/docs/) and EN (/en/docs/); $= avoids catching a nested path. */
+a.menu__link[href$="/docs/glossary/"]::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/glossary.svg);
+  mask-image: url(../../../static/img/sidebar/glossary.svg);
+}
+.section-title.catalog > div > a::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/catalog.svg);
+  mask-image: url(../../../static/img/sidebar/catalog.svg);
+}
+.section-title.inventory > div > a::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/inventory.svg);
+  mask-image: url(../../../static/img/sidebar/inventory.svg);
+}
+
+/* ----- Group labels "Ressources & outils" / "Nos services" /
+   "Management & gouvernance" -----
+   Injected as ::before on the first item of each group. That item depends on
+   the sidebar sort (src/components/sidebar-order.js): OpenAPI is pinned
+   first in the tools group (explicit sidebars.ts item), while the services
+   and governance heads carry the group-head-services / group-head-governance
+   marker classes added at build time to whichever item sorts first. */
+.theme-doc-sidebar-item-category-level-1.openapi::before,
+.theme-doc-sidebar-item-category-level-1.group-head-services::before,
+.theme-doc-sidebar-item-category-level-1.group-head-governance::before {
+  display: block;
+  font-size: 14px;
+  font-weight: var(--ns-font-weight-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: var(--ns-space-2) var(--ns-space-4) 6px;
+}
+.theme-doc-sidebar-item-category-level-1.openapi::before {
+  content: "Ressources & outils";
+}
+.theme-doc-sidebar-item-category-level-1.group-head-services::before {
+  content: "Nos services";
+  margin-top: var(--ns-space-3);
+  padding-top: var(--ns-space-4);
+  border-top: 1px solid var(--border-secondary);
+}
+.theme-doc-sidebar-item-category-level-1.group-head-governance::before {
+  content: "Management & gouvernance";
+  margin-top: var(--ns-space-3);
+  padding-top: var(--ns-space-4);
+  border-top: 1px solid var(--border-secondary);
+}
+/* EN translation of the group labels (en locale = htmlLang "en-GB").
+   The content is injected via CSS, so it is localized through the <html> lang. */
+html[lang="en-GB"] .theme-doc-sidebar-item-category-level-1.openapi::before {
+  content: "Resources & tools";
+}
+html[lang="en-GB"] .theme-doc-sidebar-item-category-level-1.group-head-services::before {
+  content: "Our services";
+}
+html[lang="en-GB"] .theme-doc-sidebar-item-category-level-1.group-head-governance::before {
+  content: "Management & governance";
+}
+
+/* Sidebar mobile (navbar-sidebar) */
+.navbar-sidebar {
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-secondary);
+}
+.navbar-sidebar .menu {
+  background-color: var(--bg-secondary);
+}
+.navbar-sidebar__brand {
+  background-color: var(--bg-navbar);
+}
+
+/* Sidebar background distinct from the page background (Pearl in light mode).
+   The separating border sits on .menu (the element that materializes the
+   visible right edge): on .theme-doc-sidebar-container it does not render
+   (actual edge hidden behind the content column). */
+.theme-doc-sidebar-container {
+  background: var(--bg-sidebar);
+}
+.theme-doc-sidebar-container .menu {
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border-primary);
+}
+
+/* ----- Full-height fixed side nav (sticky) — desktop, doc pages -----
+   The nav stays visible while scrolling and runs down to the bottom of the
+   page: the collapse button ends up at the very bottom left, and the footer
+   moves to its right. The nav being out of flow (fixed), content and footer
+   are shifted by its width. The `max-width: calc(100% - sidebar)` Docusaurus
+   already sets on the content prevents any horizontal overflow. Also holds in
+   COLLAPSED state: the rail keeps its full height and the footer stays
+   shifted (reduced width = 30px). */
+@media (min-width: 997px) {
+  .theme-doc-sidebar-container {
+    position: fixed;
+    top: var(--ifm-navbar-height);
+    bottom: 0;
+    left: 0;
+    width: var(--doc-sidebar-width);
+    height: auto;
+    /* Docusaurus sets `margin-top: calc(-1 * navbar-height)` on the container
+       (default sticky design). With our rail fixed + `top: navbar-height`,
+       that negative margin would push it under the navbar (top of the menu
+       hidden). !important to neutralize regardless of CSS load order. */
+    margin-top: 0 !important;
+    z-index: 1;
+  }
+  /* Collapsed state: the rail stays fixed at full height but reduced width. */
+  .theme-doc-sidebar-container[class*="docSidebarContainerHidden"] {
+    width: var(--doc-sidebar-hidden-width);
+  }
+  /* Docusaurus sets `padding-top: navbar-height` on the inner .sidebar to
+     clear the navbar; not needed here (the rail already starts below it) →
+     remove it so the menu sits at the top. */
+  .theme-doc-sidebar-container [class*="sidebar_"] {
+    padding-top: 0;
+  }
+  /* Content + footer shifted by the CURRENT nav width (full or reduced). */
+  [class*="docRoot"] [class*="docMainContainer"] {
+    margin-left: var(--doc-sidebar-width);
+    transition: margin-left var(--ifm-transition-fast) ease;
+  }
+  [class*="docRoot"]:has([class*="docSidebarContainerHidden"])
+    [class*="docMainContainer"] {
+    margin-left: var(--doc-sidebar-hidden-width);
+  }
+  .main-wrapper:has([class*="docsWrapper"]) ~ .footer {
+    margin-left: var(--doc-sidebar-width);
+    transition: margin-left var(--ifm-transition-fast) ease;
+  }
+  .main-wrapper:has([class*="docsWrapper"]):has(
+      [class*="docSidebarContainerHidden"]
+    )
+    ~ .footer {
+    margin-left: var(--doc-sidebar-hidden-width);
+  }
+}
+
+/* ----- Sidebar collapse / expand buttons — discreet version -----
+   By default Docusaurus renders a large bordered button ("‹‹") at the bottom
+   of the sidebar and large chevrons ("››") to reopen it once collapsed. We
+   keep a small muted chevron (visible but discreet), highlighted on hover.
+   Substring selectors because the classes are hashed (CSS modules:
+   collapseSidebarButton_xxxx, expandButton_xxxx). */
+.theme-doc-sidebar-container [class*="collapseSidebarButton"] {
+  height: auto;
+  padding: var(--ns-space-2) var(--ns-space-3);
+  /* Docusaurus forces `display:block !important` → align via text-align. */
+  text-align: center;
+  background: var(--bg-sidebar) !important;
+  border: none !important;
+  border-top: 1px solid var(--border-secondary) !important;
+  /* extends .menu's right border to the bottom (button sits under the menu) */
+  border-right: 1px solid var(--border-primary) !important;
+  border-radius: 0;
+  box-shadow: none !important;
+  color: var(--text-muted) !important;
+  transition: color var(--ns-transition-hover);
+}
+.theme-doc-sidebar-container [class*="collapseSidebarButton"]:hover {
+  background: var(--bg-sidebar) !important;
+  color: var(--accent-primary);
+}
+
+/* Expand button (shown while the rail is collapsed): carries the right border
+   of the reduced rail (the menu is hidden in that state). */
+[class*="expandButton"] {
+  background: transparent !important;
+  color: var(--text-muted);
+  border-right: 1px solid var(--border-primary) !important;
+  transition: color var(--ns-transition-hover),
+    background var(--ns-transition-hover);
+}
+[class*="expandButton"]:hover {
+  background: var(--bg-hover) !important;
+  color: var(--accent-primary);
+}
+
+/* Docusaurus's arrow SVG has no viewBox (it gets clipped when resized): we
+   hide it and replace it with a small double-chevron glyph (" / "), fully
+   controllable in size and color. */
+[class*="collapseSidebarButtonIcon"],
+[class*="expandButtonIcon"] {
+  display: none !important;
+}
+.theme-doc-sidebar-container [class*="collapseSidebarButton"]::after,
+[class*="expandButton"]::after {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background-color: currentColor; /* follows the button color (muted → accent) */
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+.theme-doc-sidebar-container [class*="collapseSidebarButton"]::after {
+  /* collapse: double chevron pointing left (‹‹) */
+  -webkit-mask-image: url(../../../static/img/ui/chevron-double-left.svg);
+  mask-image: url(../../../static/img/ui/chevron-double-left.svg);
+}
+[class*="expandButton"]::after {
+  /* expand: double chevron pointing right (››) */
+  -webkit-mask-image: url(../../../static/img/ui/chevron-double-right.svg);
+  mask-image: url(../../../static/img/ui/chevron-double-right.svg);
+}

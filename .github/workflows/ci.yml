@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history: the linter diffs pull requests against main.
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - name: Lint changed pages
+        if: github.event_name == 'pull_request'
+        run: node linter/cli.js --diff origin/main --ci
+      - name: Lint every page
+        if: github.event_name == 'push'
+        run: |
+          node linter/cli.js docs/docs/ --ci
+          node linter/cli.js i18n/en/docusaurus-plugin-content-docs/current/docs/ --ci
+
+  tests:
+    name: Linter regression tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: node --test linter/tests/*.test.js
+
+  build:
+    name: Typecheck and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn typecheck
+      - run: yarn build

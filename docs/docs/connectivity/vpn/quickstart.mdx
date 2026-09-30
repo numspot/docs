@@ -1,0 +1,77 @@
+---
+title: "VPN - Démarrage rapide"
+sidebar_label: "Démarrage rapide"
+description: Créez pas à pas une connexion VPN entre votre réseau d'entreprise et un VPC dans le Cloud Numspot.
+sidebar_position: 2
+draft: false
+last_update:
+  date: 2026-09-17
+---
+
+# Créer une connexion VPN
+
+Ce tutoriel vous guide à travers les étapes de base pour créer une connexion VPN (Virtual Private Network) entre votre réseau d'entreprise et un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) dans le Cloud Numspot.
+
+## Prérequis
+
+- Un compte Numspot avec les permissions nécessaires
+- Un VPC créé dans le Cloud Numspot
+- Un routeur ou pare-feu dans votre réseau d'entreprise qui servira de [client gateway (passerelle client)](/docs/connectivity/vpn/client-gateway/concepts/)
+
+## Étape 1 : Créer une client gateway
+
+La client gateway représente votre équipement réseau (routeur ou pare-feu) situé dans votre réseau d'entreprise.
+
+1. Accédez à la console Numspot
+2. Naviguez vers **Connectivité** > **VPN**
+3. Cliquez sur **Client Gateways** > **Créer une client gateway**
+4. Renseignez les informations suivantes :
+   - **Nom** : Un nom descriptif pour votre client gateway
+   - **Adresse IP publique** : L'adresse IP publique de votre routeur/pare-feu
+   - **Type BGP** (Border Gateway Protocol) : Le type de routage à utiliser
+
+## Étape 2 : Créer une virtual gateway
+
+La [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/) est la passerelle côté Numspot qui sera attachée à votre VPC.
+
+1. Dans la console, cliquez sur **Virtual Gateways** > **Créer une virtual gateway**
+2. Sélectionnez le VPC auquel attacher la passerelle
+3. Donnez un nom à votre virtual gateway
+4. Cliquez sur **Créer**
+
+## Étape 3 : Créer la connexion VPN
+
+La connexion VPN établit le tunnel sécurisé entre la client gateway et la virtual gateway.
+
+1. Cliquez sur **Connexions VPN** > **Créer une connexion VPN**
+2. Sélectionnez votre client gateway
+3. Sélectionnez votre virtual gateway
+4. Configurez les paramètres du tunnel :
+   - **Type de routage** : Statique ou dynamique (BGP)
+   - **Plage CIDR** (Classless Inter-Domain Routing) : Les réseaux de votre côté (par exemple, 192.168.1.0/24)
+5. Cliquez sur **Créer**
+
+## Étape 4 : Configurer votre équipement réseau
+
+Une fois la connexion créée, téléchargez la configuration pour votre routeur/pare-feu :
+
+1. Sélectionnez la connexion VPN créée
+2. Cliquez sur **Télécharger la configuration**
+3. Choisissez le type d'équipement (Cisco, Juniper, etc.)
+4. Appliquez la configuration sur votre routeur/pare-feu
+
+## Étape 5 : Vérifier la connexion
+
+1. Assurez-vous que votre routeur génère du trafic vers le VPC
+2. Vérifiez que le tunnel passe à l'état **Up** dans la console
+3. Testez la connectivité en pinguant une [VM](/docs/compute/concept/) dans le VPC depuis votre réseau d'entreprise
+
+:::tip
+Le tunnel VPN devient actif uniquement lorsque du trafic est généré depuis votre côté (la client gateway). Veillez à initier le trafic pour établir la connexion.
+:::
+
+## Prochaines étapes
+
+- Configurer les [security groups (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) pour autoriser le trafic entre vos réseaux
+- Mettre en place une deuxième connexion VPN pour la haute disponibilité
+- Consulter la documentation sur les [connexions VPN](/docs/connectivity/vpn/connection-vpn/concepts/)

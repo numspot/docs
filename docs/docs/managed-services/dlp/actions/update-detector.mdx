@@ -1,0 +1,115 @@
+---
+title: Modifier un détecteur personnalisé DLP - DLP managé
+sidebar_label: Modifier un détecteur personnalisé DLP
+sidebar_position: 8
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Modifier un détecteur personnalisé DLP
+
+Modifiez un [détecteur DLP](/docs/managed-services/dlp/concepts) personnalisé existant pour ajuster ses motifs, ses tags ou ses métadonnées. Les modifications sont prises en compte immédiatement dans les évaluations après la prochaine publication du [ruleset](/docs/managed-services/dlp/concepts).
+
+## Permissions
+
+:::info
+Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+
+- **detector_editor**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Dans la console DLP, cliquez sur Detectors dans le menu latéral.", hotspot: { x: 0.006, y: 0.283, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/detectors-custom.png", text: "Dans le filtre « Type », sélectionnez « Custom » pour n'afficher que les détecteurs personnalisés.", hotspot: { x: 0.649, y: 0.135, w: 0.089, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/detectors-custom.png", text: "Sur la ligne du détecteur, cliquez sur l'icône crayon (modifier).", hotspot: { x: 0.902, y: 0.274, w: 0.025, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/detector-edit.png", text: "Modifiez les champs souhaités (motifs RE2, description, tags), puis cliquez sur « Save ».", hotspot: { x: 0.616, y: 0.763, w: 0.044, h: 0.044 } },
+  ]}
+/>
+
+1. Dans la console [DLP](/docs/managed-services/dlp/concepts), cliquez sur **Detectors** dans le menu latéral.
+2. Cliquez sur l'onglet **Custom** pour afficher les détecteurs personnalisés.
+3. Cliquez sur le nom du détecteur à modifier.
+
+### Éléments modifiables
+
+Vous pouvez modifier les éléments suivants :
+
+| Élément | Description |
+|---------|-------------|
+| Name | Nom du détecteur |
+| Description | Description du détecteur |
+| Motifs | Expressions régulières (RE2) pour identifier les données sensibles |
+| Tags | Étiquettes pour le filtrage et la recherche |
+
+### Test du détecteur
+
+Avant d'enregistrer les modifications, testez le détecteur par rapport à un texte d'exemple :
+
+1. Cliquez sur **Test detector** ;
+2. Saisissez le texte d'exemple dans le champ de test ;
+3. Cliquez sur **Run test** pour voir les correspondances détectées.
+
+### Enregistrement
+
+Cliquez sur **Save** pour enregistrer les modifications. Le détecteur modifié est immédiatement disponible pour être référencé dans les conditions des règles.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+La requête `PUT /api/v1/detectors/custom/{id}` permet de modifier un [détecteur DLP](/docs/managed-services/dlp/concepts) personnalisé. Le corps de la requête est identique à celui de la création.
+
+### Exemple de requête
+
+```json
+{
+  "name": "project-codename",
+  "description": "Détecte les noms de code projet (mise à jour)",
+  "category": "custom",
+  "patterns": [
+    "PROJECT-[A-Z]{3}-\\d{4}",
+    "internal-[a-z]+-\\d+",
+    "PROJ-[A-Z]{2}-\\d{3}"
+  ],
+  "tags": [
+    "internal",
+    "project",
+    "updated"
+  ]
+}
+```
+
+### Exemple de réponse
+
+```json
+{
+  "id": "detector-a1b2c3d4",
+  "name": "project-codename",
+  "type": "custom",
+  "description": "Détecte les noms de code projet (mise à jour)",
+  "category": "custom",
+  "patterns": [
+    "PROJECT-[A-Z]{3}-\\d{4}",
+    "internal-[a-z]+-\\d+",
+    "PROJ-[A-Z]{2}-\\d{3}"
+  ],
+  "tags": [
+    "internal",
+    "project",
+    "updated"
+  ],
+  "created_at": "2026-08-27T10:00:00Z",
+  "updated_at": "2026-08-27T12:00:00Z"
+}
+```
+
+</TabItem>
+</Tabs>

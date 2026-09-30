@@ -1,0 +1,66 @@
+---
+title: À propos des security groups
+sidebar_label: Security groups
+sidebar_position: 1
+draft: false
+---
+
+# À propos des security groups
+
+Les security groups (groupes de sécurité) vous permettent de gérer le trafic vers et depuis vos [VM (Virtual Machine)](/docs/compute/concept/) selon vos besoins et votre architecture.
+
+Chaque VM, dans le Cloud public comme dans un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/), est créée derrière au moins un security group auquel vous pouvez ajouter ou retirer des règles.
+
+## Informations générales
+
+Un security group est un appareil réseau virtuel agissant comme un pare-feu et un switch, qui autorise ou interdit les flux entrants ou sortants d'une ou plusieurs VM. Ils permettent donc aux VM de communiquer entre elles ou avec des services ou appareils externes selon les règles que vous spécifiez.
+
+Lorsque vous créez une VM, vous devez spécifier un ou plusieurs security groups à associer à celle-ci.
+
+Les security groups sont soit alloués pour le Cloud public, soit pour un VPC que vous spécifiez.
+
+Des security groups par défaut sont fournis pour le Cloud public et pour chacun de vos VPC. Ces security groups par défaut ont pour nom `default` et apparaissent dans votre compte.
+
+:::tip
+Pour identifier vos ressources, vous pouvez leur ajouter des tags.
+:::
+
+Si vous ne souhaitez pas utiliser les security groups par défaut pour vos VM, vous pouvez créer vos propres security groups. Lorsque vous les créez, vous devez choisir entre un security group pour le Cloud public ou pour un VPC spécifique. Vous pouvez créer plusieurs security groups selon les différents rôles de vos VM et les flux entrants et sortants nécessaires. Chaque security group doit avoir un nom unique.
+
+:::info
+* Si vous ne spécifiez aucun security group lorsque vous créez une VM, le security group par défaut correspondant est utilisé.
+* Pour associer vos propres security groups à une VM, vous devez les créer préalablement.<br/>La Console Numspot vous permet de créer un security group lorsque vous créez une VM.
+* Vous pouvez modifier les security groups associés à une VM à tout moment.
+:::
+
+Vous pouvez ajouter ou retirer des règles, à la fois pour les security groups par défaut et vos propres security groups, afin de contrôler les flux, selon votre architecture et vos besoins.
+
+Numspot attribue un ID au format sg-xxxxxxxx à tout security group, qu'il soit par défaut ou créé par vous. Les security groups que vous créez vous appartiennent et vous pouvez les supprimer à tout moment si besoin. Vous ne pouvez cependant pas supprimer les security groups par défaut.
+
+## Security groups pour le Cloud public
+
+Si votre VM est dans le Cloud public, vous pouvez uniquement utiliser des security groups alloués au Cloud public. Lorsque vous créez une VM dans le Cloud public, vous devez spécifier un security group qui se trouve dans la même région que la VM.
+
+Les security groups pour le Cloud public vous permettent de spécifier des règles uniquement pour les flux entrants, et autorisent tous les flux sortants de la VM. Les VM dans le Cloud public ayant une IP publique peuvent accéder à Internet.
+
+Numspot fournit un security group pour le Cloud public par défaut pour votre compte. Les règles initiales de ce security group pour les flux entrants par défaut autorisent uniquement les VM associées à ce même security group à communiquer entre elles, en protocoles TCP (Transmission Control Protocol), UDP (User Datagram Protocol) et ICMP (Internet Control Message Protocol).
+
+Les security groups que vous créez pour le Cloud public ne contiennent aucune règle initiale pour les flux entrants.
+
+## Security groups pour les VPC
+
+Si votre VM est dans un VPC, vous pouvez uniquement utiliser des security groups alloués à ce VPC.
+
+Les security groups dans un VPC agissent au niveau de la VM et non au niveau du subnet (sous-réseau). Ils vous permettent de spécifier des règles pour les flux entrants et sortants.
+
+Lorsque vous créez un VPC, Numspot crée un security group par défaut alloué à ce VPC. Les règles initiales de ces security groups pour les flux entrants autorisent uniquement les VM associées à ce même security group à communiquer entre elles, en protocoles TCP, UDP et ICMP. Leurs règles initiales pour les flux sortants autorisent tous les flux sortants de la VM.
+
+:::warning
+Les security groups par défaut dans les VPC sont créés avec des règles autorisant tous les flux sortants.
+:::
+
+Les security groups que vous créez pour un VPC ne contiennent aucune règle initiale pour les flux entrants et contiennent une règle initiale pour les flux sortants qui autorise tous les flux sortants de la VM.
+
+:::info
+Les règles initiales pour les flux sortants autorisent tous les flux sortants y compris vers internet, mais les VM peuvent accéder à internet uniquement si un [internet gateway (passerelle Internet)](/docs/network/internet-gateway/concepts/) est attaché à un VPC et que le CIDR (Classless Inter-Domain Routing) 0.0.0.0/0 est routé vers l'internet gateway.
+:::

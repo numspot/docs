@@ -1,0 +1,81 @@
+---
+title: Create a volume
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Create a volume
+
+You can create `volumes` that you can attach to [VM (Virtual Machine)](/docs/compute/concept/) created within the same Sub-region. `volumes` allow you to add storage capacity to a VM if the system `volume` has reached its maximum storage capacity, or to separate your data storage from the VM operating system files.
+
+## Permissions
+
+:::info
+This action requires the following **IAM** (Identity and Access Management) permissions:
+
+- **compute.blockStorage.create**
+
+:::
+
+<Tabs>
+<TabItem value="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/volume/create-01-list.png", text: "From the left-hand side menu, click Storage → Block Storage → Volumes.", hotspot: { x: 0, y: 0.579, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/volume/create-01-list.png", text: "From Storage → Block Storage → Volumes, click “Create a Volume”.", hotspot: { x: 0.8457, y: 0.2329, w: 0.1154, h: 0.0494 } },
+    { img: "/img/walkthrough/en/volume/create-02-form.png", text: "Choose the availability zone, enter a name, the size and the volume type, then click “Create the Volume”.", hotspot: { x: 0.24, y: 0.09, w: 0.36, h: 0.85 } },
+  ]}
+/>
+
+
+1. Log in to the Numspot console.
+2. From the left-hand side menu, click **Storage** → **[Block Storage](/docs/storage/block-storage/concepts/)** → **Volumes**.
+3. Click **Create a volume**. The "Volume creation" page appears.
+4. In the "Sub-region (Availability zone)" list, select the Sub-region in which you want to create the `volume`.
+5. In the "Name" field, type a name for the `volume`.
+   :::info
+   This action adds a Name tag of up to 255 characters. You can use any characters, including accented letters.
+   :::
+6. In the "Size" field, type the size of the `volume`.
+   :::warning
+   The minimum size allowed for a `volume` is:
+   - 1 GiB for 'standard';
+   - 1 GiB for 'gp2';
+   - 4 GiB for 'io1'.
+
+   The maximum size allowed for a `volume` is 14901 GiB.
+   :::
+7. In the "Type" list, select a `volume` type:
+     - `standard` for a Magnetic `volume`;
+     - `io1` for an Enterprise `volume`;
+     - `gp2` for a Performance `volume`.
+8. (io1 volumes only) In the "IOPS" field, type the number of IOPS (Input/Output Operations Per Second) for the `volume` or select it using the arrows.
+   :::warning
+   The maximum number of IOPS allowed for io1 `volumes` is 13,000, with a maximum performance ratio of 300 IOPS per gibibyte.
+   :::
+9. In the "Number" field, type the number of `volumes` you want to create.
+10. In the "Snapshot" list, leave "None" selected.
+11. Click **Create a volume**.
+    The `volume` is created.
+
+</TabItem>
+<TabItem value="API">
+
+The `POST /compute/spaces/{spaceId}/volumes` command allows you to create a block storage `volume` in a specified region. Block storage `volumes` can be attached to a VM in the same sub-region. You can create an empty `volume` or restore a `volume` from an existing snapshot.
+
+You can create the following types of `volumes`: Enterprise (`io1`) for provisioned IOPS SSD `volumes`, Performance (`gp2`) for general-purpose SSD `volumes`, or Magnetic (`standard`) for magnetic `volumes`.
+
+[Request example: Creating a Volume ↗](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/volumes)
+
+</TabItem>
+<TabItem value="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/volume).
+
+</TabItem>
+</Tabs>

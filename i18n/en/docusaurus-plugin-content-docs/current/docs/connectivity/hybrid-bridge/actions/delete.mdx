@@ -1,0 +1,40 @@
+---
+title: Delete a Hybrid Bridge
+description: Delete a bridge to end communication between a VPC and the managed services
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Delete a Hybrid Bridge
+
+You can delete a bridge to end communication between your [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) and the managed services.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **connectivity.bridge.delete**
+
+:::
+<Tabs>
+  <TabItem value='api' label="API" default>
+
+## API {#tabhead-api}
+
+The `DELETE /connectivity/spaces/{spaceId}/bridges/{id}` command deletes the bridge.
+
+[Example request: Deleting a Hybrid Bridge](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/bridges/{id})
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/hybrid_bridge).
+
+  </TabItem>
+</Tabs>

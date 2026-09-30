@@ -1,0 +1,37 @@
+---
+title: "Utilisateur - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# À propos des utilisateurs
+
+<ActionsSummary />
+
+Un utilisateur représente un compte humain au sein de votre organisation Numspot. Il accède à la console Numspot et à l'API (Application Programming Interface) pour gérer les ressources des espaces auxquels il est rattaché, dans la limite des permissions IAM (Identity and Access Management) qui lui sont accordées.
+
+## Informations générales
+
+Un utilisateur est créé avec les informations suivantes :
+
+- un prénom et un nom ;
+- une adresse e-mail unique, qui sert d'identifiant ;
+- un ou plusieurs espaces auxquels il a accès ;
+- des rôles IAM qui déterminent ses permissions.
+
+Les espaces, les rôles et les permissions peuvent être attribués dès la création de l'utilisateur, ou ajoutés et modifiés ultérieurement.
+
+## Activation et authentification
+
+À la création d'un utilisateur, un lien d'activation est envoyé à son adresse e-mail. Ce lien permet de définir un mot de passe et de configurer l'authentification à deux facteurs, requise pour se connecter à la console.
+
+Un nouveau lien d'activation peut être envoyé à tout moment depuis la page de détails de l'utilisateur. Ce lien réinitialise le mot de passe et l'authentification à deux facteurs : l'utilisateur ne peut plus se reconnecter avec son ancien mot de passe, mais sa session en cours n'est pas interrompue.
+
+## Espaces et permissions
+
+Un utilisateur peut être rattaché à plusieurs espaces. Ses permissions sont définies par les rôles IAM qui lui sont attribués. Vous pouvez consulter à tout moment la liste des espaces assignés à un utilisateur.

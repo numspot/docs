@@ -1,0 +1,48 @@
+---
+title: "VPN Client Gateway - Concepts"
+sidebar_label: "Concepts"
+description: Découvrez les client gateways, points d'entrée de votre réseau d'entreprise vers le Cloud Numspot via VPN.
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# À propos des client gateways
+
+<ActionsSummary />
+
+Une client gateway (passerelle client) se situe de votre côté d'une connexion VPN (Virtual Private Network), et gère le trafic entre votre réseau d'entreprise et l'un de vos [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) dans le Cloud Numspot.
+
+Son équivalent du côté Numspot de la connexion VPN est une [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/).
+
+## Informations générales
+
+Une client gateway est le point d'entrée et de sortie vers votre réseau d'entreprise de votre côté de la connexion VPN.
+
+![Architecture d'une VPN Connection](/img/console/connectivity/vpn/sch-General-VPNConnectionArchitecture.png)
+<p align="center">*Architecture d'une VPN Connection*</p><br/>
+
+Vous identifiez une ressource existante dans votre réseau à utiliser comme client gateway. Il peut s'agir d'une ressource logicielle ou matérielle, par exemple une [VM](/docs/compute/concept/), un pare-feu ou un routeur. Lors de la création d'une client gateway, vous devez renseigner les informations suivantes :
+
+* L'IP publique statique de la ressource que vous voulez utiliser comme client gateway ;
+* Le type de routage. Pour utiliser le routage dynamique, vous devez indiquer un numéro de système autonome (ASN) pour le protocole BGP (Border Gateway Protocol). Sinon, le routage est statique.
+
+Vous pouvez avoir plusieurs client gateways dans le même réseau d'entreprise en même temps. Ceci vous permet, par exemple, de connecter votre réseau d'entreprise à plusieurs de vos VPC dans le Cloud Numspot.
+
+:::note
+Si vous souhaitez utiliser différents VPC simultanément, vous pouvez créer plusieurs client gateways avec la même IP mais un ASN différent.
+:::
+
+## Cycle de vie
+
+Une client gateway peut être dans l'un des états suivants :
+
+* `pending` : le processus de création est en cours ;
+* `available` : la client gateway est créée et prête à être utilisée ;
+* `deleting` : le processus de suppression est en cours ;
+* `deleted` : la ressource n'est plus identifiée comme une client gateway. Cependant, la ressource elle-même n'est pas supprimée.
+
+:::info
+Les ressources supprimées restent visibles pendant 1 heure.
+:::

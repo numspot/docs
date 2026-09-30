@@ -1,0 +1,71 @@
+---
+title: Dissocier une Public IP d'une ressource
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Dissocier une Public IP d'une ressource
+
+Vous pouvez dissocier une Public IP (adresse IP publique) que vous avez liée à une [VM (Virtual Machine)](/docs/compute/concept/) ou à une interface réseau.
+
+Pour dissocier une Public IP d'une [NAT Gateway (passerelle NAT)](/docs/network/nat/concepts/), vous devez supprimer la NAT Gateway.
+
+:::info
+Une fois détachée, la Public IP est toujours allouée à votre compte et peut être de nouveau liée. Si vous n'avez plus besoin de cette Public IP, vous pouvez la libérer.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.publicIp.update**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+L'action **Dissocier** n'est proposée que si l'IP publique est **effectivement associée** à une VM ou à une NIC (Network Interface Card) : sur une IP publique libre, l'entrée du menu **Actions** reste grisée.
+:::
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/public-ip/dis-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → Public IP.", hotspot: { x: 0, y: 0.5222, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/public-ip/dis-01-list.png", text: "Repérez l'IP publique associée (les colonnes « VM ID » et « NIC ID » sont renseignées), puis ouvrez son menu « Actions ».", hotspot: { x: 0.9031, y: 0.486, w: 0.0608, h: 0.0383 } },
+    { img: "/img/walkthrough/public-ip/dis-02-actions.png", text: "Cliquez sur « Dissocier ».", hotspot: { x: 0.8368, y: 0.6173, w: 0.1262, h: 0.0457 } },
+    { img: "/img/walkthrough/public-ip/dis-03-confirm.png", text: "La boîte de dialogue récapitule l'IP publique et la ressource concernée : cliquez sur « Dissocier la Public IP » pour confirmer.", hotspot: { x: 0.5765, y: 0.6809, w: 0.1096, h: 0.0494 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, cliquez sur **Réseau** → **Public IP** ;
+2. Repérez l'IP publique à dissocier — ses colonnes **VM ID** et **NIC ID** sont renseignées — puis ouvrez son menu **Actions** ;
+3. Cliquez sur **Dissocier**.
+
+   La boîte de dialogue **Dissociation de la Public IP** apparaît et récapitule l'IP publique ainsi que la ressource à laquelle elle est associée ;
+4. Cliquez sur **Dissocier la Public IP**.
+
+   L'IP publique est dissociée : elle reste réservée à votre compte et peut être associée à une autre ressource.
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+  La commande `PUT /compute/spaces/{spaceId}/publicIps/{id}/unlink` dissocie une Public IP de la ressource associée.
+
+  [Exemple de requête : Dissociation d'une Public IP](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/publicIps/{id}/unlink)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/public_ip).
+  </TabItem>
+</Tabs>

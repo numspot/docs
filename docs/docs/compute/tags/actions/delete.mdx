@@ -1,0 +1,70 @@
+---
+title: Supprimer un ou plusieurs tags
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Supprimer un ou plusieurs tags
+
+Vous pouvez supprimer un ou plusieurs tags sur vos ressources.
+
+## Permissions
+
+:::info
+La suppression de tags est une opération de mise à jour de la ressource concernée. Cette action nécessite la permission **IAM** (Identity and Access Management) de mise à jour de chaque ressource ciblée. Par exemple :
+
+- **compute.vm.update** pour une [VM (virtual machine)](/docs/compute/concept/) ;
+- **compute.blockStorage.update** pour un [volume (block storage)](/docs/storage/block-storage/concepts/) ;
+- **compute.loadBalancer.update** pour un [load balancer](/docs/network/load-balancer/concepts/) ;
+- **compute.vpc.update** pour un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+
+Cette liste est donnée à titre d'exemple et n'est pas exhaustive : pour chaque ressource, reportez-vous à sa page d'action.
+
+:::
+
+<Tabs>
+<TabItem value="Console" label="Console" default>
+
+## Console {#tabhead-Console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/load-balancer/lb-02-actions.png", text: "Depuis la liste de la ressource concernée, ouvrez le menu « Actions » de sa ligne, puis cliquez sur « Gérer les tags ».", hotspot: { x: 0.875, y: 0.4358, w: 0.0884, h: 0.0457 } },
+    { img: "/img/walkthrough/load-balancer/lb-tags-panel.png", text: "Dans le panneau « Gérer les tags », cliquez sur la croix du tag à supprimer.", hotspot: { x: 0.7125, y: 0.3531, w: 0.0153, h: 0.0272 } },
+    { img: "/img/walkthrough/load-balancer/lb-tags-panel.png", text: "Cliquez sur « Valider » pour enregistrer la suppression.", hotspot: { x: 0.8708, y: 0.9322, w: 0.1181, h: 0.0494 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, accédez à la liste de la ressource dont vous souhaitez supprimer un tag ;
+2. Sur la ligne de la ressource, ouvrez le menu **Actions**, puis cliquez sur **Gérer les tags** ;
+3. Dans le panneau **Gérer les tags**, cliquez sur la **croix** du tag à supprimer ;
+4. Cliquez sur **Valider** pour enregistrer.
+
+:::info
+Le parcours est identique pour toutes les ressources qui supportent les tags (VM, volume, load balancer, VPC…). L'exemple ci-dessus est pris sur un load balancer.
+:::
+
+</TabItem>
+<TabItem value="API" label="API">
+
+## API {#tabhead-API}
+
+
+La commande `DELETE /compute/spaces/{spaceId}/bulk/tags` supprime un ou plusieurs tags de vos ressources.
+
+[Exemple de requête : Supprimer un tag ↗](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/bulk/tags)
+
+</TabItem>
+<TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-Terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
+
+</TabItem>
+</Tabs>

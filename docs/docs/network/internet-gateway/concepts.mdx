@@ -1,0 +1,32 @@
+---
+title: Passerelles Internet
+sidebar_label: À propos des internet gateways
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# À propos des internet gateways
+
+<ActionsSummary />
+
+Les passerelles Internet (internet gateways) permettent aux [VM (Virtual Machines)](/docs/compute/concept/) dans un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) d'être connectées à Internet de manière directe. Les passerelles Internet peuvent être utilisées comme cible dans les [tables de routage](/docs/network/route-table/concepts/) pour le trafic réseau dirigé vers Internet.
+
+Une passerelle Internet est un composant que vous pouvez attacher à un VPC pour permettre une communication directe entre vos VM dans ce VPC et Internet. Pour cela :
+
+- Vous devez créer une route dans la table de routage d'un ou plusieurs sous-réseaux (subnets) dirigeant le trafic Internet vers la passerelle Internet.
+- Les VM dans ces sous-réseaux doivent avoir une adresse IP (Internet Protocol) publique associée.
+- Vous devez ajouter les règles appropriées autorisant le trafic vers et depuis Internet aux [groupes de sécurité (security groups)](/docs/compute/security-groups/concepts/concept-sg/) utilisés pour les VM dans ces sous-réseaux.
+
+<img src="/img/console/network/internet-gateway/sch-General-InternetGateway-v2.png" alt="Schéma de connexion d'un réseau virtuel à Internet via une internet gateway" />
+
+*Architecture d'un sous-réseau public et d'une passerelle Internet*
+
+Lorsque vous créez une route vers une passerelle Internet dans la table de routage d'un sous-réseau, cela permet aux VM dans ce sous-réseau d'accéder à Internet. Les VM dans un VPC ne connaissent que les adresses IP privées du VPC et du sous-réseau, donc la passerelle Internet effectue la traduction d'adresses réseau (NAT, Network Address Translation) pour permettre aux VM d'accéder à Internet en utilisant leur adresse IP publique.
+
+Lorsqu'une VM envoie du trafic vers Internet, la passerelle Internet remplace l'adresse IP privée de la VM par l'adresse IP publique associée à la VM. Lorsque le trafic revient d'Internet vers la VM, la passerelle Internet traduit à nouveau l'adresse IP publique en l'adresse IP privée de la VM avant de transmettre le trafic au VPC.
+
+Lorsque vous créez une route vers la passerelle Internet, vous pouvez utiliser le bloc CIDR (Classless Inter-Domain Routing) 0.0.0.0/0 en destination pour prendre en compte toutes les destinations qui ne sont pas explicitement routées dans la table de routage. Cela signifie que tout le trafic qui ne correspond pas à une autre route dans la table de routage sera envoyé vers la passerelle Internet. Vous pouvez également utiliser une plage d'adresses IP plus restreinte correspondant aux adresses IP publiques de votre réseau interne, si vous souhaitez limiter l'accès à Internet uniquement aux adresses IP spécifiées.
+
+Le MTU (Maximum Transmission Unit) dans un VPC est limité à 1500 octets par paquet dirigé vers Internet via une passerelle Internet. Cela signifie que les paquets de données qui dépassent cette taille seront fragmentés en paquets plus petits avant d'être transmis sur Internet.

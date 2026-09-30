@@ -1,0 +1,107 @@
+---
+title: "Block Storage - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+---
+
+# Block Storage
+
+Block storage is a scalable and high-performance storage solution that provides block-level storage resources for use with compute [VM](/docs/compute/concept/). With block storage, you can create and manage the following elements:
+
+- **Volumes**: storage volumes that can be attached to compute VM and used like a local hard drive. They allow you to store files or install applications.
+- **Snapshots**: volume backups kept independently of the original volume. Snapshots allow you to back up the data on your volumes and to restore new volumes from these backups at any time.
+
+## Volumes
+
+Volumes are virtual hard drives that you can attach to an instance created in the same Subregion in order to store data. A volume is defined by its size and its IOPS (Input/Output Operations Per Second) capacity.
+
+### Volumes and VM
+
+When a VM is created, a volume is automatically created and attached to store the operating system data. This volume, called the system volume, has a default size of 10 GiB for Linux VM (8 GiB for CentOS 7 VM) and 50 GiB for Windows VM. Although you can store data on a system volume, it may be deleted when the VM is terminated, depending on the block device mapping of the image used.
+
+To increase the storage capacity of your VM or to separate your data from the operating system files, you can create volumes with the storage capacity you need (within the limits of the quotas allocated to your account). These volumes are located in a Subregion, with Subregion A used by default if none is specified.
+
+You can attach a volume to any VM in the same Subregion, whether in the public Cloud or in a [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud). Once attached, the volume works like a physical hard drive and can be initialized and used in the same way. The VM can then interact with the volume and access your data. When a VM is stopped, the attached volumes remain associated with it, which allows you to access them again after the VM is restarted.
+
+The persistence of a volume is independent of the VM lifecycle: a volume can be detached from a VM to which it was previously attached, then attached to another VM. When you terminate a VM, the volumes attached to it are either deleted or detached depending on the VM block device mapping.
+
+You can attach up to 40 volumes, including the system volume, to a single VM. However, a volume can only be attached to one VM at a time.
+
+A volume can be in one of the following states:
+
+- "Creating": the volume creation process is in progress.
+- "Available": the volume is created but is not attached to a VM. A volume is considered to be in the "available" state even if it contains data.
+- "In use": the volume is attached to a VM. A volume is considered to be in the "in use" state even if the VM to which it is attached is stopped.
+- "Deleting": the volume deletion process is in progress.
+- "Error": the volume creation failed.
+
+### Attaching volumes and device names
+
+Always make sure to attach and mount the system volume (bootdisk) of a VM using the device name `/dev/sda1`, even if it appears under the name `/dev/vda1` in the VM itself. For all other volumes that you attach to a VM, you must use a device name following the format `/dev/xvdX` or `/dev/xvdXX` (where the first `X` represents a letter between `b` and `z`, and the second `X` a letter between `a` and `z`).
+
+**Device names for Linux VM**
+
+When you attach volumes to a Linux VM, the device name in `/dev/xvdX` or `/dev/xvdXX` is transformed by Linux into `/dev/sdY` or `/dev/sdYY`. The transformation order depends on when you attach the volumes to the VM.
+
+**Device names for Windows VM**
+
+In a Windows VM, volumes are numbered according to the order in which they are attached, without regard to the chosen device name `/dev/xvdX` or `/dev/xvdXX`.
+
+- The system volume is numbered 0.
+- The first attached volume is numbered 1.
+- The numbering continues in this way for the following volumes.
+- If you detach a volume, its number is released and assigned to the next volume attached to the VM.
+
+### Data persistence
+
+The data stored on a volume persists as long as the volume exists and is attached to a VM. Deleting a volume permanently erases the data it contains. Detaching a volume makes it available and keeps its data intact. You can then attach it to another VM to regain access to the data.
+
+You can back up your data using snapshots. You can copy them to another region and use them to restore your data in the event of a problem or accidental deletion of the volume.
+
+### Volume types and IOPS
+
+The performance of a volume is measured in IOPS, that is, the number of read and write operations that a volume can perform in one second. You can choose between different volume types, depending on the performance you need:
+
+- **Magnetic**: provides a fixed number of IOPS. The performance does not depend on the size of the volume.
+- **Performance**: provides a burst capability for volumes smaller than 1 TiB. Suitable for applications that need occasional performance peaks.
+- **Enterprise**: allows you to create a volume with the number of IOPS you need. Provides better performance and reduced latency. Enterprise volumes are SSD volumes.
+
+The following table presents use cases for each volume type and describes their performance characteristics:
+
+| Volume type | API/CLI name | Use case | Volume size | IOPS performance | I/O size | Min IOPS/volume | Max IOPS/volume | Max IOPS/VM | Max throughput/volume | Max throughput/VM |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Magnetic (HDD) | standard | Cold workloads | 1 GiB - 14.55 TiB | 250 reads, 150 writes | 4 KiB | / | / | 36,000 | 40 MiB/s | 600 MiB/s |
+| Performance (SSD) | gp2 | Moderate workloads | 1 GiB - 14.55 TiB | 3 IOPS/GiB (with burst) | 4 KiB | / | 10,000 | 36,000 | 160 MiB/s | 600 MiB/s |
+| Enterprise (SSD) | io1 | High-performance workloads | 4 GiB - 14.55 TiB | Base: 3 IOPS/GiB, Burst: 300 IOPS/GiB | 4 KiB | 100 | 13,000 | 36,000 | 200 MiB/s | 600 MiB/s |
+
+## Snapshots
+
+A snapshot is an image of a volume at a given point in time that allows you to back up your data, create replicas of a volume at the moment the snapshot was created, or move data to another Subregion or region.
+
+### Overview
+
+A snapshot created at a given point in time corresponds to an image of a volume that contains all the information needed to create a replica of that volume, of the same size or a larger size. A snapshot can be used to back up your data or share it with other accounts.
+
+All snapshots contain the information required to create a new volume with the data stored on the original volume at the moment the snapshot was created. Therefore, if you delete previously created snapshots, you can still restore all the volume data from the moment the snapshot was created.
+
+:::info
+To identify your resources, you can add tags to them.
+:::
+
+Snapshots are placed in a region and can be used in all Subregions within that region. You can copy a snapshot to another region and thus use it in the Subregions within that region, for example to create identical copies of a volume there.
+
+The number of snapshots that you can create depends on the quotas allocated to your account.
+
+A snapshot can be in one of the following states:
+
+- "in-queue": the snapshot creation request has been received.
+- "pending": the snapshot creation is in progress.
+- "completed": the snapshot is ready and available.
+
+  :::info
+  The data contained in a snapshot is considered frozen when the snapshot is in the "completed" state.
+  :::
+
+- "error": the snapshot creation failed.
+- "deleting": the snapshot deletion request has been received.

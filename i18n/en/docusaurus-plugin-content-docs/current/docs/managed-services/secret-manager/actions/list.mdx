@@ -1,0 +1,48 @@
+---
+title: List Secret Manager instances
+sidebar_position: 1
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# List Secret Manager instances
+
+You can list all the [Secret Manager instances](/docs/managed-services/secret-manager/concepts/) within your space.
+
+## Permissions
+
+:::info
+This action requires the following **IAM** (Identity and Access Management) permissions:
+
+- **secrets.instance.get**
+
+:::
+<Tabs>
+    
+    <TabItem value="api" label="API" default>
+        The `GET /secrets/spaces/{spaceId}/instances` request lets you list all your Secret Manager instances.
+
+        ### Example response
+
+        ```json
+        {
+          "items": [
+            {
+              "id": "550e8400-e29b-41d4-a716-446655440002",
+              "name": "my-secret-manager",
+              "status": {
+                "state": "RUNNING",
+                "message": "instance is healthy"
+              },
+              "version": "2.5.1",
+              "host": "my-secret-manager.secrets.eu-west-2.numspot.com",
+              "visibility": "EXTERNAL"
+            }
+          ]
+        }
+        ```
+
+        [View the full specification](/openapi/#tag/Secret/GET/secrets/spaces/{spaceId}/instances)
+    </TabItem>
+</Tabs>

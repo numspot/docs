@@ -1,0 +1,70 @@
+---
+title: Delete a route table
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Delete a route table
+
+You can delete a [route table](/docs/network/route-table/concepts/) that you no longer need and that is not associated with any subnet. You cannot delete the route table that is set as the main one.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.routeTable.delete**
+
+:::
+<Tabs>
+   <TabItem value="Console" default> 
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/route-table/list.png", text: "From the left-hand side menu, click Network → VPC → Route Tables.", hotspot: { x: 0, y: 0.579, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/route-table/list-selected.png", text: "From Network → VPC → Route Tables, tick the route table to delete, then click “Delete”.", hotspot: { x: 0.327, y: 0.3304, w: 0.0681, h: 0.0494 } },
+    { img: "/img/walkthrough/en/route-table/delete-modal.png", text: "Strong confirmation: enter the exact route table ID, then click “Delete”. Deletion is permanent.", hotspot: { x: 0.2847, y: 0.1924, w: 0.4306, h: 0.6153 } },
+  ]}
+/>
+
+   ## Delete a route table from the console
+   
+    You can delete a single route table or delete several of them in one action.
+
+### Delete a route table
+
+1. Log in to the Numspot console.
+2. From the left-hand side menu, click **Network** → **[VPC](/docs/network/vpc/concepts/)** → **Route Table**.
+3. Identify the route table you want to delete, then from the list of actions, click **Delete**.
+    A new "Deleting the route table" dialog box appears.
+4. To continue, strong confirmation is required. Enter the name of the resource to delete in the corresponding field.
+5. Click **Delete**.  
+    The route table is deleted and a confirmation message "**The route table has been successfully deleted**" appears.
+
+### Delete several route tables
+
+1. Log in to the Numspot console.
+2. From the left-hand side menu, click **Network** → **VPC** → **Route Table**.
+3. Select the route tables you want to delete, then click **Delete**.
+    A new "Deleting route tables" dialog box appears.
+4. To continue, strong confirmation is required. Enter the term **Delete** in the corresponding field.
+5. Click **Delete**.  
+    The route tables are deleted and a confirmation message "**The route tables have been successfully deleted**" appears.
+
+  </TabItem> 
+  <TabItem value="API">
+   :::info
+   Before you start: detach the route table from the subnets it is associated with.
+   :::
+  The `DELETE /compute/spaces/{spaceId}/routeTables/{id}` command deletes a specified route table. Before deleting a route table, you must dissociate it from any subnet. You cannot delete the main route table.
+
+  [Example request: Deleting a route table](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/routeTables)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
+  </TabItem>
+</Tabs>

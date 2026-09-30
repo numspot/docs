@@ -1,0 +1,86 @@
+# License
+
+Copyright (c) 2026 Numspot and contributors.
+
+This repository contains the public documentation of the Numspot cloud
+platform. It is distributed under two licenses, depending on the type of
+material.
+
+## 1. Documentation content — CC BY 4.0
+
+Unless otherwise stated, the documentation content is licensed under the
+**Creative Commons Attribution 4.0 International License (CC BY 4.0)**.
+
+This covers, in particular:
+
+- all prose in `.md` / `.mdx` files (guides, tutorials, concepts,
+  reference pages, changelog entries);
+- images, diagrams, screenshots and other media produced by Numspot;
+- navigation, glossary and translation files.
+
+You may copy, redistribute, translate, adapt and build upon this content
+for any purpose, including commercially, provided that you give
+appropriate credit to Numspot, link to the license, and indicate if
+changes were made.
+
+Full text: `LICENSES/CC-BY-4.0.txt`
+Canonical source: <https://creativecommons.org/licenses/by/4.0/legalcode>
+
+SPDX-License-Identifier: CC-BY-4.0
+
+## 2. Code — Apache 2.0
+
+Unless otherwise stated, all code is licensed under the
+**Apache License, Version 2.0**.
+
+This covers, in particular:
+
+- code snippets, commands and configuration examples embedded in the
+  documentation (shell, Terraform, Helm, Kubernetes manifests, API
+  requests, etc.), so that they can be copied into your own projects
+  without constraint;
+- the source code of the documentation website (build tooling, theme,
+  components, scripts, CI configuration).
+
+Full text: `LICENSES/Apache-2.0.txt`
+Canonical source: <https://www.apache.org/licenses/LICENSE-2.0>
+
+SPDX-License-Identifier: Apache-2.0
+
+## 3. Exclusions
+
+The following are **not** covered by the licenses above:
+
+- the Numspot name, logos, and any other Numspot trademarks or trade
+  dress, which remain the property of Numspot and may not be used
+  without prior written permission, except as required for reasonable
+  and customary attribution;
+- third-party trademarks, logos and product screenshots (which remain
+  the property of their respective owners and are used here for
+  identification purposes only);
+- any file that carries its own license header or an accompanying
+  `LICENSE` file, in which case that license prevails for that file.
+
+## 4. Contributions
+
+By submitting a contribution (pull request, issue content, or any other
+material) to this repository, you agree that your contribution is
+licensed under the same terms as the material it modifies or adds to:
+CC BY 4.0 for documentation content, Apache 2.0 for code. You certify
+that you have the right to submit it under these terms, as described in
+the Developer Certificate of Origin (<https://developercertificate.org/>).
+
+## 5. Attribution notice
+
+A suitable attribution when reusing documentation content is:
+
+> Based on the Numspot documentation, © Numspot,
+> licensed under CC BY 4.0 — https://github.com/numspot/docs
+
+## 6. No warranty
+
+The documentation is provided "as is", without warranty of any kind.
+Nothing in this documentation constitutes a contractual commitment on
+the features, availability or security properties of Numspot services;
+those are governed exclusively by the applicable Numspot terms of
+service.

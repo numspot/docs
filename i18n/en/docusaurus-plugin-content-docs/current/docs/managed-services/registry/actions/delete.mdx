@@ -1,0 +1,42 @@
+---
+title: Delete a Harbor registry
+sidebar_label: Delete a Harbor instance
+sidebar_position: 9
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Delete a Harbor instance
+
+You can delete a Harbor registry within your space, whatever its status.
+
+:::warning
+Make sure the Container Registry is not in use before deleting it.
+:::
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **registry.instance.delete**
+
+:::
+<Tabs>
+
+{/* </TabItem> */}
+<TabItem value="api" label="API" default>
+    The `DELETE /registry/spaces/{spaceId}/registries/{registryId}` request deletes a Container Registry.
+    The Container Registry moves to the `deleting` state for the duration of the deletion.
+
+    ### Example response
+
+    ```http
+    HTTP/1.1 204 No Content
+    ```
+
+    [See the full specification](/openapi/#tag/registry/DELETE/registry/spaces/{spaceId}/registries/{registryId})
+
+</TabItem>
+</Tabs>

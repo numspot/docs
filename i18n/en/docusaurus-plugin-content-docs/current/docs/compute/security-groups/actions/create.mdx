@@ -1,0 +1,89 @@
+---
+title: Create a security group
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Create a security group
+
+In the same way as firewalls, [security groups](/docs/compute/security-groups/concepts/concept-sg/) let you define rules to control network traffic to and from the virtual machines they are associated with.
+
+You can create security groups for the public Cloud or for a [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud) that you specify. You must then add rules to these security groups according to your needs and your architecture.
+
+In the same way as we recommend using a [VM](/docs/compute/concept/) (Virtual Machine) for a single service only, we recommend creating one security group per service with the appropriate rules, and associating this security group with all the VM dedicated to that service. You can then authorize inbound and outbound traffic between your security groups according to the services that need to communicate with each other, in order to apply these rules to all the VM concerned.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.securityGroup.create**
+
+:::
+<Tabs>
+   <TabItem value="console" label="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/security-group/list.png", text: "From the left-hand side menu, click Compute → Security Groups.", hotspot: { x: 0, y: 0.5568, w: 0.194, h: 0.0457 } },
+    { img: "/img/walkthrough/en/security-group/list.png", text: "From the security groups list, click “Create a Security Group”.", hotspot: { x: 0.8117, y: 0.2329, w: 0.1494, h: 0.0494 } },
+    { img: "/img/walkthrough/en/security-group/create.png", text: "Enter the name and description of the security group.", hotspot: { x: 0.2083, y: 0.1767, w: 0.5556, h: 0.1728 } },
+    { img: "/img/walkthrough/en/security-group/create.png", text: "Select the VPC to associate this security group with.", hotspot: { x: 0.2083, y: 0.42, w: 0.5556, h: 0.42 } },
+    { img: "/img/walkthrough/en/security-group/create.png", text: "Click “Create the Security Group”. You can then add inbound and outbound rules.", hotspot: { x: 0.6153, y: 0.9574, w: 0.134, h: 0.0494 } },
+  ]}
+/>
+
+   :::warning
+   To be able to create a security group, you must have at least 1 VPC created in your space.
+   :::
+   1. Log in to the Numspot console. 
+   2. From the left-hand side menu, click **Compute** → **Security Groups**.
+   
+   
+   3. Once on the "Security Groups" page, click the **Create a Security Group** button. 
+       The "Create a Security Group" page appears. 
+       
+
+   4. In the **Security Group name** field, enter a name for the security group. 
+
+
+   :::warning 
+   * The name must be unique within your account for the public Cloud or for each VPC. The security group name must not start with `sg-` or with a space. The name must contain between 1 and 255 characters. The allowed characters are `a-z`, `A-Z`, `0-9`, the space, and `_.-:/()#,@[]+=&;{}!$*`. 
+   ::: 
+    
+   :::info 
+   Give your security groups explicit names so that their role is understood. For example, you can use names in the application-environment-role format:
+   * website-all-bastion
+   * website-front-lb
+   * website-middle-app
+   * website-back-db
+   ::: 
+   5. In the **Description** field, enter a description of the security group. 
+   :::warning 
+   The description must contain between 1 and 255 characters. The allowed characters are `a-z`, `A-Z`, `0-9`, accented letters, the space, and `_.-:/()#,@[]+=&;{}!$*`. 
+   ::: 
+   6. In the **Select a VPC to associate** section, select a VPC from the list displayed.
+   7. Click the **Create the Security Group** button.
+
+
+   8. A confirmation message appears at the bottom indicating that the security group has been created, and you are redirected to the detailed page of the security group. 
+   
+
+   </TabItem> 
+  <TabItem value="api" label="API">
+The `POST /compute/spaces/{spaceId}/securityGroups` command creates a security group. This action creates a security group in a specified VPC. By default, a security group is created for use in a VPC.
+
+When launching a VM, if no security group is explicitly specified, the appropriate default security group is assigned to the VM. Security groups include a default rule allowing VM to have network access between each other.
+
+When creating a security group, you must specify a name. You can have up to 500 security groups per VPC. You can add or remove rules afterwards.
+
+[Example request: Creating a Security Group](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/securityGroups)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+    The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/security_group).
+  </TabItem>
+</Tabs>

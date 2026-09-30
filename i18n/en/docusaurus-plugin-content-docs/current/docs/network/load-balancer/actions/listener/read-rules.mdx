@@ -1,0 +1,43 @@
+---
+title: Get information about your load balancer listener rules - Numspot
+sidebar_label: Get information about your load balancer listener rules
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Get information about your load balancer listener rules
+
+You can view the information about the rules of your [load balancer](/docs/network/load-balancer/concepts/) listeners.
+
+## Permissions
+
+:::info
+This action requires the following **IAM** (Identity and Access Management) permissions:
+
+- **compute.loadBalancer.get**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
+2. Click the name of the load balancer for which you want to view the rules.
+3. In the "Listeners" tab, click the listener for which you want to view the rules.
+4. The rules associated with the listener are displayed in the "Rules" section.
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+The `GET /compute/spaces/{spaceId}/listenerRules` command lists the rules for your listeners.
+
+[Example request: List all the rules for your listeners ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/listenerRules)
+
+The `GET /compute/spaces/{spaceId}/listenerRules/{id}` command retrieves the information about your rules for a listener.
+
+[Example request: Retrieve the information about your rules for a listener ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/listenerRules/{id})
+
+  </TabItem>
+</Tabs>

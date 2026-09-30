@@ -1,0 +1,66 @@
+---
+title: About security groups
+sidebar_label: Security groups
+sidebar_position: 1
+draft: false
+---
+
+# About security groups
+
+Security groups let you manage the traffic to and from your [VM](/docs/compute/concept/) (Virtual Machine) according to your needs and your architecture.
+
+Each VM, in the public Cloud as well as in a [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud), is created behind at least one security group to which you can add or remove rules.
+
+## General information
+
+A security group is a virtual network device acting as a firewall and a switch, which authorizes or denies the inbound or outbound traffic of one or more VM. They therefore allow VM to communicate with each other or with external services or devices according to the rules you specify.
+
+When you create a VM, you must specify one or more security groups to associate with it.
+
+Security groups are either allocated to the public Cloud, or to a VPC that you specify.
+
+Default security groups are provided for the public Cloud and for each of your VPC. These default security groups are named `default` and appear in your account.
+
+:::tip
+To identify your resources, you can add tags to them.
+:::
+
+If you do not want to use the default security groups for your VM, you can create your own security groups. When you create them, you must choose between a security group for the public Cloud or for a specific VPC. You can create several security groups according to the different roles of your VM and the necessary inbound and outbound traffic. Each security group must have a unique name.
+
+:::info
+* If you do not specify any security group when you create a VM, the corresponding default security group is used.
+* To associate your own security groups with a VM, you must create them beforehand.<br/>The Numspot console lets you create a security group when you create a VM.
+* You can modify the security groups associated with a VM at any time.
+:::
+
+You can add or remove rules, both for the default security groups and your own security groups, in order to control traffic, according to your architecture and your needs.
+
+Numspot assigns an ID in the sg-xxxxxxxx format to any security group, whether default or created by you. The security groups you create belong to you and you can delete them at any time if needed. You cannot, however, delete the default security groups.
+
+## Security groups for the public Cloud
+
+If your VM is in the public Cloud, you can only use security groups allocated to the public Cloud. When you create a VM in the public Cloud, you must specify a security group that is in the same region as the VM.
+
+Security groups for the public Cloud let you specify rules only for inbound traffic, and authorize all outbound traffic of the VM. VM in the public Cloud with a public IP can access the Internet.
+
+Numspot provides a default security group for the public Cloud for your account. The initial rules of this security group for inbound traffic by default authorize only the VM associated with this same security group to communicate with each other, in the TCP (Transmission Control Protocol), UDP (User Datagram Protocol) and ICMP (Internet Control Message Protocol) protocols.
+
+The security groups you create for the public Cloud do not contain any initial rule for inbound traffic.
+
+## Security groups for VPC
+
+If your VM is in a VPC, you can only use security groups allocated to that VPC.
+
+Security groups in a VPC act at the VM level and not at the subnet level. They let you specify rules for inbound and outbound traffic.
+
+When you create a VPC, Numspot creates a default security group allocated to that VPC. The initial rules of these security groups for inbound traffic authorize only the VM associated with this same security group to communicate with each other, in the TCP, UDP and ICMP protocols. Their initial rules for outbound traffic authorize all outbound traffic of the VM.
+
+:::warning
+The default security groups in VPC are created with rules authorizing all outbound traffic.
+:::
+
+The security groups you create for a VPC do not contain any initial rule for inbound traffic and contain an initial rule for outbound traffic that authorizes all outbound traffic of the VM.
+
+:::info
+The initial rules for outbound traffic authorize all outbound traffic including to the internet, but VM can access the internet only if an [internet gateway](/docs/network/internet-gateway/concepts/) is attached to a VPC and the CIDR (Classless Inter-Domain Routing) 0.0.0.0/0 is routed to the internet gateway.
+:::

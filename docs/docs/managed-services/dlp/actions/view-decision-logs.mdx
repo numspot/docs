@@ -1,0 +1,103 @@
+---
+title: Consulter les journaux de décision DLP - DLP managé
+sidebar_label: Consulter les journaux de décision DLP
+sidebar_position: 11
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Consulter les journaux de décision DLP
+
+Consultez les journaux de décision pour suivre les évaluations effectuées par le service [DLP](/docs/managed-services/dlp/concepts). Chaque évaluation produit un journal contenant la décision rendue, les [règles DLP](/docs/managed-services/dlp/concepts) déclenchées et les champs modifiés.
+
+## Permissions
+
+:::info
+Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+
+- **viewer**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Dans la console DLP, cliquez sur Decision Logs dans le menu latéral.", hotspot: { x: 0.006, y: 0.431, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/decision-logs.png", text: "Utilisez les filtres pour affiner la recherche : Platform, Decision, Rule, Request ID et plage de dates.", hotspot: { x: 0.185, y: 0.145, w: 0.800, h: 0.120 } },
+    { img: "/img/walkthrough/dlp/decision-logs.png", text: "Consultez la liste des journaux de décision.", hotspot: { x: 0.201, y: 0.350, w: 0.786, h: 0.300 } },
+  ]}
+/>
+
+1. Dans la console [DLP](/docs/managed-services/dlp/concepts), cliquez sur **Decision Logs** dans le menu latéral.
+
+### Filtrer les journaux
+
+Utilisez les filtres disponibles pour affiner la recherche :
+
+- **Platform instance** : filtrer par instance de plateforme ;
+- **Decision** : filtrer par type de décision — `pass`, `block` ou `modify` ;
+- **Time range** : filtrer par période.
+
+### Détails d'un journal
+
+Cliquez sur un journal pour afficher ses détails :
+
+- l'identifiant de la requête ;
+- la plateforme consommatrice ;
+- la décision rendue ;
+- les règles déclenchées ;
+- les champs modifiés ;
+- le code de statut HTTP ;
+- la latence de traitement.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+La requête `GET /api/v1/logs/decisions` permet de rechercher les journaux de décision.
+
+### Paramètres de requête
+
+| Paramètre | Description |
+|-----------|-------------|
+| `platform_instance` | Filtrer par instance de plateforme |
+| `decision` | Filtrer par décision : `pass`, `block` ou `modify` |
+| `time_start` | Date de début de la période (ISO 8601) |
+| `time_end` | Date de fin de la période (ISO 8601) |
+
+### Exemple de réponse
+
+```json
+{
+  "logs": [
+    {
+      "id": "log-001",
+      "timestamp": "2026-08-27T14:30:00Z",
+      "platform_instance": "mistral-prod-eu",
+      "request_id": "req-abc123",
+      "decision": "block",
+      "rule_ids": ["rule-550e8400"],
+      "triggered_by": [
+        {
+          "rule_id": "rule-550e8400",
+          "detector": "@preset:aws_access_key_id",
+          "field": "tool_arguments"
+        }
+      ],
+      "modified_fields": [],
+      "endpoint": "/v1/evaluate",
+      "status_code": 200,
+      "latency_ms": 12
+    }
+  ],
+  "total": 1
+}
+```
+
+</TabItem>
+</Tabs>

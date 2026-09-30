@@ -1,0 +1,48 @@
+---
+title: Supprimer un server certificate
+sidebar_position: 5
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer un server certificate
+
+Vous pouvez supprimer un server certificate que vous n'utilisez plus.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.serverCertificate.delete**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+La suppression d'un certificat serveur n'est pas disponible depuis la console Numspot.
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+La commande `DELETE /compute/spaces/{spaceId}/serverCertificates/{id}` supprime un server certificate spécifié.
+
+[Exemple de requête : Suppression d'un server certificate](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/serverCertificates/{id})
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/server_certificate).
+  </TabItem>
+</Tabs>

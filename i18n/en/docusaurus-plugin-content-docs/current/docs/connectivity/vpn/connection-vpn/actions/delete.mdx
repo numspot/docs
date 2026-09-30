@@ -1,0 +1,55 @@
+---
+title: Delete a VPN connection
+description: Delete a secure VPN tunnel between your corporate network and a VPC.
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Delete a VPN connection
+
+You can delete a VPN (Virtual Private Network) connection between your corporate network and one of your [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud) in the Numspot Cloud.
+
+This action deletes the secure VPN tunnel between the [client gateway](/docs/connectivity/vpn/client-gateway/concepts/) and the [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/).
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **connectivity.vpnconnection.delete**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+1. Click inside the **VPN Connections** dashboard to display the tick boxes.
+2. Tick the box of the VPN connection you want to delete.
+   The VPN connection is selected and an actions menu appears.
+3. Click **Delete**.
+   A confirmation dialog box appears.
+4. Click **Delete**.
+   The VPN connection is deleted.
+
+:::info
+Deleted resources remain visible for 1 hour.
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `DELETE /connectivity/spaces/{spaceId}/vpnConnections/{id}` command deletes a specified VPN connection.
+If you want to delete a VPC and all its dependencies, it is recommended to detach the virtual gateway from the VPC and to delete the VPC before deleting the VPN connection. This allows you to delete the VPC without waiting for the VPN connection to be deleted.
+
+[Example request: Deleting a VPN Connection](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/vpnConnections/{id})
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection).
+
+</TabItem>
+</Tabs>

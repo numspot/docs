@@ -1,0 +1,67 @@
+---
+title: Supprimer un cluster PostgreSQL - PostgreSQL managé
+sidebar_label: Supprimer un cluster PostgreSQL
+sidebar_position: 11
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Supprimer un cluster PostgreSQL
+
+Vous pouvez supprimer un [cluster PostgreSQL](/docs/managed-services/postgresql/concepts/) au sein de votre espace, quel que soit son statut.
+
+:::warning
+Vérifiez que le cluster n'est pas en cours d'utilisation avant de le supprimer.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **postgresql.cluster.delete**
+
+:::
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/postgresql/list.png", text: "Depuis le menu latéral gauche, cliquez sur Services Managés → PostgreSQL → Clusters.", hotspot: { x: 0, y: 0.5136, w: 0.1931, h: 0.0568 } },
+    { img: "/img/walkthrough/postgresql/actions-menu.png", text: "Sur la ligne du cluster à supprimer, ouvrez le menu « Actions », puis cliquez sur « Supprimer » (possible aussi depuis la page de détails).", hotspot: { x: 0.875, y: 0.4691, w: 0.0884, h: 0.0457 } },
+    { img: "/img/walkthrough/postgresql/delete-modal.png", text: "Confirmation forte : saisissez le nom exact du cluster, puis cliquez sur « Supprimer ». La suppression est définitive.", hotspot: { x: 0.6221, y: 0.7513, w: 0.064, h: 0.0494 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, cliquez sur **Services Managés** → **PostgreSQL** → **Clusters** pour accéder à la liste des clusters PostgreSQL.
+
+2. Dans la liste, repérez le cluster à supprimer, cliquez sur le bouton **Actions** situé sur sa ligne, puis sur **Supprimer**.
+
+   Vous pouvez aussi ouvrir la page de détails du cluster et cliquer sur le bouton **Supprimer** situé en haut à droite.
+
+3. Dans la fenêtre "Supprimer le cluster", saisissez le nom exact du cluster dans le champ de "Confirmation forte", puis cliquez sur **Supprimer**.
+
+   Le cluster passe à l'état "Suppression en cours" dans la liste.
+
+</TabItem>
+
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+    La requête `DELETE /postgresql/spaces/{spaceId}/clusters/{clusterId}` permet de supprimer un cluster PostgreSQL.
+    Le cluster passe dans l'état `DELETING` le temps de la suppression.
+
+    ### Exemple de réponse
+
+    ```text
+    HTTP/1.1 204 No Content
+    ```
+
+    [Voir la spécification complète](/openapi/#tag/postgresql/DELETE/postgresql/spaces/{spaceId}/clusters/{clusterId})
+</TabItem>
+</Tabs>

@@ -1,0 +1,59 @@
+---
+title: Export an image
+sidebar_position: 5
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Export an image
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.image.get**
+
+:::
+
+Numspot allows images to be exported for backup purposes.
+The permitted export formats are `raw` or `qcow2`.
+
+:::info
+**Prerequisites**
+
+- [Create a bucket ↗](/docs/storage/object-storage/quickstart/)
+:::
+
+To export an image, you must use the API and provide the following information:
+* the space identifier;
+* the identifier of the image to export;
+* the name of the object storage bucket in which the export must be made available;
+* the desired export format (`raw` or `qcow2`).
+
+The export operation is then accepted and an export identifier is provided to you.
+
+The export file will be available in the bucket specified in the request.
+
+Depending on the size of the image to export, the export can take a few minutes to complete.
+You can check the status of the ongoing export through the API (see the API below) by providing the export identifier.
+
+:::warning
+Before exporting an image or a snapshot to another region, make sure this action is permitted by all applicable third-party licenses.
+If the export is permitted, only the image export guarantees that the third-party licenses apply in the target region, whereas the snapshot export does not guarantee that they apply.
+:::
+
+<Tabs>
+  <TabItem value="api" label="API">
+
+The `POST /compute/spaces/{spaceId}/imageExportTasks` command creates an export of an image.
+
+[Example request: Create an image export](/openapi/#tag/compute/POST/compute/spaces/%7BspaceId%7D/imageExportTasks)
+
+The `GET /compute/spaces/{spaceId}/imageExportTasks/{id}` command retrieves the information of an image export.
+
+[Example request: Retrieve the information of an image export](/openapi/#tag/compute/GET/compute/spaces/%7BspaceId%7D/imageExportTasks/%7Bid%7D)
+  </TabItem>
+</Tabs>

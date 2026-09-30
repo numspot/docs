@@ -1,0 +1,153 @@
+---
+title: Créer une DirectLinkInterface
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Créer une DirectLinkInterface
+
+Pour créer une `DirectLinkInterface`, vous devez configurer une connexion entre le routeur [DirectLink](/docs/connectivity/direct-link/concepts/) et votre [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+
+Pour accéder à vos ressources avec une connexion DirectLink, vous devez configurer cette connexion avec une ou plusieurs `DirectLinkInterface`. Une `DirectLinkInterface` correspond à un chemin réseau entre le routeur DirectLink et un de vos VPC, spécifié grâce à la [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/) attachée à celui-ci. Vous devez créer une `DirectLinkInterface` pour chaque VPC auquel vous souhaitez accéder, et vous pouvez créer plusieurs `DirectLinkInterface` utilisant la même connexion DirectLink.
+
+:::note
+La MTU (Maximum Transmission Unit) d'une `DirectLinkInterface` est limitée à 1500 octets.
+:::
+
+Une `DirectLinkInterface` peut être dans un des états suivants :
+
+* `confirming` : La virtual interface est en attente de confirmation de son propriétaire. Après 7 jours, si la virtual interface n'est pas confirmée, son état devient `expired`.
+* `pending` : La virtual interface est créée et reste à l'état `pending` jusqu'à ce que votre routeur et le routeur DirectLink soient configurés.
+* `available` : La virtual interface peut envoyer du trafic réseau.
+* `deleting` : La virtual interface est en cours de suppression. Elle reste à l'état `deleting` jusqu'à ce que Numspot supprime la configuration du routeur DirectLink.
+* `deleted` : La virtual interface est supprimée et ne peut plus envoyer de trafic réseau.
+* `rejected` : La virtual interface a été supprimée alors qu'elle était à l'état `confirming`.
+* `expired` : Le propriétaire de la virtual interface n'a pas confirmé sa création dans le délai de 7 jours. La virtual interface ne pouvant plus être utilisée, vous devez en créer une nouvelle.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **connectivity.directlink.create**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+
+:::warning
+### Avant de commencer
+* Assurez-vous d'avoir une connexion DirectLink existante en statut `available`.
+:::
+
+1. Dans la console, naviguez vers **Connectivity** → **DirectLink**.
+2. Sélectionnez la connexion DirectLink pour laquelle vous souhaitez créer une interface.
+3. Cliquez sur **Créer une interface**.
+4. Renseignez les informations suivantes :
+   - "Nom" : un nom pour l'interface
+   - "Virtual Gateway" : l'ID de la virtual gateway cible
+   - "VLAN" : un numéro VLAN unique entre 2 et 4094
+   - "BGP ASN" : le numéro ASN (Autonomous System Number) du côté commanditaire (entre 64512 et 65534)
+5. Spécifiez optionnellement :
+   - "BGP Key" : une clé d'authentification BGP
+   - "Client Private IP" : l'IP du côté commanditaire
+   - "Numspot Private IP" : l'IP du côté Numspot
+6. Cliquez sur **Créer**.
+
+La `DirectLinkInterface` créée passe à l'état `confirming` puis en `available`.
+
+:::info
+L'ASN de Numspot pour les régions eu-west-2 et cloudgouv-eu-west-1 est : **50624**
+:::
+
+Une fois acceptée, le commanditaire devient propriétaire de l'interface et peut l'utiliser pour accéder à son VPC via sa connexion DirectLink.
+
+> Si votre réseau interne ne se trouve pas dans le même datacenter que le site DirectLink, vous pouvez faire appel à un prestataire de service réseau pour y faire installer une fibre optique.
+
+:::warning
+Les [security group](/docs/compute/security-groups/concepts/concept-sg/) utilisés pour le VPC doivent autoriser les flux venant de votre réseau interne.
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+:::warning
+### Avant de commencer
+* Assurez-vous d'avoir une connexion DirectLink existante en statut `available`.
+:::
+
+1. Récupérer votre token d'authentification :
+
+```bash
+curl -X POST --location "https://api.{region}.numspot.com/iam/token?grant_type=client_credentials&scope=%27openid+offline_access%27" \
+    -H "Content-Type: application/x-www-form-urlencoded" \
+    --basic --user {service_account_id}:{service_account_secret}
+```
+
+Veillez à bien renseigner la région ainsi que vos `service_account_id` et `service_account_secret`.
+
+2. Créer une `DirectLinkInterface` :
+
+```bash
+curl -X POST --location "https://api.{region}.numspot.com/connectivity/spaces/{spaceID}/directLinkInterfaces" \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer {token}" \
+     -d '{
+           "name": "MyDirectLinkInterface",
+           "directLinkId": "dl-xxx",
+           "virtualGatewayId": "uuidxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+           "vlan": 3512,
+           "bgpAsn": 64512
+         }'
+```
+
+Veillez à bien renseigner dans l'URL la région et le `spaceID` du compte de service pour lequel vous souhaitez créer une `DirectLinkInterface`.
+Renseignez ensuite votre Bearer token dans le champ "Authorization":
+
+Paramètres requis :
+- `name` : un nom pour l'interface
+- `directLinkId` : l'ID de votre connexion DirectLink "available"
+- `virtualGatewayId` : l'ID de la virtual gateway cible
+- `vlan` : un numéro VLAN unique entre 2 et 4094
+- `bgpAsn` : le numéro ASN BGP du côté commanditaire (entre 64512 et 65534)
+
+Paramètres optionnels :
+- `bgpKey` : une clé d'authentification BGP
+- `clientPrivateIp` : l'IP du côté commanditaire
+- `numSpotPrivateIp` : l'IP du côté Numspot
+
+3. Lister les `DirectLinkInterface` et vérifiez qu'elle apparaît bien :
+
+```bash
+curl -X GET --location "https://api.{region}.numspot.com/connectivity/spaces/{spaceID}/directLinkInterfaces" \
+    -H "Authorization: Bearer {token}" \
+    -H "Content-Type: application/json"
+```
+
+:::info
+L'ASN de Numspot pour les régions eu-west-2 et cloudgouv-eu-west-1 est : **50624**
+:::
+
+La `DirectLinkInterface` créée passe à l'état `confirming` puis en `available`.
+Une fois acceptée, le commanditaire devient propriétaire de l'interface et peut l'utiliser pour accéder à son VPC via sa connexion DirectLink.
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/direct_link_interface).
+
+</TabItem>
+</Tabs>

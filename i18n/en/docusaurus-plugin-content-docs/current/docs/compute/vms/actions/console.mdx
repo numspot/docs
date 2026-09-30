@@ -1,0 +1,67 @@
+---
+title: View the console output of a VM
+sidebar_position: 5
+draft: false
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# View the console output of a VM
+
+You can display the console output of a [VM (Virtual Machine)](/docs/compute/concept/) to diagnose kernel problems or system errors. The console displays the most recent 64 KiB of output. On Windows VM, the console is accessible only on the first start and provides no output after the first restart.
+
+## Permissions
+
+:::info
+This action requires the following **IAM** (Identity and Access Management) permissions:
+
+- **compute.vm.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/vm/list.png", text: "From the left-hand side menu, click Compute → VMs to open the list of VMs.", hotspot: { x: 0, y: 0.4123, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/en/vm/list.png", text: "Click the VM ID to open its details page.", hotspot: { x: 0.2687, y: 0.4928, w: 0.0544, h: 0.0247 } },
+    { img: "/img/walkthrough/en/vm/details.png", text: "In the “General” section, click “View console”.", hotspot: { x: 0.456, y: 0.3198, w: 0.0772, h: 0.0494 } },
+    { img: "/img/walkthrough/en/vm/console.png", text: "The console output is displayed. Tick “Automatic refresh” or click “Refresh” to update it.", hotspot: { x: 0.6341, y: 0.8253, w: 0.052, h: 0.0494 } },
+  ]}
+/>
+
+1. Access the VM
+
+   1. From the left-hand side menu, click **Compute** → **VM** to access the list of VM.
+
+
+   2. Click the ID of the VM to access the details page.
+
+
+2. View the console
+
+   1. In the General section, click "View the console".
+
+
+   2. Tick "Automatic refresh" if necessary or click "Refresh".
+
+
+</TabItem>
+
+  <TabItem value="api" label="API">
+The `GET /compute/spaces/{spaceId}/vms/{id}/consoleOutputs` command lets you obtain the console output for a VM. This console provides the most recent 64 KiB of output.
+
+:::warning
+On Windows VM, the console is handled only on the first start. No output is returned after this first start.
+:::
+
+[Example request: Retrieve the console output of the VM](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/vms/{id}/consoleOutputs)
+  </TabItem>
+
+  <TabItem value="terraform" label="Terraform">
+    The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
+  </TabItem>
+</Tabs>

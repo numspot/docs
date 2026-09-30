@@ -1,0 +1,107 @@
+---
+title: Supprimer un compte de service - IAM
+description: "Supprimez définitivement un compte de service IAM de votre espace Numspot et révoquez ses accès, via la console, l'API ou Terraform."
+sidebar_label: Supprimer un compte de service
+sidebar_position: 7
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Supprimer un compte de service
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **iam.serviceAccount.delete**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/service-account/list-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Comptes de Service.", hotspot: { x: 0, y: 0.8, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/service-account/list-02-menu.png", text: "Depuis IAM → Comptes de Service, ouvrez le menu « Actions » du compte de service, puis cliquez sur « Supprimer ».", hotspot: { x: 0.7299, y: 0.7, w: 0.2348, h: 0.05 } },
+    { img: "/img/walkthrough/service-account/delete-02-modal.png", text: "Confirmation forte : saisissez le nom exact du compte de service, puis cliquez sur « Supprimer ». La suppression est définitive.", hotspot: { x: 0.3333, y: 0.1858, w: 0.3333, h: 0.6284 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, cliquez sur **IAM** → **Comptes de Service**.
+2. Cliquez sur le menu **Actions** du compte de service concerné, puis sur **Supprimer**.
+3. Une boîte de dialogue "Suppression d'un Compte de Service" apparaît. Dans le champ "Confirmation forte", tapez le nom du compte de service.
+4. Cliquez sur le bouton **Supprimer** pour confirmer la suppression du compte de service.
+
+Vous pouvez également supprimer le compte de service depuis sa page "Détails Compte de Service", via le bouton **Supprimer le Compte de Service** en haut à droite.
+
+:::note
+La suppression est asynchrone : un message confirme que la demande de suppression du compte de service a bien été prise en compte, puis le compte disparaît de la liste.
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+### Supprimer un compte de service dans une organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/DELETE/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}
+
+### Exemple avec curl
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}' \
+  --request DELETE
+```
+
+### Réponse
+
+```json
+{}
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+### Supprimer un compte de service dans un espace
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/DELETE/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}
+
+### Exemple avec curl
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}' \
+  --request DELETE
+```
+
+### Réponse
+
+```json
+{}
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/service_account).
+
+</TabItem>
+</Tabs>

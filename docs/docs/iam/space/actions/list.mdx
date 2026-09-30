@@ -1,0 +1,96 @@
+---
+title: Lister les espaces de l'organisation - IAM
+description: "Listez les espaces de votre organisation Numspot et accédez à leurs détails, via la console ou l'API."
+sidebar_label: Lister les espaces de l'organisation
+sidebar_position: 2
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Walkthrough from "@site/src/components/Walkthrough";
+
+# Lister les espaces de l'organisation
+
+Visualisez l'ensemble des espaces de votre organisation.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **iam.role.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/space/list-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Espaces.", hotspot: { x: 0, y: 0.6963, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/space/list-01-list.png", text: "Depuis IAM → Espaces, le tableau liste tous les espaces de votre organisation (ID, nom, description, statut).", hotspot: { x: 0.2229, y: 0.39, w: 0.7493, h: 0.5 } },
+    { img: "/img/walkthrough/space/list-02-menu.png", text: "Le menu « Actions » d'un espace permet de le modifier, d'y assigner des utilisateurs ou des comptes de service, ou de le supprimer. Cliquez sur l'ID d'un espace pour ouvrir sa page de détails.", hotspot: { x: 0.7708, y: 0.42, w: 0.19, h: 0.25 } },
+  ]}
+/>
+
+1. Dans le menu **IAM**, cliquez sur **Espaces**.
+
+   Vous accédez au tableau des **Espaces** où vous pouvez visualiser l'ensemble des espaces de votre organisation.
+
+2. En cliquant sur **Actions** pour un espace donné, vous pouvez modifier l'espace, y assigner des utilisateurs ou des comptes de service, ou le supprimer.
+
+3. En cliquant sur l'identifiant d'un espace, vous accédez à une vision plus détaillée de l'espace, avec la liste des utilisateurs et des comptes de service qui lui sont assignés.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/organisations/{organisationId}/spaces
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/organisations/{organisationId}/spaces'
+```
+
+### Réponse
+
+```json
+{
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "totalSize": 150,
+  "items": [
+    {
+      "name": "…",
+      "description": "…",
+      "id": "123e4567-e89b-12d3-a456-426614174000",
+      "organisationId": "123e4567-e89b-12d3-a456-426614174000",
+      "status": "QUEUED",
+      "createdOn": "2025-12-16T15:38:31.485Z",
+      "updatedOn": "2025-12-16T15:38:31.485Z"
+    }
+  ]
+}
+```
+
+:::info
+Consulter la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/space).
+
+</TabItem>
+</Tabs>

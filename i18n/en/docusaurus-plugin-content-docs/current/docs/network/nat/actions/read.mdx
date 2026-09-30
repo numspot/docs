@@ -1,0 +1,57 @@
+---
+title: Get information about your nat gateways - Numspot
+sidebar_label: Get information about your nat gateways
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Get information about your nat gateways
+
+You can get information about one or more of your [nat gateways](/docs/network/nat/concepts/), such as their public IP or the [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) and subnet they belong to.
+
+## Permissions
+
+:::info
+This action requires the following **IAM** (Identity and Access Management) permissions:
+
+- **compute.natGateway.get**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/nat/list.png", text: "From the left-hand side menu, click Network → VPC → NAT Gateways.", hotspot: { x: 0, y: 0.6926, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/nat/list.png", text: "From Network → VPC → NAT Gateways, your NAT gateways are listed with their information.", hotspot: { x: 0.2083, y: 0.3872, w: 0.5556, h: 0.2173 } },
+  ]}
+/>
+
+
+1. From the left-hand side menu, click **Network** → **VPC** → **NAT Gateways**.
+
+
+2. You then arrive on the list of nat gateways.
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+The `GET /compute/spaces/{spaceId}/natGateways` command lists the nat gateways.
+
+[Example request: List all nat gateways ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/natGateways)
+
+The `GET /compute/spaces/{spaceId}/natGateways/{id}` command retrieves information about a nat gateway.
+
+[Example request: Retrieve the information of a nat gateway ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/natGateways/{id})
+
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/nat_gateway).
+
+  </TabItem>
+</Tabs>

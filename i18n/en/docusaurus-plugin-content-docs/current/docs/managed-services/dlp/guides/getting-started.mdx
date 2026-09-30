@@ -1,0 +1,75 @@
+---
+title: Getting started with DLP - Managed DLP
+sidebar_label: Getting started with DLP
+description: "Quick start guide to configure the DLP service: first login, rule creation and ruleset publication."
+sidebar_position: 1
+draft: false
+---
+
+# Getting started with DLP
+
+## Introduction
+
+This guide describes the steps to configure the [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) service from the first login to publishing the first active [ruleset](/docs/managed-services/dlp/concepts).
+
+To access the DLP console, see [Access the DLP console](/docs/managed-services/dlp/guides/access-console).
+
+## First login
+
+1. Log in to the DLP console.
+2. Log in with the admin credentials provided when the service was deployed.
+3. On the first login, change the password: the change is mandatory (8 characters minimum).
+
+## Create a custom detector
+
+If the predefined detectors do not cover your needs, create a custom detector:
+
+1. Click **Detectors** → **Custom** → **Create custom detector**;
+2. Name the detector and add one or more regular expressions;
+3. Test the detector against sample text;
+4. Save the detector.
+
+See [Create a custom DLP detector](/docs/managed-services/dlp/actions/create-detector) for full details.
+
+## Create a rule
+
+1. Click **Rules** → **New Rule**;
+2. Fill in the name, description and platform type;
+3. Configure the condition — for example: `* matches_detector @preset:aws_access_key_id`;
+4. Select the action — for example: `block` with the message `AWS key detected`;
+5. Test the rule against sample data;
+6. Save the rule as a draft.
+
+See [Create a DLP rule](/docs/managed-services/dlp/actions/create-rule) for full details.
+
+## Create a policy
+
+1. Click **Policies** → **Create policy**;
+2. Fill in the name, description and platform type;
+3. Select the rules to include and order them;
+4. Choose the default action — `block` for a restrictive policy, `pass` for a permissive policy;
+5. Save the policy as a draft.
+
+See [Create a DLP policy](/docs/managed-services/dlp/actions/create-policy) for full details.
+
+## Publish the ruleset
+
+1. Click **Publish**;
+2. Review the changes compared to the current version;
+3. Enter a description for the new version;
+4. Click **Publish** to activate the rules and policies.
+
+Workers retrieve the new version within 30 seconds. The DLP service is now operational.
+
+See [Publish a DLP ruleset](/docs/managed-services/dlp/actions/publish-ruleset) for full details.
+
+## Verify operation
+
+1. View the **Dashboard** to check evaluation statistics;
+2. View the **Decision Logs** to verify that rules are triggering correctly;
+3. Adjust rules if necessary and publish a new version.
+
+## Next steps
+
+- [Monitor DLP events](/docs/managed-services/dlp/guides/monitor-events) to track logged requests;
+- [Manage DLP users](/docs/managed-services/dlp/actions/manage-users) to configure your team's access.

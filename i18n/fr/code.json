@@ -1,0 +1,337 @@
+{
+  "theme.ErrorPageContent.title": {
+    "message": "Cette page a planté.",
+    "description": "Le titre de la page de secours lorsque la page a planté"
+  },
+  "theme.BackToTopButton.buttonAriaLabel": {
+    "message": "Remonter en haut",
+    "description": "L'étiquette ARIA pour le bouton de retour en haut"
+  },
+  "theme.blog.archive.title": {
+    "message": "Archives",
+    "description": "Le titre de la page et du héros de la page d'archives du blog"
+  },
+  "theme.blog.archive.description": {
+    "message": "Archives",
+    "description": "La description de la page et du héros de la page d'archives du blog"
+  },
+  "theme.blog.paginator.navAriaLabel": {
+    "message": "Navigation de la liste des articles du blog",
+    "description": "L'étiquette ARIA pour la pagination du blog"
+  },
+  "theme.blog.paginator.newerEntries": {
+    "message": "Articles plus récents",
+    "description": "L'étiquette pour naviguer vers la page des articles plus récents (page précédente)"
+  },
+  "theme.blog.paginator.olderEntries": {
+    "message": "Articles plus anciens",
+    "description": "L'étiquette pour naviguer vers la page des articles plus anciens (page suivante)"
+  },
+  "theme.blog.post.paginator.navAriaLabel": {
+    "message": "Navigation des pages d'articles du blog",
+    "description": "L'étiquette ARIA pour la pagination des articles du blog"
+  },
+  "theme.blog.post.paginator.newerPost": {
+    "message": "Article plus récent",
+    "description": "L'étiquette du bouton pour naviguer vers l'article plus récent/précédent"
+  },
+  "theme.blog.post.paginator.olderPost": {
+    "message": "Article plus ancien",
+    "description": "L'étiquette du bouton pour naviguer vers l'article plus ancien/suivant"
+  },
+  "theme.blog.post.plurals": {
+    "message": "Un article|{count} articles",
+    "description": "Étiquette pluralisée pour \"{count} articles\". Utilisez autant de formes plurielles (séparées par \"|\") que votre langue le permet (voir https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.blog.tagTitle": {
+    "message": "{nPosts} étiqueté(s) avec \"{tagName}\"",
+    "description": "Le titre de la page pour une étiquette de blog"
+  },
+  "theme.tags.tagsPageLink": {
+    "message": "Voir toutes les étiquettes",
+    "description": "L'étiquette du lien vers la page de liste des étiquettes"
+  },
+  "theme.colorToggle.ariaLabel": {
+    "message": "Basculer entre le mode sombre et clair (actuellement {mode})",
+    "description": "L'étiquette ARIA pour le bouton de bascule de mode de couleur dans la barre de navigation"
+  },
+  "theme.colorToggle.ariaLabel.mode.dark": {
+    "message": "mode sombre",
+    "description": "Le nom du mode sombre"
+  },
+  "theme.colorToggle.ariaLabel.mode.light": {
+    "message": "mode clair",
+    "description": "Le nom du mode clair"
+  },
+  "theme.docs.breadcrumbs.navAriaLabel": {
+    "message": "Fil d'Ariane",
+    "description": "L'étiquette ARIA pour le fil d'Ariane"
+  },
+  "theme.docs.DocCard.categoryDescription.plurals": {
+    "message": "{count} éléments",
+    "description": "La description par défaut pour une carte de catégorie dans l'index généré, indiquant combien d'éléments cette catégorie inclut"
+  },
+  "theme.docs.paginator.navAriaLabel": {
+    "message": "Pages de documentation",
+    "description": "L'étiquette ARIA pour la pagination des pages de documentation"
+  },
+  "theme.docs.paginator.previous": {
+    "message": "Précédent",
+    "description": "L'étiquette pour naviguer vers le document précédent"
+  },
+  "theme.docs.paginator.next": {
+    "message": "Suivant",
+    "description": "L'étiquette pour naviguer vers le document suivant"
+  },
+  "theme.docs.tagDocListPageTitle.nDocsTagged": {
+    "message": "Un document étiqueté|{count} documents étiquetés",
+    "description": "Étiquette pluralisée pour \"{count} documents étiquetés\". Utilisez autant de formes plurielles (séparées par \"|\") que votre langue le permet (voir https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.docs.tagDocListPageTitle": {
+    "message": "{nDocsTagged} avec \"{tagName}\"",
+    "description": "Le titre de la page pour une étiquette de documentation"
+  },
+  "theme.docs.versionBadge.label": {
+    "message": "Version : {versionLabel}"
+  },
+  "theme.docs.versions.unreleasedVersionLabel": {
+    "message": "Ceci est une documentation non publiée pour la version {versionLabel} de {siteTitle}.",
+    "description": "L'étiquette pour indiquer que l'utilisateur consulte une version non publiée de la documentation"
+  },
+  "theme.docs.versions.unmaintainedVersionLabel": {
+    "message": "Ceci est la documentation pour {siteTitle} {versionLabel}, qui n'est plus activement maintenue.",
+    "description": "L'étiquette pour indiquer que l'utilisateur consulte une version non maintenue de la documentation"
+  },
+  "theme.docs.versions.latestVersionSuggestionLabel": {
+    "message": "Pour une documentation à jour, consultez la {latestVersionLink} ({versionLabel}).",
+    "description": "L'étiquette pour inciter l'utilisateur à consulter la dernière version"
+  },
+  "theme.docs.versions.latestVersionLinkLabel": {
+    "message": "dernière version",
+    "description": "L'étiquette pour le lien de suggestion vers la dernière version"
+  },
+  "theme.common.editThisPage": {
+    "message": "Modifier cette page",
+    "description": "L'étiquette du lien pour modifier la page actuelle"
+  },
+  "theme.common.headingLinkTitle": {
+    "message": "Lien direct vers {heading}",
+    "description": "Titre pour le lien vers un en-tête"
+  },
+  "theme.lastUpdated.atDate": {
+    "message": " le {date}",
+    "description": "Les mots utilisés pour indiquer la date de dernière mise à jour d'une page"
+  },
+  "theme.lastUpdated.byUser": {
+    "message": " par {user}",
+    "description": "Les mots utilisés pour indiquer par qui la page a été mise à jour en dernier"
+  },
+  "theme.lastUpdated.lastUpdatedAtBy": {
+    "message": "Dernière mise à jour{atDate}{byUser}",
+    "description": "La phrase utilisée pour afficher quand une page a été mise à jour et par qui"
+  },
+  "theme.navbar.mobileVersionsDropdown.label": {
+    "message": "Versions",
+    "description": "L'étiquette pour le menu déroulant des versions sur la vue mobile"
+  },
+  "theme.NotFound.title": {
+    "message": "Page introuvable",
+    "description": "Page introuvable"
+  },
+  "theme.NotFound.back": {
+    "message": "Retour à la page d'accueil",
+    "description": "L'étiquette pour le bouton de retour à la page d'accueil"
+  },
+  "theme.tags.tagsListLabel": {
+    "message": "Étiquettes :",
+    "description": "L'étiquette à côté d'une liste d'étiquettes"
+  },
+  "theme.admonition.caution": {
+    "message": "attention",
+    "description": "L'étiquette par défaut pour l'admonition Attention (:::caution)"
+  },
+  "theme.admonition.danger": {
+    "message": "danger",
+    "description": "L'étiquette par défaut pour l'admonition Danger (:::danger)"
+  },
+  "theme.admonition.info": {
+    "message": "info",
+    "description": "L'étiquette par défaut pour l'admonition Info (:::info)"
+  },
+  "theme.admonition.note": {
+    "message": "note",
+    "description": "L'étiquette par défaut pour l'admonition Note (:::note)"
+  },
+  "theme.admonition.tip": {
+    "message": "astuce",
+    "description": "L'étiquette par défaut pour l'admonition Astuce (:::tip)"
+  },
+  "theme.admonition.warning": {
+    "message": "avertissement",
+    "description": "L'étiquette par défaut pour l'admonition Avertissement (:::warning)"
+  },
+  "theme.AnnouncementBar.closeButtonAriaLabel": {
+    "message": "Fermer",
+    "description": "L'étiquette ARIA pour le bouton de fermeture de la barre d'annonce"
+  },
+  "theme.blog.sidebar.navAriaLabel": {
+    "message": "Navigation des articles récents du blog",
+    "description": "L'étiquette ARIA pour les articles récents dans la barre latérale du blog"
+  },
+  "theme.CodeBlock.copied": {
+    "message": "Copié",
+    "description": "L'étiquette du bouton de copie sur les blocs de code"
+  },
+  "theme.CodeBlock.copyButtonAriaLabel": {
+    "message": "Copier le code dans le presse-papiers",
+    "description": "L'étiquette ARIA pour le bouton de copie des blocs de code"
+  },
+  "theme.CodeBlock.copy": {
+    "message": "Copier",
+    "description": "L'étiquette du bouton de copie sur les blocs de code"
+  },
+  "theme.CodeBlock.wordWrapToggle": {
+    "message": "Activer/Désactiver le retour à la ligne",
+    "description": "L'attribut de titre pour le bouton de bascule du retour à la ligne des lignes de blocs de code"
+  },
+  "theme.DocSidebarItem.expandCategoryAriaLabel": {
+    "message": "Développer la catégorie de la barre latérale '{label}'",
+    "description": "L'étiquette ARIA pour développer la catégorie de la barre latérale"
+  },
+  "theme.DocSidebarItem.collapseCategoryAriaLabel": {
+    "message": "Réduire la catégorie de la barre latérale '{label}'",
+    "description": "L'étiquette ARIA pour réduire la catégorie de la barre latérale"
+  },
+  "theme.NavBar.navAriaLabel": {
+    "message": "Principal",
+    "description": "L'étiquette ARIA pour la navigation principale"
+  },
+  "theme.navbar.mobileLanguageDropdown.label": {
+    "message": "Langues",
+    "description": "L'étiquette pour le menu déroulant de changement de langue sur mobile"
+  },
+  "theme.NotFound.p1": {
+    "message": "Oups, ce lien a décidé de faire une petite escapade !",
+    "description": "Le premier paragraphe de la page 404"
+  },
+  "theme.NotFound.p2": {
+    "message": "Pour accéder à toute la documentation Numspot, cliquez sur le bouton ci-dessous :",
+    "description": "Le deuxième paragraphe de la page 404"
+  },
+  "theme.TOCCollapsible.toggleButtonLabel": {
+    "message": "Sur cette page",
+    "description": "L'étiquette utilisée par le bouton du composant de table des matières rétractable"
+  },
+  "theme.blog.post.readMore": {
+    "message": "Lire la suite",
+    "description": "L'étiquette utilisée dans les extraits d'articles de blog pour créer un lien vers les articles complets"
+  },
+  "theme.blog.post.readMoreLabel": {
+    "message": "En savoir plus sur {title}",
+    "description": "L'étiquette ARIA pour le lien vers les articles complets depuis les extraits"
+  },
+  "theme.blog.post.readingTime.plurals": {
+    "message": "Une minute de lecture|{readingTime} minutes de lecture",
+    "description": "Étiquette pluralisée pour \"{readingTime} minutes de lecture\". Utilisez autant de formes plurielles (séparées par \"|\") que votre langue le permet (voir https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.docs.breadcrumbs.home": {
+    "message": "Page d'accueil",
+    "description": "L'étiquette ARIA pour la page d'accueil dans le fil d'Ariane"
+  },
+  "theme.docs.sidebar.collapseButtonTitle": {
+    "message": "Réduire la barre latérale",
+    "description": "L'attribut de titre pour le bouton de réduction de la barre latérale de documentation"
+  },
+  "theme.docs.sidebar.collapseButtonAriaLabel": {
+    "message": "Réduire la barre latérale",
+    "description": "L'attribut de titre pour le bouton de réduction de la barre latérale de documentation"
+  },
+  "theme.docs.sidebar.navAriaLabel": {
+    "message": "Barre latérale de documentation",
+    "description": "L'étiquette ARIA pour la navigation de la barre latérale"
+  },
+  "theme.docs.sidebar.closeSidebarButtonAriaLabel": {
+    "message": "Fermer la barre de navigation",
+    "description": "L'étiquette ARIA pour le bouton de fermeture de la barre latérale mobile"
+  },
+  "theme.navbar.mobileSidebarSecondaryMenu.backButtonLabel": {
+    "message": "← Retour au menu principal",
+    "description": "L'étiquette du bouton de retour au menu principal, à l'intérieur du menu secondaire de la barre latérale mobile (notamment utilisé pour afficher la barre latérale de documentation)"
+  },
+  "theme.docs.sidebar.toggleSidebarButtonAriaLabel": {
+    "message": "Basculer la barre de navigation",
+    "description": "L'étiquette ARIA pour le bouton de menu hamburger de la navigation mobile"
+  },
+  "theme.docs.sidebar.expandButtonTitle": {
+    "message": "Développer la barre latérale",
+    "description": "L'étiquette ARIA et l'attribut de titre pour le bouton de développement de la barre latérale de documentation"
+  },
+  "theme.docs.sidebar.expandButtonAriaLabel": {
+    "message": "Développer la barre latérale",
+    "description": "L'étiquette ARIA et l'attribut de titre pour le bouton de développement de la barre latérale de documentation"
+  },
+  "theme.ErrorPageContent.tryAgain": {
+    "message": "Réessayer",
+    "description": "L'étiquette du bouton pour réessayer le rendu lorsque la limite d'erreur React capture une erreur"
+  },
+  "theme.common.skipToMainContent": {
+    "message": "Passer au contenu principal",
+    "description": "L'étiquette pour passer au contenu, utilisée pour l'accessibilité, permettant de naviguer rapidement vers le contenu principal avec la navigation par tabulation/entrée au clavier"
+  },
+  "theme.tags.tagsPageTitle": {
+    "message": "Étiquettes",
+    "description": "Le titre de la page de liste des étiquettes"
+  },
+  "theme.unlistedContent.title": {
+    "message": "Page non listée",
+    "description": "Le titre de la bannière de contenu non listé"
+  },
+  "theme.unlistedContent.message": {
+    "message": "Cette page est non listée. Les moteurs de recherche ne l'indexeront pas, et seuls les utilisateurs ayant un lien direct peuvent y accéder.",
+    "description": "Le message de la bannière de contenu non listé"
+  },
+  "theme.SearchBar.label": {
+    "message": "Rechercher",
+    "description": "Libellés de l'interface de recherche — @easyops-cn/docusaurus-search-local (extension tierce : Docusaurus ne fournit aucune traduction native pour ces clés)"
+  },
+  "theme.SearchBar.noResultsText": {
+    "message": "Aucun résultat",
+    "description": "Libellés de l'interface de recherche — @easyops-cn/docusaurus-search-local (extension tierce : Docusaurus ne fournit aucune traduction native pour ces clés)"
+  },
+  "theme.SearchBar.seeAll": {
+    "message": "Voir tous les résultats",
+    "description": "Libellés de l'interface de recherche — @easyops-cn/docusaurus-search-local (extension tierce : Docusaurus ne fournit aucune traduction native pour ces clés)"
+  },
+  "theme.SearchBar.searchInContext": {
+    "message": "Voir tous les résultats dans « {context} »",
+    "description": "Libellés de l'interface de recherche — @easyops-cn/docusaurus-search-local (extension tierce : Docusaurus ne fournit aucune traduction native pour ces clés)"
+  },
+  "theme.SearchBar.seeAllOutsideContext": {
+    "message": "Voir tous les résultats hors de « {context} »",
+    "description": "Libellés de l'interface de recherche — @easyops-cn/docusaurus-search-local (extension tierce : Docusaurus ne fournit aucune traduction native pour ces clés)"
+  },
+  "theme.SearchPage.existingResultsTitle": {
+    "message": "Résultats de recherche pour « {query} »",
+    "description": "Libellés de l'interface de recherche — @easyops-cn/docusaurus-search-local (extension tierce : Docusaurus ne fournit aucune traduction native pour ces clés)"
+  },
+  "theme.SearchPage.emptyResultsTitle": {
+    "message": "Rechercher dans la documentation",
+    "description": "Libellés de l'interface de recherche — @easyops-cn/docusaurus-search-local (extension tierce : Docusaurus ne fournit aucune traduction native pour ces clés)"
+  },
+  "theme.SearchPage.noResultsText": {
+    "message": "Aucun document trouvé",
+    "description": "Libellés de l'interface de recherche — @easyops-cn/docusaurus-search-local (extension tierce : Docusaurus ne fournit aucune traduction native pour ces clés)"
+  },
+  "theme.SearchPage.documentsFound.plurals": {
+    "message": "1 document trouvé|{count} documents trouvés",
+    "description": "Libellés de l'interface de recherche — @easyops-cn/docusaurus-search-local (extension tierce : Docusaurus ne fournit aucune traduction native pour ces clés)"
+  },
+  "theme.SearchPage.searchContext.everywhere": {
+    "message": "Partout",
+    "description": "Libellés de l'interface de recherche — @easyops-cn/docusaurus-search-local (extension tierce : Docusaurus ne fournit aucune traduction native pour ces clés)"
+  },
+  "theme.docs.reviewedOn": {
+    "message": "Mise à jour le {date}",
+    "description": "Date de mise à jour affichée sous le titre de la page — src/components/LastUpdatedDate"
+  }
+}

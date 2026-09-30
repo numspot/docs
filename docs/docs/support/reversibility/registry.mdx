@@ -1,0 +1,53 @@
+---
+title: Réversibilité - Container Registry managé
+sidebar_label: Réversibilité du Container Registry managé
+description: Informations sur la réversibilité du service managé Container Registry
+sidebar_position: 4
+draft: false
+---
+
+# Réversibilité du Container Registry managé
+
+Le service managé Container Registry est conçu pour garantir la réversibilité, c'est-à-dire la possibilité pour le client de récupérer ses données et de migrer vers une autre solution sans verrouillage.
+
+## Données exportables
+
+L'ensemble des images de conteneurs et artefacts stockés dans le Container Registry peut être exporté via les outils standards de l'écosystème OCI (Open Container Initiative).
+
+## Outils de réversibilité
+
+### Push vers un registry externe
+
+Utilisez les commandes standards Docker pour copier les images vers un registry externe :
+
+```bash
+docker pull <registry-url>/<project>/<image>:<tag>
+docker tag <registry-url>/<project>/<image>:<tag> <new-registry>/<project>/<image>:<tag>
+docker push <new-registry>/<project>/<image>:<tag>
+```
+
+### Réplication Harbor
+
+La [réplication Harbor](/docs/managed-services/registry/guides/harbor-replication/) permet de répliquer automatiquement les images vers un registry externe.
+
+### Export via l'API Harbor
+
+L'API Harbor permet de lister les projets et les images pour automatiser l'export :
+
+```bash
+curl -u "admin:password" "https://<registry-url>/api/v2.0/projects"
+```
+
+## Formats ouverts
+
+- Les images de conteneurs sont au format OCI (Open Container Initiative), compatible avec tout registry conforme (Docker Registry, Quay, etc.).
+- Les charts Helm sont au format standard Helm, compatible avec tout repository Helm.
+- Le protocole de registre est le Docker Registry HTTP API V2, standard du marché.
+
+## Procédure de sortie
+
+1. Identifiez l'ensemble des projets et images à migrer.
+2. Configurez la réplication vers le registry cible ou effectuez un push manuel.
+3. Vérifiez l'intégrité des images copiées sur le registry cible.
+4. Mettez à jour les configurations de déploiement (URL du registry).
+5. Supprimez l'instance Container Registry Numspot après validation.

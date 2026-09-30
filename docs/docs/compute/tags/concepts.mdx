@@ -1,0 +1,51 @@
+---
+title: "Tags - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# À propos des tags
+
+<ActionsSummary />
+
+:::info
+Les tags (étiquettes) sont des métadonnées personnalisables que vous pouvez attribuer à vos ressources compute pour faciliter leur organisation et leur gestion en fonction de critères spécifiques.
+:::
+
+Un tag représente une correspondance exclusive entre une clé et une valeur qui est assignée à chaque ressource. Ces balises peuvent être employées pour structurer vos ressources en fonction de différents critères, tels que le système d'exploitation, l'environnement, les applications ou la version.
+
+Les tags sont des métadonnées que vous pouvez attribuer à vos ressources compute sous forme de paires clé-valeur que vous définissez. Par exemple, vous pouvez définir un ensemble de tags pour vos [VM (virtual machine)](/docs/compute/concept/) Numspot afin de faciliter leur identification et leur gestion.
+
+Aucun tag n'est attribué automatiquement à vos ressources.
+
+Lors de l'ajout d'un tag à une ressource, vous pouvez soit définir une clé et une valeur, soit définir uniquement une clé sans valeur associée. Si vous assignez une clé déjà utilisée à la même ressource, la valeur du tag existant est simplement actualisée, sans création de tag en double.
+
+## Utilisation des Tags
+
+Les tags peuvent être utilisés pour :
+
+- **Organiser vos ressources** : vous pouvez utiliser des tags pour organiser vos ressources en fonction de vos besoins. Par exemple, vous pouvez utiliser des tags pour regrouper des VM par environnement (production, test, développement), par service (web, base de données, stockage) ou par équipe (équipe A, équipe B, équipe C) ;
+- **Inventorier vos ressources** : permettant ainsi de filtrer celles partageant un même tag ;
+- **Contrôler l'accès à vos ressources** : vous pouvez utiliser des tags pour définir des règles d'accès à vos ressources. Par exemple, vous pouvez utiliser des tags pour définir des règles d'accès à vos VM en fonction de l'environnement (production, test, développement) ou de l'équipe (équipe A, équipe B, équipe C).
+
+## Création de Tags
+
+Pour créer un tag, vous devez définir une clé et une valeur. La clé est le nom du tag et la valeur est la valeur du tag. Par exemple, vous pouvez créer un tag avec la clé "environnement" et la valeur "production".
+
+À la création d'une ressource, la Console Numspot permet de définir son tag **Name** (le nom de la ressource). Une fois la ressource créée, vous pouvez ajouter des tags supplémentaires via la Console Numspot ou l'API Numspot.
+
+## Limites des Tags
+
+Il y a quelques limites à prendre en compte lors de l'utilisation de tags :
+
+- Le nombre maximum de tags par ressource est de 50 ;
+- La longueur maximale d'une clé de tag est de 128 caractères ;
+- La longueur maximale d'une valeur de tag est de 256 caractères ;
+- Les clés et les valeurs des tags ne peuvent contenir que des caractères Unicode imprimables et des espaces blancs ;
+- Les clés des tags sont sensibles à la casse ;
+- Les valeurs des tags ne sont pas sensibles à la casse.
+
+En utilisant les tags de manière efficace, vous pouvez améliorer la gestion de vos ressources compute et réduire vos coûts. Pour plus d'informations sur l'utilisation des tags, consultez la documentation Numspot.

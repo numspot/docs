@@ -1,0 +1,42 @@
+---
+title: Delete an image
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Delete an image
+
+You can delete an image you have created at any time if you no longer need it.
+
+The snapshots linked to the image are not deleted.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.image.delete**
+
+:::
+
+<Tabs>
+  <TabItem value="console" label="Console" default>
+    Deleting an image from the console is not available yet. Use the API or Terraform.
+  </TabItem>
+  <TabItem value="api" label="API">
+    The `DELETE /compute/spaces/{spaceId}/images/{id}` command deletes an image.
+
+:::info
+
+You can still use the [VM (Virtual Machine)](/docs/compute/concept/) already launched from the deleted image, because the deletion does not affect existing VM. However, you will no longer be able to create new VM from this image.
+
+[Example request: Deleting an image](/openapi/#tag/compute/DELETE/compute/spaces/%7BspaceId%7D/images/%7Bid%7D)
+:::
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+    The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/image).
+  </TabItem>
+</Tabs>

@@ -1,0 +1,159 @@
+---
+title: View the permissions of a role - IAM
+description: "View a role's information and the permissions it contains, via the console or the API."
+sidebar_label: View the permissions of a role
+sidebar_position: 3
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# View the permissions of a role
+
+You can view a role's information and the permissions it contains via the console or the API.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **iam.role.get**
+
+:::
+
+<Tabs>
+<TabItem value='console' label="Console" default>
+
+## Console {#tabhead-console}
+
+
+Roles are viewed from the identity details pages (users and service accounts).
+
+1. From the left-hand side menu, click **IAM** → **Users** (or **Service Accounts**).
+2. Click the identifier of the relevant identity: the "Assigned spaces" section lists their spaces.
+3. Click **X roles** for the relevant space: the list of roles assigned on that space is displayed.
+4. Select a role: the list of permissions it contains is displayed.
+
+:::info
+The full list of roles and their permissions is available via the API (API tab): the console displays the roles assigned to an identity, space by space.
+:::
+
+</TabItem>
+
+<TabItem value='api' label="API">
+
+## API {#tabhead-api}
+
+
+### Obtain the mapping between role names and their UUID (Universally Unique Identifier)
+
+Roles are specific to each space. To manipulate them via the API, you need their UUID.
+
+**List the roles of an organization**
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/roles
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/roles'
+```
+
+**Example response:**
+
+```json
+{
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "totalSize": 150,
+  "items": [
+    {
+      "name": "…",
+      "description": "…",
+      "tenantType": [
+        "organisation"
+      ],
+      "uuid": "123e4567-e89b-12d3-a456-426614174000",
+      "createdOn": "2025-12-16T11:56:58.617Z",
+      "updatedOn": "2025-12-16T11:56:58.617Z",
+      "custom": true
+    }
+  ]
+}
+```
+
+**List the roles of a space**
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/roles
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/roles'
+```
+
+**Example response:**
+
+```json
+{
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "totalSize": 85,
+  "items": [
+    {
+      "name": "…",
+      "description": "…",
+      "tenantType": [
+        "space"
+      ],
+      "uuid": "987f6543-e21b-43d3-b765-543210987654",
+      "createdOn": "2025-12-18T09:23:12.432Z",
+      "updatedOn": "2025-12-18T09:23:12.432Z",
+      "custom": false
+    }
+  ]
+}
+```
+
+### View the permissions of a space role
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/roles/{roleUuid}/permissions
+
+### Example
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/roles/{roleUuid}/permissions'
+```
+
+### Response
+
+```json
+{
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "totalSize": 150,
+  "items": [
+    {
+      "name": "…",
+      "id": "123e4567-e89b-12d3-a456-426614174000"
+    }
+  ]
+}
+```
+
+:::info
+See the [API usage page](/docs/iam/concepts/api/) for details.
+:::
+
+### View the permissions of an organisation role
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/roles/{roleUuid}/permissions
+
+### Example
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/roles/{roleUuid}/permissions'
+```
+
+:::info
+See the [API usage page](/docs/iam/concepts/api/) for details.
+:::
+
+</TabItem>
+</Tabs>

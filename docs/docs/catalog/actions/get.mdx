@@ -1,0 +1,98 @@
+---
+title: Consulter le catalogue
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Consulter le catalogue
+
+Le catalogue public référence l'ensemble des produits et tarifs disponibles sur la plateforme Numspot. Il fournit pour chaque produit ses caractéristiques techniques, certifications et conditions tarifaires.
+
+## Permissions
+
+:::info
+Aucune permission IAM (Identity and Access Management) n'est requise pour effectuer cette action.
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+
+1. Depuis le menu latéral gauche, cliquez sur la section de votre choix pour accéder aux ressources.
+2. Lors de la création d'une ressource, le catalogue est consulté automatiquement et les produits disponibles s'affichent.
+
+La console utilise le catalogue dans les workflows suivants :
+
+- **Création d'une [VM](/docs/compute/concept/)** : le catalogue fournit la liste des types de VM (Virtual Machine) disponibles avec leurs spécifications : vCPU (virtual Central Processing Unit), RAM (Random Access Memory) ;
+- **Création d'un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/)** : le catalogue liste les profils de nodes (nœuds) disponibles pour les [node pools (groupes de nœuds)](/docs/managed-services/kubernetes/concepts/) ;
+- **Configuration [GPU](/docs/compute/gpu/concept/)** : le catalogue affiche les modèles de GPU (Graphics Processing Unit) avec leur mémoire VRAM (Video Random Access Memory) ;
+- **Création d'une instance PostgreSQL** : le catalogue propose les types de nodes et volumes persistants.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `GET /catalogue` permet de récupérer l'ensemble du catalogue public avec tous les produits et tarifs disponibles.
+
+### Liste des produits du catalogue
+
+**Endpoint** : `GET /catalogue`
+
+### Paramètres de requête
+
+| Champ | Type | Requis | Description |
+|-------|------|--------|-------------|
+| `domain` | string | Non | Domaine des produits : `compute`, `connectivity`, `kubernetes`, `objectstorage`, `postgresql`, `registry`, `secrets` |
+| `kind` | string | Non | Type de ressource (ex: `virtual-machine`, node, gpu, cluster) |
+| `regionCode` | string | Non | Code de région : `eu-west-2` ou `cloudgouv-eu-west-1` |
+| `page[size]` | integer | Non | Nombre maximum d'éléments à retourner (1 à 500, défaut: 100) |
+| `page[nextToken]` | string | Non | Jeton de pagination pour la page suivante |
+
+### Réponse
+
+| Champ | Type | Description |
+|-------|------|-------------|
+| `disclaimer` | string | Mention légale sur les tarifs |
+| `version` | string | Version du catalogue |
+| `publicationDate` | string | Date de publication du catalogue |
+| `items` | array | Liste des produits du catalogue |
+| `items[].uuid` | string — UUID (Universally Unique Identifier) | Identifiant unique du produit |
+| `items[].regionCode` | string | Code de région |
+| `items[].attributes.domain` | string | Domaine du produit |
+| `items[].attributes.kind` | string | Type de ressource |
+| `items[].attributes.productCode` | string | Code produit |
+| `items[].attributes.sku` | string | Identifiant de facturation |
+| `items[].attributes.label` | string | Libellé du produit |
+| `items[].attributes.currentGeneration` | boolean | Génération actuelle |
+| `items[].attributes.certifications` | array | Liste des certifications |
+| `items[].attributes.releaseStage` | string | Stade de release |
+| `items[].attributes.licenseModel` | string | Modèle de licence |
+| `items[].attributes.deploymentOption` | string | Option de déploiement |
+| `items[].resource` | object | Spécifications techniques (VM ou GPU) |
+| `items[].terms` | array | Conditions tarifaires |
+| `items[].terms[].effectiveDate.begin` | string | Date de début de validité |
+| `items[].terms[].effectiveDate.end` | string | Date de fin de validité |
+| `items[].terms[].consumptionPrice.amount` | number | Montant unitaire |
+| `items[].terms[].consumptionPrice.currency` | string | Devise (EUR) |
+| `items[].terms[].consumptionPrice.frequency` | string | Fréquence (HOURLY, MONTHLY) |
+| `items[].terms[].consumptionPrice.unit` | string | Unité de facturation |
+
+[Exemple de requête : Liste du catalogue public](/openapi/#tag/catalogue/GET/catalogue)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La consultation du catalogue via Terraform n'est pas disponible. Utilisez la console ou l'API pour consulter le catalogue des produits et tarifs.
+
+  </TabItem>
+</Tabs>

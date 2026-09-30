@@ -1,0 +1,34 @@
+---
+title: Identity-related concepts - IAM
+sidebar_label: Identity-related concepts
+sidebar_position: 2
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+# Identity-related concepts
+
+## General principle
+
+Each user must have their own identity (ID), in accordance with the recommendations of the SecNumCloud framework. Sharing identities or using generic identities is strictly discouraged. In the same way, you must avoid using a generic service account that could distort traceability or audit information.
+
+## The different types of accounts
+
+The infrastructure and technologies of the IAM (Identity and Access Management) enforce strict isolation of each customer's information. A distinction is made between:
+
+- user accounts, attached to a natural person;
+- service accounts, attached to a machine or a type of service.
+
+### User account
+
+A user account consists of an email address (identifier) and an additional authentication mechanism. The login chain relies on:
+
+- a knowledge factor (the password);
+- a possession factor (an application enrolled on the mobile phone) used to validate a short-lived one-time password, called TOTP (Time-based One-Time Password).
+
+This two-factor mechanism meets the MFA (Multi-Factor Authentication) authentication recommendations of the SecNumCloud framework.
+
+### Service account or system account
+
+The principal can define and manage service accounts in order to automate or programmatically drive their infrastructure. A service account can also link resources to each other (machine to machine), such as a portal that calls business components.

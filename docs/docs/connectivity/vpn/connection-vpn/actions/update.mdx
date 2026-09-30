@@ -1,0 +1,55 @@
+---
+title: Modifier une connexion VPN
+description: Modifiez les attributs d'une connexion VPN existante.
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Modifier une connexion VPN
+
+Vous pouvez modifier les attributs d'une connexion **VPN** (Virtual Private Network).
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **connectivity.vpnconnection.update**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+
+1. Dans le dashboard **VPN Connections**, cliquez sur l'ID de la connexion VPN à modifier.
+2. Modifiez les attributs souhaités.
+3. Cliquez sur **Enregistrer**.
+
+La connexion VPN est modifiée.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `PUT /connectivity/spaces/{spaceId}/vpnConnections/{id}` modifie les attributs spécifiés d'une connexion VPN.
+
+[Exemple de requête : Modification d'une VPN Connection](/openapi/#tag/connectivity/PUT/connectivity/spaces/{spaceId}/vpnConnections/{id})
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection).
+
+</TabItem>
+</Tabs>

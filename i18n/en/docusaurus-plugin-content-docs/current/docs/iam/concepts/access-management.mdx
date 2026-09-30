@@ -1,0 +1,58 @@
+---
+title: Concepts related to access management - IAM
+sidebar_label: Concepts related to access management
+sidebar_position: 3
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+# Concepts related to access management
+
+When an authenticated user attempts to access a resource, the **IAM** (Identity and Access Management) checks the authorization policy to determine whether the action is permitted.
+
+## Resources
+
+A computing resource refers to any physical or virtual component of the system. In a Cloud Computing context, only virtual resources are handled, such as [virtual machines](/docs/compute/concept/), applications, databases or container orchestrators. These resources have a lifecycle that runs from creation to deletion, including modification.
+
+## Resource hierarchy
+
+An organization, its spaces and its resources are part of a graph. The system is composed of users and resources. Users are related to these resources through permissions. An action is authorized if a direct or indirect relationship is found between the user and the resource.
+
+## Permissions
+
+Permissions determine the actions authorized for a user or a service account on a resource or a category of resource. For a resource managed according to the CRUD model (create, read, update, delete), the permissions correspond to each action. The actions are sometimes specific to a category of resources. For example, for a VM, you may have start or stop actions. Rights are the result of permissions associated with roles, which are themselves assigned to a user or a service account. This mechanism may optionally be supplemented by customization through permissions and **ACL** (Access Control List).
+
+## Roles
+
+The Numspot **IAM** allows one or more predefined roles to be assigned to users or service accounts. Each role holds a set of permissions, adapted to its organizational or functional domain. When you assign a role to a user, you grant them all the permissions that the role contains.
+
+### Roles at the level of an organization or its spaces
+
+Users assigned roles at the level of the organization or of a space have a permission scope corresponding to those entities. For example, a user with an organization administrator role can designate themselves or another user as the administrator of a space. A user can be both an administrator on one space and an unprivileged user on another.
+
+### Functional roles
+
+You can assign roles for categories of resources. For example: entrust the management of VM to one user and the management of network components to another. Within a category of resources, in addition to the administration role, you can restrict rights to specific actions: create, update, delete and access a resource.
+
+### Role hierarchy
+
+A scale can be established within roles: at the top, administrator roles, which have full latitude to perform operations within their scope, then resource creators, and finally basic users, who only have read-only access. The user or service account that creates a resource has all rights over it.
+
+### Permission scope of a user or a service account
+
+Permissions are confined to the scope of the space. A user with rights on one space cannot act on the resources of another space, unless they also belong to that space. For a user to acquire rights on a space, they must either already have the rights to grant themselves new permissions, or these permissions must be granted by the administrator of the space.
+
+### Granular permissions or ACL
+
+Roles have a generic scope over the resources of an organization or its spaces. If you want to assign a user a permission on a specific resource, you can add a permission limited to that resource. In this way, a user can combine permissions attached to a role and specific permissions in the form of ACL. You can add several ACL at the same time.
+
+## The authorization strategy
+
+The **IAM** implements a permission management mechanism that confines the permissions of each organization.
+
+The default strategy is to authorize nothing. Permissions are obtained through role assignment or through the declaration of specific permissions on a resource.
+
+You can assign roles to users. These roles determine a set of permissions. It is a set of rules that define who has which type of access. An authorization strategy is associated with a resource and allows all access to it to be controlled.
+
+When a user wants to perform an action on a resource, the system applies the three authorization strategies — RBAC (Role-Based Access Control), unit permission and ACL — in order to establish whether the user can perform the action. As a reminder, the creator of a resource has all rights over it.

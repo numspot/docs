@@ -1,0 +1,67 @@
+---
+title: Obtenir des informations sur vos route tables
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Obtenir des informations sur vos route tables
+
+Vous pouvez obtenir des informations à propos d'une ou plusieurs de vos [route tables (tables de routage)](/docs/network/route-table/concepts/), comme le [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) pour lequel elles sont créées ou les routes qu'elles contiennent.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.routeTable.get**
+
+:::
+<Tabs>
+   <TabItem value="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/route-table/read-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC → Route Tables.", hotspot: { x: 0, y: 0.579, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/route-table/read-list.png", text: "Depuis Réseau → VPC → Route Tables, la liste de vos route tables s'affiche avec leurs informations principales.", hotspot: { x: 0.2083, y: 0.3872, w: 0.5556, h: 0.3519 } },
+  ]}
+/>
+   ## Consulter vos route tables depuis la console
+
+   Vous pouvez consulter les informations de vos route tables depuis la console Numspot.
+
+   ### Consulter la liste des route tables
+
+   1. Connectez-vous sur la console Numspot.
+   2. Depuis le menu latéral gauche, cliquez sur **Réseau** → **VPC** → **Route Table**.
+   3. La liste de vos route tables s'affiche avec leurs informations principales.
+
+   ### Consulter les détails d'une route table
+
+   1. Connectez-vous sur la console Numspot.
+   2. Depuis le menu latéral gauche, cliquez sur **Réseau** → **VPC** → **Route Table**.
+   3. Cliquez sur le nom de la route table dont vous souhaitez consulter les détails.
+      Les informations détaillées de la route table s'affichent, incluant les routes et les associations aux subnets.
+
+   </TabItem>
+   <TabItem value="API">
+
+La commande `GET /compute/spaces/{spaceId}/routeTables` permet de lister les route tables.
+Dans votre VPC, chaque subnet (sous-réseau) doit être associé à une route table. Si un subnet n'est pas explicitement associé à une route table, il est implicitement associé à la route table principale du VPC.
+
+[Exemple de requête : Lister toutes les route tables](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/routeTables)
+
+La commande `GET /compute/spaces/{spaceId}/routeTables/{id}` permet de récupérer des informations concernant une route table.
+
+[Exemple de requête : Récupérer les informations d'une route table](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/routeTables/{id})
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
+  </TabItem>
+</Tabs>

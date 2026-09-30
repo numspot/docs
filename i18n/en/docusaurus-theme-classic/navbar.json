@@ -1,0 +1,22 @@
+{
+  "logo.alt": {
+    "message": "Numspot Logo",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Docs": {
+    "message": "Docs",
+    "description": "Navbar item with label Docs"
+  },
+  "item.label.API": {
+    "message": "API",
+    "description": "Navbar item with label API"
+  },
+  "item.label.Tutoriels": {
+    "message": "Tutorials",
+    "description": "Navbar item with label Tutoriels"
+  },
+  "item.label.Produits": {
+    "message": "Products",
+    "description": "Navbar item with label Produits"
+  }
+}

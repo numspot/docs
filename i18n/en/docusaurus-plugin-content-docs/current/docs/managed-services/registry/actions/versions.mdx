@@ -1,0 +1,37 @@
+---
+title: Get the available Harbor versions
+sidebar_label: Available Harbor versions
+sidebar_position: 1
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Available Harbor versions
+
+You can get the list of available minor versions of Harbor to create your Registry.
+
+During creation, you will need to specify the \<major\>.\<minor\> version of Harbor that you want to use.
+Numspot manages the patch versions so as to always provide you with the most up-to-date version.
+
+## Permissions
+
+No **IAM** (Identity and Access Management) permission is required to perform this action.
+
+<Tabs>
+    
+    {/* </TabItem> */}
+    <TabItem value="api" label="API" default>
+        The `GET /registry/versions` request returns the list of minor versions of Harbor offered by Numspot.
+
+        ### Example response
+
+        ```json
+        {
+          "items": ["2.13", "2.14"]
+        }
+        ```
+
+        [See the full specification](/openapi/#tag/registry/GET/registry/versions)
+    </TabItem>
+</Tabs>
