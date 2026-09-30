@@ -1,0 +1,51 @@
+---
+title: Supprimer une image
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer une image
+
+Vous pouvez supprimer une image que vous avez créée à tout moment si vous n'en avez plus besoin.
+
+Les snapshots (instantanés) liés à l'image ne sont pas supprimés.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.image.delete**
+
+:::
+
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+    La suppression d'image depuis la Console n'est pas encore disponible. Utilisez l'API ou Terraform.
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+    La commande `DELETE /compute/spaces/{spaceId}/images/{id}` permet de supprimer une Image.
+
+:::info
+
+Vous pouvez toujours utiliser les [VM (Virtual Machine)](/docs/compute/concept/) déjà lancées à partir de l'Image supprimée, car la suppression n'affecte pas les VM existantes. Cependant, vous ne pourrez plus créer de nouvelles VM à partir de cette Image.
+
+[Exemple de requête : Suppression d'une Image](/openapi/#tag/compute/DELETE/compute/spaces/%7BspaceId%7D/images/%7Bid%7D)
+:::
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/image).
+  </TabItem>
+</Tabs>

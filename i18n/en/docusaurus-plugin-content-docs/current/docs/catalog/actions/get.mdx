@@ -1,0 +1,89 @@
+---
+title: View the catalog
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# View the catalog
+
+The public catalog lists all the products and prices available on the Numspot platform. For each product, it provides its technical characteristics, certifications and pricing conditions.
+
+## Permissions
+
+:::info
+No IAM (Identity and Access Management) permission is required to perform this action.
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+1. From the left-hand side menu, click the section of your choice to access the resources.
+2. When you create a resource, the catalog is consulted automatically and the available products are displayed.
+
+The console uses the catalog in the following workflows:
+
+- **Creating a [VM](/docs/compute/concept/)** (Virtual Machine): the catalog provides the list of available VM types with their specifications: vCPU (virtual Central Processing Unit), RAM (Random Access Memory);
+- **Creating a [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/)**: the catalog lists the node profiles available for the [node pools](/docs/managed-services/kubernetes/concepts/);
+- **GPU configuration**: the catalog displays the [GPU](/docs/compute/gpu/concept/) (Graphics Processing Unit) models with their VRAM (Video Random Access Memory);
+- **Creating a PostgreSQL instance**: the catalog offers the node types and persistent volumes.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `GET /catalogue` command lets you retrieve the entire public catalog with all the available products and prices.
+
+## List of catalog products
+
+**Endpoint**: `GET /catalogue`
+
+### Query parameters
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `domain` | string | No | Product domain: `compute`, `connectivity`, `kubernetes`, `objectstorage`, `postgresql`, `registry`, `secrets` |
+| `kind` | string | No | Resource type (e.g. `virtual-machine`, node, gpu, cluster) |
+| `regionCode` | string | No | Region code: `eu-west-2` or `cloudgouv-eu-west-1` |
+| `page[size]` | integer | No | Maximum number of items to return (1 to 500, default: 100) |
+| `page[nextToken]` | string | No | Pagination token for the next page |
+
+### Response
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `disclaimer` | string | Legal notice on prices |
+| `version` | string | Catalog version |
+| `publicationDate` | string | Catalog publication date |
+| `items` | array | List of catalog products |
+| `items[].uuid` | string — UUID (Universally Unique Identifier) | Unique product identifier |
+| `items[].regionCode` | string | Region code |
+| `items[].attributes.domain` | string | Product domain |
+| `items[].attributes.kind` | string | Resource type |
+| `items[].attributes.productCode` | string | Product code |
+| `items[].attributes.sku` | string | Billing identifier |
+| `items[].attributes.label` | string | Product label |
+| `items[].attributes.currentGeneration` | boolean | Current generation |
+| `items[].attributes.certifications` | array | List of certifications |
+| `items[].attributes.releaseStage` | string | Release stage |
+| `items[].attributes.licenseModel` | string | License model |
+| `items[].attributes.deploymentOption` | string | Deployment option |
+| `items[].resource` | object | Technical specifications (VM or GPU) |
+| `items[].terms` | array | Pricing conditions |
+| `items[].terms[].effectiveDate.begin` | string | Validity start date |
+| `items[].terms[].effectiveDate.end` | string | Validity end date |
+| `items[].terms[].consumptionPrice.amount` | number | Unit amount |
+| `items[].terms[].consumptionPrice.currency` | string | Currency (EUR) |
+| `items[].terms[].consumptionPrice.frequency` | string | Frequency (HOURLY, MONTHLY) |
+| `items[].terms[].consumptionPrice.unit` | string | Billing unit |
+
+[Example request: Public catalog list](/openapi/#tag/catalogue/GET/catalogue)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+Viewing the catalog via Terraform is not available. Use the console or the API to view the catalog of products and prices.
+
+  </TabItem>
+</Tabs>

@@ -1,0 +1,328 @@
+---
+title: "VM - Démarrage rapide"
+sidebar_label: "Démarrage rapide"
+sidebar_position: 1
+last_update:
+  date: 2026-09-28
+---
+
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Démarrage rapide
+
+Numspot permet de créer des machines virtuelles ([VM](/docs/compute/concept/)) et de s'y connecter à distance en SSH (Secure Shell).
+
+En suivant ce tutoriel, vous mettrez en œuvre une partie des composants nécessaires à la construction d'une application allant de simple à très complexe, de manière sécurisée. Avant de plonger dans l'aventure, jetez un œil au schéma ci-dessous ! Il vous dévoile tous les composants dont vous aurez besoin pour créer votre propre VM chez Numspot.
+
+![Quickstart VM](/img/console/compute/general/quickstart_vm.png)
+
+## 1. Créer une VM
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/vm-quickstart/00-list.png", text: "Depuis le menu latéral gauche, cliquez sur Compute → VM.", hotspot: { x: 0, y: 0.4123, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/vm-quickstart/00-list.png", text: "Cliquez sur « Créer une VM » pour lancer l'assistant en 7 étapes.", hotspot: { x: 0.8592, y: 0.2329, w: 0.1019, h: 0.0494 } },
+    { img: "/img/walkthrough/vm-quickstart/01-image.png", text: "Étape 1 — Image : choisissez le système d'exploitation de la VM, puis cliquez sur « Continuer ».", hotspot: { x: 0.22, y: 0.5, w: 0.55, h: 0.33 } },
+    { img: "/img/walkthrough/vm-quickstart/02-type.png", text: "Étape 2 — Machines Virtuelles : choisissez un type d'utilisation puis un gabarit (vCPU, RAM, coût horaire) et le nombre de VM.", hotspot: { x: 0.22, y: 0.42, w: 0.55, h: 0.35 } },
+    { img: "/img/walkthrough/vm-quickstart/03-info.png", text: "Étape 3 — Informations générales et réseau : nommez la VM, puis sélectionnez le VPC et le subnet (ou créez-les).", hotspot: { x: 0.229, y: 0.14, w: 0.277, h: 0.06 } },
+    { img: "/img/walkthrough/vm-quickstart/04-volume.png", text: "Étape 4 — Volume : conservez le volume système par défaut ou ajustez sa taille et son type.", hotspot: { x: 0.22, y: 0.15, w: 0.55, h: 0.3 } },
+    { img: "/img/walkthrough/vm-quickstart/05-sg.png", text: "Étape 5 — Security Groups : gardez le security group par défaut du VPC ou sélectionnez-en un ou plusieurs.", hotspot: { x: 0.229, y: 0.17, w: 0.32, h: 0.34 } },
+    { img: "/img/walkthrough/vm-quickstart/06-keypair.png", text: "Étape 6 — Key Pair : sélectionnez une key pair existante, créez-en une ou continuez sans. Cliquez enfin sur « Créer la VM ».", hotspot: { x: 0.6625, y: 0.9308, w: 0.1014, h: 0.0494 } },
+  ]}
+/>
+
+1. Depuis la console, dans le menu de gauche, cliquez sur **Compute** → **VM** pour accéder à la liste des VM.
+
+
+2. Cliquez sur le bouton **Créer une VM** situé en haut à droite de l'écran pour lancer l'assistant de création de VM.
+
+
+La création d'une VM sur le Cloud de Numspot est simplifiée grâce à un assistant de création qui vous guide à travers chaque étape de configuration.
+
+À chaque étape, un récapitulatif des options sélectionnées est affiché sur le côté droit de l'écran, incluant le coût total estimé des ressources ajoutées. Cela vous permet de gérer les coûts de votre VM et de vous assurer qu'ils restent dans les limites de votre budget.
+
+Voici les étapes pour créer une VM en utilisant l'assistant :
+
+### Choisir une image
+
+
+1. Sélectionnez l'image de l'OS que vous souhaitez utiliser pour votre VM.
+2. Cliquez sur **Continuer**<br/>
+L'écran **VM** s'affiche.
+
+### Choisir un type de VM et le nombre de VM
+
+{/* 1. Lors de la sélection de la VM, vous avez deux options :
+    - **Sélectionner un gabarit de VM préconfiguré** :
+        <br/>Numspot propose des gabarits de VM optimisés pour divers cas d'utilisation, tels que le calcul, la mémoire, le standard et l'économique. Ces gabarits sont conçus pour répondre aux besoins spécifiques de différents types d'applications et de charges de travail. Par exemple, le gabarit de calcul est optimisé pour les applications nécessitant une puissance de traitement élevée, tandis que le gabarit de mémoire est optimisé pour les applications nécessitant une grande quantité de mémoire vive. */}
+
+1. Sélectionnez le type de VM que vous souhaitez créer.
+      :::tip
+      Numspot vous propose des gabarits de VM optimisés pour divers cas d'utilisation, tels que le calcul, la mémoire, le standard, l'économique et l'inférence.
+      * **Calcul** : Optimisé pour les applications nécessitant une puissance de traitement élevée.
+      * **Mémoire** : Optimisé pour les applications nécessitant une grande quantité de mémoire vive.
+      * **Standard** : Convient à la plupart des cas d'utilisation.
+      * **Économique** : Idéal pour les applications à faible coût.
+      * **Inférence** : Optimisé pour l'inférence IA.
+      :::
+
+
+2. Sélectionnez le nombre de VM que vous souhaitez créer
+
+
+      :::info
+         * Vous pouvez choisir de créer plusieurs VM simultanément (jusqu'à un maximum de 20, sous réserve de votre quota).
+         * Vous pouvez déployer rapidement votre infrastructure en créant plusieurs VM en une seule fois.
+         * Un récapitulatif des options sélectionnées, avec le coût total estimé, est affiché sur le côté droit de l'écran. Cela vous permet de suivre les coûts associés à votre VM.
+      :::
+
+3. Cliquez sur **Continuer**.
+
+### Informations générales et Network 
+Choisir un nom et une option d'allocation.
+1. Dans le champ **Nom de la VM**, renseigner le nom que vous souhaitez attribuer à votre VM.
+   :::warning
+      Ce nom doit contenir entre 1 et 255 [caractères ASCII imprimables](https://fr.wikipedia.org/wiki/American_Standard_Code_for_Information_Interchange#Caract%C3%A8res_imprimables)
+   ::: 
+   :::info
+   Ce nom est utilisé comme tag associé à votre VM.
+   :::
+
+2. **Bail de VM dédié** :
+
+   Cochez la case **Bail de VM dédié** uniquement si vous souhaitez créer des VM dédiées.
+   :::info
+      Une VM dédiée bénéficie de ressources matérielles dédiées, moyennant un coût supplémentaire.
+   :::
+
+3. Configurez le réseau :
+   Lorsque vous configurez le réseau pour votre VM, on parle ici du réseau virtuel privé ([VPC](/docs/network/vpc/concepts/)), vous avez deux options :
+   - **Choisir un VPC existant** : <br/>
+      - Sélectionnez un VPC existant dans la liste déroulante si vous avez déjà créé un VPC dans votre espace.
+      - Choisissez un subnet (sous-réseau) existant dans la liste déroulante Subnet.
+   - **Créer un nouveau réseau** : <br/> 
+      Si vous n'avez pas encore créé de réseau ou si vous souhaitez créer un nouveau réseau pour votre VM, vous pouvez cliquer sur le bouton **Créer un VPC**.
+      Cela ouvrira une boîte de dialogue dans laquelle vous pourrez créer un nouveau VPC et un nouveau subnet pour votre VM.
+
+      - Création du VPC :
+         - Sélectionner l'AZ (Availability Zone) dans laquelle vous souhaitez déployer votre VM
+         - Dans le champ **Nom du VPC**, choisissez un nom identifiable pour votre VPC.
+          - Entrez le CIDR (Classless Inter-Domain Routing). Définissez la plage d'adresses IP (Internet Protocol) pour votre VPC.
+       - Créez le subnet :
+          - Dans le champ **Nom du subnet**, choisissez un nom identifiable pour votre subnet.
+          - Entrez le CIDR pour définir la plage d'adresses IP de votre subnet.
+          :::info
+             - Le bloc CIDR du subnet doit être inclus dans le bloc CIDR du VPC.
+             - Si vous créez plusieurs subnets dans un VPC, leurs blocs CIDR ne doivent pas se chevaucher.
+          :::
+      - Cliquez sur **Créer le Network**
+3. Cliquez sur **Continuer**.<br/>
+   L'écran de **Volume** apparaît.
+
+### Volume 
+**Configurez le root volume** <br/>
+1. Si vous voulez que vos VM utilisent un volume root par défaut :
+   - Sélectionnez **Utiliser configuration par défaut**.
+2. Si vous voulez personnaliser le volume système de vos VM :
+   - Sélectionnez **Personnaliser la configuration du root volume**.
+   - Sélectionnez une des valeurs suivantes dans la liste Type de volume :
+      - _Magnetic_ pour un volume Magnetic
+      - _SSD_ pour un volume Performance
+      - _SSD premium_ pour un volume Enterprise
+      :::info
+         Si vous sélectionnez **SSD premium**, vous devez définir le nombre d'IOPS (Input/Output Operations Per Second) dont vous avez besoin.
+      :::
+    - Dans le champ **Taille du volume**, spécifiez la taille du volume (en Gio).
+      :::note
+         Notez que la taille minimale du volume est de 10 Gio et la taille maximale est de 14901 Gio, sous réserve de votre quota. Assurez-vous de choisir une taille de volume adaptée à vos besoins en termes de stockage et de coût.
+      :::
+3. Cliquez sur **Continuer**.<br/>
+   L'écran de **[security group](/docs/compute/security-groups/concepts/concept-sg/)** (groupe de sécurité) apparaît.
+
+### Règles associées au security group (groupe de sécurité)
+Vous avez le choix entre trois options :
+1. **Continuer avec le security group du VPC** <br/>
+   Cette option vous permet d'utiliser le security group par défaut associé à votre VPC.
+2. **Sélectionner un ou plusieurs SG existants**<br/>
+   Cette option vous permet de sélectionner un ou plusieurs security group existants.
+
+3. **Créez un nouveau security group** 
+   - Dans le champ **Nom du security group**, tapez un nom pour le security group.
+      :::info
+         - Le nom doit être unique.
+         - Le nom du security group ne doit pas commencer par "sg-".
+         - Chaque nom et description peut contenir entre 1 et 255 caractères. Les caractères autorisés sont a-z, A-Z, 0-9, l'espace et _.-:/()#,@[]+=&;\{}!$*.
+      :::
+   - Dans le champ **Description**, entrez une description. Décrivez brièvement le but de votre security group.
+
+4. Cliquez sur **Continuer**.<br/>
+   L'écran de **Keypair** apparaît.
+
+### Key pair (paire de clés)
+Vous avez le choix entre trois options :
+
+1. **Sélectionner une [key pair](/docs/compute/keypairs/concept/) existante**. <br/>
+   Choisissez une key pair existante pour vous connecter à votre VM.
+      :::warning
+         Seules les key pairs au format RSA peuvent déchiffrer le mot de passe d'une VM Windows.
+      :::
+
+2. **Créez une nouvelle key pair**
+   - Dans le champ **Nom de la key pair**, tapez un nom pour la key pair.
+      :::info
+          - Le nom de la key pair doit être unique dans votre compte.
+          - Il doit contenir entre 1 et 255 [caractères ASCII imprimables](https://fr.wikipedia.org/wiki/American_Standard_Code_for_Information_Interchange#Caract%C3%A8res_imprimables)
+      :::
+      :::success
+         Vous pourrez télécharger la clé privée à la dernière étape de la création de la VM.
+      :::
+
+3. **Continuez sans key pair**. <br/>
+   Cette option vous permet de créer une VM sans key pair.
+      :::warning
+         Vous pouvez créer une VM sans y associer de key pair. Cependant, toutes les images officielles utilisent des key pairs comme système d'authentification.
+         Si vous voulez accéder à une VM créée à partir d'une image officielle, vous devez donc y associer une key pair pendant cette étape ou plus tard via l'API.
+      :::
+
+4. Cliquez sur **Créer la VM**.<br/>
+   L'écran de **Création** s'affiche.
+
+### Création de la VM
+   - Les ressources à créer selon les options sélectionnées seront automatiquement créées et rattachées à votre VM dans un ordre séquentiel.
+   - Si vous avez choisi de créer une **key pair**, vous devez télécharger la clé privée avant de quitter l'écran de création.
+      :::warning
+          Sauvegardez ce fichier avec précaution, car vous aurez besoin de son contenu à chaque connexion à vos ressources. Il ne peut pas être récupéré auprès de Numspot en cas de perte.
+      :::
+   - L'écran affiche l'évolution de la création de la VM.
+   - Un récapitulatif des options sélectionnées apparaît sur le côté droit de l'écran.
+    - Il inclut :
+      * L'image choisie, le type de VM, les informations générales (nom de la VM, bail de VM dédié, etc.), le réseau (VPC et subnet), le volume (taille et type), le security group et la key pair.
+      * Le récapitulatif affiche également le coût total estimé de la VM, basé sur les options sélectionnées.
+    
+   - Lorsque la création est terminée, vous pouvez retourner à la liste des VM.
+
+## 2. Créer les ressources nécessaires à la VM
+### Internet Gateway (passerelle Internet)
+Afin de pouvoir connecter la VM à internet, il faut ajouter une passerelle vers internet sur le VPC.
+
+Dans le menu de gauche, cliquez sur **Réseau** → **VPC** puis sur [Internet Gateways](/docs/network/internet-gateway/concepts/) pour accéder à la liste des internet gateways.
+
+Cliquez sur **Créer une Internet Gateway**, renseignez un **nom**, enfin cliquez sur **Créer** :
+![Create Internet Gateway: Create resource](/img/console/network/vpc/internet-gateway/create_internet_gateway.png)
+
+L'internet gateway est créée.
+
+Il faut maintenant l'attacher au VPC dans lequel la VM réside. Pour cela :
+* Cliquez dans le menu **Action** à droite de la ligne, sélectionnez l'option **Lier à un VPC**
+
+![Create Internet Gateway: Link resource action](/img/console/network/vpc/internet-gateway/actions_internet_gateway.png)
+
+* Choisissez dans la liste déroulante, le VPC à lier :
+
+![Create Internet Gateway: Select vpc to attach](/img/console/network/internet-gateway/igw3-select-vpc-to-link.png)
+
+### IP publique
+
+Afin de pouvoir connecter la VM à internet, il faut que celle-ci ait une adresse IP publique.
+
+:::info
+Si le subnet dans lequel vous créez votre VM a l'attribut `mapPublicIpOnLaunch` activé, la VM reçoit automatiquement une IP publique à sa création : l'étape d'association manuelle décrite ci-dessous n'est alors pas nécessaire. Pour plus d'informations, consultez [À propos des IP publiques](/docs/network/public-ip/concepts/).
+:::
+
+Pour cela :
+* dans le menu de gauche, cliquez sur **Réseau** → **IP publiques** pour accéder à la liste des IP publiques.
+* Cliquez sur le bouton **Réserver une IP publique**.
+* Dans le champ qui s'affiche, précisez un nom pour l'IP publique.
+* Enfin cliquez sur le bouton **Réserver une IP publique**.
+
+![Add Public IP to VM: create Public IP resource](/img/console/network/public-ips/reserve_public_ip_form.png)
+
+Il faut maintenant associer l'IP publique réservée à la VM :
+* Cliquez sur le menu **Action** à droite de la ligne
+![Add Public IP to VM: Action select](/img/console/network/public-ips/actions_public_ip1.png)
+* Sélectionnez l'option **Associer à la VM**,
+* Dans le panneau qui s'ouvre, sélectionnez l'identifiant de la VM concernée,
+* Cliquez sur **Associer à la VM**
+
+:::warning
+   - Le lien établi par défaut entre l'IP publique et la VM est éphémère. Il est détruit à chaque redémarrage de la VM.
+   - Si vous souhaitez que le lien soit pérenne, il faut cocher l'option **Associer automatiquement l'IP publique au démarrage de la VM.**
+:::
+
+### Route table (table de routage)
+
+Afin que la VM puisse accéder à internet, il faut ajouter une route dans la **[route table](/docs/network/route-table/concepts/)** (table de routage) liée au subnet dans lequel réside la VM.
+Pour ajouter la route, cliquez sur la propriété **Routes**, puis cliquez sur **Ajouter une route**
+
+![Route Table: Open route table panel](/img/console/network/vpc/route-table/open_panel_route_table.png)
+
+![Route Table: Add route button](/img/console/network/vpc/route-table/add_route_cta.png)
+
+Le panneau d'ajout de route s'ouvre.
+La route que l'on ajoute doit :
+* avoir comme type **Internet Gateway**
+* avoir comme cible, l'**internet gateway** configurée précédemment (à sélectionner dans la liste déroulante)
+* avoir comme IP de **Destination** 0.0.0.0/0
+
+![Configure route to internet: configure route](/img/console/network/route-table/route-table-2.png)
+
+Pour enregistrer les changements, cliquez sur **Ajouter la route** puis **Valider**.
+
+### Security group (groupe de sécurité)
+
+Afin de pouvoir se connecter à une VM en SSH depuis internet, il faut autoriser la connexion entrante sur le security group affecté à la VM.
+
+Rendez-vous sur l'écran de détail de la VM :
+* dans le menu de gauche, cliquez sur **Compute** → **VM**,
+* dans la liste, sélectionnez la VM à laquelle vous souhaitez vous connecter en cliquant sur son identifiant,
+* vous voyez maintenant l'écran de détails de la VM, dans lequel vous trouverez en bas à gauche, le security group associé à votre VM. Cliquez sur l'identifiant du **security group**.
+
+Dans l'écran qui s'affiche, vous allez pouvoir ajouter une règle autorisant les communications entrantes, pour cela:
+
+* Cliquez sur **Ajouter une règle**
+* Indiquez le service visé dans le champ **Service** (ici **SSH**),
+* sélectionnez le type de source souhaité (**Mon IP** de préférence).
+* Cliquez sur **Valider** pour terminer la configuration.
+
+![Configure route to internet: Add rule to security group](/img/console/compute/security-groups/button-add-rule-security-group.png)
+
+![Configure route to internet: Create inbound rule](/img/console/compute/security-groups/sg-create-inbound-rule.png)
+
+:::info
+   La configuration du security group peut prendre quelques minutes à être prise en compte.
+:::
+
+## 3. Se connecter à la VM
+
+Une fois votre VM créée, configurée et en cours d'exécution, suivez les instructions correspondantes à votre système d'exploitation pour vous connecter à votre VM.
+
+* Pour les VM Linux :
+   - Identifiez l'adresse IP publique de votre VM Linux.
+   - Ouvrez un terminal (ou une fenêtre de commande) sur votre ordinateur local.
+   - Assurez-vous que vous disposez de la clé privée correspondant à la key pair que vous avez utilisée lors de la création de votre VM Linux.
+   - Modifiez les permissions de la clé privée pour garantir sa sécurité.
+   - Connectez-vous à votre VM Linux en utilisant la commande SSH:
+      ```bash
+      ssh -i <chemin/vers/votre/cle_privee> numspot@<adresse_ip_publique_de_votre_vm>
+      ```
+
+## 4. Supprimer une VM
+
+Lorsque vous n'avez plus besoin d'une VM, vous pouvez la supprimer pour libérer les ressources associées.
+1. Dans le menu de gauche, cliquez sur **Compute** → **VM**.
+![Menu Compute](/img/console/compute/menu_compute.png)
+2. Sélectionnez la VM que vous souhaitez supprimer <br/>
+![Menu Compute list](/img/console/compute/vms/selection_vm_list.png)
+   Cochez la case de la VM que vous souhaitez supprimer.
+   :::info
+      La multi-sélection est disponible.
+   :::
+3. Cliquez sur le bouton **Supprimer**.
+![Supprimer VM](/img/console/compute/vms/delete.png)
+   :::warning
+      L'action "Supprimer" est irréversible. Si vous confirmez cette action, la VM sera définitivement supprimée, ce qui entraînera les conséquences suivantes :
+      * Les ressources rattachées à la VM seront libérées.
+      * Les données stockées dans la mémoire seront effacées.
+      * En cas d'IP publique rattachée, elle sera libérée mais restera allouée au compte.
+      * Le comportement des volumes [block storage](/docs/storage/block-storage/concepts/) dépend du block device mapping.
+   :::

@@ -1,0 +1,108 @@
+---
+title: Sécuriser l'authentification du Secret Manager
+description: Sécuriser l'authentification du Secret Manager pour la conformité SecNumCloud
+sidebar_position: 2
+draft: false
+---
+
+# Sécuriser l'authentification du Secret Manager
+
+Le service managé [Secret Manager](/docs/managed-services/secret-manager/concepts/) intègre des mécanismes de sécurité pour protéger l'accès aux secrets. Cette page présente les bonnes pratiques pour sécuriser l'authentification, notamment dans un contexte de conformité SecNumCloud.
+
+## Connexions sécurisées TLS
+
+Les communications avec le Secret Manager sont chiffrées avec TLS (Transport Layer Security). L'instance est accessible via son host en HTTPS.
+
+### Vérifier le chiffrement TLS
+
+```bash
+curl -v https://{host-de-l-instance}/v1/sys/health
+```
+
+## Authentification forte et conformité SecNumCloud
+
+Pour répondre aux exigences SecNumCloud en matière d'authentification forte, combinez plusieurs couches de sécurité selon une approche multi-facteurs.
+
+### Architecture multi-facteurs recommandée
+
+| Facteur | Mécanisme | Protection |
+| --- | --- | --- |
+| Ce que vous savez | Identifiants d'accès au Secret Manager | Authentification applicative |
+| Ce que vous possédez | VPN avec MFA | Couche réseau |
+| Ce que vous êtes | Contrôle d'accès réseau (IP, [VPC](/docs/network/vpc/concepts/)) | Périmètre de sécurité |
+
+### Configuration recommandée pour environnements sensibles
+
+1. **Restriction des IP** : Limitez l'accès aux plages d'adresses IP autorisées ;
+
+2. **Accès via VPN avec MFA** : Connectez-vous au Secret Manager via un VPN doté d'une authentification MFA pour ajouter une couche de sécurité réseau ;
+
+3. **Bastion avec MFA** : Déployez un bastion avec authentification forte (TOTP, clé hardware) et configurez l'accès au Secret Manager uniquement via ce bastion ;
+
+4. **Principe du moindre privilège** : Accordez uniquement les permissions nécessaires pour accéder aux secrets.
+
+### Architecture type
+
+```text
+[Application/Utilisateur] 
+    → [VPN avec MFA] 
+    → [Bastion/Proxy] 
+    → [Secret Manager]
+```
+
+## Contrôle d'accès
+
+### Permissions IAM Numspot
+
+L'accès aux opérations de gestion des instances Secret Manager est contrôlé par les permissions IAM :
+
+| Permission | Description |
+| --- | --- |
+| `secrets.instance.get` | Obtenir les informations d'une instance ou lister les instances |
+| `secrets.instance.create` | Créer une instance |
+| `secrets.instance.delete` | Supprimer une instance |
+
+### Contrôle d'accès applicatif
+
+Le contrôle d'accès aux secrets au sein de l'instance est géré par les mécanismes internes du Secret Manager. Pour plus d'informations sur la configuration des accès applicatifs, consultez la documentation de l'interface de l'instance.
+
+## Audit des accès
+
+### Événements de gestion des instances
+
+Les opérations de gestion des instances (création, consultation, suppression) sont tracées par l'API Numspot.
+
+### Audit des accès aux secrets
+
+La journalisation des accès aux secrets est gérée par les mécanismes internes du Secret Manager. Pour configurer et consulter les logs d'audit, consultez la documentation de l'interface de l'instance.
+
+## Protection contre les attaques
+
+### Limitation des tentatives
+
+Des protections contre les attaques par force brute sont appliquées :
+
+- Verrouillage temporaire après échecs répétés ;
+- Rate limiting sur les opérations sensibles.
+
+### Détection des anomalies
+
+Surveillez les comportements suspects dans les logs d'audit :
+
+- Multiples échecs de connexion ;
+- Accès à des secrets depuis des IP inhabituelles ;
+- Tentatives d'accès non autorisées.
+
+## Résumé des bonnes pratiques SecNumCloud
+
+| Exigence | Implémentation recommandée |
+| --- | --- |
+| Chiffrement des connexions | TLS obligatoire (HTTPS) |
+| Authentification forte | VPN avec MFA + identifiants du Secret Manager |
+| Contrôle d'accès | Permissions IAM restrictives, principe du moindre privilège |
+| Audit des accès | Logs d'audit activés, revue régulière |
+| Révocation | Suppression ou révocation immédiate en cas de compromission |
+
+:::tip
+Pour les architectures critiques, utilisez un bastion SSH ou un proxy d'accès pour centraliser et auditer toutes les connexions au Secret Manager. Mettez en place une revue trimestrielle des accès.
+:::

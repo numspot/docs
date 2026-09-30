@@ -1,0 +1,49 @@
+---
+title: Set up a direct connection between the VM of a VPC and the internet - Numspot
+sidebar_label: Set up a direct connection between the VM of a VPC and the internet
+sidebar_position: 1
+draft: false
+---
+
+# Tutorial: Set up a direct connection between the VM of a VPC and the internet
+
+The purpose of this tutorial is to allow the [VM](/docs/compute/concept/) (Virtual Machine) of a subnet to be connected to the internet directly by using an [internet gateway](/docs/network/internet-gateway/concepts/) and a **public IP**.
+
+In this tutorial, you learn how to:
+
+* set up an internet gateway for your [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud);
+* configure your [route tables](/docs/network/route-table/concepts/) and [security groups](/docs/compute/security-groups/concepts/concept-sg/) for a direct connection to the internet.
+
+## Permissions
+
+No IAM (Identity and Access Management) permission is required to perform this action.
+
+## Prerequisites
+
+:::info
+**Before you begin:**
+1. Set up a VPC architecture.
+2. Allocate to your account as many public IP as required for your VM.
+:::
+
+1. Create an internet gateway.
+2. Attach an internet gateway to the VPC.
+3. In the route table associated with the subnet where your VM are located, create a route with 0.0.0.0/0 as the destination and the ID of the internet gateway as the target.
+
+:::tip
+You can use the CIDR block 0.0.0.0/0 as the destination to take into account all destinations that are not explicitly routed in the route table, or you can use a smaller IP range matching, for example, the public IP of your internal network.
+:::
+
+4. To allow the traffic going from your VM to the internet, add a rule allowing outbound traffic to the internet (CIDR block 0.0.0.0/0, or a smaller IP range) to the security groups used for your VM in the subnet.
+
+:::info
+To allow the internet to initiate connections with your VM, add another rule allowing inbound traffic from the internet.
+:::
+
+5. Associate a public IP with each VM created in your subnet that you want to connect directly to the internet.
+
+:::info
+This public IP is the public IP used by the VM to access the internet and is reachable from the internet through the internet gateway.
+:::
+
+The VM in your subnet that have a public IP associated are connected to the internet directly through the internet gateway.

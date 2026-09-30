@@ -1,0 +1,97 @@
+---
+title: Consulter le tableau de bord DLP - DLP managé
+sidebar_label: Consulter le tableau de bord DLP
+sidebar_position: 16
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Consulter le tableau de bord DLP
+
+Consultez le tableau de bord [DLP](/docs/managed-services/dlp/concepts) pour visualiser les statistiques d'évaluation en temps réel : volume de requêtes, répartition des décisions, règles les plus déclenchées et répartition par plateforme.
+
+## Permissions
+
+:::info
+Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+
+- **viewer**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Connectez-vous à la console DLP. Le tableau de bord s'affiche par défaut.", hotspot: { x: 0.006, y: 0.085, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Consultez les graphiques : évolution des évaluations, répartition par décision et par plateforme.", hotspot: { x: 0.201, y: 0.186, w: 0.765, h: 0.370 } },
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Consultez la répartition par plateforme consommatrice.", hotspot: { x: 0.609, y: 0.698, w: 0.357, h: 0.247 } },
+  ]}
+/>
+
+1. Connectez-vous à la console [DLP](/docs/managed-services/dlp/concepts). Le tableau de bord s'affiche par défaut.
+
+### Statistiques d'évaluation
+
+- **Sélecteur de période** : choisissez la plage temporelle — 1h, 24h, 7d ou 30d ;
+- **Graphique en courbes** : évolution des évaluations dans le temps, ventilée par type de décision (`pass`, `block`, `modify`, `monitor`) ;
+- **Graphique en barres** : règles les plus déclenchées sur la période sélectionnée ;
+- **Graphique en secteurs** : répartition des évaluations par plateforme consommatrice.
+
+### Décisions récentes
+
+Le tableau des décisions récentes affiche les dernières évaluations bloquées ou modifiées, avec :
+
+- l'identifiant de la requête ;
+- la plateforme consommatrice ;
+- la décision rendue ;
+- les règles déclenchées ;
+- l'horodatage.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+La requête `GET /api/v1/dashboard/stats` permet de récupérer les statistiques du tableau de bord.
+
+### Paramètres de requête
+
+| Paramètre | Description |
+|-----------|-------------|
+| `range` | Période : `1h`, `24h`, `7d` ou `30d` |
+
+### Exemple de réponse
+
+```json
+{
+  "evaluations": [
+    {
+      "timestamp": "2026-08-27T14:00:00Z",
+      "pass": 8420,
+      "block": 156,
+      "modify": 23,
+      "monitor": 8
+    }
+  ],
+  "top_rules": [
+    {
+      "rule_id": "rule-550e8400",
+      "rule_name": "block-aws-keys",
+      "count": 156
+    }
+  ],
+  "per_platform": [
+    {
+      "platform_instance": "mistral-prod-eu",
+      "total": 8607
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>

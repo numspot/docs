@@ -1,0 +1,420 @@
+---
+title: Secure Harbor authentication
+description: Secure Harbor authentication for SecNumCloud compliance
+sidebar_position: 8
+draft: false
+---
+
+# Secure Harbor authentication
+
+The Container Registry (Harbor) managed service includes security mechanisms to protect access to images and projects. This page presents best practices for securing authentication, in particular in a SecNumCloud compliance context.
+
+## TLS secure connections
+
+All communications with Harbor are encrypted with TLS (Transport Layer Security).
+
+### Check TLS encryption
+
+```bash
+## Check that the registry uses HTTPS
+curl -v https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/v2/
+```
+
+### Docker with TLS
+
+Docker automatically uses TLS for HTTPS connections:
+
+```bash
+docker login registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com
+```
+
+## Strong authentication and SecNumCloud compliance
+
+To meet SecNumCloud strong-authentication requirements, combine several security layers.
+
+### Recommended multi-factor architecture
+
+| Factor | Mechanism | Protection |
+| --- | --- | --- |
+| Something you know | Admin password or robot token | Harbor authentication |
+| Something you have | VPN access | Network layer |
+| Something you are | Network access control (IP, [VPC](/docs/network/vpc/concepts/)) | Security perimeter |
+
+### Recommended configuration for sensitive environments
+
+1. **Access via private network**: connect to the registry through a VPN (Virtual Private Network) or a VPC (Virtual Private Cloud);
+
+2. **IP restriction**: limit access to authorized IP address ranges;
+
+3. **Use of robot accounts**: prefer robot accounts over admin credentials for automation.
+
+## Multi-factor authentication (MFA)
+
+Harbor does not provide native MFA (Multi-Factor Authentication) configurable through the Numspot API. To implement multi-factor authentication, use a layered architecture.
+
+### Recommended MFA approach
+
+| Layer | Mechanism | Factor |
+| --- | --- | --- |
+| Layer 1 | Password or robot token | Something you know |
+| Layer 2 | VPN with MFA | Something you have |
+| Layer 3 | Client certificate | Something you have |
+| Layer 4 | IP/VPC restriction | Something you are |
+
+### MFA configuration via bastion
+
+To implement MFA, deploy a secure architecture:
+
+1. **Bastion with MFA**:
+   - deploy a bastion with strong authentication (TOTP, hardware key);
+   - configure access to the registry only through the bastion.
+
+2. **Access via VPN with MFA**:
+   - configure a VPN with MFA authentication;
+   - limit access to the registry to clients connected to the VPN.
+
+### Typical MFA architecture
+
+```text
+[User/Docker] 
+    → [VPN with MFA] 
+    → [Bastion/Proxy] 
+    → [Container Registry Harbor]
+```
+
+### Docker configuration with proxy
+
+To access the registry through a proxy with MFA:
+
+```bash
+## Configure Docker to use the proxy
+export HTTP_PROXY=http://bastion:3128
+export HTTPS_PROXY=http://bastion:3128
+
+## Connect to the registry
+docker login registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com
+```
+
+:::note
+Native Harbor multi-factor authentication is not currently configurable through the Numspot API. For strong authentication, use network-level access control (VPN, bastion).
+:::
+
+## Password policy
+
+### Administrator password
+
+The administrator password is generated automatically when the Container Registry is created.
+
+To retrieve the password, see [Retrieve the password](/docs/managed-services/registry/actions/password/).
+
+### Best practices
+
+- Never share the administrator password;
+- Use robot accounts for automation;
+- Change the password regularly through the Harbor interface.
+
+### Create a strong password
+
+For additional users created in Harbor:
+
+- Minimum length of 12 characters;
+- Combination of uppercase letters, lowercase letters, numbers and special characters;
+- Exclusion of dictionary words and personal information.
+
+## Harbor user management
+
+### User types
+
+| Type | Description | Use case |
+| --- | --- | --- |
+| Administrator | Full access | System administration |
+| User | Project access | Developers, ops |
+| Robot account | Automation | CI/CD, deployments |
+
+### Create a user (via the Harbor interface)
+
+1. Log in to the Harbor interface;
+2. Go to **Administration** → **Users**;
+3. Click **New User**;
+4. Fill in the information:
+   - Username
+   - Email
+   - Password
+5. Click **OK**.
+
+For more details about robot accounts, see [Robot accounts](/docs/managed-services/registry/guides/robot-accounts/).
+
+## Per-project permission management
+
+### Permission levels
+
+| Role | Permissions |
+| --- | --- |
+| Guest | Read-only access to images |
+| Developer | Push/Pull images |
+| Master | Member management, project configuration |
+| Admin | Full project administration |
+
+### Assign permissions
+
+1. Go to the project;
+2. Click **Members**;
+3. Add a user or group;
+4. Select the appropriate role.
+
+## Connection auditing
+
+Harbor logs authentication events and operations on images.
+
+### Logged events
+
+| Event | Description |
+| --- | --- |
+| Successful login | User authentication |
+| Authentication failure | Attempts with invalid credentials |
+| Image Push/Pull | Repository operations |
+| Creation/Deletion | Operations on projects and resources |
+
+### Consult the audit logs
+
+1. Log in as administrator;
+2. Go to **Administration** → **Audit Log**;
+3. Filter by:
+   - User
+   - Operation
+   - Period
+   - Project
+
+### Via API
+
+```bash
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/logs" \
+  -u "admin:{password}"
+```
+
+## Protection against attacks
+
+### Attempt limiting
+
+Harbor applies protections against brute-force attacks:
+
+- Temporary lockout after repeated failures;
+- Rate limiting on sensitive operations.
+
+:::note
+Harbor does not apply a configurable automatic block after a defined number of login failures. For automatic blocking, use an application firewall.
+:::
+
+### Anomaly detection
+
+Monitor suspicious behavior in the audit logs:
+
+- Multiple login failures;
+- Image pushes from unusual IP;
+- Attempts to access unauthorized projects.
+
+## Block a user in case of misuse
+
+If you detect suspicious activity or a compromised account, you can immediately block access.
+
+### Disable a user
+
+#### Via the Harbor interface
+
+1. Go to **Administration** → **Users**;
+2. Select the user;
+3. Click **Disable**.
+
+#### Via API
+
+```bash
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}" \
+  -u "admin:{password}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "disabled": true
+  }'
+```
+
+### Disable a robot account
+
+#### Via the Harbor interface
+
+1. Go to the project → **Robots**;
+2. Select the robot account;
+3. Click **Disable**.
+
+#### Via API
+
+```bash
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots/{robot_id}" \
+  -u "admin:{password}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "disable": true
+  }'
+```
+
+### Revoke a user's permissions
+
+1. Go to the project;
+2. Click **Members**;
+3. Remove the user from the project.
+
+### Check a user's status
+
+```bash
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}" \
+  -u "admin:{password}"
+```
+
+## Permanently delete an account
+
+If the account is no longer needed or if the compromise is confirmed.
+
+### Delete a user
+
+#### Via the Harbor interface
+
+1. Go to **Administration** → **Users**;
+2. Select the user;
+3. Click **Delete**.
+
+#### Via API
+
+```bash
+curl -X DELETE "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}" \
+  -u "admin:{password}"
+```
+
+### Delete a robot account
+
+#### Via the Harbor interface
+
+1. Go to the project → **Robots**;
+2. Select the robot account;
+3. Click **Delete**.
+
+#### Via API
+
+```bash
+curl -X DELETE "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots/{robot_id}" \
+  -u "admin:{password}"
+```
+
+:::warning
+Deletion is irreversible. All systems using the account will immediately lose access.
+:::
+
+### Incident response procedure
+
+In case misuse is detected:
+
+1. **Immediately disable** the user or robot account;
+2. **Regenerate the secret** of the robot account if necessary;
+3. **Analyze the logs** to identify the origin of the attack;
+4. **Restrict network access** through [security groups](/docs/compute/security-groups/concepts/concept-sg) or the VPN;
+5. **Delete the account** if necessary.
+
+## Reset the administrator password
+
+If you suspect that the admin password has been compromised:
+
+### Via the Numspot API
+
+Use the API to reset the password:
+
+```http
+PUT /registry/spaces/{spaceId}/registries/{registryId}/password/reset
+```
+
+See [Retrieve the password](/docs/managed-services/registry/actions/password/) for more details.
+
+## Extract rights for audit
+
+### List users and their permissions
+
+```bash
+## List all users
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users" \
+  -u "admin:{password}"
+
+## List the members of a project
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/members" \
+  -u "admin:{password}"
+```
+
+### List robot accounts and their permissions
+
+```bash
+## Project-level robots
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots" \
+  -u "admin:{password}"
+
+## System-level robots
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/robots" \
+  -u "admin:{password}"
+```
+
+### Export permissions for audit
+
+```bash
+## Export the members of all projects
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects" \
+  -u "admin:{password}" | jq '.[] | {project_id: .project_id, name: .name}' | while read project; do
+    project_id=$(echo $project | jq -r '.project_id')
+    curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/$project_id/members" \
+      -u "admin:{password}"
+done
+```
+
+## Cross audit
+
+Check that the applied permissions match the security policies.
+
+### Recommended checks
+
+1. **List system administrators**: who has the admin role?
+2. **Check access to sensitive projects**: who can push images?
+3. **Audit robot accounts**: which systems have access?
+4. **Check external permissions**: are there any public access?
+
+### Audit script
+
+```bash
+#!/bin/bash
+REGISTRY="registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com"
+AUTH="admin:password"
+
+echo "=== Harbor audit ==="
+echo ""
+echo "1. Active users:"
+curl -s -X GET "https://$REGISTRY/api/v2.0/users" -u "$AUTH" | jq '.[] | select(.disabled == false) | {username: .username, email: .email, admin: .sysadmin_flag}'
+
+echo ""
+echo "2. System robot accounts:"
+curl -s -X GET "https://$REGISTRY/api/v2.0/robots" -u "$AUTH" | jq '.[] | {name: .name, disabled: .disable}'
+
+echo ""
+echo "3. Projects and members:"
+for project_id in $(curl -s -X GET "https://$REGISTRY/api/v2.0/projects" -u "$AUTH" | jq '.[].project_id'); do
+  echo "Project $project_id:"
+  curl -s -X GET "https://$REGISTRY/api/v2.0/projects/$project_id/members" -u "$AUTH" | jq '.[].entity_name'
+done
+```
+
+## SecNumCloud best-practices summary
+
+| Requirement | Recommended implementation |
+| --- | --- |
+| Connection encryption | Mandatory TLS (HTTPS) |
+| Strong authentication | Private network (VPN/VPC) + password |
+| Password policy | Complexity, regular rotation |
+| Access auditing | Audit logs enabled, regular review |
+| Access control | Per-project permissions, least-privilege principle |
+| Account blocking | Immediate disabling in case of incident |
+| Rights auditing | Regular permission export, cross audit |
+
+:::tip
+For critical architectures, use an SSH bastion or an access proxy to centralize and audit all connections to the registry. Set up a quarterly review of access and robot accounts.
+:::

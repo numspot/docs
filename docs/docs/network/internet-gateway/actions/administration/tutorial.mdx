@@ -1,0 +1,49 @@
+---
+title: Mettre en place une connexion directe entre des VM d'un VPC et internet - Numspot
+sidebar_label: Mettre en place une connexion directe entre des VM d'un VPC et internet
+sidebar_position: 1
+draft: false
+---
+
+# Tutoriel : Mettre en place une connexion directe entre des VM d'un VPC et internet
+
+Le but de ce tutoriel est de permettre aux [VM (Virtual Machine)](/docs/compute/concept/) d'un subnet (sous-réseau) d'être connectées à Internet de manière directe en utilisant une [internet gateway](/docs/network/internet-gateway/concepts/) et une **IP publique**.
+
+Dans ce tutoriel, vous apprenez à :
+
+* Mettre en place une internet gateway pour votre [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/)
+* Configurer vos [route tables (tables de routage)](/docs/network/route-table/concepts/) et [security groups (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) pour une connexion directe à Internet
+
+## Permissions
+
+Aucune permission **IAM** (Identity and Access Management) n'est requise pour effectuer cette action.
+
+## Prérequis
+
+:::info
+## Avant de commencer
+1. Mettez en place une architecture VPC. 
+2. Allouez à votre compte autant d'IP publiques que nécessaire pour vos VM.
+:::
+
+1. Créez une internet gateway.
+2. Attachez une internet gateway au VPC.
+3. Dans la route table associée au subnet où se trouvent vos VM, créez une route avec 0.0.0.0/0 en destination et l'ID de l'internet gateway en target.
+
+:::tip
+Vous pouvez utiliser le bloc CIDR 0.0.0.0/0 en destination pour prendre en compte toutes les destinations qui ne sont pas explicitement routées dans la route table, ou vous pouvez utiliser une plage d'IP plus petite correspondant, par exemple, aux IP publiques de votre réseau interne.
+:::
+
+4. Pour autoriser les flux allant de vos VM vers Internet, ajoutez une règle autorisant les flux sortants vers Internet (bloc CIDR 0.0.0.0/0, ou une plage d'IP plus petite) aux security groups utilisés pour vos VM dans le subnet.
+
+:::info
+Pour autoriser internet à initier des connexions avec vos VM, ajoutez une autre règle autorisant les flux entrants depuis Internet.
+:::
+
+5. Associez une IP publique à chaque VM créée dans votre subnet que vous souhaitez connecter directement à Internet.
+
+:::info
+Cette IP publique est l'IP publique utilisée par la VM pour accéder à Internet et est accessible depuis Internet via l'internet gateway.
+:::
+
+Les VM dans votre subnet qui ont une IP publique associée sont connectées à Internet de manière directe à travers l'internet gateway.

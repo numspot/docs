@@ -1,0 +1,67 @@
+---
+title: Read one or more tags
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Read one or more tags
+
+You can search for information about your tags.
+
+:::info
+To search for resources by their tags, refer to the read section of the relevant resource.
+:::
+
+## Permissions
+
+:::info
+This action requires the **IAM** (Identity and Access Management) read permission for each resource whose tags you want to view. For example:
+
+- **compute.vm.get** for a [VM (virtual machine)](/docs/compute/concept/);
+- **compute.blockStorage.get** for a [volume (block storage)](/docs/storage/block-storage/concepts/);
+- **compute.loadBalancer.get** for a [load balancer](/docs/network/load-balancer/concepts/);
+- **compute.vpc.get** for a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+
+This list is given as an example and is not exhaustive: for each resource, refer to its action page.
+
+Only the tags of the resources you are allowed to read are returned.
+
+:::
+
+<Tabs>
+<TabItem value="Console" label="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/load-balancer/lb-02-actions.png", text: "From the list of the relevant resource, open its row “Actions” menu, then click “Manage tags”.", hotspot: { x: 0.8819, y: 0.4358, w: 0.0809, h: 0.0457 } },
+    { img: "/img/walkthrough/en/load-balancer/lb-tags-panel.png", text: "The “Manage Tags” panel shows the list of tags (key/value) associated with the resource.", hotspot: { x: 0.6, y: 0.28, w: 0.35, h: 0.1 } },
+  ]}
+/>
+
+1. From the left-hand side menu, go to the list of the resource whose tags you want to view;
+2. On the resource row, open the **Actions** menu, then click **Manage tags**.
+
+The **Manage Tags** panel shows the list of tags associated with the resource.
+
+:::info
+The process is identical for all resources that support tags (VM, volume, load balancer, VPC…). The example above is taken from a load balancer.
+:::
+
+</TabItem>
+<TabItem value="API" label="API">
+
+The `GET /compute/spaces/{spaceId}/tags` command lists the tags of a space. The list contains only the tags of the resources you have permission to access.
+
+[Example request: List the tags ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/tags)
+
+</TabItem>
+<TabItem value="Terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
+
+</TabItem>
+</Tabs>

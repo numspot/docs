@@ -1,0 +1,88 @@
+---
+title: Create a PostgreSQL backup - Managed PostgreSQL
+sidebar_label: Create a PostgreSQL backup
+sidebar_position: 8
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Create a PostgreSQL backup
+
+You can create a manual (on-demand) backup of your [PostgreSQL cluster](/docs/managed-services/postgresql/concepts/) at any time.
+
+:::warning Prerequisites
+WAL (Write-Ahead Logging) archiving must be enabled on the cluster in order to create on-demand backups.
+:::
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- `postgresql.cluster.create`
+
+:::
+<Tabs>
+
+{/* </TabItem> */}
+
+{/* </TabItem> */}
+<TabItem value="api" label="API" default>
+    The `POST /postgresql/spaces/{spaceId}/clusters/{clusterId}/backups` request triggers an on-demand backup of a PostgreSQL cluster.
+
+    **Parameters**
+
+    | Parameter | Type | Required | Description |
+    |-----------|------|----------|-------------|
+    | `spaceId` | UUID (Universally Unique Identifier) | Yes | Space identifier |
+    | `clusterId` | UUID | Yes | Unique identifier of the cluster |
+
+    **Request body**
+
+    ```json
+    {
+      "name": "my-backup",
+      "target": "PREFER_STANDBY"
+    }
+    ```
+
+    | Field | Type | Required | Description |
+    |-------|------|----------|-------------|
+    | `name` | string | No | Backup name (max 63 characters, strict slug format) |
+    | `target` | string | No | Target node for running the backup. Possible values: `PREFER_STANDBY` (default), `STANDBY`, `PRIMARY` |
+
+    **Values of the target field**
+
+    | Value | Description |
+    |-------|-------------|
+    | `PREFER_STANDBY` | Runs the backup from a standby node if one is available, otherwise from the primary (default behavior) |
+    | `STANDBY` | Runs the backup only from a standby node. Fails if no standby is available |
+    | `PRIMARY` | Runs the backup only from the primary node |
+
+    **Sample response**
+
+    ```json
+    {
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "clusterId": "e592a4f6-2e49-46e7-b6d0-248a7711197a",
+      "name": "my-backup",
+      "type": "ON_DEMAND",
+      "status": {
+        "state": "CREATING",
+        "message": "Backup request submitted"
+      },
+      "startedAt": null,
+      "completedAt": null
+    }
+    ```
+
+    The backup goes through the following states:
+    1. `CREATING` — request submitted
+    2. `RUNNING` — backup in progress
+    3. `SUCCEEDED` — backup completed successfully
+    4. `FAILED` — backup completed with an error
+
+    [See the full specification](/openapi/#tag/postgresql/POST/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups)
+</TabItem>
+</Tabs>

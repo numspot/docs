@@ -1,0 +1,56 @@
+---
+title: Obtain information about your key pairs
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Obtain information about your key pairs
+
+You can obtain information about your created and imported [key pairs](/docs/compute/keypairs/concept/).
+
+Information about the public part of a key pair is also available, only from the [VM](/docs/compute/concept/) (Virtual Machine) associated with the key pair.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.keypair.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/keypair/list.png", text: "From the left-hand side menu, click Compute → Key Pairs.", hotspot: { x: 0, y: 0.5086, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/en/keypair/list.png", text: "The list shows your key pairs with, for each, its fingerprint and type (set at creation).", hotspot: { x: 0.223, y: 0.42, w: 0.75, h: 0.28 } },
+  ]}
+/>
+
+1. Log in to the Numspot console.
+
+2. From the left-hand side menu, click **Compute → Key pairs**.
+
+
+The list shown is that of the existing key pairs with the Fingerprint information for each one as well as the type of the key pair defined at its creation.
+
+</TabItem>
+  <TabItem value="api" label="API">
+The `GET /compute/spaces/{spaceId}/keypairs` command lets you list your key pairs.
+
+[Example request: Listing all your key pairs](/openapi/#tag/compute/get/compute/spaces/{spaceId}/keypairs)
+
+The `GET /compute/spaces/{spaceId}/keypairs/{id}` command lets you retrieve the information of a key pair.
+
+[Example request: Retrieving the information of a key pair](/openapi/#tag/compute/get/compute/spaces/{spaceId}/keypairs/{id})
+  </TabItem>
+<TabItem value="terraform" label="Terraform">
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/keypair).
+</TabItem>
+</Tabs>

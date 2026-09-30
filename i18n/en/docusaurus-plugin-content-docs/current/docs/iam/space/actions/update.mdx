@@ -1,0 +1,80 @@
+---
+title: Update a space - IAM
+description: "Update the name and description of an IAM space of your Numspot organisation, via the console or the API."
+sidebar_label: Update a space
+sidebar_position: 4
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Walkthrough from "@site/src/components/Walkthrough";
+
+# Update a space
+
+You can update a space's administrative information: its name and its description.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **iam.role.update**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/space/list-02-menu.png", text: "From the left-hand side menu, click IAM → Spaces.", hotspot: { x: 0, y: 0.6963, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/space/list-02-menu.png", text: "From IAM → Spaces, open the space's “Actions” menu, then click “Edit space”.", hotspot: { x: 0.7972, y: 0.4, w: 0.17, h: 0.045 } },
+    { img: "/img/walkthrough/en/space/update-02-form.png", text: "Update the space's name and/or description, then click “Edit space”.", hotspot: { x: 0.6849, y: 0.921, w: 0.0644, h: 0.0494 } },
+  ]}
+/>
+
+You can update a space from the **Spaces** page (**Actions** menu → **Edit space**). The **Actions** button also lets you assign users and service accounts to the space.
+
+1. From the left-hand side menu, click **IAM** → **Spaces**.
+2. Open the **Actions** menu of the space to update, then click **Edit space**.
+3. Update the space's name and/or description, then click **Edit space**.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PATCH/organisations/{organisationId}/spaces/{spaceId}
+
+### Example
+
+```bash
+curl 'https://api.{region}.numspot.com/organisations/{organisationId}/spaces/{spaceId}' \
+  --request PATCH \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "",
+  "description": ""
+}'
+```
+
+:::info
+See the [API usage page](/docs/iam/concepts/api/) for details.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/space).
+
+</TabItem>
+</Tabs>

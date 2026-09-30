@@ -1,0 +1,62 @@
+---
+title: Remove rules from a security group
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Remove rules from a security group
+
+You can remove rules for inbound or outbound traffic at any time, even the initial rules contained in the default [security groups](/docs/compute/security-groups/concepts/concept-sg/) or in the ones you create. Once the rule is removed, your changes are automatically applied and the corresponding traffic is no longer authorized.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.securityGroup.update**
+
+:::
+
+<Tabs>
+   <TabItem value="console" label="Console" default> 
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/security-group/list.png", text: "From the left-hand side menu, click Compute → Security Groups.", hotspot: { x: 0, y: 0.5568, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/en/security-group/list.png", text: "Click the ID of the security group to remove a rule from.", hotspot: { x: 0.2687, y: 0.4946, w: 0.0624, h: 0.0204 } },
+    { img: "/img/walkthrough/en/security-group/rule-actions.png", text: "In the “Inbound rules” (or “Outbound rules”) tab, open the “Actions” menu of the rule to remove, then click “Delete”.", hotspot: { x: 0.8931, y: 0.9333, w: 0.07, h: 0.0457 } },
+    { img: "/img/walkthrough/en/security-group/rule-delete-modal.png", text: "Confirm by clicking “Delete”. The rule is removed immediately.", hotspot: { x: 0.6403, y: 0.5856, w: 0.0458, h: 0.0494 } },
+  ]}
+/>
+
+   1. Log in to the Numspot console. 
+   2. From the left-hand side menu, click **Compute** → **Security Groups**.
+
+
+   3. Click the ID of the security group from which you want to remove a rule. 
+     The "Security Group Details" page appears. 
+   4. Choose the rule you want to remove. In the actions drop-down menu, click **Delete**. A confirmation dialog box appears.
+   5. Click the "Delete" button.
+
+
+   6. The selected rule is deleted and the dialog box closes. 
+   </TabItem> 
+  <TabItem value="api" label="API">
+The `DELETE /compute/spaces/{spaceId}/securityGroups/{id}/rules` command deletes one or more inbound or outbound rules of a security group. For the rule to be deleted, the values specified in the deletion request must match exactly those of the existing rule.
+
+In the case of the TCP (Transmission Control Protocol) and UDP (User Datagram Protocol) protocols, you must indicate the destination port or the port range. In the case of the ICMP (Internet Control Message Protocol) protocol, you must specify the ICMP type and code numbers.
+
+The rules, or IP (Internet Protocol) authorizations, are made up of the protocol, the IP range or the source security group.
+
+To remove outbound access to a destination security group, it is recommended to use a set of IP authorizations. It is also recommended to specify the protocol in this set of IP authorizations.
+
+[Example request: Deleting a rule from a Security Group](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/securityGroups/{id}/rules)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+    The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/security_group_rule).
+  </TabItem>
+</Tabs>

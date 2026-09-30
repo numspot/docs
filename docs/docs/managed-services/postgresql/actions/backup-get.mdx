@@ -1,0 +1,62 @@
+---
+title: Obtenir une sauvegarde PostgreSQL - PostgreSQL managé
+sidebar_label: Obtenir une sauvegarde PostgreSQL
+sidebar_position: 9
+draft: false
+last_update:
+  date: 2026-09-30
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Obtenir une sauvegarde PostgreSQL
+
+Vous pouvez obtenir les détails d'une sauvegarde d'un [cluster PostgreSQL](/docs/managed-services/postgresql/concepts/) au sein de votre espace.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **postgresql.cluster.get**
+
+:::
+<Tabs>
+
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+    La requête `GET /postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId}` permet de récupérer les détails d'une sauvegarde d'un cluster PostgreSQL.
+
+### Paramètres
+
+| Paramètre | Type   | Requis | Description                            |
+| --------- | ------ | ------ | -------------------------------------- |
+| spaceId   | string | Oui    | Identifiant de l'espace Numspot.       |
+| clusterId | string | Oui    | Identifiant du cluster PostgreSQL.     |
+| backupId  | string | Oui    | Identifiant de la sauvegarde.          |
+
+### Exemple de réponse
+
+    ```json
+    {
+      "id": "123e4567-e89b-42d3-a456-426614174000",
+      "clusterId": "550e8400-e29b-41d4-a716-446655440002",
+      "clusterName": "mon-cluster-postgresql",
+      "name": "sauvegarde-quotidienne",
+      "type": "ON_DEMAND",
+      "target": "PREFER_STANDBY",
+      "status": {
+        "state": "SUCCEEDED",
+        "message": "backup completed"
+      },
+      "startedAt": "2026-09-01T02:00:00Z",
+      "completedAt": "2026-09-01T02:15:00Z"
+    }
+    ```
+
+    [Voir la spécification complète](/openapi/#tag/postgresql/GET/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId})
+</TabItem>
+</Tabs>

@@ -1,0 +1,76 @@
+---
+title: Configurer un hybrid bridge
+sidebar_position: 4
+---
+
+# Configurer un hybrid bridge
+
+Vous pouvez créer un `hybrid bridge` pour connecter un service managé à votre [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) à l'aide de Terraform.
+
+## Avant de commencer
+
+Pour réaliser les actions présentées ci-dessous, vous devez disposer :
+
+* D'un compte Numspot
+* De [Terraform ↗](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform) installé
+
+:::info
+Le service managé doit être créé avec `visibility = "INTERNAL"` pour être compatible avec un `hybrid bridge`.
+:::
+
+## Créer et déployer des ressources Numspot à l'aide de Terraform
+
+Pour démarrer, commencez par créer [le fichier de configuration ↗](/docs/terraform/quickstart/#création-du-fichier-de-configuration-terraform).
+
+Vous devez ensuite créer les ressources suivantes :
+
+- VPC ;
+- [Cluster PostgreSQL](/docs/managed-services/postgresql/concepts/) ;
+- `hybrid bridge`.
+
+Ajoutez les blocs suivants :
+
+```tf
+resource "numspot_vpc" "vpc" {
+  ip_range = "10.0.0.0/16"
+}
+
+resource "numspot_postgres_cluster" "postgres" {
+  name       = "my-postgres"
+  user       = "admin"
+  visibility = "INTERNAL"
+  node_configuration = {
+    vcpu_count       = 2
+    memory_size_gi_b = 2
+  }
+  volume = {
+    type      = "PERFORMANCE"
+    size_gi_b = 10
+  }
+}
+
+resource "numspot_hybrid_bridge" "hybrid-bridge" {
+  managed_service_id = numspot_postgres_cluster.postgres.id
+  vpc_id             = numspot_vpc.vpc.id
+}
+```
+
+:::warning
+Les valeurs acceptées pour `volume.type` (`ENTERPRISE`, `PERFORMANCE`, `MAGNETIC`) et la plage de `memory_size_gi_b` (1 à 15 GiB) sont définies par l'API Numspot. Si le provider Terraform Numspot que vous utilisez rejette ces valeurs au plan, mettez-le à jour vers la dernière version disponible sur la [registry HashiCorp ↗](https://registry.terraform.io/providers/numspot/numspot/latest).
+:::
+
+Votre configuration est maintenant prête à être [déployée sur l'infrastructure de Numspot ↗](/docs/terraform/quickstart/#déployer-votre-configuration-à-laide-de-terraform).
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **connectivity.bridge.create**
+
+:::
+
+## Liens utiles
+
+* [Documentation du provider Numspot sur le registre d'HashiCorp ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs)
+* [Repository GitHub du provider Numspot ↗](https://github.com/numspot/terraform-provider-numspot)

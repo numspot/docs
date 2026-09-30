@@ -1,0 +1,59 @@
+---
+title: Désactiver la propagation des routes
+description: Désactivez la propagation des routes d'une virtual gateway vers une route table.
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Désactiver la propagation des routes
+
+Vous pouvez désactiver la propagation des routes vers une [route table (table de routage)](/docs/network/route-table/concepts/) depuis une [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/).
+
+Cette action supprime les routes de la connexion **VPN** (Virtual Private Network) de la route table. Pour que la connexion VPN reste disponible, vous devez ensuite ajouter manuellement chaque route à la route table.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **connectivity.vpnconnection.update**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+
+1. Cliquez dans le dashboard **Route Tables** pour faire apparaître des cases à cocher.
+2. Cochez la case de la route table vers laquelle vous voulez désactiver la propagation des routes.
+   La route table est sélectionnée et un menu d'actions apparaît.
+3. Cliquez sur **Désactiver la propagation des routes**.
+   La boîte de dialogue "Désactiver la propagation des routes" s'affiche.
+4. Cliquez sur **Désactiver**.
+   La propagation des routes est désactivée.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `PUT /compute/spaces/{spaceId}/routeTables/{id}/routePropagation` configure la propagation des routes vers une table de routage spécifiée d'un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) par une virtual gateway.
+
+[Exemple de requête : Désactivation de la propagation des routes](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/routeTables/{id}/routePropagation)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
+
+</TabItem>
+</Tabs>

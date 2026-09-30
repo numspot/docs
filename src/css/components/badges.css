@@ -1,0 +1,24 @@
+/**
+ * "New" badge — Brand Book 2026 (Bloom accent)
+ */
+
+.new-badge {
+  position: relative;
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 14px;
+  font-weight: var(--ns-font-weight-bold);
+  color: var(--ns-obsidienne);
+  background: var(--ns-bloom);
+  border-radius: var(--ns-radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  box-shadow: 0 2px 8px rgba(var(--accent-soft-rgb), 0.25);
+  transition: transform var(--ns-transition-hover),
+    box-shadow var(--ns-transition-hover);
+}
+
+.new-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(var(--accent-soft-rgb), 0.35);
+}

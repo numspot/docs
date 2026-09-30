@@ -1,0 +1,58 @@
+---
+title: Auditer les accès d'un espace
+description: "Auditez les accès aux ressources d'un espace, par ressource ou par identité, via l'API ou l'outil space-permission-extractor."
+sidebar_position: 4
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Auditer les accès d'un espace
+
+L'audit des accès permet de savoir quelles identités (utilisateurs ou comptes de service) ont accès aux ressources d'un espace, et à quelles ressources une identité donnée a accès. Vous pouvez procéder via l'API Numspot ou via l'outil space-permission-extractor.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **iam.permission.get**
+
+:::
+<Tabs>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+### Lister les identités ayant accès à une ressource donnée
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/resource/{resourceId}
+
+Retourne les identités ayant accès à une ressource donnée d'un espace, ainsi que leurs rôles et permissions.
+
+### Lister les ressources accessibles à une identité donnée
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/users/{userId}/resources
+
+Retourne l'ensemble des ressources d'un espace auxquelles une identité a accès.
+
+:::info
+Consulter la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+<TabItem value="github" label="GitHub">
+
+## GitHub {#tabhead-github}
+
+
+Avec une TUI (Interface Utilisateur Terminal), l'outil [space-permission-extractor](https://github.com/numspot/space-permission-extractor) interroge les API IAM pour extraire et consolider les accès d'un espace Numspot, afin d'en faciliter l'audit.
+
+Consultez le [README du projet ↗](https://github.com/numspot/space-permission-extractor#readme) pour l'installation et l'utilisation.
+
+</TabItem>
+</Tabs>

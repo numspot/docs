@@ -1,0 +1,68 @@
+---
+title: Supprimer une client gateway
+description: Supprimez une client gateway qui n'est plus associée à une connexion VPN.
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer une client gateway
+
+Vous pouvez supprimer une [client gateway (passerelle client)](/docs/connectivity/vpn/client-gateway/concepts/) qui n'est plus associée à une connexion **VPN** (Virtual Private Network).
+
+Cette action supprime l'identification de la ressource comme client gateway, mais ne supprime pas la ressource elle-même.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **connectivity.bridge.delete**
+
+:::
+
+:::info
+**Avant de commencer** : Supprimez toutes les connexions VPN auxquelles la client gateway est associée.
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+
+1. Cliquez à l'intérieur du dashboard **Client Gateways** pour faire apparaître les cases à cocher.
+2. Cochez la case de la client gateway que vous voulez supprimer.
+   La client gateway est sélectionnée et un menu d'actions apparaît.
+3. Cliquez sur **Supprimer**.
+   Une boîte de dialogue de confirmation s'affiche.
+4. Cliquez sur **Supprimer la Client Gateway**.
+   La client gateway est supprimée.
+
+:::info
+Les ressources supprimées restent visibles pendant 1 heure.
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `DELETE /connectivity/spaces/{spaceId}/clientGateways/{id}` supprime une client gateway spécifiée.
+Vous devez supprimer la connexion VPN avant de supprimer la client gateway.
+
+[Exemple de requête : Suppression d'une Client Gateway](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/clientGateways/{id})
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/client_gateway).
+
+</TabItem>
+</Tabs>

@@ -1,0 +1,54 @@
+---
+title: Delete a route from a VPN connection
+description: Remove a static route from an existing VPN connection.
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Delete a route from a VPN connection
+
+You can delete a static route from a VPN (Virtual Private Network) connection.
+
+:::warning
+This action applies to static routing only. If your VPN connection uses dynamic routing, you do not need to create new routes.
+:::
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **connectivity.vpnconnection.update**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+1. In the **VPN Connections** dashboard, click the ID of the VPN connection from which you want to delete a route.
+   The VPN connections panel appears.
+2. Click in the "Route VPN" dashboard to display the checkboxes.
+3. Select the checkbox of the route you want to delete.
+   The route is selected and an actions menu appears.
+4. Click **Delete**.
+   A confirmation dialog box appears.
+5. Click **Delete**.
+   The selected route is deleted from the VPN connection.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `DELETE /connectivity/spaces/{spaceId}/vpnConnections/{id}/routes` command deletes a static route from a previously created VPN connection.
+
+[Request example: Delete a route from a VPN connection](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/vpnConnections/{id}/routes)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection_route).
+
+</TabItem>
+</Tabs>

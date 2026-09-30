@@ -1,0 +1,67 @@
+---
+title: Delete a volume
+sidebar_position: 6
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Delete a volume
+
+You can delete a `volume` that you no longer need in order to free up your resource quotas. You cannot later recover a deleted `volume`.
+
+## Permissions
+
+:::info
+This action requires the following **IAM** (Identity and Access Management) permissions:
+
+- **compute.blockStorage.delete**
+
+:::
+
+<Tabs>
+<TabItem value="Console" default>
+
+1. Log in to the Numspot console.
+
+2. From the left-hand side menu, click **Storage** → **[Block Storage](/docs/storage/block-storage/concepts/)** → **Volumes**. The list of `volumes` appears.
+
+3. Tick the box of the `volume` that you want to delete.
+
+    :::info
+    The `volume` must be in the "available" state to be deleted.
+    :::
+
+    :::info
+    Multi-selection is available.
+    :::
+
+4. Click **Delete**.
+
+    The **Delete a volume** dialog box appears.
+
+5. Click **Delete the volume**. The `volume` is deleted.
+
+    :::info
+    This deletion procedure can also be carried out directly by selecting the **Delete** action in the **Actions** menu associated with each `volume`.
+    :::
+
+</TabItem>
+<TabItem value="API">
+
+:::info
+**Before you begin**: Make sure that you no longer need the data stored on the `volume` that you want to delete, or that it is backed up elsewhere (on another `volume` or in a snapshot), as it will not be possible to recover the deleted `volume`.
+:::
+
+The `DELETE /compute/spaces/{spaceId}/volumes/{id}` command deletes a specified block storage `volume`. You can only delete available `volumes`, that is, `volumes` that are not attached to a [VM (Virtual Machine)](/docs/compute/concept/).
+
+[Request example: Deleting a Volume ↗](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/volumes/{id})
+
+</TabItem>
+<TabItem value="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/volume).
+
+</TabItem>
+</Tabs>

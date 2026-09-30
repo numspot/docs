@@ -1,0 +1,2181 @@
+openapi: 3.1.0
+info:
+  title: DLP Control API
+  description: Customer-facing REST API for the DLP control plane. Manages rules, detectors, rulesets, users, and serves dashboard/log data.
+  version: 1.0.0
+  contact:
+    name: DLP Team
+
+servers:
+  - url: /api/v1
+    description: DLP Control API
+
+security:
+  - cookieAuth: []
+  - bearerToken: []
+
+paths:
+  /auth/login:
+    post:
+      operationId: login
+      summary: Create a user session
+      tags: [Auth]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Session created
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: dlp_session=abc123; Path=/; HttpOnly; SameSite=Strict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "429":
+          description: Account locked (too many failed attempts)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /auth/logout:
+    post:
+      operationId: logout
+      summary: Destroy the current session
+      tags: [Auth]
+      responses:
+        "204":
+          description: Session destroyed
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /auth/me:
+    get:
+      operationId: getCurrentUser
+      summary: Get the currently authenticated user
+      tags: [Auth]
+      responses:
+        "200":
+          description: Current user info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /auth/change-password:
+    post:
+      operationId: changePassword
+      summary: Change the current user's password
+      description: |
+        Changes the authenticated user's password. Required when `must_change_password` is true
+        on the user (e.g., after bootstrap with initial credentials). After a successful change,
+        `must_change_password` is set to false and the user can access all API endpoints.
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordRequest"
+      responses:
+        "200":
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChangePasswordResponse"
+        "400":
+          description: Validation error (password too short, current password incorrect)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /users:
+    get:
+      operationId: listUsers
+      summary: List customer-tier users
+      tags: [Users]
+      x-required-roles: [admin]
+      parameters:
+        - $ref: "#/components/parameters/OffsetParam"
+        - $ref: "#/components/parameters/LimitParam"
+      responses:
+        "200":
+          description: User list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserList"
+        "403":
+          description: Forbidden (admin role required)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      operationId: createUser
+      summary: Create a customer-tier user
+      tags: [Users]
+      x-required-roles: [admin]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Username already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /users/{id}:
+    put:
+      operationId: updateUser
+      summary: Update a user's roles
+      tags: [Users]
+      x-required-roles: [admin]
+      parameters:
+        - $ref: "#/components/parameters/UserIdParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserRequest"
+      responses:
+        "200":
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Cannot delete last admin
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      operationId: deleteUser
+      summary: Delete a customer-tier user
+      tags: [Users]
+      x-required-roles: [admin]
+      parameters:
+        - $ref: "#/components/parameters/UserIdParam"
+      responses:
+        "204":
+          description: User deleted
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Cannot delete last admin
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /tokens:
+    get:
+      operationId: listTokens
+      summary: List API tokens
+      tags: [Tokens]
+      x-required-roles: [admin]
+      parameters:
+        - $ref: "#/components/parameters/OffsetParam"
+        - $ref: "#/components/parameters/LimitParam"
+      responses:
+        "200":
+          description: API token list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/APITokenList"
+        "403":
+          description: Forbidden (admin role required)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      operationId: createToken
+      summary: Create an API token
+      description: The plaintext token (num_dlp_...) is generated by the backend and returned only once in the response.
+      tags: [Tokens]
+      x-required-roles: [admin]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTokenRequest"
+      responses:
+        "201":
+          description: Token created, token_value is shown only once
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateTokenResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /tokens/{id}:
+    delete:
+      operationId: revokeToken
+      summary: Revoke an API token
+      description: Revoked tokens are rejected immediately; the record is kept for audit purposes.
+      tags: [Tokens]
+      x-required-roles: [admin]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Token ID
+      responses:
+        "200":
+          description: Token revoked
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/APIToken"
+        "404":
+          description: Token not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /platforms:
+    get:
+      operationId: listPlatforms
+      summary: List registered platform instances (read-only)
+      tags: [Platforms]
+      x-required-roles: [viewer]
+      responses:
+        "200":
+          description: Platform instance list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlatformInstanceList"
+
+  /platforms/{id}/schema:
+    get:
+      operationId: getPlatformSchema
+      summary: Get the schema for a platform type
+      tags: [Platforms]
+      x-required-roles: [viewer]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Platform instance ID
+      responses:
+        "200":
+          description: Platform schema
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlatformSchema"
+        "404":
+          description: Platform not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /rules:
+    get:
+      operationId: listRules
+      summary: List rules
+      tags: [Rules]
+      x-required-roles: [viewer]
+      parameters:
+        - name: platform_type
+          in: query
+          schema:
+            type: string
+          description: Filter by platform type
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [draft, published]
+          description: Filter by rule status
+        - $ref: "#/components/parameters/OffsetParam"
+        - $ref: "#/components/parameters/LimitParam"
+      responses:
+        "200":
+          description: Rule list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RuleList"
+
+    post:
+      operationId: createRule
+      summary: Create a draft rule
+      tags: [Rules]
+      x-required-roles: [rule_editor]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRuleRequest"
+      responses:
+        "201":
+          description: Rule created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Rule"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /rules/{id}:
+    put:
+      operationId: updateRule
+      summary: Update a draft rule
+      tags: [Rules]
+      x-required-roles: [rule_editor]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateRuleRequest"
+      responses:
+        "200":
+          description: Rule updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Rule"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Rule not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      operationId: deleteRule
+      summary: Delete a rule
+      tags: [Rules]
+      x-required-roles: [rule_editor]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Rule deleted
+        "404":
+          description: Rule not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /rulesets:
+    get:
+      operationId: listRulesets
+      summary: List published ruleset versions
+      tags: [Rulesets]
+      x-required-roles: [viewer]
+      parameters:
+        - $ref: "#/components/parameters/OffsetParam"
+        - $ref: "#/components/parameters/LimitParam"
+      responses:
+        "200":
+          description: Ruleset version list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RulesetVersionList"
+
+  /rulesets/{version}:
+    get:
+      operationId: getRuleset
+      summary: Get a specific ruleset version
+      tags: [Rulesets]
+      x-required-roles: [viewer]
+      parameters:
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Ruleset version content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RulesetVersion"
+        "404":
+          description: Version not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /rulesets/publish:
+    post:
+      operationId: publishRuleset
+      summary: Publish current drafts as a new ruleset version
+      tags: [Rulesets]
+      x-required-roles: [rule_publisher]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PublishRulesetRequest"
+      responses:
+        "201":
+          description: Ruleset published
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RulesetVersion"
+        "409":
+          description: No draft changes to publish
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /rulesets/rollback:
+    post:
+      operationId: rollbackRuleset
+      summary: Rollback to a previous ruleset version
+      tags: [Rulesets]
+      x-required-roles: [rule_publisher]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RollbackRequest"
+      responses:
+        "201":
+          description: Rollback version created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RulesetVersion"
+        "404":
+          description: Target version not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /detectors/presets:
+    get:
+      operationId: listPresetDetectors
+      summary: List preset detectors (read-only)
+      tags: [Detectors]
+      x-required-roles: [viewer]
+      parameters:
+        - name: tag
+          in: query
+          schema:
+            type: string
+          description: Filter by tag
+        - name: category
+          in: query
+          schema:
+            type: string
+          description: Filter by detector category (e.g. secrets, generic, mistral-service)
+      responses:
+        "200":
+          description: Preset detector list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PresetDetectorList"
+
+  /detectors/custom:
+    get:
+      operationId: listCustomDetectors
+      summary: List custom detectors
+      tags: [Detectors]
+      x-required-roles: [viewer]
+      responses:
+        "200":
+          description: Custom detector list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomDetectorList"
+
+    post:
+      operationId: createCustomDetector
+      summary: Create a custom detector
+      tags: [Detectors]
+      x-required-roles: [detector_editor]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCustomDetectorRequest"
+      responses:
+        "201":
+          description: Custom detector created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomDetector"
+        "400":
+          description: Validation error (e.g., invalid regex)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Detector ID already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /detectors/custom/{id}:
+    put:
+      operationId: updateCustomDetector
+      summary: Update a custom detector
+      tags: [Detectors]
+      x-required-roles: [detector_editor]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCustomDetectorRequest"
+      responses:
+        "200":
+          description: Custom detector updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomDetector"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Detector not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      operationId: deleteCustomDetector
+      summary: Delete a custom detector
+      tags: [Detectors]
+      x-required-roles: [detector_editor]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Custom detector deleted
+        "404":
+          description: Detector not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Cannot delete detector referenced by rules
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /detectors/test:
+    post:
+      operationId: testDetector
+      summary: Test detector patterns against sample text
+      tags: [Detectors]
+      x-required-roles: [viewer]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TestDetectorRequest"
+      responses:
+        "200":
+          description: Test results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TestDetectorResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /dashboard/stats:
+    get:
+      operationId: getDashboardStats
+      summary: Get evaluation statistics for the dashboard
+      tags: [Dashboard]
+      x-required-roles: [viewer]
+      parameters:
+        - name: range
+          in: query
+          schema:
+            type: string
+            enum: [1h, 24h, 7d, 30d]
+            default: 24h
+          description: Time range for statistics
+      responses:
+        "200":
+          description: Dashboard statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardStats"
+
+  /logs/decisions:
+    get:
+      operationId: searchDecisionLogs
+      summary: Search decision logs
+      tags: [Logs]
+      x-required-roles: [viewer]
+      parameters:
+        - name: platform_instance
+          in: query
+          schema:
+            type: string
+        - name: decision
+          in: query
+          schema:
+            type: string
+            enum: [pass, block, modify]
+        - name: rule_id
+          in: query
+          schema:
+            type: string
+        - name: request_id
+          in: query
+          schema:
+            type: string
+        - name: endpoint
+          in: query
+          schema:
+            type: string
+        - name: status_code
+          in: query
+          schema:
+            type: integer
+        - name: time_start
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: time_end
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - $ref: "#/components/parameters/OffsetParam"
+        - $ref: "#/components/parameters/LimitParam"
+      responses:
+        "200":
+          description: Decision log results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DecisionLogList"
+
+  /logs/monitored-rules:
+    get:
+      operationId: searchMonitoredRuleEvents
+      summary: Search monitored rule events
+      tags: [Logs]
+      x-required-roles: [viewer]
+      parameters:
+        - name: platform_instance
+          in: query
+          schema:
+            type: string
+        - name: rule_id
+          in: query
+          schema:
+            type: string
+        - name: request_id
+          in: query
+          schema:
+            type: string
+        - name: final_decision
+          in: query
+          schema:
+            type: string
+            enum: [pass, block, modify]
+        - name: time_start
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: time_end
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - $ref: "#/components/parameters/OffsetParam"
+        - $ref: "#/components/parameters/LimitParam"
+      responses:
+        "200":
+          description: Monitored rule event results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MonitoredRuleEventList"
+
+  /logs/monitored-rules/{requestID}/payload:
+    get:
+      operationId: getMonitoredPayload
+      summary: Retrieve the S3-stored request payload for a monitored rule event
+      description: |
+        Returns the original request payload JSON that triggered the monitor rule, retrieved from S3.
+        Each download is recorded in the audit trail.
+      tags: [Logs]
+      x-required-roles: [viewer]
+      parameters:
+        - name: requestID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Original request payload JSON
+          content:
+            application/json:
+              schema:
+                type: object
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+                example: 'attachment; filename=req-123.json'
+        "404":
+          description: Request ID not found or S3 payload unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /logs/monitored-rules/{requestID}/payload/redacted:
+    get:
+      operationId: getRedactedMonitoredPayload
+      summary: Retrieve the redacted request payload for a monitored rule event
+      description: |
+        Returns the request payload JSON with all strings matching the rule's detector patterns replaced by `[REDACTED]`.
+        The original payload is fetched from S3 and redacted on the fly. S3 only stores the original payload.
+        Each download is recorded in the audit trail.
+      tags: [Logs]
+      x-required-roles: [viewer]
+      parameters:
+        - name: requestID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Redacted request payload JSON
+          content:
+            application/json:
+              schema:
+                type: object
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+                example: 'attachment; filename=req-123-redacted.json'
+        "404":
+          description: Request ID not found or S3 payload unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /audit:
+    get:
+      operationId: getAuditTrail
+      summary: View admin audit trail
+      tags: [Audit]
+      x-required-roles: [viewer]
+      parameters:
+        - name: action
+          in: query
+          schema:
+            type: string
+            enum: [rule_create, rule_update, rule_delete, ruleset_publish, ruleset_rollback, detector_create, detector_update, detector_delete, user_create, user_update, user_delete, monitored_payload_download, monitored_payload_download_redacted]
+        - name: time_start
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: time_end
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - $ref: "#/components/parameters/OffsetParam"
+        - $ref: "#/components/parameters/LimitParam"
+      responses:
+        "200":
+          description: Audit trail entries
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuditLogList"
+
+  /policies:
+    get:
+      operationId: listPolicies
+      summary: List policies
+      tags: [Policies]
+      x-required-roles: [viewer]
+      parameters:
+        - name: platform_type
+          in: query
+          schema:
+            type: string
+          description: Filter by platform type
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [draft, published]
+          description: Filter by policy status
+        - $ref: "#/components/parameters/OffsetParam"
+        - $ref: "#/components/parameters/LimitParam"
+      responses:
+        "200":
+          description: Policy list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PolicyList"
+
+    post:
+      operationId: createPolicy
+      summary: Create a draft policy
+      tags: [Policies]
+      x-required-roles: [rule_editor]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePolicyRequest"
+      responses:
+        "201":
+          description: Policy created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Policy"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /policies/{id}:
+    get:
+      operationId: getPolicy
+      summary: Get a policy
+      tags: [Policies]
+      x-required-roles: [viewer]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Policy details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Policy"
+        "404":
+          description: Policy not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    put:
+      operationId: updatePolicy
+      summary: Update a draft policy
+      tags: [Policies]
+      x-required-roles: [rule_editor]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePolicyRequest"
+      responses:
+        "200":
+          description: Policy updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Policy"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Policy not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      operationId: deletePolicy
+      summary: Delete a policy
+      tags: [Policies]
+      x-required-roles: [rule_editor]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Policy deleted
+        "404":
+          description: Policy not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /policies/{id}/versions:
+    get:
+      operationId: listPolicyVersions
+      summary: List policy versions
+      tags: [Policies]
+      x-required-roles: [viewer]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Policy version list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PolicyVersionList"
+
+  /policies/{id}/versions/{version}:
+    get:
+      operationId: getPolicyVersion
+      summary: Get a specific policy version
+      tags: [Policies]
+      x-required-roles: [viewer]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Policy version details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PolicyVersion"
+        "404":
+          description: Version not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /policies/{id}/versions/{version}/restore:
+    post:
+      operationId: restorePolicyVersion
+      summary: Restore a policy version
+      tags: [Policies]
+      x-required-roles: [rule_editor]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Policy restored
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Policy"
+        "404":
+          description: Version not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: dlp_session
+    bearerToken:
+      type: http
+      scheme: bearer
+      description: 'API token generated by the control plane (num_dlp_...), passed as Authorization: Bearer num_dlp_...'
+
+  parameters:
+    OffsetParam:
+      name: offset
+      in: query
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      description: Pagination offset
+    LimitParam:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 500
+        default: 50
+      description: Page size
+    UserIdParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: User ID
+
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
+              description: Additional error context
+
+    LoginRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+
+    LoginResponse:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+
+    ChangePasswordRequest:
+      type: object
+      required: [current_password, new_password]
+      properties:
+        current_password:
+          type: string
+          format: password
+          description: The user's current password
+        new_password:
+          type: string
+          format: password
+          minLength: 8
+          description: The new password (minimum 8 characters)
+
+    ChangePasswordResponse:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+
+    User:
+      type: object
+      required: [id, username, roles, must_change_password, type, created_at]
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomerRole"
+        must_change_password:
+          type: boolean
+          description: Whether the user must change their password before accessing other endpoints
+        type:
+          $ref: "#/components/schemas/UserType"
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    UserType:
+      type: string
+      enum: [local]
+      description: User authentication type (local for password-based, saml/oidc in the future)
+
+    CustomerRole:
+      type: string
+      enum: [admin, rule_editor, rule_publisher, detector_editor, viewer]
+
+    CreateUserRequest:
+      type: object
+      required: [username, password, roles]
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 64
+        password:
+          type: string
+          format: password
+          minLength: 8
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomerRole"
+          minItems: 1
+        type:
+          $ref: "#/components/schemas/UserType"
+
+    UpdateUserRequest:
+      type: object
+      required: [roles]
+      properties:
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomerRole"
+          minItems: 1
+
+    UserList:
+      type: object
+      required: [users, total]
+      properties:
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+        total:
+          type: integer
+
+    APIToken:
+      type: object
+      required: [id, name, roles, created_by, created_at]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        token_prefix:
+          type: string
+          description: Non-secret prefix of the token (num_dlp_XXXXXXXX) used for identification
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomerRole"
+        created_by:
+          type: string
+          description: ID of the admin user who created the token
+        expires_at:
+          type: string
+          format: date-time
+          description: Empty if the token does not expire
+        last_used_at:
+          type: string
+          format: date-time
+        revoked_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+
+    APITokenList:
+      type: object
+      required: [tokens, total]
+      properties:
+        tokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/APIToken"
+        total:
+          type: integer
+
+    CreateTokenRequest:
+      type: object
+      required: [name, roles]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 128
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomerRole"
+          minItems: 1
+        expires_in_days:
+          type: integer
+          minimum: 1
+          maximum: 3650
+          description: Token lifetime in days; omit or 0 for a non-expiring token
+        expires_at:
+          type: string
+          format: date-time
+          description: Alternative to expires_in_days; must be in the future
+
+    CreateTokenResponse:
+      type: object
+      required: [token, token_value]
+      properties:
+        token:
+          $ref: "#/components/schemas/APIToken"
+        token_value:
+          type: string
+          description: 'Plaintext token (num_dlp_...), only shown once at creation time'
+
+    PlatformInstanceList:
+      type: object
+      required: [platforms]
+      properties:
+        platforms:
+          type: array
+          items:
+            $ref: "#/components/schemas/PlatformInstance"
+
+    PlatformInstance:
+      type: object
+      required: [id, name, platform_type, absent_field_policy]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        platform_type:
+          type: string
+        absent_field_policy:
+          type: string
+          enum: [fail_open, fail_closed]
+        schema_version:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+
+    PlatformSchema:
+      type: object
+      required: [platform_id, schema_version, fields]
+      properties:
+        platform_id:
+          type: string
+        schema_version:
+          type: string
+        fields:
+          type: array
+          items:
+            $ref: "#/components/schemas/SchemaField"
+
+    SchemaField:
+      type: object
+      required: [name, type]
+      properties:
+        name:
+          type: string
+          description: Dot-notation field name
+        type:
+          type: string
+          enum: [string, number, boolean, enum, array, datetime]
+        required:
+          type: boolean
+          default: false
+        description:
+          type: string
+        values:
+          type: array
+          items:
+            type: string
+          description: Allowed values for enum type
+        items:
+          type: string
+          enum: [string, number, boolean, enum, datetime]
+          description: Element type for array fields
+
+    RuleList:
+      type: object
+      required: [rules, total]
+      properties:
+        rules:
+          type: array
+          items:
+            $ref: "#/components/schemas/Rule"
+        total:
+          type: integer
+
+    Rule:
+      type: object
+      required: [id, name, platform_type, enabled, priority, conditions, action, draft]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        platform_type:
+          type: string
+        enabled:
+          type: boolean
+        priority:
+          type: integer
+          description: Must be unique within the platform type
+        conditions:
+          $ref: "#/components/schemas/ConditionTree"
+        action:
+          $ref: "#/components/schemas/Action"
+        draft:
+          type: boolean
+          description: Whether this is an unpublished draft
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    CreateRuleRequest:
+      type: object
+      required: [name, platform_type, enabled, priority, conditions, action]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        platform_type:
+          type: string
+        enabled:
+          type: boolean
+        priority:
+          type: integer
+        conditions:
+          $ref: "#/components/schemas/ConditionTree"
+        action:
+          $ref: "#/components/schemas/Action"
+
+    UpdateRuleRequest:
+      type: object
+      required: [name, enabled, priority, conditions, action]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        priority:
+          type: integer
+        conditions:
+          $ref: "#/components/schemas/ConditionTree"
+        action:
+          $ref: "#/components/schemas/Action"
+
+    ConditionTree:
+      type: object
+      required: [logic, terms]
+      properties:
+        logic:
+          type: string
+          enum: [AND, OR]
+        terms:
+          type: array
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/ConditionTree"
+              - $ref: "#/components/schemas/ConditionLeaf"
+          minItems: 1
+
+    ConditionLeaf:
+      type: object
+      required: [field, operator]
+      properties:
+        field:
+          type: string
+          description: Schema field name (dot-notation)
+        operator:
+          type: string
+          description: Operator to apply (varies by field type)
+        value:
+          description: Comparison value (literal or detector reference)
+          oneOf:
+            - type: string
+            - type: number
+            - type: boolean
+            - type: array
+              items: {}
+
+    Action:
+      type: object
+      required: [type]
+      properties:
+        type:
+          type: string
+          enum: [pass, block, modify, monitor]
+        message:
+          type: string
+          description: Human-readable message (required for block, optional for others)
+        modifications:
+          type: array
+          items:
+            $ref: "#/components/schemas/Modification"
+          description: Required when type is modify
+
+    Modification:
+      type: object
+      required: [field, detector, operation]
+      properties:
+        field:
+          type: string
+          description: Field to modify (must be string or array-of-string)
+        detector:
+          type: string
+          description: Detector reference (e.g., @preset:ssn_us)
+        operation:
+          type: string
+          enum: [redact, remove]
+        replacement:
+          type: string
+          description: Replacement text (required for redact, forbidden for remove)
+
+    RulesetVersionList:
+      type: object
+      required: [versions, total]
+      properties:
+        versions:
+          type: array
+          items:
+            $ref: "#/components/schemas/RulesetVersionSummary"
+        total:
+          type: integer
+
+    RulesetVersionSummary:
+      type: object
+      required: [version, published_by, published_at, rule_count]
+      properties:
+        version:
+          type: integer
+        description:
+          type: string
+        published_by:
+          type: string
+        published_at:
+          type: string
+          format: date-time
+        rule_count:
+          type: integer
+
+    RulesetVersion:
+      type: object
+      required: [version, rules, custom_detectors, schema_version, published_by, published_at]
+      properties:
+        version:
+          type: integer
+        description:
+          type: string
+        rules:
+          type: array
+          items:
+            $ref: "#/components/schemas/Rule"
+        custom_detectors:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomDetector"
+        schema_version:
+          type: string
+        published_by:
+          type: string
+        published_at:
+          type: string
+          format: date-time
+
+    RollbackRequest:
+      type: object
+      required: [target_version]
+      properties:
+        target_version:
+          type: integer
+          description: The version to roll back to
+
+    PublishRulesetRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Optional description for this ruleset version
+        schema_version:
+          type: string
+
+    PresetDetectorList:
+      type: object
+      required: [detectors]
+      properties:
+        detectors:
+          type: array
+          items:
+            $ref: "#/components/schemas/PresetDetector"
+
+    PresetDetector:
+      type: object
+      required: [id, name, description, category, patterns, tags]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          description: Detector category (e.g. secrets, generic, mistral-service)
+        patterns:
+          type: array
+          items:
+            type: string
+          description: RE2 regex patterns
+        tags:
+          type: array
+          items:
+            type: string
+
+    CustomDetectorList:
+      type: object
+      required: [detectors]
+      properties:
+        detectors:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomDetector"
+
+    CustomDetector:
+      type: object
+      required: [id, name, description, category, patterns, tags, created_at, updated_at]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          description: Detector category (always "custom" for user-defined detectors)
+        patterns:
+          type: array
+          items:
+            type: string
+          description: RE2 regex patterns
+        tags:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    CreateCustomDetectorRequest:
+      type: object
+      required: [id, name, patterns]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        patterns:
+          type: array
+          items:
+            type: string
+          description: RE2 regex patterns
+        tags:
+          type: array
+          items:
+            type: string
+
+    UpdateCustomDetectorRequest:
+      type: object
+      required: [name, patterns]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        patterns:
+          type: array
+          items:
+            type: string
+          description: RE2 regex patterns
+        tags:
+          type: array
+          items:
+            type: string
+
+    TestDetectorRequest:
+      type: object
+      required: [patterns, sample]
+      properties:
+        patterns:
+          type: array
+          items:
+            type: string
+          description: RE2 regex patterns to test
+        sample:
+          type: string
+          description: Sample text to test patterns against
+
+    TestDetectorResponse:
+      type: object
+      required: [matches]
+      properties:
+        matches:
+          type: array
+          items:
+            $ref: "#/components/schemas/TestDetectorMatch"
+
+    TestDetectorMatch:
+      type: object
+      required: [pattern, match, start, end]
+      properties:
+        pattern:
+          type: string
+          description: The regex pattern that matched
+        match:
+          type: string
+          description: The matched substring
+        start:
+          type: integer
+          description: Start position of the match in the sample text
+        end:
+          type: integer
+          description: End position of the match in the sample text
+
+    DashboardStats:
+      type: object
+      required: [evaluations, top_rules, per_platform, dropped_logs]
+      properties:
+        evaluations:
+          type: array
+          items:
+            $ref: "#/components/schemas/TimeBucket"
+          description: Evaluation counts over time (by decision type)
+        top_rules:
+          type: array
+          items:
+            type: object
+            required: [rule_id, rule_name, count]
+            properties:
+              rule_id:
+                type: string
+              rule_name:
+                type: string
+              count:
+                type: integer
+        per_platform:
+          type: array
+          items:
+            type: object
+            required: [platform_instance, count]
+            properties:
+              platform_instance:
+                type: string
+              count:
+                type: integer
+        dropped_logs:
+          type: integer
+          description: Total dropped logs in the time range
+
+    TimeBucket:
+      type: object
+      required: [timestamp, pass, block, modify, monitor]
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        pass:
+          type: integer
+        block:
+          type: integer
+        modify:
+          type: integer
+        monitor:
+          type: integer
+
+    DecisionLogList:
+      type: object
+      required: [logs, total]
+      properties:
+        logs:
+          type: array
+          items:
+            $ref: "#/components/schemas/DecisionLogEntry"
+        total:
+          type: integer
+
+    DecisionLogEntry:
+      type: object
+      required: [id, timestamp, platform_instance, request_id, decision, rule_ids, triggered_by]
+      properties:
+        id:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        platform_instance:
+          type: string
+        request_id:
+          type: string
+        decision:
+          type: string
+          enum: [pass, block, modify]
+        rule_ids:
+          type: array
+          items:
+            type: string
+        triggered_by:
+          type: array
+          items:
+            type: object
+            required: [field, operator, detector]
+            properties:
+              field:
+                type: string
+              operator:
+                type: string
+              detector:
+                type: string
+                description: Detector reference if applicable, null otherwise
+        modified_fields:
+          type: object
+          additionalProperties: true
+          description: Modified field names with redacted values (only for modify decisions)
+        endpoint:
+          type: string
+          description: API endpoint called (e.g., /v1/evaluate)
+        status_code:
+          type: integer
+        latency_ms:
+          type: integer
+          description: Request processing latency in milliseconds
+
+    MonitoredRuleEventList:
+      type: object
+      required: [events, total]
+      properties:
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/MonitoredRuleEventEntry"
+        total:
+          type: integer
+
+    MonitoredRuleEventEntry:
+      type: object
+      required: [id, timestamp, platform_instance, request_id, rule_id, triggered_by, final_decision]
+      properties:
+        id:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        platform_instance:
+          type: string
+        request_id:
+          type: string
+        rule_id:
+          type: string
+        rule_name:
+          type: string
+        triggered_by:
+          type: array
+          items:
+            $ref: "#/components/schemas/TriggerDetail"
+        final_decision:
+          type: string
+          enum: [pass, block, modify]
+        request_fields:
+          type: object
+          additionalProperties: true
+
+    TriggerDetail:
+      type: object
+      required: [field, operator]
+      properties:
+        field:
+          type: string
+        operator:
+          type: string
+        detector:
+          type: string
+          description: Detector reference if applicable (e.g. @preset:ssn_us), omitted otherwise
+
+    AuditLogList:
+      type: object
+      required: [entries, total]
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/AuditLogEntry"
+        total:
+          type: integer
+
+    AuditLogEntry:
+      type: object
+      required: [id, user_name, action, event, target_type, target_name, created_at]
+      properties:
+        id:
+          type: string
+        user_name:
+          type: string
+          description: Username of the actor (empty if user was deleted)
+        action:
+          type: string
+          enum: [rule_create, rule_update, rule_delete, ruleset_publish, ruleset_rollback, detector_create, detector_update, detector_delete, policy_create, policy_update, policy_delete, user_create, user_update, user_delete, monitored_payload_download, monitored_payload_download_redacted]
+        event:
+          type: string
+          description: Human-readable event description (e.g. "Created rule Block API Keys")
+        target_type:
+          type: string
+          enum: [rule, ruleset, detector, policy, user]
+        target_name:
+          type: string
+          description: Name of the target entity (falls back to ID if name unavailable)
+        details:
+          type: object
+          additionalProperties: true
+          description: Action-specific details (what changed)
+        created_at:
+          type: string
+          format: date-time
+
+    PolicyList:
+      type: object
+      required: [policies, total]
+      properties:
+        policies:
+          type: array
+          items:
+            $ref: "#/components/schemas/Policy"
+        total:
+          type: integer
+
+    Policy:
+      type: object
+      required: [id, name, platform_type, rule_ids, default_action, draft, version]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        platform_type:
+          type: string
+        rule_ids:
+          type: array
+          items:
+            type: string
+        default_action:
+          type: string
+          enum: [pass, block]
+          description: "Action taken when no rule matches (default: pass)"
+        draft:
+          type: boolean
+          description: Whether this is an unpublished draft
+        version:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    CreatePolicyRequest:
+      type: object
+      required: [name, platform_type, rule_ids]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        platform_type:
+          type: string
+        rule_ids:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        default_action:
+          type: string
+          enum: [pass, block]
+          default: pass
+          description: Action taken when no rule matches
+
+    UpdatePolicyRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        platform_type:
+          type: string
+        rule_ids:
+          type: array
+          items:
+            type: string
+        default_action:
+          type: string
+          enum: [pass, block]
+          description: Action taken when no rule matches
+
+    PolicyVersionList:
+      type: object
+      required: [versions]
+      properties:
+        versions:
+          type: array
+          items:
+            $ref: "#/components/schemas/PolicyVersion"
+
+    PolicyVersion:
+      type: object
+      required: [id, policy_id, version, name, platform_type, rule_ids, default_action, created_at]
+      properties:
+        id:
+          type: string
+        policy_id:
+          type: string
+        version:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        platform_type:
+          type: string
+        rule_ids:
+          type: array
+          items:
+            type: string
+        default_action:
+          type: string
+          enum: [pass, block]
+        created_by:
+          type: string
+        created_at:
+          type: string
+          format: date-time

@@ -1,0 +1,148 @@
+---
+title: "Kubernetes - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# About the Kubernetes managed service
+
+<ActionsSummary />
+
+## Introduction
+
+The Kubernetes managed service enables customers to deploy, manage and scale containerized applications in a high-availability cloud environment.
+This service is used to create a cluster Kubernetes in a **Service cluster** without managing the underlying infrastructure.
+Users can also manage node pools, retrieve the `kubeconfig` file, and use [GPU (Graphics Processing Unit)](/docs/compute/gpu/concept/) for compute-intensive workloads.
+
+### Benefits of the Kubernetes managed service
+- High availability: clusters are designed to minimize downtime.
+- Simplified management: no need to manage the Kubernetes infrastructure.
+- Scalability: addition or removal of nodes according to needs.
+- GPU integration: support for workloads requiring graphics acceleration.
+- Security: security updates and patches managed by Numspot.
+
+## Key features
+
+### 1. Creating a high-availability cluster
+
+A high-availability cluster Kubernetes is designed to provide optimal service continuity.
+
+The control plane is redundant by design at Numspot.
+The master node of the control plane is replicated in each of the available AZ in the region.
+
+Make the worker nodes (workers of the node pools) redundant to guarantee service continuity even in the event of a component failure.
+To do so, add one or more node pools by defining the desired number of replicas.
+
+**Steps to create a high-availability cluster via the Numspot Console**:
+1. Sign in to the Numspot Console.
+2. Select the option to create a cluster Kubernetes.
+3. Confirm the creation of the cluster.
+
+### 2. Managing node pools
+
+A node pool is a group of nodes — [VM](/docs/compute/concept/) (Virtual Machine) or physical machines — within a cluster Kubernetes.
+Node pools are used to group nodes with similar configurations (for example, machine type, operating system, etc.).
+
+**Node pool management features**:
+- **Adding nodes**: increase the cluster capacity by adding nodes to a node pool.
+- **Removing nodes**: reduce the cluster size by removing nodes.
+
+**Steps to add a replicated node pool via the console**:
+1. Sign in to the console.
+2. Select an existing cluster Kubernetes.
+3. Select the option to add a node pool to the cluster.
+4. Enable the **autoscaling** option to let Kubernetes manage the number of nodes according to the load, or specify the desired number of replicas.
+5. Confirm the creation of the node pool.
+
+### 3. Retrieving the kubeconfig file
+
+The `kubeconfig` file is used by the `kubectl` command-line tool to interact with a cluster Kubernetes.
+This file contains the information required to authenticate with and communicate with the cluster.
+
+**Steps to retrieve the kubeconfig file via the console**:
+1. Access the console.
+2. Navigate to the section dedicated to the cluster Kubernetes.
+3. Download the `kubeconfig` file from the user interface.
+4. Configure `kubectl` to use this file:
+```bash
+export KUBECONFIG=~/chemin/vers/kubeconfig
+```
+
+### 4. Using GPU
+
+GPU are used in Kubernetes to accelerate compute-intensive workloads, such as machine learning (ML) or graphics processing.
+
+**Configuration to use GPU**:
+1. Create a node pool with GPU nodes: select machine types equipped with GPU when creating the node pool.
+2. Deploy applications using GPU: use specific resource requests in the Kubernetes manifests to request GPU.
+3. Check the availability of GPU: use `kubectl` to verify that the GPU are available and used correctly.
+
+## Use cases
+
+### 1. Deploying critical applications
+High-availability clusters are ideal for applications requiring high availability, such as financial services or e-commerce platforms.
+
+### 2. Compute-intensive data processing
+Using GPU accelerates data-processing tasks, such as training machine learning models.
+
+### 3. Development and test environments
+Node pools are used to create isolated environments for development and testing, with specific configurations.
+
+## Worker security
+
+### Hardened ANSSI image
+
+The workers (worker nodes) of Numspot Kubernetes clusters are created from a hardened system image following the recommendations of the ANSSI (French National Cybersecurity Agency).
+
+This image includes:
+
+- **Operating system hardening**: secure configuration according to the ANSSI guides;
+- **Service minimization**: only the components required for Kubernetes to operate;
+- **Vulnerability management**: application of security patches during updates;
+- **Network configuration**: pre-configured firewall and security rules;
+- **System audit**: logging of system events.
+
+### Security responsibilities
+
+Worker security relies on a clear division of responsibilities between Numspot and the customer.
+
+**Numspot responsibilities**
+
+- Maintenance of the hardened system image;
+- Application of operating system security updates;
+- Lifecycle management of the workers (creation, update, removal);
+- Network isolation between the workers and the control plane;
+- Securing of the Kubernetes control plane.
+
+**Customer responsibilities**
+
+- **Installation and maintenance of security tools on the workers**:
+  - Monitoring of abnormal behavior (e.g. Falco);
+  - Intrusion detection;
+  - System log analysis;
+  - Vulnerability scanning.
+- Configuration and maintenance of the Network Policies;
+- Management of application secrets and credentials;
+- Securing of the workloads, in particular via RBAC (Role-Based Access Control) and the Pod Security Standards;
+- Updating of applications and their dependencies.
+
+:::warning
+The installation and configuration of security tools on the workers (Falco, intrusion detection tools, etc.) are the responsibility of the customer. Numspot provides a hardened image but does not deploy these tools automatically.
+:::
+
+### Installing security tools
+
+Refer to the following guides to install the recommended security tools:
+
+- [Install Falco](/docs/managed-services/kubernetes/guides/install-falco/): real-time detection of abnormal behavior.
+
+## Best practices
+
+- Monitoring: use monitoring tools to track the state of the cluster and the applications.
+- Backups: set up regular backups of configurations and data.
+- Security: apply security best practices, such as role-based access control (RBAC).
+- Optimization: adjust the size of the node pools according to the load to optimize costs.
+- **Security tools**: install Falco or an equivalent tool to monitor abnormal behavior on the workers.

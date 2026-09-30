@@ -1,0 +1,404 @@
+---
+title: Sécuriser l'authentification PostgreSQL
+description: Sécuriser l'authentification PostgreSQL pour la conformité SecNumCloud
+sidebar_position: 9
+draft: false
+---
+
+# Sécuriser l'authentification PostgreSQL
+
+Le service managé PostgreSQL intègre des mécanismes de sécurité pour protéger les connexions et les données. Cette page présente les bonnes pratiques pour sécuriser l'authentification, notamment dans un contexte de conformité SecNumCloud.
+
+Le [cluster PostgreSQL](/docs/managed-services/postgresql/concepts/) est chiffré et sécurisé par défaut.
+
+## Connexions sécurisées SSL/TLS
+
+Toutes les connexions au cluster PostgreSQL sont chiffrées avec TLS (Transport Layer Security). Le protocole SSL est obligatoire pour toutes les connexions externes.
+
+### Vérifier le chiffrement TLS
+
+Connectez-vous avec le mode sslmode=require pour garantir une connexion chiffrée :
+
+```bash
+psql "host=<hôte> port=5432 dbname=<base_de_données> user=<utilisateur> sslmode=require"
+```
+
+### Niveaux de vérification SSL
+
+| Mode | Description |
+| --- | --- |
+| sslmode=require | Connexion chiffrée sans vérification du certificat serveur |
+| sslmode=verify-ca | Vérifie que le certificat serveur est signé par une autorité de confiance |
+| sslmode=verify-full | Vérifie le certificat et le nom d'hôte |
+
+Pour une sécurité maximale :
+
+```bash
+psql "host=<hôte> port=5432 dbname=<base_de_données> user=<utilisateur> sslmode=verify-full"
+```
+
+### Vérifier le certificat serveur avec une autorité de certification
+
+Pour utiliser le mode `verify-full`, le client doit disposer de la chaîne de confiance complète du certificat serveur. Cette chaîne contient trois certificats à enregistrer dans un fichier `ca.cert` :
+
+- le certificat de l'autorité de certification (CA) racine ;
+- le certificat de l'autorité de certification STD ou SNC intermédiaire ;
+- le certificat de la zone du service managé PostgreSQL.
+
+:::info
+L'acronyme CA signifie Certificate Authority, soit autorité de certification en français.
+:::
+
+#### Zone standard
+
+Pour les clusters déployés dans une zone standard, copiez les certificats suivants dans le fichier `ca.cert` :
+
+```text
+-----BEGIN CERTIFICATE-----
+MIIB7jCCAZOgAwIBAgIUGtSuAkXlSdGgIJ0nQEXBjZ7ZgM4wCgYIKoZIzj0EAwMw
+RDELMAkGA1UEBhMCRlIxEDAOBgNVBAoMB051bVNwb3QxETAPBgNVBAsMCEludGVy
+bmFsMRAwDgYDVQQDDAdSb290IEcxMB4XDTI1MTAyMzExMTIxN1oXDTQ1MTAyMzEx
+MTIxN1owRDELMAkGA1UEBhMCRlIxEDAOBgNVBAoMB051bVNwb3QxETAPBgNVBAsM
+CEludGVybmFsMRAwDgYDVQQDDAdSb290IEcxMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAEdOo92g3S8fhzgFuZ22MOqVcBXmg7ADtjVPHceUb6AeF4loE/DHOHKhda
+Rm9kD/5YUQ6/svE0/ZAm2AvEkSdggaNjMGEwDgYDVR0PAQH/BAQDAgGGMA8GA1Ud
+EwEB/wQFMAMBAf8wHQYDVR0OBBYEFNH6pnuOBcL+goXE9Zfa7Vp7CgjxMB8GA1Ud
+IwQYMBaAFNH6pnuOBcL+goXE9Zfa7Vp7CgjxMAoGCCqGSM49BAMDA0kAMEYCIQCb
+U9MPn3B5aS3Nvn6oZqDYVUOfMqLBwRxbhxUK2W4LXwIhAMpTNHk8cUXTCGwtWB3+
+aj/aVt5ATRhOp+1pZR5dV24b
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+MIICnzCCAkagAwIBAgIUQrgjAnWqAgphNlLEWNaciMGBUgMwCgYIKoZIzj0EAwMw
+RDELMAkGA1UEBhMCRlIxEDAOBgNVBAoMB051bVNwb3QxETAPBgNVBAsMCEludGVy
+bmFsMRAwDgYDVQQDDAdSb290IEcxMB4XDTI1MTAyMzExMjkwN1oXDTQ1MTAyMzEx
+MjkwN1owSDELMAkGA1UEBhMCRlIxEDAOBgNVBAoMB051bVNwb3QxETAPBgNVBAsM
+CEludGVybmFsMRQwEgYDVQQDDAtQcm9kIFNURCBHMTBZMBMGByqGSM49AgEGCCqG
+SM49AwEHA0IABLL0lGlZtGFEWb8G+EzI8If0lIsicl+kiYRQ8/jCFmxgAiRrj60x
+ODDf2IZ2QJWujatWhLE6iaTSI21NdO8/acmjggEQMIIBDDAOBgNVHQ8BAf8EBAMC
+AYYwEgYDVR0TAQH/BAgwBgEB/wIBATAdBgNVHQ4EFgQU0Z6GGHjpYMstGe32lPfh
+LisvW/MwHwYDVR0jBBgwFoAU0fqme44Fwv6ChcT1l9rtWnsKCPEwPgYIKwYBBQUH
+AQEEMjAwMC4GCCsGAQUFBzAChiJodHRwOi8vY3J0Lm51bXNwb3QuY29tL3Jvb3Rf
+ZzEuY3J0MDMGA1UdHwQsMCowKKAmoCSGImh0dHA6Ly9jcmwubnVtc3BvdC5jb20v
+cm9vdF9nMS5jcmwwMQYDVR0eAQH/BCcwJaAjMBKCEG51bXNwb3QuaW50ZXJuYWww
+DYILbnVtc3BvdC5jb20wCgYIKoZIzj0EAwMDRwAwRAIgA03YKm0RO3TrjHBY7i63
+Hi+/odBKRtE3OWqmSqPSvmMCIHL3vvLYGkGOj6mMvfWBCcA3co29qv7KBje9UhXy
+IePt
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+MIICvTCCAmSgAwIBAgIUPmokhRn16PUD6IiIxbg/mMa9xI8wCgYIKoZIzj0EAwMw
+SDELMAkGA1UEBhMCRlIxEDAOBgNVBAoMB051bVNwb3QxETAPBgNVBAsMCEludGVy
+bmFsMRQwEgYDVQQDDAtQcm9kIFNURCBHMTAeFw0yNTEwMjMxMTQ5MTlaFw0zMDEw
+MjMxMTQ5MTlaMGQxCzAJBgNVBAYTAkZSMRAwDgYDVQQKDAdOdW1TcG90MREwDwYD
+VQQLDAhJbnRlcm5hbDENMAsGA1UECwwET1NDMjEhMB8GA1UEAwwYTWFuYWdlZCBz
+ZXJ2aWNlcyBQcm9kIEcxMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE45yql4Pi
+pr2ZjvWHtPh72jbgqzMG2muSAYm0G7U4l60tsOB/cy7qdGKqGop+kpVKswdu3YZK
+lMNW2elE9GHrxaOCAQ4wggEKMA4GA1UdDwEB/wQEAwIBhjASBgNVHRMBAf8ECDAG
+AQH/AgEAMB0GA1UdDgQWBBQm2QVmW0ULGXU0cCPhis1tptHJIDAfBgNVHSMEGDAW
+gBTRnoYYeOlgyy0Z7faU9+EuKy9b8zBCBggrBgEFBQcBAQQ2MDQwMgYIKwYBBQUH
+MAKGJmh0dHA6Ly9jcnQubnVtc3BvdC5jb20vcHJvZF9zdGRfZzEuY3J0MDcGA1Ud
+HwQwMC4wLKAqoCiGJmh0dHA6Ly9jcmwubnVtc3BvdC5jb20vcHJvZF9zdGRfZzEu
+Y3JsMCcGA1UdHgEB/wQdMBugGTAXghVldS13ZXN0LTIubnVtc3BvdC5jb20wCgYI
+KoZIzj0EAwMDRwAwRAIgZOG9W4qQHcSOKn+x4VV1YXXCwKhXdAkQu6HXi0ZuTXAC
+IExYUDI1Lh38cS8Wnvp/vyp0k5Ba/QMwLlECruCqO8fD
+-----END CERTIFICATE-----
+```
+
+#### Zone SecNumCloud
+
+Pour les clusters déployés dans une zone SecNumCloud (SNC), copiez les certificats suivants dans le fichier `ca.cert` :
+
+```text
+-----BEGIN CERTIFICATE-----
+MIIB7jCCAZOgAwIBAgIUGtSuAkXlSdGgIJ0nQEXBjZ7ZgM4wCgYIKoZIzj0EAwMw
+RDELMAkGA1UEBhMCRlIxEDAOBgNVBAoMB051bVNwb3QxETAPBgNVBAsMCEludGVy
+bmFsMRAwDgYDVQQDDAdSb290IEcxMB4XDTI1MTAyMzExMTIxN1oXDTQ1MTAyMzEx
+MTIxN1owRDELMAkGA1UEBhMCRlIxEDAOBgNVBAoMB051bXNwb3QxETAPBgNVBAsM
+CEludGVybmFsMRAwDgYDVQQDDAdSb290IEcxMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAEdOo92g3S8fhzgFuZ22MOqVcBXmg7ADtjVPHceUb6AeF4loE/DHOHKhda
+Rm9kD/5YUQ6/svE0/ZAm2AvEkSdggaNjMGEwDgYDVR0PAQH/BAQDAgGGMA8GA1Ud
+EwEB/wQFMAMBAf8wHQYDVR0OBBYEFNH6pnuOBcL+goXE9Zfa7Vp7CgjxMB8GA1Ud
+IwQYMBaAFNH6pnuOBcL+goXE9Zfa7Vp7CgjxMAoGCCqGSM49BAMDA0kAMEYCIQCb
+U9MPn3B5aS3Nvn6oZqDYVUOfMqLBwRxbhxUK2W4LXwIhAMpTNHk8cUXTCGwtWB3+
+aj/aVt5ATRhOp+1pZR5dV24b
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+MIICoDCCAkagAwIBAgIUMv12xaXWf0fbx2DX9FB8/DoaUCYwCgYIKoZIzj0EAwMw
+RDELMAkGA1UEBhMCRlIxEDAOBgNVBAoMB051bVNwb3QxETAPBgNVBAsMCEludGVy
+bmFsMRAwDgYDVQQDDAdSb290IEcxMB4XDTI1MTAyMzExMjQwNVoXDTQ1MTAyMzEx
+MjQwNVowSDELMAkGA1UEBhMCRlIxEDAOBgNVBAoMB051bVNwb3QxETAPBgNVBAsM
+CEludGVybmFsMRQwEgYDVQQDDAtQcm9kIFNOQyBHMTBZMBMGByqGSM49AgEGCCqG
+SM49AwEHA0IABOOGrytgZPq+DxSwlCLMeDthhLOa6QwB9tVrpb8f3THgUbKekfsb
+lU4Ull2sazZWZi22gWOX0HT1ZzpOpgBOYlajggEQMIIBDDAOBgNVHQ8BAf8EBAMC
+AYYwEgYDVR0TAQH/BAgwBgEB/wIBATAdBgNVHQ4EFgQUP8n1CyCqGWgZw1OHq1Ju
+eWdPnL8wHwYDVR0jBBgwFoAU0fqme44Fwv6ChcT1l9rtWnsKCPEwPgYIKwYBBQUH
+AQEEMjAwMC4GCCsGAQUFBzAChiJodHRwOi8vY3J0Lm51bXNwb3QuY29tL3Jvb3Rf
+ZzEuY3J0MDMGA1UdHwQsMCowKKAmoCSGImh0dHA6Ly9jcmwubnVtc3BvdC5jb20v
+cm9vdF9nMS5jcmwwMQYDVR0eAQH/BCcwJaAjMBKCEG51bXNwb3QuaW50ZXJuYWww
+DYILbnVtc3BvdC5jb20wCgYIKoZIzj0EAwMDSAAwRQIgN+pLXOu0+dANwQsLTLu3
++WzokQDyZkv8WAdjv1UZWbECIQDxIGRhBKfN6QUZONZCj4PwrNmdYZdWScc53Ueb
+rTcJTA==
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+MIICwzCCAmmgAwIBAgIUUSahzJrOJneSwtdLlcK3VK0L7aIwCgYIKoZIzj0EAwMw
+SDELMAkGA1UEBhMCRlIxEDAOBgNVBAoMB051bVNwb3QxETAPBgNVBAsMCEludGVy
+bmFsMRQwEgYDVQQDDAtQcm9kIFNOQyBHMTAeFw0yNTEwMjMxMTQ0NDJaFw0zMDEw
+MjMxMTQ0NDJaMF8xCzAJBgNVBAYTAkZSMRAwDgYDVQQKDAdOdW1TcG90MREwDwYD
+VQQLDAhJbnRlcm5hbDENMAsGA1UECwwET1NDMTEcMBoGA1UEAwwTTWFuYWdlZCBz
+ZXJ2aWNlcyBHMTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABDbpvIxrPV6LelWV
+rLW5y1X0wwY48VErHRXhjyVpl2pV3QQYcz+UdRzRJ9I0WrrY3yErnTeF9uEBNOd/
+EYobnOGjggEYMIIBFDAOBgNVHQ8BAf8EBAMCAYYwEgYDVR0TAQH/BAgwBgEB/wIB
+ADAdBgNVHQ4EFgQUARjQeFZm12hucKEFmgk0xBF9HvgwHwYDVR0jBBgwFoAUP8n1
+CyCqGWgZw1OHq1JueWdPnL8wQgYIKwYBBQUHAQEENjA0MDIGCCsGAQUFBzAChiZo
+dHRwOi8vY3J0Lm51bXNwb3QuY29tL3Byb2Rfc25jX2cxLmNydDA3BgNVHR8EMDAu
+MCygKqAohiZodHRwOi8vY3JsLm51bXNwb3QuY29tL3Byb2Rfc25jX2cxLmNybDAx
+BgNVHR4BAf8EJzAloCMwIYIfY2xvdWRnb3V2LWV1LXdlc3QtMS5udW1zcG90LmNv
+bTAKBggqhkjOPQQDAwNIADBFAiA99qdmAqX6K9cDQJ7sWH2mcLTE63f3GhJU23QH
+7FeuhQIhANizmbi3duXIryNxAF5eTlluWOLC5AarSR2o4qDoTD/V
+-----END CERTIFICATE-----
+```
+
+#### Modifier la chaîne de connexion
+
+Indiquez le chemin vers le fichier `ca.cert` dans la chaîne de connexion avec le paramètre `sslrootcert` :
+
+```bash
+psql "host=<hôte> port=5432 dbname=<base_de_données> user=<utilisateur> sslmode=verify-full sslrootcert=/chemin/vers/ca.cert"
+```
+
+L'utilisation de `sslmode=verify-full` avec `sslrootcert` permet de vérifier à la fois que le certificat serveur est signé par une autorité de confiance et que le nom d'hôte de la connexion correspond au nom indiqué dans le certificat serveur.
+
+## Chiffrement des mots de passe
+
+Le service PostgreSQL utilise le chiffrement SCRAM-SHA-256 pour les mots de passe. Ce mécanisme offre une meilleure sécurité que l'ancien chiffrement MD5.
+
+### Caractéristiques de SCRAM-SHA-256
+
+- Les mots de passe ne sont jamais transmis en clair sur le réseau ;
+- Protection contre les attaques par rejeu (replay attacks) ;
+- Résistance aux attaques par dictionnaire.
+
+Le chiffrement SCRAM-SHA-256 est activé par défaut sur tous les clusters PostgreSQL managés.
+
+## Authentification forte et conformité SecNumCloud
+
+Pour répondre aux exigences SecNumCloud en matière d'authentification forte, combinez plusieurs couches de sécurité.
+
+### Architecture multi-facteurs recommandée
+
+| Facteur | Mécanisme | Protection |
+| --- | --- | --- |
+| Ce que vous savez | Mot de passe (SCRAM-SHA-256) | Authentification PostgreSQL |
+| Ce que vous possédez | Certificat client ou accès VPN | Couche réseau |
+| Ce que vous êtes | Contrôle d'accès réseau (IP, [VPC](/docs/network/vpc/concepts/)) | Périmètre de sécurité |
+
+### Configuration recommandée pour environnements sensibles
+
+1. **Accès via réseau privé** : Connectez vos applications via un VPN ou un VPC (Virtual Private Cloud) pour limiter l'exposition du cluster ;
+
+2. **Restriction des IP** : Limitez l'accès aux plages d'adresses IP autorisées ;
+
+3. **Rotation des identifiants** : Changez régulièrement les mots de passe applicatifs (voir [Gérer les utilisateurs et les rôles](/docs/managed-services/postgresql/guides/manage-users-roles/)).
+
+## Authentification multi-facteurs (MFA)
+
+PostgreSQL ne dispose pas de MFA natif. Pour implémenter une authentification multi-facteurs, utilisez une architecture en couches.
+
+### Approche MFA recommandée
+
+| Couche | Mécanisme | Facteur |
+| --- | --- | --- |
+| Couche 1 | Mot de passe PostgreSQL | Ce que vous savez |
+| Couche 2 | VPN avec MFA | Ce que vous possédez |
+| Couche 3 | Certificat client | Ce que vous possédez |
+| Couche 4 | Restriction IP/VPC | Ce que vous êtes |
+
+### Configuration MFA via bastion
+
+Pour implémenter le MFA, installez un bastion avec authentification forte :
+
+1. **Bastion SSH avec MFA** :
+   - Déployez un bastion SSH avec support MFA (TOTP, clé hardware) ;
+   - Configurez la connexion PostgreSQL uniquement via le bastion.
+
+2. **Accès via VPN avec MFA** :
+   - Configurez un VPN avec authentification MFA ;
+   - Limitez l'accès au cluster PostgreSQL aux clients connectés au VPN.
+
+### Architecture MFA type
+
+```text
+[Utilisateur] 
+    → [VPN avec MFA] 
+    → [Bastion SSH] 
+    → [Cluster PostgreSQL]
+```
+
+### Certificats clients (authentification mutuelle TLS)
+
+PostgreSQL supporte l'authentification par certificat client. Cette fonctionnalité n'est pas configurable via l'API Numspot pour le moment. Contactez le support pour activer cette option sur les clusters critiques.
+
+:::note
+L'authentification multi-facteurs native PostgreSQL (certificats clients) n'est pas actuellement configurable via l'API Numspot. Pour une authentification forte, utilisez le contrôle d'accès au niveau réseau (VPN, bastion).
+:::
+
+## Politique de mots de passe
+
+### Bonnes pratiques
+
+Appliquez ces règles pour les mots de passe PostgreSQL :
+
+- Longueur minimale de 12 caractères ;
+- Combinaison de lettres majuscules, minuscules, chiffres et caractères spéciaux ;
+- Exclusion des mots du dictionnaire et des informations personnelles ;
+- Rotation régulière (tous les 90 jours pour les comptes privilégiés).
+
+### Créer un mot de passe robuste
+
+```sql
+CREATE USER <utilisateur> WITH PASSWORD '<mot_de_passe_complexe>';
+```
+
+Exemple de mot de passe robuste (à adapter) :
+
+```text
+Kj7#mP9$vL3@nQ2xWz5!
+```
+
+### Définir une expiration
+
+Pour les comptes temporaires ou à risque :
+
+```sql
+ALTER USER <utilisateur> WITH VALID UNTIL '2026-06-30 23:59:59';
+```
+
+## Audit des connexions
+
+Le cluster PostgreSQL journalise les événements d'authentification pour permettre l'audit et la détection d'anomalies.
+
+### Événements journalisés
+
+| Événement | Description |
+| --- | --- |
+| Connexion réussie | Enregistrement de chaque connexion |
+| Échec d'authentification | Tentatives de connexion avec identifiants invalides |
+| Déconnexion | Fin de session |
+
+### Consulter les logs de connexion
+
+Les logs PostgreSQL sont disponibles via les outils d'observabilité de votre cluster. Contactez le support pour accéder aux logs d'audit.
+
+## Protection contre les attaques
+
+### Limitation des tentatives
+
+Le service applique un délai de 5 secondes après chaque échec d'authentification pour ralentir les attaques par force brute.
+
+:::note
+Le service PostgreSQL managé n'applique pas de blocage automatique après un nombre défini d'échecs de connexion. La protection repose sur le délai entre les tentatives et la surveillance des logs. Pour un blocage automatique basé sur le nombre de tentatives, utilisez un outil externe comme fail2ban ou un pare-feu applicatif.
+:::
+
+### Détection des anomalies
+
+Surveillez les comportements suspects dans les logs :
+
+- Multiples échecs de connexion depuis une même IP ;
+- Tentatives de connexion à des heures inhabituelles ;
+- Accès depuis des plages d'IP non autorisées.
+
+### Bloquer un utilisateur en cas d'utilisation abusive
+
+Si vous détectez une activité suspecte ou un compte compromis, vous pouvez bloquer immédiatement l'accès d'un utilisateur.
+
+#### Bloquer temporairement un compte
+
+Utilisez l'attribut `NOLOGIN` pour empêcher toute connexion :
+
+```sql
+ALTER USER <utilisateur> WITH NOLOGIN;
+```
+
+L'utilisateur ne peut plus se connecter, mais ses permissions et ses données sont conservées.
+
+#### Débloquer un compte
+
+Pour réactiver l'accès :
+
+```sql
+ALTER USER <utilisateur> WITH LOGIN;
+```
+
+#### Vérifier le statut d'un utilisateur
+
+```sql
+SELECT rolname, rolcanlogin FROM pg_roles WHERE rolname = '<utilisateur>';
+```
+
+| rolcanlogin | Signification |
+| --- | --- |
+| `t` (true) | L'utilisateur peut se connecter |
+| `f` (false) | L'utilisateur est bloqué |
+
+### Supprimer définitivement un compte
+
+Si le compte n'est plus nécessaire ou si la compromission est confirmée :
+
+```sql
+-- Révoquer d'abord les permissions
+REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM <utilisateur>;
+REVOKE ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public FROM <utilisateur>;
+REVOKE USAGE ON SCHEMA public FROM <utilisateur>;
+
+-- Supprimer l'utilisateur
+DROP USER <utilisateur>;
+```
+
+:::warning
+La suppression est irréversible. Vérifiez qu'aucun objet n'appartient à cet utilisateur avant la suppression.
+:::
+
+### Procédure de réponse à un incident
+
+En cas de détection d'utilisation abusive (multiples échecs de connexion, activité suspecte) :
+
+1. **Bloquer immédiatement** le compte avec `ALTER USER ... NOLOGIN` ;
+2. **Réinitialiser le mot de passe** si vous souhaitez réactiver le compte ;
+3. **Analyser les logs** pour identifier l'origine de l'attaque ;
+4. **Restreindre l'accès réseau** via les groupes de sécurité ou le VPN ;
+5. **Supprimer le compte** si nécessaire.
+
+## Révoquer ou renouveler un mot de passe compromis
+
+Si vous suspectez une compromission, réinitialisez immédiatement le mot de passe.
+
+### Pour l'utilisateur principal
+
+Utilisez l'API pour réinitialiser le mot de passe de l'utilisateur principal :
+
+```http
+PUT /postgresql/spaces/{spaceId}/clusters/{clusterId}/password/reset
+```
+
+Consultez [Réinitialiser le mot de passe](/docs/managed-services/postgresql/actions/password-reset/) pour plus de détails.
+
+### Pour les utilisateurs supplémentaires
+
+```sql
+ALTER USER <utilisateur> WITH PASSWORD '<nouveau_mot_de_passe>';
+```
+
+## Résumé des bonnes pratiques SecNumCloud
+
+| Exigence | Implémentation recommandée |
+| --- | --- |
+| Chiffrement des connexions | TLS obligatoire (sslmode=require minimum) |
+| Authentification forte | Réseau privé (VPN/VPC) + mot de passe |
+| Politique de mots de passe | SCRAM-SHA-256, rotation régulière, complexité |
+| Audit des accès | Logs de connexion activés |
+| Contrôle d'accès | Principe du moindre privilège |
+| Blocage de compte | `ALTER USER ... NOLOGIN` en cas d'activité suspecte |
+| Révocation | Réinitialisation immédiate en cas de compromission |
+
+:::tip
+Pour les architectures critiques, installez un bastion SSH ou un proxy d'accès pour centraliser et auditer toutes les connexions aux bases de données.
+:::

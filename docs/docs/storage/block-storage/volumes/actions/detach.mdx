@@ -1,0 +1,80 @@
+---
+title: Détacher un volume
+sidebar_position: 5
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Détacher un volume
+
+Vous pouvez détacher un `volume` d'une [VM (Virtual Machine)](/docs/compute/concept/), ce qui vous permet de l'attacher à une autre VM et d'accéder à vos données à nouveau.
+
+:::warning
+Pour les VM Linux, le montage du `volume` doit être permanent pour éviter tout échec lors du démarrage de la VM.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.blockStorage.update**
+
+:::
+
+<Tabs>
+<TabItem value="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/volume/detach-01-menu.png", text: "Depuis le menu latéral gauche, cliquez sur Stockage → Block Storage → Volumes.", hotspot: { x: 0, y: 0.579, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/volume/detach-01-menu.png", text: "Depuis Stockage → Block Storage → Volumes, ouvrez le menu « Actions » du volume, puis cliquez sur « Dissocier de la VM ».", hotspot: { x: 0.7722, y: 0.5259, w: 0.1912, h: 0.0457 } },
+    { img: "/img/walkthrough/volume/detach-02-modal.png", text: "La boîte de dialogue « Dissociation du Volume » récapitule le volume et la VM concernés. Confirmez en cliquant sur « Dissocier le Volume ».", hotspot: { x: 0.2917, y: 0.2635, w: 0.4167, h: 0.473 } },
+  ]}
+/>
+
+1. Connectez-vous sur la console Numspot. 
+2. Depuis le menu latéral gauche, cliquez sur **Storage** → **[Block Storage](/docs/storage/block-storage/concepts/)** → **Volumes**. La liste des `volumes` apparaît. 
+3. Sélectionnez le `volume` que vous souhaitez lier. 
+   :::info 
+   Vous pouvez également sélectionner une VM dans le dashboard "VM" et cliquer sur **Détacher un volume**. 
+   ::: 
+4. Sous le menu d'actions du `volume`, cliquez sur **Dissocier de la VM**. 
+   :::warning 
+   Détacher un `volume` sur lequel des données sont en cours d'inscription peut endommager vos ressources.
+
+   Vous pouvez détacher un `volume` système d'une VM si celle-ci est arrêtée. Cependant, vous ne pourrez pas redémarrer cette VM en utilisant ce `volume` système. 
+   ::: 
+   La boîte de dialogue **Dissociation du volume** apparaît. 
+
+5. Cliquez sur **Dissocier le volume**. 
+   
+   Un message de confirmation apparaît. 
+
+   Le `volume` est détaché de la VM.
+
+</TabItem>
+<TabItem value="API">
+
+## API {#tabhead-api}
+
+
+La commande `PUT /compute/spaces/{spaceId}/volumes/{id}/vms/unlink` détache un `volume` de type block storage d'une VM. Pour détacher le périphérique racine d'une VM, cette VM doit être arrêtée.
+
+[Exemple de requête : Détacher un Volume d'une VM ↗](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/volumes/{id}/vms/unlink)
+
+</TabItem>
+<TabItem value="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/volume).
+
+</TabItem>
+</Tabs>

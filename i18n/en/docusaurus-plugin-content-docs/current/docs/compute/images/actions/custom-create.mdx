@@ -1,0 +1,93 @@
+---
+title: Create a custom image
+sidebar_position: 3
+draft: false
+---
+
+# Create a custom image
+
+In case the list of official images does not meet your specific needs, you have the option to create your own custom images.
+
+:::danger
+Numspot cannot guarantee the correct operation of virtual machines ([VM](/docs/compute/concept/)) created from unofficial sources.
+:::
+
+## Manual creation
+
+This method consists of building an image locally, transferring it to a Numspot VM, and then converting it into an image via the API.
+
+### 1. Installing a local VM management tool
+
+Install a virtual machine management tool on your computer, such as [VirtualBox](https://www.virtualbox.org/) or [VMWare](https://www.vmware.com/).
+
+### 2. Creating and configuring the VM
+
+Proceed to create and configure a local virtual machine with the operating system of your choice.
+
+### 3. Exporting the VM
+
+Once configured, export this local virtual machine in OVA (Open Virtual Appliance) format.
+
+### 4. Creating a VM on Numspot
+
+On the Numspot platform, create a new virtual machine by choosing a Linux of your choice and configuring two volumes: [Create VM](/docs/compute/vms/actions/create/).
+
+### 5. Connecting to the VM
+
+Use SSH (Secure Shell) to connect to the virtual machine. (See [Connect to a VM](/docs/compute/vms/actions/access/).)
+
+### 6. Transferring the OVA file
+
+From your local machine, copy the OVA file to your Numspot virtual machine. To do so, use the Linux command line `scp`.
+
+Example:
+
+```bash
+scp path/to/your/file.ova numspot@ip_address:/path/to/destination
+```
+
+### 7. Extracting the OVA file
+
+From the Numspot VM, use the Linux command line `tar` to extract the OVA file.
+
+Example:
+
+```bash
+tar xvf path/to/your/file.ova
+```
+
+### 8. Converting the VMDK file
+
+Using the Linux command line `qemu-img`, convert the VMDK file to RAW format.
+
+Example:
+
+```bash
+qemu-img convert -f vmdk -O raw path/to/your/file-disk001.vmdk path/to/your/file.raw
+```
+
+### 9. Writing the converted image
+
+Transfer the image converted to RAW to the attached volume.
+
+Example:
+
+```bash
+sudo dd if=path/to/your/file.raw of=/dev/xvdY bs=16k status=progress
+```
+
+### 10. Creating an image via the API
+
+Take a snapshot of the volume and turn it into an image using the `Create Image` API. (See [Create an image](/docs/compute/images/actions/create/).)
+
+### 11. Using the image to create VM
+
+Use this image to create Numspot virtual machines with your OS (Operating System).
+
+:::info
+This procedure applies to all operating systems for which no pre-existing image exists.
+:::
+
+## Automated creation with Packer
+
+You can create custom images in an automated and reproducible way using [Packer ↗](https://github.com/numspot/packer-plugin-numspot), a machine image building tool. The Packer plugin for Numspot lets you define your image configuration in an HCL (HashiCorp Configuration Language) file and build it without manual intervention.

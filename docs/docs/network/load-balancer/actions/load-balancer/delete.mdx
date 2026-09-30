@@ -1,0 +1,65 @@
+---
+title: Supprimer un load balancer - Numspot
+sidebar_label: Supprimer un load balancer
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Supprimer un load balancer
+
+Vous pouvez supprimer un [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) dont vous n'avez plus besoin.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.loadBalancer.delete**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/load-balancer/lb-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → Load Balancers.", hotspot: { x: 0, y: 0.6136, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/load-balancer/lb-02-actions.png", text: "Sur la ligne du load balancer à supprimer, ouvrez le menu « Actions », puis cliquez sur « Supprimer ».", hotspot: { x: 0.875, y: 0.4815, w: 0.0884, h: 0.0457 } },
+    { img: "/img/walkthrough/load-balancer/lb-del-confirm.png", text: "Une confirmation forte est requise : saisissez le nom du load balancer dans le champ, puis cliquez sur « Supprimer le Load Balancer ».", hotspot: { x: 0.5431, y: 0.7309, w: 0.1444, h: 0.0444 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, cliquez sur **Réseau** → **Load Balancers** pour accéder à la liste des load balancers.
+2. Sur la ligne du load balancer à supprimer, ouvrez le menu **Actions**, puis cliquez sur **Supprimer**.
+3. Une confirmation forte est requise : saisissez le nom du load balancer dans le champ, puis cliquez sur **Supprimer le Load Balancer**.
+
+Le load balancer est supprimé.
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+:::info
+Avant de commencer : Assurez-vous que les [security group (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) de vos [VM (Virtual Machine)](/docs/compute/concept/) de backend autorisent les flux provenant d'une autre source que le load balancer.
+:::
+
+La commande `DELETE /compute/spaces/{spaceId}/loadBalancers/{id}` supprime un load balancer spécifié.
+
+[Exemple de requête : Suppression d'un load balancer](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/loadBalancers/{id})
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
+
+  </TabItem>
+</Tabs>

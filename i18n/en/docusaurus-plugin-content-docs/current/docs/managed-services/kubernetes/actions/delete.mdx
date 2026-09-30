@@ -1,0 +1,63 @@
+---
+title: Delete a cluster Kubernetes - Managed Kubernetes
+sidebar_label: Delete a cluster Kubernetes
+sidebar_position: 9
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Delete a cluster Kubernetes
+
+Delete a [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) within your space, regardless of its status.
+
+:::info
+**Prerequisites:** Make sure that the cluster is not in use before deleting it.
+:::
+
+:::warning
+This action is irreversible. Once the cluster is deleted, all its associated resources and configurations will be permanently lost.
+:::
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **kubernetes.cluster.delete**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+1. From the left-hand side menu, click **Managed Services** → **Kubernetes** to access the list of clusters Kubernetes.
+
+   ![Managed Services menu](/img/console/managed-services/en-menu-managed-services.png)
+
+2. In the list, locate the cluster to delete, click the **Actions** button on its row, then click **Delete**.
+
+   ![Delete a cluster from the list](/img/console/managed-services/kubernetes/en-kubernetes-cluster-delete-action.png)
+
+3. In the **Deleting a cluster** window, enter the exact name of the cluster in the confirmation field, then click **Delete the cluster**.
+
+   ![Cluster deletion confirmation](/img/console/managed-services/kubernetes/en-kubernetes-cluster-delete-confirmation.png)
+
+The cluster moves to the "Deletion in progress" status in the list.
+
+</TabItem>
+
+<TabItem value="api" label="API">
+The `DELETE /kubernetes/spaces/{spaceId}/clusters/{clusterId}` request lets you delete a cluster Kubernetes.
+The cluster moves to the "deleting" status during the deletion.
+
+**Example response**
+
+```text
+HTTP/1.1 204 No Content
+```
+
+[See the full specification](/openapi/#tag/kubernetes/DELETE/kubernetes/spaces/{spaceId}/clusters/{clusterId})
+
+</TabItem>
+</Tabs>

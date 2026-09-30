@@ -1,0 +1,112 @@
+---
+title: Create a nat gateway - Numspot
+sidebar_label: Create a nat gateway
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Create a nat gateway
+
+You can create a [nat gateway](/docs/network/nat/concepts/) in a subnet of a [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud) to allow the [VM](/docs/compute/concept/) (Virtual Machine) in that subnet to connect to the Internet indirectly. You can create a nat gateway for each public subnet of the VPC.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.natGateway.create**
+
+:::
+
+## Prerequisites
+
+:::info
+To do this, you must also:
+- add a rule allowing outbound flows to the Internet to the [security groups](/docs/compute/security-groups/concepts/concept-sg/) used for the VM you want to connect to the Internet;
+- add a route with the CIDR (Classless Inter Domain Routing) block 0.0.0.0/0 (or a smaller IP range) as the destination and the ID of the newly created nat gateway as the target to the [route table](/docs/network/route-table/concepts/) of this subnet containing your VM.
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/nat/list.png", text: "From the left-hand side menu, click Network → VPC → NAT Gateways.", hotspot: { x: 0, y: 0.6926, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/nat/list.png", text: "From the NAT gateways list, click “Create a NAT Gateway”.", hotspot: { x: 0.8273, y: 0.2329, w: 0.1338, h: 0.0494 } },
+    { img: "/img/walkthrough/en/nat/form.png", text: "Name the NAT gateway, then select the VPC, subnet and public IP to associate with it.", hotspot: { x: 0.2083, y: 0.2132, w: 0.5556, h: 0.6584 } },
+    { img: "/img/walkthrough/en/nat/form.png", text: "Click “Create a NAT Gateway”.", hotspot: { x: 0.6405, y: 0.9518, w: 0.1088, h: 0.0494 } },
+  ]}
+/>
+
+
+:::info
+**Prerequisites**
+- [Allocate a public IP ↗](/docs/network/public-ip/actions/allocate)
+- [Attach an internet gateway to a VPC ↗](/docs/network/internet-gateway/actions/administration/attach)
+- [Link a route table to a subnet ↗](/docs/network/route-table/actions/administration/link)
+- [Create a route table ↗](/docs/network/route-table/actions/create)
+:::
+
+1. From the left-hand side menu, click **Network** → **VPC** → **NAT Gateways**.
+
+
+2. From the list of nat gateways, click **Create a NAT Gateway**.
+
+
+A "NAT Gateway creation" page appears.
+
+
+3. In the "Name" field, enter a name for the nat gateway.
+
+:::info
+This action adds a Name tag of up to 255 characters. You can use all characters, including accented letters.
+:::
+
+4. In the "VPC" list, select the VPC in which you want to create a nat gateway.
+5. In the "Subnet" list, select the subnet in which you want to create a nat gateway.
+
+:::info
+Only subnets with a route pointing to an [internet gateway](/docs/network/internet-gateway/concepts/) on the IP range 0.0.0.0/0 are displayed.
+:::
+
+6. In the "Public IP" list, select the public IP you want to associate with the nat gateway.
+7. Click **Create the NAT Gateway**.
+
+A confirmation message appears at the bottom of the page indicating that the nat gateway has been created.
+
+
+</TabItem>
+<TabItem value="api" label="API">
+
+:::info
+**Prerequisites**
+- Allocate a public IP to your account.
+:::
+
+The `POST /compute/spaces/{spaceId}/natGateways` command creates a nat gateway in the specified public subnet of a VPC.
+
+A nat gateway allows the VM placed in the private subnet of this VPC to connect to the Internet, without being accessible from the Internet.
+
+When creating a nat gateway, you specify the allocation ID of the public IP you want to use as the public IP for the nat gateway.
+
+Once the nat gateway is created, you must create a route in the route table of the private subnet, with 0.0.0.0/0 as the destination and the ID of the nat gateway as the target.
+
+This action also allows you to create several nat gateways in the same VPC (one per public subnet).
+
+:::warning
+You cannot change the public IP associated with a nat gateway after its creation. To do this, you must delete the nat gateway and create a new one with another public IP.
+:::
+
+[Example request: Creating a nat gateway ↗](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/natGateways)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/nat_gateway).
+
+</TabItem>
+</Tabs>

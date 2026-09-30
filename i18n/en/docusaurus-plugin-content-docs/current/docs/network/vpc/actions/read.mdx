@@ -1,0 +1,58 @@
+---
+title: Get information about your VPC
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Get information about your VPC
+
+You can get information about one or more of your [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud), such as their CIDR (Classless Inter-Domain Routing) block or their allocation option.
+Information about your VPC is also available from the [VM](/docs/compute/concept/) (Virtual Machine) themselves.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.vpc.get**
+
+:::
+<Tabs>
+   <TabItem value="Console" default> 
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/vpc/list.png", text: "From the left-hand side menu, click Network → VPC.", hotspot: { x: 0, y: 0.5222, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/vpc/list.png", text: "In the VPC list, click the ID of the VPC to view.", hotspot: { x: 0.2687, y: 0.4928, w: 0.0689, h: 0.0247 } },
+    { img: "/img/walkthrough/en/vpc/detail.png", text: "The details page shows the VPC information: IP range, DHCP, route tables and tags.", hotspot: { x: 0.2083, y: 0.155, w: 0.5556, h: 0.34 } },
+  ]}
+/>
+
+
+  1. Log in to the Numspot console.   
+
+  2. From the left-hand side menu, click **Network** → **VPC** → **VPC**.
+
+  3. The list of VPC appears. Click the **VPC ID** concerned.
+
+  4. The **VPC details** page appears.
+
+   </TabItem> 
+   <TabItem value="API">
+
+The `GET /compute/spaces/{spaceId}/vpcs` command lets you list the VPC.
+
+[Example request: List all VPC ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/vpcs)
+
+The `GET /compute/spaces/{spaceId}/vpcs/{id}` command lets you retrieve the information of a VPC.
+
+[Example request: Retrieve the information of a VPC ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/vpcs/{id})
+  </TabItem>
+  <TabItem value="Terraform" label="Terraform">
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpc).
+  </TabItem>
+</Tabs>

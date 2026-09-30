@@ -1,0 +1,424 @@
+---
+title: Manage Harbor users and roles
+description: Configure the users, roles and permissions of a Harbor Container Registry
+sidebar_position: 7
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Manage Harbor users and roles
+
+The Container Registry (Harbor) managed service provides an administrator account at creation. For fine-grained access management, create additional users and configure permissions per project.
+
+:::note
+The Numspot API only allows you to manage the administrator password. Creating users and managing permissions is performed through the Harbor interface or the Harbor API.
+:::
+
+## Connect to Harbor
+
+Before managing users, connect to the Harbor interface:
+
+1. Retrieve the administrator password (see [Retrieve the password](/docs/managed-services/registry/actions/password/)) ;
+2. Go to `https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com` ;
+3. Log in with `admin` and the password.
+
+## User types
+
+### System administrator
+
+- Full access to all functions ;
+- Management of users, projects and system configuration ;
+- Access to all projects.
+
+### Standard user
+
+- Access to projects according to the permissions assigned ;
+- Push/pull operations according to the role within the project.
+
+### Robot account
+
+- User for automation (CI/CD, Kubernetes) ;
+- Permissions defined per project ;
+- Secret token instead of a password.
+
+For more details on robot accounts, see [Robot accounts](/docs/managed-services/registry/guides/robot-accounts/).
+
+## Create a user
+
+### Through the Harbor interface
+
+1. Log in as an administrator ;
+2. Go to **Administration** → **Users** ;
+3. Click **New User** ;
+4. Fill in the fields:
+
+| Field | Description |
+| --- | --- |
+| Username | Unique username |
+| Email | Email address |
+| Real Name | Full name (optional) |
+| Password | Password |
+| Confirm Password | Password confirmation |
+| Comments | Comments (optional) |
+
+5. Click **OK**.
+
+### Through the API
+
+```bash
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users" \
+  -u "admin:{password}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "dev-user",
+    "email": "dev@example.com",
+    "realname": "Developer User",
+    "password": "SecurePassword123!",
+    "comment": "Developer account"
+  }'
+```
+
+## Manage projects
+
+### Create a project
+
+#### Through the Harbor interface
+
+1. Click **New Project** ;
+2. Fill in:
+
+| Field | Description |
+| --- | --- |
+| Project Name | Project name |
+| Access Level | Public or Private |
+| Quota | Storage limit (optional) |
+
+3. Click **OK**.
+
+#### Through the API
+
+```bash
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects" \
+  -u "admin:{password}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "project_name": "my-project",
+    "public": false,
+    "metadata": {
+      "public": "false"
+    }
+  }'
+```
+
+### List projects
+
+```bash
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects" \
+  -u "admin:{password}"
+```
+
+## Roles and permissions
+
+### Role levels
+
+| Role | Permissions |
+| --- | --- |
+| Guest | Read images and metadata |
+| Developer | Push/pull images, read logs |
+| Master | Manage members, configure the project, push/pull |
+| Admin | Full project administration |
+| Limited Guest | Read images in certain repositories only |
+
+### Assign a role to a user
+
+#### Through the Harbor interface
+
+1. Go to the project ;
+2. Click **Members** ;
+3. Click **Add User** ;
+4. Enter the username or email ;
+5. Select the role ;
+6. Click **OK**.
+
+#### Through the API
+
+```bash
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/members" \
+  -u "admin:{password}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "role_id": 2,
+    "member_user": {
+      "username": "dev-user"
+    }
+  }'
+```
+
+| role_id | Role |
+| --- | --- |
+| 1 | Limited Guest |
+| 2 | Guest |
+| 3 | Developer |
+| 4 | Master |
+| 5 | Admin |
+
+## Modify a user
+
+### Modify the information
+
+#### Through the Harbor interface
+
+1. Go to **Administration** → **Users** ;
+2. Select the user ;
+3. Click **Edit** ;
+4. Modify the information ;
+5. Click **OK**.
+
+#### Through the API
+
+```bash
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}" \
+  -u "admin:{password}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "new-email@example.com",
+    "realname": "New Name"
+  }'
+```
+
+### Change the password
+
+#### Through the Harbor interface
+
+1. Go to **Administration** → **Users** ;
+2. Select the user ;
+3. Click **Change Password** ;
+4. Enter the new password.
+
+#### Through the API
+
+```bash
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}/password" \
+  -u "admin:{password}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "old_password": "{old_password}",
+    "new_password": "{new_password}"
+  }'
+```
+
+### Set an administrator
+
+To grant or revoke administrator privileges:
+
+```bash
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}/sysadmin" \
+  -u "admin:{password}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sysadmin_flag": true
+  }'
+```
+
+## Manage permissions
+
+### List the members of a project
+
+#### Through the Harbor interface
+
+1. Go to the project ;
+2. Click **Members**.
+
+#### Through the API
+
+```bash
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/members" \
+  -u "admin:{password}"
+```
+
+### Modify the role of a member
+
+#### Through the Harbor interface
+
+1. Go to the project → **Members** ;
+2. Select the member ;
+3. Change the role ;
+4. Click **OK**.
+
+#### Through the API
+
+```bash
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/members/{member_id}" \
+  -u "admin:{password}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "role_id": 3
+  }'
+```
+
+### Remove a member from a project
+
+#### Through the Harbor interface
+
+1. Go to the project → **Members** ;
+2. Select the member ;
+3. Click **Delete**.
+
+#### Through the API
+
+```bash
+curl -X DELETE "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/members/{member_id}" \
+  -u "admin:{password}"
+```
+
+## Disable or delete a user
+
+### Disable a user
+
+Disabling temporarily prevents login:
+
+#### Through the Harbor interface
+
+1. Go to **Administration** → **Users** ;
+2. Select the user ;
+3. Click **Disable**.
+
+#### Through the API
+
+```bash
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}" \
+  -u "admin:{password}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "disabled": true
+  }'
+```
+
+### Re-enable a user
+
+To restore access:
+
+#### Through the Harbor interface
+
+1. Go to **Administration** → **Users** ;
+2. Select the disabled user ;
+3. Click **Enable**.
+
+#### Through the API
+
+```bash
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}" \
+  -u "admin:{password}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "disabled": false
+  }'
+```
+
+### Delete a user
+
+:::warning
+Deletion is irreversible. The history of the user's operations is retained.
+:::
+
+#### Through the Harbor interface
+
+1. Go to **Administration** → **Users** ;
+2. Select the user ;
+3. Click **Delete** ;
+4. Confirm the deletion.
+
+#### Through the API
+
+```bash
+curl -X DELETE "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}" \
+  -u "admin:{password}"
+```
+
+## Access audit
+
+### List all users
+
+```bash
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users" \
+  -u "admin:{password}"
+```
+
+### List system administrators
+
+```bash
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users" \
+  -u "admin:{password}" | jq '.[] | select(.sysadmin_flag == true)'
+```
+
+### Export permissions
+
+```bash
+#!/bin/bash
+REGISTRY="registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com"
+AUTH="admin:password"
+
+echo "=== Export of Harbor permissions ==="
+echo ""
+echo "Projects and members:"
+
+for project in $(curl -s -X GET "https://$REGISTRY/api/v2.0/projects" -u "$AUTH" | jq -r '.[] | @base64'); do
+  project_json=$(echo $project | base64 --decode)
+  project_id=$(echo $project_json | jq -r '.project_id')
+  project_name=$(echo $project_json | jq -r '.name')
+  
+  echo ""
+  echo "Projet: $project_name (ID: $project_id)"
+  curl -s -X GET "https://$REGISTRY/api/v2.0/projects/$project_id/members" -u "$AUTH" | jq '.[] | {username: .entity_name, role_id: .role_id, role_name: .role_name}'
+done
+```
+
+### Checking sensitive access
+
+- Public projects: which projects are publicly accessible?
+- Administrators: who has system admin rights?
+- Active robot accounts: which robot accounts are in use?
+
+## Best practices
+
+### Principle of least privilege
+
+- Grant the minimum permissions required ;
+- Use the Guest role for read-only users ;
+- Restrict the Admin and Master roles.
+
+### Project organization
+
+| Project type | Recommended permissions |
+| --- | --- |
+| Production | Restricted - Master/Admin only |
+| Staging | Developer for the dev team |
+| Public | Developer for push, public access for pull |
+
+### Credential rotation
+
+- Change user passwords regularly ;
+- Refresh the secrets of robot accounts ;
+- Revoke unused access.
+
+### Regular audit
+
+- Monthly review of access to sensitive projects ;
+- Deletion of inactive accounts ;
+- Verification of expired robot accounts.
+
+## Limitations
+
+| Action | Support |
+| --- | --- |
+| Retrieve the admin password | Through the Numspot API |
+| Create users | Through the Harbor UI or Harbor API |
+| Manage permissions | Through the Harbor UI or Harbor API |
+| Create projects | Through the Harbor UI or Harbor API |
+| Configure quotas | Through the Harbor UI or Harbor API |
+
+:::tip
+Automate user management with scripts that use the Harbor API. Integrate access management into your environment provisioning processes.
+:::

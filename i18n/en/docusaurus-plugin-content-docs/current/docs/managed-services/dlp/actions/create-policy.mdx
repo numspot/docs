@@ -1,0 +1,113 @@
+---
+title: Create a DLP policy - Managed DLP
+sidebar_label: Create a DLP policy
+sidebar_position: 4
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Create a DLP policy
+
+Create a [DLP policy](/docs/managed-services/dlp/concepts) to group a set of rules and define the default action when no rule triggers a terminal action.
+
+A policy consists of an ordered list of rules and a default action (`pass` or `block`). The policy is created as a draft. To activate it, publish it in a [ruleset](/docs/managed-services/dlp/concepts).
+
+## Permissions
+
+:::info
+This action requires the following [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) role:
+
+- **rule_editor**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/policies-list.png", text: "In the DLP console, click Policies in the side menu.", hotspot: { x: 0.006, y: 0.184, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/policies-list.png", text: "Click “New Policy” in the top right.", hotspot: { x: 0.894, y: 0.030, w: 0.089, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/policy-create-form.png", text: "Enter the policy name, select the Platform Type and, optionally, a description.", hotspot: { x: 0.184, y: 0.109, w: 0.800, h: 0.300 } },
+    { img: "/img/walkthrough/dlp/policy-create-form.png", text: "Choose the default action applied when no rule matches: Pass or Block.", hotspot: { x: 0.378, y: 0.528, w: 0.082, h: 0.050 } },
+    { img: "/img/walkthrough/dlp/policy-create-form.png", text: "Add the rules to include via the “Add Rule” drop-down (shown once the Platform Type is chosen).", hotspot: { x: 0.201, y: 0.634, w: 0.765, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/policy-create-form.png", text: "Click “Save as Draft” to save the policy as a draft.", hotspot: { x: 0.900, y: 0.738, w: 0.083, h: 0.044 } },
+  ]}
+/>
+
+1. In the [DLP](/docs/managed-services/dlp/concepts) console, click **Policies** in the sidebar.
+2. Click the **Create policy** button to open the policy editor.
+
+### General information
+
+Fill in the policy information:
+
+| Field | Example value | Description |
+|-------|---------------|-------------|
+| Name | `mistral-prod-policy` | Name of the policy |
+| Description | `Production policy for Mistral` | Description of the policy |
+| Platform type | `mistral-platform` | Target platform type |
+
+### Rule selection
+
+1. Select the rules to include in the policy from the list of available rules;
+2. Order the rules by drag and drop — the order determines the evaluation sequence;
+3. Rules are evaluated from top to bottom. A `pass` or `block` action terminates the evaluation immediately.
+
+### Default action
+
+Select the policy default action:
+
+- `pass`: allows the request if no rule triggers a terminal action;
+- `block`: blocks the request if no rule triggers a terminal action.
+
+### Saving
+
+Click **Save** to save the policy as a draft. The policy appears in the list with the "Draft" status.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `POST /api/v1/policies` request creates a draft DLP policy.
+
+### Request example
+
+```json
+{
+  "name": "mistral-prod-policy",
+  "description": "Production policy for Mistral",
+  "platform_type": "mistral-platform",
+  "rule_ids": [
+    "rule-550e8400",
+    "rule-a1b2c3d4"
+  ],
+  "default_action": "block"
+}
+```
+
+### Response example
+
+```json
+{
+  "id": "policy-9f8e7d6c",
+  "name": "mistral-prod-policy",
+  "description": "Production policy for Mistral",
+  "platform_type": "mistral-platform",
+  "rule_ids": [
+    "rule-550e8400",
+    "rule-a1b2c3d4"
+  ],
+  "default_action": "block",
+  "draft": true,
+  "version": 1,
+  "created_at": "2026-08-27T10:00:00Z",
+  "updated_at": "2026-08-27T10:00:00Z"
+}
+```
+
+</TabItem>
+</Tabs>

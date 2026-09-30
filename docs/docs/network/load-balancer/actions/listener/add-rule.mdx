@@ -1,0 +1,56 @@
+---
+title: Ajouter une règle à un listener de load balancer - Numspot
+sidebar_label: Ajouter une règle à un listener de load balancer
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Ajouter une règle à un listener de load balancer
+
+Vous pouvez ajouter une règle de redirection de trafic à un listener (écouteur) de [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) pour diriger les requêtes vers différentes [VM (Virtual Machine)](/docs/compute/concept/) de backend selon des critères définis.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.loadBalancer.create**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+L'ajout d'une règle de listener n'est pas disponible depuis la console Numspot.
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `POST /compute/spaces/{spaceId}/listenerRules` crée une règle de redirection de trafic pour le listener spécifié. Chaque règle doit spécifier soit le paramètre "hostNamePattern", soit "pathPattern". Les règles sont traitées par ordre de priorité, de la valeur la plus élevée à la plus basse.
+
+Une fois la règle créée, vous devez enregistrer des VM backend avec cette règle.
+
+[Exemple de requête : Création d'une règle pour un listener ↗](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/listenerRules)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/listener_rule).
+
+</TabItem>
+</Tabs>

@@ -1,0 +1,63 @@
+# Numspot Documentation
+
+Source code of [docs.numspot.com](https://docs.numspot.com/), the public
+documentation for Numspot, the sovereign French cloud platform. The site is
+built with [Docusaurus](https://docusaurus.io/) and served in French, with an
+English translation generated from the `i18n/` directory.
+
+## Quick start
+
+Requirements: **Node 20+** and **Yarn 1.22+** (the package manager is pinned in
+`packageManager`).
+
+```bash
+yarn        # install dependencies
+yarn start  # dev server with live reload -> http://localhost:3000
+```
+
+The site is up in under two minutes. All changes are hot-reloaded.
+
+## Commands
+
+| Command            | Description                                              |
+| ------------------ | -------------------------------------------------------- |
+| `yarn start`       | Development server with live reload                      |
+| `yarn build`       | Production build (French at `/`, English at `/en/`)      |
+| `yarn serve`       | Serve the production build locally                       |
+| `yarn typecheck`   | TypeScript type checking                                 |
+| `yarn clear`       | Clear the Docusaurus cache                               |
+| `yarn lint:docs`   | Lint the documentation pages changed against `main`      |
+| `yarn lint:docs:all` | Lint every documentation page                          |
+| `make spec-update` | Refresh the OpenAPI specification used by the API pages  |
+
+## Project structure
+
+```
+/
+├── docs/docs/       # Documentation content (.mdx), French, source of truth
+├── i18n/            # English translation
+├── linter/          # Documentation compliance linter (zero dependency)
+├── static/          # Static assets
+├── docusaurus.config.ts
+└── sidebars.ts
+```
+
+The content is written in French first. English versions live under
+`i18n/en/docusaurus-plugin-content-docs/current/` and must stay in sync with
+the French source.
+
+## Contributing
+
+Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for the
+development setup, the writing standards and the review process.
+
+## Security
+
+See [SECURITY.md](SECURITY.md) before reporting a security issue. Please do
+not open public issues for security reports.
+
+## License
+
+The documentation content is licensed under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — see
+[LICENSE](LICENSE).

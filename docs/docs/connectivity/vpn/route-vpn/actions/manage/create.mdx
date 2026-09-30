@@ -1,0 +1,71 @@
+---
+title: Créer une route pour une connexion VPN
+description: Ajoutez une route statique à une connexion VPN pour router le trafic entre la virtual gateway et la client gateway.
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Créer une route pour une connexion VPN
+
+Vous pouvez créer une route statique pour une connexion **VPN** (Virtual Private Network).
+
+Ceci vous permet de router le trafic entre la [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/) et la [client gateway (passerelle client)](/docs/connectivity/vpn/client-gateway/concepts/). Vous devez ensuite ajouter la nouvelle route à la [route table (table de routage)](/docs/network/route-table/concepts/).
+
+:::warning
+Cette action s'applique au routage statique uniquement. Si votre connexion VPN utilise le routage dynamique, vous n'avez pas besoin de créer de nouvelles routes.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **connectivity.vpnconnection.update**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+
+:::warning
+**Avant de commencer :** Créez une connexion VPN.
+:::
+
+1. Dans le dashboard **VPN Connections**, cliquez sur l'ID de la connexion VPN pour laquelle vous voulez créer une route.
+   Le volet des connexions VPN apparaît.
+2. Dans l'onglet "Route VPN", cliquez sur **Créer une route pour VPN**.
+   La boîte de dialogue "Créer une route pour une VPN Connection" s'affiche.
+3. Dans le champ "Plage d'IP de destination", tapez la plage d'IP (Internet Protocol) de votre réseau d'entreprise, en notation CIDR (Classless Inter-Domain Routing).
+4. Cliquez sur **Créer**.
+   Une route statique est créée pour la connexion VPN sélectionnée.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+:::info
+Avant de commencer : Créez une connexion VPN.
+:::
+
+La commande `POST /connectivity/spaces/{spaceId}/vpnConnections/{id}/routes` crée une route statique vers une connexion VPN. Cela vous permet de sélectionner les flux réseau envoyés par la virtual gateway vers la connexion VPN cible.
+
+[Exemple de requête : Création d'une route vers une connexion VPN](/openapi/#tag/connectivity/POST/connectivity/spaces/{spaceId}/vpnConnections/{id}/routes)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection_route).
+
+</TabItem>
+</Tabs>

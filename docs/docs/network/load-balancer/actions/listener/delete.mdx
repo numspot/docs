@@ -1,0 +1,52 @@
+---
+title: Supprimer un listener de load balancer - Numspot
+sidebar_label: Supprimer un listener de load balancer
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer un listener de load balancer
+
+Vous pouvez supprimer un listener (écouteur) d'un [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) dont vous n'avez plus besoin.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.loadBalancer.delete**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+La suppression d'un listener n'est pas disponible depuis la console Numspot.
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `DELETE /compute/spaces/{spaceId}/loadBalancers/{id}/listeners` supprime les listener d'un load balancer spécifié.
+
+[Exemple de requête : Suppression d'un listener](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/loadBalancers/{id}/listeners)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/listener).
+
+  </TabItem>
+</Tabs>

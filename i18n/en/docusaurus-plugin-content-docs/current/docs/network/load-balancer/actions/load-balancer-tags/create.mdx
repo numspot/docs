@@ -1,0 +1,54 @@
+---
+title: Add or remove tags on a load balancer - Numspot
+sidebar_label: Add or remove tags on a load balancer
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Add or remove tags on a load balancer
+
+You can add or remove tags associated with a [load balancer](/docs/network/load-balancer/concepts/) to organize and identify your resources.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.loadBalancer.update**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/load-balancer/lb-01-list.png", text: "From the left-hand side menu, click Network → Load Balancers.", hotspot: { x: 0, y: 0.6136, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/load-balancer/lb-02-actions.png", text: "On the load balancer row, open the “Actions” menu, then click “Manage tags”.", hotspot: { x: 0.8819, y: 0.4358, w: 0.0809, h: 0.0457 } },
+    { img: "/img/walkthrough/en/load-balancer/lb-tags-panel.png", text: "In the “Manage Tags” panel, click “Create a tag” (or the cross of an existing tag to remove it).", hotspot: { x: 0.8922, y: 0.2795, w: 0.0966, h: 0.0494 } },
+    { img: "/img/walkthrough/en/load-balancer/lb-tags-form.png", text: "Enter the tag key and value, click “Add tag”, then “Confirm” to save.", hotspot: { x: 0.937, y: 0.5881, w: 0.0518, h: 0.0494 } },
+  ]}
+/>
+
+
+1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
+2. Click the name of the load balancer for which you want to manage the tags.
+3. In the "Tags" tab, click **Add a tag** or the delete button next to an existing tag.
+4. Enter the key and the value of the tag, then click **Add**.
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+The `PATCH /compute/spaces/{spaceId}/bulk/loadBalancersTags` command adds one or more tags to the specified load balancer. If a tag with the same key already exists for the load balancer, the value of the tag is replaced.
+
+[Example request: Adding tags to the load balancer ↗](/openapi/#tag/compute/PATCH/compute/spaces/{spaceId}/bulk/loadBalancersTags)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
+
+  </TabItem>
+</Tabs>

@@ -1,0 +1,364 @@
+/**
+ * Homepage — 2026 Brand Book (hero, search block, content zones)
+ * Markup: docs/docs/home.mdx
+ */
+
+.home-hero {
+  position: relative;
+  padding: var(--ns-space-12) 0 var(--ns-space-6);
+}
+
+/* Wave layer on the home hero: decorative dotted wave, scaled down from
+   the natural 504x218 asset (ratio kept via aspect-ratio). Shifted up and
+   right per user review: top edge lands at the header line (the image's
+   transparent top means the visible dots start just below it) and the
+   right edge pokes past the content column toward the viewport edge —
+   body overflow-x: clip (custom.css) absorbs the poke on narrow
+   viewports, so no horizontal scrollbar. Asset self-hosted (D-016). */
+.home-hero::before {
+  content: "";
+  position: absolute;
+  top: calc(-1 * (var(--ns-space-12) + var(--ns-space-8)));
+  right: calc(-1 * var(--ns-space-12));
+  width: min(380px, 60vw);
+  aspect-ratio: 504 / 218;
+  background-image: url(../../../static/img/home/bg-vague-bleu.png);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Keep the title and subtitle above the wave layer */
+.home-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* The breadcrumb reads over the wave's upper dots: keep it above the
+   layer too (scoped to the home article — .home-hero exists only there). */
+article:has(.home-hero) .theme-doc-breadcrumbs {
+  position: relative;
+  z-index: 1;
+}
+
+/* Constrain the text over the wave to the original hero width */
+.markdown .home-hero h1,
+.home-hero__subtitle {
+  max-width: 820px;
+}
+
+/* .markdown specificity + !important to outrank the content.css responsive rules */
+.markdown .home-hero h1 {
+  font-size: clamp(2.2rem, 4vw, 3.2rem) !important;
+  font-weight: var(--ns-font-weight-extrabold);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--accent-primary);
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: var(--ns-space-4);
+}
+
+.home-hero__subtitle {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  border-bottom: none;
+  margin-bottom: var(--ns-space-4);
+}
+
+/* ----- Hero search block (theme search-local SearchBar) -----
+   The "Rechercher" placeholder comes from the theme.SearchBar.label
+   translation (i18n/fr/code.json). navbar__search-input is the plugin's
+   unhashed class; the wrapper carries position: relative to anchor the
+   plugin's absolute search icon. */
+.home-search {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: var(--ns-space-5);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--card-border);
+  border-radius: var(--ns-radius-lg);
+}
+
+/* The plugin's search container ships with margin-left: 16px (navbar
+   design): neutralize it so the input spans the block and the first chip
+   lines up with it. position: relative also anchors the ⌘K hint inside
+   the input. On hover/focus the plugin SWAPS the container for a
+   `.searchBar` wrapper (span, inline-block, intrinsic width ≈ 250px) —
+   force the full-width block in both modes. */
+.home-search > div,
+.home-search .navbar__search,
+.home-search .navbar__search > span {
+  display: block !important;
+  position: relative;
+  width: 100% !important;
+  margin-left: 0;
+}
+
+.home-search .navbar__search-input,
+.home-search .navbar__search-input:hover,
+.home-search .navbar__search-input:focus,
+.home-search .navbar__search-input:focus-visible {
+  width: 100% !important;
+  min-width: 100%;
+  max-width: 100%;
+  height: 60px;
+  margin: 0;
+  padding-left: 3rem;
+  font-size: 1.15rem;
+  color: var(--text-heading);
+  background: var(--bg-card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--ns-radius-md);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  transition: border-color var(--ns-transition-hover),
+    box-shadow var(--ns-transition-hover);
+}
+
+.home-search .navbar__search-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 30px rgba(var(--accent-rgb), 0.25);
+}
+
+/* The ⌘K hint: right-aligned INSIDE the input (the plugin anchors it to
+   the nearest positioned ancestor — the container, styled above). */
+.home-search .searchHint {
+  background: var(--bg-card);
+}
+
+/* Most-searched keywords: compact chips, one single line (silent
+   horizontal scroll on narrow screens). Double class + tag: outranks the
+   .markdown ul / li rules from content.css that would otherwise indent the
+   row and space the chips. */
+.home-search ul.home-search__keywords {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  list-style: none;
+  margin: var(--ns-space-3) 0 0;
+  padding: 0;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+}
+
+.home-search ul.home-search__keywords > li {
+  margin: 0;
+  padding: 0;
+}
+
+.home-search ul.home-search__keywords::-webkit-scrollbar {
+  display: none; /* WebKit */
+}
+
+.home-search ul.home-search__keywords .home-search__keyword {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  font-size: 14px;
+  font-weight: var(--ns-font-weight-medium);
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--ns-radius-full);
+  text-decoration: none !important;
+  white-space: nowrap;
+  transition: border-color var(--ns-transition-hover),
+    transform var(--ns-transition-hover),
+    color var(--ns-transition-hover);
+}
+
+.home-search ul.home-search__keywords .home-search__keyword:hover {
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+  transform: translateY(-1px);
+}
+
+/* ----- Content zones (Most popular / Get started / Labs) ----- */
+.home-zones {
+  /* Clear separation between the search block and the first zone. */
+  margin-top: var(--ns-space-12);
+}
+
+.home-zones__section--divided {
+  margin-top: var(--ns-space-12);
+}
+
+.home-section__title {
+  font-size: 14px;
+  font-weight: var(--ns-font-weight-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--ns-space-5);
+}
+
+/* ----- Card grid (category index pages) -----
+   Same card look as the home zones, as a wrapping grid (all sub-pages
+   visible at once, no carousel). */
+.svc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--ns-space-5);
+}
+
+/* Category index page header: closer to the home hero (h1 without the
+   separator rule, description in secondary text). */
+.category-index__header h1 {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: var(--ns-space-3);
+}
+.category-index__header p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 0;
+}
+
+.svc-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ns-space-3);
+  text-align: left;
+}
+
+/* Card header: icon inline with the title — Figma "align bottom": the
+   title text shares the icon's bottom edge (1-line titles sit at the
+   bottom of the icon box, 2-line titles fill it). */
+.svc-card__header {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+/* Icon spans the height of a 2-line title (19px × 1.2 × 2 ≈ 46px) */
+.svc-card__icon {
+  width: 46px;
+  height: 46px;
+  border-radius: var(--ns-radius-sm);
+  background: var(--bg-active);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background var(--ns-transition-hover);
+}
+
+.svc-card__glyph {
+  width: 23px;
+  height: 23px;
+  background-color: var(--accent-primary);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  transition: background-color var(--ns-transition-hover);
+}
+
+.card:hover .svc-card__icon {
+  background: var(--brand-strong);
+}
+.card:hover .svc-card__glyph {
+  background-color: #fff;
+}
+
+.svc-card__title {
+  /* !important outranks the content.css h3 { font-size: 22px !important } */
+  font-size: 19px !important;
+  line-height: 1.2;
+  font-weight: var(--ns-font-weight-bold);
+  color: var(--text-heading);
+  /* Optical "align bottom": absorb the last line's descender slack so the
+     text bottom sits flush with the icon bottom edge */
+  margin: 0 0 -3px;
+}
+
+.svc-card__desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* "Read more" button on home cards: discreet pill pinned to the card
+   bottom (the whole card remains a link). */
+.home-card__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  font-size: 13px;
+  font-weight: var(--ns-font-weight-semibold);
+  color: var(--accent-primary);
+  transition: transform var(--ns-transition-hover);
+}
+
+.home-card__more::after {
+  content: "";
+  width: 1em;
+  height: 1em;
+  background-color: currentColor;
+  -webkit-mask: url(../../../static/img/ui/chevron-right.svg) center / contain
+    no-repeat;
+  mask: url(../../../static/img/ui/chevron-right.svg) center / contain no-repeat;
+}
+
+.card:hover .home-card__more {
+  transform: translateX(2px);
+}
+
+/* Child sub-category list: standalone links above the stretched card link
+   (z-index) so they stay clickable on their own. */
+.svc-card__links {
+  position: relative;
+  z-index: 1;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.svc-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  line-height: 1.35;
+  padding-block: 1px;
+  font-weight: var(--ns-font-weight-medium);
+  color: var(--text-link);
+  text-decoration: none;
+  transition: transform var(--ns-transition-hover);
+}
+
+.svc-card__link::before {
+  content: "";
+  width: 1.1em;
+  height: 1.1em;
+  flex-shrink: 0;
+  background-color: var(--text-muted);
+  -webkit-mask: url(../../../static/img/ui/chevron-right.svg) center / contain
+    no-repeat;
+  mask: url(../../../static/img/ui/chevron-right.svg) center / contain no-repeat;
+}
+
+.card:hover .svc-card__link {
+  transform: translateX(2px);
+}
+
+/* Hover: only child links get underlined (not the parent category title).
+   .markdown a.svc-card__link:hover specificity outranks the no-underline
+   rule set in content.css. */
+.markdown a.svc-card__link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: var(--accent-primary);
+}

@@ -1,0 +1,66 @@
+---
+title: Edit an attribute of a subnet
+sidebar_position: 3
+draft: false
+last_update:
+  date: 2026-09-28
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Edit an attribute of a subnet
+
+You can edit one attribute of a subnet: the `mapPublicIpOnLaunch` attribute.
+
+This attribute determines whether a public IP (Internet Protocol) is automatically assigned to the network interfaces created in the subnet, including the network interfaces created when you launch a [VM](/docs/compute/concept/) (Virtual Machine) in a subnet. It is disabled by default.
+
+To learn about the behaviour of the public IP assigned this way, see [About public IP](/docs/network/public-ip/concepts/).
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.subnet.update**
+
+:::
+<Tabs>
+  <TabItem value="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/vpc/list.png", text: "From the left-hand side menu, click Network → VPC.", hotspot: { x: 0, y: 0.5222, w: 0.1931, h: 0.0568 } },
+    { img: "/img/walkthrough/en/vpc/list.png", text: "In the VPC list, click the ID of the relevant VPC.", hotspot: { x: 0.2687, y: 0.4928, w: 0.0689, h: 0.0247 } },
+    { img: "/img/walkthrough/en/subnet/vpc-detail.png", text: "On the “VPC details” page, in the “Subnets” section, click “Update” for the relevant subnet.", hotspot: { x: 0.8337, y: 0.6377, w: 0.051, h: 0.0494 } },
+    { img: "/img/walkthrough/en/subnet/update-dialog.png", text: "Tick “Map public IP on launch” if wanted, then click “Save”.", hotspot: { x: 0.6475, y: 0.5623, w: 0.0386, h: 0.0494 } },
+  ]}
+/>
+
+
+ 1. Log in to the Numspot console.
+ 2. From the left-hand side menu, click **Network** → **[VPC](/docs/network/vpc/concepts/)** → **VPC**.
+ 3. The list of VPC appears. Click the ID of the relevant VPC.
+ 4. The "VPC details" page appears.
+ 5. Below the VPC details, the "Subnets" section appears, containing the list of subnets associated with the VPC.
+ 6. On the VPC detailed page, identify the subnet from the "Subnets" section. In this section, you can:  
+     \- manage the `tags`  
+     \- add and edit the associated [Route Table](/docs/network/route-table/concepts/)
+
+ :::info
+ By clicking the **Edit** button, you can enable or disable the `mapPublicIpOnLaunch` attribute of the subnet, which automatically assigns a public IP to the network interfaces created in it, including when you launch a VM in the subnet.
+
+ :::
+
+  </TabItem> 
+  <TabItem value="API">
+
+The `PUT /compute/spaces/{spaceId}/subnets/{id}` command edits the `mapPublicIpOnLaunch` attribute of a subnet.
+
+[Example request: Editing a subnet](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/subnets/{id})
+  </TabItem>
+  <TabItem value="Terraform" label="Terraform">
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/subnet).
+  </TabItem>
+</Tabs>

@@ -1,0 +1,45 @@
+---
+title: Supprimer une règle d'un listener de load balancer
+sidebar_position: 6
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer une règle d'un listener de load balancer
+
+Vous pouvez supprimer une règle de redirection de trafic d'un listener (écouteur) de [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) dont vous n'avez plus besoin.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.loadBalancer.delete**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+La suppression d'une règle de listener n'est pas disponible depuis la console Numspot.
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `DELETE /compute/spaces/{spaceId}/listenerRules/{id}` supprime une règle de listener.
+
+La règle qui était active auparavant est désactivée après la suppression.
+
+[Exemple de requête : Suppression d'une règle pour un Listener](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/listenerRules/{id})
+  </TabItem>
+</Tabs>

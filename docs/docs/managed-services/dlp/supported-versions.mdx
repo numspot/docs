@@ -1,0 +1,52 @@
+---
+title: Versions et cycle de vie - DLP managé
+sidebar_label: Versions et cycle de vie
+sidebar_position: 5
+draft: false
+---
+
+# Versions et cycle de vie
+
+Numspot opère le service [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) avec des versions stables bénéficiant d'un suivi actif des correctifs de sécurité, en conformité avec les exigences de sécurité appliquées au service.
+
+## Version supportée
+
+La version suivante est supportée :
+
+- **DLP v0.16**
+
+Ce périmètre couvre la version stable et activement maintenue, avec un suivi continu des bulletins de sécurité.
+
+## Suivi des patches de sécurité
+
+Le service DLP intègre :
+
+- des mises à jour de correctifs appliquées régulièrement pour corriger les bugs et les failles de sécurité ;
+- un suivi actif des vulnérabilités critiques et hautes ;
+- des images conteneur durcies.
+
+Les mises à jour de correctifs sont appliquées automatiquement par Numspot et ne nécessitent aucune action de la part du client.
+
+:::info
+Pour obtenir des informations sur les versions appliquées ou les correctifs récents, contactez le support Numspot.
+:::
+
+## Cycle de vie des versions (lifecycle)
+
+### Politique de support
+
+| Version | Statut du support | Fin de support Numspot estimée |
+|---------|-------------------|--------------------------------|
+| **v0.16** | Active | Non planifiée |
+
+### Notification de fin de support
+
+Numspot notifie ses clients plusieurs mois avant la fin de support d'une version. Cette notification permet aux clients de planifier la migration vers une version plus récente.
+
+## Mises à jour
+
+Les mises à jour du service DLP sont appliquées par Numspot de manière continue. Les [rulesets](/docs/managed-services/dlp/concepts) (ensembles de règles) publiés et les données de journalisation sont préservés lors des mises à jour.
+
+:::warning
+Les mises à jour peuvent modifier les schémas de plateforme disponibles. Vérifiez la compatibilité de vos règles après chaque mise à jour signalée par Numspot.
+:::

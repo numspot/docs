@@ -1,0 +1,59 @@
+---
+title: Create a virtual gateway
+description: Create a virtual gateway to attach to a VPC to establish VPN connections.
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Create a virtual gateway
+
+You can create a [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/) to attach to a [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud). You can then set up a VPN (Virtual Private Network) connection between this VPC and a [client gateway](/docs/connectivity/vpn/client-gateway/concepts/).
+
+You can create the virtual gateway before or after creating the VPC.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **connectivity.bridge.create**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/virtual-gateway/create-01-list.png", text: "From the left-hand side menu, click VPN → Virtual Gateways.", hotspot: { x: 0, y: 0.6309, w: 0.194, h: 0.0457 } },
+    { img: "/img/walkthrough/en/virtual-gateway/create-01-list.png", text: "From VPN → Virtual Gateways, click “Create a Virtual Gateway”.", hotspot: { x: 0.8158, y: 0.2329, w: 0.1453, h: 0.0494 } },
+    { img: "/img/walkthrough/en/virtual-gateway/create-02-modal.png", text: "In the confirmation dialog, click “Create”.", hotspot: { x: 0.6394, y: 0.5572, w: 0.0468, h: 0.0494 } },
+  ]}
+/>
+
+
+1. In the **Virtual Gateways** dashboard, click **Create a Virtual Gateway**.
+   The "Create a Virtual Gateway" dialog box appears.
+2. In the "Name" field, type a name for the virtual gateway.
+3. Click **Create**.
+   The virtual gateway is created.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `POST /connectivity/spaces/{spaceId}/virtualGateways` command creates a virtual gateway.
+A virtual gateway is the access point on the VPC side of a VPN connection.
+
+[Example request: Creating a virtual gateway](/openapi/#tag/connectivity/POST/connectivity/spaces/{spaceId}/virtualGateways)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/virtual_gateway).
+
+</TabItem>
+</Tabs>

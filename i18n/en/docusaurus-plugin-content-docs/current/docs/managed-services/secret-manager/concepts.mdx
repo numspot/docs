@@ -1,0 +1,70 @@
+---
+title: "Secret Manager - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# Secret Manager concepts
+
+<ActionsSummary />
+
+## Introduction
+
+Secret Manager is a service managed by Numspot, based on [OpenBao](https://openbao.org/), that lets you store, manage and control access to the secrets (passwords, API keys, certificates, tokens, etc.) used by your applications and infrastructures.
+
+Secret Manager centralizes secret management within a dedicated OpenBao instance, providing a single control point for distributing sensitive information while guaranteeing data sovereignty.
+
+### Benefits of the managed Secret Manager service
+
+- **Simplified management**: no need to manage the underlying OpenBao infrastructure.
+- **Centralization**: a single point for managing and distributing secrets across all of your services.
+- **Security**: access to the instance is controlled by IAM (Identity and Access Management) policies.
+
+## Key features
+
+### 1. Creating a Secret Manager instance
+
+A Secret Manager instance is a dedicated OpenBao instance within your space. It provides a single endpoint accessible by your applications to read and write secrets.
+
+**Steps to create a Secret Manager instance from the Numspot Console**:
+
+1. Log in to the Numspot Console.
+2. Select the option to create a managed Secret Manager instance.
+3. Specify the instance name.
+4. Confirm the instance creation.
+
+### 2. Instance lifecycle management
+
+Secret Manager offers a complete lifecycle for instance management:
+
+- **Creation**: the instance goes through the `PENDING` and then `CREATING` states before reaching the `RUNNING` state.
+- **Monitoring**: view the status and information of your instance at any time.
+- **Deletion**: delete an instance when you no longer need it.
+
+### 3. Integration with the managed services
+
+Secret Manager integrates natively with the other Numspot managed services. Your applications deployed on a [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) or a [VM](/docs/compute/concept/) (Virtual Machine) can retrieve their secrets directly from the Secret Manager instance using the instance host.
+
+## Use cases
+
+### 1. Application credential management
+
+- Centralize database passwords, API keys and authentication tokens in a single, secure vault.
+
+### 2. Environment separation
+
+- Create separate Secret Manager instances for the development, staging and production environments to isolate secrets.
+
+### 3. Compliance and auditing
+
+- Use access traceability to meet SecNumCloud compliance requirements and security audits.
+
+## Best practices
+
+- **Secret rotation**: put in place a policy of regular secret rotation to limit the impact of a possible compromise.
+- **Principle of least privilege**: grant only the IAM permissions required to access secrets.
+- **Environment isolation**: use separate instances for each environment (development, production).
+- **Do not store secrets in plain text**: avoid storing secrets in unencrypted environment variables or in source code.

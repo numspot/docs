@@ -1,0 +1,32 @@
+---
+title: Internet gateways
+sidebar_label: About internet gateways
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# About internet gateways
+
+<ActionsSummary />
+
+Internet gateways allow [VM (Virtual Machines)](/docs/compute/concept/) in a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) to be connected directly to the Internet. Internet gateways can be used as a target in [route tables](/docs/network/route-table/concepts/) for network traffic directed to the Internet.
+
+An internet gateway is a component that you can attach to a VPC to enable direct communication between your VM in that VPC and the Internet. To do so:
+
+- you must create a route in the route table of one or more subnets directing Internet traffic to the internet gateway;
+- the VM in those subnets must have an associated public IP address;
+- you must add the appropriate rules authorizing traffic to and from the Internet to the [security groups](/docs/compute/security-groups/concepts/concept-sg/) used for the VM in those subnets.
+
+<img src="/img/console/network/internet-gateway/sch-General-InternetGateway-v2.png" alt="Diagram of a virtual network connected to the Internet through an internet gateway" />
+
+*Architecture of a public subnet and an internet gateway*
+
+When you create a route to an internet gateway in the route table of a subnet, it allows the VM in that subnet to access the Internet. The VM in a VPC only know the private IP addresses of the VPC and the subnet, so the internet gateway performs network address translation (NAT, Network Address Translation) to allow the VM to access the Internet using their public IP address.
+
+When a VM sends traffic to the Internet, the internet gateway replaces the private IP address of the VM with the public IP address associated with the VM. When the traffic returns from the Internet to the VM, the internet gateway translates the public IP address back into the private IP address of the VM before forwarding the traffic to the VPC.
+
+When you create a route to the internet gateway, you can use the CIDR (Classless Inter-Domain Routing) block 0.0.0.0/0 as the destination to account for all destinations that are not explicitly routed in the route table. This means that all traffic that does not match another route in the route table will be sent to the internet gateway. You can also use a more restricted IP address range corresponding to the public IP addresses of your internal network, if you wish to limit Internet access only to the specified IP addresses.
+
+The MTU (Maximum Transmission Unit) in a VPC is limited to 1500 bytes per packet directed to the Internet through an internet gateway. This means that data packets exceeding this size will be fragmented into smaller packets before being transmitted over the Internet.

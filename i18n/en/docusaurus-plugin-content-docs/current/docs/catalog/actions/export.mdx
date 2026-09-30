@@ -1,0 +1,63 @@
+---
+title: Export the catalog
+sidebar_position: 3
+draft: false
+---
+
+# Export the catalog
+
+You can export the full catalog in CSV (Comma-Separated Values) format. This file contains all the products and prices available on the Numspot platform.
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## Permissions
+
+:::info
+No IAM (Identity and Access Management) permission is required to perform this action.
+:::
+
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+1. From the left-hand side menu, go to **Catalog**.
+2. Click **Export** in the top right of the page.
+3. Select the desired filters (domain, type, region).
+4. Click **Download** to obtain the CSV file.
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+**Endpoint**: `GET /catalogue/export/csv`
+
+### Query parameters
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `domain` | string | No | Domain of the products to filter: `compute`, `connectivity`, `kubernetes`, `objectstorage`, `postgresql`, `registry`, `secrets` |
+| `kind` | string | No | Resource type to filter (e.g. `virtual-machine`, `node`, `gpu`, `cluster`) |
+| `regionCode` | string | No | Region code: `eu-west-2` or `cloudgouv-eu-west-1` |
+
+### Response
+
+The CSV file contains the following columns for each product:
+
+- **Identifiers**: uuid, `productCode`, `sku`;
+- **Attributes**: `domain`, `kind`, `label`, `currentGeneration`, `releaseStage`, `certifications`, `licenseModel`, `deploymentOption`;
+- **Resources**: `family`, `generation`, vCPU (virtual Central Processing Unit), `memoryGiB`, `gpuType`, `gpuQuantity`, `gpuMemoryGB`, `model`, `vramGB`;
+- **Pricing**: `amount`, `currency`, `frequency`, `unit`, `effectiveDateBegin`, `effectiveDateEnd`;
+- **Region**: `regionCode`.
+
+### Example file name
+
+`numspot-catalogue-2025-01-01.csv`
+
+[Example request: CSV export of the catalog](/openapi/#tag/catalogue/GET/catalogue/export/csv)
+
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+Exporting the catalog via Terraform is not available. Use the console or the API to export the catalog in CSV format.
+
+  </TabItem>
+</Tabs>

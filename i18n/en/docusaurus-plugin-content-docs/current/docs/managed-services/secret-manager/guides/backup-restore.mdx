@@ -1,0 +1,180 @@
+---
+title: Backups and restores - Managed Secret Manager
+sidebar_label: Backups and restores
+description: Guide to backing up and restoring the data of a managed Secret Manager instance using Raft snapshots
+sidebar_position: 4
+draft: false
+---
+
+# Backups and restores
+
+[Secret Manager instances](/docs/managed-services/secret-manager/concepts/) use OpenBao's Raft storage. This guide explains how to back up and restore your instance's data using Raft snapshots, and how to request an automated backup configuration from Numspot support.
+
+:::warning
+Raft snapshots contain the instance's entire data, including the encrypted secrets. Keep them in a secure location with restricted access.
+:::
+
+---
+
+## Prerequisites
+
+- A Secret Manager instance in the `RUNNING` state;
+- The instance's admin token;
+- The `bao` CLI installed, or `curl` for direct API calls;
+- A secure storage location for the snapshot files.
+
+Configure access to the instance:
+
+```bash
+export BAO_ADDR="https://{instance-host}"
+export BAO_TOKEN="{admin-token}"
+```
+
+---
+
+## Back up an instance
+
+### Using the OpenBao CLI
+
+The `bao operator raft snapshot save` command creates a binary snapshot of the complete state of the Raft cluster:
+
+```bash
+bao operator raft snapshot save backup-$(date +%Y%m%d-%H%M%S).snap
+```
+
+The generated file contains the entire data stored in the instance (encrypted secrets, configuration, policies, authentication methods).
+
+### Using the HTTP API
+
+Use the `GET /v1/sys/storage/raft/snapshot` endpoint:
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --output backup-$(date +%Y%m%d-%H%M%S).snap \
+  https://{instance-host}/v1/sys/storage/raft/snapshot
+```
+
+### Verify the snapshot's integrity
+
+After a backup, check that the file is well formed:
+
+```bash
+bao operator raft snapshot verify backup-20260611-120000.snap
+```
+
+---
+
+## Restore an instance
+
+:::danger
+Restoring a snapshot replaces the instance's **entire** data with that of the snapshot. Any data created after the snapshot will be lost. This operation is irreversible.
+:::
+
+### Using the OpenBao CLI
+
+```bash
+bao operator raft snapshot restore backup-20260611-120000.snap
+```
+
+### Using the HTTP API
+
+Use the `POST /v1/sys/storage/raft/snapshot` endpoint:
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request POST \
+  --data-binary @backup-20260611-120000.snap \
+  https://{instance-host}/v1/sys/storage/raft/snapshot
+```
+
+### After the restore
+
+1. Check the instance's state:
+
+   ```bash
+   bao status
+   ```
+
+2. Check that the secrets are accessible:
+
+   ```bash
+   bao kv list secret/
+   ```
+
+3. Check the authentication methods:
+
+   ```bash
+   bao auth list
+   ```
+
+4. If you use auto-unseal, check that the seal is correctly configured:
+
+   ```bash
+   bao operator seal-status
+   ```
+
+---
+
+## Configure automated backups
+
+### Using Numspot support
+
+For a scheduled automated backup (for example daily or weekly), contact [Numspot support](/docs/support/general/#support-requests). The team can:
+
+- Configure scheduled backups (daily or weekly) using the OpenBao API;
+- Store the snapshots in S3-compatible object storage;
+- Define a snapshot retention and expiry policy;
+- Set up alerts in the event of a backup failure.
+
+### Self-service automated backups using the snapshot agent
+
+You can configure the OpenBao snapshot agent to automate backups. This configuration is performed using your instance's OpenBao API and requires S3-compatible object storage to store the snapshots.
+
+To enable and configure the snapshot agent, see the [OpenBao documentation on snapshots](https://openbao.org/docs/concepts/snapshot/).
+
+---
+
+## Request a restore from support
+
+If you no longer have access to the admin token or if the instance is in a degraded state, you can ask [Numspot support](/docs/support/general/#support-requests) to trigger a restore:
+
+1. Provide the Secret Manager instance identifier;
+2. Indicate the snapshot file to restore (or the snapshot date if the backups are managed by Numspot);
+3. Support carries out the restore and helps you check the integrity of the data after the restore.
+
+---
+
+## Best practices
+
+### Backup frequency
+
+| Environment | Recommended frequency |
+| --- | --- |
+| Production | Daily (automated via support) |
+| Staging | Weekly |
+| Development | On demand (before each major change) |
+
+### Retention
+
+- Keep at least **7 days** of snapshots in production;
+- Archive a weekly snapshot for at least **30 days**;
+- Keep a monthly snapshot for SecNumCloud compliance.
+
+### Snapshot security
+
+- Store the snapshots in an encrypted location with restricted access;
+- Never store the snapshots on the same infrastructure as the instance;
+- Use object storage (S3) with encryption at rest;
+- Rotate the storage access credentials regularly.
+
+### Restore testing
+
+- Perform a restore test at least once per quarter;
+- Check the consistency of the data after the restore (secrets, policies, authentication methods);
+- Document the observed restore time for the disaster recovery plan.
+
+:::tip
+For critical environments, combine Raft snapshots with a cross-instance replication strategy. Contact Numspot support to explore the available options.
+:::

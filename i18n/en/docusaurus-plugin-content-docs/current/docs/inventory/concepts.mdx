@@ -1,0 +1,42 @@
+---
+title: "Inventory - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# Inventory
+
+<ActionsSummary />
+
+The inventory is a feature that lets you view all the resources deployed in a Numspot space. It provides a consolidated and unified view of every resource, regardless of its source service (compute, connectivity, Kubernetes, postgresql, objectstorage, registry, secrets).
+
+The inventory makes resources easier to manage and track by providing a centralized list with essential information: identifier, reference, name, type, source, state and parent relationships.
+
+## Accessing the inventory
+
+The inventory is accessible through the API with the endpoint `GET /inventory/spaces/{spaceId}/resources`.
+
+## Structure of a resource
+
+Each resource in the inventory includes the following attributes:
+
+- **ID**: unique identifier of the resource (for example `vm-622ef57d`, `vpc-12b7fdbc`);
+- **Reference**: NRN (Numspot Resource Name), a unique identifier in the form of a UUID (Universally Unique Identifier);
+- **Name**: name assigned to the resource when it was created;
+- **Type**: resource type, for example [VM (Virtual Machine)](/docs/compute/concept/), [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/), subnet, [load balancer](/docs/network/load-balancer/concepts/);
+- **Source**: source service of the resource;
+- **State**: current state of the resource;
+- **Parent**: parent resource if applicable (hierarchical relationship).
+
+## Resource sources and types
+
+Inventory resources are classified by source and by type. For the exhaustive list of available domains and kinds, refer to the [catalog](/docs/catalog/concepts/#domains-and-product-types) documentation.
+
+## Relationships between resources
+
+The inventory displays the parent relationships between resources. For example, a node has a cluster as its parent.
+
+This hierarchy lets you understand the structure of your infrastructure and the dependencies between resources.

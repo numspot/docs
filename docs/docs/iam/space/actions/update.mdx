@@ -1,0 +1,80 @@
+---
+title: Modifier un espace - IAM
+description: "Modifiez le nom et la description d'un espace IAM de votre organisation Numspot, via la console ou l'API."
+sidebar_label: Modifier un espace
+sidebar_position: 4
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Modifier un espace
+
+Vous pouvez modifier les informations administratives d'un espace : son nom et sa description.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **iam.role.update**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/space/list-02-menu.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Espaces.", hotspot: { x: 0, y: 0.6963, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/space/list-02-menu.png", text: "Depuis IAM → Espaces, ouvrez le menu « Actions » de l'espace, puis cliquez sur « Modifier l'espace ».", hotspot: { x: 0.7708, y: 0.4, w: 0.19, h: 0.045 } },
+    { img: "/img/walkthrough/space/update-02-form.png", text: "Modifiez le nom et/ou la description de l'espace, puis cliquez sur « Modifier l'espace ».", hotspot: { x: 0.6559, y: 0.921, w: 0.0934, h: 0.0494 } },
+  ]}
+/>
+
+Vous pouvez modifier un espace depuis la page **Espaces** (menu **Actions** → **Modifier l'espace**). Le bouton **Actions** permet également d'assigner des utilisateurs et des comptes de service à cet espace.
+
+1. Depuis le menu latéral gauche, cliquez sur **IAM** → **Espaces**.
+2. Ouvrez le menu **Actions** de l'espace à modifier, puis cliquez sur **Modifier l'espace**.
+3. Modifiez le nom et/ou la description de l'espace, puis cliquez sur **Modifier l'espace**.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PATCH/organisations/{organisationId}/spaces/{spaceId}
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/organisations/{organisationId}/spaces/{spaceId}' \
+  --request PATCH \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "",
+  "description": ""
+}'
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/space).
+
+</TabItem>
+</Tabs>

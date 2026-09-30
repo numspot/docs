@@ -1,0 +1,1088 @@
+{
+  "metadata": {
+    "language": "fr",
+    "description": "Technical glossary - standardized terminology",
+    "last_updated": "2026-03-13"
+  },
+  "terms": {
+    "acl": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "ACL",
+      "meaning": "Access Control List"
+    },
+    "aes": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "AES",
+      "meaning": "Advanced Encryption Standard"
+    },
+    "ak": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "AK",
+      "meaning": "Access Key"
+    },
+    "anssi": {
+      "type": [
+        "ACRONYM",
+        "PROPER_NOUN"
+      ],
+      "correct_form": "ANSSI",
+      "meaning": "Agence Nationale de la Sécurité des Systèmes d'Information"
+    },
+    "api": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "API",
+      "meaning": "Application Programming Interface"
+    },
+    "asn": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "ASN",
+      "meaning": "Autonomous System Number"
+    },
+    "autoscaling": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "autoscaling",
+      "translation_fr": "mise à l'échelle automatique"
+    },
+    "az": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "AZ",
+      "meaning": "Availability Zone"
+    },
+    "backend": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "backend",
+      "plural": "backends"
+    },
+    "bgp": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "BGP",
+      "meaning": "Border Gateway Protocol"
+    },
+    "billing": {
+      "type": [
+        "FRENCH"
+      ],
+      "correct_form": "facturation",
+      "translation_en": "billing"
+    },
+    "block_storage": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "block storage",
+      "translation_fr": "stockage bloc",
+      "wrong_form": "BSU",
+      "concept_page": "/docs/storage/block-storage/concepts"
+    },
+    "bridge": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "bridge",
+      "plural": "bridges"
+    },
+    "bucket": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "bucket",
+      "plural": "buckets"
+    },
+    "cdr": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "CDR",
+      "meaning": "Custom Resource Definition"
+    },
+    "checksum": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "checksum",
+      "translation_fr": "somme de contrôle",
+      "plural": "checksums"
+    },
+    "cidr": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "CIDR",
+      "meaning": "Classless Inter Domain Routing"
+    },
+    "cli": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "CLI",
+      "meaning": "Command Line Interface"
+    },
+    "client_gateway": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "client gateway",
+      "translation_fr": "passerelle client",
+      "plural": "client gateways",
+      "concept_page": "/docs/connectivity/vpn/client-gateway/concepts"
+    },
+    "client_id": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "client id"
+    },
+    "client_secret": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "client secret",
+      "plural": "client secrets"
+    },
+    "cluster": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "cluster",
+      "meaning": "Groupe de machines",
+      "plural": "clusters"
+    },
+    "cluster_api": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "cluster api",
+      "plural": "clusters api"
+    },
+    "cluster_kubernetes": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "cluster Kubernetes",
+      "plural": "clusters Kubernetes",
+      "concept_page": "/docs/managed-services/kubernetes/concepts"
+    },
+    "cluster_postgresql": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "cluster PostgreSQL",
+      "plural": "clusters PostgreSQL",
+      "concept_page": "/docs/managed-services/postgresql/concepts"
+    },
+    "compute": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "compute"
+    },
+    "container": {
+      "type": [
+        "FRENCH"
+      ],
+      "correct_form": "conteneur",
+      "translation_en": "container"
+    },
+    "control_plane": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "control plane",
+      "translation_fr": "plan de contrôle",
+      "plural": "control planes"
+    },
+    "cors": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "CORS",
+      "meaning": "Cross-Origin Resource Sharing"
+    },
+    "dhcp": {
+      "type": [
+        "ACRONYM",
+        "RESOURCE"
+      ],
+      "correct_form": "DHCP",
+      "meaning": "Dynamic Host Configuration Protocol",
+      "concept_page": "/docs/network/dhcp/concepts"
+    },
+    "dh": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "DH",
+      "meaning": "Diffie-Hellman"
+    },
+    "directlink": {
+      "type": [
+        "PROPER_NOUN",
+        "RESOURCE"
+      ],
+      "correct_form": "DirectLink",
+      "concept_page": "/docs/connectivity/direct-link/concepts"
+    },
+    "dns": {
+      "type": [
+        "ACRONYM",
+        "RESOURCE"
+      ],
+      "correct_form": "DNS",
+      "meaning": "Domain Name System"
+    },
+    "dpd": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "DPD",
+      "meaning": "Dead Peer Detection"
+    },
+    "eim": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "EIM",
+      "meaning": "Elastic Identity Management"
+    },
+    "endpoint": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "endpoint",
+      "translation_fr": "point d'accès",
+      "plural": "endpoints"
+    },
+    "firewall": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "firewall",
+      "translation_fr": "pare-feu",
+      "plural": "firewalls"
+    },
+    "gateway": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "gateway",
+      "translation_fr": "passerelle",
+      "plural": "gateways"
+    },
+    "gpu": {
+      "type": [
+        "ACRONYM",
+        "RESOURCE"
+      ],
+      "correct_form": "GPU",
+      "meaning": "Graphics Processing Unit",
+      "concept_page": "/docs/compute/gpu/concept"
+    },
+    "health_check": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "health check",
+      "translation_fr": "vérification d'état",
+      "plural": "health checks"
+    },
+    "hcp": {
+      "type": [
+        "ACRONYM",
+        "RESOURCE"
+      ],
+      "correct_form": "HCP",
+      "meaning": "Hosted Control Plane"
+    },
+    "high_availability": {
+      "type": [
+        "FRENCH"
+      ],
+      "correct_form": "haute disponibilité",
+      "translation_en": "high availability",
+      "wrong_form": "HA"
+    },
+    "hmac": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "HMAC",
+      "meaning": "Hash-based Message Authentication Code"
+    },
+    "http": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "HTTP",
+      "meaning": "HyperText Transfer Protocol"
+    },
+    "https": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "HTTPS",
+      "meaning": "HyperText Transfer Protocol Secure"
+    },
+    "hypervisor": {
+      "type": [
+        "FRENCH"
+      ],
+      "correct_form": "hyperviseur",
+      "translation_en": "hypervisor",
+      "plural": "hyperviseurs"
+    },
+    "iaas": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "IaaS",
+      "meaning": "Infrastructure as a Service"
+    },
+    "iam": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "IAM",
+      "meaning": "Identity and Access Management"
+    },
+    "icmp": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "ICMP",
+      "meaning": "Internet Control Message Protocol"
+    },
+    "ike": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "IKE",
+      "meaning": "Internet Key Exchange"
+    },
+    "internet_gateway": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "internet gateway",
+      "translation_fr": "passerelle Internet",
+      "plural": "internet gateways",
+      "concept_page": "/docs/network/internet-gateway/concepts"
+    },
+    "iops": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "IOPS",
+      "meaning": "Input/Output Operations Per Second"
+    },
+    "ip": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "IP",
+      "meaning": "Internet Protocol"
+    },
+    "json": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "JSON",
+      "meaning": "JavaScript Object Notation"
+    },
+    "kubeconfig": {
+      "type": [
+        "COMMAND"
+      ],
+      "correct_form": "kubeconfig"
+    },
+    "kubectl": {
+      "type": [
+        "COMMAND"
+      ],
+      "correct_form": "kubectl"
+    },
+    "kubernetes": {
+      "type": [
+        "PROPER_NOUN"
+      ],
+      "correct_form": "Kubernetes",
+      "variations": [
+        "K8s",
+        "Kube"
+      ]
+    },
+    "key_pair": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "key pair",
+      "translation_fr": "paire de clés",
+      "plural": "key pairs",
+      "concept_page": "/docs/compute/keypairs/concept"
+    },
+    "listener": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "listener",
+      "plural": "listeners"
+    },
+    "load_balancer": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "load balancer",
+      "translation_fr": "équilibreur de charge",
+      "plural": "load balancers",
+      "concept_page": "/docs/network/load-balancer/concepts"
+    },
+    "md5": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "MD5",
+      "meaning": "Message Digest Algorithm 5"
+    },
+    "mtu": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "MTU",
+      "meaning": "Maximum Transmission Unit"
+    },
+    "multi_tenant": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "multi-tenant",
+      "translation_fr": "multi-entité"
+    },
+    "multitenant": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "multitenant",
+      "translation_fr": "multi-entité"
+    },
+    "nat": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "NAT",
+      "meaning": "Network Address Translation"
+    },
+    "nat_gateway": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "nat gateway",
+      "translation_fr": "passerelle nat",
+      "plural": "nat gateways",
+      "concept_page": "/docs/network/nat/concepts"
+    },
+    "network": {
+      "type": [
+        "FRENCH"
+      ],
+      "correct_form": "réseau"
+    },
+    "nic": {
+      "type": [
+        "ACRONYM",
+        "RESOURCE"
+      ],
+      "correct_form": "NIC",
+      "meaning": "Network Interface Cards"
+    },
+    "node": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "node",
+      "translation_fr": "nœud",
+      "plural": "nodes"
+    },
+    "node_pool": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "node pool",
+      "translation_fr": "groupe de nœuds",
+      "plural": "node pools"
+    },
+    "nrn": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "NRN",
+      "meaning": "Numspot Resource Name"
+    },
+    "ntp": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "NTP",
+      "meaning": "Network Time Protocol"
+    },
+    "oauth": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "OAuth",
+      "meaning": "Open Authorization"
+    },
+    "object_storage": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "object storage",
+      "translation_fr": "stockage objet"
+    },
+    "oidc": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "OIDC",
+      "meaning": "OpenID Connect"
+    },
+    "on_premises": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "on-premise",
+      "translation_fr": "sur site"
+    },
+    "operator": {
+      "type": [
+        "FRENCH"
+      ],
+      "correct_form": "opérateur",
+      "translation_en": "operator",
+      "plural": "opérateurs"
+    },
+    "orchestration": {
+      "type": [
+        "FRENCH"
+      ],
+      "correct_form": "orchestration"
+    },
+    "os": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "OS",
+      "meaning": "Operating System"
+    },
+    "peering": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "peering",
+      "translation_fr": "appairage"
+    },
+    "pfs": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "PFS",
+      "meaning": "Perfect Forward Secrecy"
+    },
+    "pod": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "pod",
+      "meaning": "unité logicielle",
+      "plural": "pods"
+    },
+    "policy": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "policy",
+      "translation_fr": "règle",
+      "plural": "policies"
+    },
+    "profile": {
+      "type": [
+        "FRENCH"
+      ],
+      "correct_form": "profil",
+      "translation_en": "profile",
+      "plural": "profils"
+    },
+    "provisioning": {
+      "type": [
+        "FRENCH"
+      ],
+      "correct_form": "approvisionnement",
+      "translation_en": "provisioning"
+    },
+    "psql": {
+      "type": [
+        "COMMAND"
+      ],
+      "correct_form": "psql"
+    },
+    "public_ip": {
+      "type": [
+        "FRENCH"
+      ],
+      "correct_form": "IP publique",
+      "translation_en": "public IP"
+    },
+    "rbac": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "RBAC",
+      "meaning": "Role-Based Access Control"
+    },
+    "region": {
+      "type": [
+        "FRENCH"
+      ],
+      "correct_form": "région",
+      "plural": "régions"
+    },
+    "replica": {
+      "type": [
+        "FRENCH"
+      ],
+      "correct_form": "réplica",
+      "plural": "réplicas"
+    },
+    "restore": {
+      "type": [
+        "FRENCH"
+      ],
+      "correct_form": "restauration",
+      "translation_en": "restore"
+    },
+    "round_robin": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "round robin",
+      "translation_fr": "tourniquet"
+    },
+    "route_table": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "route table",
+      "translation_fr": "table de routage",
+      "plural": "route tables",
+      "concept_page": "/docs/network/route-table/concepts"
+    },
+    "rsa": {
+      "type": [
+        "PROPER_NOUN"
+      ],
+      "correct_form": "RSA",
+      "note": "N'est pas un acronyme : ce sont les initiales des inventeurs (Rivest, Shamir, Adleman). Ne pas développer ni traduire ; laisser « RSA » tel quel en français comme en anglais."
+    },
+    "s3": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "S3",
+      "meaning": "Simple Storage Service"
+    },
+    "sauvegarde": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "backup",
+      "translation_fr": "sauvegarde",
+      "plural": "backups"
+    },
+    "sdk": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "SDK",
+      "meaning": "Software Development Kit"
+    },
+    "security_group": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "security group",
+      "translation_fr": "groupe de sécurité",
+      "plural": "security groups",
+      "concept_page": "/docs/compute/security-groups/concepts/concept-sg"
+    },
+    "service_account": {
+      "type": [
+        "RESOURCE"
+      ],
+      "correct_form": "compte de service",
+      "translation_en": "service account",
+      "plural": "comptes de service"
+    },
+    "sha": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "SHA",
+      "meaning": "Secure Hash Algorithm"
+    },
+    "sk": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "SK",
+      "meaning": "Secret Key"
+    },
+    "snapshot": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "snapshot",
+      "translation_fr": "instantané",
+      "plural": "snapshots"
+    },
+    "space": {
+      "type": [
+        "FRENCH"
+      ],
+      "correct_form": "espace",
+      "translation_en": "space",
+      "plural": "espaces"
+    },
+    "ssh": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "SSH",
+      "meaning": "Secure Shell"
+    },
+    "ssl": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "SSL",
+      "meaning": "Secure Sockets Layer"
+    },
+    "ssd": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "SSD",
+      "meaning": "Solid-State Drive"
+    },
+    "storage": {
+      "type": [
+        "FRENCH"
+      ],
+      "correct_form": "stockage",
+      "translation_en": "storage"
+    },
+    "subnet": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "subnet",
+      "translation_fr": "sous-réseau",
+      "plural": "subnets"
+    },
+    "tag": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "tag",
+      "translation_fr": "étiquette",
+      "plural": "tags"
+    },
+    "tcp": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "TCP",
+      "meaning": "Transmission Control Protocol"
+    },
+    "tenant": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "tenant",
+      "translation_fr": "entité"
+    },
+    "tls": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "TLS",
+      "meaning": "Transport Layer Security"
+    },
+    "tui": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "TUI",
+      "meaning": "Terminal User Interface"
+    },
+    "udp": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "UDP",
+      "meaning": "User Datagram Protocol"
+    },
+    "user": {
+      "type": [
+        "RESOURCE"
+      ],
+      "correct_form": "utilisateur",
+      "translation_en": "user",
+      "plural": "utilisateurs"
+    },
+    "uuid": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "UUID",
+      "meaning": "Universally Unique Identifier"
+    },
+    "vcpu": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "vCPU",
+      "meaning": "virtual Central Processing Unit"
+    },
+    "virtual_gateway": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "virtual gateway",
+      "translation_fr": "passerelle virtuelle",
+      "plural": "virtual gateways",
+      "concept_page": "/docs/connectivity/vpn/virtual-gateway/concepts"
+    },
+    "virtual_machine": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "virtual machine",
+      "translation_fr": "machine virtuelle",
+      "plural": "virtual machines",
+      "concept_page": "/docs/compute/concept"
+    },
+    "vm": {
+      "type": [
+        "ACRONYM",
+        "RESOURCE"
+      ],
+      "correct_form": "VM",
+      "meaning": "Virtual Machine",
+      "concept_page": "/docs/compute/concept"
+    },
+    "volume_systeme": {
+      "type": [
+        "FRENCH"
+      ],
+      "correct_form": "volume système",
+      "translation_en": "system volume",
+      "plural": "volumes système"
+    },
+    "vpc": {
+      "type": [
+        "ACRONYM",
+        "RESOURCE"
+      ],
+      "correct_form": "VPC",
+      "meaning": "Virtual Private Cloud",
+      "concept_page": "/docs/network/vpc/concepts"
+    },
+    "vpn": {
+      "type": [
+        "ACRONYM",
+        "RESOURCE"
+      ],
+      "correct_form": "VPN",
+      "meaning": "Virtual Private Network"
+    },
+    "vram": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "VRAM",
+      "meaning": "Video Random Access Memory"
+    },
+    "vti": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "VTI",
+      "meaning": "Virtual Tunnel Interface"
+    },
+    "workload": {
+      "type": [
+        "ANGLICISM"
+      ],
+      "correct_form": "workload",
+      "translation_fr": "charge de travail",
+      "plural": "workloads"
+    },
+    "worker": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "worker",
+      "translation_fr": "nœud de travail",
+      "plural": "workers"
+    },
+    "xml": {
+      "type": [
+        "ACRONYM"
+      ],
+      "correct_form": "XML",
+      "meaning": "Extensible Markup Language"
+    },
+    "secret_manager": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "Secret Manager",
+      "translation_fr": "gestionnaire de secrets",
+      "plural": "Secret Managers",
+      "concept_page": "/docs/managed-services/secret-manager/concepts"
+    },
+    "secret_instance": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "instance Secret Manager",
+      "translation_fr": "instance de gestionnaire de secrets",
+      "plural": "instances Secret Manager",
+      "concept_page": "/docs/managed-services/secret-manager/concepts"
+    },
+    "openbao": {
+      "type": [
+        "PROPER_NOUN"
+      ],
+      "correct_form": "OpenBao",
+      "meaning": "OpenBao - Fork communautaire open source de HashiCorp Vault",
+      "variations": [
+        "openbao",
+        "OpenBao"
+      ]
+    },
+    "telehouse": {
+      "type": [
+        "PROPER_NOUN"
+      ],
+      "correct_form": "Téléhouse",
+      "meaning": "Opérateur de centres de données (localisation d'infrastructure)"
+    },
+    "secnumcloud": {
+      "type": [
+        "PROPER_NOUN"
+      ],
+      "correct_form": "SecNumCloud",
+      "meaning": "Label de sécurité de l'ANSSI"
+    },
+    "numspot": {
+      "type": [
+        "PROPER_NOUN"
+      ],
+      "correct_form": "Numspot",
+      "wrong_form": "NumSpot",
+      "meaning": "Marque Numspot — toujours « Numspot », jamais « NumSpot »"
+    },
+    "dlp": {
+      "type": [
+        "ACRONYM",
+        "RESOURCE"
+      ],
+      "correct_form": "DLP",
+      "wrong_form": "Data Leak Protection",
+      "meaning": "Data Loss Prevention",
+      "concept_page": "/docs/managed-services/dlp/concepts"
+    },
+    "rule_dlp": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "règle DLP",
+      "plural": "règles DLP",
+      "concept_page": "/docs/managed-services/dlp/concepts"
+    },
+    "policy_dlp": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "policy DLP",
+      "translation_fr": "politique DLP",
+      "plural": "policies DLP",
+      "concept_page": "/docs/managed-services/dlp/concepts"
+    },
+    "detector_dlp": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "détecteur DLP",
+      "plural": "détecteurs DLP",
+      "concept_page": "/docs/managed-services/dlp/concepts"
+    },
+    "ruleset": {
+      "type": [
+        "ANGLICISM",
+        "RESOURCE"
+      ],
+      "correct_form": "ruleset",
+      "translation_fr": "ensemble de règles",
+      "plural": "rulesets",
+      "concept_page": "/docs/managed-services/dlp/concepts"
+    }
+  }
+}

@@ -1,0 +1,93 @@
+---
+title: Créer une image personnalisée
+sidebar_position: 3
+draft: false
+---
+
+# Créer une image personnalisée
+
+Dans le cas où la liste des images officielles ne répond pas à vos besoins spécifiques, vous avez la possibilité de créer vos propres images personnalisées.
+
+:::danger
+Numspot ne peut pas garantir le bon fonctionnement des machines virtuelles ([VM](/docs/compute/concept/)) créées à partir de sources non officielles.
+:::
+
+## Création manuelle
+
+Cette méthode consiste à construire une image localement, la transférer sur une VM Numspot, puis la convertir en image via l'API.
+
+### 1. Installation d'un outil de gestion de VM local
+
+Installez un outil de gestion de machine virtuelle sur votre ordinateur, tel que [VirtualBox](https://www.virtualbox.org/) ou [VMWare](https://www.vmware.com/).
+
+### 2. Création et configuration de la VM
+
+Procédez à la création et à la configuration d'une machine virtuelle locale avec le système d'exploitation de votre choix.
+
+### 3. Export de la VM
+
+Une fois configurée, exportez cette machine virtuelle locale au format OVA (Open Virtual Appliance).
+
+### 4. Création d'une VM sur Numspot
+
+Sur la plateforme Numspot, créez une nouvelle machine virtuelle en choisissant un Linux de votre choix et en configurant deux volumes : [Créer des VM](/docs/compute/vms/actions/create/).
+
+### 5. Connexion à la VM
+
+Utilisez SSH (Secure Shell) pour vous connecter à la machine virtuelle. (cf. [Se connecter à une VM](/docs/compute/vms/actions/access/).)
+
+### 6. Transfert du fichier OVA
+
+Depuis votre machine locale, copiez le fichier OVA vers votre machine virtuelle Numspot. Pour cela, utilisez la ligne de commande Linux `scp`.
+
+Exemple :
+
+```bash
+scp path/to/your/file.ova numspot@ip_address:/path/to/destination
+```
+
+### 7. Décompression du fichier OVA
+
+Depuis la VM Numspot, utilisez la ligne de commande Linux `tar` afin de décompresser le fichier OVA.
+
+Exemple :
+
+```bash
+tar xvf path/to/your/file.ova
+```
+
+### 8. Conversion du fichier VMDK
+
+À l'aide de la ligne de commande Linux `qemu-img`, convertissez le fichier VMDK en format RAW.
+
+Exemple :
+
+```bash
+qemu-img convert -f vmdk -O raw path/to/your/file-disk001.vmdk path/to/your/file.raw
+```
+
+### 9. Écriture de l'image convertie
+
+Transférez l'image convertie en RAW vers le volume attaché.
+
+Exemple :
+
+```bash
+sudo dd if=path/to/your/file.raw of=/dev/xvdY bs=16k status=progress
+```
+
+### 10. Création d'une image via l'API
+
+Prenez une capture du volume et transformez-le en image en utilisant l'API `Create Image`. (cf. [Créer une image](/docs/compute/images/actions/create/).)
+
+### 11. Utilisation de l'image pour créer des VM
+
+Utilisez cette image pour créer des machines virtuelles Numspot avec votre OS.
+
+:::info
+Cette procédure est applicable à tous les systèmes d'exploitation pour lesquels il n'existe pas d'image préexistante.
+:::
+
+## Création automatisée avec Packer
+
+Vous pouvez créer des images personnalisées de manière automatisée et reproductible à l'aide de [Packer ↗](https://github.com/numspot/packer-plugin-numspot), un outil de construction d'images de machine. Le plugin Packer pour Numspot vous permet de définir la configuration de votre image dans un fichier HCL (HashiCorp Configuration Language) et de la construire sans intervention manuelle.

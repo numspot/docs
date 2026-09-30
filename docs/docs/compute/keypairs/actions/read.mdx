@@ -1,0 +1,63 @@
+---
+title: Obtenir des informations sur vos key pairs
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Obtenir des informations sur vos key pairs
+
+Vous pouvez obtenir des informations à propos de vos [key pairs (paires de clés)](/docs/compute/keypairs/concept/) créées et importées.
+
+Des informations concernant la partie publique d'une key pair sont également disponibles, uniquement depuis les [VM (Virtual Machine)](/docs/compute/concept/) associées à la key pair.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+
+- **compute.keypair.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/keypair/list.png", text: "Depuis le menu latéral gauche, cliquez sur Compute → Key Pairs.", hotspot: { x: 0, y: 0.5086, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/keypair/list.png", text: "La liste présente vos key pairs avec, pour chacune, son fingerprint et son type (défini à la création).", hotspot: { x: 0.223, y: 0.42, w: 0.75, h: 0.28 } },
+  ]}
+/>
+
+1. Connectez-vous sur la console Numspot.
+
+2. Depuis le menu latéral gauche, cliquez sur **Compute → Key pairs**.
+
+La liste présentée est celle des key pairs existantes avec les informations de Fingerprint pour chacune ainsi que le type de la key pair défini à sa création.
+
+</TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+La commande `GET /compute/spaces/{spaceId}/keypairs` permet de lister vos key pairs.
+
+[Exemple de requête : Lister toutes vos key pairs](/openapi/#tag/compute/get/compute/spaces/{spaceId}/keypairs)
+
+La commande `GET /compute/spaces/{spaceId}/keypairs/{id}` permet de récupérer les informations d'une key pair.
+
+[Exemple de requête : Récupérer les informations d'une key pair](/openapi/#tag/compute/get/compute/spaces/{spaceId}/keypairs/{id})
+  </TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/keypair).
+</TabItem>
+</Tabs>

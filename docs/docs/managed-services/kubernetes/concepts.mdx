@@ -1,0 +1,149 @@
+---
+title: "Kubernetes - Concepts"
+sidebar_label: "Concepts"
+description: "Découvrez le service managé Kubernetes de Numspot : clusters haute disponibilité, node pools, kubeconfig et GPU pour vos applications conteneurisées."
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# À propos du service managé Kubernetes
+
+<ActionsSummary />
+
+## Introduction
+
+Le service managé Kubernetes permet aux clients de déployer, gérer et faire évoluer des applications conteneurisées dans un environnement cloud à haute disponibilité.
+Ce service permet de créer un cluster Kubernetes dans un **Cluster de service** sans gérer l'infrastructure sous-jacente.
+Les utilisateurs peuvent également gérer les node pools, récupérer le fichier `kubeconfig`, et utiliser des [GPU (Graphics Processing Unit)](/docs/compute/gpu/concept/) pour des charges de travail intensives.
+
+### Avantages du service managé Kubernetes
+- Haute disponibilité : les clusters sont conçus pour minimiser les temps d'arrêt.
+- Gestion simplifiée : pas besoin de gérer l'infrastructure Kubernetes.
+- Évolutivité : ajout ou suppression de nœuds en fonction des besoins.
+- Intégration GPU : prise en charge des charges de travail nécessitant des accélérations graphiques.
+- Sécurité : mises à jour et correctifs de sécurité gérés par Numspot.
+
+## Fonctionnalités clés
+
+### 1. Création d'un cluster à haute disponibilité
+
+Un cluster Kubernetes à haute disponibilité est conçu pour offrir une continuité de service optimale.
+
+Le control plane est redondant par construction chez Numspot.
+Le nœud maître du control plane est répliqué dans chacune des AZ disponibles de la région.
+
+Redondez les nœuds de travail (workers des node pools) pour garantir la continuité du service même en cas de défaillance d'un composant.
+Pour ce faire, ajoutez un ou plusieurs node pools en définissant le nombre de réplicas souhaité.
+
+**Étapes pour créer un cluster hautement disponible via la Console Numspot** :
+1. Se connecter à la Console Numspot.
+2. Sélectionner l'option de création d'un cluster Kubernetes.
+3. Valider la création du cluster.
+
+### 2. Gestion des node pools
+
+Un node pool est un groupe de nœuds ([VM](/docs/compute/concept/) ou machines physiques) au sein d'un cluster Kubernetes. 
+Les node pools permettent de regrouper des nœuds ayant des configurations similaires (par exemple, type de machine, système d'exploitation, etc.).
+
+**Fonctionnalités de gestion des node pools** :
+- **Ajout de nœuds** : Augmentez la capacité du cluster en ajoutant des nœuds à un node pool.
+- **Suppression de nœuds** : Réduisez la taille du cluster en supprimant des nœuds.
+
+**Étapes pour ajouter un node pool répliqué via la console** :
+1. Connectez-vous à la console.
+2. Sélectionnez un cluster Kubernetes existant.
+3. Sélectionnez l'option d'ajout d'un node pool au cluster.
+4. Activez l'option **autoscaling** pour laisser Kubernetes gérer le nombre de nœuds en fonction de la charge, ou spécifiez le nombre de réplicas souhaité.
+5. Validez la création du node pool.
+
+### 3. Récupération du fichier kubeconfig
+
+Le fichier `kubeconfig` est utilisé par l'outil en ligne de commande `kubectl` pour interagir avec un cluster Kubernetes. 
+Ce fichier contient les informations nécessaires pour authentifier et communiquer avec le cluster.
+
+**Étapes pour récupérer le fichier kubeconfig via la console** :
+1. Accédez à la console.
+2. Naviguez vers la section dédiée au cluster Kubernetes.
+3. Téléchargez le fichier `kubeconfig` depuis l'interface utilisateur.
+4. Configurez `kubectl` pour utiliser ce fichier :
+```bash
+export KUBECONFIG=~/chemin/vers/kubeconfig
+```
+
+### 4. Utilisation de GPU
+
+Les GPU sont utilisés dans Kubernetes pour accélérer les charges de travail intensives en calcul, comme l'apprentissage automatique (ML) ou le traitement graphique.
+
+**Configuration pour utiliser des GPU** :
+1. Créer un node pool avec des nœuds GPU : sélectionnez des types de machines équipées de GPU lors de la création du node pool.
+2. Déployer des applications utilisant des GPU : utilisez des requêtes de ressources spécifiques dans les manifests Kubernetes pour demander des GPU.
+3. Vérifier la disponibilité des GPU : utilisez `kubectl` pour vérifier que les GPU sont disponibles et utilisés correctement.
+
+## Cas d'utilisation
+
+### 1. Déploiement d'applications critiques
+Les clusters hautement disponibles sont idéaux pour les applications nécessitant une disponibilité élevée, comme les services financiers ou les plateformes e-commerce.
+
+### 2. Traitement de données intensif
+L'utilisation des GPU permet d'accélérer les tâches de traitement de données, comme l'entraînement de modèles de machine learning.
+
+### 3. Environnements de développement et de test
+Les node pools permettent de créer des environnements isolés pour le développement et les tests, avec des configurations spécifiques.
+
+## Sécurité des workers
+
+### Image ANSSI durcie
+
+Les workers (nœuds de travail) des clusters Kubernetes Numspot sont créés à partir d'une image système durcie suivant les recommandations de l'ANSSI (Agence nationale de la sécurité des systèmes d'information).
+
+Cette image intègre :
+
+- **Durcissement du système d'exploitation** : configuration sécurisée selon les guides ANSSI ;
+- **Minimisation des services** : uniquement les composants nécessaires au fonctionnement de Kubernetes ;
+- **Gestion des vulnérabilités** : application des correctifs de sécurité lors des mises à jour ;
+- **Configuration réseau** : firewall et règles de sécurité préconfigurés ;
+- **Audit système** : journalisation des événements système.
+
+### Responsabilités de sécurité
+
+La sécurité des workers repose sur une répartition claire des responsabilités entre Numspot et le client.
+
+**Responsabilités Numspot**
+
+- Maintenance de l'image système durcie ;
+- Application des mises à jour de sécurité du système d'exploitation ;
+- Gestion du cycle de vie des workers (création, mise à jour, suppression) ;
+- Isolation réseau entre les workers et le control plane ;
+- Sécurisation du control plane Kubernetes.
+
+**Responsabilités du client**
+
+- **Installation et maintenance des outils de sécurité sur les workers** :
+  - Surveillance des comportements anormaux (ex : Falco) ;
+  - Détection des intrusions ;
+  - Analyse des logs système ;
+  - Recherche de vulnérabilités.
+- Configuration et maintenance des Network Policies ;
+- Gestion des secrets et des credentials applicatifs ;
+- Sécurisation des workloads, notamment via RBAC (Role-Based Access Control) et les Pod Security Standards ;
+- Mise à jour des applications et de leurs dépendances.
+
+:::warning
+L'installation et la configuration des outils de sécurité sur les workers (Falco, outils de détection d'intrusion, etc.) sont de la responsabilité du client. Numspot fournit une image durcie, mais ne déploie pas ces outils automatiquement.
+:::
+
+### Installation des outils de sécurité
+
+Consultez les guides suivants pour installer les outils de sécurité recommandés :
+
+- [Installer Falco](/docs/managed-services/kubernetes/guides/install-falco/) : détection des comportements anormaux en temps réel.
+
+## Bonnes pratiques
+
+- Surveillance : utiliser des outils de surveillance pour suivre l'état du cluster et des applications.
+- Sauvegardes : mettre en place des sauvegardes régulières des configurations et des données.
+- Sécurité : appliquer les bonnes pratiques de sécurité, comme le contrôle d'accès basé sur les rôles (RBAC).
+- Optimisation : ajuster la taille des node pools en fonction de la charge pour optimiser les coûts.
+- **Outils de sécurité** : installer Falco ou un outil équivalent pour surveiller les comportements anormaux sur les workers.

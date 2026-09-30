@@ -1,0 +1,91 @@
+---
+title: Créer une key pair
+description: "Créez une key pair SSH sur Numspot pour vous connecter en toute sécurité à vos machines virtuelles, via la console, l'API ou Terraform."
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Créer une key pair
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+
+- **compute.keypair.create**
+
+:::
+
+Vous pouvez créer une [key pair (paire de clés)](/docs/compute/keypairs/concept/) à l'aide de l'API (Application Programming Interface), de la console ou d'un outil tiers et l'utiliser pour accéder à vos [VM (Virtual Machine)](/docs/compute/concept/).
+
+:::info
+Vous pouvez aussi directement créer une key pair lorsque vous créez une VM sur la Console Numspot.
+:::
+
+Avec l'API ou avec la Console, vous pouvez créer une key pair au format RSA 2048 bits. La clé publique est conservée par Numspot. La clé privée doit être téléchargée et sauvegardée, et n'est jamais transmise à Numspot. Une nouvelle key pair est valable uniquement pour la région dans laquelle vous la créez.
+
+Avec un outil tiers, comme ssh-keygen par exemple, vous pouvez créer une key pair dans l'un des types suivants : RSA (2048 bits ou de préférence 4096 bits), Ed25519, et ECDSA (256 bits, 384 bits, ou 521 bits). Les formats suivants peuvent être utilisés : PEM, PKCS8, RFC4716, et OpenSSH. Vous devez ensuite importer sa clé publique dans votre compte Numspot.
+
+:::warning
+Seules les key pairs RSA peuvent déchiffrer le mot de passe d'une VM Windows.
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/keypair/01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Compute → Key Pairs.", hotspot: { x: 0, y: 0.5086, w: 0.194, h: 0.0457 } },
+    { img: "/img/walkthrough/keypair/01-list.png", text: "Depuis la liste des key pairs, cliquez sur « Créer une key pair ».", hotspot: { x: 0.8302, y: 0.2206, w: 0.1378, h: 0.0741 } },
+    { img: "/img/walkthrough/keypair/02-nom.png", text: "Donnez un nom à votre key pair (unique dans votre compte, 1 à 255 caractères ASCII).", hotspot: { x: 0.2083, y: 0.3794, w: 0.5556, h: 0.1086 } },
+    { img: "/img/walkthrough/keypair/03-creer.png", text: "Cliquez sur « Créer » : la clé privée est téléchargée automatiquement. Conservez-la, elle n'est fournie qu'une seule fois.", hotspot: { x: 0.6996, y: 0.9086, w: 0.0566, h: 0.0741 } },
+  ]}
+/>
+
+1. Connectez-vous sur la console Numspot.
+
+2. Depuis le menu latéral gauche, cliquez sur **Compute → Key pairs**.
+
+
+3. Cliquez sur **Créer une key pair**. La page "Création d'une key pair" apparaît.
+
+
+4. La fenêtre de création d'une key pair apparaît. Dans le champ "Nom", tapez un nom pour la key pair.
+
+
+    :::note
+    Ce nom doit être unique dans votre compte, et contenir entre 1 et 255 caractères ASCII (hors caractères de contrôle). Les caractères accentués ne sont pas autorisés.
+    :::
+
+5. Cliquez sur **Créer**.
+
+
+  La key pair est créée et un message de confirmation s'affiche en bas de la page.
+  Un fichier contenant la clé privée de la key pair est automatiquement téléchargé sur votre ordinateur.
+    
+
+    :::warning
+    Sauvegardez ce document avec précaution, car vous aurez besoin de son contenu à chaque connexion à vos ressources. Il ne peut pas être récupéré auprès de Numspot en cas de perte.
+    :::
+
+</TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `POST /compute/spaces/{spaceId}/keypairs` crée une key pair à utiliser avec vos VM. Vous pouvez utiliser cette méthode de deux manières différentes :
+
+1. **Créer une key pair** : Dans ce cas, Numspot crée une key pair RSA de 2048 bits, stocke la clé publique dans votre compte et renvoie la clé privée dans la réponse de l'appel, afin que vous puissiez la sauvegarder dans un fichier. Lorsque vous enregistrez la clé privée renvoyée, assurez-vous de remplacer les séquences d'échappement `\n` par de véritables sauts de ligne.
+
+2. **Importer une key pair créée localement** : Si vous avez déjà une key pair que vous avez créée localement avec un outil tiers, vous pouvez importer sa clé publique dans votre compte. Les types de clés suivants peuvent être importés : RSA (2048 bits ou de préférence 4096 bits), Ed25519, et ECDSA (256 bits, 384 bits ou 521 bits). Les formats suivants peuvent être utilisés : PEM, PKCS8, RFC4716 et OpenSSH.
+
+[Exemple de requête : Création d'une key pair](/openapi/#tag/compute/post/compute/spaces/{spaceId}/keypairs)
+  </TabItem>
+</Tabs>

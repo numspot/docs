@@ -1,0 +1,252 @@
+.wrap {
+  margin: 1.25rem 0 1.75rem;
+}
+
+/* Fullscreen mode: the stage is centered on a dark background, the controls
+   stay visible below. */
+.wrapFs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+  height: 100%;
+  margin: 0;
+  padding: 1.5rem;
+  background: #0b0e14;
+}
+
+/* The controls keep their natural height: the stage absorbs the rest
+   (otherwise it would be squeezed and the image shifted). */
+.wrapFs .controls {
+  flex: none;
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-background-surface-color);
+}
+
+/* Fullscreen: the stage simply takes the remaining space (the controls take
+   their natural height). The image is centered via object-fit contain, and
+   the JS measures its actual rect to anchor the spot and the tip — no more
+   assumptions about the controls' height or the ratio. */
+.wrapFs .stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  margin: 0;
+  border: none;
+  background: transparent;
+}
+
+/* The image is absolutely positioned on the stage: against a relatively
+   positioned parent, width/height:100% ALWAYS resolve. In normal flow, the
+   height:100% did not resolve when the stage is a flex item with a flexible
+   height (fullscreen): the <img> fell back to its auto height and the image
+   painted much smaller than the stage, shifting every marker. */
+.img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* The site applies globally `img { max-height: 650px; max-width: 100%;
+     width: auto; margin: auto }`. That cap crippled the screenshot: it never
+     exceeded 650px tall, stayed tiny in fullscreen, and the marker geometry
+     no longer matched. We neutralize it here. */
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  /* contain: the whole image stays visible, nothing is cropped. */
+  object-fit: contain;
+  user-select: none;
+}
+
+/* Spotlight: transparent rectangle over the click target; the huge box-shadow
+   dims everything around it (clipped by the stage's overflow:hidden). */
+.spot {
+  position: absolute;
+  border-radius: 6px;
+  box-shadow: 0 0 0 100vmax rgba(15, 23, 42, 0.62);
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 1px;
+  pointer-events: none;
+  transition: left 0.35s ease, top 0.35s ease, width 0.35s ease, height 0.35s ease;
+  animation: wtPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes wtPulse {
+  0%, 100% { outline-color: var(--ifm-color-primary); }
+  50% { outline-color: color-mix(in srgb, var(--ifm-color-primary) 35%, transparent); }
+}
+
+.tip {
+  position: absolute;
+  z-index: 3;
+  max-width: min(360px, 82%);
+  padding: 0.6rem 0.8rem;
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-font-color-base);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  /* the tip is positioned in JS (top/left px) and bounded within the stage;
+     we never truncate the text. */
+  overflow-wrap: anywhere;
+}
+
+/* In fullscreen the stage is large: allow a wider tip and more readable
+   text. */
+.wrapFs .tip {
+  max-width: min(520px, 46%);
+  font-size: 1rem;
+  padding: 0.7rem 0.95rem;
+}
+
+.badge {
+  flex: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--ifm-color-primary);
+  border-radius: 999px;
+  padding: 0.08rem 0.45rem;
+  white-space: nowrap;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+}
+
+.wrapFs .controls {
+  margin-top: 0;
+}
+
+/* Navigation group: ‹  n / total  › */
+.navGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.iconBtn {
+  appearance: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--ifm-color-primary);
+  background: transparent;
+  color: var(--ifm-color-primary);
+  transition: background 0.15s, color 0.15s, opacity 0.15s;
+}
+
+.iconBtn:hover:not(:disabled) {
+  background: var(--ifm-color-primary);
+  color: #fff;
+}
+
+.iconBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.counter {
+  min-width: 3.2rem;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ifm-color-emphasis-800);
+}
+
+.dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot,
+.dotOn {
+  appearance: none;
+  cursor: pointer;
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border-radius: 999px;
+  border: none;
+  background: var(--ifm-color-emphasis-400);
+  transition: background 0.15s, transform 0.15s;
+}
+
+.dotOn {
+  background: var(--ifm-color-primary);
+  transform: scale(1.25);
+}
+
+.rightGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fsBtn {
+  appearance: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--ifm-color-primary);
+  background: transparent;
+  color: var(--ifm-color-primary);
+  transition: background 0.15s, color 0.15s;
+}
+
+.fsBtn:hover {
+  background: var(--ifm-color-primary);
+  color: #fff;
+}
+
+/* In fullscreen, controls legible on the dark background */
+.wrapFs .counter {
+  color: #e5e7eb;
+}
+.wrapFs .iconBtn,
+.wrapFs .fsBtn {
+  border-color: #e5e7eb;
+  color: #e5e7eb;
+}
+.wrapFs .iconBtn:hover:not(:disabled),
+.wrapFs .fsBtn:hover {
+  background: #e5e7eb;
+  color: #0b0e14;
+}
+
+@media (max-width: 600px) {
+  .tip { font-size: 0.8rem; max-width: 84%; }
+  .counter { min-width: 2.8rem; font-size: 0.8rem; }
+  .fsLabel { display: none; }
+}

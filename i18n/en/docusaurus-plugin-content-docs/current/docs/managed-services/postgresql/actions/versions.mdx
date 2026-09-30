@@ -1,0 +1,54 @@
+---
+title: List available PostgreSQL versions - Managed PostgreSQL
+sidebar_label: List available PostgreSQL versions
+sidebar_position: 1.5
+draft: false
+last_update:
+  date: 2026-09-30
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# List available PostgreSQL versions
+
+You can list the PostgreSQL versions available to create your [PostgreSQL cluster](/docs/managed-services/postgresql/concepts/).
+
+When creating, specify the desired `<major>.<minor>` version.
+
+## Permissions
+
+No **IAM** (Identity and Access Management) permission is required to perform this action.
+
+<Tabs>
+
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+    The request `GET /postgresql/versions` lists the PostgreSQL versions offered by Numspot.
+
+### Example response
+
+    ```json
+    {
+      "items": [
+        {
+          "majorVersion": "16",
+          "fullVersion": "16.11"
+        },
+        {
+          "majorVersion": "17",
+          "fullVersion": "17.7"
+        },
+        {
+          "majorVersion": "18",
+          "fullVersion": "18.1"
+        }
+      ]
+    }
+    ```
+
+    [View the full specification](/openapi/#tag/postgresql/GET/postgresql/versions)
+</TabItem>
+</Tabs>

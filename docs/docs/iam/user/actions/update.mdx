@@ -1,0 +1,142 @@
+---
+title: Modifier un utilisateur - IAM
+description: "Modifiez les informations d'un utilisateur IAM, son statut de compte, ou réinitialisez ses informations d'authentification, via la console ou l'API."
+sidebar_label: Modifier un utilisateur
+sidebar_position: 6
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Modifier un utilisateur
+
+Vous pouvez modifier les informations de base de l'utilisateur, ainsi que le désactiver.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **iam.user.update**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/user/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Utilisateurs.", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/user/create-01-list.png", text: "Cliquez sur l'identifiant de l'utilisateur à modifier.", hotspot: { x: 0.234, y: 0.32, w: 0.11, h: 0.035 } },
+    { img: "/img/walkthrough/user/detail.png", text: "Dans « Informations générales », cliquez sur le crayon du champ à modifier (prénom, nom ou e-mail).", hotspot: { x: 0.3554, y: 0.4103, w: 0.0222, h: 0.0395 } },
+    { img: "/img/walkthrough/user/upd-02-edit.png", text: "Saisissez la nouvelle valeur, puis validez avec la coche (la croix annule). Le bouton « Statut du compte » permet d'activer ou de désactiver l'utilisateur.", hotspot: { x: 0.4462, y: 0.288, w: 0.0222, h: 0.0346 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, cliquez sur **IAM** → **Utilisateurs**.
+2. Cliquez sur l'identifiant de l'utilisateur à modifier.
+
+   La page "Détails utilisateur" apparaît.
+3. Dans la section "Informations générales", cliquez sur le **crayon** du champ à modifier : prénom, nom ou adresse e-mail.
+4. Saisissez la nouvelle valeur puis validez avec la **coche** (la **croix** annule la modification).
+
+Vous pouvez également **désactiver** l'utilisateur via le bouton "Statut du compte" (il ne pourra plus se connecter), ou lui envoyer un **Nouveau lien d'activation** pour réinitialiser son mot de passe et son authentification à deux facteurs.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+### Modifier un utilisateur dans une organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PUT/iam/organisations/{organisationId}/users/{userId}
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users/{userId}' \
+  --request PUT \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "email": "john.smith@acme.org",
+  "firstname": "",
+  "lastname": "",
+  "active": true
+}'
+```
+
+### Réponse
+
+```json
+{
+  "email": "john.smith@acme.org",
+  "firstname": "…",
+  "lastname": "…",
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "active": true,
+  "createdOn": "2018-11-13T20:20:39+00:00",
+  "updatedOn": "2018-11-13T20:20:39+00:00"
+}
+```
+
+:::info
+Tous les champs, modifiés ou non, doivent être renseignés.
+
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+### Modifier un utilisateur dans un espace
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PUT/iam/spaces/{spaceId}/users/{userId}
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/users/{userId}' \
+  --request PUT \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "email": "john.smith@acme.org",
+  "firstname": "",
+  "lastname": "",
+  "active": true
+}'
+```
+
+### Réponse
+
+```json
+{
+  "email": "john.smith@acme.org",
+  "firstname": "…",
+  "lastname": "…",
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "active": true,
+  "createdOn": "2018-11-13T20:20:39+00:00",
+  "updatedOn": "2018-11-13T20:20:39+00:00"
+}
+```
+
+:::info
+Tous les champs, modifiés ou non, doivent être renseignés.
+
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/user).
+
+</TabItem>
+</Tabs>

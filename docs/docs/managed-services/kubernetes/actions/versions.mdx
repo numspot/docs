@@ -1,0 +1,39 @@
+---
+title: Lister les versions disponibles de Kubernetes - Kubernetes managé
+sidebar_label: Lister les versions disponibles de Kubernetes
+sidebar_position: 1
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Lister les versions disponibles de Kubernetes
+
+Vous pouvez lister les versions mineures disponibles pour créer votre [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/).
+
+Lors de la création, spécifiez la version `<majeure>.<mineure>` souhaitée.
+Numspot gère automatiquement les versions des correctifs pour vous offrir la version la plus à jour.
+
+## Permissions
+
+Aucune permission **IAM** (Identity and Access Management) n'est requise pour effectuer cette action.
+
+<Tabs>
+
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+    La requête `GET /kubernetes/versions` permet d'obtenir la liste des versions mineures de Kubernetes proposées par Numspot.
+
+### Exemple de réponse
+
+    ```json
+    {
+      "versions": ["1.34"]
+    }
+    ```
+
+    [Voir la spécification complète](/openapi/#tag/kubernetes/GET/kubernetes/versions)
+</TabItem>
+</Tabs>

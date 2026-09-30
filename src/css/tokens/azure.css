@@ -1,0 +1,115 @@
+/**
+ * Role tokens — "Azure Navy" direction
+ * Source: artifacts/ux-ui-designer/parcours/styleguide-azure.html (l.40-113)
+ *
+ * Palette: Navy #00478E (primary) · Azure #8BBDFF (secondary) · Bloom #F587AC (tertiary)
+ * ⚠️ Contrast: Navy forbidden as text in dark mode (1.75:1); Azure forbidden as
+ *    text on white (2.22:1). The roles below respect these constraints.
+ */
+
+:root {
+  --ns-navy: #00478e;
+  --ns-azure: #8bbdff;
+  --ns-bloom: #f587ac;
+  --accent-rgb: 0, 71, 142;
+  --accent-soft-rgb: 245, 135, 172;
+}
+
+/* Light = default (:root) to cover the first SSR paint before data-theme is set */
+:root,
+[data-theme="light"] {
+  /* Backgrounds */
+  --bg-primary: var(--ns-polar);
+  --bg-secondary: var(--ns-pearl);
+  --bg-tertiary: var(--ns-fog);
+  --bg-surface: var(--ns-polar);
+  --bg-card: var(--ns-polar);
+  --bg-sidebar: var(--ns-pearl);
+  --bg-code: var(--ns-fog);
+  --bg-navbar: rgba(255, 255, 255, 0.88);
+  --bg-active: rgba(0, 71, 142, 0.1);
+  --bg-hover: rgba(0, 71, 142, 0.05);
+
+  /* Text */
+  --text-primary: var(--ns-obsidienne);
+  --text-secondary: var(--ns-graphite);
+  --text-muted: #646b78;
+  --text-heading: var(--ns-obsidienne);
+  --text-link: var(--ns-navy);
+  --text-code: var(--ns-navy);
+
+  /* Borders */
+  --border-primary: var(--ns-iron);
+  --border-secondary: var(--ns-fog);
+  --border-active: var(--ns-navy);
+  --border-focus: var(--ns-navy);
+
+  /* Accents (role, varies per theme) */
+  --accent-primary: var(--ns-navy);
+  --accent-secondary: var(--ns-azure);
+  --accent-tertiary: var(--ns-bloom);
+  --brand-strong: var(--ns-navy);
+  --icon-color: var(--ns-graphite);
+  --icon-active: var(--ns-navy);
+
+  /* Cards */
+  --card-border: var(--ns-iron);
+  --card-border-hover: var(--ns-navy);
+  --card-glow: 0 8px 24px rgba(0, 71, 142, 0.2);
+
+  /* Callouts (tinted backgrounds) */
+  --callout-bg-default: #fdeef3;
+  --callout-bg-info: #e9f1fe;
+  --callout-bg-success: #e6f7f0;
+  --callout-bg-warning: #fef4e2;
+  --callout-bg-danger: #fcecec;
+}
+
+[data-theme="dark"] {
+  /* Backgrounds — page background (--ifm-background-color) at #06151F, slightly
+     lighter than the sidebar/footer (obsidian #04131D). */
+  --bg-primary: #06151f;
+  --bg-secondary: var(--ns-midnight);
+  --bg-tertiary: #0d1b27;
+  --bg-surface: var(--ns-midnight);
+  --bg-card: rgba(26, 41, 54, 0.55);
+  --bg-sidebar: var(--ns-obsidienne);
+  --bg-code: #0d1b27;
+  --bg-navbar: rgba(4, 19, 29, 0.92);
+  --bg-active: rgba(0, 71, 142, 0.18);
+  --bg-hover: rgba(139, 189, 255, 0.07);
+
+  /* Text */
+  --text-primary: var(--ns-pearl);
+  --text-secondary: var(--ns-silver);
+  --text-muted: #8b92a1;
+  --text-heading: var(--ns-polar);
+  --text-link: var(--ns-azure);
+  --text-code: var(--ns-azure);
+
+  /* Borders */
+  --border-primary: rgba(208, 211, 219, 0.15);
+  --border-secondary: rgba(208, 211, 219, 0.08);
+  --border-active: var(--ns-azure);
+  --border-focus: var(--ns-azure);
+
+  /* Accents — in dark, primary = Azure (Navy unreadable on Obsidian) */
+  --accent-primary: var(--ns-azure);
+  --accent-secondary: var(--ns-navy);
+  --accent-tertiary: var(--ns-bloom);
+  --brand-strong: var(--ns-navy);
+  --icon-color: var(--ns-silver);
+  --icon-active: var(--ns-azure);
+
+  /* Cards */
+  --card-border: rgba(208, 211, 219, 0.1);
+  --card-border-hover: var(--ns-azure);
+  --card-glow: 0 8px 24px rgba(0, 71, 142, 0.25);
+
+  /* Callouts (tinted backgrounds) */
+  --callout-bg-default: #2a1620;
+  --callout-bg-info: #11243b;
+  --callout-bg-success: #0c2a22;
+  --callout-bg-warning: #2e2412;
+  --callout-bg-danger: #2e1616;
+}

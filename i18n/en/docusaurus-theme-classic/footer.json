@@ -1,0 +1,54 @@
+{
+  "link.title.Numspot": {
+    "message": "Numspot",
+    "description": "The title of the footer links column with title=Numspot in the footer"
+  },
+  "link.title.Réseaux sociaux": {
+    "message": "Social networks",
+    "description": "The title of the footer links column with title=Réseaux sociaux in the footer"
+  },
+  "link.title.Outils": {
+    "message": "Tools",
+    "description": "The title of the footer links column with title=Outils in the footer"
+  },
+  "link.title.Support": {
+    "message": "Support",
+    "description": "The title of the footer links column with title=Support in the footer"
+  },
+  "link.item.label.numspot.com": {
+    "message": "numspot.com",
+    "description": "The label of footer link with label=numspot.com linking to https://numspot.com/"
+  },
+  "link.item.label.Carrières": {
+    "message": "Careers",
+    "description": "The label of footer link with label=Carrières linking to https://numspot.com/carrieres/"
+  },
+  "link.item.label.Linkedin": {
+    "message": "Linkedin",
+    "description": "The label of footer link with label=Linkedin linking to https://www.linkedin.com/company/numspot/"
+  },
+  "link.item.label.X": {
+    "message": "X",
+    "description": "The label of footer link with label=X linking to https://twitter.com/i/flow/login?redirect_after_login=%2FNumspotCloud"
+  },
+  "link.item.label.GitHub": {
+    "message": "GitHub",
+    "description": "The label of footer link with label=GitHub linking to https://github.com/numspot"
+  },
+  "link.item.label.Contactez-nous": {
+    "message": "Contact us",
+    "description": "The label of footer link with label=Contactez-nous linking to mailto:support-client@numspot.com"
+  },
+  "link.item.label.Signaler un incident de sécurité": {
+    "message": "Report a security incident",
+    "description": "The label of footer link with label=Signaler un incident de sécurité linking to https://numspot.com/signalement-de-vulnerabilites-et-incidents-de-securite/"
+  },
+  "logo.alt": {
+    "message": "Numspot",
+    "description": "The alt text of footer logo"
+  },
+  "link.item.label.Console Numspot": {
+    "message": "Console Numspot",
+    "description": "The label of footer link with label=Console Numspot linking to https://auth.eu-west-2.numspot.com/"
+  }
+}

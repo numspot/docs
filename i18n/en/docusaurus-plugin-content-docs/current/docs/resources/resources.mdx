@@ -1,0 +1,58 @@
+---
+title: Resource locations
+sidebar_position: 1
+draft: false
+---
+
+# About Numspot Zones, Regions and Endpoints
+
+Numspot is a cloud computing platform that provides flexible and scalable compute, storage and network infrastructure. Numspot resources are organized into zones and regions: you create your resources within a region, and each region belongs to a zone.
+
+## Zones
+
+A zone corresponds to the hosting perimeter of the Numspot cloud infrastructure. A zone can host one or more regions.
+
+Numspot has two zones:
+
+- the `STD` (standard) zone;
+- the `SNC` (SecNumCloud) zone.
+
+## Regions
+
+A region is a geographical area in which cloud resources are hosted. The Numspot regions are independent of one another.
+
+Currently, each zone corresponds to one region:
+
+| Zone | Region                |
+| ---- | --------------------- |
+| STD  | `eu-west-2`           |
+| SNC  | `cloudgouv-eu-west-1` |
+
+Regions are identified by their name (for example `eu-west-2`). This name is what is used in the API URLs.
+
+## Endpoints
+
+Endpoints are URL used to access Numspot services in a given region. Each Numspot service has its own endpoint, which is made up of a service name and the region name.
+
+```text
+https://(service name).(region name).numspot.com/
+```
+
+## Using endpoints
+
+To use Numspot services in a given region, you must use the endpoints corresponding to that region. You can use the endpoints to access Numspot services through the Numspot API or the Numspot administration console.
+
+Here is an example of an API command to create a [VM (Virtual Machine)](/docs/compute/concept/) in the `eu-west-2` region of the `STD` zone:
+
+```bash
+POST https://api.eu-west-2.numspot.com/compute/spaces/{spaceId}/vms
+{
+    "imageId": "string",
+    "KeypairName": "string",
+    "maxVMsCount": 1,
+    "minVMsCount": 1,
+    "vmType": "string"
+}
+```
+
+In this example, the `api.eu-west-2.numspot.com` endpoint is used to access the VM creation service in the `eu-west-2` region.

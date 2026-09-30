@@ -1,0 +1,74 @@
+---
+title: Detach an internet gateway from a VPC - Numspot
+sidebar_label: Detach an internet gateway from a VPC
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Detach an internet gateway from a VPC
+
+You can detach an [internet gateway](/docs/network/internet-gateway/concepts/) from a [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud) to remove its connection to the Internet.
+
+This action also deletes the routes using the internet gateway as a target.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.internetGateway.update**
+
+:::
+
+## Prerequisites
+
+:::info
+The VPC must not contain any [VM](/docs/compute/concept/) (Virtual Machine) using public IP, nor any [load balancer](/docs/network/load-balancer/concepts/) exposed to the Internet.
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/internet-gateway/list.png", text: "From the left-hand side menu, click Network → VPC → Internet Gateways.", hotspot: { x: 0, y: 0.6358, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/internet-gateway/detach-actions.png", text: "From Network → VPC → Internet Gateways, open the internet gateway's “Actions” menu, then click “Unlink from VPC”.", hotspot: { x: 0.8667, y: 0.5259, w: 0.0968, h: 0.0457 } },
+    { img: "/img/walkthrough/en/internet-gateway/detach-modal.png", text: "The dialog recaps the internet gateway and the VPC. Confirm by clicking “Unlink”.", hotspot: { x: 0.2917, y: 0.2524, w: 0.4167, h: 0.4951 } },
+  ]}
+/>
+
+
+1. From the left-hand side menu, click **Network** → **VPC** → **Internet Gateways**.
+
+
+2. Identify the internet gateway you want to detach from the VPC, then from the list of actions, click **Detach from VPC**.
+
+
+A new **Detach the VPC** dialog box appears.
+
+
+3. Confirm the dissociation by clicking **Detach**. The internet gateway is dissociated from the VPC.  
+
+    A confirmation message "The VPC has been successfully dissociated" appears.
+
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `PUT /compute/spaces/{spaceId}/internetGateways/{id}/vpcs/unlink` command detaches an internet gateway from a VPC. This action disables and detaches an Internet service from a VPC.
+
+[Example request: Detach an internet gateway from a VPC](/openapi/#tag/compute/PUT/compute/spaces/%7BspaceId%7D/internetGateways/%7Bid%7D/vpcs/unlink)
+
+The command that detaches an internet gateway from a VPC returns an HTTP 204 NO CONTENT code, indicating that the operation has been performed and that no content is returned in the response.
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/internet_gateway).
+
+</TabItem>
+</Tabs>

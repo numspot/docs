@@ -1,0 +1,209 @@
+---
+title: "DLP - Concepts"
+sidebar_label: "Concepts"
+description: "Discover the Numspot managed DLP service: data loss prevention, rules, detectors, policies and decision logs."
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# About the managed DLP service
+
+<ActionsSummary />
+
+## Introduction
+
+The managed [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) service inspects, evaluates and protects sensitive data in real time. The DLP service sits between internal platforms and their backends, inspects incoming requests and returns a decision: pass, block, modify or monitor.
+
+This service is designed to prevent leaks of sensitive data — API keys, cloud credentials, access tokens — in the traffic flowing through Numspot platforms.
+
+### Benefits of the managed DLP service
+
+- Real-time protection: inspection of requests on the fly, with no perceptible latency;
+- Customisable rules: creation of rules and detectors tailored to each organisation's needs;
+- Predefined detectors: library of detectors covering cloud secrets, API tokens and AI services;
+- Automatic modification: redaction or removal of sensitive data detected in traffic;
+- Comprehensive auditing: traceability of decisions and logging of administration actions;
+- High availability: architecture with redundant components and automatic scaling of workers.
+
+### Accessing the DLP console
+
+The DLP console is a standalone web interface, accessible via its own URL. It is not accessible from the Numspot console.
+
+## Architecture
+
+The DLP service relies on five components:
+
+| Component | Role |
+|-----------|------|
+| Control | Administration API, management of rules, users and detectors |
+| Control Frontend | Web interface for DLP management |
+| Control Gateway | Reverse proxy that routes requests to the frontend or the Control API |
+| worker | Stateless evaluation engine, exposed to consuming platforms |
+| Log Collector | Collection, storage and querying of decision logs |
+
+### How evaluation works
+
+1. The consuming platform sends a request to the DLP worker;
+2. The worker authenticates the request via an API key;
+3. The worker validates the request against the platform schema;
+4. The worker evaluates all active rules in the order defined by policies;
+5. The worker returns the decision: `pass`, `block` or `modify`.
+
+Workers synchronise with the Control component every 30 seconds to retrieve the latest published version of rules and configuration. If no changes are detected, the synchronisation returns a 304 (not modified) status.
+
+## Key concepts
+
+### Rules
+
+A DLP rule defines a condition and an action to apply when the condition is met.
+
+- **Condition**: DSL (Domain Specific Language) expression as a string that specifies the field to inspect and the detector to use;
+- **Action**: decision to apply when the condition is met.
+
+The available actions are:
+
+| Action | Description |
+|--------|-------------|
+| `pass` | Allows the request without modification |
+| `block` | Blocks the request and returns an error message |
+| `modify` | Modifies detected sensitive fields (redaction or removal) |
+| `monitor` | Allows the request but logs the event and stores the payload |
+
+Rules are created as drafts. They must be published in a [ruleset](/docs/managed-services/dlp/concepts) to become active.
+
+#### DSL operators
+
+The DSL language has two operators:
+
+| Operator | Description |
+|----------|-------------|
+| `matches_detector` | Checks whether the specified field matches the indicated detector |
+| `not_matches_detector` | Checks whether the specified field does not match the indicated detector |
+
+Example DSL condition:
+
+```text
+matches_detector(tool_arguments, @preset:aws_access_key)
+```
+
+### Policies
+
+A [DLP policy](/docs/managed-services/dlp/concepts) groups a set of rules and defines a default action.
+
+- **Rules**: ordered list of rules to evaluate;
+- **Default action**: decision applied when no rule triggers a terminal action — `pass` or `block`.
+
+Evaluation follows the order of rules in the policy. A `pass` or `block` action terminates the evaluation. The `modify` action accumulates modifications and continues the evaluation. The `monitor` action logs the event and continues the evaluation.
+
+### Detectors
+
+A detector identifies a type of sensitive data using regular expressions.
+
+There are two categories of detectors:
+
+- **Predefined detectors**: provided by Numspot, divided into three categories:
+  - **secrets** (~80 detectors): cloud access keys, API tokens, infrastructure secrets;
+  - **mistral-service** (2 detectors): detectors specific to Mistral services;
+  - **generic** (1 detector): generic detector.
+- **Custom detectors**: created by the user with regular expressions specific to their organisation.
+
+Detectors are referenced in rule conditions using the syntax `@preset:<id>` for predefined ones and `@custom:<id>` for custom ones.
+
+### Rulesets
+
+A ruleset is an immutable version of the set of active rules, policies and custom detectors. Publishing a ruleset freezes all draft rules and policies into a new numbered version.
+
+Rollback restores a previous version by creating a new version (N+1) identical to the selected version.
+
+### Platform schemas
+
+Each consuming platform has a schema that defines the expected fields in evaluation requests. The schema specifies for each field:
+
+- the name in dot notation;
+- the type: `string`, `number`, `boolean`, `enum`, `array` or `datetime`;
+- whether it is mandatory or optional;
+- the description.
+
+#### Mistral platform schema
+
+| Field | Type | Mandatory | Description |
+|-------|------|-----------|-------------|
+| `tool_arguments` | `string` | Yes | Arguments of the called tool |
+| `tool_called` | `string` | No | Name of the called tool |
+| `request_time` | `datetime` | Yes | Request timestamp |
+
+When a field referenced by a rule is absent from the request, the missing field policy determines the behaviour:
+
+- `fail_open`: the rule does not trigger;
+- `fail_closed`: the rule triggers.
+
+## Roles and permissions
+
+The DLP service uses a role-based access control model. The available roles are:
+
+| Role | Permissions |
+|------|------------|
+| `viewer` | Read rules, policies, detectors, logs and audit |
+| `detector_editor` | Read + write custom detectors |
+| `rule_editor` | Read + write rules and policies |
+| `rule_publisher` | Read + publish rulesets |
+| `admin` | All permissions, including user management |
+
+Role changes take effect immediately on existing sessions.
+
+## Authentication
+
+Access to the Control API is via sessions based on secure cookies (HttpOnly, SameSite=Strict), with a configurable duration of 8 hours.
+
+Access to the DLP worker is via API keys per platform instance, with Bearer authentication.
+
+After 5 failed login attempts, a 5-minute lockout is applied per username.
+
+## Logs and audit
+
+### Decision logs
+
+Each evaluation by the worker produces a decision log containing:
+
+- the request identifier;
+- the consuming platform;
+- the decision rendered;
+- the rules triggered;
+- the fields modified;
+- the processing latency.
+
+Decision logs are accessible from the **Decision Logs** section of the DLP console.
+
+### Monitored events
+
+Rules in `monitor` mode generate events that store the original payload in S3-compatible object storage. Payloads can be viewed in full or redacted versions.
+
+### Audit Logs
+
+All administration actions — creation, modification, deletion of rules, policies, detectors, ruleset publication, user management — are recorded in audit logs.
+
+Audit logs are accessible from the **Audit Logs** section of the DLP console.
+
+## Use cases
+
+### Protecting cloud access keys
+
+Detect and block the accidental transmission of AWS, GCP or other cloud provider access keys in requests flowing through Numspot platforms.
+
+### Redacting sensitive data
+
+Automatically replace detected secrets — API keys, access tokens, credentials — with masks in data flows.
+
+### Compliance monitoring
+
+Log requests containing sensitive data without blocking them, to build an audit trail for compliance requirements.
+
+## Best practices
+
+- Specific rules: create rules targeting precise fields rather than the generic `*` field to limit false positives;
+- Test before publishing: use the rule and detector testing feature before publishing a ruleset;
+- Monitor action first: start by monitoring traffic in `monitor` mode to measure the impact before switching to `block`;
+- Quick rollback: in case of massive false positives, use rollback to restore the previous version of the ruleset;
+- Least privilege: assign the minimum necessary role to each user — `viewer` by default, `rule_editor` only for users creating rules.

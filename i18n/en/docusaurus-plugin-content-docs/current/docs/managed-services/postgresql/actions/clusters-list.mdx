@@ -1,0 +1,75 @@
+---
+title: List PostgreSQL clusters - Managed PostgreSQL
+sidebar_label: List PostgreSQL clusters
+sidebar_position: 3.5
+draft: false
+last_update:
+  date: 2026-09-30
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# List PostgreSQL clusters
+
+You can list all the [PostgreSQL clusters](/docs/managed-services/postgresql/concepts/) within your space.
+
+## Permissions
+
+:::info
+This action requires the following **IAM** (Identity and Access Management) permissions:
+
+- **postgresql.cluster.get**
+
+:::
+<Tabs>
+
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+    The request `GET /postgresql/spaces/{spaceId}/clusters` lists the PostgreSQL clusters of a space.
+
+### Parameters
+
+| Parameter | Type   | Required | Description              |
+| --------- | ------ | -------- | ------------------------ |
+| spaceId   | string | Yes      | The Numspot space ID.    |
+
+### Example response
+
+    ```json
+    {
+      "items": [
+        {
+          "id": "123e4567-e89b-42d3-a456-426614174000",
+          "name": "my-cluster-postgresql",
+          "databaseName": "appdb",
+          "user": "admin",
+          "majorVersion": "17",
+          "fullVersion": "17.2",
+          "status": {
+            "state": "RUNNING",
+            "message": "Cluster is healthy"
+          },
+          "nodeConfiguration": {
+            "vcpuCount": 2,
+            "memorySizeGiB": 8
+          },
+          "volume": {
+            "type": "GP2",
+            "sizeGiB": 100
+          },
+          "replicaCount": 1,
+          "host": "my-cluster-postgresql.postgres.eu-west-2.numspot.com",
+          "port": 5432,
+          "visibility": "EXTERNAL",
+          "createdOn": "2026-08-15T12:41:00Z"
+        }
+      ]
+    }
+    ```
+
+    [View the full specification](/openapi/#tag/postgresql/GET/postgresql/spaces/{spaceId}/clusters)
+</TabItem>
+</Tabs>

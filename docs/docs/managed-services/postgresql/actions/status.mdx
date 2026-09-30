@@ -1,0 +1,81 @@
+---
+title: Obtenir le statut d'un cluster PostgreSQL
+sidebar_position: 3
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Obtenir le statut d'un cluster PostgreSQL
+
+Vous pouvez obtenir le statut de vos [clusters PostgreSQL](/docs/managed-services/postgresql/concepts/) au sein de votre espace.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **postgresql.cluster.get**
+
+:::
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/postgresql/list.png", text: "Depuis le menu latéral gauche, cliquez sur Services Managés → PostgreSQL → Clusters.", hotspot: { x: 0, y: 0.5136, w: 0.1931, h: 0.0568 } },
+    { img: "/img/walkthrough/postgresql/list.png", text: "Dans la liste, la colonne « État » indique le statut courant de chaque cluster (par exemple « Création en cours », « En attente », « En cours »).", hotspot: { x: 0.6253, y: 0.3095, w: 0.2635, h: 0.0642 } },
+    { img: "/img/walkthrough/postgresql/details.png", text: "Cliquez sur l'ID d'un cluster pour ouvrir sa page de détails : une pastille en haut à droite affiche son statut courant.", hotspot: { x: 0.9024, y: 0.2465, w: 0.0476, h: 0.023 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, cliquez sur **Services Managés** → **PostgreSQL** → **Clusters** pour accéder à la liste des clusters PostgreSQL.
+
+   La colonne "État" indique le statut courant de chaque cluster (par exemple : "Création en cours", "En cours").
+
+2. Cliquez sur l'identifiant d'un cluster dans la colonne "ID" pour ouvrir sa page de détails. En haut de la page, à droite du nom et de l'identifiant du cluster, une pastille indique son statut courant.
+
+</TabItem>
+
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+    La requête `GET /postgresql/spaces/{spaceId}/clusters/{clusterId}` permet d'obtenir le statut actuel d'un cluster PostgreSQL.
+
+    ### Exemple de réponse
+
+    ```json
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440001",
+      "name": "mon-cluster-postgresql",
+      "databaseName": "appdb",
+      "user": "admin",
+      "majorVersion": "17",
+      "fullVersion": "17.2",
+      "status": {
+        "state": "RUNNING",
+        "message": "Cluster is healthy"
+      },
+      "nodeConfiguration": {
+        "vcpuCount": 2,
+        "memorySizeGiB": 8
+      },
+      "volume": {
+        "type": "GP2",
+        "sizeGiB": 100
+      },
+      "visibility": "EXTERNAL",
+      "replicaCount": 1,
+      "host": "mon-cluster-postgresql.postgres.eu-west-2.numspot.com",
+      "port": 5432,
+      "createdOn": "2026-04-05T10:30:00Z"
+    }
+    ```
+
+    [Voir la spécification complète](/openapi/#tag/postgresql/GET/postgresql/spaces/{spaceId}/clusters/{clusterId})
+</TabItem>
+</Tabs>

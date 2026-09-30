@@ -1,0 +1,63 @@
+---
+title: Supprimer une route d'une connexion VPN
+description: Retirez une route statique d'une connexion VPN existante.
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer une route d'une connexion VPN
+
+Vous pouvez supprimer une route statique d'une connexion **VPN** (Virtual Private Network).
+
+:::warning
+Cette action s'applique au routage statique uniquement. Si votre connexion VPN utilise le routage dynamique, vous n'avez pas besoin de créer de nouvelles routes.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **connectivity.vpnconnection.update**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+
+1. Dans le dashboard **VPN Connections**, cliquez sur l'ID de la connexion VPN dont vous voulez supprimer une route.
+   Le volet des connexions VPN apparaît.
+2. Cliquez dans le dashboard "Route VPN" pour faire apparaître des cases à cocher.
+3. Cochez la case de la route que vous voulez supprimer.
+   La route est sélectionnée et un menu d'actions apparaît.
+4. Cliquez sur **Supprimer**.
+   Une boîte de dialogue de confirmation s'affiche.
+5. Cliquez sur **Supprimer**.
+   La route sélectionnée est supprimée de la connexion VPN.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `DELETE /connectivity/spaces/{spaceId}/vpnConnections/{id}/routes` supprime une route statique d'une connexion VPN précédemment créée.
+
+[Exemple de requête : Suppression d'une route vers une connexion VPN](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/vpnConnections/{id}/routes)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection_route).
+
+</TabItem>
+</Tabs>

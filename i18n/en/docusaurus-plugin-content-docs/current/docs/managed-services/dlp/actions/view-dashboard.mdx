@@ -1,0 +1,99 @@
+---
+title: View the DLP dashboard - Managed DLP
+sidebar_label: View the DLP dashboard
+sidebar_position: 16
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# View the DLP dashboard
+
+View the [DLP](/docs/managed-services/dlp/concepts) dashboard to see real-time evaluation statistics: request volume, decision breakdown, most triggered rules and per-platform distribution.
+
+## Permissions
+
+:::info
+This action requires the following [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) role:
+
+- **viewer**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Log in to the DLP console. The dashboard is displayed by default.", hotspot: { x: 0.006, y: 0.085, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "View the charts: evaluation trends, decision breakdown and per-platform distribution.", hotspot: { x: 0.201, y: 0.186, w: 0.765, h: 0.370 } },
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "View the breakdown by consuming platform.", hotspot: { x: 0.609, y: 0.698, w: 0.357, h: 0.247 } },
+  ]}
+/>
+
+1. Go to the [DLP](/docs/managed-services/dlp/concepts) console dashboard.
+
+The dashboard displays the following elements:
+
+### Evaluation statistics
+
+- **Time range selector**: choose the time period — 1h, 24h, 7d or 30d;
+- **Line chart**: evolution of evaluations over time, broken down by decision type (`pass`, `block`, `modify`, `monitor`);
+- **Bar chart**: most triggered rules over the selected period;
+- **Pie chart**: distribution of evaluations by consuming platform.
+
+### Recent decisions
+
+The recent decisions table displays the latest blocked or modified evaluations, with:
+
+- the request identifier;
+- the consuming platform;
+- the decision rendered;
+- the rules triggered;
+- the timestamp.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `GET /api/v1/dashboard/stats` request retrieves dashboard statistics.
+
+### Query parameters
+
+| Parameter | Description |
+|-----------|-------------|
+| `range` | Time period: `1h`, `24h`, `7d` or `30d` |
+
+### Response example
+
+```json
+{
+  "evaluations": [
+    {
+      "timestamp": "2026-08-27T14:00:00Z",
+      "pass": 8420,
+      "block": 156,
+      "modify": 23,
+      "monitor": 8
+    }
+  ],
+  "top_rules": [
+    {
+      "rule_id": "rule-550e8400",
+      "rule_name": "block-aws-keys",
+      "count": 156
+    }
+  ],
+  "per_platform": [
+    {
+      "platform_instance": "mistral-prod-eu",
+      "total": 8607
+    }
+  ]
+}
+```
+
+</TabItem>
+</Tabs>

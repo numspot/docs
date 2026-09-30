@@ -1,0 +1,104 @@
+---
+title: "PostgreSQL - Concepts"
+sidebar_label: "Concepts"
+description: "Découvrez le service managé PostgreSQL de Numspot : déployez et faites évoluer des bases de données haute disponibilité sans gérer l'infrastructure."
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# Concepts
+
+<ActionsSummary />
+
+## Introduction
+
+Le **service managé PostgreSQL** permet aux entreprises de déployer, gérer et faire évoluer des bases de données PostgreSQL dans un environnement cloud hautement disponible.
+Grâce à ce service, les clients peuvent créer une instance PostgreSQL dans un **Cluster de service** sans avoir à gérer l'infrastructure sous-jacente.
+Ils peuvent également gérer les bases de données, et utiliser des fonctionnalités avancées pour optimiser les performances et la sécurité.
+
+### Avantages du service managé PostgreSQL
+
+- **Haute disponibilité** : Les instances sont conçues pour éviter au maximum les temps d'arrêt.
+- **Gestion simplifiée** : Pas besoin de gérer l'infrastructure PostgreSQL.
+- **Évolutivité** : Ajout ou suppression de ressources en fonction des besoins.
+- **Sécurité** : Mises à jour et correctifs de sécurité gérés par Numspot. Pour plus de détails sur les versions supportées et leur cycle de vie, consultez [Versions et cycle de vie](/docs/managed-services/postgresql/supported-versions/).
+- **Sauvegardes automatiques** : Protection des données avec des sauvegardes régulières.
+
+## Fonctionnalités clés
+
+### 1. Création d'une instance hautement disponible
+
+Une **instance PostgreSQL hautement disponible** est conçue pour offrir une haute disponibilité.
+Cela signifie que l'instance est répliquée sur plusieurs nœuds, garantissant ainsi la continuité du service même en cas de défaillance d'un composant.
+
+**Étapes pour créer une instance hautement disponible via la Console Numspot** :
+
+1. Se connecter à la Console Numspot.
+2. Sélectionner l'option de création d'une instance PostgreSQL.
+3. Spécifier un nombre de réplicas supérieur à 0 pour obtenir une configuration hautement disponible de l'instance.
+4. Spécifier le type de volume pour les données.
+5. Configurer les backups : rétention, archivage WAL (Write-Ahead Logging), backups automatiques.
+6. Valider la création de l'instance.
+
+### 2. Gestion des backups
+
+Le service PostgreSQL propose plusieurs types de backups :
+
+- **Backups automatiques** : planifiés selon une fréquence définie (format cron)
+- **Backups on-demand** : déclenchés manuellement à tout moment
+
+:::warning
+Pour pouvoir effectuer des backups, l'archivage des WAL (Write-Ahead Logging) (i.e. l'archivage continu des journaux de transactions) doit être activé sur votre cluster.
+:::
+
+**Caractéristiques** :
+
+- Rétention configurable de 1 à 90 jours
+- Compression et chiffrement optionnels (chiffrement côté serveur uniquement, clés personnalisées non supportées)
+- Target de backup configurable (primaire, standby, préférence standby)
+- Restauration possible à tout point dans le temps (PITR - Point-In-Time Recovery) avec l'archivage WAL
+
+### 3. Récupération des détails de connexion
+
+Les **détails de connexion** incluent l'hôte, le port, le nom d'utilisateur, et le mot de passe nécessaires pour se connecter à l'instance PostgreSQL.
+
+**Étapes pour récupérer les détails de connexion via la Console Numspot** :
+
+1. Accéder à la Console Numspot.
+2. Naviguer vers la section dédiée à l'instance PostgreSQL.
+3. Récupérer l'hôte, le port (5432 par défaut), le nom du cluster (qui sera le nom de la base de données) et le nom de l'utilisateur principal depuis l'interface utilisateur.
+4. Récupérer également le mot de passe de l'utilisateur principal depuis la Console Numspot.
+5. Utiliser ces informations pour se connecter à la base de données ayant le nom du cluster avec un client PostgreSQL, comme psql :
+
+```bash
+psql "host=<hôte> port=<port> dbname=<base_de_données> user=<utilisateur> sslmode=require"
+```
+
+:::note
+Il est également possible de générer un nouveau mot de passe pour l'utilisateur principal en cas d'oubli ou de compromission du mot de passe existant.
+:::
+
+## Cas d'utilisation
+
+### 1. Applications métier critiques
+
+- Les instances PostgreSQL hautement disponibles sont idéales pour les applications nécessitant une disponibilité élevée, comme les systèmes de gestion ou les plateformes transactionnelles.
+
+### 2. Analyse de données
+
+- PostgreSQL peut être utilisé pour stocker et analyser de grandes quantités de données.
+
+### 3. Environnements de développement et de test
+
+- Créer des environnements de bases de données isolés pour le développement et les tests, avec des configurations spécifiques.
+
+## Bonnes pratiques
+
+- **Backups** : Configurez l'archivage WAL dès la création pour permettre les backups on-demand. Planifiez des backups automatiques quotidiens.
+- **Rétention** : Adaptez la durée de rétention selon vos besoins de conformité (minimum 7 jours recommandé).
+- **Surveillance** : Utiliser des outils de surveillance pour suivre l'état de l'instance et des requêtes.
+- **Sécurité** : Appliquer les bonnes pratiques de sécurité, comme le chiffrement des données et le contrôle d'accès.
+- **Optimisation** : Ajuster les paramètres de configuration pour optimiser les performances en fonction de la charge.
+- **Test de restauration** : Testez régulièrement les procédures de restauration pour vous assurer de la validité des backups.

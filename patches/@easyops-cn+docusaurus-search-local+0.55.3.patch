@@ -1,0 +1,76 @@
+diff --git a/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/worker.js b/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/worker.js
+index 4c84cd0..14fa8ed 100644
+--- a/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/worker.js
++++ b/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/worker.js
+@@ -6,6 +6,13 @@ import { smartQueries } from "../utils/smartQueries";
+ import { SearchDocumentType, } from "../../shared/interfaces";
+ import { sortSearchResults } from "../utils/sortSearchResults";
+ import { processTreeStatusOfSearchResults } from "../utils/processTreeStatusOfSearchResults";
++// NUMSPOT (DOC-604) — query-side counterpart of the accent folding applied at
++// indexing time (see dist/server/server/utils/buildIndex.js). The index
++// serializes the "foldAccents" label in its pipeline; without this
++// registration lunr.Pipeline.load drops it silently, query terms stop being
++// folded while the index still is, and every accented query returns nothing.
++const foldAccents = (token) => token.update((str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
++lunr.Pipeline.registerFunction(foldAccents, "foldAccents");
+ const cache = new Map();
+ export class SearchWorker {
+     async fetchIndexes(baseUrl, searchContext) {
+diff --git a/node_modules/@easyops-cn/docusaurus-search-local/dist/server/server/utils/buildIndex.js b/node_modules/@easyops-cn/docusaurus-search-local/dist/server/server/utils/buildIndex.js
+index 821d58f..30e2c3a 100644
+--- a/node_modules/@easyops-cn/docusaurus-search-local/dist/server/server/utils/buildIndex.js
++++ b/node_modules/@easyops-cn/docusaurus-search-local/dist/server/server/utils/buildIndex.js
+@@ -5,6 +5,23 @@ const tslib_1 = require("tslib");
+ /* eslint @typescript-eslint/no-var-requires: 0 */
+ const lunr_1 = tslib_1.__importDefault(require("lunr"));
+ const constants_1 = require("../../shared/constants");
++// NUMSPOT (DOC-604) — accent-insensitive search.
++// Neither lunr nor lunr-languages folds diacritics: "réseau" is indexed
++// verbatim, so "reseau" does not find it. Fuzzy matching
++// (fuzzyMatchingDistance) absorbs ONE accent but not two — "securite" did not
++// find "sécurité". So accents are folded at the head of both pipelines. The
++// "foldAccents" label is serialized into the index JSON and must be
++// registered identically client-side (see dist/client/.../worker.js).
++const foldAccents = (token) => token.update((str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
++lunr_1.default.Pipeline.registerFunction(foldAccents, "foldAccents");
++const prependFoldAccents = (pipeline) => {
++    if (pipeline._stack.length > 0) {
++        pipeline.before(pipeline._stack[0], foldAccents);
++    }
++    else {
++        pipeline.add(foldAccents);
++    }
++};
+ let pluginInitialized = false;
+ let plugin;
+ function buildIndex(allDocuments, { language, removeDefaultStopWordFilter, removeDefaultStemmer, zhUserDict, zhUserDictPath, }) {
+@@ -48,6 +65,11 @@ function buildIndex(allDocuments, { language, removeDefaultStopWordFilter, remov
+             if (plugin) {
+                 this.use(plugin);
+             }
++            // Must come AFTER `use(plugin)`: lunr.multiLanguage resets both
++            // pipelines. `searchPipeline` is the one serialized into the index
++            // and replayed on query terms.
++            prependFoldAccents(this.pipeline);
++            prependFoldAccents(this.searchPipeline);
+             // Sometimes we need no English stop words,
+             // since they are almost all programming code.
+             for (const lang of language) {
+diff --git a/node_modules/@easyops-cn/docusaurus-search-local/dist/server/server/utils/getIndexHash.js b/node_modules/@easyops-cn/docusaurus-search-local/dist/server/server/utils/getIndexHash.js
+index eb42978..63737c4 100644
+--- a/node_modules/@easyops-cn/docusaurus-search-local/dist/server/server/utils/getIndexHash.js
++++ b/node_modules/@easyops-cn/docusaurus-search-local/dist/server/server/utils/getIndexHash.js
+@@ -41,6 +41,13 @@ function getIndexHash(config) {
+         const pluginVersion = require(path_1.default.resolve(__dirname, "../../../../package.json")).version;
+         (0, debug_1.debugInfo)("using @easyops-cn/docusaurus-search-local v%s", pluginVersion);
+         md5sum.update(pluginVersion, "utf8");
++        // NUMSPOT — the index file name is cached "immutable" for a year
++        // (container/nginx.conf). The upstream hash only covers the plugin
++        // version and the markdown files: changing an option OR our own patch
++        // (accent folding) produced the SAME file name for different content,
++        // hence a stale index served for a year. Add the two missing inputs.
++        md5sum.update(JSON.stringify(config), "utf8");
++        md5sum.update(fs_1.default.readFileSync(path_1.default.resolve(__dirname, "buildIndex.js")));
+         for (const item of files) {
+             md5sum.update(fs_1.default.readFileSync(item.path));
+         }

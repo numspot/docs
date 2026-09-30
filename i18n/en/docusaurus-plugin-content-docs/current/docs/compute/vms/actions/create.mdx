@@ -1,0 +1,180 @@
+---
+title: Create a VM
+sidebar_position: 3
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Create a VM
+
+You can create one or more custom [VM (Virtual Machine)](/docs/compute/concept/) within a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+
+During creation, you can define the characteristics specific to each VM, such as the amount of RAM, the storage capacity and the number of vCPU (virtual Central Processing Unit).
+
+To ensure security and authentication, all official images use [key pairs](/docs/compute/keypairs/concept/) as their authentication system. Therefore, to launch a VM from an official image, you must specify a valid key pair. Non-official images, however, may use different authentication systems. Consequently, before launching a VM from a non-official image, make sure to check whether a key pair is required or whether another authentication mechanism is provided.
+
+## Permissions
+
+:::info
+This action requires the following **IAM** (Identity and Access Management) permissions:
+
+- **compute.vm.create**
+
+:::
+<Tabs>
+   <TabItem value="console" label="Console" default> 
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/vm/create-00-list.png", text: "From the left-hand side menu, click Compute → VMs.", hotspot: { x: 0, y: 0.4123, w: 0.194, h: 0.0457 } },
+    { img: "/img/walkthrough/en/vm/create-00-list.png", text: "From the VM list, click “Create VM” to launch the wizard.", hotspot: { x: 0.8732, y: 0.2329, w: 0.088, h: 0.0494 } },
+    { img: "/img/walkthrough/en/vm/create-01-image.png", text: "Choose the image (operating system) of your VM.", hotspot: { x: 0.492, y: 0.5292, w: 0.2788, h: 0.1975 } },
+    { img: "/img/walkthrough/en/vm/create-02-type.png", text: "Select a VM profile (Compute, Memory, Standard, Economic, Inference) then the template that fits your use.", hotspot: { x: 0.2083, y: 0.5313, w: 0.5556, h: 0.0827 } },
+    { img: "/img/walkthrough/en/vm/create-03-info.png", text: "Give your VM a name.", hotspot: { x: 0.2083, y: 0.1292, w: 0.5556, h: 0.084 } },
+    { img: "/img/walkthrough/en/vm/create-03-info.png", text: "Configure the network: choose an existing VPC and subnet, or create new ones.", hotspot: { x: 0.2083, y: 0.475, w: 0.5556, h: 0.40 } },
+    { img: "/img/walkthrough/en/vm/create-04-volume.png", text: "Keep the default root volume or customize its type and size.", hotspot: { x: 0.2083, y: 0.09, w: 0.5556, h: 0.11 } },
+  ]}
+/>
+
+
+  :::info
+  **Optional prerequisites**
+  - [Create a VPC ↗](/docs/network/vpc/actions/create)
+  - [Create a subnet ↗](/docs/network/subnets/actions/create)
+  - [Create a security group ↗](../../security-groups/actions/create.mdx) 
+  - [Create a key pair ↗](../../keypairs/actions/create.mdx) 
+  :::
+
+  1. From the left-hand side menu, click **Compute** → **VM** to access the list of VM.
+  2. Click the **Create a VM** button at the top right of the screen to launch the VM creation wizard.
+
+
+  Creating a VM in the Numspot console is simplified by a creation wizard that guides you through each configuration step.
+
+  At each step, a summary of the selected options is displayed on the right-hand side of the screen, including the total estimated cost of the resources added. This lets you manage the costs of your VM and ensure they stay within your budget.
+
+  The steps for creating a VM using the wizard are described below.
+
+  ## Choose an image
+  1. Select the OS image you want to use for your VM.
+
+
+  2. Click **Continue**.  
+  The "VM type" screen appears.
+
+  ## Choose the type and number of VM
+  1. Select the type of VM you want to create.
+
+
+  Numspot offers VM templates optimized for various use cases: 
+
+  - **Compute**: optimized for applications requiring high processing power;
+  - **Memory**: optimized for applications requiring a large amount of RAM;
+  - **Standard**: suitable for most use cases;
+  - **Economy**: ideal for low-cost applications;
+  - **Inference**: optimized for AI inference.
+
+  2. Select the desired number of VM:
+
+
+  - you can choose to create several VM simultaneously (up to a maximum of 20, subject to a quota increase); 
+  - a summary of the selected options, with the total estimated cost, is displayed on the right-hand side of the screen. This lets you track the costs associated with your VM.
+
+  3. Click **Continue**.  
+  The "General information" and "Network" screen appears.
+
+  ## Configure the general information and network
+
+  ### Enter the general information
+
+  1. In the "VM name" field, enter the name you want to assign to your VM or VM:
+    - it must contain between 1 and 255 [printable ASCII characters](https://en.wikipedia.org/wiki/ASCII#Printable_characters);
+    - it is used as a tag associated with your VM;
+    - by default, all created VM have the same characteristics. They can be modified later.
+  2. Tick the "Dedicated VM tenancy" box only if you want to create dedicated VM.  
+  A dedicated VM benefits from dedicated hardware resources, for an additional cost.
+
+  ### Configure the network
+
+  Your VM must be attached to a VPC.
+
+  1. Select one of the two options offered: use an existing VPC, or create a new VPC and its associated subnet:
+
+  - if a VPC is already available in your space, select the desired VPC from the drop-down list, then choose an existing subnet from the "Subnet" drop-down list;
+  - if no network exists yet, or if you want to create a new one, click the **Create a VPC** button;   
+  A dialog box opens to create a new VPC and a new subnet:
+    - to create the VPC, select the AZ (Availability Zone) in which you want to deploy your VM, enter the VPC name and then its IP (Internet Protocol) address range in CIDR (Classless Inter-Domain Routing) format;
+    - to create the subnet, enter its name and then its IP address range in CIDR format;
+  This address range must be part of the VPC range, without overlapping that of another subnet: 
+    - click **Create the Network**.
+
+  2. Click **Continue**.  
+  The "System volume" screen appears.
+
+  ## Configure the system volume
+
+  1. Select one of the two options offered: "Continue with a default system volume" or "Customize the system volume".  
+  To customize the system volume:
+    1. Select one of the following values from the "Volume type" list:
+      - "Magnetic" for a Magnetic volume;
+      - "SSD" for a Performance volume;
+      - "SSD premium" for an Enterprise volume. If you select "SSD premium", you must define the number of IOPS (Input/Output Operations Per Second) you need.
+    2. In the "Volume size" field, specify the volume size (in GiB).  
+  The minimum volume size is 10 GiB and the maximum size is 14901 GiB, subject to your quota. Make sure to choose a volume size suited to your storage and cost needs.
+  2. Click **Continue**.  
+  The "[Security group](/docs/compute/security-groups/concepts/concept-sg/)" screen appears.
+
+  ## Configure the security group
+
+  1. Select one of the three options offered: "Continue with the VPC security group", "Select one or more existing security groups" or "Create a new security group".
+  2. To create a new security group, enter its name and description:
+    - the name must be unique;
+    - the security group name must not start with sg-; 
+    - each name and description can contain between 1 and 255 characters. The allowed characters are a-z, A-Z, 0-9, space and \_.-:/()#,@\[\]+=&;!$\*.
+  3. Click **Continue**.  
+  The "Key pair" screen appears.
+
+  ## Configure the key pair
+
+  1. Select one of the three options offered:
+    1. "Select an existing key pair"  
+  Choose an existing key pair to connect to your VM.  
+  Only RSA-format key pairs can decrypt the password of a Windows VM.
+    2. "Create a new key pair"  
+  In the "Key pair name" field, enter a name for the key pair:
+      - the key pair name must be unique within your account;
+      - it must contain between 1 and 255 [printable ASCII characters](https://en.wikipedia.org/wiki/ASCII#Printable_characters). You can download the private key at the last step of the VM creation.
+    3. "Continue without a key pair"  
+  This option lets you create a VM without a key pair. However, all official images use key pairs as their authentication system. So, if you want to access a VM created from an official image, you must associate a key pair with it during this step or later via the API.
+  2. Click **Create the VM**.  
+  The "Creation" screen appears.
+
+  ## Finalize the VM creation
+
+  - The resources to be created according to the selected options are automatically created and attached to your VM in sequential order;
+  - if you chose to create a key pair, you must download the private key before leaving the creation screen.
+
+:::warning
+Save this file carefully. It cannot be recovered from Numspot if lost. Backing up and securely storing the key pair and associated passwords is the customer's responsibility.
+:::
+
+  - The screen displays the progress of the VM creation;
+  - a summary of the selected options appears on the right-hand side of the screen. It includes:
+    - the chosen image, the VM type, the general information (VM name, dedicated VM tenancy, etc.), the network (VPC and subnet), the volume (size and type), the security group and the key pair;
+    - the summary also displays the total estimated cost of the VM, based on the selected options.
+  - When the creation is complete, you can return to the list of VM.
+</TabItem>
+<TabItem value="api" label="API">
+    The `POST /compute/spaces/{spaceId}/vms` command lets you create and launch a VM from an image.
+The VM is in a `pending` state until it is created, then moves to the `running` state.
+The default security group is used if none is specified.
+The metadata server lets you obtain the public key provided at launch for password-less secure access to the VM.
+
+[Example request: Creating a VM](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/vms)
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+  The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
+</TabItem>
+</Tabs>

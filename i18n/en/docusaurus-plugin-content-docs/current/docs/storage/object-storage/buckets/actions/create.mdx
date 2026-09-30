@@ -1,0 +1,78 @@
+---
+title: Create a bucket - Object Storage
+sidebar_label: Create a bucket
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Create a bucket
+
+You can create a [bucket](/docs/storage/object-storage/concepts/) to host your objects. The Numspot Object Storage service is compatible with the AWS (Amazon Web Services) Simple Storage Service (S3) API, which means you can create a bucket with any S3-compatible tool, such as the AWS CLI (Command Line Interface).
+
+Before you begin, you need an AK/SK [key pair](/docs/compute/keypairs/concept) (Access Key/Secret Key), obtained from a token, as described in the [Quick start](/docs/storage/object-storage/quickstart/) section.
+
+## Permissions
+
+:::info
+This action requires the following IAM permissions:
+
+- **objectstorage.bucket.create**
+
+:::
+
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+Bucket creation is not available from the Numspot console. Use the S3 API (AWS CLI) or Terraform.
+:::
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+To create a bucket, use the **mb** command with the following syntax:
+
+```shell
+## request
+aws s3 mb s3://BUCKET_NAME \
+    --profile YOUR_PROFILE \
+    --debug \
+    --endpoint https://objectstorage.{{region}}.numspot.com/spaces/{{spaceId}}
+```
+
+This command contains the following options that you must specify:
+
+- `s3://BUCKET_NAME` : The name you want to give to your bucket, according to the corresponding naming rules.
+- endpoint : The endpoint corresponding to the region to which you want to send the request.
+- (optional) `profile` : The named profile you want to use, created during the AWS CLI (Command Line Interface) configuration. To find out more, see [Install and configure AWS CLI](/docs/storage/object-storage/config/).
+- (optional) `debug` : If included, returns a detailed report of the operation. This option is useful for analyzing and troubleshooting problems you may encounter.
+
+The bucket is created.
+
+The bucket name must:
+
+- Be unique for the entire region.
+- Contain between 3 and 63 characters.
+- Start with an alphanumeric character.
+- Contain only lowercase letters, numbers, and hyphens (-).
+
+To find out more, see [Object storage concepts](/docs/storage/object-storage/concepts/).
+
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+To create a bucket with Terraform, use the `numspot_bucket` resource from the Numspot provider.
+
+Refer to the official resource documentation: [numspot_bucket](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/bucket).
+
+  </TabItem>
+</Tabs>

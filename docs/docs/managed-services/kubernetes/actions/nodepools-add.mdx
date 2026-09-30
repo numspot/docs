@@ -1,0 +1,145 @@
+---
+title: Ajouter un groupe de nœuds à un cluster Kubernetes - Kubernetes managé
+sidebar_label: Ajouter un groupe de nœuds à un cluster Kubernetes
+sidebar_position: 6
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Ajouter un groupe de nœuds à un cluster Kubernetes
+
+Ajoutez un groupe de nœuds (node pool) à un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) existant.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+
+- **kubernetes.cluster.update**
+
+:::
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/k8s/nodepool-00-list.png", text: "Depuis le menu latéral gauche, cliquez sur Services Managés → Kubernetes.", hotspot: { x: 0, y: 0.3556, w: 0.194, h: 0.0543 } },
+    { img: "/img/walkthrough/k8s/nodepool-00-list.png", text: "Depuis Services managés → Kubernetes, cliquez sur l'ID du cluster auquel vous souhaitez ajouter un groupe de nœuds.", hotspot: { x: 0.24, y: 0.3737, w: 0.2, h: 0.0593 } },
+    { img: "/img/walkthrough/k8s/nodepool-01-details.png", text: "Sur la page de détails du cluster, dans la section « Node pools », cliquez sur « Créer ».", hotspot: { x: 0.8837, y: 0.6399, w: 0.0663, h: 0.0494 } },
+    { img: "/img/walkthrough/k8s/nodepool-02-top.png", text: "Nommez le node pool, choisissez la zone de disponibilité et le type de nodes (avec ou sans GPU).", hotspot: { x: 0.21, y: 0.14, w: 0.45, h: 0.82 } },
+    { img: "/img/walkthrough/k8s/nodepool-03-bottom.png", text: "Choisissez le type et la taille du volume système, activez éventuellement l'autoscaling (ou fixez le nombre de nodes), puis cliquez sur « Créer ».", hotspot: { x: 0.7316, y: 0.9012, w: 0.0438, h: 0.0494 } },
+  ]}
+/>
+
+    1. Depuis le menu latéral de gauche, cliquez sur **Services managés** → **Kubernetes** pour accéder à la liste des clusters Kubernetes.
+
+
+    2. Cliquez sur l'ID du cluster auquel vous souhaitez ajouter un groupe de nœuds.
+
+    3. Cliquez sur le bouton **Créer** dans la section **Node pools** pour lancer l'assistant de création.
+
+### Nom du groupe de nœuds
+
+
+    Spécifiez un nom qui vous permettra d'identifier votre groupe de nœuds.
+    Ce nom doit respecter les critères suivants :
+
+    - Longueur : entre 3 et 63 caractères ;
+    - Caractères autorisés : uniquement des lettres (a-z, A-Z), des chiffres (0-9), des tirets (`-`) ou des tirets bas (`_`) ;
+    - Structure :
+      - doit commencer et se terminer par un caractère alphanumérique ;
+      - les tirets (`-`) ou tirets bas (`_`) ne peuvent pas être consécutifs ni placés en début ou fin de nom.
+    
+    Exemple valide : `mon-node_pool-2026`.
+
+### Zone de disponibilité
+
+
+    Sélectionnez la zone de disponibilité de votre groupe de nœuds.
+
+### Type de nodes
+
+
+    Sélectionnez le type de nodes de votre groupe de nœuds.
+    Tous les nodes d'un groupe de nœuds ont le même type.
+
+### Type de volume système
+
+
+    Sélectionnez le type de volume système parmi les options suivantes :
+
+    - Magnetic : SSD équilibré pour usages courants ;
+    - Performance : SSD performant pour la production ;
+    - Enterprise : SSD avec IOPS par Gio garantis pour les charges de travail critiques.
+
+    Renseignez la taille de volume système nécessaire pour votre groupe de nœuds.
+
+### Autoscaling
+
+
+    Activez l'autoscaling si vous le souhaitez et renseignez les nombres minimum et maximum de nodes.
+    Le nombre de nodes peut varier entre 1 et 20.
+    Si vous ne souhaitez pas activer l'autoscaling, renseignez simplement le nombre de nodes nécessaires - compris entre 1 et 20.
+
+
+### Création du groupe de nœuds
+
+    Pour finaliser la création du groupe de nœuds, cliquez sur le bouton **Créer**.
+
+    Vous êtes redirigé vers la page de détails du cluster. Votre groupe de nœuds est alors en cours de création. Son statut se mettra à jour dès qu'il sera opérationnel, après quelques minutes seulement.
+</TabItem>
+
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+    Utilisez la route `POST /kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools` pour ajouter un groupe de nœuds à un cluster Kubernetes.
+
+### Exemple de requête
+
+    ```json
+    {
+      "name": "worker-nodepool-new",
+      "availabilityZone": "eu-west-2a",
+      "nodeProfile": "large",
+      "replicas": 3,
+      "autoscaling": {
+        "min": 2,
+        "max": 10
+      },
+      "rootDisk": {
+        "size": 100,
+        "iops": 5000,
+        "type": "enterprise"
+      }
+    }
+    ```
+
+### Exemple de réponse
+
+    ```json
+    {
+      "id": "nodepool-003-e29b-41d4-a716",
+      "name": "worker-nodepool-new",
+      "availabilityZone": "eu-west-2a",
+      "nodeProfile": "large",
+      "replicas": 3,
+      "rootDisk": {
+        "size": 100,
+        "iops": 5000,
+        "type": "enterprise"
+      },
+      "status": {
+        "state": "CREATING",
+        "message": "NodePool is being provisioned"
+      }
+    }
+    ```
+
+    [Voir la spécification complète](/openapi/#tag/kubernetes/POST/kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools)
+</TabItem>
+</Tabs>

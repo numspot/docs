@@ -1,0 +1,83 @@
+---
+title: À propos des règles des security groups
+sidebar_label: Règles des security groups
+sidebar_position: 2
+draft: false
+---
+
+# À propos des règles des security groups
+
+Un [security group (groupe de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) contient des règles qui peuvent être ajoutées ou retirées à tout moment.
+
+Ces règles contrôlent l'accès aux [VM (Virtual Machine)](/docs/compute/concept/) avec lesquelles le security group est associé. Elles définissent quels flux entrants sont autorisés à atteindre les VM, et quels flux sortants sont autorisés à les quitter.
+
+## Informations générales
+
+Les règles d'un security group ne peuvent pas explicitement interdire un accès. Un accès est interdit par défaut sauf si une règle de security group l'autorise explicitement.
+
+Lorsque vous modifiez les règles d'un security group, ces modifications sont automatiquement et immédiatement appliquées à toutes les VM auxquelles ce security group est associé.
+
+Les security groups sont à états, ce qui signifie que les réponses à des flux autorisés sont également autorisées. Ainsi, les flux de réponses à des requêtes envoyées depuis la VM sont automatiquement autorisés indépendamment des règles pour les flux entrants de ses security groups. Dans un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/), les flux de réponse à des flux entrants autorisés sont également automatiquement autorisés indépendamment des règles pour les flux sortants des security groups de la VM.
+
+De la même manière que nous recommandons d'utiliser une VM pour un service uniquement, nous recommandons de créer un security group par service avec les règles appropriées, et d'associer ce security group avec toutes les VM dédiées à ce service. Vous pouvez ensuite autoriser les flux entrants et sortants entre vos security groups selon les services qui doivent communiquer entre eux pour appliquer ces règles à l'ensemble des VM concernées.
+
+## Caractéristiques
+
+Lorsque vous créez une règle de security group, vous devez spécifier les quatre éléments suivants :
+
+* La direction des flux.
+* Le protocole des flux : TCP (Transmission Control Protocol), UDP (User Datagram Protocol), ICMP (Internet Control Message Protocol), ou `-1` pour tous les protocoles. Dans un VPC, cette valeur peut aussi être un numéro de protocole IP (Internet Protocol). Pour en savoir plus, voir le [site IANA.org](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml).
+* Le port ou la plage de ports, entre 1 et 65535 pour les protocoles TCP et UDP, ou le numéro de type ICMP. Vous pouvez spécifier tous les types ICMP avec `-1`.
+
+    :::warning
+    Évitez d'ouvrir des flux sur tous les ports (`1-65535`), car cela vous empêche de les contrôler efficacement. Ouvrez des flux uniquement sur les ports dont vous avez besoin.
+    :::
+  
+  Dans la Console Numspot, vous pouvez sélectionner des services prédéfinis correspondant à des combinaisons spécifiques de protocoles de flux et de ports/numéros ICMP :
+
+  | Service                      | Protocole | Port |
+  | ---------------------------- | --------- | ---- |
+  | SSH                          | TCP       | 22   |
+  | HTTP                         | TCP       | 80   |
+  | HTTPS                        | TCP       | 443  |
+  | DNS                          | UDP       | 53   |
+  | IMAP                         | TCP       | 143  |
+  | Secure IMAP                  | TCP       | 993  |
+  | POP3                         | TCP       | 110  |
+  | Secure POP3                  | TCP       | 995  |
+  | SMTP                         | TCP       | 25   |
+  | SMTPS                        | TCP       | 465  |
+  | LDAP                         | TCP       | 389  |
+  | MySQL                        | TCP       | 3306 |
+  | MS SQL                       | TCP       | 1433 |
+  | ICMP                         | ICMP      | -1   |
+  | RDP                          | TCP       | 3389 |
+
+* La cible, c'est-à-dire l'une des options suivantes en tant que source des flux entrants ou destination des flux sortants :
+
+  * Une IP, en notation CIDR (Classless Inter-Domain Routing). Vous pouvez spécifier une IP publique ou privée.
+
+    :::tip
+    Comme l'IP publique change à chaque fois que vous arrêtez et démarrez votre VM, les règles de security group s'appuyant sur une IP publique peuvent devenir caduques. Pour associer une IP publique à votre VM de manière persistante, même en cas d'arrêt et de redémarrage de la VM, vous pouvez utiliser un tag Numspot spécifiant une IP publique.
+    :::
+
+  * Une plage d'IP, en notation CIDR (par exemple `101.365.245.3/16`).
+
+    :::danger
+    L'utilisation d'un préfixe `/0` ouvre le port ou la plage de ports spécifiés à tout le monde. Nous vous déconseillons fortement son utilisation sur le port d'administration — port SSH (Secure Shell) 22 pour Linux, ou port RDP (Remote Desktop Protocol) 3389 pour Windows —, car cela peut exposer vos ressources à des attaques. 
+    :::
+
+  * Un autre security group, pour autoriser les flux entrants ou sortants de toutes les VM auxquelles ce security group est associé :
+
+    * Si votre security group est alloué au Cloud public, vous pouvez référencer un security group pour le Cloud public qui vous appartient ou qui appartient à un autre compte.
+    * Si votre security group est alloué à un VPC, vous pouvez référencer un security group pour le même VPC.
+
+      :::tip
+      Pour autoriser la communication entre les VM associées à un même security group que vous avez créé, vous devez ajouter une règle qui autorise explicitement les flux entrants en provenance de ce security group.
+      :::
+
+      :::info
+      Par défaut, le trafic entre deux security groups est autorisé à travers à la fois les IP publiques et les IP privées. Pour le restreindre uniquement aux IP privées, contactez notre équipe Support.
+      :::
+
+  * (flux sortants uniquement) L'ID d'une prefix list (liste de préfixes) pour autoriser le trafic en provenance de VM placées dans un VPC à accéder à un service (par exemple, Numspot Object Storage).

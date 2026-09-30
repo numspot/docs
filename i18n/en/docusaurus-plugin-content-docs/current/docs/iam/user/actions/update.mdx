@@ -1,0 +1,142 @@
+---
+title: Update a user - IAM
+description: "Update an IAM user's information, account status, or reset their authentication details, via the console or the API."
+sidebar_label: Update a user
+sidebar_position: 6
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Update a user
+
+You can update the user's basic information, as well as deactivate them.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **iam.user.update**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/user/list.png", text: "From the left-hand side menu, click IAM → Users.", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/user/list.png", text: "Click the identifier of the user to update.", hotspot: { x: 0.234, y: 0.32, w: 0.11, h: 0.035 } },
+    { img: "/img/walkthrough/en/user/detail.png", text: "In “General information”, click the pencil of the field to update (first name, last name or email).", hotspot: { x: 0.3554, y: 0.4103, w: 0.0222, h: 0.0395 } },
+    { img: "/img/walkthrough/en/user/upd-02-edit.png", text: "Enter the new value, then confirm with the tick (the cross cancels). The “Account status” button activates or deactivates the user.", hotspot: { x: 0.4462, y: 0.288, w: 0.0222, h: 0.0346 } },
+  ]}
+/>
+
+1. From the left-hand side menu, click **IAM** → **Users**.
+2. Click the identifier of the user to update.
+
+   The "User details" page appears.
+3. In the "General information" section, click the **pencil** of the field to update: first name, last name or email address.
+4. Enter the new value, then confirm with the **tick** (the **cross** cancels the change).
+
+You can also **deactivate** the user with the "Account status" button (they will no longer be able to sign in), or send them a **New activation link** to reset their password and two-factor authentication.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+### Update a user in an organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PUT/iam/organisations/{organisationId}/users/{userId}
+
+### Example
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users/{userId}' \
+  --request PUT \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "email": "john.smith@acme.org",
+  "firstname": "",
+  "lastname": "",
+  "active": true
+}'
+```
+
+### Response
+
+```json
+{
+  "email": "john.smith@acme.org",
+  "firstname": "…",
+  "lastname": "…",
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "active": true,
+  "createdOn": "2018-11-13T20:20:39+00:00",
+  "updatedOn": "2018-11-13T20:20:39+00:00"
+}
+```
+
+:::info
+All fields, updated or not, must be provided.
+
+See the [API usage page](/docs/iam/concepts/api/) for details.
+:::
+
+### Update a user in a space
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PUT/iam/spaces/{spaceId}/users/{userId}
+
+### Example
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/users/{userId}' \
+  --request PUT \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "email": "john.smith@acme.org",
+  "firstname": "",
+  "lastname": "",
+  "active": true
+}'
+```
+
+### Response
+
+```json
+{
+  "email": "john.smith@acme.org",
+  "firstname": "…",
+  "lastname": "…",
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "active": true,
+  "createdOn": "2018-11-13T20:20:39+00:00",
+  "updatedOn": "2018-11-13T20:20:39+00:00"
+}
+```
+
+:::info
+All fields, updated or not, must be provided.
+
+See the [API usage page](/docs/iam/concepts/api/) for details.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/user).
+
+</TabItem>
+</Tabs>

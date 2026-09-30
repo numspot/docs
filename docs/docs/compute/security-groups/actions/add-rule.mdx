@@ -1,0 +1,103 @@
+---
+title: Ajouter des règles à un security group
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Ajouter des règles à un security group
+
+**Trafic Contrôlé** : Vous pouvez spécifier des règles pour le trafic entrant et pour le trafic sortant d'un [security group (groupe de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) créé pour un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+
+**Critères d'Autorisation** : Les règles autorisent le trafic en fonction du protocole — par exemple TCP (Transmission Control Protocol) ou UDP (User Datagram Protocol) — et des ports spécifiés.
+
+**Sources & Destinations** - Le trafic autorisé peut provenir :
+
+* D'une adresse IP (Internet Protocol) unique ou d'une plage d'adresses IP (qu'elles soient publiques, privées ou externes).
+* D'un autre security group.
+
+Toute règle ajoutée à un security group est immédiatement appliquée à toutes les [VM (Virtual Machine)](/docs/compute/concept/) qui utilisent ce groupe.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.securityGroup.update**
+
+:::
+<Tabs>
+   <TabItem value="console" label="Console" default> 
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/security-group/addrule-01-menu.png", text: "Depuis le menu latéral gauche, cliquez sur Compute → Security Groups.", hotspot: { x: 0, y: 0.5568, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/security-group/addrule-02-list.png", text: "Dans la liste des security groups, cliquez sur l'ID du security group auquel ajouter une règle.", hotspot: { x: 0.2687, y: 0.4946, w: 0.0624, h: 0.0204 } },
+    { img: "/img/walkthrough/security-group/addrule-03-details.png", text: "Sur la page de détails, sélectionnez l'onglet « Règles entrantes » (ou « Règles sortantes »), puis cliquez sur « Ajouter une Règle ».", hotspot: { x: 0.854, y: 0.8043, w: 0.0974, h: 0.0494 } },
+    { img: "/img/walkthrough/security-group/addrule-04-dialog.png", text: "Renseignez le service, le protocole, la plage de ports, la source et la plage d'IP, puis cliquez sur « Valider ».", hotspot: { x: 0.8053, y: 0.6364, w: 0.0475, h: 0.0494 } },
+  ]}
+/>
+
+   1. Connectez-vous sur la console Numspot. 
+   2. Depuis le menu latéral gauche, cliquez sur **Compute** → **Security Groups**.
+
+
+   3. Cliquez sur l'ID du security group auquel vous voulez ajouter une règle. 
+     La page "Détails Security Group" apparaît. 
+   4. Sélectionnez l'onglet "Règles entrantes" ou "Règles sortantes" puis cliquez sur le bouton "Ajouter une règle". La boîte de dialogue de création d'une règle apparaît.     
+        
+
+   5. Pour définir une règle, spécifiez les informations suivantes : 
+       - **Service** : le service, par exemple SSH (Secure Shell) ou HTTP (HyperText Transfer Protocol). 
+       - **Protocole** : le protocole IP (**tcp**, **udp**, **icmp**, ou **Tous**), le cas échéant. 
+       - **Plage de ports** : spécifiez la plage des ports à ouvrir, cela pourrait être : 
+         * Pour TCP et UDP : un numéro de port seul compris entre 0 et 65535, ou une plage de numéros de ports. 
+         * Pour ICMP : un numéro de type seul entre 0 et 255, ou un numéro de type et numéro de code, ou -1 pour indiquer tous les types ICMP. 
+
+           :::danger 
+           Évitez d'ouvrir des flux sur tous les ports (`1-65535`), car cela vous empêche de les contrôler efficacement. Ouvrez des flux uniquement sur les ports dont vous avez besoin.  
+           ::: 
+
+       - **Source** : "N'importe où", "Personnalisé" ou "Mon IP"
+       - **Plage d'IP** : La cible de la règle. Cela peut être : 
+         * Une IP en notation CIDR (Classless Inter-Domain Routing) 
+         * Une plage d'IP en notation CIDR 
+         * Un autre security group, spécifié par son ID
+
+   6. Cliquez sur le bouton **Valider**.
+
+
+   7. La règle est bien créée et apparaît dans la liste des règles du security group.
+
+   </TabItem> 
+  <TabItem value='api' label='API'>
+La commande `POST /compute/spaces/{spaceId}/securityGroups/{id}/rules` ajoute une ou plusieurs règles à un security group. Utilisez le paramètre **flow** pour indiquer si vous voulez une règle entrante ou une règle sortante.
+
+- Une règle entrante permet au security group de recevoir du trafic :
+  - Soit d'une plage d'adresses IP spécifique (paramètre **ipRange**) sur une plage de ports spécifique (paramètres **fromPortRange** et **toPortRange**) en respectant un protocole spécifique (paramètre **ipProtocol**).
+  - Soit d'un autre security group spécifique (paramètre **securityGroupNameToLink**).
+
+- (Uniquement pour les VPC) Une règle sortante fonctionne de manière similaire mais permet au security group d'envoyer du trafic plutôt que de le recevoir.
+
+Alternativement, vous pouvez utiliser le paramètre **rules** pour ajouter plusieurs règles en même temps.
+
+:::info
+Les modifications sont appliquées aussi rapidement que possible, mais un léger délai peut survenir.
+
+Par défaut, le trafic entre deux security groups est autorisé à la fois via les IP publiques et les IP privées. Pour restreindre le trafic uniquement aux IP privées, contactez notre équipe de support à l'adresse support@numspot.com.
+:::
+
+[Exemple de requête : Création d'une règle d'un Security Group](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/securityGroups/{id}/rules)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/security_group_rule).
+  </TabItem>
+</Tabs>

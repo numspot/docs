@@ -1,0 +1,44 @@
+---
+title: Réversibilité - Plateforme IA Mistral
+sidebar_label: Réversibilité de la Plateforme IA Mistral
+description: Informations sur la réversibilité du service managé Plateforme IA Mistral
+slug: /docs/support/reversibility/mistral-ai-platform
+sidebar_position: 6
+draft: false
+---
+
+# Réversibilité de la Plateforme IA Mistral
+
+Le service managé [Plateforme IA Mistral](/docs/managed-services/mistral-ai-platform/concepts/) est conçu pour garantir la réversibilité, c'est-à-dire la possibilité pour le client de récupérer ses données et de migrer vers une autre solution sans verrouillage.
+
+## Données exportables
+
+L'ensemble des données associées à votre instance Plateforme IA Mistral (configurations, requêtes, historiques d'utilisation) peut être récupéré par le client.
+
+## Outils de réversibilité
+
+### Récupération des données via le support Numspot
+
+Contrairement aux autres services managés disposant d'outils d'export en libre-service, la récupération des données de la Plateforme IA Mistral s'effectue **[sur demande auprès du support technique aux utilisateurs de Numspot](https://docs.numspot.com/docs/support/general/)**.
+
+1. [Contactez le support Numspot](mailto:support-client@numspot.com?subject=AI%20Platform%20reversibility) pour formuler votre demande de récupération de données.
+2. Le support met à disposition vos données dans un **bucket S3** dédié.
+3. Téléchargez les données depuis le bucket S3 à l'aide des outils standards (AWS CLI, etc.).
+
+```bash
+aws s3 sync s3://<bucket-name>/<prefix> ./plateforme-ia-export
+```
+
+## Formats ouverts
+
+- Les données exportées sont au format JSON, standard de l'industrie.
+- Les configurations et historiques sont fournis dans des formats structurés et lisibles.
+- Les modèles Mistral sont accessibles via l'API standard Mistral, compatible avec tout endpoint Mistral ou toute plateforme supportant les modèles open-weights de Mistral AI.
+
+## Procédure de sortie
+
+1. [Contactez le support Numspot](mailto:support-client@numspot.com?subject=AI%20Platform%20reversibility) pour demander l'export de vos données.
+2. Récupérez les données depuis le bucket S3 mis à disposition par le support.
+3. Déployez une infrastructure équivalente sur la nouvelle plateforme (instance Mistral ou autre fournisseur de modèles de langage).
+4. Importez vos configurations et données dans la nouvelle solution.
+5. Vérifiez la cohérence des données récupérées et mettez à jour les points de terminaison dans vos applications.

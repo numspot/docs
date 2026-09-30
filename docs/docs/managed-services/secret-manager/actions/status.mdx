@@ -1,0 +1,60 @@
+---
+title: Obtenir le statut d'une instance Secret Manager
+sidebar_position: 3
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Obtenir le statut d'une instance Secret Manager
+
+Vous pouvez obtenir le statut et les informations de votre [instance Secret Manager](/docs/managed-services/secret-manager/concepts/) au sein de votre espace.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **secrets.instance.get**
+
+:::
+<Tabs>
+    
+    
+    {/* </TabItem> */}
+    <TabItem value="API" label="API" default>
+
+## API {#tabhead-API}
+
+        La requête `GET /secrets/spaces/{spaceId}/instances/{instanceId}` permet d'obtenir le statut actuel d'une instance Secret Manager.
+
+        ### États possibles
+
+        | État | Description |
+        | --- | --- |
+        | `PENDING` | L'instance est en attente de création |
+        | `CREATING` | L'instance est en cours de création |
+        | `RUNNING` | L'instance est opérationnelle |
+        | `DELETING` | L'instance est en cours de suppression |
+        | `FAILED` | La création ou l'opération a échoué |
+
+        ### Exemple de réponse
+
+        ```json
+        {
+          "id": "550e8400-e29b-41d4-a716-446655440002",
+          "name": "mon-secret-manager",
+          "status": {
+            "state": "RUNNING",
+            "message": "instance is healthy"
+          },
+          "version": "2.5.1",
+          "host": "mon-secret-manager.secrets.eu-west-2.numspot.com",
+          "visibility": "EXTERNAL"
+        }
+        ```
+
+        [Voir la spécification complète](/openapi/#tag/Secret/GET/secrets/spaces/{spaceId}/instances/{instanceId})
+
+    </TabItem>
+</Tabs>

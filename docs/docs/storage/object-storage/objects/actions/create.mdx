@@ -1,0 +1,70 @@
+---
+title: Créer un objet - stockage objet
+sidebar_label: Créer un objet
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Créer un objet
+
+Vous pouvez déposer un objet dans un [bucket](/docs/storage/object-storage/concepts/) sur lequel vous avez des droits d'écriture. Le service Object Storage Numspot est compatible avec l'API Simple Storage Service (S3) d'AWS (Amazon Web Services) : vous pouvez donc déposer des objets avec n'importe quel outil compatible S3, comme AWS CLI (Command Line Interface).
+
+Avant de commencer, vous devez disposer d'une paire de clés AK/SK (Access Key/Secret Key), obtenue à partir d'un token, comme décrit dans la rubrique [Démarrage rapide](/docs/storage/object-storage/quickstart/).
+
+Un objet déposé sans découpage (dépôt simple) est limité à 5 Gio. Pour les fichiers de plus de 100 Mio, il est recommandé d'effectuer un dépôt en plusieurs parties afin de garantir une performance optimale.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions IAM suivantes :
+
+- **objectstorage.bucket.create**
+
+:::
+
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+Le dépôt d'objets n'est pas disponible depuis la console Numspot. Utilisez l'API S3 (AWS CLI).
+:::
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+Pour déposer un objet local dans un bucket, utilisez la commande **cp** en suivant cette syntaxe :
+
+```shell
+## request
+aws s3 cp LOCAL_PATH/OBJECT_TO_UPLOAD s3://BUCKET_NAME/PATH \
+   --profile YOUR_PROFILE \
+   --debug \
+   --endpoint https://objectstorage.{{region}}.numspot.com/spaces/{{spaceId}}
+```
+
+Cette commande contient les options suivantes que vous devez spécifier :
+
+- `LOCAL_PATH/OBJECT_TO_UPLOAD` : Le chemin local de l'objet que vous voulez déposer dans le bucket.
+- `s3://BUCKET_NAME/PATH` : Le chemin d'accès vers l'objet que vous voulez déposer dans le bucket.
+- endpoint : Le endpoint correspondant à la région à laquelle vous voulez envoyer la requête.
+- (optionnel) `profile` : Le profil nommé que vous voulez utiliser, créé pendant la configuration d'AWS CLI. Pour en savoir plus, voir [Installer et configurer AWS CLI](/docs/storage/object-storage/config/).
+- (optionnel) `debug` : Si inclus, renvoie un rapport détaillé de l'opération. Cette option est utile pour analyser et résoudre les problèmes que vous pouvez rencontrer.
+
+L'objet est déposé dans le bucket.
+
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+Le dépôt d'objets n'est pas pris en charge par le provider Terraform Numspot. Utilisez l'API S3 (AWS CLI) pour déposer vos objets.
+
+  </TabItem>
+</Tabs>

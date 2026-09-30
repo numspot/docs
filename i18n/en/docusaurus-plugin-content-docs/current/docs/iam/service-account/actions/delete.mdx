@@ -1,0 +1,107 @@
+---
+title: Delete a service account - IAM
+description: "Permanently delete an IAM service account from your Numspot space and revoke its access, via the console, the API or Terraform."
+sidebar_label: Delete a service account
+sidebar_position: 7
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Delete a service account
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **iam.serviceAccount.delete**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/service-account/list-01-list.png", text: "From the left-hand side menu, click IAM → Service Accounts.", hotspot: { x: 0, y: 0.8, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/service-account/list-02-menu.png", text: "From IAM → Service Accounts, open the service account's “Actions” menu, then click “Delete”.", hotspot: { x: 0.7576, y: 0.7, w: 0.2069, h: 0.05 } },
+    { img: "/img/walkthrough/en/service-account/delete-02-modal.png", text: "Strong confirmation: enter the exact name of the service account, then click “Delete”. The deletion is permanent.", hotspot: { x: 0.3333, y: 0.1858, w: 0.3333, h: 0.6284 } },
+  ]}
+/>
+
+1. From the left-hand side menu, click **IAM** → **Service Accounts**.
+2. Open the **Actions** menu of the relevant service account, then click **Delete**.
+3. The "Deleting Service Account" dialog appears. In the "Strong confirmation" field, enter the name of the service account.
+4. Click the **Delete** button to confirm the deletion of the service account.
+
+You can also delete the service account from its "Service Account details" page, using the **Delete Service Account** button at the top right.
+
+:::note
+The deletion is asynchronous: a message confirms that the deletion request has been taken into account, then the service account disappears from the list.
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+### Delete a service account in an organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/DELETE/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}
+
+### curl example
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}' \
+  --request DELETE
+```
+
+### Response
+
+```json
+{}
+```
+
+:::info
+See the [API usage page](/docs/iam/concepts/api/) for details.
+:::
+
+### Delete a service account in a space
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/DELETE/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}
+
+### curl example
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}' \
+  --request DELETE
+```
+
+### Response
+
+```json
+{}
+```
+
+:::info
+See the [API usage page](/docs/iam/concepts/api/) for details.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/service_account).
+
+</TabItem>
+</Tabs>

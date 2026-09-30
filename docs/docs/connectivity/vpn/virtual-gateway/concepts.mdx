@@ -1,0 +1,46 @@
+---
+title: "VPN Virtual Gateway - Concepts"
+sidebar_label: "Concepts"
+description: Découvrez les virtual gateways, passerelles côté Numspot qui gèrent le trafic VPN entre votre VPC et votre réseau d'entreprise.
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# À propos des virtual gateways
+
+<ActionsSummary />
+
+Une virtual gateway (passerelle virtuelle) se situe du côté Numspot d'une connexion VPN (Virtual Private Network), et est attachée à l'un de vos [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+
+Son équivalent de votre côté de la connexion VPN est une [client gateway (passerelle client)](/docs/connectivity/vpn/client-gateway/concepts/).
+
+## Informations générales
+
+Une virtual gateway est le point d'entrée et de sortie du côté Numspot d'une connexion VPN. Le trafic entre les [VM](/docs/compute/concept/) dans le VPC et votre réseau d'entreprise est dirigé à travers elle.
+
+![Architecture d'une connexion VPN](/img/console/connectivity/vpn/sch-General-VPNConnectionArchitecture.png)
+*_Architecture d'une connexion VPN_*
+
+Vous pouvez attacher une seule virtual gateway à la fois à chaque VPC. Cependant, vous pouvez connecter la même virtual gateway à cinq client gateways simultanément. Ceci vous permet de créer des connexions VPN entre le même VPC et jusqu'à cinq réseaux d'entreprise, par exemple pour des locaux ou services différents.
+
+## Cycle de vie
+
+Une virtual gateway peut être dans l'un des états suivants :
+
+* Pending : Le processus de création est en cours.
+* Available : La virtual gateway est créée. Elle est ou peut être attachée à un VPC.
+* Deleting : Le processus de suppression est en cours.
+* Deleted : La virtual gateway est supprimée.
+
+:::info
+Les ressources supprimées restent visibles pendant 1 heure.
+:::
+
+De plus, une virtual gateway dans l'état `available` peut avoir l'un des états d'attachement suivants :
+
+* Attaching : L'attachement au VPC est en cours.
+* Attached : La virtual gateway est attachée au VPC et peut être utilisée pour créer une connexion VPN.
+* Detaching : Le détachement du VPC est en cours.
+* Detached : La virtual gateway est détachée du VPC.

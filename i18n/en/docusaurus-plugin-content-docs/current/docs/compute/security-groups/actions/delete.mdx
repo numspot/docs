@@ -1,0 +1,74 @@
+---
+title: Delete a security group
+sidebar_position: 5
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Delete a security group
+
+You can delete a [security group](/docs/compute/security-groups/concepts/concept-sg/) that you have created if it is no longer used by any [VM](/docs/compute/concept/) (Virtual Machine) or in any security group rule, and if it does not contain any rule.
+
+You cannot delete the default security groups.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.securityGroup.delete**
+
+:::
+<Tabs>
+   <TabItem value="console" label="Console" default> 
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/security-group/list.png", text: "From the left-hand side menu, click Compute → Security Groups.", hotspot: { x: 0, y: 0.5568, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/en/security-group/actions-menu.png", text: "Tick the security group to delete, or open its “Actions” menu, then click “Delete”.", hotspot: { x: 0.8771, y: 0.8654, w: 0.0863, h: 0.0457 } },
+    { img: "/img/walkthrough/en/security-group/delete-modal.png", text: "Strong confirmation: enter the exact security group name, then click “Delete”.", hotspot: { x: 0.6403, y: 0.7145, w: 0.0458, h: 0.0494 } },
+  ]}
+/>
+
+   :::info
+   **Before you begin:** make sure that the security group you want to delete: 
+   * is not associated with any VM;
+   * is not referenced as a source or destination security group in any security group rule;
+   * does not contain any rule.
+
+   ::: 
+   1. Log in to the Numspot console. 
+   2. From the left-hand side menu, click **Compute** → **Security Groups**.
+
+ 
+   3. To delete a security group, 2 options are possible:
+      * select the security group you want to delete, then click the highlighted "Delete" button. A confirmation dialog box appears.
+      * in the security group actions drop-down menu, click **Delete**. A confirmation dialog box appears. 
+    
+
+   4. Click the **Delete** button.
+
+
+   5. A confirmation message appears at the bottom indicating that the security group is deleted and the dialog box closes.
+
+
+   </TabItem> 
+  <TabItem value='api' label='API'>
+      :::info
+   **Before you begin:** make sure that the security group you want to delete: 
+   * is not associated with any VM;
+   * is not referenced as a source or destination security group in any security group rule;
+   * does not contain any rule.
+
+      ::: 
+The `DELETE /compute/spaces/{spaceId}/securityGroups/{id}` command deletes a specified security group. You cannot delete a security group associated with a VM or referenced in a rule of another security group.
+
+[Example request: Deleting a Security Group](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/securityGroups/{id})
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+    The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/security_group).
+  </TabItem>
+</Tabs>

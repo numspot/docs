@@ -1,0 +1,32 @@
+/* Right column = single scroll container (TOC + feedback widget).
+
+   By default, Docusaurus sets `position: sticky` + `overflow-y: auto` on the
+   TOC ITSELF (.tableOfContents). Any sibling added after it — here the
+   "Was this page useful?" widget — stays in normal flow: it scrolls with the
+   page while the stuck TOC slides over it.
+
+   We invert the responsibility: the column is what sticks and scrolls, the
+   TOC becomes an ordinary block again. Both blocks are then in the same
+   flow — no more overlap possible — and the column only scrolls when its
+   content exceeds the available height. */
+@media (min-width: 997px) {
+  .tocColumn {
+    position: sticky;
+    top: calc(var(--ifm-navbar-height) + 1rem);
+    max-height: calc(100vh - var(--ifm-navbar-height) - 2rem);
+    overflow-y: auto;
+    /* Isolate the scroll: at the end of its travel, the wheel does not
+       chain into the page scroll. */
+    overscroll-behavior: contain;
+  }
+
+  /* Neutralize the sticky/overflow the theme puts on the TOC.
+     Two-class selector (0,2,0) to win over the theme's CSS module (0,1,0)
+     regardless of stylesheet injection order. */
+  .tocColumn :global(.theme-doc-toc-desktop) {
+    position: static;
+    top: auto;
+    max-height: none;
+    overflow: visible;
+  }
+}

@@ -1,0 +1,67 @@
+---
+title: Supprimer un utilisateur DLP - DLP managé
+sidebar_label: Supprimer un utilisateur DLP
+sidebar_position: 13
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Supprimer un utilisateur DLP
+
+Supprimez un utilisateur du service [DLP](/docs/managed-services/dlp/concepts). L'utilisateur supprimé perd immédiatement l'accès à la console DLP.
+
+## Permissions
+
+:::info
+Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+
+- **admin**
+
+:::
+
+:::warning
+Le compte interne `numspot` ne peut pas être supprimé. Le dernier compte admin ne peut pas être supprimé — assurez-vous qu'il reste au moins un admin après la suppression.
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Dans la console DLP, cliquez sur Users dans le menu latéral.", hotspot: { x: 0.006, y: 0.332, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/users-list.png", text: "Survolez la ligne de l'utilisateur à supprimer, puis cliquez sur l'icône corbeille (rouge).", hotspot: { x: 0.930, y: 0.257, w: 0.030, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/user-delete.png", text: "Dans la fenêtre de confirmation, cliquez sur « Delete » pour supprimer définitivement l'utilisateur.", hotspot: { x: 0.609, y: 0.532, w: 0.052, h: 0.044 } },
+  ]}
+/>
+
+1. Dans la console [DLP](/docs/managed-services/dlp/concepts), cliquez sur **Users** dans le menu latéral.
+2. Cliquez sur l'icône de suppression (corbeille) sur la ligne de l'utilisateur à supprimer.
+3. Confirmez la suppression dans la boîte de dialogue.
+
+### Restrictions
+
+- Le compte interne **numspot** ne peut pas être supprimé ;
+- Le dernier compte **admin** ne peut pas être supprimé. Si vous devez supprimer le dernier admin, attribuez d'abord le rôle admin à un autre utilisateur.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+La requête `DELETE /api/v1/users/{id}` permet de supprimer un utilisateur.
+
+### Exemple de réponse
+
+```text
+HTTP/1.1 204 No Content
+```
+
+### Restrictions
+
+- La suppression du compte interne `numspot` renvoie une erreur `403 Forbidden` ;
+- La suppression du dernier admin renvoie une erreur `409 Conflict`.
+
+</TabItem>
+</Tabs>

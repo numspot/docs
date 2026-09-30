@@ -1,0 +1,87 @@
+---
+title: Supprimer un utilisateur - IAM
+description: "Supprimez définitivement un utilisateur IAM de votre organisation Numspot et révoquez ses accès et ses clés API, via la console ou l'API."
+sidebar_label: Supprimer un utilisateur
+sidebar_position: 7
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Supprimer un utilisateur
+
+La suppression d'un utilisateur est une opération d'administration à fort impact, non réversible.
+
+:::warning
+Cette action est **irréversible**.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+
+- **iam.user.delete**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/user/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Utilisateurs.", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/user/list-02-menu.png", text: "Dans le tableau des utilisateurs, ouvrez le menu « Actions » de l'utilisateur, puis cliquez sur « Supprimer ».", hotspot: { x: 0.7708, y: 0.635, w: 0.1929, h: 0.045 } },
+    { img: "/img/walkthrough/user/delete-02-modal.png", text: "Confirmation forte : saisissez le prénom et le nom exacts de l'utilisateur, puis cliquez sur « Supprimer ». La suppression est définitive.", hotspot: { x: 0.3333, y: 0.1981, w: 0.3333, h: 0.6037 } },
+  ]}
+/>
+
+1. Dans le tableau listant les **utilisateurs**, ouvrez le menu **Actions** de l'utilisateur à supprimer, puis cliquez sur **Supprimer**. La boîte de dialogue "Supprimer l'utilisateur" apparaît.
+
+2. Dans le champ "Confirmation forte", saisissez le prénom et le nom de l'utilisateur à supprimer.
+
+3. Cliquez sur **Supprimer**.
+
+Vous pouvez également supprimer un utilisateur depuis sa page "Détails utilisateur", via le bouton **Supprimer l'utilisateur** en haut à droite.
+
+:::warning
+La suppression d'un utilisateur de l'organisation supprime automatiquement ses clés API. Les politiques qui lui sont directement associées restent orphelines.
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+### Supprimer un utilisateur dans une organisation
+
+[Documentation de l'API de suppression d'un utilisateur](/openapi/#tag/identity-access-management/DELETE/iam/organisations/{organisationId}/users/{userId})
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users/{userId}' \
+  --request DELETE
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/user).
+
+</TabItem>
+</Tabs>

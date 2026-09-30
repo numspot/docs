@@ -1,0 +1,103 @@
+---
+title: Create a space within an organisation - IAM
+description: "Create an IAM space within your Numspot organisation to compartmentalise your resources and identities, via the console or the API."
+sidebar_label: Create a space within an organisation
+sidebar_position: 2
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Walkthrough from "@site/src/components/Walkthrough";
+
+# Create a space within an organisation
+
+An organisation can create as many spaces as it needs. A space compartmentalises resources and identities. A user or a service account can belong to several spaces of the organisation and have different permissions for each space. Example: an administrator on one space can be a read or write user on some resources in others.
+
+A space has the following properties:
+
+- a name;
+- a description.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **iam.role.create**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/space/list-01-list.png", text: "From the left-hand side menu, click IAM → Spaces.", hotspot: { x: 0, y: 0.6963, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/space/list-01-list.png", text: "In the IAM → Spaces menu, click “Create a space”.", hotspot: { x: 0.8508, y: 0.2296, w: 0.1103, h: 0.0494 } },
+    { img: "/img/walkthrough/en/space/create-02-form.png", text: "Enter the space's name and description, then click “Create space”.", hotspot: { x: 0.6721, y: 0.921, w: 0.0772, h: 0.0494 } },
+  ]}
+/>
+
+1. In the **Spaces** menu, click the **Create a space** button.
+
+   A new window appears.
+
+2. In the "Space name" and "Space description" fields, enter the name and description of the new space.
+3. Click the **Create space** button. Back on the spaces list, a message confirms that the new space has been created.
+:::warning
+A space can take several seconds to be created. Therefore, it may not appear immediately in the list of spaces.
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/POST/organisations/{organisationId}/spaces
+
+### Example
+
+```bash
+curl 'https://api.{region}.numspot.com/organisations/{organisationId}/spaces' \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "",
+  "description": ""
+}'
+```
+
+### Response
+
+```json
+{
+  "name": "…",
+  "description": "…",
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "organisationId": "123e4567-e89b-12d3-a456-426614174000",
+  "status": "QUEUED",
+  "createdOn": "2025-12-16T15:38:31.485Z",
+  "updatedOn": "2025-12-16T15:38:31.485Z"
+}
+```
+
+:::info
+See the [API usage page](/docs/iam/concepts/api/) for details.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/space).
+
+</TabItem>
+</Tabs>

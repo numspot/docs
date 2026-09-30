@@ -1,0 +1,76 @@
+---
+title: Supprimer un volume
+sidebar_position: 6
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer un volume
+
+Vous pouvez supprimer un `volume` dont vous n'avez plus besoin afin de libérer vos quotas de ressources. Vous ne pouvez pas retrouver ultérieurement un `volume` supprimé.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.blockStorage.delete**
+
+:::
+
+<Tabs>
+<TabItem value="Console" default>
+
+## Console {#tabhead-console}
+
+
+1. Connectez-vous sur la console Numspot.
+
+2. Depuis le menu latéral gauche, cliquez sur **Storage** → **[Block Storage](/docs/storage/block-storage/concepts/)** → **Volumes**. La liste des `volumes` apparaît.
+
+3. Cochez la case du `volume` que vous souhaitez supprimer.
+
+    :::info
+    Le `volume` doit être dans l'état "available" pour être supprimé.
+    :::
+
+    :::info
+    La multi-sélection est disponible.
+    :::
+
+4. Cliquez sur **Supprimer**.
+
+    La boîte de dialogue **Suppression d'un volume** apparaît.
+
+5. Cliquez sur **Suppression du volume**. Le `volume` est supprimé.
+
+    :::info
+    Cette procédure de suppression peut aussi être réalisée directement via la sélection de l'action **Supprimer** dans le menu **Actions** associé à chaque `volume`.
+    :::
+
+</TabItem>
+<TabItem value="API">
+
+## API {#tabhead-api}
+
+
+:::info
+**Avant de commencer** : Assurez-vous que vous n'avez plus besoin des données stockées sur le `volume` que vous souhaitez supprimer ou qu'elles sont sauvegardées ailleurs (sur un autre `volume` ou dans un snapshot), car il ne sera pas possible de récupérer le `volume` supprimé.
+:::
+
+La commande `DELETE /compute/spaces/{spaceId}/volumes/{id}` supprime un `volume` de type block storage spécifié. Vous ne pouvez supprimer que des `volumes` disponibles, c'est-à-dire des `volumes` qui ne sont pas attachés à une [VM (Virtual Machine)](/docs/compute/concept/).
+
+[Exemple de requête : Suppression d'un Volume ↗](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/volumes/{id})
+
+</TabItem>
+<TabItem value="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/volume).
+
+</TabItem>
+</Tabs>

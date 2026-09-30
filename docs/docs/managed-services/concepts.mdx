@@ -1,0 +1,78 @@
+---
+title: "Services managés - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+---
+
+# Services managés
+
+## Introduction aux services managés
+
+Les **services managés** permettent aux entreprises de bénéficier d'une infrastructure informatique complète, gérée par un fournisseur de services cloud. Ces services incluent des bases de données, des environnements d'exécution pour applications, des outils de développement, et bien plus, sans que l'utilisateur ait à gérer l'infrastructure sous-jacente.
+
+### Avantages des services managés
+- **Gain de temps** : Pas besoin de gérer l'infrastructure, les mises à jour, ou la maintenance.
+- **Évolutivité** : Les ressources peuvent être ajustées en fonction des besoins.
+- **Sécurité** : Les fournisseurs de services assurent la sécurité et la conformité.
+- **Coût** : Réduction des coûts liés à la gestion de l'infrastructure.
+
+:::warning
+Les services managés doivent impérativement être activés avant de lancer une création.
+À défaut, une erreur bloquante `Managed Services are not enabled yet in your space` sera retournée.
+
+Pour activer vos services managés, veuillez contacter le [Support Client](/docs/support/general/#demandes-de-support).
+:::
+
+## Services managés Numspot
+
+### 1. PostgreSQL managé
+
+**PostgreSQL** est un système de gestion de base de données relationnelle (SGBDR) open-source, connu pour sa robustesse et sa conformité aux standards SQL. En tant que service managé, il permet aux utilisateurs de bénéficier d'une base de données PostgreSQL sans avoir à gérer l'installation, la configuration, ou la maintenance du serveur.
+
+**Cas d'utilisation** :
+- Stockage et gestion de données structurées.
+- Applications nécessitant des transactions ACID (Atomicité, Cohérence, Isolation, Durabilité).
+- Environnements où la conformité et la sécurité des données sont critiques.
+
+### 2. Kubernetes (K8s) managé
+
+**Kubernetes** est une plateforme open-source pour l'automatisation du déploiement, de la mise à l'échelle et de la gestion des applications conteneurisées. En tant que service managé, Kubernetes permet aux entreprises de déployer et gérer des applications conteneurisées sans avoir à configurer ou maintenir le [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/).
+
+**Cas d'utilisation** :
+- Déploiement et gestion d'applications conteneurisées.
+- Environnements nécessitant une haute disponibilité et une évolutivité.
+- Orchestration de microservices.
+
+### 3. Container Registry managé
+
+**Container Registry** est une solution gérée par Numspot pour stocker, gérer et sécuriser les artefacts logiciels, notamment :
+- des images de conteneurs (Docker, OCI),
+- des charts Helm,
+- des artefacts divers (npm, packages, fichiers de configuration, etc.).
+
+### 4. Plateforme IA Mistral managée
+
+La **Plateforme IA Mistral** est une plateforme d'intelligence artificielle générative (modèles de langage Mistral) hébergée dans un environnement cloud souverain. En tant que service managé, elle permet d'exploiter des modèles d'IA sans gérer l'infrastructure [GPU](/docs/compute/gpu/concept) ni le déploiement des modèles.
+
+Contrairement aux autres services managés, la Plateforme IA Mistral n'est pas activable en autonomie : elle est mise à disposition **sur demande via notre service commercial**. Voir [Plateforme IA Mistral - Concepts](/docs/managed-services/mistral-ai-platform/concepts/).
+
+### 5. Secret Manager managé
+
+[Secret Manager](/docs/managed-services/secret-manager/concepts) est un service géré par Numspot permettant de stocker, gérer et contrôler l'accès aux secrets (mots de passe, clés API, certificats, tokens, etc.) utilisés par vos applications et infrastructures. Basé sur OpenBao, il centralise la gestion des secrets au sein d'une instance dédiée, offrant un point de contrôle unique pour la distribution et la rotation des informations sensibles.
+
+**Cas d'utilisation** :
+- Centralisation des identifiants et clés API.
+- Rotation automatisée des secrets.
+- Conformité et audit des accès aux secrets.
+
+## Interaction entre services managés
+
+Les services managés peuvent communiquer entre eux sans intervention supplémentaire de votre part.
+
+Pour faire communiquer un service managé avec un autre, vous devez utiliser le "host" de chaque service. Par exemple, un cluster Kubernetes pourra se connecter à une base PostgreSQL en utilisant l'"host" du [cluster PostgreSQL](/docs/managed-services/postgresql/concepts/).
+
+Pour récupérer l'"host" d'un service managé :
+* [Récupérer le statut d'un cluster PostgreSQL](/docs/managed-services/postgresql/actions/status/)
+* [Récupérer le statut d'un cluster K8s](/docs/managed-services/kubernetes/actions/status/)
+* [Récupérer le statut d'un Container Registry](/docs/managed-services/registry/actions/status/)
+* [Récupérer le statut d'une instance Secret Manager](/docs/managed-services/secret-manager/actions/status/)
