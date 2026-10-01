@@ -1,0 +1,42 @@
+name: Trigger GitLab pipeline
+
+# Deploys bridge: a push to main (PR squash-merge or direct push) fires the
+# GitLab pipeline, which downloads this repository's tarball at refs/heads/main
+# and builds/publishes the container (see the GitLab .gitlab-ci.yml
+# sync_github_source job). Without it, merging on GitHub would only run these
+# Actions and the production deploy would wait for a manual GitLab event.
+# Runs with a pipeline trigger token (CI_PIPELINE_SOURCE "trigger"): the
+# existing pipeline rules already accept it on the main branch.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions: {}
+
+jobs:
+  trigger:
+    name: Trigger GitLab deploy pipeline
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger GitLab pipeline for main
+        env:
+          TOKEN: ${{ secrets.GITLAB_PIPELINE_TRIGGER_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::warning::GITLAB_PIPELINE_TRIGGER_TOKEN is not set — skipping (configure it in Settings → Secrets and variables → Actions)."
+            exit 0
+          fi
+          status=$(curl -s -o /tmp/trigger-response.json -w "%{http_code}" \
+            -X POST \
+            --fail-with-body \
+            -F "token=$TOKEN" \
+            -F "ref=main" \
+            "https://gitlab.tooling.cloudgouv-eu-west-1.numspot.internal/api/v4/projects/862/trigger/pipeline") || status="curl-error"
+          cat /tmp/trigger-response.json 2>/dev/null || true
+          if [ "$status" != "201" ] && [ "$status" != "200" ]; then
+            echo "::error::GitLab pipeline trigger failed with HTTP $status"
+            exit 1
+          fi
+          echo "GitLab pipeline triggered (HTTP $status)."
