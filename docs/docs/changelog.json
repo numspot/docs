@@ -81,6 +81,51 @@
       ]
     },
     {
+      "service": "Référence",
+      "status": "added",
+      "date": "2026-09-25",
+      "title": "Nouvelle section Référence avec la page Types de paramètres",
+      "description": "Une section Référence apparaît dans le menu « Ressources & outils » et s'ouvre avec une page Types de paramètres : définitions et exemples des types utilisés dans les tableaux de paramètres des onglets API et Terraform (string, UUID, integer, boolean, enum, array, set, object), avec l'équivalence entre le schéma OpenAPI et le schéma du provider Terraform.",
+      "components": [
+        "docs",
+        "api",
+        "terraform"
+      ]
+    },
+    {
+      "service": "Ressources",
+      "status": "removed",
+      "date": "2026-09-25",
+      "title": "Page Emplacements des ressources supprimée",
+      "description": "La page qui décrivait les zones, régions et endpoints Numspot est supprimée. L'information utile est désormais portée par les pages elles-mêmes : les commandes d'exemple des onglets API indiquent l'URL de base complète (protocole https:// inclus) de chaque service.",
+      "components": [
+        "docs",
+        "api"
+      ]
+    },
+    {
+      "service": "Compute",
+      "status": "changed",
+      "date": "2026-09-25",
+      "title": "Documentation API et Terraform enrichie pour la création de VM",
+      "description": "L'onglet API de la page de création de VM documente l'endpoint POST https://api.eu-west-2.numspot.com/compute/spaces/{spaceId}/vms en détail : l'intégralité des paramètres de la requête (obligatoires puis optionnels, par ordre alphabétique) avec un exemple d'usage dans le tableau, les prérequis à créer en amont, un exemple de requête où chaque valeur dynamique est représentée par une variable {MA-VARIABLE} explicitée (représentation et emplacement de la valeur), la réponse avec machine à états (pending puis running) et l'ensemble des cas d'erreur. La section Permissions distingue la section IAM et la permission (create, get, update). L'onglet Terraform présente la ressource numspot_vm avec les mêmes règles : prérequis, arguments complets ordonnés, variables explicitées et commande d'import avec variable {VM-ID}.",
+      "components": [
+        "docs",
+        "api"
+      ]
+    },
+    {
+      "service": "Compute",
+      "status": "changed",
+      "date": "2026-09-25",
+      "title": "Documentation API et Terraform enrichie pour la création de volumes block storage",
+      "description": "L'onglet API de la page de création de volumes documente l'endpoint POST https://api.eu-west-2.numspot.com/compute/spaces/{spaceId}/volumes en détail : l'intégralité des paramètres de la requête (obligatoires puis optionnels, par ordre alphabétique) avec un exemple d'usage dans le tableau, les prérequis (aucun obligatoire, snapshot optionnel), un exemple de requête où chaque valeur dynamique est représentée par une variable {MA-VARIABLE} explicitée, la réponse avec états asynchrones (creating puis available) et l'ensemble des cas d'erreur. La section Permissions distingue la section IAM et la permission (create, get). L'onglet Terraform présente la ressource numspot_volume avec les mêmes règles : arguments complets ordonnés, variables explicitées et commande d'import avec variable {VOLUME-ID}.",
+      "components": [
+        "docs",
+        "api"
+      ]
+    },
+    {
       "service": "IAM",
       "status": "changed",
       "date": "2026-09-18",

@@ -40,6 +40,7 @@ const SERVICE_TRANSLATIONS = {
   PostgreSQL: 'PostgreSQL',
   Réseau: 'Network',
   Ressources: 'Resources',
+  'Référence': 'Reference',
   'Secret Manager': 'Secret Manager',
   'Services Managés': 'Managed Services',
   Support: 'Support',

@@ -47,7 +47,15 @@ const SLUG_RENAMES = [["plateforme-ia-mistral", "mistral-ai-platform"]];
  * Unlike SLUG_RENAMES this mapping is exact-route based, so each locale
  * build root gets the stub only if the target page exists for that locale.
  */
-const DELETED_PAGES = [];
+// Pages deleted from the documentation tree, mapped to the still-existing
+// page that best replaces them: ["old-route", "target-route"]. The plugin
+// serves a noindex redirect stub at the old URL; the page-deletion guard
+// (linter/tests/page-deletion.test.js) enforces the registration.
+const DELETED_PAGES = [
+  // Resources page (resource locations) removed by D-023 (8): the useful
+  // information (full API base URLs) now lives inside the action pages.
+  ["docs/resources", "docs/reference/parameter-types"],
+];
 
 function redirectHtml(targetUrl) {
   // `noindex, follow`: do not index this old URL, but follow the

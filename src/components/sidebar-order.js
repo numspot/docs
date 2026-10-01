@@ -51,7 +51,7 @@ const HIGHLIGHTED_SIDEBAR_ENTRIES = new Set([
 // OpenAPI (explicit sidebars.ts item, first in the DOM) carries the
 // "Ressources & outils" label, so group 0 needs no marker.
 const SIDEBAR_GROUPS = [
-  ['terraform', 'glossary', 'resources', 'support', 'faq', 'changelog'],
+  ['terraform', 'glossary', 'reference', 'support', 'faq', 'changelog'],
   ['managed-services', 'compute', 'network', 'storage', 'connectivity'],
   ['iam', 'catalog', 'inventory'],
 ];

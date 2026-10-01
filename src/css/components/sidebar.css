@@ -202,7 +202,7 @@ a.menu__link[href^="/docs/getting-started"]::before {
   -webkit-mask-image: url(../../../static/img/sidebar/connectivity.svg);
   mask-image: url(../../../static/img/sidebar/connectivity.svg);
 }
-.section-title.resource > div > a::before {
+.section-title.reference > div > a::before {
   -webkit-mask-image: url(../../../static/img/sidebar/governance.svg);
   mask-image: url(../../../static/img/sidebar/governance.svg);
 }

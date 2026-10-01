@@ -4,7 +4,7 @@ description: Découvrez comment créer une VM sur mesure dans un VPC.
 sidebar_position: 3
 draft: false
 last_update:
-  date: 2026-09-11
+  date: 2026-09-25
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -49,7 +49,9 @@ Pour garantir la sécurité et l'authentification, toutes les images officielles
 :::info
 Cette action nécessite les permissions IAM suivantes :
 
-- **compute.vm.create**
+- **Section :** compute — **Permission :** `vm.create` (créer la VM)
+- **Section :** compute — **Permission :** `vm.get` (consulter la VM après sa création)
+- **Section :** compute — **Permission :** `vm.update` (démarrer, arrêter ou modifier la VM après sa création)
 
 :::
 
@@ -64,7 +66,7 @@ Cette action nécessite les permissions IAM suivantes :
   - [Créer une key pair ↗](../../keypairs/actions/create.mdx) 
   :::
 
-  1. Depuis le menu latéral gauche, cliquez sur **Compute** → **VMs** pour accéder à la liste des VM.
+  1. Depuis le menu latéral gauche, cliquez sur **Compute** → **VM** pour accéder à la liste des VM.
   2. Cliquez sur le bouton **Créer une VM** situé en haut à droite de l'écran pour lancer l'assistant de création de VM.
 
 ![menu_compute.png](/img/console/compute/menu_compute.png)
@@ -100,7 +102,7 @@ Cette action nécessite les permissions IAM suivantes :
 
   2. Sélectionnez le nombre de VM souhaité :
 
-![Number of VMs](/img/console/compute/vms/number_of_vms.png)
+![Number of VM](/img/console/compute/vms/number_of_vms.png)
 
   - vous pouvez choisir de créer plusieurs VM simultanément (jusqu'à un maximum de 20, sous réserve d'augmentation de quota) ; 
   - un récapitulatif des options sélectionnées, avec le coût total estimé, est affiché sur le côté droit de l'écran. Cela vous permet de suivre facilement les coûts associés à votre VM.
@@ -200,15 +202,257 @@ Sauvegardez ce fichier avec précaution, car vous aurez besoin de son contenu à
   - Lorsque la création est terminée, vous pouvez retourner à la liste des VM.
 </TabItem>
 <TabItem value="api" label="API">
-    La commande `POST /compute/spaces/{spaceId}/vms` permet de créer et lancer une VM à partir d'une image.
-- **États** : La VM passe de `pending` à `running` une fois créée ;
-- **Security group** : Le security group par défaut est appliqué si aucun n'est spécifié ;
-- **Accès sécurisé** : Le serveur de métadonnées fournit la clé publique pour un accès sans mot de passe.
+<!-- API tab standard (see DECISIONS.md D-020 + D-021): every API tab follows
+     this structure, grounded in the OpenAPI spec (static/files/openapi.yaml) —
+     never invented:
+     1. One-line intro: what the operation does + scope (organisation vs space).
+     2. INFO admonition: prerequisites to create beforehand (mandatory vs
+        optional, with links to the action pages) + access token link
+        (/docs/iam/concepts/api/) + pointer to the page-level Permissions
+        section.
+     3. `METHOD https://<base-url>/<path>` in inline code right after the INFO
+        admonition — FULL base URL with the https:// scheme, never a relative
+        path — + "Documentation complète ↗" link to the /openapi anchor
+        (encode { } as %7B %7D). Do NOT repeat the action name as an H3
+        ("Créer une VM dans un espace") — the page title already says it. Add
+        an H3 per endpoint ONLY when the tab documents several endpoints
+        (e.g. organisation vs space variants).
+     4. Parameter table: Paramètre | Emplacement (chemin/corps/requête) |
+        Requis | Type | Exemple | Description. ALL parameters of the request
+        (path + body) — none omitted. Order: required parameters first
+        (alphabetical), then optional parameters (alphabetical). The Exemple
+        column carries a realistic usage value. Types are described once under
+        the table with a link to the parameter-types reference page
+        (/docs/reference/parameter-types).
+     5. Example: one realistic curl (token exported, full base URL) where every
+        dynamic value uses the {MA-VARIABLE} syntax ({SPACE-ID}, {IMAGE-ID}… —
+        uppercase, hyphenated, derived from the API field name; literals such
+        as enum choices or plain numbers stay as example values). curl only —
+        no SDK snippets. A "Variables" table below the example explains each
+        variable: what it represents + where to find its value.
+     6. Response: HTTP status line + field table + complete JSON example.
+     7. Async behaviors in an INFO admonition (state machine, polling endpoint).
+     8. "Erreurs principales" table: EVERY error case of the operation — codes
+        from the spec plus the concrete realistic cases (400/401/403/404/500…),
+        reviewed as a whole (final wording validated with Erwan).
+     Glossary rules apply in tables: resource types and acronyms plain text
+     (e.g. snapshot, iops — no backticks); enum literal values stay backticked.
 
-[Exemple de requête : Création d'une VM](https://docs.numspot.com/openapi#tag/compute/POST/compute/spaces/%7BspaceId%7D/vms)
+     TERRAFORM tab standard (grounded in the provider source
+     github.com/numspot/terraform-provider-numspot, never invented):
+     1. One-line intro: manage the <resource> with the numspot_<resource>
+        resource + provider auth note (service account client_id/client_secret,
+        space-level scope).
+     2. INFO admonition: prerequisites to create beforehand (mandatory vs
+        optional, with links) + pointer to the page-level Permissions section.
+     3. "### Exemple": one realistic hcl block — variable declarations for the
+        provider credentials + provider block + the resource block. Values come
+        from the provider's examples/resources/<resource>/resource.tf when
+        available; a closing line tells the reader to replace the id-shaped
+        literals with the values of their own space. HCL stays valid HCL: the
+        {MA-VARIABLE} syntax applies to shell commands (curl, terraform
+        import), not to Terraform configuration.
+     4. "### Arguments": Argument | Requis | Type | Exemple | Description —
+        ALL writable arguments of the resource (none omitted; computed-only
+        outputs excluded). Order: required arguments first (alphabetical),
+        then optional arguments (alphabetical).
+     5. "### Import": one-line purpose (bring an existing resource, created via
+        console or API, into the Terraform state without recreating it), then
+        `terraform import numspot_<resource> {RESOURCE-ID}` with the
+        {MA-VARIABLE} syntax, then a short paragraph: what the id represents
+        and where to find it, the command maps the existing resource to the
+        matching resource block without modifying it, and a `terraform plan`
+        check is required afterwards because Terraform does not generate the
+        configuration. -->
+## API {#tabhead-api}
+
+Créez et lancez une VM à partir d'une image, au sein d'un espace.
+
+:::info
+**Prérequis** : un subnet doit exister dans l'espace (créer un [subnet ↗](/docs/network/subnets/actions/create)) ; une [key pair](/docs/compute/keypairs/concept) et un [security group](/docs/compute/security-groups/concepts/concept-sg) sont optionnels.
+
+Cette opération nécessite un [jeton d'accès](/docs/iam/concepts/api/) et les permissions listées en tête de page.
+:::
+
+`POST https://api.eu-west-2.numspot.com/compute/spaces/{spaceId}/vms`
+
+[Documentation complète de cet endpoint ↗](/openapi/#tag/compute/POST/compute/spaces/%7BspaceId%7D/vms)
+
+### Paramètres
+
+| Paramètre | Emplacement | Requis | Type | Exemple | Description |
+| --- | --- | --- | --- | --- | --- |
+| `imageId` | corps | oui | string | `ami-12345678` | Identifiant de l'image à utiliser ; la liste des images est disponible via l'endpoint ReadImages |
+| `spaceId` | chemin | oui | UUID | `123e4567-e89b-12d3-a456-426614174000` | Espace dans lequel créer la VM |
+| `subnetId` | corps | oui | string | `subnet-12345678` | Identifiant du subnet dans lequel créer la VM |
+| `type` | corps | oui | string | `ns-eco6-2c4r` | Gabarit de VM parmi les 65 disponibles |
+| `blockDeviceMappings` | corps | non | array | `/dev/sda1` | Mappings de périphériques blocs ; chaque mapping décrit un volume (`deviceName`, `bsu` avec `deleteOnVmDeletion`, `iops`, `snapshotId`, `volumeSize`) |
+| `bootOnCreation` | corps | non | boolean | `true` | Démarrage de la VM à la création, `true` par défaut |
+| `bsuOptimized` | corps | non | boolean | — | Paramètre historique conservé pour compatibilité, sans effet |
+| `clientToken` | corps | non | string | `create-vm-2026-09` | Identifiant unique gérant l'idempotence de la requête |
+| `deletionProtection` | corps | non | boolean | `true` | Empêche la suppression de la VM si `true` |
+| `keypairName` | corps | non | string | `keypair-example` | Nom de la key pair associée à la VM |
+| `nestedVirtualization` | corps | non | boolean | `false` | Active la virtualisation imbriquée (bail dédié uniquement) |
+| `performance` | corps | non | enum | `high` | `medium`, `high` ou `highest`, `high` par défaut ; ignoré si le gabarit `type` porte déjà sa performance |
+| `placement` | corps | non | object | `{"tenancy": "default"}` | Placement de la VM : `tenancy` (`default`, `dedicated` ou ID de groupe dédié) et `availabilityZoneName` |
+| `privateIps` | corps | non | array | `10.0.0.4` | Adresses IP privées de la VM |
+| `securityGroupIds` | corps | non | array | `sg-12345678` | Identifiants des security groups ; le security group par défaut est appliqué si absent |
+| `securityGroups` | corps | non | array | `mon-security-group` | Noms des security groups (alternative à `securityGroupIds`) |
+| `userData` | corps | non | string | `UHV0IHlvdXIgc2NyaXB0…` | Script de configuration injecté au démarrage, encodé en Base64, 500 KiB maximum |
+| `vmInitiatedShutdownBehavior` | corps | non | string | `stop` | Comportement à l'arrêt : `stop` (défaut), `restart` ou `terminate` |
+
+Les types utilisés dans ce tableau sont décrits dans la page [Types de paramètres](/docs/reference/parameter-types).
+
+### Exemple
+
+```bash
+export TOKEN="{TOKEN}"
+
+curl 'https://api.eu-west-2.numspot.com/compute/spaces/{SPACE-ID}/vms' \
+  --request POST \
+  --header "Authorization: Bearer $TOKEN" \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "imageId": "{IMAGE-ID}",
+  "subnetId": "{SUBNET-ID}",
+  "type": "ns-eco6-2c4r",
+  "keypairName": "{KEYPAIR-NAME}"
+}'
+```
+
+| Variable | Représente | Où trouver sa valeur |
+| --- | --- | --- |
+| `{TOKEN}` | Jeton d'accès OAuth 2.0 de la requête | Généré par l'authentification API (voir [Jeton d'accès](/docs/iam/concepts/api/)) |
+| `{SPACE-ID}` | Espace Numspot dans lequel créer la VM | Console Numspot (espace actif) ou réponse de l'API [Lister les espaces ↗](/docs/iam/space/actions/list) |
+| `{IMAGE-ID}` | Image utilisée pour créer la VM | Assistant de création de VM sur la console, ou endpoint ReadImages de l'API |
+| `{SUBNET-ID}` | Subnet dans lequel la VM est créée | Console Numspot (réseau du VPC) ou réponse de l'API de lecture des subnets |
+| `{KEYPAIR-NAME}` | Key pair associée à la VM | Console Numspot ou réponse de l'API de lecture des key pairs |
+
+### Réponse
+
+`201 Created` — le payload décrit la VM créée :
+
+| Champ | Type | Description |
+| --- | --- | --- |
+| `id` | string | Identifiant de la VM (`i-…`) |
+| `state` | string | `pending`, `running`, `stopping`, `stopped`, `shutting-down`, `terminated` ou `quarantine` |
+| `type` | string | Gabarit de la VM |
+| `imageId` | string | Image utilisée |
+| `subnetId` | string | Subnet de la VM |
+| `keypairName` | string | Key pair associée |
+| `privateIp` | string | Adresse IP privée principale |
+| `publicIp` | string | Adresse IP publique, si attribuée |
+| `creationDate` | string | Date de création |
+
+```json
+{
+  "id": "i-12345678",
+  "state": "pending",
+  "type": "ns-eco6-2c4r",
+  "imageId": "ami-12345678",
+  "subnetId": "subnet-12345678",
+  "keypairName": "keypair-example",
+  "privateIp": "10.0.0.4",
+  "creationDate": "2026-09-21T10:15:30.485Z"
+}
+```
+
+:::info
+La VM est retournée avec l'état `pending`, puis passe à `running` une fois démarrée. Le serveur de métadonnées fournit la clé publique de la key pair pour un accès sécurisé sans mot de passe.
+:::
+
+### Erreurs principales
+
+| Code | Cas |
+| --- | --- |
+| 400 | Corps invalide : `type` inconnu, `userData` non encodé en Base64 ou trop volumineux, combinaison de paramètres interdite |
+| 401 | Jeton d'accès absent, expiré ou invalide |
+| 403 | Permission `vm.create` manquante |
+| 404 | `spaceId`, `imageId` ou `subnetId` inconnu |
+| 500 | Erreur interne du service — réessayer plus tard |
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
-  La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
+## Terraform {#tabhead-terraform}
+
+Gérez la VM avec la ressource `numspot_vm` du [provider Terraform Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs). Le provider s'authentifie avec les identifiants d'un compte de service (client_id / client_secret) et opère au niveau de l'espace configuré.
+
+:::info
+**Prérequis** : un subnet doit exister dans l'espace (créer un [subnet ↗](/docs/network/subnets/actions/create)) ; une [key pair](/docs/compute/keypairs/concept) et un [security group](/docs/compute/security-groups/concepts/concept-sg) sont optionnels.
+
+Les permissions nécessaires sont listées en tête de page.
+:::
+
+### Exemple
+
+```hcl
+terraform {
+  required_providers {
+    numspot = {
+      source = "numspot/numspot"
+    }
+  }
+}
+
+variable "client_id" {
+  type = string
+}
+
+variable "client_secret" {
+  type      = string
+  sensitive = true
+}
+
+provider "numspot" {
+  client_id     = var.client_id
+  client_secret = var.client_secret
+}
+
+resource "numspot_vm" "vm" {
+  image_id           = "ami-0b7df82c"
+  type               = "ns-eco6-2c8r"
+  subnet_id          = "subnet-12345678"
+  keypair_name       = "keypair-example"
+  security_group_ids = ["sg-12345678"]
+}
+```
+
+Remplacez les identifiants (`ami-…`, `subnet-…`, `sg-…`) par ceux de votre espace.
+
+| Variable | Représente | Où trouver sa valeur |
+| --- | --- | --- |
+| `var.client_id` | Identifiant du compte de service utilisé par le provider | Créé lors de la création du compte de service (console Numspot, section IAM) |
+| `var.client_secret` | Secret du compte de service | Généré à la création du compte de service, à conserver dans un gestionnaire de secrets |
+
+### Arguments
+
+| Argument | Requis | Type | Exemple | Description |
+| --- | --- | --- | --- | --- |
+| `image_id` | oui | string | `ami-0b7df82c` | Identifiant de l'image à utiliser (`ami-…`) |
+| `subnet_id` | oui | string | `subnet-12345678` | Identifiant du subnet dans lequel créer la VM |
+| `type` | oui | string | `ns-eco6-2c8r` | Gabarit de VM |
+| `deletion_protection` | non | bool | `true` | Empêche la suppression de la VM si `true` |
+| `initiated_shutdown_behavior` | non | string | `stop` | Comportement à l'arrêt : `stop`, `restart` ou `terminate` |
+| `keypair_name` | non | string | `keypair-example` | Nom de la key pair associée à la VM |
+| `nested_virtualization` | non | bool | `false` | Active la virtualisation imbriquée (bail dédié uniquement) |
+| `placement` | non | object | `{"tenancy": "default"}` | Placement de la VM : `tenancy` et `availability_zone_name` |
+| `private_ips` | non | list | `["10.0.0.4"]` | Adresses IP privées de la VM |
+| `security_group_ids` | non | set | `["sg-12345678"]` | Identifiants des security groups |
+| `security_groups` | non | set | `["mon-security-group"]` | Noms des security groups (alternative à `security_group_ids`) |
+| `tags` | non | set | `{key = "name", value = "ma-vm"}` | Tags key/value associés à la VM |
+| `user_data` | non | string | `UHV0IHlvdXIgc2NyaXB0…` | Script de configuration injecté au démarrage, encodé en Base64 |
+
+Les types utilisés dans ce tableau sont décrits dans la page [Types de paramètres](/docs/reference/parameter-types).
+
+### Import
+
+Si la VM existe déjà (créée via la console ou l'API), importez-la dans l'état Terraform :
+
+```bash
+terraform import numspot_vm {VM-ID}
+```
+
+`{VM-ID}` est l'identifiant de la VM (`i-…`, visible sur la console ou en réponse de l'API). La commande associe la VM existante au bloc `resource "numspot_vm"` correspondant dans votre configuration, sans la modifier. Terraform n'importe pas les attributs dans la configuration : vérifiez ensuite avec `terraform plan` que la configuration décrit bien l'état réel, sous peine de destruction ou de modification non souhaitée au prochain `apply`.
+
 </TabItem>
 </Tabs>
