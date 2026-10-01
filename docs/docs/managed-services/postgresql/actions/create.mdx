@@ -1,6 +1,6 @@
 ---
-title: Créer des clusters PostgreSQL - PostgreSQL managé
-sidebar_label: Créer des clusters PostgreSQL
+title: Create PostgreSQL clusters - Managed PostgreSQL
+sidebar_label: Create PostgreSQL clusters
 sidebar_position: 2
 draft: false
 ---
@@ -8,16 +8,16 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Créer des clusters PostgreSQL
+# Create PostgreSQL clusters
 
-Vous avez la possibilité de créer un ou plusieurs [clusters PostgreSQL](/docs/managed-services/postgresql/concepts/) sur mesure au sein de votre espace.
+You can create one or more custom [PostgreSQL clusters](/docs/managed-services/postgresql/concepts/) within your space.
 
-Lors de la création, vous pouvez définir les caractéristiques propres à chaque cluster, telles que le nom, la version de PostgreSQL, la configuration des nœuds — quantité de RAM et nombre de vCPU (virtual CPU) —, le volume dans lequel seront stockées les données, l'exposition publique via un [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) et l'utilisateur principal.
+During creation, you can define the characteristics specific to each cluster, such as the name, the PostgreSQL version, the node configuration — amount of RAM and number of vCPU (virtual Central Processing Unit) —, the volume in which the data is stored, public exposure through a [load balancer](/docs/network/load-balancer/concepts/) and the primary user.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **postgresql.cluster.create**
 
@@ -26,99 +26,94 @@ Cette action nécessite les permissions IAM (Identity and Access Management) sui
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/postgresql/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Services Managés → PostgreSQL → Clusters.", hotspot: { x: 0, y: 0.5136, w: 0.194, h: 0.0568 } },
-    { img: "/img/walkthrough/postgresql/create-01-list.png", text: "Depuis Services managés → PostgreSQL → Clusters, cliquez sur « Créer un cluster ».", hotspot: { x: 0.847, y: 0.2329, w: 0.1141, h: 0.0494 } },
-    { img: "/img/walkthrough/postgresql/create-02-form-top.png", text: "Renseignez le nom du cluster (et éventuellement de la base), les extensions, puis la configuration : version de PostgreSQL, RAM et vCPU.", hotspot: { x: 0.21, y: 0.14, w: 0.45, h: 0.82 } },
-    { img: "/img/walkthrough/postgresql/create-03-form-bottom.png", text: "Choisissez le stockage, la haute disponibilité, le type de réseau (privé/public) et l'administrateur, puis cliquez sur « Créer ». Le panneau « Récapitulatif » résume votre configuration.", hotspot: { x: 0.21, y: 0.14, w: 0.45, h: 0.82 } },
+    { img: "/img/walkthrough/en/postgresql/create-01-list.png", text: "From the left-hand side menu, click Managed Services → PostgreSQL → Clusters.", hotspot: { x: 0, y: 0.5136, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/postgresql/create-01-list.png", text: "From Managed Services → PostgreSQL → Clusters, click “Create a cluster”.", hotspot: { x: 0.8478, y: 0.2329, w: 0.1134, h: 0.0494 } },
+    { img: "/img/walkthrough/en/postgresql/create-02-form-top.png", text: "Enter the cluster name (and optionally the database), the extensions, then the configuration: PostgreSQL version, RAM and vCPU.", hotspot: { x: 0.21, y: 0.14, w: 0.45, h: 0.82 } },
+    { img: "/img/walkthrough/en/postgresql/create-03-form-bottom.png", text: "Choose the storage, high availability, network type (private/public) and the administrator, then click “Create”. The “Summary” panel recaps your configuration.", hotspot: { x: 0.21, y: 0.14, w: 0.45, h: 0.82 } },
   ]}
 />
 
-    1. Depuis le menu latéral de gauche, cliquez sur **Services managés** → **PostgreSQL** → **Clusters** pour accéder à la liste des clusters PostgreSQL.  
-2. Cliquez sur le bouton **Créer un cluster** situé en haut à droite de l'écran pour lancer l'assistant de création d'un cluster PostgreSQL.  
+    1. From the left-hand side menu, click **Managed Services** → **PostgreSQL** → **Clusters** to access the list of PostgreSQL clusters.  
+2. Click the **Create a cluster** button at the top right of the screen to launch the PostgreSQL cluster creation wizard.  
 
-### Nom du cluster
+**Cluster name**
 
-Spécifiez un nom unique pour votre cluster PostgreSQL.  
-Ce nom doit respecter les critères suivants :
+Specify a unique name for your PostgreSQL cluster.  
+This name must meet the following criteria:
 
-- Longueur : entre 3 et 63 caractères ;
-- Caractères autorisés : uniquement des lettres (a-z, A-Z), des chiffres (0-9), des tirets (`-`) ou des tirets bas (`_`) ; 
-- Structure :
-  - doit commencer et se terminer par un caractère alphanumérique ;
-  - les tirets (`-`) ou tirets bas (`_`) ne peuvent pas être consécutifs ni placés en début ou fin de nom.
+- length: between 3 and 63 characters;
+- allowed characters: only letters (a-z, A-Z), numbers (0-9), hyphens (`-`) or underscores (`_`);
+- structure:
+  - it must start and end with an alphanumeric character;
+  - hyphens (`-`) and underscores (`_`) cannot be consecutive nor placed at the start or end of the name.
 
-Exemple valide : `mon-cluster_PostgreSQL-2026`.
+Valid example: `my-cluster_PostgreSQL-2026`.
 
-Vous pouvez également renseigner un **nom de base de données** (facultatif). Si vous ne renseignez rien, la base de données porte le nom du cluster.
+You can also fill in a **database name** (optional). If you leave it empty, the database takes the name of the cluster.
 
-### Extensions
+**Extensions**
 
-Sélectionnez les extensions que vous souhaitez activer. Pour plus de détails sur les extensions disponibles, leurs restrictions et les différences de licences, consultez la section [Extensions](#extensions).
+Select the extensions you want to enable. For more details on available extensions, their restrictions and license differences, see the [Extensions](#extensions) section.
 
-### Configuration du cluster
+**Cluster configuration**
 
-1. Sélectionnez la version de PostgreSQL souhaitée parmi les versions supportées : 16, 17 et 18.
-   La version la plus récente est sélectionnée par défaut. Pour plus d'informations sur le cycle de vie des versions, consultez [Versions et cycle de vie](/docs/managed-services/postgresql/supported-versions/).
-2. Renseignez les quantités de RAM (en giga-octets) et de vCPU.
+1. Select the desired PostgreSQL version among the supported versions: 16, 17 and 18.
+   The most recent version is selected by default. For more information about the version lifecycle, see [Versions and lifecycle](/docs/managed-services/postgresql/supported-versions/).
+2. Fill in the amounts of RAM (in gigabytes) and vCPU.
 
-### Dimensionnement du stockage
+**Storage sizing**
 
-1. Sélectionnez le type de stockage parmi les options suivantes :
-   - Magnetic : volume magnétique économique, adapté aux usages peu intensifs en lecture/écriture ;
-   - Performance : SSD performant pour la production ;
-   - Enterprise : SSD avec 300 IOPS (Input/Output Operations Per Second) par Gio garantis pour les charges de travail critiques.
-2. Renseignez la taille de stockage nécessaire pour votre cluster.
+1. Select the storage type among the following options:
+   - Magnetic: economical magnetic volume, suited to low read/write usage;
+   - Performance: high-performance SSD for production;
+   - Enterprise: SSD with 300 IOPS (Input/Output Operations Per Second) per GiB guaranteed for critical workloads.
+2. Fill in the storage size required for your cluster.
 
-### Haute disponibilité
+**High availability**
 
-Pour activer la haute disponibilité, configurez le nombre de réplicas synchrones :
+To enable high availability, configure the number of synchronous replicas:
 
-- 0 réplica : aucune haute disponibilité - le service s'interrompt en cas de panne du nœud ;
-- 1 réplica : protection de base contre les défaillances ;
-- 2 réplicas : configuration recommandée pour une tolérance aux pannes optimale.
+- 0 replica: no high availability - the service is interrupted if the node fails;
+- 1 replica: basic protection against failures;
+- 2 replicas: configuration recommended for optimal fault tolerance.
 
 :::info
-La haute disponibilité nécessite au minimum 1 réplica. Avec 0 réplica, aucune protection n'est assurée.
+High availability requires at least 1 replica. With 0 replica, no protection is provided.
 :::
 
-### Réseau
+**Network**
 
-Sélectionnez le type de réseau parmi les options suivantes :
+Select the network type among the following options:
 
-- Public : le cluster est accessible depuis Internet via une adresse IP publique ;
-- Privé : le cluster est accessible uniquement depuis le réseau interne.
+- Public: the cluster is accessible from the Internet through a public IP address;
+- Private: the cluster is accessible only from the internal network.
 
-### Administrateur
+**Administrator**
 
-Renseignez le nom de l'administrateur qui sera créé pour le cluster.
+Fill in the name of the administrator that will be created for the cluster.
 
-### Création du cluster
+**Cluster creation**
 
-Pour finaliser la création du cluster, cliquez sur le bouton **Créer**.
+To finalize the cluster creation, click the **Create** button.
 
-Vous êtes redirigé vers la page de détails du cluster. Votre cluster est alors en cours de création et sera opérationnel en quelques minutes.
+You are redirected to the cluster details page. Your cluster is then being created and will be operational within a few minutes.
 </TabItem> 
 <TabItem value="api" label="API">
+    The `POST /postgresql/spaces/{spaceId}/clusters` request lets you create and launch a PostgreSQL cluster.
+    The cluster moves to the "creating" state until it is created, then to "pending" while the pods are managed, then to the "active" state.
 
-## API {#tabhead-api}
+    **Choosing the network type**:
 
-    La requête `POST /postgresql/spaces/{spaceId}/clusters` permet de créer et lancer un cluster PostgreSQL.
-    Le cluster passe en état "creating" jusqu'à sa création, puis "pending" pendant la gestion des pods, puis passe à l'état "active".
+    - **Public**: specify `"visibility": "EXTERNAL"`
+    - **Private**: specify `"visibility": "INTERNAL"`
 
-    **Choix du type de réseau** :
-
-    - **Public** : spécifiez `"visibility": "EXTERNAL"`
-    - **Privé** : spécifiez `"visibility": "INTERNAL"`
-
-### Exemple de requête
+    **Example request**
 
     ```json
     {
-      "name": "mon-cluster-postgresql",
+      "name": "my-cluster-postgresql",
       "user": "admin",
       "majorVersion": "17",
       "nodeConfiguration": {
@@ -133,19 +128,19 @@ Vous êtes redirigé vers la page de détails du cluster. Votre cluster est alor
     }
     ```
 
-### Exemple de réponse
+    **Example response**
 
     ```json
     {
       "id": "550e8400-e29b-41d4-a716-446655440001",
-      "name": "mon-cluster-postgresql",
-      "databaseName": "mon-cluster-postgresql",
+      "name": "my-cluster-postgresql",
+      "databaseName": "my-cluster-postgresql",
       "user": "admin",
       "majorVersion": "17",
       "fullVersion": "17.2",
       "status": {
         "state": "CREATING",
-        "message": "cluster is being created"
+        "message": "Cluster is being created"
       },
       "nodeConfiguration": {
         "vcpuCount": 2,
@@ -157,49 +152,49 @@ Vous êtes redirigé vers la page de détails du cluster. Votre cluster est alor
       },
       "visibility": "EXTERNAL",
       "replicaCount": 0,
-      "host": "mon-cluster-postgresql.postgres.eu-west-2.numspot.com",
+      "host": "my-cluster-postgresql.postgres.eu-west-2.numspot.com",
       "port": 5432,
       "createdOn": "2026-04-05T10:30:00Z"
     }
     ```
 
-    [Voir la spécification complète](/openapi/#tag/postgresql/POST/postgresql/spaces/{spaceId}/clusters)
+    [See the full specification](/openapi/#tag/postgresql/POST/postgresql/spaces/{spaceId}/clusters)
 </TabItem>
 
 {/* </TabItem> */}
 </Tabs>
 
-## Choix du type de réseau
+## Choosing the network type
 
-Le choix entre réseau **Privé** et **Public** détermine qui peut accéder à votre base de données :
+The choice between a **Private** and a **Public** network determines who can access your database:
 
-- **Privé** : votre cluster n'est accessible qu'au sein du réseau interne Numspot. Seules vos autres ressources présentes dans le même réseau peuvent s'y connecter. Cette option est recommandée pour les environnements de production, notamment les environnements SecNumCloud. Pour y accéder de façon sécurisée, vous pouvez utiliser une [VM](/docs/compute/concept/) de rebond et un VPN (Virtual Private Network) Numspot.
+- **Private**: your cluster is accessible only within the Numspot internal network. Only your other resources located in the same network can connect to it. This option is recommended for production environments, in particular SecNumCloud environments. To access it securely, you can use a bastion [VM](/docs/compute/concept/) and a Numspot VPN (Virtual Private Network).
 
-- **Public** : votre cluster est accessible depuis Internet. Toute personne disposant des identifiants de connexion peut s'y connecter, où qu'elle se trouve. Cette option convient aux développements, tests ou environnements où la sécurité réseau n'est pas critique.
+- **Public**: your cluster is accessible from the Internet. Anyone with the connection credentials can connect to it, wherever they are. This option is suitable for development, testing or environments where network security is not critical.
 
-**Recommandation** : Pour garantir la sécurité de vos données en production, privilégiez toujours le réseau **Privé**.
+**Recommendation**: To ensure the security of your data in production, always favor the **Private** network.
 
 ## Extensions
 
-Lors de la création d'un cluster PostgreSQL, vous pouvez choisir d'activer une ou plusieurs extensions. **Cette sélection est définitive : les extensions doivent être choisies à la création du cluster et ne peuvent pas être ajoutées ou retirées par la suite.**
+When creating a PostgreSQL cluster, you can choose to enable one or more extensions. **This selection is final: extensions must be chosen at cluster creation and cannot be added or removed afterwards.**
 
-### Extensions disponibles
+### Available extensions
 
-| Extension | Description | Cas d'usage | Restrictions |
-|-----------|-------------|-------------|--------------|
-| **TimescaleDB** | Extension de base de données relationnelle optimisée pour les données temporelles (time-series). Elle organise les données en hypertables pour améliorer les performances des insertions et des requêtes sur de grands volumes de données horodatées. | Séries temporelles, monitoring, IoT, métriques applicatives, analyse historique. | Licence Apache 2 uniquement. Les fonctionnalités de l'édition Community (sous licence TSL — Timescale License) ne sont pas disponibles. |
-| **Vector** | Extension permettant de stocker, indexer et rechercher des vecteurs à haute dimension directement dans PostgreSQL. Elle prend en charge plusieurs méthodes d'indexation (IVFFlat, HNSW) et des opérateurs de distance. | Recherche sémantique, systèmes de recommandation, RAG (Retrieval-Augmented Generation), bases de données vectorielles. | Aucune restriction particulière. |
+| Extension | Description | Use cases | Restrictions |
+|-----------|-------------|-----------|--------------|
+| **TimescaleDB** | Database extension optimized for time-series data. It organizes data into hypertables to improve the performance of inserts and queries on large volumes of timestamped data. | Time series, monitoring, IoT, application metrics, historical analysis. | Apache 2 license only. Features from the Community edition (under TSL — Timescale License) are not available. |
+| **Vector** | Extension for storing, indexing, and searching high-dimensional vectors directly in PostgreSQL. It supports several indexing methods (IVFFlat, HNSW) and distance operators. | Semantic search, recommendation systems, RAG (Retrieval-Augmented Generation), vector databases. | No particular restrictions. |
 
-### Différences de fonctionnalités entre les licences TimescaleDB
+### TimescaleDB license feature differences
 
-TimescaleDB est distribué sous deux licences : Apache 2 (open source) et Community (licence TSL). Numspot fournit uniquement l'édition **Apache 2** : les fonctionnalités réservées à l'édition Community ne sont donc pas accessibles.
+TimescaleDB is distributed under two licenses: Apache 2 (open source) and Community (TSL license). Numspot provides only the **Apache 2** edition: features reserved for the Community edition are therefore not accessible.
 
-| Fonctionnalité | Apache 2 | Community (TSL) | Disponible sur Numspot |
-|----------------|----------|-----------------|------------------------|
-| Hypertables | Oui | Oui | Oui |
-| Indexation et requêtes temporelles | Oui | Oui | Oui |
-| Agrégats continus (continuous aggregates) | Non | Oui | Non |
-| Compression native des données | Non | Oui | Non |
-| Politiques de rétention automatiques | Non | Oui | Non |
-| Tiering des données (stockage froid) | Non | Oui | Non |
-| Déploiement multi-nœud (multi-node) | Non | Oui | Non |
+| Feature | Apache 2 | Community (TSL) | Available on Numspot |
+|---------|----------|-----------------|----------------------|
+| Hypertables | Yes | Yes | Yes |
+| Time-oriented indexing and queries | Yes | Yes | Yes |
+| Continuous aggregates | No | Yes | No |
+| Native data compression | No | Yes | No |
+| Automated retention policies | No | Yes | No |
+| Data tiering (cold storage) | No | Yes | No |
+| Multi-node deployment | No | Yes | No |

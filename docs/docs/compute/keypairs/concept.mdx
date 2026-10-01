@@ -1,57 +1,57 @@
 ---
-title: À propos des key pairs
+title: About key pairs
 sidebar_position: 1
 draft: false
 ---
 
 import ActionsSummary from '@site/src/components/ActionsSummary';
 
-# À propos des key pairs
+# About key pairs
 
 <ActionsSummary />
 
-Les key pairs (paires de clés) sont des paires de clés SSH (Secure Shell) qui vous permettent de vous connecter à vos [VM (Virtual Machine)](/docs/compute/concept/). Lorsque vous créez une VM, vous devez spécifier la key pair que vous souhaitez utiliser et utiliser sa clé privée pour vous connecter à la VM.
+Key pairs are pairs of SSH (Secure Shell) keys that let you connect to your [VM](/docs/compute/concept/) (Virtual Machine). When you create a VM, you must specify the key pair you want to use and use its private key to connect to the VM.
 
-## Clé publique et clé privée
+## Public key and private key
 
-Une key pair se compose d'une clé publique et d'une clé privée.
+A key pair consists of a public key and a private key.
 
-Vous pouvez :
+You can:
 
-* Générer une key pair au format RSA 2048 bits à l'aide de l'API (Application Programming Interface) ou de la console.
-* Importer une key pair existante créée à l'aide d'un outil tiers, parmi les types suivants : RSA (2048 bits ou de préférence 4096 bits), Ed25519, et ECDSA (256 bits, 384 bits, ou 521 bits). Les formats suivants peuvent être utilisés : PEM, PKCS8, RFC4716, et OpenSSH.
+* Generate a key pair in 2048-bit RSA format using the API (Application Programming Interface) or the console.
+* Import an existing key pair created using a third-party tool, from the following types: RSA (2048 bits or preferably 4096 bits), Ed25519, and ECDSA (256 bits, 384 bits, or 521 bits). The following formats can be used: PEM, PKCS8, RFC4716, and OpenSSH.
 
 :::warning
-Donnez des noms explicites à vos key pairs afin que leur rôle soit compris. Vous pouvez par exemple utiliser des noms au format application-environnement-rôle :
+Give explicit names to your key pairs so that their role is understood. You can, for example, use names in the application-environment-role format:
 * website-all-bastion
 * website-front-lb
 * website-middle-app
 * website-back-db 
 :::
 
-Dans tous les cas, la clé publique de la key pair est conservée par Numspot, et est disponible uniquement dans les metadata de la VM. En revanche, la clé privée n'est jamais transmise à Numspot.
+In all cases, the public key of the key pair is kept by Numspot, and is available only in the metadata of the VM. The private key, however, is never transmitted to Numspot.
 
-Pour les VM Linux créées à partir d'une [image](/docs/compute/images/concept/) non officielle, vous pouvez remplacer la clé publique de la key pair dans le fichier authorized_keys par celle d'une nouvelle key pair.
+For Linux VM created from a non-official [image](/docs/compute/images/concept/), you can replace the public key of the key pair in the authorized_keys file with that of a new key pair.
 
-## Key pairs et Image
+## Key pairs and Image
 
-Toutes les images officielles utilisent les key pairs comme système d'authentification. Lors de la création d'une VM à partir d'une image officielle, vous devez lui attribuer une key pair :
+All official images use key pairs as their authentication system. When creating a VM from an official image, you must assign it a key pair:
 
-* Pour les VM Linux, la VM obtient la clé publique de la key pair à partir des metadata et l'associe à l'utilisateur `root` en l'insérant dans le répertoire home, dans le fichier authorized_keys.
-* Pour les VM Windows, la key pair vous permet d'obtenir et de déchiffrer le mot de passe Administrateur lors de la création de la VM.
+* For Linux VM, the VM obtains the public key of the key pair from the metadata and associates it with the `root` user by inserting it into the home directory, in the authorized_keys file.
+* For Windows VM, the key pair lets you obtain and decrypt the Administrator password when creating the VM.
 
 :::info
-Seules les key pairs RSA peuvent déchiffrer le mot de passe d'une VM Windows.
+Only RSA key pairs can decrypt the password of a Windows VM.
 :::
 
-Cependant, les images non officielles peuvent utiliser n'importe quel système d'authentification. Lors de la création d'une VM, vous devez vérifier si une key pair est nécessaire pour l'image spécifiée.
+However, non-official images can use any authentication system. When creating a VM, you must check whether a key pair is required for the specified image.
 
 :::warning
-Nous vous recommandons fortement d'utiliser uniquement des images officielles. Nous ne pouvons pas garantir la sécurité des VM créées à partir d'images issues d'autres sources.
+We strongly recommend that you use only official images. We cannot guarantee the security of VM created from images from other sources.
 :::
 
-Après votre première connexion à une VM, vous pouvez :
+After your first connection to a VM, you can:
 
-* Remplacer la key pair attribuée.
-* Remplacer la key pair par un autre système d'authentification de votre choix, par exemple les protocoles Kerberos ou Radius.
-* Ajouter un ou plusieurs systèmes d'authentification en supplément de la key pair.
+* Replace the assigned key pair.
+* Replace the key pair with another authentication system of your choice, for example the Kerberos or Radius protocols.
+* Add one or more authentication systems in addition to the key pair.

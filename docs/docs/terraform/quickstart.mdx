@@ -1,50 +1,50 @@
 ---
-title: Terraform pour Numspot - Démarrage rapide
+title: Terraform for Numspot - Quickstart
 sidebar_position: 1
 ---
 
-# Terraform pour Numspot - Démarrage rapide
+# Terraform for Numspot - Quickstart
 
-Terraform est un outil qui permet d'automatiser la création et de versionner une infrastructure cloud.
+Terraform is a tool that automates the creation and versioning of a cloud infrastructure.
 
-Le provider développé par Numspot sert d'interface entre la définition de votre infrastructure et notre service en charge de la création de ces ressources.
+The provider developed by Numspot acts as an interface between the definition of your infrastructure and our service in charge of creating these resources.
 
-Pour plus d'informations sur les ressources disponibles et la façon de les utiliser, vous pouvez vous référer à [la documentation de notre provider sur le registre d'HashiCorp](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
+For more information about the available resources and how to use them, you can refer to [our provider documentation on the HashiCorp registry](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
 
-## Avant de commencer
+## Before you begin
 
-Pour réaliser les actions présentées ci-dessous, vous devez disposer :
+To carry out the actions presented below, you must have:
 
-* D'un compte Numspot
-* De [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform) installé
+* A Numspot account
+* [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform) installed
 
-## Créer et déployer des ressources Numspot à l'aide de Terraform
+## Create and deploy Numspot resources using Terraform
 
-Pour les besoins de cet exemple, nous allons créer une [VM (Virtual Machine)](/docs/compute/concept/).
+For the purposes of this example, we will create a [VM (Virtual Machine)](/docs/compute/concept/).
 
-### Création du fichier de configuration Terraform
+### Creating the Terraform configuration file
 
-1) Créez un nouveau fichier appelé `main.tf`.
+1) Create a new file named `main.tf`.
 
-2) Ouvrez le fichier dans un éditeur de code et collez le bloc suivant pour définir Numspot comme fournisseur pour ce déploiement :
-vous pourrez retrouver la dernière version disponible [ici](https://registry.terraform.io/providers/numspot/numspot/latest)
+2) Open the file in a code editor and paste the following block to define Numspot as the provider for this deployment:
+you can find the latest available version [here](https://registry.terraform.io/providers/numspot/numspot/latest)
 ```hcl
 terraform {
   required_providers {
     numspot = {
       source  = "numspot/numspot"
-      version = "<NUMERO_DE_VERSION>"
+      version = "<PROVIDER_VERSION>"
     }
   }
 }
 ```
 
-3) Ajoutez le bloc suivant et remplacez `<CLIENT_ID>`, `<CLIENT_SECRET>` et `<SPACE_ID>` par les informations du projet dans lequel vous souhaitez créer des ressources :
+3) Add the following block and replace `<CLIENT_ID>`, `<CLIENT_SECRET>` and `<SPACE_ID>` with the details of the project in which you want to create resources:
 
 ```hcl
 provider "numspot" {
-  numspot_host      = "<Choisissez une des deux régions ci-dessous>"
-  numspot_host_os   = "<Choisissez une des deux régions ci-dessous>"
+  numspot_host      = "<Choose one of the two regions below>"
+  numspot_host_os   = "<Choose one of the two regions below>"
   client_id         = "<CLIENT_ID>"
   client_secret     = "<CLIENT_SECRET>"
   space_id          = "<SPACE_ID>"
@@ -52,17 +52,17 @@ provider "numspot" {
 ```
 
 :::info
-**Région standard** :
-- API (Application Programming Interface) : https://api.eu-west-2.numspot.com
-- object storage : https://objectstorage.eu-west-2.numspot.com
+**Standard region**:
+- API (Application Programming Interface): https://api.eu-west-2.numspot.com
+- object storage: https://objectstorage.eu-west-2.numspot.com
 
-AZ (Availability Zone) disponibles :
+Available AZ (Availability Zone):
 - eu-west-2a
 - eu-west-2b
 
 :::
 
-4) Ajoutez les blocs suivants pour créer un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/), un subnet et une VM :
+4) Add the following blocks to create a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/), a subnet and a VM:
 ```hcl
 resource "numspot_vpc" "net" {
   ip_range = "10.0.0.0/16"
@@ -71,64 +71,64 @@ resource "numspot_vpc" "net" {
 resource "numspot_subnet" "subnet" {
   vpc_id                 = numspot_vpc.net.id
   ip_range               = "10.0.0.0/24"
-  availability_zone_name = "<Choisissez une AZ de la région>"
+  availability_zone_name = "<Choose an AZ from the region>"
 }
 
 resource "numspot_vm" "vm" {
-  image_id           = "<ID de l'image>"
+  image_id           = "<image ID>"
   subnet_id          = numspot_subnet.subnet.id
-  type               = "<Type de VM>"
+  type               = "<VM type>"
 }
 ```
 {/* :::info
-Vous pouvez retrouver les types de vm disponible [ici](../compute/vms/types.mdx)
+You can find the available VM types [here](../compute/vms/types.mdx)
 
-Vous pouvez retrouver les identifiants d'images disponibles [ici](../compute/images/official-images)
+You can find the available image identifiers [here](../compute/images/official-images)
 ::: */}
 
-5) Enregistrez vos modifications.
+5) Save your changes.
 
-Votre configuration est maintenant prête à être déployée sur l'infrastructure de Numspot.
+Your configuration is now ready to be deployed on the Numspot infrastructure.
 
-### Déployer votre configuration à l'aide de Terraform
+### Deploying your configuration using Terraform
 
-1) Ouvrez un terminal, accédez au dossier que vous venez de créer et exécutez la commande suivante pour initialiser Terraform dans ce dossier :
+1) Open a terminal, go to the folder you have just created and run the following command to initialize Terraform in this folder:
 ```console
 terraform init
 ```
 
-2) Exécutez la commande suivante pour afficher les actions que Terraform effectuera :
+2) Run the following command to display the actions that Terraform will perform:
 ```console 
 terraform plan
 ```
 
-3) Vérifiez le plan de déploiement pour vous assurer qu'il correspond à la configuration souhaitée.
-4) Exécutez la commande suivante pour déployer vos ressources :
+3) Check the deployment plan to make sure it matches the desired configuration.
+4) Run the following command to deploy your resources:
 ```console
 terraform apply
 ```
 
 :::info
-Si vous faites une mise à jour de la version du provider que vous utilisez, il faudra faire `terraform init -upgrade`
+If you update the version of the provider you are using, you will need to run `terraform init -upgrade`
 :::
 
-Une fois le déploiement terminé, connectez-vous à la Console Numspot pour voir les ressources que vous venez de créer.
+Once the deployment is complete, log in to the Numspot Console to view the resources you have just created.
 
-## Suppression des ressources Numspot à l'aide de Terraform
+## Deleting Numspot resources using Terraform
 
-1) Ouvrez un terminal et accédez au dossier contenant la configuration Terraform que vous souhaitez supprimer.
+1) Open a terminal and go to the folder containing the Terraform configuration you want to delete.
 
-2) Exécutez la commande ci-dessous pour supprimer les ressources indiquées dans le fichier de configuration Terraform :
+2) Run the command below to delete the resources listed in the Terraform configuration file:
 ```console
 terraform destroy
 ```
 :::warning
-Seules les ressources créées avec Terraform seront supprimées. Cette action est irréversible.
+Only the resources created with Terraform will be deleted. This action is irreversible.
 :::
 
-Un message `Destroy complete! Resources: X destroyed.` apparaît, vos ressources Numspot sont désormais supprimées.
+A `Destroy complete! Resources: X destroyed.` message appears: your Numspot resources are now deleted.
 
-## Liens utiles
+## Useful links
 
-* [Documentation du provider Numspot sur le registre d'HashiCorp](https://registry.terraform.io/providers/numspot/numspot/latest/docs)
-* [Repository GitHub du provider Numspot](https://github.com/numspot/terraform-provider-numspot)
+* [Numspot provider documentation on the HashiCorp registry](https://registry.terraform.io/providers/numspot/numspot/latest/docs)
+* [Numspot provider GitHub repository](https://github.com/numspot/terraform-provider-numspot)

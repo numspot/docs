@@ -1,7 +1,7 @@
 ---
-title: "IAM Accès - Démarrage rapide"
-description: "Découvrez les étapes pour gérer les accès de votre organisation Numspot : identités, espaces, rôles et permissions."
-sidebar_label: "Démarrage rapide"
+title: "IAM Access - Quickstart"
+description: "The steps for managing access rights in your Numspot organisation: identities, spaces, roles and permissions."
+sidebar_label: "Quickstart"
 sidebar_position: 1
 draft: false
 last_update:
@@ -10,37 +10,37 @@ last_update:
 
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Démarrage rapide
+# Quickstart
 
-Au préalable, l'organisation et le premier utilisateur doivent avoir été créés.
+The organization and the first user must have been created beforehand.
 
-Les étapes pour la gestion des droits sont les suivantes :
+The steps for managing rights are as follows:
 
-1. Si l'administrateur souhaite utiliser des API, il doit créer un compte de service dans l'organisation et lui attribuer des rôles ou des permissions. L'administrateur pourra ensuite utiliser le portail ou les endpoints de l'API avec son compte de service, pour créer les nouveaux espaces nécessaires.
-2. Après la création d'un espace, l'administrateur pourra y assigner des utilisateurs ou des comptes de service.
+1. If the administrator wants to use API, they must create a service account in the organization and assign roles or permissions to it. The administrator can then use the portal or the API endpoints with their service account, to create the new spaces required.
+2. After a space is created, the administrator can assign users or service accounts to it.
 
-En résumé, quatre fonctionnalités seront à mettre en œuvre pour gérer une organisation :
+In summary, four features must be implemented to manage an organization:
 
-- la création d'utilisateurs ;
-- la création de comptes de service ;
-- la création d'espaces ;
-- l'attribution de rôles ou permissions.
+- the creation of users;
+- the creation of service accounts;
+- the creation of spaces;
+- the assignment of roles or permissions.
 
-La **gestion des accès** est la phase d'attribution des rôles et permissions pour chaque utilisateur et compte de service. Elle peut être réalisée dès la création de l'identité (assistant "Espaces", "Rôles", "Permissions") ou ultérieurement via le menu **Actions** de chaque identité.
+**Access management** is the phase of assigning roles and permissions to each user and service account. It can be done when the identity is created (the "Spaces", "Roles" and "Permissions" wizard) or later, from the identity's **Actions** menu.
 
-La Console affiche le nom des rôles et des permissions de manière textuelle.
+The Console displays the names of roles and permissions as text.
 
-Pour manipuler les droits par API, il faut passer par les UUID (Universally Unique Identifier) des rôles et permissions. Il est donc nécessaire d'obtenir leur correspondance textuelle.
+To manage rights via the API, you must use the UUIDs (Universally Unique Identifier) of the roles and permissions. You therefore need to obtain their text mapping.
 
-Seul un utilisateur ayant les droits suffisants pour lister, attribuer et supprimer des rôles ou des permissions peut réaliser ces opérations. Un utilisateur dispose de droits sur un espace uniquement s'il fait lui-même partie de cet espace. Chaque espace étant cloisonné des autres, l'identifiant des rôles variera d'un espace à l'autre.
+Only a user with sufficient rights to list, assign and delete roles or permissions can perform these operations. A user has rights on a space only if they belong to that space themselves. Since each space is isolated from the others, the identifier of the roles varies from one space to another.
 
-(Voir les exemples de manipulation dans les onglets API des actions)
+(See the manipulation examples in the API tabs of the actions)
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/user/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Utilisateurs (le parcours est identique pour les Comptes de Service).", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
-    { img: "/img/walkthrough/user/list-02-menu.png", text: "Sur la ligne de l'identité, ouvrez le menu « Actions », puis cliquez sur « Gérer les rôles » ou « Gérer les permissions ».", hotspot: { x: 0.7708, y: 0.5, w: 0.1929, h: 0.045 } },
-    { img: "/img/walkthrough/user/create-03-roles.png", text: "Étape « Rôles » : sélectionnez l'onglet « Organisation » ou l'espace concerné, puis cochez les rôles à attribuer.", hotspot: { x: 0.2229, y: 0.63, w: 0.4, h: 0.17 } },
-    { img: "/img/walkthrough/user/create-03-permissions.png", text: "Étape « Permissions » : cochez les permissions à attribuer, puis cliquez sur « Enregistrer et quitter ».", hotspot: { x: 0.8571, y: 0.9754, w: 0.1096, h: 0.0246 } },
+    { img: "/img/walkthrough/en/user/list.png", text: "From the left-hand side menu, click IAM → Users (the journey is the same for Service Accounts).", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/user/list-02-menu.png", text: "On the identity's row, open the “Actions” menu, then click “Manage roles” or “Manage permissions”.", hotspot: { x: 0.7972, y: 0.5, w: 0.1667, h: 0.045 } },
+    { img: "/img/walkthrough/en/user/roles.png", text: "“Roles” step: select the “Organisation” tab or the relevant space, then tick the roles to assign.", hotspot: { x: 0.2229, y: 0.63, w: 0.4, h: 0.17 } },
+    { img: "/img/walkthrough/en/user/permissions.png", text: "“Permissions” step: tick the permissions to assign, then click “Save and quit”.", hotspot: { x: 0.8885, y: 0.9754, w: 0.0781, h: 0.0246 } },
   ]}
 />

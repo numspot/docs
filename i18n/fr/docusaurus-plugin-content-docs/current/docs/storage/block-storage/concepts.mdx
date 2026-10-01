@@ -1,0 +1,107 @@
+---
+title: "Block Storage - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+---
+
+# Block Storage
+
+Le stockage bloc (block storage) est une solution de stockage évolutive et performante qui offre des ressources de stockage par blocs pour une utilisation avec les [VM (virtual machines)](/docs/compute/concept/) de compute. Avec le stockage bloc, vous pouvez créer et gérer les éléments suivants :
+
+- **Volumes** : volumes de stockage attachables aux VM de calcul, utilisables comme un disque dur local. Ils permettent de stocker des fichiers ou d'installer des applications.
+- **Instantanés** : sauvegardes de volumes conservées indépendamment du volume d'origine. Les instantanés (snapshots) permettent de sauvegarder les données de vos volumes et de restaurer de nouveaux volumes à partir de ces sauvegardes à tout moment.
+
+## Volumes
+
+Les volumes sont des disques durs virtuels que vous pouvez attacher à une instance créée dans la même Sous-région afin de stocker des données. Un volume est défini par sa taille et sa capacité d'IOPS (Input/Output Operations Per Second).
+
+### Volumes et VM
+
+Lors de la création d'une VM, un volume est automatiquement créé et attaché pour stocker les données du système d'exploitation. Ce volume, appelé volume système, a une taille par défaut de 10 Gio pour les VM Linux (8 Gio pour les VM CentOS 7) et de 50 Gio pour les VM Windows. Bien que vous puissiez stocker des données sur un volume système, celui-ci peut être supprimé lors de la terminaison de la VM, selon le block device mapping de l'image utilisée.
+
+Pour augmenter la capacité de stockage de vos VM ou séparer vos données des fichiers du système d'exploitation, vous pouvez créer des volumes avec la capacité de stockage souhaitée (dans les limites des quotas alloués à votre compte). Ces volumes sont localisés dans une Sous-région, la Sous-région A étant utilisée par défaut si aucune n'est spécifiée.
+
+Vous pouvez attacher un volume à n'importe quelle VM dans la même Sous-région, que ce soit dans le Cloud public ou dans un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/). Une fois attaché, le volume fonctionne comme un disque dur physique et peut être initialisé et utilisé de la même manière. La VM peut alors interagir avec le volume et accéder à vos données. Lors de l'arrêt d'une VM, les volumes attachés restent associés à celle-ci, ce qui vous permet d'y accéder à nouveau après le redémarrage de la VM.
+
+La persistance d'un volume est indépendante du cycle de vie de la VM : un volume peut être détaché d'une VM à laquelle il était précédemment attaché, puis attaché à une autre VM. Lorsque vous terminez une VM, les volumes qui lui sont attachés sont soit supprimés, soit détachés selon le block device mapping de la VM.
+
+Vous pouvez attacher jusqu'à 40 volumes, y compris le volume système, à une seule VM. Toutefois, un volume ne peut être attaché qu'à une seule VM à la fois.
+
+Un volume peut se trouver dans l'un des états suivants :
+
+- "Création" : le processus de création du volume est en cours.
+- "Disponible" : le volume est créé mais n'est pas attaché à une VM. Un volume est considéré comme étant dans l'état "disponible" même s'il contient des données.
+- "En cours d'utilisation" : le volume est attaché à une VM. Un volume est considéré comme étant dans l'état "en cours d'utilisation" même si la VM à laquelle il est attaché est arrêtée.
+- "Suppression" : le processus de suppression du volume est en cours.
+- "Erreur" : la création du volume a échoué.
+
+### Attachement des volumes et noms de périphériques
+
+Assurez-vous d'attacher et de monter toujours le volume système (bootdisk) d'une VM en utilisant le nom de périphérique `/dev/sda1`, même si celui-ci s'affiche sous le nom `/dev/vda1` dans la VM elle-même. Pour tous les autres volumes que vous attachez à une VM, vous devez utiliser un nom de périphérique suivant le format `/dev/xvdX` ou `/dev/xvdXX` (où le premier `X` représente une lettre comprise entre `b` et `z`, et le second `X` une lettre comprise entre `a` et `z`).
+
+**Noms de périphériques pour les VM Linux**
+
+Lorsque vous attachez des volumes à une VM Linux, le nom du périphérique dans `/dev/xvdX` ou `/dev/xvdXX` est transformé par Linux en `/dev/sdY` ou `/dev/sdYY`. L'ordre de transformation dépend du moment où vous attachez les volumes à la VM.
+
+**Noms de périphériques pour les VM Windows**
+
+Dans une VM Windows, les volumes sont numérotés selon l'ordre d'attachement, sans tenir compte du nom de périphérique `/dev/xvdX` ou `/dev/xvdXX` choisi.
+
+- Le volume système porte le numéro 0.
+- Le premier volume attaché est numéroté 1.
+- La numérotation continue ainsi pour les volumes suivants.
+- Si vous détachez un volume, son numéro est libéré et attribué au prochain volume attaché à la VM.
+
+### Persistance des données
+
+Les données stockées sur un volume persistent tant que le volume existe et est attaché à une VM. Supprimer un volume efface définitivement les données qu'il contient. Détacher un volume le rend disponible et conserve ses données intactes. Vous pouvez ensuite l'attacher à une autre VM pour retrouver l'accès aux données.
+
+Sauvegarder vos données est possible grâce aux instantanés. Vous pouvez les copier dans une autre région et les utiliser pour restaurer vos données en cas de problème ou de suppression accidentelle du volume.
+
+### Types de volumes et IOPS
+
+La performance d'un volume se mesure en IOPS, c'est-à-dire le nombre d'opérations de lecture et d'écriture que peut effectuer un volume en une seconde. Vous pouvez choisir entre différents types de volumes, selon les performances dont vous avez besoin :
+
+- **Magnetic** : offre un nombre d'IOPS fixe. La performance ne dépend pas de la taille du volume.
+- **Performance** : offre une possibilité de burst pour les volumes inférieurs à 1 Tio. Convient aux applications qui ont besoin de pics de performance occasionnels.
+- **Enterprise** : permet de créer un volume avec le nombre d'IOPS dont vous avez besoin. Offre une meilleure performance et une latence réduite. Les volumes Enterprise sont des volumes SSD.
+
+Le tableau suivant présente des cas d'utilisation pour chaque type de volume et décrit leurs caractéristiques de performance :
+
+| Type de volume | Nom API/CLI | Cas d'utilisation | Taille du volume | Performance en IOPS | Taille E/S | IOPS min/volume | IOPS max/volume | IOPS max/VM | Débit max/volume | Débit max/VM |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Magnetic (HDD) | standard | Charges de travail froides | 1 GiB - 14,55 TiB | 250 lectures, 150 écritures | 4 KiB | / | / | 36 000 | 40 MiB/s | 600 MiB/s |
+| Performance (SSD) | gp2 | Charges de travail modérées | 1 GiB - 14,55 TiB | 3 IOPS/GiB (avec burst) | 4 KiB | / | 10 000 | 36 000 | 160 MiB/s | 600 MiB/s |
+| Enterprise (SSD) | io1 | Charges de travail à haute performance | 4 GiB - 14,55 TiB | Base : 3 IOPS/GiB, Burst : 300 IOPS/GiB | 4 KiB | 100 | 13 000 | 36 000 | 200 MiB/s | 600 MiB/s |
+
+## Instantanés
+
+Un instantané est une image d'un volume à un moment donné qui vous permet de sauvegarder vos données, créer des répliques d'un volume au moment où l'instantané a été créé, ou déplacer des données dans une autre Sous-région ou région.
+
+### Généralités
+
+Un instantané créé à un moment donné correspond à une image d'un volume qui contient toutes les informations nécessaires pour créer une réplique de ce volume, de la même taille ou de taille supérieure. Un instantané peut être utilisé pour sauvegarder vos données ou les partager avec d'autres comptes.
+
+Tous les instantanés contiennent les informations requises pour créer un nouveau volume avec les données stockées sur le volume d'origine au moment où l'instantané a été créé. Ainsi, si vous supprimez des instantanés précédemment créés, vous pouvez toujours restaurer toutes les données du volume du moment où l'instantané a été créé.
+
+:::info
+Pour identifier vos ressources, vous pouvez leur ajouter des étiquettes (tags).
+:::
+
+Les instantanés sont placés dans une région et peuvent être utilisés dans toutes les Sous-régions au sein de cette région. Vous pouvez copier un instantané dans une autre région et ainsi l'utiliser dans les Sous-régions au sein de celle-ci, pour par exemple y créer des copies identiques d'un volume.
+
+Le nombre d'instantanés que vous pouvez créer dépend des quotas alloués à votre compte.
+
+Un instantané peut être dans l'un des états suivants :
+
+- "in-queue" : la demande de création de l'instantané a été reçue.
+- "pending" : la création de l'instantané est en cours.
+- "completed" : l'instantané est prêt et disponible.
+
+  :::info
+  Les données contenues dans un instantané sont considérées figées lorsque l'instantané est dans l'état "completed".
+  :::
+
+- "error" : la création de l'instantané a échoué.
+- "deleting" : la demande de suppression de l'instantané a été reçue.

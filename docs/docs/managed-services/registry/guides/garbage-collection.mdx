@@ -1,35 +1,35 @@
 ---
-title: Gérer le nettoyage automatique
+title: Manage garbage collection
 sidebar_position: 6
 draft: false
 ---
 
-# Gérer le nettoyage automatique
+# Manage garbage collection
 
-Ce guide explique comment configurer et gérer le nettoyage automatique dans le Container Registry Numspot.
-
----
-
-## Vue d'ensemble
-
-Le nettoyage automatique (Garbage Collection ou GC) est le processus de suppression des blobs, artefacts et manifests inutilisés du registry Harbor pour récupérer de l'espace de stockage. Le nettoyage automatique de Harbor supprime :
-
-- **Blobs non référencés** : Couches d'images non associées à un manifest
-- **Artefacts orphelins** : Manifests sans tags ni références
-- **Artefacts supprimés** : Artefacts marqués pour suppression mais non retirés du stockage
-
-### Pourquoi le nettoyage automatique est important
-
-- **Optimisation du stockage** : Récupérez l'espace disque occupé par les données inutilisées
-- **Réduction des coûts** : Diminuez les coûts de stockage objet
-- **Performance** : Améliorez les performances du registry en supprimant les données inutiles
-- **Conformité** : Respectez les politiques de rétention des données
+This guide explains how to configure and manage garbage collection in the Numspot Container Registry.
 
 ---
 
-## Fonctionnement du nettoyage automatique
+## Overview
 
-### Architecture de stockage Harbor
+Garbage collection (GC) is the process of removing unused blobs, artifacts and manifests from the Harbor registry to reclaim storage space. Harbor garbage collection removes:
+
+- **Unreferenced blobs**: image layers not associated with a manifest
+- **Orphaned artifacts**: manifests without tags or references
+- **Deleted artifacts**: artifacts marked for deletion but not removed from storage
+
+### Why garbage collection matters
+
+- **Storage optimization**: reclaim disk space occupied by unused data
+- **Cost reduction**: lower object storage costs
+- **Performance**: improve registry performance by removing unnecessary data
+- **Compliance**: comply with data retention policies
+
+---
+
+## How garbage collection works
+
+### Harbor storage architecture
 
 ```text
 ┌────────────────────────────────────────────────────────┐
@@ -47,52 +47,52 @@ Le nettoyage automatique (Garbage Collection ou GC) est le processus de suppress
 └────────────────────────────────────────────────────────┘
 ```
 
-### Processus de GC
+### GC process
 
-1. **Identifier les blobs non référencés** : Trouver les blobs non référencés par un manifest
-2. **Marquer pour suppression** : Marquer les artefacts et blobs pour suppression dans les métadonnées
-3. **Supprimer du stockage** : Supprimer les blobs marqués du stockage objet
-4. **Nettoyer les métadonnées** : Supprimer les enregistrements d'artefacts de la base de données
+1. **Identify unreferenced blobs**: find the blobs not referenced by a manifest
+2. **Mark for deletion**: mark artifacts and blobs for deletion in the metadata
+3. **Remove from storage**: remove the marked blobs from object storage
+4. **Clean up metadata**: remove the artifact records from the database
 
-### Modes de GC
+### GC modes
 
-Harbor prend en charge deux modes de nettoyage automatique :
+Harbor supports two garbage collection modes:
 
 | Mode | Description | Impact |
 |------|-------------|--------|
-| **GC en ligne** | Exécution pendant que le registry est accessible | Impact minimal, plus lent |
-| **GC hors ligne** | Le registry est en mode lecture seule pendant le GC | Plus rapide, mais registry en lecture seule |
+| **Online GC** | Runs while the registry is accessible | Minimal impact, slower |
+| **Offline GC** | The registry is in read-only mode during GC | Faster, but registry in read-only mode |
 
 ---
 
-## Prérequis
+## Prerequisites
 
-- **Accès administrateur** : Requis pour configurer et exécuter le GC
-- **Instance de registry** : Container Registry Numspot en cours d'exécution
-- **Visibilité du quota de stockage** : Connaître votre utilisation actuelle du stockage
-- **Fenêtre de maintenance** : Pour le GC hors ligne, planifiez pendant les périodes de faible trafic
+- **Administrator access**: required to configure and run GC
+- **Registry instance**: a running Numspot Container Registry
+- **Storage quota visibility**: know your current storage usage
+- **Maintenance window**: for offline GC, schedule during low-traffic periods
 
 ---
 
-## Étape 1 : Vérifier l'utilisation actuelle du stockage
+## Step 1: Check current storage usage
 
-### Via l'interface Harbor
+### Through the Harbor interface
 
-1. Connectez-vous à l'interface Harbor
-2. Accédez à **Administration** → **Paramètres système**
-3. Consultez la section **Stockage** pour voir :
-   - Stockage total utilisé
-   - Espace libre disponible
-   - Quota de stockage
+1. Log in to the Harbor interface
+2. Go to **Administration** → **System Settings**
+3. Check the **Storage** section to view:
+   - total storage used
+   - available free space
+   - storage quota
 
-### Via l'API
+### Through the API
 
 ```bash
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/systeminfo" \
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/systeminfo" \
   -u "admin:{password}" | jq '.storage'
 ```
 
-**Réponse :**
+**Response:**
 
 ```json
 {
@@ -104,35 +104,35 @@ curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-
 
 ---
 
-## Étape 2 : Configurer le nettoyage automatique
+## Step 2: Configure garbage collection
 
-### Via l'interface Harbor
+### Through the Harbor interface
 
-1. Accédez à **Administration** → **Nettoyage automatique**
-2. Configurez les paramètres GC :
+1. Go to **Administration** → **Garbage Collection**
+2. Configure the GC settings:
 
-| Paramètre | Valeur |
+| Setting | Value |
 |---------|-------|
-| **Type de GC** | `En ligne` ou `Hors ligne` |
-| **Planification** | Expression cron ou manuel |
-| **Supprimer les artefacts sans tag** | Activer pour supprimer les manifests sans tag |
-| **Inclure les artefacts sans tag** | Inclure les artefacts sans tag dans le GC |
+| **GC type** | `Online` or `Offline` |
+| **Schedule** | Cron expression or manual |
+| **Delete untagged artifacts** | Enable to remove untagged manifests |
+| **Include untagged artifacts** | Include untagged artifacts in GC |
 
-3. Cliquez sur **Enregistrer**
+3. Click **Save**
 
-### Exemples de planification
+### Schedule examples
 
-| Planification | Expression Cron | Cas d'utilisation |
+| Schedule | Cron expression | Use case |
 |----------|-----------------|----------|
-| Quotidien à 2h | `0 2 * * *` | Nettoyage régulier |
-| Hebdomadaire le dimanche | `0 2 * * 0` | Maintenance hebdomadaire |
-| Toutes les 6 heures | `0 */6 * * *` | Environnements à forte rotation |
-| Manuel | N/A | Nettoyage à la demande |
+| Daily at 2 a.m. | `0 2 * * *` | Regular cleanup |
+| Weekly on Sunday | `0 2 * * 0` | Weekly maintenance |
+| Every 6 hours | `0 */6 * * *` | High-churn environments |
+| Manual | N/A | On-demand cleanup |
 
-### Via l'API
+### Through the API
 
 ```bash
-curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/system/gc/schedule" \
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/system/gc/schedule" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -146,26 +146,26 @@ curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-
 
 ---
 
-## Étape 3 : Exécuter le nettoyage automatique
+## Step 3: Run garbage collection
 
-### Exécution manuelle
+### Manual run
 
-#### Via l'interface Harbor
+#### Through the Harbor interface
 
-1. Accédez à **Administration** → **Nettoyage automatique**
-2. Cliquez sur **GC maintenant**
-3. Sélectionnez le type de GC :
-   - **GC en ligne** : Le registry reste accessible
-   - **GC hors ligne** : Le registry passe en mode lecture seule
-4. Sélectionnez les options :
-   - Supprimer les artefacts sans tag
-5. Cliquez sur **Démarrer GC**
-6. Suivez la progression dans l'historique GC
+1. Go to **Administration** → **Garbage Collection**
+2. Click **GC Now**
+3. Select the GC type:
+   - **Online GC**: the registry remains accessible
+   - **Offline GC**: the registry switches to read-only mode
+4. Select the options:
+   - delete untagged artifacts
+5. Click **Start GC**
+6. Track progress in the GC history
 
-#### Via l'API
+#### Through the API
 
 ```bash
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/system/gc/schedule" \
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/system/gc/schedule" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -179,98 +179,98 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
 
 ---
 
-## Étape 4 : Surveiller le nettoyage automatique
+## Step 4: Monitor garbage collection
 
-### Via l'interface Harbor
+### Through the Harbor interface
 
-1. Accédez à **Administration** → **Nettoyage automatique**
-2. Consultez l'onglet **Historique GC**
-3. Cliquez sur une exécution GC pour voir :
-   - Statut (En cours, Succès, Échec)
-   - Heure de début et durée
-   - Nombre d'artefacts supprimés
-   - Espace récupéré
-   - Journaux
+1. Go to **Administration** → **Garbage Collection**
+2. Check the **GC History** tab
+3. Click a GC run to view:
+   - status ("In progress", "Success", "Failed")
+   - start time and duration
+   - number of artifacts deleted
+   - space reclaimed
+   - logs
 
-### Via l'API
+### Through the API
 
 ```bash
-# Lister les exécutions GC
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/system/gc" \
+# List GC runs
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/system/gc" \
   -u "admin:{password}"
 
-# Obtenir une exécution GC spécifique
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/system/gc/{gc_id}" \
+# Get a specific GC run
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/system/gc/{gc_id}" \
   -u "admin:{password}"
 
-# Obtenir le journal GC
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/system/gc/{gc_id}/log" \
+# Get the GC log
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/system/gc/{gc_id}/log" \
   -u "admin:{password}"
 ```
 
-### Statuts GC
+### GC statuses
 
-| Statut | Description |
+| Status | Description |
 |--------|-------------|
-| `Pending` | Tâche GC en file d'attente |
-| `Running` | GC en cours |
-| `Success` | GC terminé avec succès |
-| `Failed` | GC a rencontré des erreurs |
-| `Stopped` | GC a été arrêté manuellement |
+| `Pending` | GC task queued |
+| `Running` | GC in progress |
+| `Success` | GC completed successfully |
+| `Failed` | GC encountered errors |
+| `Stopped` | GC stopped manually |
 
 ---
 
-## Bonnes pratiques
+## Best practices
 
-### Planification
+### Scheduling
 
-1. **Planifiez pendant les heures creuses** : Exécutez le GC quand l'utilisation du registry est faible
-2. **Fréquence basée sur la rotation** : Les registries à forte rotation nécessitent un GC plus fréquent
-3. **Commencez par le GC en ligne** : Testez avec le GC en ligne avant d'utiliser le GC hors ligne
-4. **Surveillez la durée** : Suivez la durée du GC pour estimer les fenêtres de maintenance
+1. **Schedule during off-peak hours**: run GC when registry usage is low
+2. **Frequency based on churn**: high-churn registries require more frequent GC
+3. **Start with online GC**: test with online GC before using offline GC
+4. **Monitor the duration**: track GC duration to estimate maintenance windows
 
 ### Configuration
 
-1. **Activez la suppression des artefacts sans tag** : Supprimez les artefacts sans tags
-2. **Utilisez le GC hors ligne pour les nettoyages importants** : Plus rapide pour une récupération significative
-3. **Définissez des quotas de projet** : Prévenez la croissance illimitée du stockage
-4. **Configurez des politiques de rétention** : Utilisez la rétention d'artefacts pour supprimer automatiquement les anciennes images
+1. **Enable untagged artifact deletion**: remove artifacts without tags
+2. **Use offline GC for large cleanups**: faster for significant reclamation
+3. **Set project quotas**: prevent unlimited storage growth
+4. **Configure retention policies**: use artifact retention to automatically remove old images
 
-### Tests
+### Testing
 
-1. **Testez en non-production** : Validez la configuration GC en staging d'abord
-2. **Surveillez après le GC** : Vérifiez que le stockage est récupéré et que le registry fonctionne
-3. **Vérifiez la disponibilité des images** : Assurez-vous que les images critiques restent accessibles après le GC
+1. **Test in non-production**: validate the GC configuration in staging first
+2. **Monitor after GC**: check that storage is reclaimed and the registry works
+3. **Verify image availability**: ensure critical images remain accessible after GC
 
 ---
 
-## Nettoyage automatique et rétention d'images
+## Garbage collection and image retention
 
-### Stratégie combinée
+### Combined strategy
 
-Implémentez une stratégie de nettoyage complète :
+Implement a complete cleanup strategy:
 
-1. **Politiques de rétention d'artefacts** : Suppression automatique des anciens artefacts basée sur le temps ou le nombre
-2. **Quotas de projet** : Limiter le stockage par projet
-3. **Règles de rétention de tags** : Conserver uniquement les tags nécessaires
-4. **Nettoyage automatique planifié** : Nettoyage régulier des données non référencées
+1. **Artifact retention policies**: automatic deletion of old artifacts based on time or count
+2. **Project quotas**: limit storage per project
+3. **Tag retention rules**: keep only the necessary tags
+4. **Scheduled garbage collection**: regular cleanup of unreferenced data
 
-### Configurer la rétention d'artefacts
+### Configure artifact retention
 
-1. Accédez à **Administration** → **Rétentions**
-2. Créez une règle de rétention :
+1. Go to **Administration** → **Retentions**
+2. Create a retention rule:
 
-| Champ | Valeur |
+| Field | Value |
 |-------|-------|
-| **Portée** | Global ou projet spécifique |
-| **Motif de dépôt** | `**` ou motif spécifique |
-| **Critère** | Tiré au cours des 30 derniers jours, ou les 10 plus récemment poussés |
-| **Action** | `Supprimer` |
+| **Scope** | Global or a specific project |
+| **Repository pattern** | `**` or a specific pattern |
+| **Criteria** | Pulled within the last 30 days, or the 10 most recently pushed |
+| **Action** | `Delete` |
 
-### Via l'API
+### Through the API
 
 ```bash
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/retentions" \
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/retentions" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -312,41 +312,41 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
 
 ---
 
-## Conseils d'optimisation du stockage
+## Storage optimization tips
 
-### Réduire le stockage avant le GC
+### Reduce storage before GC
 
-1. **Supprimer les dépôts inutilisés** :
+1. **Delete unused repositories**:
 ```bash
-curl -X DELETE "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project}/repositories/{repo}" \
+curl -X DELETE "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project}/repositories/{repo}" \
   -u "admin:{password}"
    ```
 
-2. **Supprimer les anciens tags** :
-   - Supprimez des tags spécifiques manuellement
-   - Utilisez des politiques de rétention pour la suppression automatique
+2. **Delete old tags**:
+   - delete specific tags manually
+   - use retention policies for automatic deletion
 
-3. **Nettoyer les artefacts sans tag** :
-   - Activez `delete_untagged` dans la configuration GC
+3. **Clean up untagged artifacts**:
+   - enable `delete_untagged` in the GC configuration
 
-### Surveiller les tendances de stockage
+### Monitor storage trends
 
 ```bash
-# Obtenir l'utilisation du stockage au fil du temps
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/statistics" \
+# Get storage usage over time
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/statistics" \
   -u "admin:{password}" | jq '.total_storage_consumption'
 ```
 
-### Définir des quotas de projet
+### Set project quotas
 
-1. Accédez à **Administration** → **Projets**
-2. Sélectionnez le projet → **Configuration**
-3. Définissez le **Quota de stockage** (ex: 50Go)
+1. Go to **Administration** → **Projects**
+2. Select the project → **Configuration**
+3. Set the **Storage quota** (e.g. 50 GB)
 
-### Via l'API
+### Through the API
 
 ```bash
-curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}" \
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -358,68 +358,68 @@ curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-
 
 ---
 
-## Dépannage
+## Troubleshooting
 
-### Problème 1 : Le GC ne récupère pas d'espace
+### Issue 1: GC does not reclaim space
 
-**Symptôme** : L'utilisation du stockage reste élevée après le GC
+**Symptom**: storage usage remains high after GC
 
-**Solutions** :
-1. Vérifiez si les artefacts sont encore référencés par des tags
-2. Vérifiez que `delete_untagged` est activé
-3. Vérifiez les téléversements incomplets :
+**Solutions**:
+1. Check whether the artifacts are still referenced by tags
+2. Check that `delete_untagged` is enabled
+3. Check for incomplete uploads:
 ```bash
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/systeminfo" \
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/systeminfo" \
   -u "admin:{password}" | jq '.incomplete_upload_count'
    ```
-4. Exécutez un GC hors ligne pour un nettoyage plus agressif
+4. Run an offline GC for a more aggressive cleanup
 
-### Problème 2 : Le GC prend trop de temps
+### Issue 2: GC takes too long
 
-**Symptôme** : Le GC s'exécute pendant des heures
+**Symptom**: GC runs for hours
 
-**Solutions** :
-1. Vérifiez la taille du stockage et le nombre d'artefacts
-2. Envisagez de diviser en projets plus petits
-3. Planifiez un GC plus fréquent avec une portée de nettoyage plus petite
-4. Utilisez le GC hors ligne au lieu du GC en ligne
+**Solutions**:
+1. Check the storage size and the number of artifacts
+2. Consider splitting into smaller projects
+3. Schedule more frequent GC with a smaller cleanup scope
+4. Use offline GC instead of online GC
 
-### Problème 3 : Registry lent pendant le GC en ligne
+### Issue 3: Registry slow during online GC
 
-**Symptôme** : Dégradation des performances pendant le GC en ligne
+**Symptom**: performance degradation during online GC
 
-**Solutions** :
-1. Planifiez le GC pendant les heures creuses
-2. Utilisez le GC hors ligne pour les nettoyages importants
-3. Augmentez les ressources du registry (contactez le support)
-4. Réduisez la fréquence du GC
+**Solutions**:
+1. Schedule GC during off-peak hours
+2. Use offline GC for large cleanups
+3. Increase registry resources (contact support)
+4. Reduce the GC frequency
 
-### Problème 4 : Tâche GC échouée
+### Issue 4: Failed GC task
 
-**Symptôme** : L'exécution du GC affiche le statut `Failed`
+**Symptom**: the GC run shows the `Failed` status
 
-**Solutions** :
-1. Vérifiez les journaux GC pour les détails de l'erreur :
+**Solutions**:
+1. Check the GC logs for the error details:
 ```bash
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/system/gc/{gc_id}/log" \
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/system/gc/{gc_id}/log" \
   -u "admin:{password}"
    ```
-2. Vérifiez la connectivité au stockage objet
-3. Vérifiez la connectivité à la base de données
-4. Contactez le support avec les détails de l'erreur
+2. Check connectivity to object storage
+3. Check connectivity to the database
+4. Contact support with the error details
 
 ---
 
-## Référence API
+## API reference
 
-### Obtenir la planification GC
+### Get the GC schedule
 
 ```http
 GET /api/v2.0/system/gc/schedule
 Authorization: Basic {base64(admin:password)}
 ```
 
-### Mettre à jour la planification GC
+### Update the GC schedule
 
 ```http
 PUT /api/v2.0/system/gc/schedule
@@ -435,7 +435,7 @@ Content-Type: application/json
 }
 ```
 
-### Déclencher un GC manuel
+### Trigger a manual GC
 
 ```http
 POST /api/v2.0/system/gc/schedule
@@ -451,21 +451,21 @@ Content-Type: application/json
 }
 ```
 
-### Lister les exécutions GC
+### List GC runs
 
 ```http
 GET /api/v2.0/system/gc
 Authorization: Basic {base64(admin:password)}
 ```
 
-### Obtenir les détails d'une exécution GC
+### Get GC run details
 
 ```http
 GET /api/v2.0/system/gc/{gc_id}
 Authorization: Basic {base64(admin:password)}
 ```
 
-### Obtenir le journal GC
+### Get the GC log
 
 ```http
 GET /api/v2.0/system/gc/{gc_id}/log
@@ -476,10 +476,10 @@ Authorization: Basic {base64(admin:password)}
 
 ## Limitations
 
-- **GC en ligne plus lent** : Peut prendre plus de temps que le GC hors ligne
-- **GC hors ligne en lecture seule** : Le registry est inaccessible en écriture pendant le GC hors ligne
-- **Impossible d'arrêter un GC en cours** : Il faut attendre la fin ou redémarrer le registry
-- **Stockage non libéré immédiatement** : Le stockage objet peut avoir un nettoyage différé
-- **GC ne supprime pas les tags** : Supprime uniquement les blobs et artefacts non référencés
+- **Online GC is slower**: it can take longer than offline GC
+- **Offline GC is read-only**: the registry is inaccessible for writes during offline GC
+- **A running GC cannot be stopped**: you must wait for it to finish or restart the registry
+- **Storage is not freed immediately**: object storage may have deferred cleanup
+- **GC does not delete tags**: it only removes unreferenced blobs and artifacts
 
 ---

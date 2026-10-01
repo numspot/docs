@@ -1,0 +1,72 @@
+---
+title: Exporter le catalogue
+sidebar_position: 3
+draft: false
+---
+
+# Exporter le catalogue
+
+Vous pouvez exporter le catalogue complet au format CSV (Comma-Separated Values). Ce fichier contient l'ensemble des produits et tarifs disponibles sur la plateforme Numspot.
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## Permissions
+
+:::info
+Aucune permission IAM (Identity and Access Management) n'est requise pour effectuer cette action.
+:::
+
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+
+1. Depuis le menu latéral gauche, accédez à **Catalogue**.
+2. Cliquez sur **Exporter** en haut à droite de la page.
+3. Sélectionnez les filtres souhaités (domaine, type, région).
+4. Cliquez sur **Télécharger** pour obtenir le fichier CSV.
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+**Endpoint** : `GET /catalogue/export/csv`
+
+### Paramètres de requête
+
+| Champ | Type | Requis | Description |
+|-------|------|--------|-------------|
+| `domain` | string | Non | Domaine des produits à filtrer : `compute`, `connectivity`, `kubernetes`, `objectstorage`, `postgresql`, `registry`, `secrets` |
+| `kind` | string | Non | Type de ressource à filtrer (ex: `virtual-machine`, `node`, `gpu`, `cluster`) |
+| `regionCode` | string | Non | Code de région : `eu-west-2` ou `cloudgouv-eu-west-1` |
+
+### Réponse
+
+Le fichier CSV contient les colonnes suivantes pour chaque produit :
+
+- **Identifiants** : uuid, `productCode`, `sku` ;
+- **Attributs** : `domain`, `kind`, `label`, `currentGeneration`, `releaseStage`, `certifications`, `licenseModel`, `deploymentOption` ;
+- **Ressources** : `family`, `generation`, vCPU (virtual Central Processing Unit), `memoryGiB`, `gpuType`, `gpuQuantity`, `gpuMemoryGB`, `model`, `vramGB` ;
+- **Tarification** : `amount`, `currency`, `frequency`, `unit`, `effectiveDateBegin`, `effectiveDateEnd` ;
+- **Région** : `regionCode`.
+
+### Exemple de nom de fichier
+
+`numspot-catalogue-2025-01-01.csv`
+
+[Exemple de requête : Export CSV du catalogue](/openapi/#tag/catalogue/GET/catalogue/export/csv)
+
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+L'export du catalogue via Terraform n'est pas disponible. Utilisez la console ou l'API pour exporter le catalogue au format CSV.
+
+  </TabItem>
+</Tabs>

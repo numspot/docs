@@ -1,7 +1,7 @@
 ---
-title: Lister les utilisateurs - IAM
-description: "Listez les utilisateurs de votre organisation ou d'un espace Numspot et accédez à leurs actions, via la console ou l'API."
-sidebar_label: Lister les utilisateurs
+title: List users - IAM
+description: "List the users of your Numspot organisation or space and access their actions, via the console or the API."
+sidebar_label: List users
 sidebar_position: 3
 draft: false
 last_update:
@@ -12,14 +12,14 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Lister les utilisateurs
+# List users
 
-La liste des utilisateurs s'obtient au niveau de l'organisation ou de l'espace.
+The list of users is available at organisation level or at space level.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **iam.user.get**
 
@@ -32,22 +32,22 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/user/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Utilisateurs.", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
-    { img: "/img/walkthrough/user/create-01-list.png", text: "Depuis IAM → Utilisateurs, le tableau liste tous les utilisateurs de votre organisation (ID, prénom, nom, e-mail, statut d'activation).", hotspot: { x: 0.2229, y: 0.3012, w: 0.7493, h: 0.55 } },
-    { img: "/img/walkthrough/user/list-02-menu.png", text: "Le menu « Actions » d'un utilisateur donne accès à ses opérations : créer un utilisateur à partir de ce profil, gérer ses espaces, rôles et permissions, ou le supprimer.", hotspot: { x: 0.7708, y: 0.4198, w: 0.1929, h: 0.2691 } },
+    { img: "/img/walkthrough/en/user/list.png", text: "From the left-hand side menu, click IAM → Users.", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/user/list.png", text: "From IAM → Users, the table lists all the users of your organisation (ID, first name, last name, email, activation status).", hotspot: { x: 0.2229, y: 0.3012, w: 0.7493, h: 0.55 } },
+    { img: "/img/walkthrough/en/user/list-02-menu.png", text: "A user's “Actions” menu gives access to their operations: create a user from this profile, manage their spaces, roles and permissions, or delete them.", hotspot: { x: 0.7972, y: 0.4198, w: 0.1667, h: 0.2691 } },
   ]}
 />
 
-1. Depuis le menu latéral gauche, cliquez sur **IAM** → **Utilisateurs**.
-2. Le tableau **Utilisateurs** affiche, pour chaque utilisateur de l'organisation : l'ID, le prénom, le nom, l'adresse e-mail, le statut d'activation et les actions disponibles.
+1. From the left-hand side menu, click **IAM** → **Users**.
+2. The **Users** table displays, for each user in the organisation: the ID, the first name, the last name, the email address, the activation status and the available actions.
 
-Le menu **Actions** d'un utilisateur donne accès aux opérations suivantes :
+A user's **Actions** menu gives access to the following operations:
 
-- **Créer un utilisateur à partir de ce profil** ;
-- **Gérer les espaces** ;
-- **Gérer les rôles** ;
-- **Gérer les permissions** ;
-- **Supprimer**.
+- **Create user from this profile**;
+- **Manage spaces**;
+- **Manage roles**;
+- **Manage permissions**;
+- **Delete**.
 
 </TabItem>
 <TabItem value="api" label="API">
@@ -55,17 +55,17 @@ Le menu **Actions** d'un utilisateur donne accès aux opérations suivantes :
 ## API {#tabhead-api}
 
 
-### Lister les utilisateurs d'une organisation
+### List the users of an organisation
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/users
 
-### Exemple
+### Example
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users'
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -86,20 +86,20 @@ curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users'
 ```
 
 :::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
-### Lister les utilisateurs d'un espace
+### List the users of a space
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/users
 
-### Exemple
+### Example
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/users'
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -120,7 +120,7 @@ curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/users'
 ```
 
 :::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
 </TabItem>
@@ -129,7 +129,7 @@ Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la m
 ## Terraform {#tabhead-terraform}
 
 
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/user).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/user).
 
 </TabItem>
 </Tabs>

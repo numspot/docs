@@ -1,0 +1,49 @@
+---
+title: Obtenir des informations sur vos règles de listener de load balancer - Numspot
+sidebar_label: Obtenir des informations sur vos règles de listener de load balancer
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Obtenir des informations sur vos règles de listener de load balancer
+
+Vous pouvez consulter les informations concernant les règles de vos listener (écouteurs) de [load balancer (équilibreurs de charge)](/docs/network/load-balancer/concepts/).
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.loadBalancer.get**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+La consultation des règles d'un listener n'est pas disponible depuis la console Numspot.
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `GET /compute/spaces/{spaceId}/listenerRules` permet de lister vos règles pour vos listener.
+
+[Exemple de requête : Lister toutes les règles pour vos listener ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/listenerRules)
+
+La commande `GET /compute/spaces/{spaceId}/listenerRules/{id}` permet de récupérer les informations de vos règles pour un listener.
+
+[Exemple de requête : Récupérer les informations de vos règles pour un listener ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/listenerRules/{id})
+
+  </TabItem>
+</Tabs>

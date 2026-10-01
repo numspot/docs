@@ -1,63 +1,63 @@
 ---
-title: "Routes VPN - Concepts"
+title: "VPN Routes - Concepts"
 sidebar_label: "Concepts"
-description: Découvrez les types de routes, le routage statique et dynamique, et la propagation des routes pour les connexions VPN.
+description: Learn about route types, static and dynamic routing, and route propagation for VPN connections.
 sidebar_position: 1
 draft: false
 ---
 
 import ActionsSummary from '@site/src/components/ActionsSummary';
 
-# À propos des configurations de routage des connexions VPN
+# About the routing configurations of VPN connections
 
 <ActionsSummary />
 
-Une connexion VPN (Virtual Private Network) utilise deux types de routes que vous devez configurer entre votre réseau d'entreprise et l'un de vos [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) dans le Cloud Numspot.
+A VPN (Virtual Private Network) connection uses two types of routes that you must configure between your corporate network and one of your [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud) in the Numspot Cloud.
 
-## Types de routes
+## Route types
 
-Une connexion VPN utilise deux types de routes :
+A VPN connection uses two types of routes:
 
-* Routes VPC : pour le trafic à l'intérieur du VPC, entre les [VM](/docs/compute/concept/) et la [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/).
-* Routes VPN : pour le trafic à l'intérieur du tunnel VPN, entre la virtual gateway et la [client gateway (passerelle client)](/docs/connectivity/vpn/client-gateway/concepts/).
+* VPC routes: for traffic inside the VPC, between the [VM](/docs/compute/concept/) (Virtual Machine) and the [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/).
+* VPN routes: for traffic inside the VPN tunnel, between the virtual gateway and the [client gateway](/docs/connectivity/vpn/client-gateway/concepts/).
 
-Ces deux types de routes utilisent le CIDR (Classless Inter-Domain Routing) de votre réseau d'entreprise comme destination, et l'ID de la virtual gateway comme cible.
+Both types of routes use the CIDR (Classless Inter-Domain Routing) of your corporate network as the destination, and the ID of the virtual gateway as the target.
 
-_Routes d'une connexion VPN :_
+_Routes of a VPN connection:_
 
-![Routes d'une connexion VPN](/img/console/connectivity/vpn/FR-sch-General-VPNConnectionRoutes.png)
+![Routes of a VPN connection](/img/console/connectivity/vpn/en-sch-General-VPNConnectionRoutes.png)
 
-## Routage statique et dynamique
+## Static and dynamic routing
 
-Pour autoriser les VM dans votre VPC à atteindre la client gateway, vous devez spécifier le type de routage pour la connexion VPN, et actualiser la [route table (table de routage)](/docs/network/route-table/concepts/) dans le subnet (sous-réseau) du VPC :
+To allow the VM in your VPC to reach the client gateway, you must specify the routing type for the VPN connection, and update the [route table](/docs/network/route-table/concepts/) in the subnet of the VPC:
 
-* Pour le routage statique, vous devez créer de nouvelles routes VPN.
-* Pour le routage dynamique, vous ne devez pas créer de nouvelles routes. Cependant, vous devez utiliser des ressources compatibles avec le BGP (Border Gateway Protocol).
+* For static routing, you must create new VPN routes.
+* For dynamic routing, you must not create new routes. However, you must use resources compatible with BGP (Border Gateway Protocol).
 
 :::info
-Vous ne pouvez pas modifier le type de routage une fois la connexion VPN créée. Vous pouvez utiliser une route table par défaut ou personnalisée.
+You cannot change the routing type once the VPN connection is created. You can use a default or custom route table.
 :::
 
 ## Configuration
 
-_Organigramme de routage d'une connexion VPN :_
+_Routing flow chart of a VPN connection:_
 
-![Organigramme de routage d'une connexion VPN](/img/console/connectivity/vpn/FR-sch-General-VPNConnectionRoutingFlowChart.png)
+![Routing flow chart of a VPN connection](/img/console/connectivity/vpn/en-sch-General-VPNConnectionRoutingFlowChart.png)
 
-### Propagation des routes
+### Route propagation
 
-Vous pouvez activer la propagation des routes vers une route table associée à un subnet du VPC. Cette action ajoute automatiquement à la route table les routes du VPC pointant vers la virtual gateway. La propagation des routes est facultative, et s'applique au routage statique ou dynamique. Vous pouvez utiliser une route table par défaut ou personnalisée.
+You can enable route propagation to a route table associated with a subnet of the VPC. This action automatically adds to the route table the VPC routes pointing to the virtual gateway. Route propagation is optional, and applies to static or dynamic routing. You can use a default or custom route table.
 
-Sans la propagation des routes, vous devez ajouter manuellement chaque route à la route table.
+Without route propagation, you must manually add each route to the route table.
 
 ### BGP ASN
 
-Le BGP est un protocole de routage dynamique basé sur les ASN (Autonomous System Numbers). Dans une connexion VPN avec BGP, la client gateway affiche un ASN pour aider la virtual gateway à trouver un chemin vers elle à travers le réseau internet.
+BGP is a dynamic routing protocol based on ASN (Autonomous System Numbers). In a VPN connection with BGP, the client gateway displays an ASN to help the virtual gateway find a path to it across the internet network.
 
-Pour utiliser le BGP, vos ressources doivent être compatibles avec le routage dynamique. L'utilisation du BGP est facultative : vous pouvez choisir le routage statique même si vos ressources sont compatibles avec le routage dynamique.
+To use BGP, your resources must be compatible with dynamic routing. Using BGP is optional: you can choose static routing even if your resources are compatible with dynamic routing.
 
 :::warning
-Si vous reliez plusieurs client gateways du même réseau à une même virtual gateway, ces client gateways doivent toutes utiliser le même ASN pour le BGP.
+If you connect several client gateways from the same network to the same virtual gateway, these client gateways must all use the same ASN for BGP.
 :::
 
-Sinon, vous devez créer manuellement de nouvelles routes VPN.
+Otherwise, you must manually create new VPN routes.

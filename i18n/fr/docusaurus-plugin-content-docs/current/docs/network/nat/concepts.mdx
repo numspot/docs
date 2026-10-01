@@ -1,0 +1,46 @@
+---
+title: Passerelles nat
+sidebar_label: À propos des NAT Gateways
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# À propos des NAT Gateways
+
+<ActionsSummary />
+
+Les passerelles nat (NAT gateways) permettent aux [VM (Virtual Machines)](/docs/compute/concept/) situées dans un réseau de se connecter à Internet en utilisant une adresse IP publique unique. Elles assurent ainsi la traduction d'adresses réseau et la connexion sortante pour les instances de VM dans un sous-réseau (subnet) privé.
+
+## Informations générales
+
+Une passerelle nat assure l'envoi et la réception du trafic Internet pour une ou plusieurs VM d'un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/). Pour ce faire, la passerelle nat effectue une traduction d'adresses réseau en convertissant les adresses IP privées des VM en une adresse IP publique unique lorsque ces VM communiquent avec Internet. Cette traduction permet aux VM de se connecter à Internet tout en restant cachées derrière l'adresse IP publique de la passerelle nat.
+
+:::warning
+Étant donné que vous disposez d'un quota limité d'adresses IP publiques pour votre compte, les passerelles nat vous permettent de connecter vos VM du VPC à Internet en utilisant une adresse IP publique unique. Cela vous permet de maximiser l'utilisation de vos adresses IP publiques tout en permettant aux VM de se connecter à Internet de manière sécurisée et efficace.
+:::
+
+Une passerelle nat peut avoir les états suivants :
+
+- "pending" : la passerelle nat est en cours de création.
+- "available" : la passerelle nat est prête à transmettre du trafic.
+- "deleting" : la passerelle nat est en cours de suppression.
+- "deleted" : la passerelle nat est supprimée.
+
+## Architecture
+
+Une passerelle nat se crée dans un sous-réseau mais peut être utilisée par tous les sous-réseaux du VPC.
+
+Pour router du trafic depuis vos VM jusqu'à Internet via la passerelle nat, vous devez ajouter les routes suivantes :
+
+- Dans la [table de routage](/docs/network/route-table/concepts/) du sous-réseau où se trouve la passerelle nat, une route dirigeant le trafic de la passerelle nat jusqu'à Internet avec la [passerelle Internet](/docs/network/internet-gateway/concepts/) comme cible.
+- Dans les tables de routage des sous-réseaux où se trouvent vos VM, des routes dirigeant le trafic de ces VM jusqu'à Internet avec la passerelle nat comme cible.
+
+<img src="/img/console/network/nat/sch-General-NATGateway_v2.png" alt="Schéma de fonctionnement d'une NAT Gateway dans un réseau Numspot" />
+
+*Architecture d'une passerelle nat*
+
+:::warning
+Dans cette architecture, assurez-vous que les [groupes de sécurité](/docs/compute/security-groups/concepts/concept-sg/) des VM comportent une règle autorisant les flux sortants vers Internet (0.0.0.0/0 ou une plage d'adresses IP plus restreinte).
+:::

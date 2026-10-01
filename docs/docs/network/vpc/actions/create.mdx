@@ -1,5 +1,5 @@
 ---
-title: Créer un VPC
+title: Create a VPC
 sidebar_position: 2
 draft: false
 ---
@@ -8,14 +8,14 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Créer un VPC
+# Create a VPC
 
-Vous pouvez créer un réseau pour isoler vos ressources dans un réseau virtuel dédié à votre compte.
+You can create a network to isolate your resources in a virtual network dedicated to your account.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.vpc.create**
 
@@ -25,47 +25,45 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/vpc/01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC.", hotspot: { x: 0, y: 0.5222, w: 0.194, h: 0.0568 } },
-    { img: "/img/walkthrough/vpc/01-list.png", text: "Depuis la liste des VPC, cliquez sur « Créer un VPC ».", hotspot: { x: 0.8527, y: 0.2206, w: 0.1153, h: 0.0741 } },
-    { img: "/img/walkthrough/vpc/02-infos.png", text: "Renseignez le nom du VPC et sa plage d'adresses IP au format CIDR.", hotspot: { x: 0.2083, y: 0.3204, w: 0.5556, h: 0.2099 } },
-    { img: "/img/walkthrough/vpc/03-creer.png", text: "Cliquez sur « Créer un VPC ». Un DHCP, un security group et une route table sont créés automatiquement.", hotspot: { x: 0.6659, y: 0.9086, w: 0.0903, h: 0.0741 } },
+    { img: "/img/walkthrough/en/vpc/list.png", text: "From the left-hand side menu, click Network → VPC.", hotspot: { x: 0, y: 0.5222, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/vpc/list.png", text: "From the VPC list, click “Create a VPC”.", hotspot: { x: 0.8604, y: 0.2329, w: 0.1007, h: 0.0494 } },
+    { img: "/img/walkthrough/en/vpc/create.png", text: "Enter the VPC name and its IP range in CIDR format.", hotspot: { x: 0.2083, y: 0.3204, w: 0.5556, h: 0.2099 } },
+    { img: "/img/walkthrough/en/vpc/create.png", text: "Click “Create a VPC”. A DHCP, a security group and a route table are created automatically.", hotspot: { x: 0.6736, y: 0.921, w: 0.0757, h: 0.0494 } },
   ]}
 />
 
-     1. Connectez-vous sur la console Numspot.   
 
-     2. Depuis le menu latéral gauche, cliquez sur **Réseau** → **[VPC](/docs/network/vpc/concepts/)** → **VPC**. 
+     1. Log in to the Numspot console.   
 
-     3. Une fois sur la page **VPC**, cliquez sur le bouton **Créer un VPC**. La page **Création de VPC** apparaît.
+     2. From the left-hand side menu, click **Network** → **[VPC](/docs/network/vpc/concepts/)** → **VPC**. 
 
-     4. Dans le champ "Nom", saisissez un nom pour le VPC.
+     3. Once on the **VPC** page, click the **Create a VPC** button. The **VPC creation** page appears.
 
-     5. Dans le champ "Plage d'IP", entrez la plage d'adresses IP pour votre VPC, en notation CIDR.
+     4. In the "Name" field, enter a name for the VPC.
+
+     5. In the "IP range" field, enter the IP address range for your VPC, in CIDR format.
          :::warning 
-          Attention le CIDR ne pourra pas être modifié.
+          Note that the CIDR cannot be changed.
          ::: 
     
-     6. (Optionnel) Cochez la case "Utiliser un serveur dédié pour chaque [VM](/docs/compute/concept/) de ce VPC" si besoin.
+     6. (Optional) Tick the "Use a dedicated server for each [VM](/docs/compute/concept/) in this VPC" box if required.
      
-     7. Cliquez sur le bouton **Créer un VPC**. 
+     7. Click the **Create a VPC** button. 
      
-     8. Un message de confirmation s'affiche en bas indiquant que le VPC est bien créé et vous êtes redirigé vers la page détaillée du VPC.
+     8. A confirmation message is displayed at the bottom indicating that the VPC has been created successfully, and you are redirected to the VPC detail page.
 
         :::info
-        Un [DHCP (Dynamic Host Configuration Protocol)](/docs/network/dhcp/concepts/), un [security group (groupe de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) et une [route table (table de routage)](/docs/network/route-table/concepts/) seront créés automatiquement.
+        A [DHCP (Dynamic Host Configuration Protocol)](/docs/network/dhcp/concepts/), a [security group](/docs/compute/security-groups/concepts/concept-sg/) and a [route table](/docs/network/route-table/concepts/) will be created automatically.
         :::
 
    </TabItem> 
    <TabItem value="API">
-La commande `POST /compute/spaces/{spaceId}/vpcs` permet de créer un VPC (Virtual Private Cloud) avec une plage d'adresses IP (Internet Protocol) spécifiée.
-La plage d'adresses IP (plage réseau) de votre VPC doit être comprise entre un masque de sous-réseau /28 (16 IP) et un masque de sous-réseau /16 (65536 IP).
+The `POST /compute/spaces/{spaceId}/vpcs` command lets you create a VPC (Virtual Private Cloud) with a specified IP (Internet Protocol) address range.
+The IP address range (network range) of your VPC must be between a /28 subnet mask (16 IP) and a /16 subnet mask (65536 IP).
 
-[Exemple de requête : Création d'un VPC](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/vpcs)
+[Example request: Creating a VPC](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/vpcs)
   </TabItem>
   <TabItem value="Terraform" label="Terraform">
-
-## Terraform {#tabhead-Terraform}
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpc).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpc).
   </TabItem>
 </Tabs>

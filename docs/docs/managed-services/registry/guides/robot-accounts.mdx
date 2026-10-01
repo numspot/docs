@@ -1,92 +1,92 @@
 ---
-title: À propos des comptes robot
+title: About robot accounts
 sidebar_position: 4
 draft: false
 ---
 
-# À propos des comptes robot
+# About robot accounts
 
-Ce guide explique comment créer et gérer les comptes robot pour l'accès automatisé au Container Registry Numspot.
-
----
-
-## Vue d'ensemble
-
-Les comptes robot sont des comptes de service utilisés pour les interactions automatisées avec Harbor, telles que :
-
-- Les pipelines CI/CD qui poussent et tirent des images.
-- Les [clusters Kubernetes](/docs/managed-services/kubernetes/concepts/) qui tirent des images pour les déploiements.
-- Les outils automatisés qui analysent ou gèrent des images.
-- La réplication inter-registries.
-
-### Pourquoi utiliser des comptes robot ?
-
-- Sécurité : éviter d'utiliser les identifiants admin dans l'automatisation.
-- Permissions granulaires : limiter l'accès à des projets et opérations spécifiques.
-- Audit : suivre les opérations automatisées séparément des actions utilisateur.
-- Rotation des identifiants : rotation des jetons des comptes robot sans affecter les utilisateurs.
-- Responsabilité : distinction claire entre les accès humains et automatisés.
+This guide explains how to create and manage robot accounts for automated access to the Numspot Container Registry.
 
 ---
 
-## Types de comptes robot
+## Overview
 
-### Comptes robot au niveau système
+Robot accounts are service accounts used for automated interactions with Harbor, such as:
 
-- Portée : tous les projets dans le registry.
-- Créé par : administrateurs système Harbor.
-- Cas d'usage : automatisation à l'échelle du registry, réplication inter-projets.
+- CI/CD pipelines that push and pull images.
+- [Kubernetes clusters](/docs/managed-services/kubernetes/concepts/) that pull images for deployments.
+- Automated tools that scan or manage images.
+- Cross-registry replication.
 
-### Comptes robot au niveau projet
+### Why use robot accounts?
 
-- Portée : un seul projet uniquement.
-- Créé par : administrateurs de projet.
-- Cas d'usage : CI/CD spécifique au projet, déploiements d'applications.
+- Security: avoid using admin credentials in automation.
+- Granular permissions: restrict access to specific projects and operations.
+- Auditing: track automated operations separately from user actions.
+- Credential rotation: rotate robot account tokens without affecting users.
+- Accountability: clear distinction between human and automated access.
 
 ---
 
-## Créer des comptes robot
+## Robot account types
 
-### Via l'interface Harbor (niveau projet)
+### System-level robot accounts
 
-1. Connectez-vous à l'interface Harbor.
-2. Accédez à **Projects** → Sélectionnez le projet → **Robots**.
-3. Cliquez sur **New Robot Account**.
-4. Configurez :
+- Scope: all projects in the registry.
+- Created by: Harbor system administrators.
+- Use case: registry-wide automation, cross-project replication.
 
-| Champ | Valeur |
+### Project-level robot accounts
+
+- Scope: a single project only.
+- Created by: project administrators.
+- Use case: project-specific CI/CD, application deployments.
+
+---
+
+## Create robot accounts
+
+### Through the Harbor interface (project level)
+
+1. Log in to the Harbor interface.
+2. Go to **Projects** → Select the project → **Robots**.
+3. Click **New Robot Account**.
+4. Configure:
+
+| Field | Value |
 |-------|-------|
-| **Name** | `ci-cd-pipeline` (préfixe ajouté automatiquement) |
+| **Name** | `ci-cd-pipeline` (prefix added automatically) |
 | **Description** | `Robot for CI/CD pipeline pushes` |
-| **Expiration** | `Never` ou date spécifique |
-| **Permissions** | Sélectionnez les permissions appropriées |
+| **Expiration** | `Never` or a specific date |
+| **Permissions** | Select the appropriate permissions |
 
-5. Cliquez sur **Add**
+5. Click **Add**
 
-### Niveaux de permission
+### Permission levels
 
-| Permission | Description | Cas d'usage |
+| Permission | Description | Use case |
 |------------|-------------|-------------|
-| **Push** | Pousser des images vers le dépôt | Pipelines CI qui construisent des images |
-| **Pull** | Tirer des images depuis le dépôt | Déploiements Kubernetes |
-| **Read** | Voir les métadonnées du dépôt | Outils de monitoring |
-| **Delete** | Supprimer des images et tags | Jobs de nettoyage |
-| **Create** | Créer des dépôts | Configuration initiale du projet |
-| **Scanner pull** | Récupérer les résultats de scan | Outils de sécurité |
+| **Push** | Push images to the repository | CI pipelines that build images |
+| **Pull** | Pull images from the repository | Kubernetes deployments |
+| **Read** | View repository metadata | Monitoring tools |
+| **Delete** | Delete images and tags | Cleanup jobs |
+| **Create** | Create repositories | Initial project setup |
+| **Scanner pull** | Retrieve scan results | Security tools |
 
-### Combinaisons de permissions courantes
+### Common permission combinations
 
-| Cas d'usage | Permissions |
+| Use case | Permissions |
 |-------------|-------------|
 | **CI/CD Push** | Push + Create |
 | **Kubernetes Pull** | Pull + Read |
-| **Accès complet** | Push + Pull + Read + Delete + Create |
+| **Full access** | Push + Pull + Read + Delete + Create |
 | **Scanner** | Pull + Read + Scanner pull |
 
-### Via API (niveau projet)
+### Through the API (project level)
 
 ```bash
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots" \
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -107,7 +107,7 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
   }'
 ```
 
-**Réponse :**
+**Response:**
 
 ```json
 {
@@ -121,30 +121,30 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
 ```
 
 :::warning
-Sauvegardez immédiatement la valeur du `secret`. Elle n'est affichée qu'une seule fois et ne peut pas être récupérée ultérieurement.
+Save the `secret` value immediately. It is displayed only once and cannot be retrieved later.
 :::
 
-### Via l'interface Harbor (niveau système)
+### Through the Harbor interface (system level)
 
-1. Connectez-vous en tant qu'administrateur système.
-2. Accédez à **Administration** → **Robot Accounts**.
-3. Cliquez sur **New Robot Account**.
-4. Configurez :
+1. Log in as a system administrator.
+2. Go to **Administration** → **Robot Accounts**.
+3. Click **New Robot Account**.
+4. Configure:
 
-| Champ | Valeur |
+| Field | Value |
 |-------|-------|
 | **Name** | `system-replication` |
 | **Description** | `System-wide replication robot` |
-| **Expiration** | `Never` ou date spécifique |
-| **Scope** | Niveau système |
-| **Permissions** | Tous les projets ou projets spécifiques |
+| **Expiration** | `Never` or a specific date |
+| **Scope** | System level |
+| **Permissions** | All projects or specific projects |
 
-5. Cliquez sur **Add**
+5. Click **Add**
 
-### Via API (niveau système)
+### Through the API (system level)
 
 ```bash
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/robots" \
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/robots" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -169,35 +169,35 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
 
 ---
 
-## Gérer les identifiants des comptes robot
+## Manage robot account credentials
 
-### Sauvegarder les identifiants
+### Save the credentials
 
-Après avoir créé un compte robot, vous recevrez :
+After creating a robot account, you will receive:
 
-- Nom d'utilisateur : `robot${project_name}+robot-name`.
-- Secret/Jeton : jeton généré (affiché une seule fois).
+- Username: `robot${project_name}+robot-name`.
+- Secret/Token: generated token (displayed only once).
 
-Stockez les identifiants de manière sécurisée :
+Store the credentials securely:
 
 ```bash
-## Exemple : Sauvegarder dans un secret Kubernetes
+## Example: save in a Kubernetes secret
 kubectl create secret docker-registry harbor-robot-secret \
-  --docker-server=reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com \
+  --docker-server=registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com \
   --docker-username='robot${project_name}+ci-cd-pipeline' \
   --docker-password='generated-secret-token'
 
-## Exemple : Sauvegarder dans des variables d'environnement
+## Example: save in environment variables
 export HARBOR_ROBOT_USER='robot${project_name}+ci-cd-pipeline'
 export HARBOR_ROBOT_SECRET='generated-secret-token'
 ```
 
-### Utiliser les comptes robot
+### Use robot accounts
 
 #### Docker Login
 
 ```bash
-docker login reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com \
+docker login registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com \
   -u 'robot${project_name}+ci-cd-pipeline' \
   -p 'generated-secret-token'
 ```
@@ -206,10 +206,10 @@ docker login reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-
 
 ```bash
 ## Push image
-docker push reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/myproject/myimage:v1.0
+docker push registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/myproject/myimage:v1.0
 
 ## Pull image
-docker pull reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/myproject/myimage:v1.0
+docker pull registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/myproject/myimage:v1.0
 ```
 
 #### Kubernetes Image Pull Secret
@@ -225,7 +225,7 @@ data:
   .dockerconfigjson: ewogICJhdXRocyI6IHsKICAgICJyZWdpc3RyeS17cmVnaXN0cnlJZH0uaGNwLmNsb3VkZ291di1ldS13ZXN0LTEubnVtc3BvdC5jb20iOiB7CiAgICAgICJ1c2VybmFtZSI6ICJyb2JvdCR7cHJvamVjdF9uYW1lfStjaS1jZC1waXBlbGluZSIsCiAgICAgICJwYXNzd29yZCI6ICJnZW5lcmF0ZWQtc2VjcmV0LXRva2VuIiwKICAgICAgImF1dGgiOiAiYjNvTlRtVm1kWEJwYm1samJtRjBaVG9qTVE9PSIKICAgIH0KICB9Cn0=
 ```
 
-#### Déploiement Kubernetes
+#### Kubernetes deployment
 
 ```yaml
 apiVersion: apps/v1
@@ -239,7 +239,7 @@ spec:
       - name: harbor-robot-secret
       containers:
       - name: myapp
-        image: reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/myproject/myimage:v1.0
+        image: registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/myproject/myimage:v1.0
 ```
 
 #### CI/CD (GitLab CI)
@@ -247,7 +247,7 @@ spec:
 ```yaml
 ## .gitlab-ci.yml
 variables:
-  HARBOR_REGISTRY: reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com
+  HARBOR_REGISTRY: registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com
   HARBOR_USER: robot${project_name}+ci-cd-pipeline
   HARBOR_PASSWORD: generated-secret-token
 
@@ -282,7 +282,7 @@ jobs:
       - name: Login to Harbor
         uses: docker/login-action@v2
         with:
-          registry: reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com
+          registry: registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com
           username: ${{ secrets.HARBOR_ROBOT_USER }}
           password: ${{ secrets.HARBOR_ROBOT_SECRET }}
 
@@ -290,48 +290,48 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/myproject/myimage:${{ github.sha }}
+          tags: registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/myproject/myimage:${{ github.sha }}
 ```
 
 ---
 
-## Gérer les comptes robot existants
+## Manage existing robot accounts
 
-### Lister les comptes robot
+### List robot accounts
 
-#### Via l'interface Harbor
+#### Through the Harbor interface
 
-1. Accédez à **Projects** → Sélectionnez le projet → **Robots**.
-2. Consultez la liste des comptes robot.
+1. Go to **Projects** → Select the project → **Robots**.
+2. Review the list of robot accounts.
 
-#### Via API
+#### Through the API
 
 ```bash
-## Lister les robots au niveau projet
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots" \
+## List project-level robots
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots" \
   -u "admin:{password}"
 
-## Lister les robots au niveau système
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/robots" \
+## List system-level robots
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/robots" \
   -u "admin:{password}"
 ```
 
-### Modifier un compte robot
+### Edit a robot account
 
-#### Via l'interface Harbor
+#### Through the Harbor interface
 
-1. Accédez à la liste des comptes robot
-2. Cliquez sur **Edit** sur le compte robot
-3. Modifiez :
-- La description
-- La date d'expiration
-- Les permissions
-4. Cliquez sur **Save**
+1. Go to the list of robot accounts
+2. Click **Edit** on the robot account
+3. Modify:
+- The description
+- The expiration date
+- The permissions
+4. Click **Save**
 
-#### Via API
+#### Through the API
 
 ```bash
-curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots/{robot_id}" \
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots/{robot_id}" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -350,20 +350,20 @@ curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-
   }'
 ```
 
-### Rafraîchir le secret
+### Refresh the secret
 
-Régénérer le secret du compte robot :
+Regenerate the robot account secret:
 
-#### Via l'interface Harbor
+#### Through the Harbor interface
 
-1. Accédez à la liste des comptes robot
-2. Cliquez sur **Refresh Secret** sur le compte robot
-3. **Copiez immédiatement le nouveau secret** (affiché une seule fois)
+1. Go to the list of robot accounts
+2. Click **Refresh Secret** on the robot account
+3. **Copy the new secret immediately** (displayed only once)
 
-#### Via API
+#### Through the API
 
 ```bash
-curl -X PATCH "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots/{robot_id}" \
+curl -X PATCH "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots/{robot_id}" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -371,7 +371,7 @@ curl -X PATCH "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgou
   }'
 ```
 
-**Réponse :**
+**Response:**
 
 ```json
 {
@@ -380,15 +380,15 @@ curl -X PATCH "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgou
 ```
 
 :::warning
-Le rafraîchissement du secret invalide immédiatement l'ancien secret. Mettez à jour tous les systèmes utilisant le compte robot.
+Refreshing the secret immediately invalidates the old secret. Update all systems that use the robot account.
 :::
 
-### Désactiver un compte robot
+### Disable a robot account
 
-Désactiver temporairement sans supprimer :
+Disable temporarily without deleting:
 
 ```bash
-curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots/{robot_id}" \
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots/{robot_id}" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -396,60 +396,60 @@ curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-
   }'
 ```
 
-### Supprimer un compte robot
+### Delete a robot account
 
 :::warning
-La suppression est permanente. Tous les systèmes utilisant le compte robot perdront l'accès.
+Deletion is permanent. All systems that use the robot account will lose access.
 :::
 
-#### Via l'interface Harbor
+#### Through the Harbor interface
 
-1. Accédez à la liste des comptes robot.
-2. Cliquez sur **Delete** sur le compte robot.
-3. Confirmez la suppression.
+1. Go to the list of robot accounts.
+2. Click **Delete** on the robot account.
+3. Confirm the deletion.
 
-#### Via API
+#### Through the API
 
 ```bash
-curl -X DELETE "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots/{robot_id}" \
+curl -X DELETE "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots/{robot_id}" \
   -u "admin:{password}"
 ```
 
 ---
 
-## Bonnes pratiques pour les comptes robot
+## Best practices for robot accounts
 
-### Sécurité
+### Security
 
-1. **Principe du moindre privilège** : Accordez les permissions minimales nécessaires
-2. **Portée projet** : Utilisez des robots au niveau projet plutôt qu'au niveau système
-3. **Expiration courte** : Définissez des dates d'expiration raisonnables
-4. **Rotation des secrets** : Rafraîchissez régulièrement les secrets des comptes robot
-5. **Ne jamais commiter les secrets** : Utilisez des variables d'environnement ou des outils de gestion de secrets
-6. **Auditer l'utilisation** : Surveillez l'activité des comptes robot dans les logs d'audit
+1. **Principle of least privilege**: Grant the minimum permissions required
+2. **Project scope**: Use project-level robots rather than system-level robots
+3. **Short expiration**: Set reasonable expiration dates
+4. **Secret rotation**: Refresh robot account secrets regularly
+5. **Never commit secrets**: Use environment variables or secret management tools
+6. **Audit usage**: Monitor robot account activity in the audit logs
 
-### Organisation
+### Organization
 
-1. **Noms descriptifs** : Utilisez des noms significatifs (ex: `ci-cd-production`, `k8s-deploy-staging`)
-2. **Documenter l'objectif** : Incluez des descriptions détaillées
-3. **Taguer les environnements** : Utilisez des conventions de nommage pour les environnements
-4. **Suivre la propriété** : Documentez quelle équipe/système possède chaque robot
+1. **Descriptive names**: Use meaningful names (e.g. `ci-cd-production`, `k8s-deploy-staging`)
+2. **Document the purpose**: Include detailed descriptions
+3. **Tag environments**: Use naming conventions for environments
+4. **Track ownership**: Document which team/system owns each robot
 
-### Gestion du cycle de vie
+### Lifecycle management
 
-1. **Revue régulière** : Auditez les comptes robot trimestriellement
-2. **Supprimer les inutilisés** : Supprimez les comptes robot qui ne sont plus utilisés
-3. **Alertes sur l'expiration** : Surveillez les comptes proches de l'expiration
-4. **Mettre à jour l'automatisation** : Rafraîchissez les identifiants dans le CI/CD avant l'expiration
+1. **Regular review**: Audit robot accounts quarterly
+2. **Remove unused ones**: Delete robot accounts that are no longer used
+3. **Expiration alerts**: Monitor accounts close to expiration
+4. **Update automation**: Refresh credentials in CI/CD before expiration
 
 ---
 
-## Modèles de comptes robot
+## Robot account templates
 
-### Robot pour pipeline CI/CD
+### Robot for a CI/CD pipeline
 
 ```bash
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots" \
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -470,10 +470,10 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
   }'
 ```
 
-### Robot pour déploiement Kubernetes
+### Robot for a Kubernetes deployment
 
 ```bash
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots" \
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/robots" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -493,10 +493,10 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
   }'
 ```
 
-### Robot de réplication
+### Replication robot
 
 ```bash
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/robots" \
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/robots" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -521,81 +521,81 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
 
 ---
 
-## Surveiller l'utilisation des comptes robot
+## Monitor robot account usage
 
-### Via les logs d'audit
+### Through the audit logs
 
-1. Accédez à **Administration** → **Audit Log**.
-2. Filtrez par nom d'utilisateur du compte robot.
-3. Consultez les opérations :
-   - Opérations push/pull.
-   - Création de dépôts.
-   - Suppression d'images.
-   - Horodatage du dernier accès.
+1. Go to **Administration** → **Audit Log**.
+2. Filter by robot account username.
+3. Review the operations:
+   - Push/pull operations.
+   - Repository creation.
+   - Image deletion.
+   - Last access timestamp.
 
-### Via API
+### Through the API
 
 ```bash
-## Récupérer les logs d'audit pour un compte robot
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/logs?username=robot%24{project_name}%2Bci-pipeline" \
+## Retrieve the audit logs for a robot account
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/logs?username=robot%24{project_name}%2Bci-pipeline" \
   -u "admin:{password}" | jq '.[] | {operation: .operation, repository: .repo_name, time: .op_time}'
 ```
 
-### Métriques à surveiller
+### Metrics to monitor
 
-- Fréquence pull/push : suivez les patterns d'utilisation.
-- Échecs d'authentification : alertes sur les tentatives de connexion échouées.
-- Heure du dernier accès : identifiez les comptes robot inactifs.
-- Violations de permissions : alertes sur les tentatives d'accès non autorisées.
-
----
-
-## Dépannage
-
-### Problème 1 : échec de l'authentification
-
-**Symptôme** : Docker login ou pull échoue avec erreur 401.
-
-**Solutions** :
-1. Vérifiez le format du nom d'utilisateur du compte robot : `robot${project_name}+robot-name`.
-2. Vérifiez si le secret a été rafraîchi récemment.
-3. Vérifiez que le compte robot n'est pas désactivé.
-4. Vérifiez que les permissions correspondent à l'opération (pull vs push).
-
-### Problème 2 : accès refusé
-
-**Symptôme** : erreur 403 Forbidden sur push/pull.
-
-**Solutions** :
-1. Vérifiez que le compte robot a les permissions correctes.
-2. Vérifiez que le compte robot est associé au bon projet.
-3. Vérifiez que le dépôt existe (ou que la permission create est accordée).
-4. Vérifiez que les quotas du projet ne sont pas dépassés.
-
-### Problème 3 : compte robot expiré
-
-**Symptôme** : l'authentification échoue après la date d'expiration.
-
-**Solutions** :
-1. Mettez à jour l'expiration du compte robot.
-2. Créez un nouveau compte robot si nécessaire.
-3. Mettez à jour les secrets dans tous les systèmes consommateurs.
-
-### Problème 4 : impossible de rafraîchir le secret
-
-**Symptôme** : le rafraîchissement du secret échoue.
-
-**Solutions** :
-1. Vérifiez que vous avez les permissions d'administrateur de projet.
-2. Vérifiez que le compte robot existe toujours.
-3. Essayez de mettre à jour via l'API au lieu de l'interface.
-4. Contactez le support si le problème persiste.
+- Pull/push frequency: track usage patterns.
+- Authentication failures: alert on failed login attempts.
+- Last access time: identify inactive robot accounts.
+- Permission violations: alert on unauthorized access attempts.
 
 ---
 
-## Référence API
+## Troubleshooting
 
-### Créer un compte robot (projet)
+### Issue 1: authentication failure
+
+**Symptom**: Docker login or pull fails with a 401 error.
+
+**Solutions**:
+1. Check the robot account username format: `robot${project_name}+robot-name`.
+2. Check whether the secret was refreshed recently.
+3. Check that the robot account is not disabled.
+4. Check that the permissions match the operation (pull vs push).
+
+### Issue 2: access denied
+
+**Symptom**: 403 Forbidden error on push/pull.
+
+**Solutions**:
+1. Check that the robot account has the correct permissions.
+2. Check that the robot account is associated with the right project.
+3. Check that the repository exists (or that the create permission is granted).
+4. Check that the project quotas are not exceeded.
+
+### Issue 3: expired robot account
+
+**Symptom**: authentication fails after the expiration date.
+
+**Solutions**:
+1. Update the robot account expiration.
+2. Create a new robot account if necessary.
+3. Update the secrets in all consuming systems.
+
+### Issue 4: unable to refresh the secret
+
+**Symptom**: refreshing the secret fails.
+
+**Solutions**:
+1. Check that you have project administrator permissions.
+2. Check that the robot account still exists.
+3. Try updating through the API instead of the interface.
+4. Contact support if the problem persists.
+
+---
+
+## API reference
+
+### Create a robot account (project)
 
 ```http
 POST /api/v2.0/projects/{project_id}/robots
@@ -618,21 +618,21 @@ Content-Type: application/json
 }
 ```
 
-### Lister les comptes robot (projet)
+### List robot accounts (project)
 
 ```http
 GET /api/v2.0/projects/{project_id}/robots
 Authorization: Basic {base64(admin:password)}
 ```
 
-### Récupérer un compte robot
+### Retrieve a robot account
 
 ```http
 GET /api/v2.0/projects/{project_id}/robots/{robot_id}
 Authorization: Basic {base64(admin:password)}
 ```
 
-### Modifier un compte robot
+### Edit a robot account
 
 ```http
 PUT /api/v2.0/projects/{project_id}/robots/{robot_id}
@@ -647,7 +647,7 @@ Content-Type: application/json
 }
 ```
 
-### Rafraîchir le secret
+### Refresh the secret
 
 ```http
 PATCH /api/v2.0/projects/{project_id}/robots/{robot_id}
@@ -659,7 +659,7 @@ Content-Type: application/json
 }
 ```
 
-### Supprimer un compte robot
+### Delete a robot account
 
 ```http
 DELETE /api/v2.0/projects/{project_id}/robots/{robot_id}
@@ -670,10 +670,10 @@ Authorization: Basic {base64(admin:password)}
 
 ## Limitations
 
-- Secret affiché une seule fois : impossible de récupérer le secret après la création.
-- Immuabilité du nom : impossible de renommer un compte robot après sa création.
-- Granularité des permissions limitée : permissions au niveau Harbor uniquement.
-- Expiration requise : doit définir une date d'expiration pour les robots au niveau système.
-- Pas de restrictions IP : les comptes robot ne peuvent pas être restreints par IP (utilisez les permissions de projet).
+- Secret displayed only once: the secret cannot be retrieved after creation.
+- Name immutability: a robot account cannot be renamed after it is created.
+- Limited permission granularity: permissions at the Harbor level only.
+- Expiration required: an expiration date must be set for system-level robots.
+- No IP restrictions: robot accounts cannot be restricted by IP (use project permissions).
 
 ---

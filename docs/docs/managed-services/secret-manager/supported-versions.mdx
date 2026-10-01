@@ -1,57 +1,57 @@
 ---
-title: Versions et cycle de vie - Secret Manager managé
-sidebar_label: Versions et cycle de vie
+title: Versions and lifecycle - Managed Secret Manager
+sidebar_label: Versions and lifecycle
 sidebar_position: 5
 draft: false
 ---
 
-# Versions et cycle de vie
+# Versions and lifecycle
 
-Numspot opère ses [instances Secret Manager](/docs/managed-services/secret-manager/concepts/) avec des versions stables d'OpenBao bénéficiant d'un suivi actif des correctifs de sécurité, en conformité avec les exigences de sécurité appliquées au service.
+Numspot operates its [Secret Manager instances](/docs/managed-services/secret-manager/concepts/) with stable OpenBao versions that benefit from active security patch tracking, in compliance with the security requirements applied to the service.
 
-## Versions supportées
+## Supported versions
 
-Les versions mineures suivantes sont supportées :
+The following minor versions are supported:
 
 - **OpenBao 2.5**
 
-Ce périmètre couvre les versions stables et activement maintenues par le projet OpenBao, avec un suivi continu des bulletins de sécurité.
+This scope covers the stable versions that are actively maintained by the OpenBao project, with continuous tracking of security advisories.
 
 :::note
-Lors de la création d'une instance Secret Manager, la version la plus récente est sélectionnée par défaut. Pour plus d'informations, consultez [Créer une instance Secret Manager](/docs/managed-services/secret-manager/actions/create/).
+When you create a Secret Manager instance, the most recent version is selected by default. For more information, see [Create a Secret Manager instance](/docs/managed-services/secret-manager/actions/create/).
 :::
 
-## Suivi des patches de sécurité
+## Security patch tracking
 
-Les images utilisées pour les instances Secret Manager intègrent :
+The images used for the Secret Manager instances include:
 
-- Des mises à jour de correctifs (patch) appliquées régulièrement pour corriger les bugs et les failles de sécurité.
-- Un suivi actif des vulnérabilités critiques et hautes.
+- patch updates applied regularly to fix bugs and security vulnerabilities;
+- active tracking of critical and high-severity vulnerabilities.
 
-Les mises à jour de correctifs sont appliquées automatiquement par Numspot et ne nécessitent aucune action de la part du client. Elles ne concernent que les versions patch (par exemple, `2.5.3` vers `2.5.4`), sans modification de la compatibilité des données.
+Patch updates are applied automatically by Numspot and require no action from the customer. They only concern patch versions (for example, `2.5.3` to `2.5.4`), without any change to data compatibility.
 
 :::info
-Pour obtenir des informations sur les versions appliquées ou les correctifs récents, contactez le support Numspot.
+To obtain information about the applied versions or recent patches, contact Numspot support.
 :::
 
-## Cycle de vie des versions (lifecycle)
+## Version lifecycle
 
-### Politique de support
+### Support policy
 
-| Version | Statut du support | Fin de support Numspot estimée |
-|---------|-------------------|--------------------------------|
-| **2.5** | Active | À déterminer |
+| Version | Support status | Estimated Numspot end-of-support |
+|---------|----------------|----------------------------------|
+| **2.5** | Active | To be determined |
 
-Le projet OpenBao ne maintient que la dernière version mineure à tout moment. Le statut de support est aligné sur les annonces du projet OpenBao. Numspot suit la politique OpenBao concernant le support des versions mineures.
+The OpenBao project only maintains the latest minor version at any time. The support status is aligned with the announcements from the OpenBao project. Numspot follows the OpenBao policy regarding the support of minor versions.
 
-### Notification de fin de support
+### End-of-support notification
 
-Numspot notifie ses clients **plusieurs mois avant la fin de support** d'une version mineure. Cette notification permet aux clients de planifier la mise à jour vers une version plus récente.
+Numspot notifies its customers **several months before the end of support** of a minor version. This notification allows customers to plan the update to a more recent version.
 
-## Mises à jour mineures
+## Minor updates
 
-Les mises à jour mineures (par exemple, d'OpenBao 2.5 vers OpenBao 2.6) entraînent une mise à jour de l'instance Secret Manager. Numspot recommande de tester la compatibilité de vos workflows avant de procéder à une mise à jour mineure.
+Minor updates (for example, from OpenBao 2.5 to OpenBao 2.6) result in an update of the Secret Manager instance. Numspot recommends testing the compatibility of your workflows before performing a minor update.
 
 :::warning
-La mise à jour de version peut entraîner une indisponibilité temporaire de l'instance Secret Manager. Il est de la responsabilité du client de vérifier que ses workflows sont compatibles avec la nouvelle version avant toute migration.
+A version update may cause a temporary unavailability of the Secret Manager instance. It is the customer's responsibility to verify that their workflows are compatible with the new version before any migration.
 :::

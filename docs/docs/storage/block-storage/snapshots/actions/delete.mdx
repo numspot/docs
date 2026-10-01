@@ -1,5 +1,5 @@
 ---
-title: Supprimer un snapshot
+title: Delete a snapshot
 sidebar_position: 2
 draft: false
 ---
@@ -7,50 +7,41 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Supprimer un snapshot
+# Delete a snapshot
 
-Vous pouvez supprimer un snapshot dont vous n'avez plus besoin pour libérer vos quotas de ressources. Un snapshot supprimé ne peut être retrouvé ultérieurement.
+You can delete a snapshot that you no longer need in order to free up your resource quotas. A deleted snapshot cannot be recovered later.
 
-Vous ne pouvez pas supprimer un snapshot en cours d'utilisation par une `image`. Pour ce faire, vous devez d'abord supprimer l'`image` correspondante.
+You cannot delete a snapshot that is in use by an `image`. To do so, you must first delete the corresponding `image`.
 
-Vous ne pouvez pas supprimer un snapshot qu'un autre compte a partagé avec vous, car il ne vous appartient pas. De même, si vous supprimez un snapshot que vous avez partagé avec d'autres comptes, celui-ci est automatiquement supprimé de ces comptes également.
+You cannot delete a snapshot that another account has shared with you, because it does not belong to you. Likewise, if you delete a snapshot that you have shared with other accounts, it is automatically deleted from those accounts as well.
 
 :::info
-La suppression d'un snapshot est disponible uniquement via l'API.
+Deleting a snapshot is available only through the API.
 :::
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.snapshot.delete**
 
 :::
 <Tabs>
 <TabItem value="Console" default>
-
-## Console {#tabhead-console}
-
-  La suppression de snapshot n'est pas disponible via la console. Utilisez l'API ou Terraform.
+  Deleting a snapshot is not available through the console. Use the API or Terraform.
 </TabItem>
 <TabItem value="API">
-
-## API {#tabhead-api}
-
     :::info
-Avant de commencer : assurez-vous que vous n'avez plus besoin des données contenues dans le snapshot, ou que vous en avez une sauvegarde, par exemple sur un `volume` ou dans un autre snapshot.
+Before you begin: make sure that you no longer need the data contained in the snapshot, or that you have a backup of it, for example on a `volume` or in another snapshot.
 :::
 
-La commande `DELETE /compute/spaces/{spaceId}/snapshots/{id}` supprime un snapshot spécifié.
-Vous ne pouvez pas supprimer un snapshot actuellement utilisé par une `image`. Pour ce faire, vous devez d'abord supprimer l'`image` correspondante.
+The `DELETE /compute/spaces/{spaceId}/snapshots/{id}` command deletes a specified snapshot.
+You cannot delete a snapshot that is currently in use by an `image`. To do so, you must first delete the corresponding `image`.
 
-[Exemple de requête : Suppression d'un snapshot](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/snapshots/{id})
+[Request example: Deleting a snapshot](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/snapshots/{id})
 </TabItem>
 <TabItem value="Terraform">
-
-## Terraform {#tabhead-terraform}
-
-  La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/snapshot).
+  The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/snapshot).
 </TabItem>
 </Tabs>

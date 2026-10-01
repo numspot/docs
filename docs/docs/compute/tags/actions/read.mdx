@@ -1,5 +1,5 @@
 ---
-title: Lire un ou plusieurs tags
+title: Read one or more tags
 sidebar_position: 3
 draft: false
 ---
@@ -8,68 +8,60 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Lire un ou plusieurs tags
+# Read one or more tags
 
-Vous pouvez rechercher des informations sur vos tags.
+You can search for information about your tags.
 
 :::info
-Pour rechercher des ressources par rapport à leurs tags, reportez-vous à la section de lecture de la ressource concernée.
+To search for resources by their tags, refer to the read section of the relevant resource.
 :::
 
 ## Permissions
 
 :::info
-Cette action nécessite la permission **IAM** (Identity and Access Management) de lecture de chaque ressource dont vous souhaitez consulter les tags. Par exemple :
+This action requires the **IAM** (Identity and Access Management) read permission for each resource whose tags you want to view. For example:
 
-- **compute.vm.get** pour une [VM (virtual machine)](/docs/compute/concept/) ;
-- **compute.blockStorage.get** pour un [volume (block storage)](/docs/storage/block-storage/concepts/) ;
-- **compute.loadBalancer.get** pour un [load balancer](/docs/network/load-balancer/concepts/) ;
-- **compute.vpc.get** pour un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+- **compute.vm.get** for a [VM (virtual machine)](/docs/compute/concept/);
+- **compute.blockStorage.get** for a [volume (block storage)](/docs/storage/block-storage/concepts/);
+- **compute.loadBalancer.get** for a [load balancer](/docs/network/load-balancer/concepts/);
+- **compute.vpc.get** for a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
 
-Cette liste est donnée à titre d'exemple et n'est pas exhaustive : pour chaque ressource, reportez-vous à sa page d'action.
+This list is given as an example and is not exhaustive: for each resource, refer to its action page.
 
-Seuls les tags des ressources que vous êtes autorisé à lire sont renvoyés.
+Only the tags of the resources you are allowed to read are returned.
 
 :::
 
 <Tabs>
 <TabItem value="Console" label="Console" default>
 
-## Console {#tabhead-Console}
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/load-balancer/lb-02-actions.png", text: "Depuis la liste de la ressource concernée, ouvrez le menu « Actions » de sa ligne, puis cliquez sur « Gérer les tags ».", hotspot: { x: 0.875, y: 0.4358, w: 0.0884, h: 0.0457 } },
-    { img: "/img/walkthrough/load-balancer/lb-tags-panel.png", text: "Le panneau « Gérer les tags » affiche la liste des tags (clé/valeur) associés à la ressource.", hotspot: { x: 0.6, y: 0.28, w: 0.35, h: 0.1 } },
+    { img: "/img/walkthrough/en/load-balancer/lb-02-actions.png", text: "From the list of the relevant resource, open its row “Actions” menu, then click “Manage tags”.", hotspot: { x: 0.8819, y: 0.4358, w: 0.0809, h: 0.0457 } },
+    { img: "/img/walkthrough/en/load-balancer/lb-tags-panel.png", text: "The “Manage Tags” panel shows the list of tags (key/value) associated with the resource.", hotspot: { x: 0.6, y: 0.28, w: 0.35, h: 0.1 } },
   ]}
 />
 
-1. Depuis le menu latéral gauche, accédez à la liste de la ressource dont vous souhaitez consulter les tags ;
-2. Sur la ligne de la ressource, ouvrez le menu **Actions**, puis cliquez sur **Gérer les tags**.
+1. From the left-hand side menu, go to the list of the resource whose tags you want to view;
+2. On the resource row, open the **Actions** menu, then click **Manage tags**.
 
-Le panneau **Gérer les tags** affiche la liste des tags associés à la ressource.
+The **Manage Tags** panel shows the list of tags associated with the resource.
 
 :::info
-Le parcours est identique pour toutes les ressources qui supportent les tags (VM, volume, load balancer, VPC…). L'exemple ci-dessus est pris sur un load balancer.
+The process is identical for all resources that support tags (VM, volume, load balancer, VPC…). The example above is taken from a load balancer.
 :::
 
 </TabItem>
 <TabItem value="API" label="API">
 
-## API {#tabhead-API}
+The `GET /compute/spaces/{spaceId}/tags` command lists the tags of a space. The list contains only the tags of the resources you have permission to access.
 
-
-La commande `GET /compute/spaces/{spaceId}/tags` liste les tags d'un espace. La liste ne contient que les tags des ressources auxquelles vous avez la permission d'accéder.
-
-[Exemple de requête : Lister les tags ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/tags)
+[Example request: List the tags ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/tags)
 
 </TabItem>
 <TabItem value="Terraform" label="Terraform">
 
-## Terraform {#tabhead-Terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
 
 </TabItem>
 </Tabs>

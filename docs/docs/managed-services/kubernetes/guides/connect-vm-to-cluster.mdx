@@ -1,63 +1,62 @@
 ---
-title: Connecter une VM à un cluster Kubernetes managé - Kubernetes managé
-sidebar_label: Connecter une VM à un cluster Kubernetes
-description: Joindre l'API d'un cluster Kubernetes managé depuis une VM d'un VPC via un Hybrid Bridge, avec les routes, les règles firewall et le fichier kubeconfig
+title: Connect a VM to a managed Kubernetes cluster
+description: Reach the API server of a managed Kubernetes cluster from a VM in a VPC through a Hybrid Bridge, with routes, firewall rules and the kubeconfig file
 sidebar_position: 5
 draft: false
 ---
 
-# Connecter une VM à un cluster Kubernetes managé
+# Connect a VM to a managed Kubernetes cluster
 
-À la création d'un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) managé, le choix du réseau détermine l'exposition du serveur d'API : réseau **Public** (`"visibility": "EXTERNAL"`) ou réseau **Privé** (`"visibility": "INTERNAL"`). Avec un réseau Privé, le serveur d'API n'est joignable que depuis le réseau interne Numspot : pour l'administrer avec `kubectl` depuis une [VM (Virtual Machine)](/docs/compute/concept/), connectez la VM au réseau du cluster par une connexion privée.
+When you create a managed [Kubernetes cluster](/docs/managed-services/kubernetes/concepts/), the network choice determines the exposure of the API server: **Public** network (`"visibility": "EXTERNAL"`) or **Private** network (`"visibility": "INTERNAL"`). With a Private network, the API server is only reachable from Numspot's internal network: to administer it with `kubectl` from a [VM (Virtual Machine)](/docs/compute/concept/), connect the VM to the cluster network through a private connection.
 
-Ce guide décrit le cheminement complet depuis une VM placée dans un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) : création du [Hybrid Bridge](/docs/connectivity/hybrid-bridge/concepts/), mise à jour du routage, ouverture des flux, déploiement du fichier kubeconfig puis connexion avec `kubectl`.
+This guide describes the complete path from a VM located in a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/): creation of the [Hybrid Bridge](/docs/connectivity/hybrid-bridge/concepts/), routing update, traffic opening, kubeconfig file deployment and connection with `kubectl`.
 
-## Prérequis
+## Prerequisites
 
 :::info
-- [Avoir un cluster Kubernetes Numspot opérationnel ↗](/docs/managed-services/kubernetes/concepts/)
-- [Avoir créé un VPC et une VM opérationnelle dans ce VPC ↗](/docs/compute/vms/actions/create/)
-- [Créer un Hybrid Bridge ↗](/docs/connectivity/hybrid-bridge/actions/create/)
-- [Télécharger le fichier kubeconfig ↗](/docs/managed-services/kubernetes/actions/kubeconfig/)
-- `kubectl` installé sur la VM
+- [Have an operational Numspot Kubernetes cluster ↗](/docs/managed-services/kubernetes/concepts/)
+- [Have a VPC and an operational VM inside this VPC ↗](/docs/compute/vms/actions/create/)
+- [Create a Hybrid Bridge ↗](/docs/connectivity/hybrid-bridge/actions/create/)
+- [Download the kubeconfig file ↗](/docs/managed-services/kubernetes/actions/kubeconfig/)
+- `kubectl` installed on the VM
 :::
 
-## Procédure
+## Procedure
 
-### Étape 1 : Créer le bridge entre le VPC et l'espace
+### Step 1: Create the bridge between the VPC and the space
 
-Un bridge connecte un VPC à l'ensemble des services managés de l'espace. La gestion des Hybrid Bridges s'effectue uniquement par API : suivez la procédure [Créer un Hybrid Bridge ↗](/docs/connectivity/hybrid-bridge/actions/create/).
+A bridge connects a VPC to all the managed services of the space. Hybrid Bridges are managed through the API only: follow the [Create a Hybrid Bridge ↗](/docs/connectivity/hybrid-bridge/actions/create/) procedure.
 
-La commande `POST /connectivity/spaces/{spaceId}/bridges` crée le bridge : `left` désigne le VPC, `right` désigne l'espace.
+The `POST /connectivity/spaces/{spaceId}/bridges` command creates the bridge: `left` targets the VPC, `right` targets the space.
 
-La création est asynchrone : l'API retourne un code **202 Accepted** et le bridge atteint ensuite un état `READY`. Attendez cet état avant de poursuivre.
+Creation is asynchronous: the API returns a **202 Accepted** code and the bridge then reaches a `READY` state. Wait for this state before continuing.
 
-### Étape 2 : Ajouter les routes vers les services managés
+### Step 2: Add the routes towards the managed services
 
-Une fois le bridge créé, lisez sa configuration : chaque entrée du tableau `routes` du bridge contient l'`ipRange` du réseau à joindre et l'identifiant `vpcPeeringId` à utiliser comme cible de route.
+Once the bridge is created, read its configuration: each entry of the `routes` table of the bridge contains the `ipRange` of the network to reach and the `vpcPeeringId` identifier to use as a route target.
 
-Créez une route pour chaque entrée, dans la [route table (table de routage)](/docs/network/route-table/concepts/) associée au subnet (sous-réseau) de la VM :
+Create one route for each entry, in the [route table](/docs/network/route-table/concepts/) associated with the VM subnet (subnetwork):
 
-- l'`ipRange` du bridge en destination ;
-- le `vpcPeeringId` du bridge en cible de type VPC peering (peering VPC).
+- the `ipRange` of the bridge as destination;
+- the `vpcPeeringId` of the bridge as a VPC peering target.
 
-Suivez la procédure [Créer une route ↗](/docs/network/route-table/actions/route/create/) dans la console ou via l'API `POST /compute/spaces/{spaceId}/routeTables/{id}/routes`.
+Follow the [Create a route ↗](/docs/network/route-table/actions/route/create/) procedure in the console or through the `POST /compute/spaces/{spaceId}/routeTables/{id}/routes` API command.
 
-### Étape 3 : Autoriser le flux vers le serveur d'API
+### Step 3: Allow the flow towards the API server
 
-Dans le [security group (groupe de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) associé à la VM, ajoutez une règle sortante autorisant le flux vers l'`ipRange` du control plane (plan de contrôle) du cluster sur le port `443`. Suivez la procédure [Ajouter une règle à un security group ↗](/docs/compute/security-groups/actions/add-rule/).
+In the [security group](/docs/compute/security-groups/concepts/concept-sg/) associated with the VM, add an outbound rule allowing the `ipRange` of the control plane towards port `443`. Follow the [Add a rule to a security group ↗](/docs/compute/security-groups/actions/add-rule/) procedure.
 
-Le trafic est bidirectionnel : les conteneurs des worker nodes (nœuds de travail) du cluster peuvent accéder à la VM. Si la VM doit recevoir du trafic depuis le cluster, ajoutez une règle entrante dédiée avec les sources nécessaires.
+Traffic is bidirectional: the containers of the worker nodes of the cluster can reach the VM. If the VM must receive traffic from the cluster, add a dedicated inbound rule with the appropriate sources.
 
-### Étape 4 : Déployer le kubeconfig sur la VM
+### Step 4: Deploy the kubeconfig on the VM
 
-Téléchargez le fichier kubeconfig depuis la console puis transférez-le sur la VM :
+Download the kubeconfig file from the console then transfer it to the VM:
 
 ```bash
-scp kubeconfig-<cluster-id>.yaml outscale@<ip-vm>:~
+scp kubeconfig-<cluster-id>.yaml outscale@<vm-ip>:~
 ```
 
-Sur la VM, placez le fichier à l'emplacement par défaut et restreignez ses droits :
+On the VM, place the file at the default location and restrict its permissions:
 
 ```bash
 mkdir -p ~/.kube
@@ -65,21 +64,21 @@ mv kubeconfig-<cluster-id>.yaml ~/.kube/config
 chmod 600 ~/.kube/config
 ```
 
-### Étape 5 : Se connecter au cluster
+### Step 5: Connect to the cluster
 
-Depuis la VM, vérifiez la connexion au cluster :
+From the VM, check the connection to the cluster:
 
 ```bash
 kubectl get nodes
 ```
 
 :::warning
-L'URL du serveur d'API dans le fichier kubeconfig doit être conservée telle quelle : elle désigne un nom de domaine complet [FQDN (Fully Qualified Domain Name)] qui transporte l'extension TLS (Transport Layer Security) [SNI (Server Name Indication)] requise par la plateforme. Remplacer cette URL par l'adresse IP du serveur d'API entraîne une réinitialisation de la connexion TLS.
+The API server URL in the kubeconfig file must be kept as is: it designates a fully qualified domain name that carries the TLS (Transport Layer Security) [SNI (Server Name Indication)] extension required by the platform. Replacing this URL with the IP address of the API server results in a connection reset.
 :::
 
-## Vérification
+## Verification
 
-La commande `kubectl get nodes` retourne les worker nodes du cluster avec le statut `Ready` :
+The `kubectl get nodes` command returns the worker nodes of the cluster with the `Ready` status:
 
 ```text
 NAME                         STATUS   ROLES    AGE   VERSION
@@ -87,28 +86,28 @@ nodepool-1-8f4f9cabc-12xyz   Ready    worker   10m   v1.30.4
 nodepool-1-8f4f9cabc-34xyz   Ready    worker   10m   v1.30.4
 ```
 
-Vous pouvez ensuite déployer vos charges de travail et les joindre depuis la VM par leurs adresses IP privées dans le réseau du cluster.
+You can then deploy your workloads and reach them from the VM through their private IP addresses in the cluster network.
 
-## Dépannage
+## Troubleshooting
 
-### La connexion reste en attente ou expire
+### The connection stays pending or expires
 
-**Cause** : le routage ou le filtrage bloque le trafic entre la VM et le serveur d'API.
+**Cause**: routing or filtering blocks the traffic between the VM and the API server.
 
-**Solution** : vérifiez dans l'ordre :
+**Solution**: check in order:
 
-1. l'état du bridge, qui doit être `READY` ;
-2. l'existence d'une route par entrée du tableau `routes` du bridge, dans la route table associée au subnet de la VM ;
-3. la règle sortante du security group de la VM, qui autorise l'`ipRange` du control plane vers le port `443`.
+1. the state of the bridge, which must be `READY`;
+2. the existence of one route per entry of the `routes` table of the bridge, in the route table associated with the VM subnet;
+3. the outbound rule of the VM security group, which allows the `ipRange` of the control plane towards port `443`.
 
-### La connexion TLS est réinitialisée
+### The TLS connection is reset
 
-**Cause** : l'URL du serveur d'API a été remplacée par une adresse IP — l'extension SNI n'est alors pas transmise.
+**Cause**: the API server URL has been replaced with an IP address — the SNI extension is then not transmitted.
 
-**Solution** : conservez l'URL du fichier kubeconfig telle quelle et relancez la commande.
+**Solution**: keep the URL of the kubeconfig file as is and run the command again.
 
-### Le serveur d'API refuse la requête
+### The API server rejects the request
 
-**Cause** : le fichier kubeconfig est expiré ou ne correspond plus au cluster.
+**Cause**: the kubeconfig file is expired or no longer matches the cluster.
 
-**Solution** : téléchargez à nouveau le fichier kubeconfig depuis la console puis remplacez le fichier sur la VM.
+**Solution**: download the kubeconfig file again from the console then replace the file on the VM.

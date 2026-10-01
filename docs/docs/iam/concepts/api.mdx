@@ -1,31 +1,31 @@
 ---
-title: Utilisation des API - IAM
-sidebar_label: Utilisation des API
+title: Using the API - IAM
+sidebar_label: Using the API
 sidebar_position: 6
 draft: false
 last_update:
   date: 2026-09-18
 ---
 
-# Utilisation des API
+# Using the API
 
-Les API de l'**IAM** (Identity and Access Management) ont un comportement commun.
+The IAM (Identity and Access Management) API share a common behavior.
 
-## Les organisations et les espaces
+## Organizations and spaces
 
-Les API fonctionnent sur le périmètre d'une organisation ou d'un espace : la présence des termes `spaces` ou `organisations` dans l'URL permet de distinguer la portée des requêtes.
+The API operate within the scope of an organization or a space: the presence of the terms `spaces` or `organisations` in the URL distinguishes the scope of the requests.
 
-L'URL pour agir au niveau de l'organisation est de la forme : `...iam/organisations/"organisationId"/`
+The URL to act at the organization level takes the form: `...iam/organisations/"organisationId"/`
 
-Celle pour agir sur un espace est de la forme : `...iam/spaces/"spaceId"/`
+The one to act on a space takes the form: `...iam/spaces/"spaceId"/`
 
-## Le jeton d'accès (token)
+## The access token
 
-Les API nécessitent un jeton d'accès (token) valide pour fonctionner.
+The API require a valid access token to work.
 
-Il est de la forme bearer (conformément à la [RFC 6750 - The OAuth 2.0 Authorization Framework: Bearer Token Usage](https://datatracker.ietf.org/doc/html/rfc6750)).
+It is of the bearer type (in accordance with [RFC 6750 - The OAuth 2.0 Authorization Framework: Bearer Token Usage](https://datatracker.ietf.org/doc/html/rfc6750)).
 
-**Exemple de demande de jeton d'accès**
+**Example of an access token request**
 
 ```bash
 export REGION="myregion"
@@ -37,43 +37,43 @@ curl -X POST https://api.$REGION.numspot.com/iam/token \
 -d 'grant_type=client_credentials&scope=openid+offline_access'
 ```
 
-Une fois le jeton renvoyé, il sera ajouté aux autres demandes sous cette forme :
+Once the token is returned, it is added to the other requests in this form:
 
-**Ajout d'un jeton d'accès dans l'entête d'une requête Curl**
+**Adding an access token to the header of a Curl request**
 
 ```bash
 curl  ... -H "Authorization: Bearer {token}"
 ```
 
-## La pagination pour les listes
+## Pagination for lists
 
-Les requêtes qui peuvent retourner un nombre indéterminé d'éléments disposent d'une pagination.
+Requests that may return an indeterminate number of items provide pagination.
 
-Il est recommandé d'utiliser la pagination afin d'éviter une trop forte sollicitation du système.
+Using pagination is recommended in order to avoid placing too high a load on the system.
 
-La pagination se présente sous la forme suivante :
+Pagination takes the following form:
 
-- par défaut, la page est limitée à 30 éléments ;
-- le paramètre **page[size]** renseigne le nombre d'éléments par page ;
-- le paramètre **page[nextToken]** est renvoyé dans la réponse et est à ajouter à la requête suivante ;
-- des informations pour obtenir la page suivante sont indiquées dans la réponse de la première page.
+- by default, the page is limited to 30 items;
+- the `page[size]` parameter sets the number of items per page;
+- the `page[nextToken]` parameter is returned in the response and must be added to the next request;
+- information to obtain the next page is provided in the response of the first page.
 
-**Exemple de requête d'une liste avec pagination**
+**Example of a request for a list with pagination**
 
 ```bash
         page[size]=30&page[nextToken]=bee04e3c-850f-4f25-8597-04ba43b24877
-   (format encodé: /organisations?page%5BnextToken%5D=bee04e3c-850f-4f25-8597-04ba43b24877)
+   (encoded format: /organisations?page%5BnextToken%5D=bee04e3c-850f-4f25-8597-04ba43b24877)
 ```
 
-Le corps de la réponse contiendra un jeton à fournir pour avoir la suite :
+The body of the response contains a token to provide in order to obtain the next part:
 
-**Exemple de réponse**
+**Example of a response**
 
 ```bash
 ..'nextPageToken': '287ccb59-0c94-4c90-9798-02c9179f5a3f'
 ```
 
-Ce jeton sera à ajouter comme paramètre à la deuxième requête. Si une troisième page est nécessaire, la deuxième page fournira un nouveau jeton de page.
+This token must be added as a parameter to the second request. If a third page is required, the second page provides a new page token.
 
 ```bash
 'nextPageToken=287ccb59-0c94-4c90-9798-02c9179f5a3f'
@@ -82,25 +82,25 @@ Ce jeton sera à ajouter comme paramètre à la deuxième requête. Si une trois
 https://...?page%5Bsize%5D=30&page%5BnextToken%5D=bee04e3c-850f-4f25-8597-04ba43b24877
 ```
 
-La dernière page ne contiendra pas ce jeton.
+The last page does not contain this token.
 
-## Les conventions
+## Conventions
 
-Les URL des exemples sont parfois présentées avec des termes entre accolades : `organisationId`, `userId`, etc. Ces expressions sont à remplacer par les identifiants des entités manipulées.
+The URL in the examples are sometimes shown with terms between braces: `organisationId`, `userId`, and so on. These expressions must be replaced with the identifiers of the entities being handled.
 
-Les identifiants sont sous la forme d'UUID (Universally Unique Identifier, voir [RFC 4122](https://datatracker.ietf.org/doc/html/rfc4122)).
+The identifiers take the form of a UUID (Universally Unique Identifier, see [RFC 4122](https://datatracker.ietf.org/doc/html/rfc4122)).
 
-## Les traitements asynchrones
+## Asynchronous processing
 
-La création d'un espace peut prendre plusieurs minutes. L'interrogation d'un espace retourne une clé "status" contenant l'état de l'espace. Le statut peut prendre quatre valeurs :
+Creating a space can take several minutes. Querying a space returns a "status" key containing the state of the space. The status can take four values:
 
-- QUEUED ;
-- RUNNING ;
-- READY ;
-- FAILED.
+- `QUEUED`;
+- `RUNNING`;
+- `READY`;
+- `FAILED`.
 
-L'état nominal d'un espace est READY. Il faut donc attendre sa création complète avant de lancer d'autres opérations.
+The nominal state of a space is `READY`. You must therefore wait for its creation to complete before launching other operations.
 
-## La correspondance des identifiants
+## Identifier mapping
 
-Toutes les entités manipulées sont identifiées par un UUID. Les API fonctionnent à partir de ces UUID. Pour obtenir le nom correspondant, il est nécessaire de passer par l'API de récupération d'informations de la ressource (exemple : retrouver les informations d'un espace ou d'un utilisateur par son identifiant).
+All the entities being handled are identified by a UUID. The API work from these UUID. To obtain the corresponding name, you must use the resource information retrieval API (for example: retrieve the information of a space or a user by its identifier).

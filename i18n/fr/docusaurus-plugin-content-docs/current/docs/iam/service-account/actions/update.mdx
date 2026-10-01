@@ -1,0 +1,135 @@
+---
+title: Modifier un compte de service - IAM
+description: "Modifiez le nom d'un compte de service IAM depuis la console, ou son nom, sa durée de vie de token et sa date d'expiration via l'API."
+sidebar_label: Modifier un compte de service
+sidebar_position: 6
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Modifier un compte de service
+
+Vous pouvez modifier le nom, la durée de vie du jeton d'accès (token) et la date d'expiration d'un compte de service.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **iam.serviceAccount.update**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/service-account/list-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Comptes de Service.", hotspot: { x: 0, y: 0.8, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/service-account/list-01-list.png", text: "Dans le tableau « Comptes de Service », cliquez sur la clé d'accès du compte de service à modifier.", hotspot: { x: 0.2687, y: 0.45, w: 0.11, h: 0.035 } },
+    { img: "/img/walkthrough/service-account/detail.png", text: "Sur la page « Détails Compte de Service », cliquez sur le crayon du champ « Nom du Compte de Service ».", hotspot: { x: 0.4319, y: 0.4103, w: 0.0222, h: 0.0395 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, cliquez sur **IAM** → **Comptes de Service**.
+2. Dans le tableau **Comptes de Service**, cliquez sur la clé d'accès du compte de service à modifier.
+:::tip
+Vous avez la possibilité de rechercher un compte de service en particulier en utilisant le champ **Rechercher**.
+:::
+
+3. Sur la page "Détails Compte de Service", cliquez sur le **crayon** du champ "Nom du Compte de Service".
+4. Saisissez le nouveau nom puis validez avec la **coche** (la **croix** annule la modification).
+
+Depuis la console, seul le nom du compte de service est modifiable. La durée de vie du token et la date d'expiration se modifient via l'API (onglet API).
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+### Modifier un compte de service dans une organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PUT/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}
+
+### Exemple avec curl
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}' \
+  --request PUT \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "",
+  "tokenDuration": "PT24H",
+  "expirationDate": "2025-12-31"
+}'
+```
+
+### Réponse
+
+```json
+{
+  "name": "…",
+  "id": "…",
+  "tokenDuration": "…",
+  "expirationDate": "…"
+}
+```
+
+:::info
+Tous les champs, modifiés ou non, doivent être renseignés. La durée de vie du token est au format ISO 8601, entre 1 seconde (PT1S) et 48 heures (PT48H), 24 heures (PT24H) par défaut.
+
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+### Modifier un compte de service dans un espace
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PUT/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}
+
+### Exemple avec curl
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}' \
+  --request PUT \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "",
+  "tokenDuration": "PT24H",
+  "expirationDate": "2025-12-31"
+}'
+```
+
+### Réponse
+
+```json
+{
+  "name": "…",
+  "id": "…",
+  "tokenDuration": "…",
+  "expirationDate": "…"
+}
+```
+
+:::info
+Tous les champs, modifiés ou non, doivent être renseignés.
+
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/service_account).
+
+</TabItem>
+</Tabs>

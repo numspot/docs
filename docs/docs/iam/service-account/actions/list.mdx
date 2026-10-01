@@ -1,73 +1,60 @@
 ---
-title: Lister les comptes de service - IAM
-description: "Listez les comptes de service de votre organisation ou d'un espace Numspot et accédez à leurs actions, via la console ou l'API."
-sidebar_label: Lister les comptes de service
+title: List service accounts - IAM
+sidebar_label: List service accounts
 sidebar_position: 3
-draft: false
-last_update:
-  date: 2026-09-18
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Lister les comptes de service
+# List service accounts
 
-Vous pouvez obtenir la liste des comptes de service au niveau de l'organisation ou d'un espace.
+You can obtain the list of service accounts at the organization level or at the space level.
+
+The presence of the words **spaces** or **organization** in the URL distinguishes the two requests.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **iam.serviceAccount.get**
 
 :::
-
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/service-account/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Comptes de Service.", hotspot: { x: 0, y: 0.8, w: 0.1944, h: 0.0494 } },
-    { img: "/img/walkthrough/service-account/create-01-list.png", text: "Depuis IAM → Comptes de Service, le tableau liste tous les comptes de service (clé d'accès, nom, date d'expiration).", hotspot: { x: 0.2229, y: 0.39, w: 0.7493, h: 0.5 } },
-    { img: "/img/walkthrough/service-account/list-02-menu.png", text: "Le menu « Actions » d'un compte de service donne accès à ses opérations : créer à partir de ce profil, gérer ses espaces, rôles et permissions, ou le supprimer.", hotspot: { x: 0.7299, y: 0.5099, w: 0.2348, h: 0.2691 } },
+    { img: "/img/walkthrough/en/service-account/list.png", text: "From the left-hand side menu, click IAM → Service Accounts.", hotspot: { x: 0, y: 0.7926, w: 0.194, h: 0.0457 } },
+    { img: "/img/walkthrough/en/service-account/list.png", text: "From IAM → Service Accounts, the table lists all the service accounts in your organization.", hotspot: { x: 0.22, y: 0.42, w: 0.68, h: 0.35 } },
+    { img: "/img/walkthrough/en/service-account/actions.png", text: "A service account's “Actions” menu gives access to its operations: create a service account from this profile, manage its spaces, roles and permissions, or delete it.", hotspot: { x: 0.769, y: 0.42, w: 0.19, h: 0.23 } },
   ]}
 />
 
-1. Depuis le menu latéral gauche, cliquez sur **IAM** → **Comptes de Service**.
-2. Le tableau **Comptes de Service** affiche, pour chaque compte de service : la clé d'accès, le nom, la date d'expiration et les actions disponibles.
 
-Le menu **Actions** d'un compte de service donne accès aux opérations suivantes :
+1.  Log in to the Numspot console
+2.  From the left-hand side menu, click **IAM → Service accounts**
 
-- **Créer un Compte de Service à partir de ce profil** ;
-- **Gérer les espaces** ;
-- **Gérer les rôles** ;
-- **Gérer les permissions** ;
-- **Supprimer**.
 
-Vous pouvez également sélectionner plusieurs comptes de service dans le tableau pour les supprimer en une seule opération.
+3.  You are redirected to the list of **Service accounts**
+
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
-
-
-### Lister les comptes de service dans une organisation
+**List service accounts in an organization**
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/serviceAccounts
 
-### Exemple de requête
+**Example request**
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/serviceAccounts'
 ```
 
-### Exemple de réponse
+**Example response with curl**
 
 ```json
 {
@@ -85,20 +72,22 @@ curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/servic
 ```
 
 :::info
-Consulter la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [page on using the API](/docs/iam/concepts/api/) for the implementation.
 :::
 
-### Lister les comptes de service dans un espace
+**List service accounts in a space**
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/serviceAccounts
 
-### Exemple de requête
+**Example request**
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/serviceAccounts'
 ```
 
-### Exemple de réponse
+Response
+
+**Example with curl**
 
 ```json
 {
@@ -116,16 +105,13 @@ curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/serviceAccounts'
 ```
 
 :::info
-Consulter la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [page on using the API](/docs/iam/concepts/api/) for the implementation.
 :::
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/service_account).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/service_account).
 
 </TabItem>
 </Tabs>

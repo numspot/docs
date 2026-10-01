@@ -1,0 +1,52 @@
+---
+title: Supprimer un backup PostgreSQL - PostgreSQL managé
+sidebar_label: Supprimer un backup PostgreSQL
+sidebar_position: 10
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer un backup PostgreSQL
+
+Vous pouvez supprimer un backup on-demand d'un [cluster PostgreSQL](/docs/managed-services/postgresql/concepts/).
+
+:::warning Restriction
+Seuls les backups de type `ON_DEMAND` peuvent être supprimés. Les backups automatiques (`AUTO`) ne peuvent pas être supprimés manuellement.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **postgresql.cluster.delete**
+
+:::
+<Tabs>
+
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+    La requête `DELETE /postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId}` permet de supprimer un backup on-demand d'un cluster.
+
+### Paramètres
+
+    | Paramètre | Type | Requis | Description |
+    |-----------|------|--------|-------------|
+    | `spaceId` | UUID (Universally Unique Identifier) | Oui | Identifiant de l'espace |
+    | `clusterId` | UUID | Oui | Identifiant unique du cluster |
+    | `backupId` | UUID | Oui | Identifiant unique du backup |
+
+### Exemple de réponse
+
+    ```text
+    HTTP/1.1 204 No Content
+    ```
+
+    Le backup passe en état `DELETING` le temps de la suppression.
+
+    [Voir la spécification complète](/openapi/#tag/postgresql/DELETE/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId})
+</TabItem>
+</Tabs>

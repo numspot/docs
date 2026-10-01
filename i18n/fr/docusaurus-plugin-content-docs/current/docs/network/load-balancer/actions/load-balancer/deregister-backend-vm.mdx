@@ -1,0 +1,52 @@
+---
+title: Retirer une VM d'un load balancer - Numspot
+sidebar_label: Retirer une VM d'un load balancer
+sidebar_position: 6
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Retirer une VM d'un load balancer
+
+Vous pouvez détacher une ou plusieurs [VM (Virtual Machine)](/docs/compute/concept/) de backend d'un [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) lorsque vous n'avez plus besoin qu'elles reçoivent du trafic de celui-ci.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.loadBalancer.update**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+Le retrait d'une VM backend n'est pas disponible depuis la console Numspot.
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `PUT /compute/spaces/{spaceId}/loadBalancers/{id}/backendMachines/unlink` détache une ou plusieurs VM de backend d'un load balancer (équilibreur de charge). Vous devez spécifier au moins le paramètre **backendIps** ou **backendVmIds**.
+
+[Exemple de requête : Détacher une VM d'un load balancer](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/loadBalancers/{id}/backendMachines/unlink)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
+
+  </TabItem>
+</Tabs>

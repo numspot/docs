@@ -1,0 +1,45 @@
+---
+title: Vue générale du service IAM
+sidebar_position: 1
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+# Vue générale du service IAM
+
+## Présentation
+
+L'**IAM** (Identity and Access Management) est une infrastructure qui assure deux fonctions principales : l'identification et l'authentification d'un utilisateur ou compte de service, et l'autorisation d'accès à une ressource. Une identité peut être une personne physique (compte utilisateur) ou une machine (compte de service).
+
+Les commanditaires disposent d'une infrastructure **IAM** dédiée assurant un parfait isolement des ressources.
+
+## Fonctionnement
+
+Le système d'**IAM** gère l'identité des utilisateurs et des comptes de service selon les aspects suivants :
+
+- identification d'un utilisateur ou d'un compte de service ;
+- critères de robustesse pour les mots de passe (longueur, composition) ;
+- authentification à deux facteurs pour les personnes physiques ;
+- blocage du compte utilisateur après trois tentatives d'authentification infructueuses.
+
+Un système **IAM** se compose de deux fonctions : authN et authZ.
+
+La stratégie d'authentification authN établit les règles pour vérifier l'identité d'un utilisateur ou d'un compte de service qui sollicite un accès.
+
+Le dispositif de gestion des accès authZ contrôle les autorisations des utilisateurs et comptes de service. Ce composant, indépendant de la gestion des identités, est conçu pour répondre à des sollicitations élevées.
+
+## Modèles de permissions
+
+Le système de permissions de l'**IAM** permet de mettre en œuvre différents modèles de gestion des droits :
+
+- **RBAC** (Role-Based Access Control) : attribue un ou plusieurs rôles à chaque utilisateur ou compte de service. Chaque rôle contient un ensemble de permissions. L'attribution d'un rôle accorde toutes les permissions qu'il contient.
+- **ACL** (liste de contrôle d'accès) : définit un droit unitaire d'un utilisateur sur une ressource spécifique (telle qu'une URL ou un fichier). C'est le niveau de permission le plus fin.
+
+Entre ces deux modèles, il est possible d'attribuer une permission décrite dans un rôle à un utilisateur. Celui-ci pourra exécuter l'action sur l'ensemble des ressources encadrées par cette permission.
+
+Trois modalités d'attribution de permissions sont disponibles :
+
+- assignation d'un rôle à un utilisateur ou compte de service ;
+- assignation d'une permission à un utilisateur ou compte de service ;
+- assignation d'un droit spécifique à un utilisateur pour une ressource spécifique (ACL).

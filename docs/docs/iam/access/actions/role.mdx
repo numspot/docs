@@ -1,7 +1,7 @@
 ---
-title: Consulter les permissions d'un rôle - IAM
-description: "Consultez les informations d'un rôle IAM et visualisez les permissions qui le composent, via la console ou l'API."
-sidebar_label: Consulter les permissions d'un rôle
+title: View the permissions of a role - IAM
+description: "View a role's information and the permissions it contains, via the console or the API."
+sidebar_label: View the permissions of a role
 sidebar_position: 3
 draft: false
 last_update:
@@ -11,14 +11,14 @@ last_update:
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Consulter les permissions d'un rôle
+# View the permissions of a role
 
-Vous pouvez consulter les informations d'un rôle et visualiser les permissions qui le composent via la console ou l'API.
+You can view a role's information and the permissions it contains via the console or the API.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **iam.role.get**
 
@@ -30,15 +30,15 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 ## Console {#tabhead-console}
 
 
-Les rôles se consultent depuis la page de détail d'une identité (utilisateur ou compte de service), dans la section "Espaces assignés".
+Roles are viewed from the identity details pages (users and service accounts).
 
-1. Depuis le menu latéral gauche, cliquez sur **IAM** → **Utilisateurs** (ou **Comptes de Service**).
-2. Cliquez sur l'identifiant de l'identité concernée pour ouvrir sa page de détails.
-3. Dans la section "Espaces assignés", cliquez sur **X rôles** pour l'espace voulu : la liste des rôles attribués sur cet espace s'affiche.
-4. Sélectionnez un rôle : la liste des permissions qui le composent s'affiche.
+1. From the left-hand side menu, click **IAM** → **Users** (or **Service Accounts**).
+2. Click the identifier of the relevant identity: the "Assigned spaces" section lists their spaces.
+3. Click **X roles** for the relevant space: the list of roles assigned on that space is displayed.
+4. Select a role: the list of permissions it contains is displayed.
 
 :::info
-La liste complète des rôles et de leurs permissions est disponible par API (onglet API) : la console affiche les rôles attribués à une identité, espace par espace.
+The full list of roles and their permissions is available via the API (API tab): the console displays the roles assigned to an identity, space by space.
 :::
 
 </TabItem>
@@ -48,19 +48,19 @@ La liste complète des rôles et de leurs permissions est disponible par API (on
 ## API {#tabhead-api}
 
 
-### Obtenir la correspondance entre les noms des rôles et leurs UUID (Universally Unique Identifier)
+### Obtain the mapping between role names and their UUID (Universally Unique Identifier)
 
-Les rôles sont propres à chaque espace. Pour les manipuler par API, il faut obtenir leur UUID.
+Roles are specific to each space. To manipulate them via the API, you need their UUID.
 
-https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/roles
+**List the roles of an organization**
 
-### Exemple
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/roles
 
 ```bash
-curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/roles'
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/roles'
 ```
 
-### Réponse
+**Example response:**
 
 ```json
 {
@@ -69,23 +69,60 @@ curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/roles'
   "items": [
     {
       "name": "…",
-      "uuid": "123e4567-e89b-12d3-a456-426614174000"
+      "description": "…",
+      "tenantType": [
+        "organisation"
+      ],
+      "uuid": "123e4567-e89b-12d3-a456-426614174000",
+      "createdOn": "2025-12-16T11:56:58.617Z",
+      "updatedOn": "2025-12-16T11:56:58.617Z",
+      "custom": true
     }
   ]
 }
 ```
 
-### Consulter les permissions d'un rôle d'un espace
+**List the roles of a space**
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/roles
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/roles'
+```
+
+**Example response:**
+
+```json
+{
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "totalSize": 85,
+  "items": [
+    {
+      "name": "…",
+      "description": "…",
+      "tenantType": [
+        "space"
+      ],
+      "uuid": "987f6543-e21b-43d3-b765-543210987654",
+      "createdOn": "2025-12-18T09:23:12.432Z",
+      "updatedOn": "2025-12-18T09:23:12.432Z",
+      "custom": false
+    }
+  ]
+}
+```
+
+### View the permissions of a space role
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/roles/{roleUuid}/permissions
 
-### Exemple
+### Example
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/roles/{roleUuid}/permissions'
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -101,21 +138,21 @@ curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/roles/{roleUuid}/per
 ```
 
 :::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
-### Obtenir les détails d'un rôle au niveau de l'organisation
+### View the permissions of an organisation role
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/roles/{roleUuid}/permissions
 
-### Exemple
+### Example
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/roles/{roleUuid}/permissions'
 ```
 
 :::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
 </TabItem>

@@ -4,8 +4,8 @@ import type * as Preset from "@docusaurus/preset-classic";
 import { sortSidebarEntries } from "./src/components/sidebar-order.js";
 
 const config: Config = {
-  title: "Documentation Numspot",
-  tagline: "L'offre de référence de cloud souverain et de confiance",
+  title: "Numspot Documentation",
+  tagline: "The reference sovereign, trusted cloud",
   favicon: "img/favicon.svg",
 
   // Set the production url of your site here
@@ -36,7 +36,7 @@ const config: Config = {
         rel: "service-desc",
         type: "application/openapi+json",
         href: "https://api.eu-west-2.numspot.com/openapi",
-        title: "Numspot API — spécification OpenAPI (source vivante)",
+        title: "Numspot API — OpenAPI specification (live source)",
       },
     },
     {
@@ -45,7 +45,7 @@ const config: Config = {
         rel: "describedby",
         type: "application/yaml",
         href: "/files/openapi.yaml",
-        title: "Numspot API — spécification OpenAPI (miroir statique)",
+        title: "Numspot API — OpenAPI specification (static mirror)",
       },
     },
     {
@@ -54,7 +54,7 @@ const config: Config = {
         rel: "service-desc",
         type: "application/openapi+json",
         href: "https://objectstorage.eu-west-2.numspot.com/openapi",
-        title: "Numspot Object Storage API — spécification OpenAPI",
+        title: "Numspot Object Storage API — OpenAPI specification",
       },
     },
   ],
@@ -63,17 +63,10 @@ const config: Config = {
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: "fr",
-    locales: ["fr", "en"],
+    defaultLocale: "en",
+    locales: ["en", "fr"],
     path: "i18n",
     localeConfigs: {
-      fr: {
-        label: "Français",
-        direction: "ltr",
-        htmlLang: "fr-FR",
-        calendar: "gregory",
-        path: "fr",
-      },
       en: {
         label: "English",
         direction: "ltr",
@@ -81,6 +74,13 @@ const config: Config = {
         htmlLang: "en-GB",
         calendar: "gregory",
         path: "en",
+      },
+      fr: {
+        label: "Français",
+        direction: "ltr",
+        htmlLang: "fr-FR",
+        calendar: "gregory",
+        path: "fr",
       },
     },
   },
@@ -231,7 +231,7 @@ const config: Config = {
         },
         {
           href: "https://numspot.com/produits-et-disponibilites/",
-          label: "Produits",
+          label: "Products",
           position: "right",
         },
         {
@@ -251,13 +251,13 @@ const config: Config = {
               href: "https://numspot.com/",
             },
             {
-              label: "Carrières",
+              label: "Careers",
               href: "https://numspot.com/carrieres/",
             },
           ],
         },
         {
-          title: "Réseaux sociaux",
+          title: "Social networks",
           items: [
             {
               label: "Linkedin",
@@ -266,14 +266,14 @@ const config: Config = {
           ],
         },
         {
-          title: "Outils",
+          title: "Tools",
           items: [
             {
               label: "GitHub",
               href: "https://github.com/numspot",
             },
             {
-              label: "Console Numspot",
+              label: "Numspot Console",
               href: "https://auth.eu-west-2.numspot.com/",
             },
           ],
@@ -282,11 +282,11 @@ const config: Config = {
           title: "Support",
           items: [
             {
-              label: "Contactez-nous",
+              label: "Contact us",
               href: "mailto:support-client@numspot.com",
             },
             {
-              label: "Signaler un incident de sécurité",
+              label: "Report a security incident",
               href: "https://numspot.com/signalement-de-vulnerabilites-et-incidents-de-securite/",
             },
           ],

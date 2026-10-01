@@ -1,20 +1,20 @@
 ---
-title: Lister les groupes de nœuds d'un cluster Kubernetes - Kubernetes managé
-sidebar_label: Lister les groupes de nœuds d'un cluster Kubernetes
+title: List the node pools of a Kubernetes cluster - Managed Kubernetes
+sidebar_label: List the node pools of a Kubernetes cluster
 sidebar_position: 5
 draft: false
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Lister les groupes de nœuds d'un cluster Kubernetes
+# List the node pools of a Kubernetes cluster
 
-Obtenez la liste des groupes de nœuds (node pools) d'un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/).
+Retrieve the list of node pools of a [Kubernetes cluster](/docs/managed-services/kubernetes/concepts/).
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **kubernetes.cluster.get**
 
@@ -23,42 +23,34 @@ Cette action nécessite les permissions IAM (Identity and Access Management) sui
 
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
+1. From the left-hand side menu, click **Managed Services** → **Kubernetes** to access the list of Kubernetes clusters.
 
+   ![Managed Services menu](/img/console/managed-services/en-menu-managed-services.png)
 
-1. Depuis le menu latéral gauche, cliquez sur **Services managés** → **Kubernetes** pour accéder à la liste des clusters Kubernetes.
+2. Click the name of a cluster to access its details page.
 
-   ![Menu Services managés](/img/console/managed-services/fr-menu-managed-services.png)
+3. The **Node pools** section displays the list of the cluster's node pools with their information:
+   - Node pool name
+   - Status
+   - Availability Zone
+   - Node type
+   - System volume
+   - Number of nodes
 
-2. Cliquez sur le nom d'un cluster pour accéder à sa page de détails.
+The status of a node pool can take the following values:
 
-3. La section **Node pools** affiche la liste des groupes de nœuds du cluster avec leurs informations :
-   - Nom du groupe de nœuds
-   - Statut
-   - Zone de disponibilité
-   - Type de nodes
-   - Volume système
-   - Nombre de nodes
-
-   ![Liste des node pools](/img/console/managed-services/kubernetes/fr-kubernetes-nodepools-list.png)
-
-Le statut d'un groupe de nœuds peut prendre les valeurs suivantes :
-
-| Statut | Description |
+| Status | Description |
 |--------|-------------|
-| En cours | Le groupe de nœuds fonctionne normalement |
-| En attente | Le groupe de nœuds est en cours de création ou de mise à jour |
-| Échec | Une erreur est survenue |
+| In progress | The node pool is operating normally |
+| Pending | The node pool is being created or updated |
+| Failed | An error has occurred |
 
 </TabItem>
 
 <TabItem value="api" label="API">
+    Use the `GET /kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools` route to list the node pools of a Kubernetes cluster.
 
-## API {#tabhead-api}
-
-    Utilisez la route `GET /kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools` pour lister les groupes de nœuds d'un cluster Kubernetes.
-
-### Exemple de réponse
+    **Example response**
 
     ```json
     {
@@ -83,6 +75,6 @@ Le statut d'un groupe de nœuds peut prendre les valeurs suivantes :
     }
     ```
 
-    [Voir la spécification complète](/openapi/#tag/kubernetes/GET/kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools)
+    [See the full specification](/openapi/#tag/kubernetes/GET/kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools)
 </TabItem>
 </Tabs>

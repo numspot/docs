@@ -1,6 +1,6 @@
 ---
-title: Lister les profils de nœuds disponibles - Kubernetes managé
-sidebar_label: Lister les profils de nœuds disponibles
+title: List available node profiles - Managed Kubernetes
+sidebar_label: List available node profiles
 sidebar_position: 1.5
 draft: false
 last_update:
@@ -10,15 +10,15 @@ last_update:
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Lister les profils de nœuds disponibles
+# List available node profiles
 
-Vous pouvez lister les profils de nœuds disponibles pour créer votre [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/).
+You can list the node profiles available to create your [Kubernetes cluster](/docs/managed-services/kubernetes/concepts/).
 
-Lors de la création, spécifiez le profil souhaité pour dimensionner les nœuds du cluster.
+When creating, specify the desired profile to size the cluster nodes.
 
 ## Permissions
 
-Aucune permission **IAM** (Identity and Access Management) n'est requise pour effectuer cette action.
+No **IAM** (Identity and Access Management) permission is required to perform this action.
 
 <Tabs>
 
@@ -26,9 +26,9 @@ Aucune permission **IAM** (Identity and Access Management) n'est requise pour ef
 
 ## API {#tabhead-api}
 
-    La requête `GET /kubernetes/nodeProfiles` permet de lister les profils de nœuds proposés par Numspot.
+    The request `GET /kubernetes/nodeProfiles` lists the node profiles offered by Numspot.
 
-### Exemple de réponse
+### Example response
 
     ```json
     {
@@ -36,6 +36,6 @@ Aucune permission **IAM** (Identity and Access Management) n'est requise pour ef
     }
     ```
 
-    [Voir la spécification complète](/openapi/#tag/kubernetes/GET/kubernetes/nodeProfiles)
+    [View the full specification](/openapi/#tag/kubernetes/GET/kubernetes/nodeProfiles)
 </TabItem>
 </Tabs>

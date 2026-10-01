@@ -1,0 +1,156 @@
+---
+title: Auto-tuning PostgreSQL - PostgreSQL managé
+sidebar_label: Configuration automatique des paramètres PostgreSQL (Auto-tuning)
+sidebar_position: 4
+draft: false
+---
+
+# Configuration automatique des paramètres PostgreSQL (Auto-tuning)
+
+L'auto-tuning configure automatiquement les paramètres internes de PostgreSQL en fonction des ressources allouées : RAM, vCPU (virtual CPU), type de stockage et extensions activées. Aucune intervention manuelle n'est requise.
+
+:::info
+Cette configuration est appliquée [lors de la création d'un cluster](/docs/managed-services/postgresql/actions/create/) et automatiquement recalculée [lors de la modification des ressources](/docs/managed-services/postgresql/actions/patch/).
+:::
+
+## Paramètres ajustés
+
+### Mémoire
+
+| Paramètre | Formule / Valeur | Contexte |
+|-----------|----------------- |----------|
+| `shared_buffers` | 25 % de la RAM, plafonné à 8 GB | `postmaster` (redémarrage requis) |
+| `effective_cache_size` | 75 % de la RAM | `user` (immédiat) |
+| `work_mem` | `(RAM − shared_buffers) / ((max_connections + max_worker_processes) × 6)`, minimum 4 MB | `user` (immédiat) |
+| `maintenance_work_mem` | RAM / 16, minimum 64 MB, maximum 8 GB | `sighup` (rechargement) |
+| `autovacuum_work_mem` | 2 GB si `maintenance_work_mem` ≥ 2 GB, sinon non défini | `sighup` (rechargement) |
+
+### Requêtes parallèles (vCPU ≥ 4)
+
+Ces paramètres ne sont définis que si le cluster dispose d'au moins 4 vCPU. Les instances plus petites utilisent les valeurs par défaut de PostgreSQL.
+
+| Paramètre | Formule / Valeur | Contexte |
+|-----------|----------------- |----------|
+| `max_worker_processes` | `vcpuCount` | `postmaster` (redémarrage requis) |
+| `max_parallel_workers` | `vcpuCount` | `postmaster` (redémarrage requis) |
+| `max_parallel_workers_per_gather` | ⌈`vcpuCount` / 2⌉, plafonné à 4 | `user` (immédiat) |
+| `max_parallel_maintenance_workers` | ⌈`vcpuCount` / 2⌉, plafonné à 4 | `user` (immédiat) |
+
+### Autovacuum
+
+| vCPU | `autovacuum_max_workers` |
+|------|--------------------------|
+| < 16 | Non défini (valeur par défaut : 3) |
+| 16 - 31 | 4 |
+| ≥ 32 | 5 |
+
+### Stockage
+
+| Type de stockage | `random_page_cost` | `effective_io_concurrency` |
+|----------------- |--------------------|----------------------------|
+| Standard (HDD) | 4.0 | 2 |
+| GP2 / IO1 (SSD) | 1.1 | 256 |
+
+### WAL (Write-Ahead Logging)
+
+Tailles du fichier WAL :
+
+- `min_wal_size` : 1 GB.
+- `max_wal_size` : 4 GB.
+
+### Paramètres fixes
+
+Ces paramètres restent constants quel que soit le dimensionnement du cluster :
+
+- `wal_compression` : lz4 ;
+- `jit` : off ;
+- `huge_pages` : off.
+
+## Paramètres PostgreSQL
+
+Les paramètres suivants sont gérés par l'opérateur interne et ne peuvent pas être configurés :
+
+- Réplication : `primary_conninfo`, `synchronous_standby_names` ;
+- Sauvegarde : `recovery_target_*`, `restore_command` ;
+- Archivage : `archive_command`, `archive_mode` ;
+- WAL : `wal_level`, `max_wal_senders` ;
+- Réseau : `port`, `listen_addresses`, `hot_standby`.
+
+## Cas particuliers
+
+### TimescaleDB
+
+Si l'extension TimescaleDB est activée, les paramètres des processus de travail sont ajustés en conséquence :
+
+| Paramètre | vCPU 4-15 | vCPU ≥ 16 |
+|-----------|-----------|-----------|
+| `max_worker_processes` | 3 + `vcpuCount` + 8 | 3 + `vcpuCount` + 16 |
+| `timescaledb.max_background_workers` | 8 | 16 |
+
+### PostgreSQL 18+
+
+Pour les versions PostgreSQL 18 et supérieures (≥ 4 vCPU), les paramètres I/O internes sont également ajustés :
+
+- `io_workers` : `min(32, max(3, vcpuCount / 4))`.
+
+## Exemples de configuration
+
+### Petit cluster (1 GiB, 1 vCPU, stockage Standard, PostgreSQL 17)
+
+| Paramètre | Valeur |
+|-----------|--------|
+| `shared_buffers` | 256 MB |
+| `effective_cache_size` | 768 MB |
+| `work_mem` | 4 MB (valeur plancher) |
+| `maintenance_work_mem` | 64 MB (valeur plancher) |
+| `random_page_cost` | 4.0 |
+| `effective_io_concurrency` | 2 |
+
+### Cluster intermédiaire (8 GiB, 4 vCPU, stockage GP2, PostgreSQL 17)
+
+| Paramètre | Valeur |
+|-----------|--------|
+| `shared_buffers` | 2 GB |
+| `effective_cache_size` | 6 GB |
+| `work_mem` | 4 MB |
+| `maintenance_work_mem` | 512 MB |
+| `random_page_cost` | 1.1 |
+| `effective_io_concurrency` | 256 |
+| `max_worker_processes` | 4 |
+| `max_parallel_workers` | 4 |
+| `max_parallel_workers_per_gather` | 2 |
+
+### Grand cluster avec TimescaleDB (32 GiB, 16 vCPU, stockage IO1, PostgreSQL 18, TimescaleDB)
+
+| Paramètre | Valeur |
+|-----------|--------|
+| `shared_buffers` | 8 GB (plafond) |
+| `effective_cache_size` | 24 GB |
+| `maintenance_work_mem` | 2 GB |
+| `autovacuum_work_mem` | 2 GB |
+| `max_worker_processes` | 35 (formule TimescaleDB) |
+| `max_parallel_workers` | 16 |
+| `max_parallel_workers_per_gather` | 4 (plafond) |
+| `autovacuum_max_workers` | 4 |
+| `timescaledb.max_background_workers` | 16 |
+| `io_workers` | 4 |
+
+## Modification des ressources
+
+Lorsque les ressources d'un cluster sont modifiées via l'API, les paramètres sont automatiquement recalculés et appliqués :
+
+| Type de changement | Paramètres concernés | Opération requise |
+|--------------------|---------------------|-------------------|
+| **RAM, vCPU** | `shared_buffers`, `max_worker_processes`, etc. | Rolling restart (redémarrage progressif) |
+| **Type de stockage** | `random_page_cost`, `effective_io_concurrency` | Rechargement de configuration |
+| **Taille du volume** | Aucun | Aucune |
+
+### Rolling restart
+
+Un redémarrage progressif est déclenché automatiquement lorsque des paramètres de contexte `postmaster` sont modifiés. Chaque instance du cluster est redémarrée l'une après l'autre, ce qui garantit la continuité de service si vous disposez d'au moins un réplica.
+
+:::warning
+Lors d'une diminution des ressources (RAM ou vCPU), les paramètres sont ajustés à la baisse en conséquence. Assurez-vous que votre charge de travail reste compatible avec la nouvelle configuration.
+:::
+
+Pour plus de détails sur l'impact du *rolling restart*, consultez la documentation sur la [modification des ressources d'un cluster](/docs/managed-services/postgresql/actions/patch/).

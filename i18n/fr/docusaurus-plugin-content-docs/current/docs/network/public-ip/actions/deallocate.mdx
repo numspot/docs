@@ -1,0 +1,74 @@
+---
+title: Libérer une IP publique de votre compte - Numspot
+sidebar_label: Libérer une IP publique de votre compte
+sidebar_position: 5
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Libérer une IP publique de votre compte
+
+Vous pouvez libérer une IP publique allouée à votre compte si vous n'en avez plus besoin. Cette IP publique redevient disponible pour être allouée par un autre compte.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.publicIp.delete**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/public-ip/act-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → Public IP.", hotspot: { x: 0, y: 0.5222, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/public-ip/act-01-list.png", text: "Sur la ligne de l'IP publique concernée, ouvrez le menu « Actions ».", hotspot: { x: 0.9031, y: 0.486, w: 0.0608, h: 0.0383 } },
+    { img: "/img/walkthrough/public-ip/act-02-actions.png", text: "Cliquez sur « Libérer ».", hotspot: { x: 0.8368, y: 0.7086, w: 0.1262, h: 0.0457 } },
+    { img: "/img/walkthrough/public-ip/act-04-liberer.png", text: "Une confirmation forte est requise : saisissez le nom de l'IP publique, puis cliquez sur « Libérer ». L'action est définitive.", hotspot: { x: 0.6377, y: 0.7397, w: 0.0485, h: 0.0494 } },
+  ]}
+/>
+
+:::warning
+La libération d'une IP publique est **définitive** : une fois libérée, elle ne pourra plus être réattribuée ni récupérée. Dissociez-la au préalable de toute ressource.
+:::
+
+1. Depuis le menu latéral gauche, cliquez sur **Réseau** → **Public IP** ;
+2. Sur la ligne de l'IP publique à libérer, ouvrez le menu **Actions** ;
+3. Cliquez sur **Libérer**.
+
+   La boîte de dialogue **Libération d'une Public IP** apparaît ;
+4. Une confirmation forte est nécessaire : saisissez le **nom** de l'IP publique dans le champ, puis cliquez sur **Libérer**.
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+:::info
+### Avant de commencer
+
+1.  Assurez-vous qu'aucune application ou script n'utilise l'IP publique que vous voulez libérer.
+2.  Stoppez l'utilisation de l'IP publique par vos ressources :
+
+- Détachez l'IP publique de toute **[VM](/docs/compute/concept/)** ou interface réseau.
+- Supprimez toute [nat gateway (passerelle NAT)](/docs/network/nat/concepts/) à laquelle l'IP publique est associée.
+:::
+
+Vous ne pouvez libérer que les IP publiques associées à votre compte. La commande `DELETE /compute/spaces/{spaceId}/publicIps/{id}` libère une IP publique. Cette adresse est renvoyée dans le pool d'IP publiques et peut être réutilisée par une autre personne. Avant de libérer une IP publique, assurez-vous d'avoir mis à jour toutes les ressources communiquant avec cette adresse.
+
+[Exemple de requête : Libérer une IP publique](/openapi/#tag/compute/DELETE/compute/spaces/%7BspaceId%7D/publicIps/%7Bid%7D)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/public_ip).
+  </TabItem>
+</Tabs>

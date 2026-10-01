@@ -1,6 +1,6 @@
 ---
-title: Créer une client gateway
-description: Créez une client gateway pour identifier une ressource de votre réseau d'entreprise.
+title: Create a client gateway
+description: Create a client gateway to identify a resource in your corporate network.
 sidebar_position: 1
 draft: false
 ---
@@ -9,75 +9,68 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Créer une client gateway
+# Create a client gateway
 
-Vous pouvez créer une [client gateway (passerelle client)](/docs/connectivity/vpn/client-gateway/concepts/) dans votre réseau d'entreprise.
+You can create a [client gateway](/docs/connectivity/vpn/client-gateway/concepts/) in your corporate network.
 
-Cette action identifie une ressource existante dans votre réseau d'entreprise à utiliser comme client gateway. Vous pouvez ensuite mettre en place une connexion **VPN** (Virtual Private Network) entre cette client gateway et une [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/).
+This action identifies an existing resource in your corporate network to use as a client gateway. You can then set up a VPN (Virtual Private Network) connection between this client gateway and a [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/).
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **connectivity.bridge.create**
 
 :::
 
 :::info
-**Avant de commencer** : Créez une ressource à utiliser comme client gateway.
+**Before you begin**: Create a resource to use as a client gateway.
 :::
 
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/client-gateway/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur VPN → Client Gateways.", hotspot: { x: 0, y: 0.5827, w: 0.194, h: 0.0457 } },
-    { img: "/img/walkthrough/client-gateway/create-01-list.png", text: "Depuis VPN → Client Gateways, cliquez sur « Créer une Client Gateway ».", hotspot: { x: 0.8051, y: 0.2329, w: 0.156, h: 0.0494 } },
-    { img: "/img/walkthrough/client-gateway/create-02-form.png", text: "Saisissez le BGP ASN et l'IP publique statique de votre ressource, puis cliquez sur « Créer ».", hotspot: { x: 0.21, y: 0.09, w: 0.39, h: 0.32 } },
+    { img: "/img/walkthrough/en/client-gateway/create-01-list.png", text: "From the left-hand side menu, click VPN → Client Gateways.", hotspot: { x: 0, y: 0.5827, w: 0.194, h: 0.0457 } },
+    { img: "/img/walkthrough/en/client-gateway/create-01-list.png", text: "From VPN → Client Gateways, click “Create a Client Gateway”.", hotspot: { x: 0.8113, y: 0.2329, w: 0.1498, h: 0.0494 } },
+    { img: "/img/walkthrough/en/client-gateway/create-02-form.png", text: "Enter the BGP ASN and the static public IP of your resource, then click “Create”.", hotspot: { x: 0.21, y: 0.09, w: 0.39, h: 0.32 } },
   ]}
 />
 
-1. Dans le dashboard **Client Gateways**, cliquez sur **Créer une Client Gateway**.
-   La boîte de dialogue "Création d'une Client Gateway" apparaît.
 
-2. Dans le champ "BGP ASN", tapez le numéro de système autonome (ASN - Autonomous System Number) adéquat pour votre client gateway.
+1. In the **Client Gateways** dashboard, click **Create a Client Gateway**.
+   The "Create a Client Gateway" dialog box appears.
 
-:::info
-L'ASN doit être compris entre 1 et 4294967295. Si vous n'avez pas d'ASN, vous pouvez en choisir un entre 64512 et 65534, ou entre 4200000000 et 4294967294.
-:::
-
-3. Dans le champ "Public IP", tapez l'IP (Internet Protocol) publique statique de la ressource que vous voulez utiliser comme client gateway.
+2. In the "BGP ASN" field, type the appropriate autonomous system number (ASN - Autonomous System Number) for your client gateway.
 
 :::info
-Les adresses IPv6 ne sont pas supportées. Vous devez utiliser une adresse IPv4.
+The ASN must be between 1 and 4294967295. If you do not have an ASN, you can choose one between 64512 and 65534, or between 4200000000 and 4294967294.
 :::
 
-4. Cliquez sur **Créer une Client Gateway**.
-   La client gateway est créée.
+3. In the "Public IP" field, type the static public IP (Internet Protocol) of the resource that you want to use as a client gateway.
+
+:::info
+IPv6 addresses are not supported. You must use an IPv4 address.
+:::
+
+4. Click **Create a Client Gateway**.
+   The client gateway is created.
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `POST /connectivity/spaces/{spaceId}/clientGateways` command creates a client gateway.
+This action records information to identify the client gateway that you have deployed in your network.
+To establish a tunnel with the client gateway, you must provide the communication protocol type, the fixed public IP address of the gateway, and an autonomous system number (ASN).
 
-
-La commande `POST /connectivity/spaces/{spaceId}/clientGateways` crée une client gateway.
-Cette action enregistre des informations pour identifier la client gateway que vous avez déployée dans votre réseau.
-Pour établir un tunnel avec la client gateway, vous devez fournir le type de protocole de communication, l'adresse IP publique fixe de la passerelle, et un numéro de système autonome (ASN).
-
-[Exemple de requête : Création d'une Client Gateway](/openapi/#tag/connectivity/POST/connectivity/spaces/{spaceId}/clientGateways)
+[Request example: Create a Client Gateway](/openapi/#tag/connectivity/POST/connectivity/spaces/{spaceId}/clientGateways)
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/client_gateway).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/client_gateway).
 
 </TabItem>
 </Tabs>

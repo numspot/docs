@@ -1,78 +1,68 @@
 ---
-title: "Services managés - Concepts"
+title: "Managed services - Concepts"
 sidebar_label: "Concepts"
 sidebar_position: 1
 ---
 
-# Services managés
+# Managed services
 
-## Introduction aux services managés
+## Introduction to managed services
 
-Les **services managés** permettent aux entreprises de bénéficier d'une infrastructure informatique complète, gérée par un fournisseur de services cloud. Ces services incluent des bases de données, des environnements d'exécution pour applications, des outils de développement, et bien plus, sans que l'utilisateur ait à gérer l'infrastructure sous-jacente.
+**Managed services** allow companies to benefit from a complete IT infrastructure, managed by a cloud service provider. These services include databases, application runtime environments, development tools, and much more, without the user having to manage the underlying infrastructure.
 
-### Avantages des services managés
-- **Gain de temps** : Pas besoin de gérer l'infrastructure, les mises à jour, ou la maintenance.
-- **Évolutivité** : Les ressources peuvent être ajustées en fonction des besoins.
-- **Sécurité** : Les fournisseurs de services assurent la sécurité et la conformité.
-- **Coût** : Réduction des coûts liés à la gestion de l'infrastructure.
+### Benefits of managed services
+- **Time savings**: No need to manage the infrastructure, the updates, or the maintenance.
+- **Scalability**: Resources can be adjusted according to needs.
+- **Security**: Service providers ensure security and compliance.
+- **Cost**: Reduction of the costs related to infrastructure management.
 
 :::warning
-Les services managés doivent impérativement être activés avant de lancer une création.
-À défaut, une erreur bloquante `Managed Services are not enabled yet in your space` sera retournée.
+Managed services must be enabled before you start a creation.
+Otherwise, a blocking error `Managed Services are not enabled yet in your space` is returned.
 
-Pour activer vos services managés, veuillez contacter le [Support Client](/docs/support/general/#demandes-de-support).
+To enable your managed services, please contact [Customer Support](/docs/support/general/#support-requests).
 :::
 
-## Services managés Numspot
+## Numspot managed services
 
-### 1. PostgreSQL managé
+### 1. Managed PostgreSQL
 
-**PostgreSQL** est un système de gestion de base de données relationnelle (SGBDR) open-source, connu pour sa robustesse et sa conformité aux standards SQL. En tant que service managé, il permet aux utilisateurs de bénéficier d'une base de données PostgreSQL sans avoir à gérer l'installation, la configuration, ou la maintenance du serveur.
+**PostgreSQL** is an open-source relational database management system (RDBMS), known for its robustness and its compliance with SQL standards. As a managed service, it allows users to benefit from a PostgreSQL database without having to manage the installation, the configuration, or the maintenance of the server.
 
-**Cas d'utilisation** :
-- Stockage et gestion de données structurées.
-- Applications nécessitant des transactions ACID (Atomicité, Cohérence, Isolation, Durabilité).
-- Environnements où la conformité et la sécurité des données sont critiques.
+**Use cases**:
+- Storage and management of structured data.
+- Applications requiring ACID transactions (Atomicity, Consistency, Isolation, Durability).
+- Environments where data compliance and security are critical.
 
-### 2. Kubernetes (K8s) managé
+### 2. Managed Kubernetes (K8s)
 
-**Kubernetes** est une plateforme open-source pour l'automatisation du déploiement, de la mise à l'échelle et de la gestion des applications conteneurisées. En tant que service managé, Kubernetes permet aux entreprises de déployer et gérer des applications conteneurisées sans avoir à configurer ou maintenir le [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/).
+**Kubernetes** is an open-source platform for automating the deployment, scaling and management of containerized applications. As a managed service, Kubernetes allows companies to deploy and manage containerized applications without having to configure or maintain the [Kubernetes cluster](/docs/managed-services/kubernetes/concepts/).
 
-**Cas d'utilisation** :
-- Déploiement et gestion d'applications conteneurisées.
-- Environnements nécessitant une haute disponibilité et une évolutivité.
-- Orchestration de microservices.
+**Use cases**:
+- Deployment and management of containerized applications.
+- Environments requiring high availability and scalability.
+- Microservices orchestration.
 
-### 3. Container Registry managé
+### 3. Managed Container Registry
 
-**Container Registry** est une solution gérée par Numspot pour stocker, gérer et sécuriser les artefacts logiciels, notamment :
-- des images de conteneurs (Docker, OCI),
-- des charts Helm,
-- des artefacts divers (npm, packages, fichiers de configuration, etc.).
+**Container Registry** is a solution managed by Numspot to store, manage and secure software artifacts, in particular:
+- container images (Docker, OCI),
+- Helm charts,
+- various artifacts (npm, packages, configuration files, etc.).
 
-### 4. Plateforme IA Mistral managée
+### 4. Managed Mistral AI Platform
 
-La **Plateforme IA Mistral** est une plateforme d'intelligence artificielle générative (modèles de langage Mistral) hébergée dans un environnement cloud souverain. En tant que service managé, elle permet d'exploiter des modèles d'IA sans gérer l'infrastructure [GPU](/docs/compute/gpu/concept) ni le déploiement des modèles.
+The **Mistral AI Platform** is a generative artificial intelligence platform (Mistral language models) hosted in a sovereign cloud environment. As a managed service, it allows you to use AI models without managing the [GPU](/docs/compute/gpu/concept) infrastructure or the deployment of the models.
 
-Contrairement aux autres services managés, la Plateforme IA Mistral n'est pas activable en autonomie : elle est mise à disposition **sur demande via notre service commercial**. Voir [Plateforme IA Mistral - Concepts](/docs/managed-services/mistral-ai-platform/concepts/).
+Unlike the other managed services, the Mistral AI Platform cannot be enabled on a self-service basis: it is made available **on request through our sales department**. See [Mistral AI Platform - Concepts](/docs/managed-services/mistral-ai-platform/concepts/).
 
-### 5. Secret Manager managé
+## Interaction between managed services
 
-[Secret Manager](/docs/managed-services/secret-manager/concepts) est un service géré par Numspot permettant de stocker, gérer et contrôler l'accès aux secrets (mots de passe, clés API, certificats, tokens, etc.) utilisés par vos applications et infrastructures. Basé sur OpenBao, il centralise la gestion des secrets au sein d'une instance dédiée, offrant un point de contrôle unique pour la distribution et la rotation des informations sensibles.
+Managed services can communicate with each other without any additional action on your part.
 
-**Cas d'utilisation** :
-- Centralisation des identifiants et clés API.
-- Rotation automatisée des secrets.
-- Conformité et audit des accès aux secrets.
+To make one managed service communicate with another, you must use the "host" of each service. For example, a Kubernetes cluster can connect to a PostgreSQL database using the "host" of the [PostgreSQL cluster](/docs/managed-services/postgresql/concepts/).
 
-## Interaction entre services managés
-
-Les services managés peuvent communiquer entre eux sans intervention supplémentaire de votre part.
-
-Pour faire communiquer un service managé avec un autre, vous devez utiliser le "host" de chaque service. Par exemple, un cluster Kubernetes pourra se connecter à une base PostgreSQL en utilisant l'"host" du [cluster PostgreSQL](/docs/managed-services/postgresql/concepts/).
-
-Pour récupérer l'"host" d'un service managé :
-* [Récupérer le statut d'un cluster PostgreSQL](/docs/managed-services/postgresql/actions/status/)
-* [Récupérer le statut d'un cluster K8s](/docs/managed-services/kubernetes/actions/status/)
-* [Récupérer le statut d'un Container Registry](/docs/managed-services/registry/actions/status/)
-* [Récupérer le statut d'une instance Secret Manager](/docs/managed-services/secret-manager/actions/status/)
+To retrieve the "host" of a managed service:
+* [Retrieve the status of a PostgreSQL cluster](/docs/managed-services/postgresql/actions/status/)
+* [Retrieve the status of a K8s cluster](/docs/managed-services/kubernetes/actions/status/)
+* [Retrieve the status of a Container Registry](/docs/managed-services/registry/actions/status/)

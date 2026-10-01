@@ -1,0 +1,635 @@
+---
+title: Gérer les utilisateurs et les politiques - Secret Manager managé
+sidebar_label: Gérer les utilisateurs et les politiques
+description: Guide de gestion des utilisateurs et des politiques OpenBao sur une instance Secret Manager managée
+sidebar_position: 1
+draft: false
+---
+
+# Gérer les utilisateurs et les politiques
+
+Le service managé [Secret Manager](/docs/managed-services/secret-manager/concepts/) fournit un token admin lors de la création de l'instance. Pour ajouter des utilisateurs supplémentaires ou gérer les permissions, vous devez configurer les méthodes d'authentification et les politiques directement sur l'instance OpenBao.
+
+:::note
+L'API Numspot permet uniquement de gérer l'instance Secret Manager (création, consultation, suppression). La création d'utilisateurs et de politiques s'effectue via l'API HTTP OpenBao, le CLI `bao` ou l'interface web de l'instance.
+:::
+
+## Prérequis
+
+- Une [instance Secret Manager](/docs/managed-services/secret-manager/concepts/) à l'état `RUNNING` ;
+- Le token admin de l'instance ;
+- Le CLI `bao` installé, ou `curl` pour les appels API directs.
+
+Configurez l'accès à l'instance :
+
+```bash
+export BAO_ADDR="https://{host-de-l-instance}"
+export BAO_TOKEN="{token-admin}"
+```
+
+:::note
+Le CLI `bao` est un client qui s'installe sur votre poste local et communique avec l'API HTTPS de l'instance grâce aux variables `BAO_ADDR` et `BAO_TOKEN`.
+:::
+
+---
+
+## Activer la méthode d'authentification userpass {#activer-la-methode-dauthentification-userpass}
+
+Par défaut, seule l'authentification par token est active. Pour créer des utilisateurs avec identifiant et mot de passe, activez la méthode **userpass** :
+
+### Via le CLI
+
+```bash
+bao auth enable userpass
+```
+
+### Via l'API HTTP {#activer-userpass-api}
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request POST \
+  --data '{"type": "userpass"}' \
+  $BAO_ADDR/v1/sys/auth/userpass
+```
+
+### Vérifier les méthodes d'authentification activées {#verifier-les-methodes-dauthentification-activees}
+
+```bash
+bao auth list
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  $BAO_ADDR/v1/sys/auth
+```
+
+---
+
+## Créer une politique {#creer-une-politique}
+
+Les politiques (policies) définissent les permissions accordées aux utilisateurs. Elles sont rédigées en HCL (HashiCorp Configuration Language).
+
+### Politique en lecture seule
+
+```bash
+bao policy write readonly - <<EOF
+path "secret/data/*" {
+  capabilities = ["read", "list"]
+}
+EOF
+```
+
+### Politique en lecture-écriture
+
+```bash
+bao policy write readwrite - <<EOF
+path "secret/data/*" {
+  capabilities = ["create", "read", "update", "delete", "list"]
+}
+EOF
+```
+
+### Politique administrateur
+
+```bash
+bao policy write admin-policy - <<EOF
+path "*" {
+  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+}
+EOF
+```
+
+### Via l'API HTTP {#creer-politique-api}
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request POST \
+  --data '{"policy": "path \"secret/data/*\" {\n  capabilities = [\"read\", \"list\"]\n}"}' \
+  $BAO_ADDR/v1/sys/policies/acl/readonly
+```
+
+### Lister les politiques
+
+```bash
+bao policy list
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  $BAO_ADDR/v1/sys/policies/acl
+```
+
+### Consulter une politique {#consulter-une-politique}
+
+```bash
+bao policy read readonly
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  $BAO_ADDR/v1/sys/policies/acl/readonly
+```
+
+---
+
+## Créer un utilisateur {#creer-un-utilisateur}
+
+Une fois la méthode userpass activée et les politiques créées, vous pouvez créer des utilisateurs.
+
+### Via le CLI
+
+```bash
+bao write auth/userpass/users/{nom_utilisateur} \
+  password="{mot_de_passe}" \
+  policies="readonly"
+```
+
+Pour associer plusieurs politiques :
+
+```bash
+bao write auth/userpass/users/{nom_utilisateur} \
+  password="{mot_de_passe}" \
+  policies="readonly,default"
+```
+
+### Via l'API HTTP {#creer-utilisateur-api}
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request POST \
+  --data '{"password": "{mot_de_passe}", "token_policies": "readonly"}' \
+  $BAO_ADDR/v1/auth/userpass/users/{nom_utilisateur}
+```
+
+:::warning
+Le nom d'utilisateur accepte uniquement les caractères alphanumériques ainsi que `_`, `-` et `.`. Il ne peut pas commencer par un `-` ni commencer ou finir par un `.`.
+:::
+
+### Lister les utilisateurs
+
+```bash
+bao list auth/userpass/users
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request LIST \
+  $BAO_ADDR/v1/auth/userpass/users
+```
+
+---
+
+## Modifier un utilisateur {#modifier-un-utilisateur}
+
+### Changer le mot de passe
+
+Via le CLI :
+
+```bash
+bao write auth/userpass/users/{nom_utilisateur}/password password="{nouveau_mot_de_passe}"
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request POST \
+  --data '{"password": "{nouveau_mot_de_passe}"}' \
+  $BAO_ADDR/v1/auth/userpass/users/{nom_utilisateur}/password
+```
+
+### Modifier les politiques associées {#modifier-les-politiques-associees}
+
+Via le CLI :
+
+```bash
+bao write auth/userpass/users/{nom_utilisateur} policies="readwrite,default"
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request POST \
+  --data '{"password": "{mot_de_passe}", "token_policies": "readwrite,default"}' \
+  $BAO_ADDR/v1/auth/userpass/users/{nom_utilisateur}
+```
+
+:::info
+La mise à jour via l'API avec `POST /v1/auth/userpass/users/{nom_utilisateur}` remplace l'intégralité de la configuration de l'utilisateur. Le champ `password` n'est requis que lors de la création : vous pouvez l'omettre pour modifier uniquement les politiques associées. Le champ `token_policies` accepte une chaîne séparée par des virgules ou un tableau JSON (par ex. `["readwrite", "default"]`).
+:::
+
+---
+
+## Supprimer un utilisateur {#supprimer-un-utilisateur}
+
+### Via le CLI
+
+```bash
+bao delete auth/userpass/users/{nom_utilisateur}
+```
+
+### Via l'API HTTP
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request DELETE \
+  $BAO_ADDR/v1/auth/userpass/users/{nom_utilisateur}
+```
+
+:::danger
+La suppression d'un utilisateur est irréversible. Les tokens déjà émis pour cet utilisateur restent valides jusqu'à leur expiration. Pour les révoquer immédiatement, consultez la section [Révoquer les tokens d'un utilisateur](#revoquer-les-tokens-dun-utilisateur).
+:::
+
+---
+
+## Supprimer une politique {#supprimer-une-politique}
+
+### Via le CLI
+
+```bash
+bao policy delete readonly
+```
+
+### Via l'API HTTP
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request DELETE \
+  $BAO_ADDR/v1/sys/policies/acl/readonly
+```
+
+:::danger
+La suppression d'une politique est irréversible. Les utilisateurs associés à cette politique perdent les permissions correspondantes immédiatement.
+:::
+
+---
+
+## Révoquer les tokens d'un utilisateur {#revoquer-les-tokens-dun-utilisateur}
+
+Après la suppression d'un utilisateur ou en cas de compromission, révoquez les tokens actifs :
+
+### Via le CLI
+
+Lister les accessoires (accessors) des tokens :
+
+```bash
+bao list auth/token/accessors
+```
+
+Révoquer un token spécifique :
+
+```bash
+bao token revoke -accessor {accessor}
+```
+
+### Via l'API HTTP
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request POST \
+  --data '{"accessor": "{accessor}"}' \
+  $BAO_ADDR/v1/auth/token/revoke-accessor
+```
+
+---
+
+## Se connecter avec un utilisateur {#se-connecter-avec-un-utilisateur}
+
+### Via le CLI
+
+```bash
+bao login -method=userpass username={nom_utilisateur}
+```
+
+Le CLI vous invite à saisir le mot de passe de manière interactive.
+
+### Via l'API HTTP {#se-connecter-api}
+
+```bash
+curl \
+  --request POST \
+  --data '{"password": "{mot_de_passe}"}' \
+  $BAO_ADDR/v1/auth/userpass/login/{nom_utilisateur}
+```
+
+La réponse contient le token client dans le champ `auth.client_token` :
+
+```json
+{
+  "auth": {
+    "client_token": "c4f280f6-fdb2-18eb-89d3-589e2e834cdb",
+    "policies": ["readonly", "default"],
+    "metadata": {
+      "username": "app-user"
+    },
+    "lease_duration": 2764800,
+    "renewable": true
+  }
+}
+```
+
+---
+
+## Exemple de structuration par profils d'accès
+
+L'exemple suivant crée trois profils types pour une instance Secret Manager :
+
+```bash
+bao policy write sm-readonly - <<EOF
+path "secret/data/*" {
+  capabilities = ["read", "list"]
+}
+EOF
+```
+
+```bash
+bao policy write sm-readwrite - <<EOF
+path "secret/data/*" {
+  capabilities = ["create", "read", "update", "delete", "list"]
+}
+path "secret/metadata/*" {
+  capabilities = ["read", "list", "delete"]
+}
+EOF
+```
+
+```bash
+bao policy write sm-admin - <<EOF
+path "*" {
+  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+}
+EOF
+```
+
+Puis associez chaque politique à un utilisateur :
+
+```bash
+bao write auth/userpass/users/app-reader password="{mot_de_passe}" policies="sm-readonly"
+bao write auth/userpass/users/app-writer password="{mot_de_passe}" policies="sm-readwrite"
+bao write auth/userpass/users/admin-user password="{mot_de_passe}" policies="sm-admin"
+```
+
+---
+
+## Gérer les utilisateurs via l'interface web {#gerer-les-utilisateurs-via-linterface-web}
+
+Vous pouvez également effectuer toutes ces opérations depuis l'interface web d'OpenBao. Pour les bases de l'interface, consultez la [documentation officielle de l'interface OpenBao](https://openbao.org/docs/configuration/ui/).
+
+1. Accédez à l'URL de votre instance : `https://{host-de-l-instance}` ;
+2. Connectez-vous avec le token admin ;
+3. Dans le menu latéral, accédez à **Access** > **Auth Methods** ;
+4. Sélectionnez **userpass** pour gérer les utilisateurs ;
+5. Accédez à **Policies** pour créer, modifier ou supprimer les politiques.
+
+:::tip
+Pour les opérations ponctuelles ou la création initiale des utilisateurs, l'interface web offre une alternative plus visuelle au CLI et à l'API.
+:::
+
+---
+
+## Configurer l'authentification SSO {#configurer-lauthentification-sso}
+
+Pour les environnements d'entreprise, vous pouvez configurer des méthodes d'authentification externes (LDAP, OIDC, JWT) pour centraliser la gestion des identités. Consultez le guide [Configurer le SSO et l'authentification externe](/docs/managed-services/secret-manager/guides/configure-sso/) pour plus de détails.
+
+---
+
+## Bonnes pratiques
+
+### Principe du moindre privilège
+
+- Créez des politiques spécifiques pour chaque cas d'usage ;
+- Préférez les politiques en lecture seule pour les applications qui n'ont besoin que de consulter des secrets ;
+- N'accordez la politique administrateur qu'aux seuls administrateurs de l'instance.
+
+### Rotation des mots de passe
+
+Changez régulièrement les mots de passe des utilisateurs applicatifs :
+
+```bash
+bao write auth/userpass/users/{nom_utilisateur}/password password="{nouveau_mot_de_passe}"
+```
+
+### Audit des accès {#audit-des-acces}
+
+Utilisez le CLI `bao` ou l'API HTTP OpenBao pour auditer les méthodes d'authentification, les politiques, les utilisateurs, les groupes et les tokens actifs.
+
+**Lister les méthodes d'authentification activées**
+
+```bash
+bao auth list
+bao auth list -detailed
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  $BAO_ADDR/v1/sys/auth
+```
+
+**Lister les politiques**
+
+```bash
+bao policy list
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  $BAO_ADDR/v1/sys/policies/acl
+```
+
+**Consulter le détail d'une politique**
+
+```bash
+bao policy read <nom_politique>
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  $BAO_ADDR/v1/sys/policies/acl/<nom_politique>
+```
+
+**Lister les utilisateurs userpass**
+
+```bash
+bao list auth/userpass/users
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request LIST \
+  $BAO_ADDR/v1/auth/userpass/users
+```
+
+**Consulter un utilisateur userpass**
+
+```bash
+bao read auth/userpass/users/<nom_utilisateur>
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  $BAO_ADDR/v1/auth/userpass/users/<nom_utilisateur>
+```
+
+**Lister les groupes identity**
+
+```bash
+bao list identity/group/name
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request LIST \
+  $BAO_ADDR/v1/identity/group/name
+```
+
+**Lister les entités identity**
+
+```bash
+bao list identity/entity/name
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request LIST \
+  $BAO_ADDR/v1/identity/entity/name
+```
+
+**Lister les tokens actifs**
+
+```bash
+bao list auth/token/accessors
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request LIST \
+  $BAO_ADDR/v1/auth/token/accessors
+```
+
+**Consulter un token**
+
+```bash
+bao token lookup <token>
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request POST \
+  --data '{"token": "<token>"}' \
+  $BAO_ADDR/v1/auth/token/lookup
+```
+
+**Vérifier les permissions effectives sur un chemin**
+
+```bash
+bao token capabilities <chemin>
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request POST \
+  --data '{"paths": ["<chemin>"]}' \
+  $BAO_ADDR/v1/sys/capabilities-self
+```
+
+**Lister les dispositifs d'audit**
+
+```bash
+bao audit list
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  $BAO_ADDR/v1/sys/audit
+```
+
+**Vérifier les accès sensibles**
+
+- Méthodes d'authentification : identifiez les méthodes non standards ou exposées publiquement.
+- Politiques administrateur : listez les utilisateurs et groupes associés à une politique avec `sudo` ou `path "*"`.
+- Tokens sans expiration : vérifiez les tokens avec un TTL élevé ou nul.
+- Audit devices : assurez-vous qu'au moins un dispositif d'audit est configuré.
+
+### Durée de vie des tokens {#duree-de-vie-des-tokens}
+
+Configurez des TTL courts pour les tokens émis afin de limiter la fenêtre d'exploitation en cas de compromission :
+
+```bash
+bao write auth/userpass/users/{nom_utilisateur} \
+  password="{mot_de_passe}" \
+  policies="readonly" \
+  token_ttl="1h" \
+  token_max_ttl="4h"
+```
+
+---
+
+## Limitations
+
+| Action | Support |
+| --- | --- |
+| Créer une instance | Via l'API ou la console Numspot |
+| Supprimer une instance | Via l'API ou la console Numspot |
+| Consulter le statut de l'instance | Via l'API ou la console Numspot |
+| Activer une méthode d'authentification | Via l'API HTTP OpenBao, le CLI `bao` ou l'interface web |
+| Créer des utilisateurs | Via l'API HTTP OpenBao, le CLI `bao` ou l'interface web |
+| Gérer les politiques | Via l'API HTTP OpenBao, le CLI `bao` ou l'interface web |
+| Configurer les permissions | Via l'API HTTP OpenBao, le CLI `bao` ou l'interface web |
+
+:::tip
+Automatisez la gestion des utilisateurs et des politiques avec des scripts versionnés dans votre système de contrôle de source. Cela facilite la traçabilité et la reproduction des configurations.
+:::

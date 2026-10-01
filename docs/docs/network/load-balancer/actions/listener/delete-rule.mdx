@@ -1,5 +1,5 @@
 ---
-title: Supprimer une règle d'un listener de load balancer
+title: Delete a rule from a load balancer listener
 sidebar_position: 6
 draft: false
 ---
@@ -7,14 +7,14 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Supprimer une règle d'un listener de load balancer
+# Delete a rule from a load balancer listener
 
-Vous pouvez supprimer une règle de redirection de trafic d'un listener (écouteur) de [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) dont vous n'avez plus besoin.
+You can delete a traffic redirection rule from a [load balancer](/docs/network/load-balancer/concepts/) listener that you no longer need.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.loadBalancer.delete**
 
@@ -22,24 +22,20 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
   <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
-:::info
-La suppression d'une règle de listener n'est pas disponible depuis la console Numspot.
-
-Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
-:::
+1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
+2. Click the name of the load balancer containing the rule to delete.
+3. In the "Listeners" tab, click the listener containing the rule.
+4. In the "Rules" section, identify the rule to delete and click **Delete**.
+5. Confirm the deletion.
+   The rule is deleted from the listener.
 
   </TabItem>
   <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `DELETE /compute/spaces/{spaceId}/listenerRules/{id}` command deletes a listener rule.
 
+The rule that was previously active is disabled after the deletion.
 
-La commande `DELETE /compute/spaces/{spaceId}/listenerRules/{id}` supprime une règle de listener.
-
-La règle qui était active auparavant est désactivée après la suppression.
-
-[Exemple de requête : Suppression d'une règle pour un Listener](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/listenerRules/{id})
+[Example request: Deleting a rule for a Listener](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/listenerRules/{id})
   </TabItem>
 </Tabs>

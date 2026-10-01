@@ -1,6 +1,6 @@
 ---
-title: Consulter les accès d'une identité
-description: "Consultez les rôles et permissions attribués à un utilisateur ou un compte de service, par espace, via la console ou l'API."
+title: View the access rights of an identity
+description: "View the roles and permissions assigned to a user or a service account, per space, via the console or the API."
 sidebar_position: 2
 draft: false
 last_update:
@@ -11,19 +11,18 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Consulter les accès d'une identité
+# View the access rights of an identity
 
-Cette opération peut s'effectuer au niveau de l'organisation ou d'un espace.
+This operation can be carried out at the organization level or at the space level.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **iam.permission.get**
 
 :::
-
 <Tabs>
 <TabItem value="console" label="Console" default>
 
@@ -31,48 +30,47 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/user/detail.png", text: "Sur la page de détail d'un utilisateur (IAM → Utilisateurs → identifiant), la section « Espaces assignés » liste ses espaces.", hotspot: { x: 0.223, y: 0.5362, w: 0.76, h: 0.35 } },
-    { img: "/img/walkthrough/user/detail.png", text: "Cliquez sur « X rôles » pour voir les rôles attribués sur un espace donné.", hotspot: { x: 0.5486, y: 0.7562, w: 0.12, h: 0.05 } },
-    { img: "/img/walkthrough/user/detail.png", text: "Cliquez sur « X permissions » pour voir les permissions attribuées sur ce même espace.", hotspot: { x: 0.7132, y: 0.7562, w: 0.14, h: 0.05 } },
+    { img: "/img/walkthrough/en/user/detail.png", text: "On a user's details page (IAM → Users → ID), the “Assigned spaces” section lists their spaces.", hotspot: { x: 0.223, y: 0.5362, w: 0.76, h: 0.35 } },
+    { img: "/img/walkthrough/en/user/detail.png", text: "Click “X roles” to see the roles granted on a given space.", hotspot: { x: 0.5486, y: 0.7562, w: 0.12, h: 0.05 } },
+    { img: "/img/walkthrough/en/user/detail.png", text: "Click “X permissions” to see the permissions granted on that same space.", hotspot: { x: 0.7132, y: 0.7562, w: 0.14, h: 0.05 } },
   ]}
 />
-1.  Dans la page de détail d'un compte utilisateur, vous pouvez voir la liste des espaces assignés à un utilisateur.
 
 
-2.  En cliquant sur **X rôles**, vous pourrez voir la liste des rôles attribués à cet utilisateur, sur l'espace qui lui est associé.
+1.  On the detail page of a user account, you can view the list of spaces assigned to a user.
 
 
-3.  En cliquant sur **X permissions**, vous pourrez voir la liste des permissions attribuées à cet utilisateur, sur l'espace qui lui est associé.
+2.  By clicking **X roles**, you can view the list of roles assigned to this user, on the space associated with them.
 
 
-### Consulter les accès d'un compte de service
-
-1.  Dans la page de détail d'un [compte de service](/docs/iam/concepts/identity/) vous pouvez voir la liste des espaces associés au compte de service.
+3.  By clicking **X permissions**, you can view the list of permissions assigned to this user, on the space associated with them.
 
 
-2.  En cliquant sur le lien **X rôles**, vous pourrez voir la liste des rôles attribués à ce compte de service pour l'espace qui lui est associé.
+## View the access rights of a service account
+
+1.  On the detail page of a [service account](/docs/iam/concepts/identity/) you can view the list of spaces associated with the service account.
 
 
-3.  En cliquant sur le lien **X permissions**, vous pourrez voir la liste des permissions attribuées à ce compte de service pour l'espace qui lui est associé.
+2.  By clicking the **X roles** link, you can view the list of roles assigned to this service account for the space associated with it.
+
+
+3.  By clicking the **X permissions** link, you can view the list of permissions assigned to this service account for the space associated with it.
 
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
-
-
-### Rôles et permissions dans une organisation
+## Roles and permissions within an organization
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}
 
-### Exemple avec un curl
+**Example with a curl:**
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}'
 ```
 
-Réponse :
+Response:
 
 ```json
 {
@@ -86,20 +84,20 @@ Réponse :
 ```
 
 :::info
-Consulter la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [page on API usage](/docs/iam/concepts/api/) for the implementation.
 :::
 
-### Rôles et permissions dans un espace
+## Roles and permissions within a space
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}
 
-### Exemple avec un curl
+**Example with a curl:**
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}'
 ```
 
-Réponse :
+Response:
 
 ```json
 {
@@ -113,7 +111,7 @@ Réponse :
 ```
 
 :::info
-Consulter la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [page on API usage](/docs/iam/concepts/api/) for the implementation.
 :::
 </TabItem>
 </Tabs>

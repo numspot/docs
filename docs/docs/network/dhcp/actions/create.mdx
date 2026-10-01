@@ -1,6 +1,6 @@
 ---
-title: Créer un groupe d'options DHCP - Numspot
-sidebar_label: Créer un groupe d'options DHCP
+title: Create a DHCP options set - Numspot
+sidebar_label: Create a DHCP options set
 sidebar_position: 2
 draft: false
 ---
@@ -8,18 +8,18 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Créer un groupe d'options DHCP
+# Create a DHCP options set
 
-Vous pouvez créer un groupe d'options [DHCP (Dynamic Host Configuration Protocol)](/docs/network/dhcp/concepts/) à associer à un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/). Vous pouvez spécifier un ou plusieurs serveurs NTP (Network Time Protocol) et serveurs DNS (Domain Name System) à utiliser, avec un nom de domaine correspondant.
+You can create a [DHCP (Dynamic Host Configuration Protocol)](/docs/network/dhcp/concepts/) options set to associate with a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/). You can specify one or more NTP (Network Time Protocol) servers and DNS (Domain Name System) servers to use, along with a corresponding domain name.
 
-Numspot fournit automatiquement un groupe d'options DHCP par défaut. Cependant, vous pouvez créer autant de groupes personnalisés que vous le souhaitez.
+Numspot automatically provides a default DHCP options set. However, you can create as many custom sets as you want.
 
-Vous pouvez associer un groupe d'options DHCP à un VPC pour personnaliser la configuration DHCP utilisée avec les [VM (Virtual Machine)](/docs/compute/concept/) créées dans ce VPC.
+You can associate a DHCP options set with a VPC to customize the DHCP configuration used with the [VM (Virtual Machine)](/docs/compute/concept/) created in that VPC.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.dhcpOptions.create**
 
@@ -28,27 +28,36 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
+1. From the left-hand side menu, click **Network** → **DHCP Options** to access the list of DHCP options sets.
+2. Click the **Create DHCP options** button.
+3. (Optional) In the "Domain name" field, enter the domain name of the DHCP options set. Leave the field empty to use the Numspot domain name.
+4. In the "Domain name servers" list, select:
+   - "Continue with a default DNS" to use the Numspot domain name;
+   - "Select one or more DNS" to use a custom domain name.
+5. Specify at least one of the following values:
+   - (Optional) In the "NTP servers" field, enter the IP (Internet Protocol) addresses of one or more NTP servers;
+   - (Optional) In the "Log servers" field, enter the IP addresses of one or more log servers.
+6. Click **Next**.
+7. Review the settings of the DHCP options set.
+8. Click **Create**.
 
-La création d'un groupe d'options DHCP n'est pas disponible depuis la Console. Utilisez l'API ou Terraform.
+A confirmation message appears at the bottom of the page indicating that the DHCP options set has been created.
+
+:::warning
+Specifying the same information as an existing DHCP options set creates a new set with a different ID.
+:::
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `POST /compute/spaces/{spaceId}/dhcpOptions` command creates a DHCP options set, which you can then associate with a network using the method to modify a VPC.
 
-
-La commande `POST /compute/spaces/{spaceId}/dhcpOptions` crée un ensemble d'options DHCP, que vous pouvez ensuite associer à un réseau en utilisant la méthode pour modifier un VPC.
-
-[Exemple de requête : Création d'un ensemble d'options DHCP ↗](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/dhcpOptions)
+[Request example: Creating a DHCP options set ↗](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/dhcpOptions)
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/dhcp_options).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/dhcp_options).
 
 </TabItem>
 </Tabs>

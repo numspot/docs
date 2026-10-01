@@ -1,0 +1,72 @@
+---
+title: Supprimer un subnet
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Supprimer un subnet
+
+Vous pouvez supprimer un subnet (sous-réseau) vide dont vous n'avez plus besoin. Cette action ne supprime pas la [route table (table de routage)](/docs/network/route-table/concepts/) et les [security groups (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) utilisés pour ce subnet.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.subnet.delete**
+
+:::
+<Tabs>
+  <TabItem value="Console" default> 
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/subnet/update-01-vpclist.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC.", hotspot: { x: 0, y: 0.5222, w: 0.1931, h: 0.0568 } },
+    { img: "/img/walkthrough/subnet/update-01-vpclist.png", text: "Dans la liste des VPC, cliquez sur l'ID du VPC concerné.", hotspot: { x: 0.2687, y: 0.4928, w: 0.0689, h: 0.0247 } },
+    { img: "/img/walkthrough/subnet/del-01-detail.png", text: "Sur la page de détail du VPC, dans la section « Subnets », cliquez sur « Supprimer » pour le subnet concerné.", hotspot: { x: 0.8707, y: 0.5025, w: 0.1029, h: 0.0741 } },
+    { img: "/img/walkthrough/subnet/del-02-modal.png", text: "Confirmation forte : saisissez le nom exact du subnet, puis cliquez sur « Supprimer ». La suppression est définitive.", hotspot: { x: 0.2847, y: 0.1924, w: 0.4306, h: 0.6153 } },
+  ]}
+/>
+
+:::info
+**Prérequis :** Toutes les [VM (Virtual Machines)](/docs/compute/concept/) qui sont dans le subnet doivent être supprimées.
+:::
+
+1.  Connectez-vous sur la console Numspot.
+2.  Depuis le menu latéral gauche, cliquez sur **Réseau** → **[VPC](/docs/network/vpc/concepts/)** → **VPC**.
+3.  La liste des VPC apparaît. Cliquez sur l'ID du VPC concerné.
+4.  La page "Détails VPC" apparaît.
+5.  En dessous des détails du VPC apparaît la section "Subnets" dans laquelle se trouve la liste des subnets associés au VPC.
+
+6.  Identifiez le subnet que vous souhaitez supprimer en cliquant sur le bouton **Supprimer**.
+
+7.  Un message de confirmation s'affiche en bas indiquant que le subnet a bien été supprimé et vous êtes redirigé vers la page détaillée du VPC associé.
+
+  </TabItem> 
+  <TabItem value="API">
+
+:::info
+**Avant de commencer :** Supprimer toutes les VM qui sont dans le subnet.
+:::
+
+La commande `DELETE /compute/spaces/{spaceId}/subnets/{id}` supprime un subnet spécifié.
+Avant de supprimer le subnet, vous devez supprimer toutes les ressources associées à celui-ci :
+
+* VM
+* Cartes d'interface réseau — NIC (Network Interface Card)
+* Services NAT ([NAT Gateway](/docs/network/nat/concepts/))
+* Équilibreurs de charge ([load balancer](/docs/network/load-balancer/concepts/))
+
+[Exemple de requête : Suppression d'un subnet](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/subnets/{id})
+  </TabItem>
+  <TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-Terraform}
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/subnet).
+  </TabItem>
+</Tabs>

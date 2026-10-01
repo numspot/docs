@@ -1,7 +1,7 @@
 // FR/EN changelog synchronization tests.
 //
-// The French changelog (docs/docs/changelog.json) is the source of truth and
-// the English one (i18n/en/docusaurus-plugin-content-docs/current/docs/changelog.json)
+// The English changelog (docs/docs/changelog.json) is the source of truth and
+// the French one (i18n/fr/docusaurus-plugin-content-docs/current/docs/changelog.json)
 // must mirror it entry for entry — translated title/description/service, but
 // identical structure:
 //   - same number of entries, same order;
@@ -18,10 +18,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const ROOT = path.join(__dirname, '..', '..');
-const FR_PATH = path.join(ROOT, 'docs', 'docs', 'changelog.json');
-const EN_PATH = path.join(
+const EN_PATH = path.join(ROOT, 'docs', 'docs', 'changelog.json');
+const FR_PATH = path.join(
   ROOT,
-  'i18n/en/docusaurus-plugin-content-docs/current/docs/changelog.json'
+  'i18n/fr/docusaurus-plugin-content-docs/current/docs/changelog.json'
 );
 
 // Approved FR -> EN service name translations. A new service must be added
@@ -64,10 +64,10 @@ test('English changelog has the same number of entries as French', () => {
   const fr = loadEntries(FR_PATH);
   const en = loadEntries(EN_PATH);
   assert.strictEqual(
-    en.length,
     fr.length,
-    `EN changelog has ${en.length} entries, FR has ${fr.length}. ` +
-    'Add the missing entries to i18n/en/docusaurus-plugin-content-docs/current/docs/changelog.json.'
+    en.length,
+    `FR changelog has ${fr.length} entries, EN has ${en.length}. ` +
+    'Add the missing entries to i18n/fr/docusaurus-plugin-content-docs/current/docs/changelog.json.'
   );
 });
 

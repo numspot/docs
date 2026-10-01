@@ -1,6 +1,6 @@
 ---
-title: Allouer une IP publique - Numspot
-sidebar_label: Allouer une IP publique
+title: Allocate a public IP - Numspot
+sidebar_label: Allocate a public IP
 sidebar_position: 2
 draft: false
 ---
@@ -9,16 +9,16 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Allouer une IP publique
+# Allocate a public IP
 
-Vous pouvez allouer une IP publique que vous pouvez ensuite associer avec une [VM (Virtual Machine)](/docs/compute/concept/) ou une interface réseau.
+You can allocate a public IP that you can then associate with a [VM](/docs/compute/concept/) (Virtual Machine) or a network interface.
 
-Les IP publiques sont également nécessaires pour créer des [nat gateways (passerelles NAT)](/docs/network/nat/concepts/).
+Public IP are also required to create [nat gateways](/docs/network/nat/concepts/).
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.publicIp.create**
 
@@ -26,39 +26,31 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
   <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/public-ip/alloc-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → Public IP.", hotspot: { x: 0, y: 0.5222, w: 0.194, h: 0.0457 } },
-    { img: "/img/walkthrough/public-ip/alloc-01-list.png", text: "Depuis Réseau → Public IP, cliquez sur « Réserver une Public IP ».", hotspot: { x: 0.8183, y: 0.2329, w: 0.1428, h: 0.0494 } },
-    { img: "/img/walkthrough/public-ip/alloc-02-modal.png", text: "Dans la boîte de dialogue, saisissez un nom pour l'IP publique, puis cliquez sur « Réserver une Public IP ».", hotspot: { x: 0.2917, y: 0.3444, w: 0.4167, h: 0.3111 } },
+    { img: "/img/walkthrough/en/public-ip/list.png", text: "From the left-hand side menu, click Network → Public IPs.", hotspot: { x: 0, y: 0.5222, w: 0.194, h: 0.0457 } },
+    { img: "/img/walkthrough/en/public-ip/list.png", text: "From Network → Public IPs, click “Reserve a Public IP”.", hotspot: { x: 0.8336, y: 0.2329, w: 0.1275, h: 0.0494 } },
+    { img: "/img/walkthrough/en/public-ip/reserve-modal.png", text: "In the dialog, enter a name for the public IP, then click “Reserve a Public IP”.", hotspot: { x: 0.5836, y: 0.5889, w: 0.1025, h: 0.0494 } },
   ]}
 />
 
-1.  Depuis le menu latéral gauche, cliquez sur **Réseau** → **Public IP**.
-2.  Depuis la liste des IP publiques, cliquez sur le bouton **Réserver une Public IP**.
-    Une nouvelle fenêtre de dialogue **Réserver une Public IP** apparaît.
-3.  Dans le champ "Nom", tapez un nom pour l'IP publique.
+1.  From the left-hand side menu, click **Network** → **Public IP**.
+2.  From the list of public IP, click the **Reserve a Public IP** button.
+    A new **Reserve a Public IP** dialog box appears.
+3.  In the "Name" field, type a name for the public IP.
 
 :::info
-Cette action ajoute un tag Name de 255 caractères maximum. Vous pouvez utiliser tous les caractères, y compris les lettres accentuées.
+This action adds a Name tag of up to 255 characters. You can use any character, including accented letters.
 :::
 
-4.  Cliquez sur **Réserver**. L'IP publique est réservée. Un message de confirmation "La Public IP a bien été réservée" apparaît.
+4.  Click **Reserve**. The public IP is reserved. A confirmation message "The Public IP has been reserved" appears.
   </TabItem>
   <TabItem value="api" label="API">
+      The `POST /compute/spaces/{spaceId}/publicIps` command allocates a public IP for your account. A public IP is a static IP address designed for dynamic Cloud computing. It can be associated with a VM, a network interface card (NIC), or a NAT service.
 
-## API {#tabhead-api}
-
-      La commande `POST /compute/spaces/{spaceId}/publicIps` permet d'acquérir une IP publique pour votre compte. Une IP publique est une adresse IP statique conçue pour l'informatique en Cloud dynamique. Elle peut être associée à une VM, à une carte d'interface réseau (NIC), ou à un service NAT.
-
-[Exemple de requête : Création d'une IP publique](/openapi/#tag/compute/POST/compute/spaces/%7BspaceId%7D/publicIps)
+[Request example: Creating a public IP](/openapi/#tag/compute/POST/compute/spaces/%7BspaceId%7D/publicIps)
   </TabItem>
   <TabItem value="terraform" label="Terraform">
-
-## Terraform {#tabhead-terraform}
-
-    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/public_ip).
+    The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/public_ip).
   </TabItem>
 </Tabs>

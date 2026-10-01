@@ -1,0 +1,62 @@
+---
+title: Détacher une route table d'un subnet
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Détacher une route table d'un subnet
+
+Vous pouvez détacher une [route table (table de routage)](/docs/network/route-table/concepts/) d'un subnet (sous-réseau). Ce subnet n'utilisera alors plus les routes contenues dans cette route table pour router le trafic réseau. Il utilisera les routes contenues dans la route table principale à la place, jusqu'à ce que vous l'associiez explicitement à une autre route table.
+
+## Permissions
+
+Aucune permission **IAM** (Identity and Access Management) n'est requise pour effectuer cette action.
+
+<Tabs>
+   <TabItem value="console" default> 
+
+## console {#tabhead-console}
+
+:::info
+**Avant de commencer :** Créez une route table. Pour en savoir plus, voir [Créer une route table ↗](../create.mdx). Il faut également qu'un subnet soit associé pour que l'action de dissocier soit proposée.
+:::
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/route-table/detach-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC → Route Tables.", hotspot: { x: 0, y: 0.579, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/route-table/detach-01-list.png", text: "Repérez la route table dont la colonne « Associations » indique au moins un subnet, puis ouvrez son menu « Actions ».", hotspot: { x: 0.9031, y: 0.5761, w: 0.0608, h: 0.0383 } },
+    { img: "/img/walkthrough/route-table/detach-02-actions.png", text: "Cliquez sur « Dissocier un Subnet ».", hotspot: { x: 0.8438, y: 0.6617, w: 0.1197, h: 0.0457 } },
+    { img: "/img/walkthrough/route-table/detach-03-panel.png", text: "Dans le panneau « Subnets », cliquez sur « Dissocier » en face du subnet à détacher.", hotspot: { x: 0.9169, y: 0.4033, w: 0.0664, h: 0.0259 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, cliquez sur **Réseau** → **[VPC](/docs/network/vpc/concepts/)** → **Route Tables** ;
+2. Repérez la route table dont la colonne **Associations** indique au moins un subnet, puis ouvrez son menu **Actions** ;
+3. Cliquez sur **Dissocier un Subnet**.
+
+   Le panneau **Subnets** apparaît et liste les subnets associés à la route table ;
+4. Cliquez sur **Dissocier** en face du subnet à détacher.
+
+   Le subnet est dissocié : il utilise de nouveau la route table principale du VPC.
+
+  </TabItem> 
+  <TabItem value="api">
+
+## api {#tabhead-api}
+
+      La commande `PUT /compute/spaces/{spaceId}/routeTables/{id}/subnets/unlink` dissocie un subnet d'une route table.
+Après la dissociation, le subnet ne peut plus utiliser les routes de cette route table, mais utilise celles de la route table principale du VPC à la place.
+
+[Exemple de requête : Détacher une route table ↗](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/routeTables/{id}/subnets/unlink)
+  </TabItem>
+  <TabItem value="terraform">
+
+## terraform {#tabhead-terraform}
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
+  </TabItem>
+</Tabs>

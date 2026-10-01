@@ -42,9 +42,9 @@ The site is up in under two minutes. All changes are hot-reloaded.
 └── sidebars.ts
 ```
 
-The content is written in French first. English versions live under
-`i18n/en/docusaurus-plugin-content-docs/current/` and must stay in sync with
-the French source.
+The content is written in English first. French versions live under
+`i18n/fr/docusaurus-plugin-content-docs/current/` and must stay in sync with
+the English source.
 
 ## Contributing
 

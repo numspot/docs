@@ -1,0 +1,95 @@
+---
+title: Configurer une VM avec les user data
+sidebar_position: 8
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Configurer une VM avec les user data
+
+Vous avez la possibilité d'ajouter des user data à une [VM (Virtual Machine)](/docs/compute/concept/) pour y inclure une configuration plus personnalisée ou tout type de données. Ces user data peuvent contenir n'importe quel type d'information, comme un script ou des données supplémentaires. Vous pouvez également définir des tags pour donner des instructions précises sur l'emplacement de la VM ou ses adresses IP.
+
+Les user data sont des données associées à la VM par l'utilisateur lors de sa création. Bien que la VM puisse accéder aux user data à tout moment, celles-ci ne sont prises en compte qu'au moment de sa création. Cependant, vous pouvez créer un script dans l'image utilisée pour créer la VM, qui exige que les user data soient prises en compte à chaque démarrage de la VM. Cela vous permet de les modifier, puis d'arrêter et de redémarrer la VM pour que ces modifications soient appliquées.
+
+Pour obtenir des informations sur les user data d'une VM, saisissez l'adresse suivante dans le terminal de la VM ou dans un navigateur web : `169.254.169.254/latest/user-data`.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.vm.update**
+
+:::
+
+## Ajouter un script ou un texte aux user data
+
+Vous pouvez inclure un script ou des données supplémentaires dans les user data d'une VM. Ce script peut contenir des variables de texte et peut être configuré pour que la VM exécute une action spécifique au démarrage, par exemple, télécharger automatiquement un fichier à partir d'un bucket (conteneur). Cela vous permet de personnaliser et d'automatiser les actions de la VM dès son démarrage.
+
+:::warning
+Les user data doivent être encodées en Base64. La taille des user data encodées en Base64 ne doit pas dépasser 500 kibioctets (Kio).
+:::
+
+Ces user data peuvent être exécutés à chaque démarrage de la VM, si la VM contient un script adéquat :
+
+<Tabs>
+  <TabItem value="Console" label="Console" default>
+
+## Console {#tabhead-Console}
+
+:::info
+La configuration des user data n'est pas disponible depuis la console Numspot : l'assistant de création de VM ne comporte pas d'étape « User Data ».
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+  </TabItem>
+
+  <TabItem value="API" label="API">
+
+## API {#tabhead-API}
+
+    Pour les VM Linux, vous devez créer un script qui récupère et exécute les user data.
+
+    Pour les VM Windows, vous pouvez taper un script dans l'un des wrappers suivants pour l'exécuter au démarrage :
+
+    ```powershell title="Langage : Powershell"
+    # autoexecutepowershellnopasswd
+    <your_script>
+    # autoexecutepowershellnopasswd
+    ```
+
+    Exécute le script powershell sans init password administrator. Le script est lancé en tant qu'utilisateur administrateur.
+
+    ```powershell title="Langage : Powershell"
+    # autoexecutepowershell
+    <your_script>
+    # autoexecutepowershell
+    ```
+
+    Exécute le script powershell avec init password administrator. Le script est lancé en tant qu'utilisateur administrateur.
+
+    ```vbscript title="Langage : Vbscript"
+    # autoexecutevbs
+    <your_script>
+    # autoexecutevbs
+    ```
+
+    Exécute le script vbscript avec init password administrator. Le script est lancé en tant qu'utilisateur administrateur.
+
+    Si le script de démarrage rencontre un des wrappers ci-dessus, le script est sauvegardé dans un VB ou dans un fichier Powershell dans ses /userdata, et exécute ces fichiers lorsque la VM démarre.
+
+    :::tip
+    Vous pouvez séparer les commandes dans un script en utilisant des retours à la ligne, et ainsi exécuter toutes les commandes que vous souhaitez dans un terminal Windows Powershell.
+    :::
+  </TabItem>
+
+  <TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-Terraform}
+
+    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
+  </TabItem>
+</Tabs>

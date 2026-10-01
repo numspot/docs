@@ -1,34 +1,34 @@
 ---
-title: Concepts liés à l'identité - IAM
-sidebar_label: Concepts liés à l'identité
+title: Identity-related concepts - IAM
+sidebar_label: Identity-related concepts
 sidebar_position: 2
 draft: false
 last_update:
   date: 2026-09-18
 ---
 
-# Concepts liés à l'identité
+# Identity-related concepts
 
-## Principe général
+## General principle
 
-Chaque utilisateur doit avoir une identité propre (ID), conformément aux recommandations du référentiel SecNumCloud. Il est strictement déconseillé de partager les identités ou d'utiliser des identités génériques. De la même manière, il faut éviter l'utilisation de compte de service générique qui pourrait biaiser les informations de traçabilité ou d'audit.
+Each user must have their own identity (ID), in accordance with the recommendations of the SecNumCloud framework. Sharing identities or using generic identities is strictly discouraged. In the same way, you must avoid using a generic service account that could distort traceability or audit information.
 
-## Les différents types de comptes
+## The different types of accounts
 
-L'infrastructure et les technologies de l'**IAM** (Identity and Access Management) implémentent un cloisonnement strict des informations de chaque client. On distingue :
+The infrastructure and technologies of the IAM (Identity and Access Management) enforce strict isolation of each customer's information. A distinction is made between:
 
-- les comptes utilisateurs, rattachés à une personne physique ;
-- les comptes de service, rattachés à une machine ou à un type de service.
+- user accounts, attached to a natural person;
+- service accounts, attached to a machine or a type of service.
 
-### Compte utilisateur
+### User account
 
-Un compte utilisateur se compose d'une adresse électronique (identifiant) et d'un dispositif d'authentification supplémentaire. La chaîne de connexion repose sur :
+A user account consists of an email address (identifier) and an additional authentication mechanism. The login chain relies on:
 
-- un facteur de connaissance (le mot de passe) ;
-- un facteur de possession (application enrôlée sur le téléphone mobile) permettant de valider un mot de passe unique à expiration courte, appelé **TOTP** (Time-based One-Time Password).
+- a knowledge factor (the password);
+- a possession factor (an application enrolled on the mobile phone) used to validate a short-lived one-time password, called TOTP (Time-based One-Time Password).
 
-Ce dispositif à deux facteurs répond aux recommandations d'authentification **MFA** (Multi-Factor Authentication) du référentiel SecNumCloud.
+This two-factor mechanism meets the MFA (Multi-Factor Authentication) authentication recommendations of the SecNumCloud framework.
 
-### Compte de service ou compte système
+### Service account or system account
 
-Le commanditaire peut définir et gérer des comptes de service afin d'automatiser ou de piloter par programme son infrastructure. Un compte de service permet aussi de relier des ressources entre elles (machine à machine), comme un portail qui sollicite des composants métiers.
+The principal can define and manage service accounts in order to automate or programmatically drive their infrastructure. A service account can also link resources to each other (machine to machine), such as a portal that calls business components.

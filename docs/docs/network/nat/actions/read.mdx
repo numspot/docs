@@ -1,6 +1,6 @@
 ---
-title: Obtenir des informations sur vos nat gateways - Numspot
-sidebar_label: Obtenir des informations sur vos nat gateways
+title: Get information about your nat gateways - Numspot
+sidebar_label: Get information about your nat gateways
 sidebar_position: 3
 draft: false
 ---
@@ -9,14 +9,14 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Obtenir des informations sur vos nat gateways
+# Get information about your nat gateways
 
-Vous pouvez obtenir des informations à propos d'une ou plusieurs de vos [nat gateways (passerelles NAT)](/docs/network/nat/concepts/), comme son IP publique ou le [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) et subnet (sous-réseau) dans lesquels elles se trouvent.
+You can get information about one or more of your [nat gateways](/docs/network/nat/concepts/), such as their public IP or the [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) and subnet they belong to.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.natGateway.get**
 
@@ -24,42 +24,34 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
   <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
-
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/nat/read-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC → NAT Gateways.", hotspot: { x: 0, y: 0.6926, w: 0.194, h: 0.0568 } },
-    { img: "/img/walkthrough/nat/read-list.png", text: "Depuis Réseau → VPC → NAT Gateways, la liste de vos NAT gateways s'affiche avec leurs informations.", hotspot: { x: 0.2083, y: 0.3872, w: 0.5556, h: 0.2173 } },
+    { img: "/img/walkthrough/en/nat/list.png", text: "From the left-hand side menu, click Network → VPC → NAT Gateways.", hotspot: { x: 0, y: 0.6926, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/nat/list.png", text: "From Network → VPC → NAT Gateways, your NAT gateways are listed with their information.", hotspot: { x: 0.2083, y: 0.3872, w: 0.5556, h: 0.2173 } },
   ]}
 />
-1. Depuis le menu latéral gauche, cliquez sur **Réseau** → **VPC** → **NAT Gateways**.
 
 
-2. Vous arrivez ainsi sur la liste des nat gateways.
+1. From the left-hand side menu, click **Network** → **VPC** → **NAT Gateways**.
+
+
+2. You then arrive on the list of nat gateways.
 
   </TabItem>
   <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `GET /compute/spaces/{spaceId}/natGateways` command lists the nat gateways.
 
+[Example request: List all nat gateways ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/natGateways)
 
-La commande `GET /compute/spaces/{spaceId}/natGateways` permet de lister les nat gateways.
+The `GET /compute/spaces/{spaceId}/natGateways/{id}` command retrieves information about a nat gateway.
 
-[Exemple de requête : Lister tous les nat gateways ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/natGateways)
-
-La commande `GET /compute/spaces/{spaceId}/natGateways/{id}` permet de récupérer des informations concernant une nat gateway.
-
-[Exemple de requête : Récupérer les informations d'une nat gateway ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/natGateways/{id})
+[Example request: Retrieve the information of a nat gateway ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/natGateways/{id})
 
   </TabItem>
   <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/nat_gateway).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/nat_gateway).
 
   </TabItem>
 </Tabs>

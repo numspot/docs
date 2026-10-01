@@ -1,6 +1,6 @@
 ---
-title: Supprimer un Hybrid Bridge
-description: Supprimez un bridge pour mettre fin à la communication entre un VPC et les services managés
+title: Delete a Hybrid Bridge
+description: Delete a bridge to end communication between a VPC and the managed services
 sidebar_position: 3
 draft: false
 ---
@@ -8,14 +8,14 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Supprimer un Hybrid Bridge
+# Delete a Hybrid Bridge
 
-Vous pouvez supprimer un bridge pour mettre fin à la communication entre votre [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) et les services managés.
+You can delete a bridge to end communication between your [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) and the managed services.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **connectivity.bridge.delete**
 
@@ -25,16 +25,16 @@ Cette action nécessite les permissions IAM (Identity and Access Management) sui
 
 ## API {#tabhead-api}
 
-La commande `DELETE /connectivity/spaces/{spaceId}/bridges/{id}` supprime le bridge.
+The `DELETE /connectivity/spaces/{spaceId}/bridges/{id}` command deletes the bridge.
 
-[Exemple de requête : Suppression d'un Hybrid Bridge](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/bridges/{id})
+[Example request: Deleting a Hybrid Bridge](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/bridges/{id})
   </TabItem>
   <TabItem value="terraform" label="Terraform">
 
 ## Terraform {#tabhead-terraform}
 
 
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/hybrid_bridge).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/hybrid_bridge).
 
   </TabItem>
 </Tabs>

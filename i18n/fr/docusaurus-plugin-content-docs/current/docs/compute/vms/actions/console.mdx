@@ -1,0 +1,71 @@
+---
+title: Consulter la sortie de la console d'une VM
+sidebar_position: 5
+draft: false
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Walkthrough from "@site/src/components/Walkthrough";
+
+# Consulter la sortie de la console d'une VM
+
+Vous pouvez afficher la sortie de la console d'une [VM (Virtual Machine)](/docs/compute/concept/) pour diagnostiquer des problèmes de kernel ou des erreurs système. La console affiche les 64 Kio les plus récents de la sortie. Sur les VM Windows, la console est accessible uniquement lors du premier démarrage et ne fournit aucune sortie après le premier redémarrage.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.vm.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/vm/list.png", text: "Depuis le menu latéral gauche, cliquez sur Compute → VM pour accéder à la liste des VM.", hotspot: { x: 0, y: 0.4123, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/vm/list.png", text: "Cliquez sur l'ID de la VM pour ouvrir sa page de détails.", hotspot: { x: 0.2687, y: 0.4928, w: 0.0544, h: 0.0247 } },
+    { img: "/img/walkthrough/vm/details.png", text: "Dans la section « Général », cliquez sur « Voir la console ».", hotspot: { x: 0.4219, y: 0.3198, w: 0.083, h: 0.0494 } },
+    { img: "/img/walkthrough/vm/console.png", text: "La sortie console s'affiche. Cochez « Rafraîchissement automatique » ou cliquez sur « Rafraîchir » pour actualiser l'affichage.", hotspot: { x: 0.6253, y: 0.8253, w: 0.0608, h: 0.0494 } },
+  ]}
+/>
+
+1. Accédez à la VM
+
+   1. Depuis le menu latéral gauche, cliquez sur **Compute** → **VM** pour accéder à la liste des VM.
+
+   2. Cliquez sur l'ID de la VM pour accéder à la page de détails.
+
+2. Consultez la console
+
+   1. Dans la section Général, cliquez sur "Voir la console".
+
+   2. Cochez "Rafraîchissement automatique" si nécessaire ou sur "Rafraîchir".
+
+</TabItem>
+
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+La commande `GET /compute/spaces/{spaceId}/vms/{id}/consoleOutputs` permet d'obtenir la sortie de la console pour une VM. Cette console fournit la sortie la plus récente de 64 Kio.
+
+:::warning
+Sur les VM Windows, la console n'est gérée qu'au premier démarrage. Aucune sortie ne sera renvoyée après ce premier démarrage.
+:::
+
+[Exemple de requête : Récupérer la sortie console de la VM](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/vms/{id}/consoleOutputs)
+  </TabItem>
+
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
+  </TabItem>
+</Tabs>

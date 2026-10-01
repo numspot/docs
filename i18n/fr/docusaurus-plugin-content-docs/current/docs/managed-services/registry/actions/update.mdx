@@ -1,0 +1,58 @@
+---
+title: Mettre à jour la version de Harbor
+sidebar_label: Changer la version de Harbor
+sidebar_position: 4
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Changer la version de Harbor
+
+Vous pouvez mettre à jour la version de Harbor au sein de votre espace.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **registry.instance.update**
+
+:::
+<Tabs>
+
+{/* </TabItem> */}
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+    La requête `PUT /registry/spaces/{spaceId}/registries/{registryId}` permet de mettre à jour la version de Harbor.
+
+    ### Exemple de requête
+
+    ```json
+    {
+      "version": "2.14"
+    }
+    ```
+
+    ### Exemple de réponse
+
+    ```json
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440002",
+      "name": "mon-container-registry",
+      "status": {
+        "state": "UPGRADING",
+        "message": "Registry is being upgraded"
+      },
+      "version": "2.14",
+      "host": "mon-container-registry.registry.eu-west-2.numspot.com",
+      "visibility": "EXTERNAL"
+    }
+    ```
+
+    [Voir la spécification complète](/openapi/#tag/registry/PUT/registry/spaces/{spaceId}/registries/{registryId})
+
+</TabItem>
+</Tabs>

@@ -14,66 +14,66 @@ export const SECTION_META: Record<string, SectionMeta> = {
   iam: {
     icon: "/img/sidebar/iam.svg",
     description:
-      "Service centralisé pour l'authentification et la gestion des accès aux services Numspot.",
+      "Centralized service for authentication and access management across Numspot services.",
   },
   "managed-services": {
     icon: "/img/sidebar/managed-services.svg",
     description:
-      "Créer et gérer des conteneurs et des bases de données dans le cloud.",
+      "Create and manage containers and databases in the cloud.",
   },
   compute: {
     icon: "/img/sidebar/compute.svg",
-    description: "Créer et gérer des instances de calcul dans le cloud.",
+    description: "Create and manage compute instances in the cloud.",
   },
   network: {
     icon: "/img/sidebar/network.svg",
     description:
-      "Explorer les options de réseau avancées pour optimiser votre infrastructure réseau.",
+      "Explore advanced networking options to optimize your network infrastructure.",
   },
   storage: {
     icon: "/img/sidebar/storage.svg",
     description:
-      "Découvrir et configurer les solutions de stockage pour sécuriser et organiser vos données.",
+      "Discover and configure storage solutions to secure and organize your data.",
   },
   connectivity: {
     icon: "/img/sidebar/connectivity.svg",
     description:
-      "Explorer les options de connectivité avancées pour optimiser votre infrastructure réseau.",
+      "Explore advanced connectivity options to optimize your network infrastructure.",
   },
   terraform: {
     icon: "/img/sidebar/terraform.svg",
     description:
-      "Outil d'infrastructure as code (IaC) pour définir et gérer des ressources cloud de manière automatisée.",
+      "Infrastructure as code (IaC) tool to define and manage cloud resources in an automated way.",
   },
   glossary: {
     icon: "/img/sidebar/glossary.svg",
     description:
-      "Définitions des termes et concepts clés de la plateforme Numspot.",
+      "Definitions of the key terms and concepts of the Numspot platform.",
   },
   catalog: {
     icon: "/img/sidebar/catalog.svg",
     description:
-      "Consulter le catalogue des ressources disponibles avec leurs domaines, types et tarifs.",
+      "Browse the catalog of available resources with their domains, types and pricing.",
   },
   inventory: {
     icon: "/img/sidebar/inventory.svg",
     description:
-      "Visualiser l'ensemble des ressources déployées dans un espace Numspot.",
+      "View all the resources deployed in a Numspot space.",
   },
   support: {
     icon: "/img/sidebar/support.svg",
     description:
-      "Explorer les options de support pour garantir la continuité de vos services.",
+      "Explore support options to ensure the continuity of your services.",
   },
   faq: {
     icon: "/img/sidebar/faq.svg",
     description:
-      "Réponses aux questions générales et techniques les plus fréquentes.",
+      "Answers to the most common general and technical questions.",
   },
   "getting-started": {
     icon: "/img/sidebar/footprints.svg",
     description:
-      "Le parcours du premier utilisateur, de la première connexion aux premières ressources.",
+      "The first-user journey, from first sign-in to first resources.",
   },
 };
 

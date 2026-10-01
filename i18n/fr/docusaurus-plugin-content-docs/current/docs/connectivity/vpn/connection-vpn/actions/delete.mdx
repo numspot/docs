@@ -1,0 +1,64 @@
+---
+title: Supprimer une connexion VPN
+description: Supprimez un tunnel VPN sécurisé entre votre réseau d'entreprise et un VPC.
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer une connexion VPN
+
+Vous pouvez supprimer une connexion **VPN** (Virtual Private Network) entre votre réseau d'entreprise et un de vos [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) dans le Cloud Numspot.
+
+Cette action supprime le tunnel VPN sécurisé entre la [client gateway (passerelle client)](/docs/connectivity/vpn/client-gateway/concepts/) et la [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/).
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **connectivity.vpnconnection.delete**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+
+1. Cliquez à l'intérieur du dashboard **VPN Connections** pour faire apparaître les cases à cocher.
+2. Cochez la case de la connexion VPN que vous voulez supprimer.
+   La connexion VPN est sélectionnée et un menu d'actions apparaît.
+3. Cliquez sur **Supprimer**.
+   Une boîte de dialogue de confirmation s'affiche.
+4. Cliquez sur **Supprimer**.
+   La connexion VPN est supprimée.
+
+:::info
+Les ressources supprimées restent visibles pendant 1 heure.
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `DELETE /connectivity/spaces/{spaceId}/vpnConnections/{id}` supprime une connexion VPN spécifiée.
+Si vous souhaitez supprimer un VPC et toutes ses dépendances, il est recommandé de détacher la virtual gateway du VPC et de supprimer le VPC avant de supprimer la connexion VPN. Cela vous permet de supprimer le VPC sans attendre que la connexion VPN soit supprimée.
+
+[Exemple de requête : Suppression d'une VPN Connection](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/vpnConnections/{id})
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection).
+
+</TabItem>
+</Tabs>

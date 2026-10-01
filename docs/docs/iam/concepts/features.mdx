@@ -1,53 +1,53 @@
 ---
-title: Principales fonctionnalités de l'IAM - IAM
-sidebar_label: Principales fonctionnalités de l'IAM
+title: Main IAM features - IAM
+sidebar_label: Main IAM features
 sidebar_position: 4
 draft: false
 last_update:
   date: 2026-09-18
 ---
 
-# Principales fonctionnalités de l'IAM
+# Main IAM features
 
-## La création d'un utilisateur et l'authentification 2FA
+## User creation and 2FA authentication
 
-Un administrateur ou un utilisateur autorisé enregistre le nom, le prénom et l'adresse électronique d'un nouvel utilisateur. Ce dernier reçoit un lien par messagerie pour activer son compte, ce qui lui permet de définir son mot de passe et d'ajouter son smartphone comme second facteur d'authentification grâce à un QR code. L'utilisateur s'authentifie avec son adresse électronique et son mot de passe comme premier facteur d'authentification.
+An administrator or an authorized user records the surname, first name and email address of a new user. The latter receives a link by email to activate their account, which allows them to set their password and add their smartphone as a second authentication factor using a QR code. The user authenticates with their email address and their password as the first authentication factor.
 
-Pour le deuxième facteur d'authentification, un jeton **OTP** (One-Time Password), sous forme de code de vérification, est à générer sur le téléphone déclaré. Comme pour chaque opération de gestion d'un utilisateur (création, affichage, modification, suppression), vous pouvez utiliser la Console ou les API.
+For the second authentication factor, an OTP (One-Time Password) token, in the form of a verification code, must be generated on the declared phone. As with every user management operation (creation, display, modification, deletion), you can use the Console or the API.
 
 :::info
-Lien vers la [Documentation API](/docs/iam/concepts/api/).
+Link to the [API Documentation](/docs/iam/concepts/api/).
 :::
 
-## La création d'un compte de service
+## Service account creation
 
-Pour un compte de service, il n'y a pas de contrôle par un deuxième facteur pour la connexion. La réponse à la requête de création contient le jeton d'accès à utiliser pour appeler les services.
+For a service account, there is no second-factor check for the connection. The response to the creation request contains the access token to be used to call the services.
 
-## Les parcours de connexion
+## Connection journeys
 
-La connexion au système d'information se fait en suivant le protocole d'authentification **OpenID Connect** (OIDC), qui utilise le protocole sous-jacent **OAuth** 2.0. À l'issue des processus d'identification et d'authentification, l'utilisateur obtient un jeton d'accès (token) qu'il doit présenter à chaque accès à une ressource.
+Connection to the information system is performed by following the OpenID Connect (OIDC) authentication protocol, which uses the underlying OAuth 2.0 protocol. At the end of the identification and authentication processes, the user obtains an access token that they must present on each access to a resource.
 
-### Pour un compte utilisateur
+### For a user account
 
-La connexion d'un utilisateur se fera en deux temps, via une page d'authentification et le **TOTP** (Time-based One-Time Password). À l'issue des contrôles par le serveur d'identité, un jeton d'accès sera retourné à l'utilisateur.
+A user connection is performed in two stages, via an authentication page and the TOTP (Time-based One-Time Password). At the end of the checks by the identity server, an access token is returned to the user.
 
-### Pour un compte de service
+### For a service account
 
-Le schéma de connexion est plus simple car il ne passe pas par une double authentification avec un formulaire web. Le service présentera l'identifiant de son compte et la clé secrète au serveur d'identité qui, après contrôle, lui délivrera un jeton d'accès (token).
+The connection scheme is simpler because it does not go through two-factor authentication with a web form. The service presents its account identifier and the secret key to the identity server which, after checking, delivers an access token to it.
 
-## Le blocage et déblocage d'un compte utilisateur
+## Blocking and unblocking a user account
 
-Au bout de trois tentatives de connexion infructueuses, le compte de l'utilisateur est automatiquement bloqué. Il ne pourra plus se connecter au système. Pour réactiver un compte :
+After three unsuccessful connection attempts, the user account is automatically blocked. The user can no longer connect to the system. To reactivate an account:
 
-- assistance par administrateur/gestionnaire de compte : un administrateur ou un gestionnaire de compte peut intervenir en générant un lien de réactivation à envoyer à l'adresse électronique de l'utilisateur. Ils peuvent également directement mettre à jour l'état du compte utilisateur en le passant de "Inactif" à "Actif".
+- assistance by an administrator or account manager: an administrator or an account manager can intervene by generating a reactivation link to send to the user's email address. They can also directly update the state of the user account by switching it from "Inactive" to "Active".
 
-## La suppression d'un compte et de ses permissions
+## Deleting an account and its permissions
 
-La transaction de suppression de compte supprime définitivement le compte du système. Aussi, pour des raisons de traçabilité et d'audit, il est recommandé de réaliser cette opération en deux temps :
+The account deletion transaction permanently removes the account from the system. Therefore, for traceability and audit reasons, it is recommended to perform this operation in two stages:
 
-- rendre le compte inactif et supprimer ses permissions ;
-- procéder à la suppression du compte.
+- make the account inactive and delete its permissions;
+- proceed with the deletion of the account.
 
-## Le token d'accès
+## The access token
 
-Après avoir été identifié et authentifié, l'utilisateur ou le compte de service reçoit un jeton d'accès (token) valide pour une durée limitée. La Console présente ce jeton auprès de chaque ressource à laquelle il accède. Le compte de service fera de même dans l'entête de la requête à destination de l'API.
+After being identified and authenticated, the user or the service account receives an access token valid for a limited time. The Console presents this token to each resource it accesses. The service account does the same in the header of the request to the API.

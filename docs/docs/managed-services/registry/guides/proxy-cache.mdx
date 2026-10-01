@@ -1,41 +1,41 @@
 ---
-title: Configurer le proxy cache
+title: Configure the proxy cache
 sidebar_position: 3
 draft: false
 ---
 
-# Configurer le proxy cache
+# Configure the proxy cache
 
-Ce guide explique comment configurer et utiliser les projets proxy cache dans le Container Registry Numspot.
+This guide explains how to configure and use proxy cache projects in the Numspot Container Registry.
 
 ---
 
-## Vue d'ensemble
+## Overview
 
-Le proxy cache permet au Container Registry Numspot d'agir comme un cache de type pull-through pour les images provenant de registries externes. Lorsqu'une image demandée n'existe pas localement, Harbor la tire automatiquement depuis le registry amont configuré et la met en cache pour une utilisation ultérieure.
+The proxy cache allows the Numspot Container Registry to act as a pull-through cache for images coming from external registries. When a requested image does not exist locally, Harbor automatically pulls it from the configured upstream registry and caches it for later use.
 
-### Avantages
+### Benefits
 
-- **Réduction de la latence** : Tirez les images depuis un cache local au lieu de registries externes
-- **Économie de bande passante** : Réduisez le trafic réseau externe et les coûts associés
-- **Haute disponibilité** : Accédez aux images en cache même si le registry amont n'est pas disponible
-- **Évitement des limites de débit** : Évitez les limites de débit de Docker Hub en mettant les images en cache localement
-- **Environnements isolés (air-gapped)** : Fournissez un accès aux images externes dans des réseaux restreints
+- **Reduced latency**: Pull images from a local cache instead of external registries
+- **Bandwidth savings**: Reduce external network traffic and the associated costs
+- **High availability**: Access cached images even when the upstream registry is unavailable
+- **Rate-limit avoidance**: Avoid Docker Hub rate limits by caching images locally
+- **Air-gapped environments**: Provide access to external images in restricted networks
 
-### Registries amont pris en charge
+### Supported upstream registries
 
-Le Container Registry Numspot peut faire du proxy cache depuis :
+The Numspot Container Registry can proxy cache from:
 
 - Docker Hub
 - AWS Elastic Container Registry (ECR)
 - Azure Container Registry (ACR)
 - Google Container Registry (GCR) / Artifact Registry
 - Quay
-- D'autres instances Harbor
+- Other Harbor instances
 
 ---
 
-## Fonctionnement du proxy cache
+## How the proxy cache works
 
 ```text
 ┌─────────────┐        ┌──────────────────────────┐        ┌─────────────────┐
@@ -43,54 +43,54 @@ Le Container Registry Numspot peut faire du proxy cache depuis :
 │   Client    │───────▶│  Registry (Proxy Cache)  │───────▶│   Registry      │
 └─────────────┘        └──────────────────────────┘        └─────────────────┘
                                 │
-                                │ Au premier pull :
-                                │ 1. Vérifier le cache local
-                                │ 2. Si non trouvé, tirer depuis l'amont
-                                │ 3. Mettre l'image en cache
-                                │ 4. Retourner au client
+                                │ On the first pull:
+                                │ 1. Check the local cache
+                                │ 2. If not found, pull from upstream
+                                │ 3. Cache the image
+                                │ 4. Return to the client
                                 │
-                                │ Aux pulls suivants :
-                                │ 1. Retourner l'image en cache
-                                │ 2. Mettre à jour le cache si une version plus récente existe
+                                │ On subsequent pulls:
+                                │ 1. Return the cached image
+                                │ 2. Update the cache if a newer version exists
 ```
 
 ---
 
-## Prérequis
+## Prerequisites
 
-- **Instance de registry** : Container Registry Numspot opérationnel
-- **Identifiants administrateur** : Accès à l'interface Harbor avec les privilèges administrateur
-- **Identifiants du registry amont** : (Optionnel) Pour les dépôts privés
-- **Connectivité réseau** : Le registry doit pouvoir atteindre le registry amont
+- **Registry instance**: An operational Numspot Container Registry
+- **Administrator credentials**: Access to the Harbor interface with administrator privileges
+- **Upstream registry credentials**: (Optional) For private repositories
+- **Network connectivity**: The registry must be able to reach the upstream registry
 
 ---
 
-## Étape 1 : Créer un endpoint de réplication
+## Step 1: Create a replication endpoint
 
-Avant de créer un projet proxy cache, configurez un endpoint pour le registry amont.
+Before creating a proxy cache project, configure an endpoint for the upstream registry.
 
-### Via l'interface Harbor
+### Through the Harbor interface
 
-1. Connectez-vous à l'interface Harbor
-2. Naviguez vers **Administration** → **Registries**
-3. Cliquez sur **+ New Endpoint**
-4. Configurez l'endpoint :
+1. Log in to the Harbor interface
+2. Navigate to **Administration** → **Registries**
+3. Click **+ New Endpoint**
+4. Configure the endpoint:
 
-| Champ | Valeur |
+| Field | Value |
 |-------|-------|
 | **Provider** | `Docker Hub`, `AWS ECR`, etc. |
 | **Name** | `docker-hub-cache` |
 | **Endpoint URL** | `https://registry-1.docker.io` (Docker Hub) |
-| **Access ID** | Votre nom d'utilisateur Docker Hub (optionnel pour les dépôts publics) |
-| **Access Secret** | Votre mot de passe/token Docker Hub (optionnel pour les dépôts publics) |
-| **Verify Remote Cert** | Activé |
+| **Access ID** | Your Docker Hub username (optional for public repositories) |
+| **Access Secret** | Your Docker Hub password/token (optional for public repositories) |
+| **Verify Remote Cert** | Enabled |
 
-5. Cliquez sur **Test Connection**
-6. Cliquez sur **OK** pour enregistrer
+5. Click **Test Connection**
+6. Click **OK** to save
 
-### Exemples de configuration d'endpoint
+### Endpoint configuration examples
 
-#### Docker Hub (images publiques)
+#### Docker Hub (public images)
 
 ```json
 {
@@ -100,7 +100,7 @@ Avant de créer un projet proxy cache, configurez un endpoint pour le registry a
 }
 ```
 
-#### Docker Hub (images privées)
+#### Docker Hub (private images)
 
 ```json
 {
@@ -142,10 +142,10 @@ Avant de créer un projet proxy cache, configurez un endpoint pour le registry a
 }
 ```
 
-### Via API
+### Through the API
 
 ```bash
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/registries" \
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/registries" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -162,27 +162,27 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
 
 ---
 
-## Étape 2 : Créer un projet proxy cache
+## Step 2: Create a proxy cache project
 
-### Via l'interface Harbor
+### Through the Harbor interface
 
-1. Connectez-vous à l'interface Harbor
-2. Cliquez sur **Projects** → **New Project**
-3. Configurez le projet :
+1. Log in to the Harbor interface
+2. Click **Projects** → **New Project**
+3. Configure the project:
 
-| Champ | Valeur |
+| Field | Value |
 |-------|-------|
-| **Name** | `docker-hub-cache` (ou un nom descriptif) |
-| **Access Level** | `Public` (pour permettre le pull à tous) ou `Private` |
-| **Proxy Cache** | Activer |
-| **Endpoint** | Sélectionnez l'endpoint `docker-hub-cache` créé à l'étape 1 |
+| **Name** | `docker-hub-cache` (or a descriptive name) |
+| **Access Level** | `Public` (to allow pull for everyone) or `Private` |
+| **Proxy Cache** | Enable |
+| **Endpoint** | Select the `docker-hub-cache` endpoint created in step 1 |
 
-4. Cliquez sur **OK** pour créer
+4. Click **OK** to create
 
-### Via API
+### Through the API
 
 ```bash
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects" \
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -197,26 +197,26 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
 
 ---
 
-## Étape 3 : Utiliser le projet proxy cache
+## Step 3: Use the proxy cache project
 
-### Tirer des images
+### Pull images
 
-Tirez des images via le projet proxy cache :
+Pull images through the proxy cache project:
 
 ```bash
-# Tirer une image officielle Docker Hub via le cache
-docker pull reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/docker-hub-cache/library/nginx:latest
+# Pull an official Docker Hub image through the cache
+docker pull registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/docker-hub-cache/library/nginx:latest
 
-# Tirer une image d'un dépôt utilisateur via le cache
-docker pull reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/docker-hub-cache/myuser/myimage:v1.0
+# Pull an image from a user repository through the cache
+docker pull registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/docker-hub-cache/myuser/myimage:v1.0
 
-# Tirer une image AWS ECR via le cache
-docker pull reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/aws-ecr-cache/my-app:latest
+# Pull an AWS ECR image through the cache
+docker pull registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/aws-ecr-cache/my-app:latest
 ```
 
-### Dans Kubernetes
+### In Kubernetes
 
-Configurez Kubernetes pour tirer depuis le proxy cache :
+Configure Kubernetes to pull from the proxy cache:
 
 ```yaml
 apiVersion: v1
@@ -226,67 +226,67 @@ metadata:
 spec:
   containers:
   - name: nginx
-    image: reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/docker-hub-cache/library/nginx:latest
+    image: registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/docker-hub-cache/library/nginx:latest
 ```
 
-### Dans Docker Compose
+### In Docker Compose
 
 ```yaml
 version: '3'
 services:
   nginx:
-    image: reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/docker-hub-cache/library/nginx:latest
+    image: registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/docker-hub-cache/library/nginx:latest
 ```
 
 ---
 
-## Étape 4 : Configurer le pull-through d'images
+## Step 4: Configure image pull-through
 
-### Mise en cache automatique
+### Automatic caching
 
-Lorsque vous tirez une image via un projet proxy cache :
+When you pull an image through a proxy cache project:
 
-1. Harbor vérifie si l'image existe localement
-2. Si elle n'est pas trouvée :
-   - Harbor tire l'image depuis le registry amont
-   - La stocke dans le projet proxy cache
-   - La retourne au client
-3. Les pulls ultérieurs servent l'image en cache
+1. Harbor checks whether the image exists locally
+2. If it is not found:
+   - Harbor pulls the image from the upstream registry
+   - Stores it in the proxy cache project
+   - Returns it to the client
+3. Subsequent pulls serve the cached image
 
-### Comportement du cache
+### Cache behavior
 
-| Scénario | Comportement |
+| Scenario | Behavior |
 |----------|----------|
-| **Premier pull** | Tirer depuis l'amont, mettre en cache localement |
-| **Pulls suivants** | Servir depuis le cache |
-| **Nouveau tag en amont** | Tirer et mettre en cache la nouvelle version |
-| **Image supprimée en amont** | Continuer à servir la version en cache |
-| **Amont non disponible** | Servir la version en cache si disponible |
+| **First pull** | Pull from upstream, cache locally |
+| **Subsequent pulls** | Serve from the cache |
+| **New tag upstream** | Pull and cache the new version |
+| **Image deleted upstream** | Keep serving the cached version |
+| **Upstream unavailable** | Serve the cached version if available |
 
 ---
 
-## Configuration avancée
+## Advanced configuration
 
-### Mettre en cache plusieurs registries
+### Cache multiple registries
 
-Créez des projets proxy cache séparés pour différents registries amonts :
+Create separate proxy cache projects for different upstream registries:
 
-| Nom du Projet | Registry Amont | Cas d'utilisation |
+| Project Name | Upstream Registry | Use case |
 |--------------|-------------------|----------|
-| `docker-hub-cache` | Docker Hub | Images officielles, dépôts Docker Hub |
-| `aws-ecr-cache` | AWS ECR | Images AWS privées |
-| `gcr-cache` | Google GCR | Images Google Cloud |
-| `quay-cache` | Quay.io | Dépôts Quay |
+| `docker-hub-cache` | Docker Hub | Official images, Docker Hub repositories |
+| `aws-ecr-cache` | AWS ECR | Private AWS images |
+| `gcr-cache` | Google GCR | Google Cloud images |
+| `quay-cache` | Quay.io | Quay repositories |
 
-### Cache en cascade (multi-niveaux)
+### Cascading cache (multi-tier)
 
-Configurez le proxy cache Harbor-vers-Harbor :
+Configure Harbor-to-Harbor proxy cache:
 
 ```text
 External Registry → Harbor Instance A (Prod) → Harbor Instance B (DR)
 ```
 
-Créez des endpoints pointant vers d'autres registries Numspot :
+Create endpoints pointing to other Numspot registries:
 
 ```bash
 curl -X POST "https://registry-{dest-id}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/registries" \
@@ -305,141 +305,141 @@ curl -X POST "https://registry-{dest-id}.hcp.cloudgouv-eu-west-1.numspot.com/api
 
 ---
 
-## Surveillance du proxy cache
+## Monitoring the proxy cache
 
-### Consulter les images en cache
+### View cached images
 
-1. Naviguez vers le projet proxy cache dans l'interface Harbor
-2. Consultez les dépôts pour voir les images en cache
-3. Vérifiez le nombre de pulls et la date du dernier pull
+1. Navigate to the proxy cache project in the Harbor interface
+2. Browse the repositories to see the cached images
+3. Check the pull count and the last pull date
 
-### Via API
+### Through the API
 
 ```bash
-# Lister les dépôts dans le projet proxy cache
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/docker-hub-cache/repositories" \
+# List the repositories in the proxy cache project
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/docker-hub-cache/repositories" \
   -u "admin:{password}"
 
-# Obtenir les détails d'un dépôt
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/docker-hub-cache/repositories/library%2Fnginx" \
+# Get the details of a repository
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/docker-hub-cache/repositories/library%2Fnginx" \
   -u "admin:{password}"
 ```
 
-### Statistiques du cache
+### Cache statistics
 
-Surveillez les performances du cache :
+Monitor cache performance:
 
-- **Taux de succès** : Pourcentage de pulls servis depuis le cache
-- **Utilisation du stockage** : Espace consommé par les images en cache
-- **Fréquence de pull** : Images les plus fréquemment tirées
-- **Latence amont** : Temps pour tirer depuis l'amont en cas de cache miss
+- **Hit rate**: Percentage of pulls served from the cache
+- **Storage usage**: Space consumed by the cached images
+- **Pull frequency**: Most frequently pulled images
+- **Upstream latency**: Time to pull from upstream on a cache miss
 
 ---
 
-## Maintenance du cache
+## Cache maintenance
 
-### Rafraîchissement manuel du cache
+### Manual cache refresh
 
-Forcez le rafraîchissement des images en cache :
+Force a refresh of the cached images:
 
-1. Naviguez vers le projet proxy cache
-2. Sélectionnez le dépôt
-3. Cliquez sur **Delete** pour supprimer l'image en cache
-4. Tirez à nouveau l'image pour la rafraîchir depuis l'amont
+1. Navigate to the proxy cache project
+2. Select the repository
+3. Click **Delete** to remove the cached image
+4. Pull the image again to refresh it from upstream
 
-### Via API
+### Through the API
 
 ```bash
-# Supprimer un dépôt en cache
-curl -X DELETE "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/docker-hub-cache/repositories/library%2Fnginx" \
+# Delete a cached repository
+curl -X DELETE "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/docker-hub-cache/repositories/library%2Fnginx" \
   -u "admin:{password}"
 ```
 
-### Nettoyage automatique du cache
+### Automatic cache cleanup
 
-Configurez des politiques de rétention :
+Configure retention policies:
 
-1. Naviguez vers **Administration** → **Configuration** → **System Settings**
-2. Définissez **Artifact Read-only** pour des projets spécifiques
-3. Configurez le nettoyage automatique (voir [Nettoyage automatique](./garbage-collection.mdx))
+1. Navigate to **Administration** → **Configuration** → **System Settings**
+2. Set **Artifact Read-only** for specific projects
+3. Configure automatic cleanup (see [Automatic cleanup](./garbage-collection.mdx))
 
 ---
 
-## Bonnes pratiques
+## Best practices
 
 ### Performance
 
-1. **Proximité géographique** : Créez des projets proxy cache dans des régions proches de vos workloads
-2. **Pré-chauffage du cache** : Tirez les images fréquemment utilisées avant le déploiement en production
-3. **Utilisez des projets publics** : Rendez les projets proxy cache publics pour éviter la surcharge d'authentification
-4. **Surveillez l'utilisation** : Suivez les taux de succès du cache et ajustez la stratégie en conséquence
+1. **Geographic proximity**: Create proxy cache projects in regions close to your workloads
+2. **Cache pre-warming**: Pull frequently used images before deployment to production
+3. **Use public projects**: Make proxy cache projects public to avoid authentication overhead
+4. **Monitor usage**: Track cache hit rates and adjust the strategy accordingly
 
-### Sécurité
+### Security
 
-1. **Validez les images amont** : Activez l'analyse de vulnérabilités pour les images en cache
-2. **Utilisez des images signées** : Configurez des politiques de confiance pour les registries amonts
-3. **Limitez l'accès** : Utilisez des projets proxy cache privés pour les images sensibles
-4. **Auditez les pulls** : Consultez les journaux d'audit pour les accès au proxy cache
+1. **Validate upstream images**: Enable vulnerability scanning for cached images
+2. **Use signed images**: Configure trust policies for upstream registries
+3. **Restrict access**: Use private proxy cache projects for sensitive images
+4. **Audit pulls**: Review the audit logs for proxy cache access
 
-### Opérations
+### Operations
 
-1. **Définissez des quotas de stockage** : Configurez des quotas sur les projets proxy cache pour empêcher une croissance non bornée
-2. **Nettoyage régulier** : Mettez en œuvre des politiques de nettoyage automatique
-3. **Surveillez l'amont** : Surveillez la disponibilité du registry amont et mettez à jour les endpoints si nécessaire
-4. **Documentez les correspondances** : Maintenez une documentation des correspondances entre projets proxy cache et registries amonts
+1. **Set storage quotas**: Configure quotas on proxy cache projects to prevent unbounded growth
+2. **Regular cleanup**: Implement automatic cleanup policies
+3. **Monitor upstream**: Monitor upstream registry availability and update the endpoints if necessary
+4. **Document the mappings**: Maintain documentation of the mappings between proxy cache projects and upstream registries
 
 ---
 
-## Résolution des problèmes
+## Troubleshooting
 
-### Problème 1 : image non mise en cache
+### Issue 1: image not cached
 
-**Symptôme** : Les pulls sont lents, les images n'apparaissent pas dans le projet proxy cache
+**Symptom**: Pulls are slow, images do not appear in the proxy cache project
 
-**Solutions** :
-1. Vérifiez que le projet proxy cache est correctement configuré
-2. Vérifiez la configuration de l'endpoint et les identifiants
-3. Vérifiez la connectivité réseau vers le registry amont
-4. Consultez les journaux Harbor :
+**Solutions**:
+1. Check that the proxy cache project is configured correctly
+2. Check the endpoint configuration and the credentials
+3. Check network connectivity to the upstream registry
+4. Review the Harbor logs:
 ```bash
 kubectl logs -n registry-instance-{registryId} deployment/harbor-core
 ```
 
-### Problème 2 : échec d'authentification
+### Issue 2: authentication failure
 
-**Symptôme** : Impossible de tirer des images privées via le proxy cache
+**Symptom**: Unable to pull private images through the proxy cache
 
-**Solutions** :
-1. Vérifiez que les identifiants de l'endpoint sont corrects
-2. Vérifiez que les identifiants ont les permissions de pull sur le registry amont
-3. Mettez à jour les identifiants de l'endpoint s'ils ont expiré
-4. Testez la connexion de l'endpoint dans l'interface Harbor
+**Solutions**:
+1. Check that the endpoint credentials are correct
+2. Check that the credentials have pull permissions on the upstream registry
+3. Update the endpoint credentials if they have expired
+4. Test the endpoint connection in the Harbor interface
 
-### Problème 3 : images en cache obsolètes
+### Issue 3: stale cached images
 
-**Symptôme** : Les images en cache sont datées
+**Symptom**: The cached images are out of date
 
-**Solutions** :
-1. Supprimez le dépôt en cache pour forcer le rafraîchissement
-2. Tirez avec un digest spécifique au lieu d'un tag
-3. Configurez des politiques d'invalidation du cache
-4. Utilisez le flag `--no-cache` pour contourner le cache
+**Solutions**:
+1. Delete the cached repository to force a refresh
+2. Pull with a specific digest instead of a tag
+3. Configure cache invalidation policies
+4. Use the `--no-cache` flag to bypass the cache
 
-### Problème 4 : limites de débit du registry amont
+### Issue 4: upstream registry rate limits
 
-**Symptôme** : Impossible de tirer de nouvelles images, erreurs de limite de débit
+**Symptom**: Unable to pull new images, rate-limit errors
 
-**Solutions** :
-1. Utilisez un endpoint authentifié (Docker Hub offre des limites plus élevées pour les utilisateurs authentifiés)
-2. Pré-chauffez le cache pendant les heures creuses
-3. Réduisez la fréquence de pull en utilisant des tags d'image stables
-4. Envisagez de mettre en miroir les images critiques au lieu d'utiliser le proxy cache
+**Solutions**:
+1. Use an authenticated endpoint (Docker Hub offers higher limits for authenticated users)
+2. Pre-warm the cache during off-peak hours
+3. Reduce pull frequency by using stable image tags
+4. Consider mirroring critical images instead of using the proxy cache
 
 ---
 
-## Référence API
+## API reference
 
-### Créer un projet proxy cache
+### Create a proxy cache project
 
 ```http
 POST /api/v2.0/projects
@@ -456,21 +456,21 @@ Content-Type: application/json
 }
 ```
 
-### Lister les projets proxy cache
+### List proxy cache projects
 
 ```http
 GET /api/v2.0/projects
 Authorization: Basic {base64(admin:password)}
 ```
 
-### Obtenir les détails d'un projet
+### Get project details
 
 ```http
 GET /api/v2.0/projects/{project_id}
 Authorization: Basic {base64(admin:password)}
 ```
 
-### Lister les dépôts en cache
+### List cached repositories
 
 ```http
 GET /api/v2.0/projects/{project_name}/repositories
@@ -481,10 +481,10 @@ Authorization: Basic {base64(admin:password)}
 
 ## Limitations
 
-- Le proxy cache est en **lecture seule** : Impossible de pousser des images vers les projets proxy cache
-- Les images sont mises en cache au **premier pull** : Pas de pre-fetching automatique
-- Le cache est **basé sur les tags** : L'utilisation de digests contourne la validation du cache
-- Le stockage est **non borné par défaut** : Configurez des quotas pour limiter la croissance
-- Disponibilité amont : Les cache misses nécessitent une connectivité avec le registry amont
+- The proxy cache is **read-only**: You cannot push images to proxy cache projects
+- Images are cached on the **first pull**: No automatic pre-fetching
+- The cache is **tag-based**: Using digests bypasses cache validation
+- Storage is **unbounded by default**: Configure quotas to limit growth
+- Upstream availability: Cache misses require connectivity to the upstream registry
 
 ---

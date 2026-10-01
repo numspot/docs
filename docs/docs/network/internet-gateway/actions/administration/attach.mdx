@@ -1,22 +1,21 @@
 ---
-title: Attacher une internet gateway à un VPC - Numspot
-sidebar_label: Attacher une internet gateway à un VPC
+title: Attach an internet gateway to a VPC - Numspot
+sidebar_label: Attach an internet gateway to a VPC
 sidebar_position: 2
 draft: false
 ---
 
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
-import Walkthrough from "@site/src/components/Walkthrough";
 
-# Attacher une internet gateway à un VPC
+# Attach an internet gateway to a VPC
 
-Vous pouvez attacher une [internet gateway](/docs/network/internet-gateway/concepts/) à un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) afin de connecter des [VM (Virtual Machine)](/docs/compute/concept/) dans un ou plusieurs subnet (sous-réseau) à Internet de manière directe grâce à une route dans leur [route table (table de routage)](/docs/network/route-table/concepts/), des règles de [security group (groupe de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) et des IP (Internet Protocol) publiques (IP publique).
+You can attach an [internet gateway](/docs/network/internet-gateway/concepts/) to a [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud) in order to connect [VM](/docs/compute/concept/) (Virtual Machine) in one or more subnets directly to the internet, through a route in their [route table](/docs/network/route-table/concepts/), [security group](/docs/compute/security-groups/concepts/concept-sg/) rules and public IP.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.internetGateway.update**
 
@@ -25,55 +24,43 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
+1. Log in to the Numspot console.
 
-<Walkthrough
-  steps={[
-    { img: "/img/walkthrough/internet-gateway/att-01-menu.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC → Internet Gateways.", hotspot: { x: 0, y: 0.6358, w: 0.194, h: 0.0568 } },
-    { img: "/img/walkthrough/internet-gateway/att-01-menu.png", text: "Depuis Réseau → VPC → Internet Gateways, ouvrez le menu « Actions » de l'internet gateway, puis cliquez sur « Lier à un VPC ».", hotspot: { x: 0.875, y: 0.6086, w: 0.0884, h: 0.0457 } },
-    { img: "/img/walkthrough/internet-gateway/att-02-modal.png", text: "Dans la boîte de dialogue, sélectionnez le VPC à associer, puis cliquez sur « Lier ».", hotspot: { x: 0.2917, y: 0.3342, w: 0.4167, h: 0.3317 } },
-  ]}
-/>
+2. From the left-hand side menu, click **Network** → **VPC** → **Internet Gateways**.
 
-1. Connectez-vous sur la console Numspot.
+    ![Menu VPC](/img/console/network/vpc/en-menu_vpc.png)
 
-2. Dans le menu de gauche, cliquez sur **Réseau** → **VPC** → **Internet Gateways**.
+3. Identify the internet gateway that you want to associate with a VPC, then from the list of actions, click **Link to a VPC**.
 
+    ![Actions Internet Gateway](/img/console/network/vpc/internet-gateway/en-actions_internet_gateway.png)
 
-3. Identifiez l'internet gateway que vous souhaitez associer à un VPC, puis depuis la liste des actions, cliquez sur **Lier à un VPC**.
+    A new **Link to a VPC** dialog box appears.
 
+    ![Link VPC Internet Gateway](/img/console/network/vpc/internet-gateway/en-link_vpc_internet_gateway.png)
 
-    Une nouvelle boîte de dialogue **Lier à un VPC** apparaît.
+4. Select the VPC to associate from the list offered.
 
+5. Click **Link**. The internet gateway is linked to the VPC.
 
-4. Sélectionnez le VPC à associer dans la liste proposée.
+    A confirmation message "The VPC has been successfully linked to the Internet Gateway" appears.
 
-5. Cliquez sur **Lier**. L'internet gateway est liée au VPC.
-
-    Un message de confirmation "Le VPC a bien été lié à l'Internet Gateway" apparaît.
-
+    ![VPC Linked Internet Gateway Success](/img/console/network/vpc/internet-gateway/vpc_linked_internal_gateway_success.png)
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `PUT /compute/spaces/{spaceId}/internetGateways/{id}/vpcs/link` command attaches an internet gateway to a VPC.
 
+To enable the connection between the internet and a VPC, you must attach an internet gateway to that VPC.
 
-La commande `PUT /compute/spaces/{spaceId}/internetGateways/{id}/vpcs/link` attache une internet gateway à un VPC.
+[Example request: Attach an internet gateway to a VPC ↗](/openapi/#tag/compute/PUT/compute/spaces/%7BspaceId%7D/internetGateways/%7Bid%7D/vpcs/link)
 
-Pour activer la connexion entre Internet et un VPC, vous devez attacher une internet gateway à ce VPC.
-
-[Exemple de requête : Attacher une internet gateway à un VPC ↗](/openapi/#tag/compute/PUT/compute/spaces/%7BspaceId%7D/internetGateways/%7Bid%7D/vpcs/link)
-
-La commande qui attache une internet gateway à un VPC retourne un code HTTP 204 NO CONTENT, indiquant que l'opération a été effectuée et qu'aucun contenu n'est renvoyé dans la réponse.
+The command that attaches an internet gateway to a VPC returns an HTTP 204 NO CONTENT code, indicating that the operation has been performed and that no content is returned in the response.
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/internet_gateway).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/internet_gateway).
 
 </TabItem>
 </Tabs>

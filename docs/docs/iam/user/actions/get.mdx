@@ -1,7 +1,7 @@
 ---
-title: Obtenir les informations d'un utilisateur - IAM
-description: "Consultez les informations d'un utilisateur IAM, son statut de compte, ses espaces assignés et ses rôles et permissions, via la console ou l'API."
-sidebar_label: Obtenir les informations d'un utilisateur
+title: Get user information - IAM
+description: "View an IAM user's information, account status, assigned spaces and roles and permissions, via the console or the API."
+sidebar_label: Get user information
 sidebar_position: 4
 draft: false
 last_update:
@@ -12,14 +12,14 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Obtenir les informations d'un utilisateur
+# Get user information
 
-Vous pouvez retrouver toutes les informations de base d'un utilisateur, y compris l'état de son compte dans le système.
+You can find all the basic information about a user, including the state of their account in the system.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **iam.user.get**
 
@@ -32,25 +32,25 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/user/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Utilisateurs.", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
-    { img: "/img/walkthrough/user/create-01-list.png", text: "Dans le tableau « Utilisateurs », cliquez sur l'identifiant de l'utilisateur (le champ « Rechercher » permet de le filtrer).", hotspot: { x: 0.234, y: 0.32, w: 0.11, h: 0.035 } },
-    { img: "/img/walkthrough/user/detail.png", text: "La page « Détails utilisateur » affiche ses informations générales : prénom, nom, e-mail et statut du compte.", hotspot: { x: 0.2451, y: 0.3255, w: 0.7049, h: 0.17 } },
-    { img: "/img/walkthrough/user/detail.png", text: "La section « Espaces assignés » liste ses espaces ; cliquez sur « X rôles » ou « X permissions » pour détailler les rôles et permissions par espace.", hotspot: { x: 0.223, y: 0.5362, w: 0.76, h: 0.35 } },
+    { img: "/img/walkthrough/en/user/list.png", text: "From the left-hand side menu, click IAM → Users.", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/user/list.png", text: "In the “Users” table, click the user's ID (the “Search” field filters the list).", hotspot: { x: 0.234, y: 0.32, w: 0.11, h: 0.035 } },
+    { img: "/img/walkthrough/en/user/detail.png", text: "The “User details” page displays their general information: first name, last name, email and account status.", hotspot: { x: 0.2451, y: 0.3255, w: 0.7049, h: 0.17 } },
+    { img: "/img/walkthrough/en/user/detail.png", text: "The “Assigned spaces” section lists their spaces; click “X roles” or “X permissions” to view the roles and permissions per space.", hotspot: { x: 0.223, y: 0.5362, w: 0.76, h: 0.35 } },
   ]}
 />
 
-1. Dans le tableau **Utilisateurs**, cliquez sur l'identifiant associé à l'utilisateur pour lequel vous souhaitez obtenir des informations.
+1. In the **Users** table, click the identifier of the user whose information you want to retrieve.
 :::tip
-Vous avez la possibilité de rechercher un utilisateur en particulier en utilisant le champ **Rechercher**.
+You can search for a specific user using the **Search** field.
 :::
 
-2. La page "Détails utilisateur" s'affiche, avec les informations générales de l'utilisateur : prénom, nom, e-mail et statut du compte.
+2. The "User details" page is displayed, with the user's general information: first name, last name, email and account status.
 
-3. Vous pouvez aussi voir la liste des espaces assignés à cet utilisateur, ainsi que les rôles et les permissions qui lui sont attribués, pour un espace donné.
+3. You can also view the list of spaces assigned to the user, as well as the roles and permissions assigned to them for a given space.
 
-4. En cliquant sur **X rôles**, vous pourrez voir la liste des rôles attribués à cet utilisateur sur un des espaces auxquels il est associé.
+4. Clicking **X roles** displays the list of roles assigned to the user on one of the spaces they are associated with.
 
-5. En cliquant sur **X permissions**, vous pourrez afficher la liste des permissions attribuées à cet utilisateur sur un des espaces auxquels il est associé.
+5. Clicking **X permissions** displays the list of permissions assigned to the user on one of the spaces they are associated with.
 
 </TabItem>
 <TabItem value="api" label="API">
@@ -58,17 +58,17 @@ Vous avez la possibilité de rechercher un utilisateur en particulier en utilisa
 ## API {#tabhead-api}
 
 
-### Obtenir les détails d'un utilisateur dans une organisation
+### Get the details of a user in an organisation
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/users/{userId}
 
-### Exemple
+### Example
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users/{userId}'
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -83,20 +83,20 @@ curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users/
 ```
 
 :::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
-### Obtenir les détails d'un utilisateur dans un espace
+### Get the details of a user in a space
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/users/{userId}
 
-### Exemple
+### Example
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/users/{userId}'
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -111,20 +111,20 @@ curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/users/{userId}'
 ```
 
 :::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
-### Obtenir la liste des espaces assignés à un utilisateur
+### Get the list of spaces assigned to a user
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/users/{userId}/spaces
 
-### Exemple
+### Example
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users/{userId}/spaces'
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -139,20 +139,20 @@ curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users/
 ```
 
 :::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
-### Obtenir les rôles et permissions d'un compte utilisateur dans une organisation
+### Get the roles and permissions of a user account in an organisation
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}
 
-### Exemple
+### Example
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}'
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -166,20 +166,20 @@ curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/iampol
 ```
 
 :::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
-### Obtenir les rôles et permissions d'un compte utilisateur dans un espace
+### Get the roles and permissions of a user account in a space
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}
 
-### Exemple
+### Example
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}'
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -193,7 +193,7 @@ curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/iampolicy/{subjectTy
 ```
 
 :::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
 </TabItem>
@@ -202,7 +202,7 @@ Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la m
 ## Terraform {#tabhead-terraform}
 
 
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/user).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/user).
 
 </TabItem>
 </Tabs>

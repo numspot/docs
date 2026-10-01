@@ -1,5 +1,5 @@
 ---
-title: Supprimer un VPC
+title: Delete a VPC
 sidebar_position: 4
 draft: false
 ---
@@ -7,14 +7,14 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Supprimer un VPC
+# Delete a VPC
 
-Vous pouvez supprimer un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) vide dont vous n'avez plus besoin. 
+You can delete an empty [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud) that you no longer need.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.vpc.delete**
 
@@ -24,50 +24,48 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/vpc/del-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC.", hotspot: { x: 0, y: 0.5222, w: 0.194, h: 0.0568 } },
-    { img: "/img/walkthrough/vpc/del-01-list.png", text: "Cochez le VPC à supprimer, puis cliquez sur « Supprimer » (ou via le menu « Actions » de la ligne → « Supprimer le VPC »).", hotspot: { x: 0.3513, y: 0.3181, w: 0.1001, h: 0.0741 } },
-    { img: "/img/walkthrough/vpc/del-02-modal.png", text: "Confirmation forte : saisissez le nom exact du VPC, puis cliquez sur « Supprimer ». La suppression est définitive.", hotspot: { x: 0.2847, y: 0.1924, w: 0.4306, h: 0.6153 } },
+    { img: "/img/walkthrough/en/vpc/list.png", text: "From the left-hand side menu, click Network → VPC.", hotspot: { x: 0, y: 0.5222, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/vpc/list-selected.png", text: "Tick the VPC to delete, then click “Delete” (or via the row “Actions” menu → “Delete the VPC”).", hotspot: { x: 0.327, y: 0.3304, w: 0.0681, h: 0.0494 } },
+    { img: "/img/walkthrough/en/vpc/delete-modal.png", text: "Strong confirmation: enter the exact VPC name, then click “Delete”. Deletion is permanent.", hotspot: { x: 0.2917, y: 0.2188, w: 0.4167, h: 0.5624 } },
   ]}
 />
 
+
  :::info
- Avant de commencer, assurez-vous de supprimer ou détacher toutes les ressources liées au VPC, telles que : 
- * [VM (Virtual Machines)](/docs/compute/concept/)
- * subnets (sous-réseaux)
- * IP (Internet Protocol) publique (Public IP)
- ::: 
+ Before you begin, make sure to delete or detach all resources linked to the VPC, such as:
+ * [VM](/docs/compute/concept/) (Virtual Machine)
+ * subnets
+ * public IP
+ :::
 
- 1. Connectez-vous sur la console Numspot.  
+ 1. Log in to the Numspot console.
 
- 2. Depuis le menu latéral gauche, cliquez sur **Réseau** → **VPC** → **VPC**. 
+ 2. From the left-hand side menu, click **Network** → **VPC** → **VPC**.
 
- 3. La liste des VPC apparaît.
+ 3. The list of VPC appears.
 
- 4. Identifiez le VPC à supprimer puis cliquez sur **Actions**. Une boîte de dialogue d'options apparaîtra.
+ 4. Identify the VPC to delete, then click **Actions**. An options dialog box appears.
 
- 5. Cliquez sur **Supprimer le VPC**. Le VPC est supprimé. 
-    :::warning 
-    Si le VPC a encore des dépendances avec d'autres objets, la suppression sera impossible. Avant de continuer, assurez-vous de supprimer ou détacher toutes les dépendances et supprimez ensuite le VPC.  
-    ::: 
+ 5. Click **Delete the VPC**. The VPC is deleted.
+    :::warning
+    If the VPC still has dependencies with other objects, the deletion will not be possible. Before continuing, make sure to delete or detach all dependencies, then delete the VPC.
+    :::
 
-   </TabItem> 
+   </TabItem>
    <TabItem value="API">
 
 :::info
-Avant de commencer, assurez-vous de supprimer ou détacher toutes les ressources liées au VPC, telles que :
+Before you begin, make sure to delete or detach all resources linked to the VPC, such as:
 * VM
-* subnets (sous-réseaux)
-* IP publique (Public IP)
+* subnets
+* public IP
 :::
 
-La commande `DELETE /compute/spaces/{spaceId}/vpcs/{id}` permet de supprimer un cloud privé virtuel (VPC).
+The `DELETE /compute/spaces/{spaceId}/vpcs/{id}` command lets you delete a VPC.
 
-[Exemple de requête : Suppression d'un VPC](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/vpcs/{id})
+[Example request: Deleting a VPC](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/vpcs/{id})
   </TabItem>
   <TabItem value="Terraform" label="Terraform">
-
-## Terraform {#tabhead-Terraform}
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpc).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpc).
   </TabItem>
 </Tabs>

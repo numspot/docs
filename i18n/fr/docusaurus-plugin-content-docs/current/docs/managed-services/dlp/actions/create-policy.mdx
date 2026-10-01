@@ -1,0 +1,113 @@
+---
+title: Créer une policy DLP - DLP managé
+sidebar_label: Créer une policy DLP
+sidebar_position: 4
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Créer une policy DLP
+
+Créez une [policy DLP](/docs/managed-services/dlp/concepts) (politique DLP) pour regrouper un ensemble de règles et définir l'action par défaut lorsqu'aucune règle ne déclenche une action terminale.
+
+Une policy est composée d'une liste ordonnée de règles et d'une action par défaut (`pass` ou `block`). La policy est créée en tant que brouillon. Pour l'activer, publiez-la dans un [ruleset](/docs/managed-services/dlp/concepts) (ensemble de règles).
+
+## Permissions
+
+:::info
+Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+
+- **rule_editor**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/policies-list.png", text: "Dans la console DLP, cliquez sur Policies dans le menu latéral.", hotspot: { x: 0.006, y: 0.184, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/policies-list.png", text: "Cliquez sur « New Policy » en haut à droite.", hotspot: { x: 0.894, y: 0.030, w: 0.089, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/policy-create-form.png", text: "Renseignez le nom de la policy, sélectionnez le Platform Type et, si besoin, une description.", hotspot: { x: 0.184, y: 0.109, w: 0.800, h: 0.300 } },
+    { img: "/img/walkthrough/dlp/policy-create-form.png", text: "Choisissez l'action par défaut appliquée quand aucune règle ne correspond : Pass ou Block.", hotspot: { x: 0.378, y: 0.528, w: 0.082, h: 0.050 } },
+    { img: "/img/walkthrough/dlp/policy-create-form.png", text: "Ajoutez les règles à inclure via la liste déroulante « Add Rule » (visible après avoir choisi le Platform Type).", hotspot: { x: 0.201, y: 0.634, w: 0.765, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/policy-create-form.png", text: "Cliquez sur « Save as Draft » pour enregistrer la policy en tant que brouillon.", hotspot: { x: 0.900, y: 0.738, w: 0.083, h: 0.044 } },
+  ]}
+/>
+
+1. Dans la console [DLP](/docs/managed-services/dlp/concepts), cliquez sur **Policies** dans le menu latéral.
+2. Cliquez sur le bouton **Create policy** pour ouvrir l'éditeur de policy.
+
+### Informations générales
+
+Renseignez les informations de la policy :
+
+| Champ | Valeur d'exemple | Description |
+|-------|-----------------|-------------|
+| Name | `mistral-prod-policy` | Nom de la policy |
+| Description | Policy de production pour Mistral | Description de la policy |
+| Platform type | `mistral-platform` | Type de plateforme cible |
+
+### Sélection des règles
+
+1. Sélectionnez les règles à inclure dans la policy depuis la liste des règles disponibles ;
+2. Ordonnez les règles par glisser-déposer — l'ordre détermine la séquence d'évaluation ;
+3. Les règles sont évaluées de haut en bas. Une action `pass` ou `block` termine l'évaluation immédiatement.
+
+### Action par défaut
+
+Sélectionnez l'action par défaut de la policy :
+
+- `pass` : autorise la requête si aucune règle ne déclenche une action terminale ;
+- `block` : bloque la requête si aucune règle ne déclenche une action terminale.
+
+### Enregistrement
+
+Cliquez sur **Save** pour enregistrer la policy en tant que brouillon. La policy apparaît dans la liste avec le statut "Draft".
+
+</TabItem>
+<TabItem value="api" label="API">
+
+La requête `POST /api/v1/policies` permet de créer une [policy DLP](/docs/managed-services/dlp/concepts) en brouillon.
+
+### Exemple de requête
+
+```json
+{
+  "name": "mistral-prod-policy",
+  "description": "Policy de production pour Mistral",
+  "platform_type": "mistral-platform",
+  "rule_ids": [
+    "rule-550e8400",
+    "rule-a1b2c3d4"
+  ],
+  "default_action": "block"
+}
+```
+
+### Exemple de réponse
+
+```json
+{
+  "id": "policy-9f8e7d6c",
+  "name": "mistral-prod-policy",
+  "description": "Policy de production pour Mistral",
+  "platform_type": "mistral-platform",
+  "rule_ids": [
+    "rule-550e8400",
+    "rule-a1b2c3d4"
+  ],
+  "default_action": "block",
+  "draft": true,
+  "version": 1,
+  "created_at": "2026-08-27T10:00:00Z",
+  "updated_at": "2026-08-27T10:00:00Z"
+}
+```
+
+</TabItem>
+</Tabs>

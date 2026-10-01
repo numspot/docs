@@ -1,19 +1,19 @@
 ---
-title: Lister les instances Secret Manager
+title: List Secret Manager instances
 sidebar_position: 1
 draft: false
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Lister les instances Secret Manager
+# List Secret Manager instances
 
-Vous pouvez lister l'ensemble des [instances Secret Manager](/docs/managed-services/secret-manager/concepts/) au sein de votre espace.
+You can list all the [Secret Manager instances](/docs/managed-services/secret-manager/concepts/) within your space.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **secrets.instance.get**
 
@@ -21,31 +21,28 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
     
     <TabItem value="api" label="API" default>
+        The `GET /secrets/spaces/{spaceId}/instances` request lets you list all your Secret Manager instances.
 
-## API {#tabhead-api}
-
-        La requête `GET /secrets/spaces/{spaceId}/instances` permet de lister toutes vos instances Secret Manager.
-
-        ### Exemple de réponse
+        ### Example response
 
         ```json
         {
           "items": [
             {
               "id": "550e8400-e29b-41d4-a716-446655440002",
-              "name": "mon-secret-manager",
+              "name": "my-secret-manager",
               "status": {
                 "state": "RUNNING",
                 "message": "instance is healthy"
               },
               "version": "2.5.1",
-              "host": "mon-secret-manager.secrets.eu-west-2.numspot.com",
+              "host": "my-secret-manager.secrets.eu-west-2.numspot.com",
               "visibility": "EXTERNAL"
             }
           ]
         }
         ```
 
-        [Voir la spécification complète](/openapi/#tag/Secret/GET/secrets/spaces/{spaceId}/instances)
+        [View the full specification](/openapi/#tag/Secret/GET/secrets/spaces/{spaceId}/instances)
     </TabItem>
 </Tabs>

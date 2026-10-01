@@ -1,0 +1,41 @@
+---
+title: Authentification
+sidebar_position: 2
+---
+
+# Méthodes d'authentification
+
+Pour utiliser notre provider, vous devez vous authentifier avec une des méthodes listées ci-dessous.
+
+:::info
+**Région standard** :
+- API (Application Programming Interface) : https://api.eu-west-2.numspot.com
+- Object Storage : https://objectstorage.eu-west-2.numspot.com
+
+:::
+
+## Méthode 1 - Variables d'environnement
+
+Définissez ces variables dans votre environnement qui seront récupérées par le provider lors des différentes commandes Terraform :
+
+```bash
+NUMSPOT_HOST=<API Numspot de la région souhaitée>
+NUMSPOT_HOST_OS=<API Object storage Numspot de la région souhaitée>
+NUMSPOT_CLIENT_ID=<votre ID client>
+NUMSPOT_CLIENT_SECRET=<votre secret>
+NUMSPOT_SPACE_ID=<l'ID du space que vous souhaitez utiliser>
+```
+
+## Méthode 2 - Configuration Terraform
+
+Définissez le bloc suivant et remplissez-le avec les informations correspondantes :
+
+```hcl
+provider "numspot" {
+  numspot_host      = "API Numspot de la région souhaitée"
+  numspot_host_os   = "API Object storage Numspot de la région souhaitée"
+  client_id         = "votre ID client"
+  client_secret     = "votre secret"
+  space_id          = "l'ID du space que vous souhaitez utiliser"
+}
+```

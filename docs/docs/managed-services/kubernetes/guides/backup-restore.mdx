@@ -1,68 +1,67 @@
 ---
-title: Sauvegardes et restaurations Kubernetes - Kubernetes managé
-sidebar_label: Sauvegardes et restaurations Kubernetes
-description: "Sauvegardez et restaurez vos clusters Kubernetes Numspot avec Velero : stratégies pour etcd et les nœuds, reprise d'activité et migration."
+title: Kubernetes backups and restores - Managed Kubernetes
+sidebar_label: Kubernetes backups and restores
 sidebar_position: 2
 draft: false
 ---
 
-# Sauvegardes et restaurations Kubernetes
+# Kubernetes backups and restores
 
 ## Introduction
 
-Velero est un outil open source permettant de sauvegarder et de restaurer en toute sécurité les ressources d'un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/), d'effectuer une reprise d'activité et de migrer les ressources et les volumes persistants vers un autre cluster. Ce guide couvre :
+Velero is an open source tool that lets you securely back up and restore the resources of a [Kubernetes cluster](/docs/managed-services/kubernetes/concepts/), perform disaster recovery, and migrate resources and persistent volumes to another cluster. This guide covers:
 
-- l'installation complète sur Kubernetes Numspot ;
-- les stratégies de sauvegarde pour etcd et les nœuds ;
-- les procédures de sauvegarde et de restauration complètes du cluster ;
-- les scénarios de migration inter-fournisseurs ;
-- l'intégration avec le pilote CSI Outscale BSU de Numspot.
+- the full installation on Numspot Kubernetes;
+- backup strategies for etcd and the nodes;
+- the full cluster backup and restore procedures;
+- cross-provider migration scenarios;
+- the integration with the Numspot Outscale BSU CSI driver.
 
-### Fonctionnalités clés
+### Key features
 
-- **Sauvegarde et restauration** : sauvegardes complètes du cluster incluant les espaces de noms, les ressources et les volumes persistants ;
-- **Reprise d'activité** : restauration complète du cluster depuis le stockage de sauvegarde ;
-- **Migration de cluster** : migration des charges de travail entre clusters et fournisseurs cloud ;
-- **Sauvegardes planifiées** : politiques de sauvegarde automatisées avec rétention ;
-- **Sauvegarde sélective** : sauvegarde d'espaces de noms, de ressources ou d'étiquettes spécifiques.
+- **Backup and restore**: full cluster backups including namespaces, resources and persistent volumes;
+- **Disaster recovery**: full cluster restore from the backup storage;
+- **Cluster migration**: migration of workloads between clusters and cloud providers;
+- **Scheduled backups**: automated backup policies with retention;
+- **Selective backup**: backup of specific namespaces, resources or labels.
 
 ---
 
-## Prérequis
+## Prerequisites
 
-### Sur le cluster Numspot
+### On the Numspot cluster
 
-- un cluster Kubernetes v1.16+ avec le DNS et la mise en réseau des conteneurs activés ;
-- `kubectl` installé et configuré ;
-- un accès au stockage objet (compatible S3) ;
-- un pilote CSI pour les volumes persistants (Outscale BSU CSI est disponible par défaut).
+- a Kubernetes cluster v1.16+ with DNS and container networking enabled;
+- `kubectl` installed and configured;
+- access to object storage (S3-compatible);
+- a CSI driver for persistent volumes (Outscale BSU CSI is available by default).
 
-### Prérequis de stockage
+### Storage prerequisites
 
-Velero nécessite deux types de stockage :
+Velero requires two types of storage:
 
-1. Stockage objet : pour les métadonnées de sauvegarde et les manifestes de ressources Kubernetes (compatible S3).
-2. Instantanés de volumes : pour les données de volumes persistants (utilise les instantanés Outscale BSU).
+1. Object storage: for backup metadata and Kubernetes resource manifests (S3-compatible).
+2. Volume snapshots: for persistent volume data (uses Outscale BSU snapshots).
 
-### Informations requises
+### Required information
 
-- le nom du compartiment (bucket) de stockage objet et les identifiants ;
-- la région du compartiment (pour la région Numspot Standard : `eu-west-2`) ;
-- la clé d'accès et la clé secrète pour le stockage compatible S3.
+- the object storage bucket name and the credentials;
+- the bucket region (for the Numspot Standard region: `eu-west-2`);
+- the access key and the secret key for the S3-compatible storage.
 
 ---
 
 ## Installation
 
-### Étape 1 : Installer Velero CLI
+### Step 1: Install the Velero CLI
 
 **macOS**
 
 ```bash
-# Avec Homebrew
+# With Homebrew
 brew install velero
 
-# Ou téléchargement manuel
+# Or manual download
 cd /tmp
 curl -sLO https://github.com/vmware-tanzu/velero/releases/download/v1.13.2/velero-v1.13.2-darwin-amd64.tar.gz
 tar -xzf velero-v1.13.2-darwin-amd64.tar.gz
@@ -80,15 +79,15 @@ tar -xzf velero-v1.13.2-linux-amd64.tar.gz
 sudo mv velero-v1.13.2-linux-amd64/velero /usr/local/bin/
 ```
 
-Vérifiez l'installation :
+Verify the installation:
 
 ```bash
 velero version --client-only
 ```
 
-### Étape 2 : Créer les identifiants de stockage compatible S3
+### Step 2: Create the S3-compatible storage credentials
 
-Velero nécessite des identifiants pour accéder au stockage objet. Créez un fichier d'identifiants :
+Velero requires credentials to access the object storage. Create a credentials file:
 
 ```bash
 cat > ~/.aws/credentials-velero <<EOF
@@ -98,15 +97,15 @@ aws_secret_access_key = YOUR_SECRET_KEY
 EOF
 ```
 
-**Pour le stockage objet Numspot** :
+**For Numspot object storage**:
 
-- obtenez les identifiants depuis la Console Numspot ;
-- stockez-les dans la section IAM ;
-- le point d'accès (endpoint) sera : `https://oos.eu-west-2.numspot.com`.
+- obtain the credentials from the Numspot Console;
+- store them in the IAM section;
+- the endpoint will be: `https://oos.eu-west-2.numspot.com`.
 
-### Étape 3 : Installer Velero sur le cluster
+### Step 3: Install Velero on the cluster
 
-**Option A : Utiliser un stockage objet compatible S3 (recommandé pour Numspot)**
+**Option A: Use S3-compatible object storage (recommended for Numspot)**
 
 ```bash
 velero install \
@@ -123,20 +122,20 @@ velero install \
   --namespace velero
 ```
 
-**Principaux paramètres** :
+**Main parameters**:
 
-- `--provider aws` : utilise le plugin AWS (compatible S3).
-- `--plugins` : plugin AWS pour les opérations S3.
-- `--bucket` : le nom de votre compartiment (bucket) de stockage objet.
-- `--region` : la région Numspot (`eu-west-2`).
-- `--s3ForcePathStyle=true` : requis pour le stockage compatible S3.
-- `--s3Url` : le point d'accès du stockage objet Numspot.
-- `--use-node-agent` : active la sauvegarde du système de fichiers pour les volumes.
-- `--features=EnableCSI` : active la prise en charge des instantanés (snapshots) CSI (volumes block storage).
+- `--provider aws`: uses the AWS plugin (S3-compatible).
+- `--plugins`: AWS plugin for S3 operations.
+- `--bucket`: the name of your object storage bucket.
+- `--region`: the Numspot region (`eu-west-2`).
+- `--s3ForcePathStyle=true`: required for S3-compatible storage.
+- `--s3Url`: the Numspot object storage endpoint.
+- `--use-node-agent`: enables file system backup for volumes.
+- `--features=EnableCSI`: enables CSI snapshot support (block storage volumes).
 
-**Option B : Installation minimale (sans Snapshots CSI)**
+**Option B: Minimal installation (without CSI snapshots)**
 
-Si vous n'avez pas besoin d'instantanés (snapshots) de volumes persistants :
+If you do not need persistent volume snapshots:
 
 ```bash
 velero install \
@@ -149,23 +148,23 @@ velero install \
   --use-volume-snapshots=false
 ```
 
-### Étape 4 : Vérifier l'installation
+### Step 4: Verify the installation
 
 ```bash
-# Vérifier les pods Velero
+# Check the Velero pods
 kubectl get pods -n velero
 
-# Vérifier l'emplacement de stockage de sauvegarde
+# Check the backup storage location
 velero backup-location get
 
-# Vérifier l'emplacement des instantanés
+# Check the snapshot location
 velero snapshot-location get
 
-# Vérifier la version de Velero
+# Check the Velero version
 velero version
 ```
 
-Sortie attendue :
+Expected output:
 
 ```text
 NAME      PHASE       LAST VALIDATED   ACCESS MODE   DEFAULT
@@ -179,9 +178,9 @@ default   aws        eu-west-2
 
 ## Configuration
 
-### Configurer l'emplacement de stockage de sauvegarde
+### Configure the backup storage location
 
-Si vous devez ajouter des emplacements de sauvegarde supplémentaires :
+If you need to add additional backup locations:
 
 ```bash
 velero backup-location create secondary-backup \
@@ -191,9 +190,9 @@ velero backup-location create secondary-backup \
   --config region=eu-west-2,s3ForcePathStyle=true,s3Url=https://oos.eu-west-2.numspot.com
 ```
 
-### Configurer l'emplacement des instantanés
+### Configure the snapshot location
 
-Ajoutez des emplacements d'instantanés pour différentes régions :
+Add snapshot locations for different regions:
 
 ```bash
 velero snapshot-location create secondary-snapshots \
@@ -201,20 +200,20 @@ velero snapshot-location create secondary-snapshots \
   --config region=eu-west-2
 ```
 
-### Définir la durée de vie par défaut des sauvegardes
+### Set the default backup lifetime
 
-Créez une planification avec une politique de rétention :
+Create a schedule with a retention policy:
 
 ```bash
 velero schedule create daily-backup \
   --schedule="0 2 * * *" \
   --include-namespaces '*' \
-  --ttl 720h0m0s  # rétention de 30 jours
+  --ttl 720h0m0s  # 30-day retention
 ```
 
-### Configurer les demandes de ressources
+### Configure the resource requests
 
-Modifiez le déploiement Velero pour les clusters plus volumineux :
+Edit the Velero deployment for larger clusters:
 
 ```bash
 kubectl set resources deployment/velero \
@@ -226,27 +225,27 @@ kubectl set resources deployment/velero \
 
 ---
 
-## Opérations de sauvegarde
+## Backup operations
 
-### Types de sauvegarde
+### Backup types
 
-**1. Sauvegarde complète du cluster**
+**1. Full cluster backup**
 
-Sauvegardez toutes les ressources, y compris les ressources à l'échelle du cluster :
+Back up all resources, including cluster-scoped resources:
 
 ```bash
 velero backup create full-cluster-backup \
   --include-cluster-resources=true \
   --wait
 
-# Vérifier le statut de la sauvegarde
+# Check the backup status
 velero backup describe full-cluster-backup --details
 velero backup logs full-cluster-backup
 ```
 
-**2. Sauvegarde d'espace de noms spécifique**
+**2. Specific namespace backup**
 
-Sauvegardez uniquement des espaces de noms spécifiques :
+Back up only specific namespaces:
 
 ```bash
 velero backup create app-backup \
@@ -254,7 +253,7 @@ velero backup create app-backup \
   --wait
 ```
 
-Plusieurs espaces de noms :
+Several namespaces:
 
 ```bash
 velero backup create multi-ns-backup \
@@ -262,9 +261,9 @@ velero backup create multi-ns-backup \
   --wait
 ```
 
-**3. Sauvegarde basée sur les étiquettes (labels)**
+**3. Label-based backup**
 
-Sauvegardez les ressources correspondant à des étiquettes spécifiques :
+Back up the resources matching specific labels:
 
 ```bash
 velero backup create labeled-backup \
@@ -272,9 +271,9 @@ velero backup create labeled-backup \
   --wait
 ```
 
-**4. Sauvegarde avec instantanés de volumes**
+**4. Backup with volume snapshots**
 
-Incluez explicitement les volumes persistants :
+Explicitly include the persistent volumes:
 
 ```bash
 velero backup create pvc-backup \
@@ -283,58 +282,58 @@ velero backup create pvc-backup \
   --wait
 ```
 
-**5. Sauvegarde du système de fichiers (FSB)**
+**5. File system backup (FSB)**
 
-Pour les applications nécessitant des sauvegardes cohérentes :
+For applications requiring consistent backups:
 
 ```bash
-# Annoter les pods pour le FSB
+# Annotate the pods for FSB
 kubectl annotate pod/myapp-pod -n myapp \
   backup.velero.io/backup-volumes=app-data
 
-# Créer la sauvegarde
+# Create the backup
 velero backup create fsb-backup \
   --include-namespaces myapp \
   --wait
 ```
 
-**6. Sauvegardes planifiées**
+**6. Scheduled backups**
 
-Créez des sauvegardes récurrentes :
+Create recurring backups:
 
 ```bash
-# Sauvegarde quotidienne à 2h du matin
+# Daily backup at 2 a.m.
 velero schedule create daily-backup \
   --schedule="0 2 * * *" \
   --include-namespaces '*' \
   --include-cluster-resources=true \
-  --ttl 168h0m0s  # rétention de 7 jours
+  --ttl 168h0m0s  # 7-day retention
 
-# Sauvegarde horaire
+# Hourly backup
 velero schedule create hourly-backup \
   --schedule="0 * * * *" \
   --include-namespaces production \
   --ttl 24h0m0s
 
-# Sauvegarde complète hebdomadaire
+# Weekly full backup
 velero schedule create weekly-full \
   --schedule="0 3 * * 0" \
   --include-cluster-resources=true \
-  --ttl 720h0m0s  # rétention de 30 jours
+  --ttl 720h0m0s  # 30-day retention
 ```
 
-### Sauvegarder les données etcd
+### Back up the etcd data
 
-Velero ne sauvegarde pas directement etcd, mais il capture tous les objets de l'API Kubernetes. Pour une sauvegarde complète d'etcd :
+Velero does not back up etcd directly, but it captures all Kubernetes API objects. For a full etcd backup:
 
 ```bash
-# Méthode 1 : sauvegarde complète du cluster Velero (capture tous les objets API)
+# Method 1: full Velero cluster backup (captures all API objects)
 velero backup create etcd-backup \
   --include-cluster-resources=true \
   --include-namespaces '*' \
   --wait
 
-# Méthode 2 : instantané etcd direct (exécution via kubectl)
+# Method 2: direct etcd snapshot (run via kubectl)
 kubectl exec -n kube-system etcd-<node-name> -- \
   etcdctl snapshot save /var/lib/etcd/backup.db \
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
@@ -342,73 +341,73 @@ kubectl exec -n kube-system etcd-<node-name> -- \
   --key=/etc/kubernetes/pki/etcd/peer.key
 ```
 
-### Sauvegarder les informations des nœuds
+### Back up the node information
 
-Velero capture les ressources des nœuds, mais ne sauvegarde pas le système d'exploitation ni la configuration des nœuds. Pour une sauvegarde complète des nœuds :
+Velero captures the node resources, but does not back up the operating system or the node configuration. For a full node backup:
 
 ```bash
-# Sauvegarde des étiquettes et taints des nœuds (capturées par Velero)
+# Backup of the node labels and taints (captured by Velero)
 velero backup create nodes-backup \
   --include-resources nodes \
   --include-cluster-resources=true \
   --wait
 
-# Sauvegarde manuelle de la configuration des nœuds (externe)
+# Manual backup of the node configuration (external)
 kubectl get nodes -o yaml > nodes-config-backup.yaml
 ```
 
-### Exclure des ressources spécifiques
+### Exclude specific resources
 
 ```bash
-# Exclure un espace de noms spécifique
+# Exclude a specific namespace
 velero backup create backup-exclude \
   --exclude-namespaces kube-system,velero \
   --wait
 
-# Exclure par étiquette
+# Exclude by label
 kubectl label namespace test-ns velero.io/exclude-from-backup=true
 velero backup create backup-no-test
 ```
 
-### Vérifier les sauvegardes
+### Verify the backups
 
 ```bash
-# Lister toutes les sauvegardes
+# List all backups
 velero backup get
 
-# Détails de la sauvegarde
+# Backup details
 velero backup describe BACKUP_NAME --details
 
-# Journaux de la sauvegarde
+# Backup logs
 velero backup logs BACKUP_NAME
 
-# Vérifier le contenu de la sauvegarde (télécharger le tarball)
+# Check the backup content (download the tarball)
 velero backup download BACKUP_NAME
 tar -tzf BACKUP_NAME.tar.gz
 ```
 
 ---
 
-## Opérations de restauration
+## Restore operations
 
-### Types de restauration
+### Restore types
 
-**1. Restauration complète du cluster**
+**1. Full cluster restore**
 
-Restaurer tout depuis une sauvegarde :
+Restore everything from a backup:
 
 ```bash
 velero restore create --from-backup full-cluster-backup \
   --wait
 
-# Vérifier le statut de la restauration
+# Check the restore status
 velero restore describe RESTORE_NAME --details
 velero restore logs RESTORE_NAME
 ```
 
-**2. Restauration d'espace de noms**
+**2. Namespace restore**
 
-Restaurer des espaces de noms spécifiques :
+Restore specific namespaces:
 
 ```bash
 velero restore create restore-app \
@@ -417,9 +416,9 @@ velero restore create restore-app \
   --wait
 ```
 
-**3. Restauration dans un espace de noms différent**
+**3. Restore into a different namespace**
 
-Restaurer dans un nouvel espace de noms :
+Restore into a new namespace:
 
 ```bash
 velero restore create restore-to-new \
@@ -428,9 +427,9 @@ velero restore create restore-to-new \
   --wait
 ```
 
-**4. Restauration sélective de ressources**
+**4. Selective resource restore**
 
-Restaurer des types de ressources spécifiques :
+Restore specific resource types:
 
 ```bash
 velero restore create restore-deployments \
@@ -439,11 +438,11 @@ velero restore create restore-deployments \
   --wait
 ```
 
-**5. Restauration avec modificateurs de ressources**
+**5. Restore with resource modifiers**
 
-Modifier les ressources lors de la restauration :
+Modify the resources during the restore:
 
-Créez un modificateur de ressources de restauration :
+Create a restore resource modifier:
 
 ```yaml
 apiVersion: v1
@@ -475,10 +474,10 @@ spec:
   preserveNodePorts: true
 ```
 
-**6. Restauration des volumes persistants**
+**6. Persistent volume restore**
 
 ```bash
-# Restaurer avec recréation du volume
+# Restore with volume re-creation
 velero restore create restore-volumes \
   --from-backup pvc-backup \
   --restore-volumes \
@@ -486,33 +485,33 @@ velero restore create restore-volumes \
   --wait
 ```
 
-### Restaurer etcd
+### Restore etcd
 
-La restauration Velero recrée tous les objets de l'API Kubernetes :
+The Velero restore re-creates all Kubernetes API objects:
 
 ```bash
-# Restaurer toutes les ressources (similaire à la restauration etcd)
+# Restore all resources (similar to an etcd restore)
 velero restore create etcd-restore \
   --from-backup etcd-backup \
   --include-cluster-resources=true \
   --wait
 ```
 
-Pour une restauration directe d'etcd depuis un instantané :
+For a direct etcd restore from a snapshot:
 
 ```bash
-# Arrêter etcd
+# Stop etcd
 kubectl exec -n kube-system etcd-<node-name> -- \
   mv /var/lib/etcd/member /var/lib/etcd/member.bak
 
-# Restaurer depuis l'instantané
+# Restore from the snapshot
 kubectl exec -n kube-system etcd-<node-name> -- \
   etcdctl snapshot restore /var/lib/etcd/backup.db
 ```
 
-### Hooks de restauration
+### Restore hooks
 
-Exécuter des commandes pendant la restauration :
+Run commands during the restore:
 
 ```yaml
 apiVersion: velero.io/v1
@@ -539,24 +538,24 @@ spec:
                 - "mysql -u root -p$MYSQL_ROOT_PASSWORD < /backup/init.sql"
 ```
 
-### Gérer les conflits de restauration
+### Handle restore conflicts
 
-Lors de la restauration vers des ressources existantes :
+When restoring onto existing resources:
 
 ```bash
-# Mettre à jour les ressources existantes
+# Update the existing resources
 velero restore create restore-update \
   --from-backup app-backup \
   --existing-resource-policy update \
   --wait
 
-# Supprimer et recréer
+# Delete and re-create
 velero restore create restore-recreate \
   --from-backup app-backup \
   --existing-resource-policy delete \
   --wait
 
-# Ignorer les ressources existantes (aucune)
+# Skip the existing resources (none)
 velero restore create restore-skip \
   --from-backup app-backup \
   --existing-resource-policy none \
@@ -565,13 +564,13 @@ velero restore create restore-skip \
 
 ---
 
-## Migration de cluster
+## Cluster migration
 
-### Scénario 1 : Migrer vers un autre cluster Numspot
+### Scenario 1: Migrate to another Numspot cluster
 
-**Sur le cluster source**
+**On the source cluster**
 
-1. **Créez une sauvegarde complète** :
+1. **Create a full backup**:
 
 ```bash
 velero backup create migration-backup \
@@ -581,24 +580,24 @@ velero backup create migration-backup \
   --wait
 ```
 
-2. **Vérifiez la fin de la sauvegarde** :
+2. **Verify the backup completion**:
 
 ```bash
 velero backup describe migration-backup --details
 ```
 
-3. **Assurez l'upload de la sauvegarde** :
+3. **Ensure the backup upload**:
 
 ```bash
 velero backup logs migration-backup
 ```
 
-**Sur le cluster de destination (même fournisseur)**
+**On the destination cluster (same provider)**
 
-1. **Installez Velero avec le même stockage** :
+1. **Install Velero with the same storage**:
 
 ```bash
-# Utiliser le MÊME compartiment (bucket) et les MÊMES identifiants que la source
+# Use the SAME bucket and the SAME credentials as the source
 velero install \
   --provider aws \
   --plugins velero/velero-plugin-for-aws:v1.9.2 \
@@ -612,14 +611,14 @@ velero install \
   --features=EnableCSI
 ```
 
-2. **Attendez la synchronisation de la sauvegarde** :
+2. **Wait for the backup synchronization**:
 
 ```bash
-# Velero synchronisera automatiquement les sauvegardes depuis le stockage objet
+# Velero will automatically synchronise the backups from the object storage
 velero backup get
 ```
 
-3. **Restaurez sur le nouveau cluster** :
+3. **Restore onto the new cluster**:
 
 ```bash
 velero restore create migration-restore \
@@ -628,18 +627,18 @@ velero restore create migration-restore \
   --wait
 ```
 
-4. **Vérifiez la restauration** :
+4. **Verify the restore**:
 
 ```bash
 kubectl get all --all-namespaces
 velero restore describe migration-restore --details
 ```
 
-### Scénario 2 : Migrer depuis un fournisseur non-Numspot (AWS, GCP, Azure)
+### Scenario 2: Migrate from a non-Numspot provider (AWS, GCP, Azure)
 
-**Sur le cluster source (autre fournisseur)**
+**On the source cluster (other provider)**
 
-1. **Installez Velero sur la source** (exemple AWS) :
+1. **Install Velero on the source** (AWS example):
 
 ```bash
 velero install \
@@ -652,7 +651,7 @@ velero install \
   --use-volume-snapshots=true
 ```
 
-2. **Créez la sauvegarde** :
+2. **Create the backup**:
 
 ```bash
 velero backup create aws-to-numspot-backup \
@@ -661,21 +660,21 @@ velero backup create aws-to-numspot-backup \
   --wait
 ```
 
-3. **Copiez la sauvegarde vers le stockage Numspot** :
+3. **Copy the backup to the Numspot storage**:
 
 ```bash
-# Télécharger la sauvegarde depuis la source
+# Download the backup from the source
 velero backup download aws-to-numspot-backup
 
-# Uploader vers le stockage Numspot en utilisant AWS CLI ou un outil compatible S3
+# Upload to the Numspot storage using the AWS CLI or an S3-compatible tool
 aws s3 cp aws-to-numspot-backup.tar.gz \
   s3://numspot-backup-bucket/backups/aws-to-numspot-backup/ \
   --endpoint-url=https://oos.eu-west-2.numspot.com
 ```
 
-**Sur le cluster de destination Numspot**
+**On the Numspot destination cluster**
 
-1. **Installez Velero sur Numspot** :
+1. **Install Velero on Numspot**:
 
 ```bash
 velero install \
@@ -688,13 +687,13 @@ velero install \
   --use-volume-snapshots=false
 ```
 
-2. **Attendez la synchronisation de la sauvegarde** :
+2. **Wait for the backup synchronization**:
 
 ```bash
 velero backup get
 ```
 
-3. **Créez la restauration avec ajustements** :
+3. **Create the restore with adjustments**:
 
 ```bash
 velero restore create aws-restore \
@@ -705,28 +704,28 @@ velero restore create aws-restore \
 ```
 
 :::info Note
-Les instantanés (snapshots) de stockage diffèrent entre les fournisseurs. Vous devrez effectuer les actions suivantes :
+Storage snapshots differ between providers. You will need to carry out the following actions:
 
-- recréer les PV manuellement ou utiliser le clonage de volumes ;
-- mettre à jour les références de StorageClass vers des classes compatibles Numspot (`gp2`, `io1`, `standard`) ;
-- ajuster les sélecteurs de nœuds et les règles d'affinité.
+- re-create the PV manually or use volume cloning;
+- update the StorageClass references to Numspot-compatible classes (`gp2`, `io1`, `standard`);
+- adjust the node selectors and the affinity rules.
 :::
 
-### Scénario 3 : Restaurer une sauvegarde Velero inter-fournisseurs sur Numspot
+### Scenario 3: Restore a cross-provider Velero backup on Numspot
 
-**Prérequis**
+**Prerequisites**
 
-Les prérequis suivants sont nécessaires :
+The following prerequisites are required:
 
-- sauvegarde Velero depuis un autre fournisseur (AWS, GCP, Azure) ;
-- accès au stockage de sauvegarde (peut être depuis un S3 différent) ;
-- cluster Numspot prêt.
+- a Velero backup from another provider (AWS, GCP, Azure);
+- access to the backup storage (this can be from a different S3);
+- a ready Numspot cluster.
 
-**Procédure étape par étape**
+**Step-by-step procedure**
 
-1. **Accédez à l'emplacement de sauvegarde** :
+1. **Access the backup location**:
 
-Option A : Utilisez temporairement l'emplacement de sauvegarde original :
+Option A: Temporarily use the original backup location:
 
 ```bash
 velero backup-location create external-backup \
@@ -736,18 +735,18 @@ velero backup-location create external-backup \
   --access-mode=ReadOnly
 ```
 
-Option B : Copiez la sauvegarde vers le stockage Numspot :
+Option B: Copy the backup to the Numspot storage:
 
 ```bash
-# Depuis une source externe
+# From an external source
 aws s3 sync s3://original-bucket/backups/external-backup/ \
   s3://numspot-bucket/backups/external-backup/ \
   --endpoint-url=https://oos.eu-west-2.numspot.com
 ```
 
-2. **Configurez Velero pour accéder à la sauvegarde externe** :
+2. **Configure Velero to access the external backup**:
 
-Créez un secret avec les identifiants externes :
+Create a secret with the external credentials:
 
 ```bash
 kubectl create secret generic external-backup-credentials \
@@ -755,7 +754,7 @@ kubectl create secret generic external-backup-credentials \
   --from-file=cloud=~/.aws/credentials-external
 ```
 
-3. **Créez un BackupStorageLocation pour la sauvegarde externe** :
+3. **Create a BackupStorageLocation for the external backup**:
 
 ```yaml
 apiVersion: velero.io/v1
@@ -776,15 +775,15 @@ spec:
   accessMode: ReadOnly
 ```
 
-4. **Attendez la synchronisation de la sauvegarde** :
+4. **Wait for the backup synchronization**:
 
 ```bash
 velero backup get
 ```
 
-5. **Restaurez avec des ajustements spécifiques au fournisseur** :
+5. **Restore with provider-specific adjustments**:
 
-Créez un modificateur de ressources de restauration pour les différences de fournisseurs :
+Create a restore resource modifier for the provider differences:
 
 ```yaml
 apiVersion: v1
@@ -807,7 +806,7 @@ data:
           path: /spec/loadBalancerSourceRanges
 ```
 
-Appliquez la restauration :
+Apply the restore:
 
 ```bash
 velero restore create cross-provider-restore \
@@ -817,17 +816,17 @@ velero restore create cross-provider-restore \
   --wait
 ```
 
-6. **Gérez les volumes persistants** :
+6. **Handle the persistent volumes**:
 
-Les instantanés étant spécifiques au fournisseur, vous avez besoin d'approches alternatives :
+As the snapshots are provider-specific, you need alternative approaches:
 
-**Méthode 1 : Restaurer manuellement les données de volume**
+**Method 1: Restore the volume data manually**
 
 ```bash
-# Exporter les données de volume depuis le fournisseur source
-# Importer vers Numspot
+# Export the volume data from the source provider
+# Import into Numspot
 
-# Créer de nouveaux PVC dans Numspot
+# Create new PVC in Numspot
 kubectl apply -f - <<EOF
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -843,84 +842,84 @@ spec:
       storage: 10Gi
 EOF
 
-# Copier les données
+# Copy the data
 kubectl cp source-data.tar.gz production/pod:/data/
 ```
 
-**Méthode 2 : Utiliser la sauvegarde du système de fichiers Velero (FSB)**
+**Method 2: Use Velero file system backup (FSB)**
 
 ```bash
-# Sur la source, avant la sauvegarde
+# On the source, before the backup
 kubectl annotate pod/myapp-pod -n production \
   backup.velero.io/backup-volumes=app-data
 
-# Créer une sauvegarde avec FSB
+# Create a backup with FSB
 velero backup create fsb-cross-provider-backup \
   --include-namespaces production \
   --snapshot-volumes=false \
   --use-restic
 
-# Sur Numspot, restaurez
+# On Numspot, restore
 velero restore create fsb-restore \
   --from-backup fsb-cross-provider-backup \
   --wait
 ```
 
-7. **Ajustez les configurations spécifiques au fournisseur** :
+7. **Adjust the provider-specific configurations**:
 
 ```bash
-# Mettre à jour les sélecteurs de nœuds
+# Update the node selectors
 kubectl patch deployment myapp -n production --type=json \
   -p='[{"op": "remove", "path": "/spec/template/spec/nodeSelector"}]'
 
-# Mettre à jour les références StorageClass
+# Update the StorageClass references
 kubectl get pvc --all-namespaces -o yaml | \
   sed 's/storageClassName: gp3/storageClassName: gp2/g' | \
   kubectl apply -f -
 ```
 
-8. **Vérifiez la restauration** :
+8. **Verify the restore**:
 
 ```bash
-# Vérifier les ressources restaurées
+# Check the restored resources
 kubectl get all --all-namespaces
 
-# Vérifier les PV
+# Check the PV
 kubectl get pv
 
-# Vérifier les journaux de restauration Velero
+# Check the Velero restore logs
 velero restore describe cross-provider-restore --details
 velero restore logs cross-provider-restore
 ```
 
 ---
 
-## Reprise d'activité inter-fournisseurs
+## Cross-provider disaster recovery
 
-### Vue d'ensemble de l'architecture
+### Architecture overview
 
-Ce diagramme montre une architecture de reprise d'activité inter-fournisseurs où les sauvegardes d'un cluster principal sont répliquées vers un cluster Numspot secondaire :
+This diagram shows a cross-provider disaster recovery architecture where the backups from a primary cluster are replicated to a secondary Numspot cluster:
 
 ```mermaid
 graph TB
-    subgraph Primary["Cluster principal<br/>(AWS/GCP/Azure/Numspot)"]
-        A["Charges de travail et données"]
-        B["Sauvegarde Velero<br/>(Planifiée)"]
-        C["Stockage objet<br/>(S3/Compatible S3)"]
-        A -->|"1. Sauvegarde"| B
-        B -->|"2. Stockage"| C
+    subgraph Primary["Primary cluster<br/>(AWS/GCP/Azure/Numspot)"]
+        A["Workloads and data"]
+        B["Velero backup<br/>(Scheduled)"]
+        C["Object storage<br/>(S3/S3-compatible)"]
+        A -->|"1. Backup"| B
+        B -->|"2. Storage"| C
     end
 
-    C -.->|"3. Réplication"| D
+    C -.->|"3. Replication"| D
 
-    subgraph Secondary["Cluster secondaire (Numspot - reprise d'activité)"]
-        D["Stockage objet<br/>(Numspot OOS)"]
-        E["Synchronisation Velero<br/>(Automatique)"]
-        F["Restauration Velero<br/>(En attente)"]
-        G["Charges de travail<br/>(Restaurées en cas de reprise d'activité)"]
+    subgraph Secondary["Secondary cluster (Numspot - disaster recovery)"]
+        D["Object storage<br/>(Numspot OOS)"]
+        E["Velero synchronisation<br/>(Automatic)"]
+        F["Velero restore<br/>(Pending)"]
+        G["Workloads<br/>(Restored on disaster recovery)"]
         D -->|"4. Synchronisation"| E
-        E -->|"5. Prêt"| F
-        F -->|"6. Restauration"| G
+        E -->|"5. Ready"| F
+        F -->|"6. Restore"| G
     end
 
     style Primary fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
@@ -929,20 +928,20 @@ graph TB
     style G fill:#ffe0b2
 ```
 
-### Stratégie de reprise d'activité 1 : Actif-Passif (cold standby)
+### Disaster recovery strategy 1: Active-Passive (cold standby)
 
-**Configuration** :
+**Configuration**:
 
-- le cluster principal exécute les charges de travail de production ;
-- le cluster secondaire Numspot a Velero installé et synchronise les sauvegardes ;
-- restauration manuelle lors de l'invocation de la reprise d'activité.
+- the primary cluster runs the production workloads;
+- the secondary Numspot cluster has Velero installed and synchronizes the backups;
+- manual restore when disaster recovery is invoked.
 
-**Implémentation** :
+**Implementation**:
 
-1. **Configurez le cluster principal pour les sauvegardes** :
+1. **Configure the primary cluster for backups**:
 
 ```bash
-# Sur le cluster principal (ex. AWS)
+# On the primary cluster (e.g. AWS)
 velero schedule create production-backup \
   --schedule="*/30 * * * *" \
   --include-namespaces production \
@@ -950,12 +949,12 @@ velero schedule create production-backup \
   --ttl 168h0m0s
 ```
 
-2. **Configurez la réplication inter-régions pour le stockage de sauvegarde** :
+2. **Configure cross-region replication for the backup storage**:
 
-- utilisez la réplication inter-régions S3 (si AWS vers Numspot) ;
-- ou implémentez une synchronisation personnalisée.
+- use S3 cross-region replication (if AWS to Numspot);
+- or implement custom synchronization.
 
-3. **Configurez le cluster secondaire Numspot** :
+3. **Configure the secondary Numspot cluster**:
 
 ```bash
 velero install \
@@ -967,7 +966,7 @@ velero install \
   --backup-location-config region=eu-west-2,s3ForcePathStyle=true,s3Url=https://oos.eu-west-2.numspot.com
 ```
 
-4. **Créez un script d'automatisation de reprise d'activité** :
+4. **Create a disaster recovery automation script**:
 
 ```bash
 #!/bin/bash
@@ -975,7 +974,7 @@ velero install \
 
 BACKUP_NAME=$(velero backup get --sort-by=.metadata.creationTimestamp -o json | jq -r '.items[-1].metadata.name')
 
-echo "Dernière sauvegarde : $BACKUP_NAME"
+echo "Latest backup: $BACKUP_NAME"
 
 velero restore create dr-restore-$(date +%Y%m%d-%H%M%S) \
   --from-backup $BACKUP_NAME \
@@ -983,35 +982,35 @@ velero restore create dr-restore-$(date +%Y%m%d-%H%M%S) \
   --existing-resource-policy update \
   --wait
 
-echo "Reprise d'activité terminée"
+echo "Disaster recovery complete"
 ```
 
-### Stratégie de reprise d'activité 2 : Actif-Actif avec basculement DNS
+### Disaster recovery strategy 2: Active-Active with DNS failover
 
-**Configuration** :
+**Configuration**:
 
-- les deux clusters exécutent les charges de travail de production ;
-- basculement DNS (Route53, CloudFlare) ;
-- réplication des données via Velero + réplication de base de données.
+- both clusters run the production workloads;
+- DNS failover (Route53, CloudFlare);
+- data replication through Velero + database replication.
 
-**Implémentation** :
+**Implementation**:
 
-1. **Configurez une sauvegarde bidirectionnelle** :
+1. **Configure a bidirectional backup**:
 
 ```bash
-# Sur les deux clusters
+# On both clusters
 velero schedule create bidirectional-backup \
   --schedule="*/15 * * * *" \
   --include-namespaces production \
   --ttl 72h0m0s
 ```
 
-2. **Réplication de base de données** :
+2. **Database replication**:
 
-- utilisez la réplication native de base de données (MySQL Group Replication, PostgreSQL streaming) ;
-- ou utilisez une réplication au niveau de l'application.
+- use native database replication (MySQL Group Replication, PostgreSQL streaming);
+- or use application-level replication.
 
-3. **Configuration du basculement DNS** :
+3. **DNS failover configuration**:
 
 ```json
 {
@@ -1024,20 +1023,20 @@ velero schedule create bidirectional-backup \
 }
 ```
 
-### Stratégie de reprise d'activité 3 : Pilot Light
+### Disaster recovery strategy 3: Pilot Light
 
-**Configuration** :
+**Configuration**:
 
-- l'infrastructure principale tourne toujours sur Numspot ;
-- les serveurs d'application sont restaurés à la demande ;
-- les réplicas de base de données sont maintenus en continu.
+- the core infrastructure always runs on Numspot;
+- the application servers are restored on demand;
+- the database replicas are maintained continuously.
 
-**Implémentation** :
+**Implementation**:
 
-1. **Maintenez les services principaux sur Numspot** :
+1. **Keep the core services on Numspot**:
 
 ```yaml
-# Services principaux toujours en cours d'exécution
+# Core services always running
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -1060,7 +1059,7 @@ spec:
           value: trust
 ```
 
-2. **Sauvegardez uniquement le tiers applicatif** :
+2. **Back up only the application tier**:
 
 ```bash
 velero schedule create app-tier-backup \
@@ -1070,22 +1069,22 @@ velero schedule create app-tier-backup \
   --exclude-resources persistentvolumes,persistentvolumeclaims
 ```
 
-3. **Procédure de reprise d'activité** :
+3. **Disaster recovery procedure**:
 
 ```bash
 #!/bin/bash
 # pilot-light-activate.sh
 
-# Restaurer le tiers applicatif
+# Restore the application tier
 velero restore create activate-pilot \
   --from-backup app-tier-backup-$(date +%Y%m%d) \
   --existing-resource-policy create \
   --wait
 
-# Mettre à l'échelle les applications
+# Scale the applications
 kubectl scale deployment --all -n production --replicas=3
 
-# Mettre à jour le DNS
+# Update the DNS
 aws route53 change-resource-record-sets \
   --hosted-zone-id $HOSTED_ZONE_ID \
   --change-batch file://dns-failover.json
@@ -1093,27 +1092,27 @@ aws route53 change-resource-record-sets \
 
 ---
 
-## Bonnes pratiques
+## Best practices
 
-### 1. Stratégie de sauvegarde
+### 1. Backup strategy
 
-**Fréquence** :
+**Frequency**:
 
-- Production : toutes les 15-30 minutes ;
-- Staging : toutes les 4 heures ;
-- Développement : quotidienne.
+- Production: every 15-30 minutes;
+- Staging: every 4 hours;
+- Development: daily.
 
-**Rétention** :
+**Retention**:
 
-- sauvegardes horaires : 24 heures ;
-- sauvegardes quotidiennes : 30 jours ;
-- sauvegardes hebdomadaires : 90 jours ;
-- sauvegardes mensuelles : 1 an.
+- hourly backups: 24 hours;
+- daily backups: 30 days;
+- weekly backups: 90 days;
+- monthly backups: 1 year.
 
-**Implémentation** :
+**Implementation**:
 
 ```bash
-# Planifications multiples avec différentes rétentions
+# Multiple schedules with different retentions
 velero schedule create hourly-prod \
   --schedule="0 * * * *" \
   --include-namespaces production \
@@ -1132,9 +1131,9 @@ velero schedule create weekly-full \
   --ttl 2160h0m0s
 ```
 
-### 2. Gestion des ressources
+### 2. Resource management
 
-**Excluez les ressources inutiles** :
+**Exclude unnecessary resources**:
 
 ```bash
 velero backup create optimized-backup \
@@ -1143,20 +1142,20 @@ velero backup create optimized-backup \
   --include-cluster-resources=true
 ```
 
-**Utilisez efficacement les étiquettes (labels)** :
+**Use labels efficiently**:
 
 ```bash
-# Étiqueter les ressources critiques
+# Label the critical resources
 kubectl label namespace production backup-priority=critical
 
-# Sauvegarder par priorité
+# Back up by priority
 velero backup create critical-backup \
   --selector backup-priority=critical
 ```
 
-### 3. Optimisation du stockage
+### 3. Storage optimization
 
-**Configurez la compression** :
+**Configure compression**:
 
 ```bash
 velero install \
@@ -1165,32 +1164,32 @@ velero install \
   --bucket YOUR_BUCKET
 ```
 
-**Surveillez l'utilisation du stockage** :
+**Monitor the storage usage**:
 
 ```bash
-# Vérifier les tailles de sauvegarde
+# Check the backup sizes
 velero backup get -o json | jq '.items[] | {name:.metadata.name, size:.status.totalSize}'
 ```
 
-### 4. Sécurité
+### 4. Security
 
-**Chiffrez les sauvegardes au repos** :
+**Encrypt the backups at rest**:
 
 ```bash
-# Utiliser le chiffrement côté serveur
+# Use server-side encryption
 velero install \
   --backup-location-config s3ServerSideEncryption=AES256
 ```
 
-**Chiffrez les sauvegardes en transit** :
+**Encrypt the backups in transit**:
 
 ```bash
-# S'assurer que TLS est activé
+# Ensure that TLS is enabled
 velero install \
   --backup-location-config s3Url=https://oos.eu-west-2.numspot.com
 ```
 
-**Restreignez les permissions Velero** :
+**Restrict the Velero permissions**:
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -1206,43 +1205,43 @@ rules:
   verbs: ["get", "list", "create", "update", "delete"]
 ```
 
-### 5. Tests
+### 5. Testing
 
-**Tests réguliers de restauration** :
+**Regular restore tests**:
 
 ```bash
 #!/bin/bash
 # test-restore.sh
 
-# Créer une sauvegarde de test
+# Create a test backup
 velero backup create test-backup-$(date +%Y%m%d) \
   --include-namespaces test-application \
   --wait
 
-# Supprimer l'espace de noms de test
+# Delete the test namespace
 kubectl delete namespace test-application --wait=true
 
-# Restaurer
+# Restore
 velero restore create test-restore-$(date +%Y%m%d) \
   --from-backup test-backup-$(date +%Y%m%d) \
   --wait
 
-# Vérifier
+# Verify
 kubectl get all -n test-application
 ```
 
-**Planifiez les tests de restauration** :
+**Schedule the restore tests**:
 
 ```bash
-# Test de restauration hebdomadaire (nécessite une automatisation)
+# Weekly restore test (requires automation)
 velero schedule create restore-test \
   --schedule="0 0 * * 0" \
   --include-namespaces test-restore
 ```
 
-### 6. Surveillance et alertes
+### 6. Monitoring and alerting
 
-**Métriques Prometheus** :
+**Prometheus metrics**:
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1
@@ -1259,16 +1258,16 @@ spec:
     interval: 30s
 ```
 
-**Principales métriques à surveiller** :
+**Key metrics to monitor**:
 
-- `velero_backup_attempt_total` ;
-- `velero_backup_success_total` ;
-- `velero_backup_failure_total` ;
-- `velero_backup_duration_seconds` ;
-- `velero_restore_attempt_total` ;
+- `velero_backup_attempt_total`;
+- `velero_backup_success_total`;
+- `velero_backup_failure_total`;
+- `velero_backup_duration_seconds`;
+- `velero_restore_attempt_total`;
 - `velero_restore_success_total`.
 
-**Règles d'alertes** :
+**Alerting rules**:
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1
@@ -1286,8 +1285,8 @@ spec:
       labels:
         severity: critical
       annotations:
-        summary: "La sauvegarde Velero échoue"
-        description: "La sauvegarde Velero a échoué {{ $value }} fois au cours de la dernière heure"
+        summary: "The Velero backup is failing"
+        description: "The Velero backup has failed {{ $value }} times over the last hour"
 
     - alert: VeleroBackupTooOld
       expr: time() - velero_backup_last_successful_timestamp > 86400
@@ -1295,141 +1294,141 @@ spec:
       labels:
         severity: warning
       annotations:
-        summary: "Aucune sauvegarde réussie au cours des dernières 24 heures"
+        summary: "No successful backup over the last 24 hours"
 ```
 
 ---
 
-## Dépannage
+## Troubleshooting
 
-### Problèmes courants
+### Common issues
 
-**1. Sauvegarde bloquée en "InProgress"**
+**1. Backup stuck in "InProgress"**
 
-**Diagnostic** :
+**Diagnosis**:
 
 ```bash
 velero backup describe BACKUP_NAME --details
 kubectl logs -n velero deployment/velero
 ```
 
-**Solution** :
+**Solution**:
 
 ```bash
-# Vérifier les volumes bloqués
+# Check the stuck volumes
 kubectl get volumesnapshot -n velero
 
-# Abandonner la sauvegarde bloquée
+# Abort the stuck backup
 kubectl patch backup BACKUP_NAME -n velero --type merge -p '{"status":{"phase":"Failed"}}'
 
-# Nettoyer
+# Clean up
 kubectl delete backup BACKUP_NAME -n velero
 ```
 
-**2. Échecs d'instantané de volumes**
+**2. Volume snapshot failures**
 
-**Diagnostic** :
+**Diagnosis**:
 
 ```bash
-# Vérifier les journaux du pilote CSI
+# Check the CSI driver logs
 kubectl logs -n kube-system ds/osc-csi-node
 
-# Vérifier le statut des instantanés
+# Check the snapshot status
 kubectl get volumesnapshotsnapshotcontent -A
 ```
 
-**Solution** :
+**Solution**:
 
 ```bash
-# Utiliser la sauvegarde du système de fichiers à la place
+# Use file system backup instead
 velero backup create fsb-backup \
   --include-namespaces myapp \
   --snapshot-volumes=false
 
-# Annoter les pods
+# Annotate the pods
 kubectl annotate pod/myapp-pod -n myapp \
   backup.velero.io/backup-volumes=<volume-name>
 ```
 
-**3. Échec de restauration avec "Resource Already Exists"**
+**3. Restore failure with "Resource Already Exists"**
 
-**Diagnostic** :
+**Diagnosis**:
 
 ```bash
 velero restore describe RESTORE_NAME --details
 ```
 
-**Solution** :
+**Solution**:
 
 ```bash
-# Utiliser la politique de mise à jour
+# Use the update policy
 velero restore create restore-update \
   --from-backup BACKUP_NAME \
   --existing-resource-policy update \
   --wait
 
-# Ou supprimer les existants
+# Or delete the existing resources
 kubectl delete namespace NAMESPACE
 velero restore create restore-clean \
   --from-backup BACKUP_NAME
 ```
 
-**4. Emplacement de stockage de sauvegarde indisponible**
+**4. Backup storage location unavailable**
 
-**Diagnostic** :
+**Diagnosis**:
 
 ```bash
 velero backup-location get
 kubectl logs -n velero deployment/velero | grep -i 'backup location'
 ```
 
-**Solution** :
+**Solution**:
 
 ```bash
-# Vérifier les identifiants
+# Check the credentials
 kubectl get secret -n velero cloud-credentials -o yaml
 
-# Mettre à jour les identifiants
+# Update the credentials
 kubectl create secret generic cloud-credentials \
   -n velero \
   --from-file=cloud=~/.aws/credentials-velero \
   --dry-run=client -o yaml | kubectl apply -f -
 
-# Redémarrer Velero
+# Restart Velero
 kubectl rollout restart deployment/velero -n velero
 ```
 
-**5. Problèmes de restauration inter-fournisseurs**
+**5. Cross-provider restore issues**
 
-**Problème** : non-correspondance de StorageClass
+**Issue**: StorageClass mismatch
 
-**Solution** :
+**Solution**:
 
 ```bash
-# Lister les StorageClasses disponibles sur Numspot
+# List the StorageClasses available on Numspot
 kubectl get storageclass
 
-# Mapper les StorageClasses
+# Map the StorageClasses
 velero restore create cross-provider-restore \
   --from-backup external-backup \
   --restore-volumes=false
 
-# Recréer les PVC avec le bon StorageClass
+# Re-create the PVC with the correct StorageClass
 kubectl get pvc -n production -o yaml | \
   sed 's/storageClassName: gp3/storageClassName: gp2/g' | \
   kubectl apply -f -
 ```
 
-**Problème** : problèmes d'affinité de nœuds
+**Issue**: node affinity issues
 
-**Solution** :
+**Solution**:
 
 ```bash
-# Supprimer les sélecteurs de nœuds
+# Remove the node selectors
 kubectl patch deployment DNAME -n NAMESPACE --type=json \
   -p='[{"op": "remove", "path": "/spec/template/spec/nodeSelector"}]'
 
-# Ou utiliser un modificateur de restauration
+# Or use a restore modifier
 cat > /tmp/restore-modifier.yaml <<EOF
 - version: v1
   kind: Deployment
@@ -1443,77 +1442,77 @@ velero restore create modifier-restore \
   --restore-resource-modifier /tmp/restore-modifier.yaml
 ```
 
-**6. Problèmes de performance**
+**6. Performance issues**
 
-**Sauvegardes lentes** :
+**Slow backups**:
 
-**Diagnostic** :
+**Diagnosis**:
 
 ```bash
-# Journaux Velero
+# Velero logs
 kubectl logs -n velero deployment/velero --tail=100 | grep -i 'duration'
 
-# Vérifier les limites de ressources
+# Check the resource limits
 kubectl describe deployment velero -n velero
 ```
 
-**Solution** :
+**Solution**:
 
 ```bash
-# Augmenter les ressources Velero
+# Increase the Velero resources
 kubectl set resources deployment/velero \
   -n velero \
   --containers=velero \
   --requests=cpu=1000m,memory=1Gi \
   --limits=cpu=2000m,memory=2Gi
 
-# Ajuster la taille de page client
+# Adjust the client page size
 kubectl patch deployment velero -n velero --type=json \
   -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--client-page-size=500"}]'
 
-# Utiliser l'upload parallèle (pour fs-backup)
+# Use parallel upload (for fs-backup)
 velero backup create parallel-backup \
   --include-namespaces myapp \
   --parallel-files-upload 10
 ```
 
-### Commandes utiles
+### Useful commands
 
 ```bash
-# Obtenir le statut Velero
+# Get the Velero status
 velero version
 velero backup-location get
 velero snapshot-location get
 velero schedule get
 
-# Déboguer la sauvegarde
+# Debug the backup
 velero backup describe BACKUP_NAME --details
 velero backup logs BACKUP_NAME
 velero backup download BACKUP_NAME
 
-# Déboguer la restauration
+# Debug the restore
 velero restore describe RESTORE_NAME --details
 velero restore logs RESTORE_NAME
 
-# Nettoyer
+# Clean up
 velero backup delete BACKUP_NAME
 velero restore delete RESTORE_NAME
 
-# Forcer la synchronisation
+# Force synchronisation
 kubectl rollout restart deployment/velero -n velero
 
-# Vérifier le statut du plugin
+# Check the plugin status
 kubectl exec -n velero deployment/velero -- ./velero plugin get
 ```
 
 ---
 
-## Référence rapide
+## Quick reference
 
-### Commandes Velero
+### Velero commands
 
 ```bash
-# Sauvegarde
+# Backup
 velero backup create NAME [flags]
 velero backup get
 velero backup describe NAME
@@ -1521,25 +1520,25 @@ velero backup logs NAME
 velero backup delete NAME
 velero backup download NAME
 
-# Restauration
+# Restore
 velero restore create --from-backup NAME [flags]
 velero restore get
 velero restore describe NAME
 velero restore logs NAME
 velero restore delete NAME
 
-# Planification
+# Schedule
 velero schedule create NAME --schedule="CRON" [flags]
 velero schedule get
 velero schedule describe NAME
 velero schedule delete NAME
 
-# Emplacement
+# Location
 velero backup-location get
 velero snapshot-location get
 ```
 
-### Options courantes
+### Common options
 
 ```bash
 --include-namespaces ns1,ns2
@@ -1556,47 +1555,47 @@ velero snapshot-location get
 --wait
 ```
 
-### Exemples de planification CRON
+### CRON schedule examples
 
 ```bash
-"0 * * * *"       # Toutes les heures
-"*/15 * * * *"    # Toutes les 15 minutes
-"0 2 * * *"       # Quotidien à 2h du matin
-"0 3 * * 0"       # Hebdomadaire le dimanche à 3h du matin
-"0 0 1 * *"       # Mensuel le 1er
+"0 * * * *"       # Every hour
+"*/15 * * * *"    # Every 15 minutes
+"0 2 * * *"       # Daily at 2 a.m.
+"0 3 * * 0"       # Weekly on Sunday at 3 a.m.
+"0 0 1 * *"       # Monthly on the 1st
 ```
 
 ---
 
 ## Conclusion
 
-Velero fournit des capacités complètes de sauvegarde et de reprise d'activité pour les clusters Kubernetes sur Numspot.
+Velero provides full backup and disaster recovery capabilities for Kubernetes clusters on Numspot.
 
-### Points clés
+### Key takeaways
 
-1. **Installation** : utilisez le plugin AWS avec les paramètres de stockage compatible S3 pour le stockage objet Numspot ;
-2. **Stratégie de sauvegarde** : implémentez plusieurs planifications avec différentes durées de rétention ;
-3. **Sauvegarde de volumes** : utilisez Outscale BSU CSI pour les instantanés, ou utilisez la sauvegarde du système de fichiers pour la compatibilité inter-fournisseurs ;
-4. **Reprise d'activité** : choisissez la stratégie appropriée (Actif-Passif, Actif-Actif ou Pilot Light) ;
-5. **Migration inter-fournisseurs** : prévoyez les différences de StorageClass et les stratégies de migration de volumes ;
-6. **Tests** : testez régulièrement les restaurations pour garantir la récupérabilité ;
-7. **Surveillance** : implémentez une surveillance et des alertes complètes pour les opérations de sauvegarde.
+1. **Installation**: use the AWS plugin with the S3-compatible storage parameters for Numspot object storage;
+2. **Backup strategy**: implement several schedules with different retention durations;
+3. **Volume backup**: use Outscale BSU CSI for snapshots, or use file system backup for cross-provider compatibility;
+4. **Disaster recovery**: choose the appropriate strategy (Active-Passive, Active-Active or Pilot Light);
+5. **Cross-provider migration**: plan for StorageClass differences and volume migration strategies;
+6. **Testing**: test the restores regularly to guarantee recoverability;
+7. **Monitoring**: implement comprehensive monitoring and alerting for the backup operations.
 
-Pour les environnements de production :
+For production environments:
 
-- documentez vos procédures de sauvegarde et de restauration ;
-- testez les scénarios de reprise d'activité ;
-- maintenez des copies de sauvegarde hors site ;
-- surveillez la santé des sauvegardes et alertez en cas d'échec ;
-- maintenez Velero et ses plugins à jour.
+- document your backup and restore procedures;
+- test the disaster recovery scenarios;
+- keep off-site backup copies;
+- monitor the backup health and alert on failure;
+- keep Velero and its plugins up to date.
 
 ---
 
-## Références
+## References
 
-- [Documentation officielle Velero](https://velero.io/docs/)
-- [API Stockage Objet Numspot](https://api.eu-west-2.numspot.com/openapi)
-- [Documentation Kubernetes CSI](https://kubernetes-csi.github.io/docs/)
-- [Plugin AWS Velero](https://github.com/vmware-tanzu/velero-plugin-for-aws)
+- [Official Velero documentation](https://velero.io/docs/)
+- [Numspot Object Storage API](https://api.eu-west-2.numspot.com/openapi)
+- [Kubernetes CSI documentation](https://kubernetes-csi.github.io/docs/)
+- [Velero AWS plugin](https://github.com/vmware-tanzu/velero-plugin-for-aws)
 
 ---

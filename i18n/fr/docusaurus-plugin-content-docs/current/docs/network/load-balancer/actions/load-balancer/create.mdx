@@ -1,0 +1,122 @@
+---
+title: Créer un load balancer - Numspot
+sidebar_label: Créer un load balancer
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Créer un load balancer
+
+Un [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) reçoit le trafic entrant et le distribue vers des [VM (Virtual Machine)](/docs/compute/concept/) de backend (serveur dorsal). Par défaut, la création produit un load balancer **internet‑facing** (exposé à Internet) : la résolution DNS (Domain Name System) renvoie une IP publique. Pour créer un load balancer **interne** dans un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) (résolution DNS → IP privée), utilisez le paramètre `LoadBalancerType`. Vous devez fournir **soit** des subnet (sous-réseaux) **soit** des `AvailabilityZoneNames`.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.loadBalancer.create**
+
+:::
+
+:::info Prérequis (API)
+- **Région** : `https://api.{region}.numspot.com`
+- **Auth** : Bearer token (tous les endpoints Load Balancer sont protégés).
+- **`spaceId`** requis dans l'URL.
+- **Nom du LB** : max **32** chars, `a-zA-Z0-9-` uniquement (s'applique aux ressources nommées : LB, listeners, règles, etc.).
+- **HTTPS** : Si vous terminez TLS (Transport Layer Security) sur le LB, créez d'abord un **certificat serveur** (endpoint *CreateServerCertificate*), puis attachez‑le via *UpdateLoadBalancer*.
+:::
+
+## Étapes via l'API
+
+## Créer le load balancer
+   `POST /compute/spaces/{spaceId}/loadBalancers`
+   Le LB reçoit un **nom DNS unique**. Choisissez `internal` ou `internet-facing` via `LoadBalancerType`. Fournissez Subnets ou `AvailabilityZoneNames`.
+
+## Ajouter un ou plusieurs listeners
+   `POST /compute/spaces/{spaceId}/loadBalancers/{id}/listeners`
+   Les listeners définissent protocole/ports (ex. HTTP/HTTPS/TCP) et portent éventuellement un certificat TLS.
+
+## (Optionnel) Créer une politique de session persistante — stickiness (persistance de session)
+   `POST /compute/spaces/{spaceId}/loadBalancers/{id}/policies`
+   Deux modes : **cookie géré par le LB** (durée = cookie navigateur) ou **cookie applicatif** (durée = cookie de l'app). **HTTP/HTTPS uniquement**.
+
+## Enregistrer des VM backend
+   `PUT /compute/spaces/{spaceId}/loadBalancers/{id}/backendMachines/link`
+   Fournissez **au moins** `BackendVmIds` **ou** `BackendIps`. Les VM peuvent être dans **d'autres subnet/AZ** tant que tout est dans **le même VPC**. L'enregistrement peut prendre un peu de temps.
+
+## Contrôler l'état des VM
+   `GET /compute/spaces/{spaceId}/loadBalancers/{id}/vmsHealth` retourne la santé des backends enregistrés.
+
+## Cas d'usage rapides
+- **Site public** : LB **internet‑facing** + listeners 80/443, VM web.
+- **Micro‑services privés** : LB **interne** dans un VPC, exposé uniquement aux workloads internes.
+- **Terminaison TLS** : certificat via *CreateServerCertificate* puis attachement côté LB.
+- **Sessions persistantes** pour applis stateful (panier, portail) : stickiness (persistance de session) HTTP/HTTPS.
+
+## Bonnes pratiques
+- **Nommage** : respectez la contrainte 32 chars / alphanum + tiret pour éviter les 400.
+- **Sécurité** : ouvrez uniquement les ports nécessaires dans les [security group (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) et isolez les LBs internes dans le VPC.
+- **Évolution** : pour changer de certificat ou de policy, passez par *UpdateLoadBalancer* (un seul attribut par appel).
+- **Traçabilité** : utilisez des **tags** (étiquettes) pour env/projet/service.
+
+## Erreurs fréquentes (et résolution)
+- Création sans Subnets **ni** `AvailabilityZoneNames` → 400 : fournissez l'un des deux.
+- Politique de stickiness (persistance de session) sur **TCP** → 400 : stickiness **HTTP/HTTPS** seulement.
+- Impossible de supprimer une **policy** encore activée sur un listener → désactivez d'abord la policy sur le listener (via *UpdateLoadBalancer*), puis appelez `DELETE /compute/spaces/{spaceId}/loadBalancers/{id}/policies`.
+- Détacher un **[Internet Gateway](/docs/network/internet-gateway/concepts/)** d'un VPC qui a des LBs **internet‑facing** → interdit : supprimez/convertissez d'abord les LBs publics.
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+La création d'un load balancer n'est pas disponible depuis la console Numspot.
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+:::info
+**Avant de commencer** :
+
+1. Créez un VPC.
+
+2. Créez un security group pour le load balancer avec les règles suivantes :
+
+   - Autorisez les flux entrants dans le protocole sur le port souhaité.
+   - Autorisez les flux entrants provenant des security group des VM qui lui envoient des requêtes.
+   - Autorisez les flux sortants vers tous les security group des VM de backend.
+
+3. Configurez le security group des futures VM de backend avec les règles suivantes :
+
+   - Autorisez les flux entrants dans le protocole sur le port souhaité.
+   - Autorisez les flux entrants provenant du security group du load balancer.
+:::
+
+La commande `POST /compute/spaces/{spaceId}/loadBalancers` crée un load balancer.
+
+Le load balancer est créé avec un nom DNS unique. Il reçoit le trafic entrant et le redirige vers ses VM enregistrées. Par défaut, cette action crée un load balancer accessible via Internet, qui résout vers des IP publiques. Pour créer un load balancer interne dans un VPC, résolvant vers des IP privées, utilisez le paramètre **type**.
+
+Vous devez spécifier soit les paramètres **subnets**, soit **AvailabilityZoneNames**.
+
+[Exemple de requête : Création d'un load balancer ↗](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/loadBalancers)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
+
+</TabItem>
+</Tabs>

@@ -1,47 +1,47 @@
 ---
-title: Configurer la réplication Harbor
+title: Configure Harbor replication
 sidebar_position: 2
 draft: false
 ---
 
-# Configurer la réplication Harbor
+# Configure Harbor replication
 
-Ce guide explique comment configurer et gérer la réplication avec les instances de Container Registry Numspot basées sur Harbor.
+This guide explains how to configure and manage replication with Numspot Container Registry instances based on Harbor.
 
 ---
 
-## Vue d'ensemble
+## Overview
 
-La réplication Harbor vous permet de synchroniser des images de conteneurs et des artefacts OCI entre registries. Sur la plateforme Numspot, la réplication prend en charge deux cas d'utilisation principaux :
+Harbor replication allows you to synchronize container images and OCI artifacts between registries. On the Numspot platform, replication supports two main use cases:
 
-### Cas d'utilisation
+### Use cases
 
-#### 1. Migration vers Numspot (réplication entrante)
+#### 1. Migration to Numspot (inbound replication)
 
-Tirez des images de votre registry de conteneurs existant vers une instance de Container Registry Numspot. Cela est idéal pour :
+Pull images from your existing container registry to a Numspot Container Registry instance. This is ideal for:
 
-- **Migration cloud** : Déplacez les charges de travail vers le cloud souverain Numspot
-- **Consolidation** : Centralisez les images de conteneurs depuis plusieurs registries
-- **Sauvegarde** : Créez une copie redondante des images critiques sur Numspot
+- **Cloud migration**: move workloads to the Numspot sovereign cloud
+- **Consolidation**: centralize container images from several registries
+- **Backup**: create a redundant copy of critical images on Numspot
 
-#### 2. Réversibilité - Quitter Numspot (réplication sortante)
+#### 2. Reversibility - Leaving Numspot (outbound replication)
 
-Poussez des images depuis votre Container Registry Numspot vers un registry externe. Cela assure :
+Push images from your Numspot Container Registry to an external registry. This ensures:
 
-- **Portabilité** : Répondre aux exigences réglementaires de réversibilité cloud
-- **Stratégie multi-cloud** : Distribuer des images sur plusieurs fournisseurs
-- **Reprise après sinistre** : Maintenir des sauvegardes hors plateforme de vos images
+- **Portability**: meet regulatory cloud reversibility requirements
+- **Multi-cloud strategy**: distribute images across several providers
+- **Disaster recovery**: keep off-platform backups of your images
 
-### Modes de réplication
+### Replication modes
 
-| Mode | Description | Cas d'utilisation |
+| Mode | Description | Use case |
 |------|-------------|----------|
-| **Pull-based** | Tirer les artefacts depuis un registry distant vers Numspot | Migrer vers Numspot, refléter les registries externes |
-| **Push-based** | Pousser les artefacts depuis Numspot vers un registry distant | Réversibilité, distribution multi-cloud |
+| **Pull-based** | Pull artifacts from a remote registry to Numspot | Migrate to Numspot, mirror external registries |
+| **Push-based** | Push artifacts from Numspot to a remote registry | Reversibility, multi-cloud distribution |
 
-### Registries pris en charge
+### Supported registries
 
-Le Container Registry Numspot peut répliquer vers/depuis :
+The Numspot Container Registry can replicate to/from:
 
 - Docker Hub
 - AWS Elastic Container Registry (ECR)
@@ -52,34 +52,34 @@ Le Container Registry Numspot peut répliquer vers/depuis :
 - JFrog Artifactory
 - Ali Cloud Container Registry
 - Huawei SWR
-- Autres instances Harbor (y compris d'autres registries Numspot)
+- Other Harbor instances (including other Numspot registries)
 
 ---
 
-## Prérequis
+## Prerequisites
 
-### Pour le Container Registry Numspot
+### For the Numspot Container Registry
 
-Avant de configurer la réplication, assurez-vous de :
+Before configuring replication, ensure that:
 
-1. **L'instance de Registry Numspot est créée et en cours d'exécution**
-2. **Connectivité réseau** entre les registries source et destination
-3. **Identifiants admin** pour l'instance de registry Numspot
-4. **Space ID** et **Registry ID** de votre instance Numspot
+1. **The Numspot Registry instance is created and running**
+2. **Network connectivity** between the source and destination registries
+3. **Admin credentials** for the Numspot registry instance
+4. **Space ID** and **Registry ID** of your Numspot instance
 
-### Permissions requises
+### Required permissions
 
-- **Registry source** : Accès en lecture (pull images)
-- **Registry destination** : Accès en écriture (push images)
-- **IAM Numspot** : Permission de gérer les instances de registry
+- **Source registry**: read access (pull images)
+- **Destination registry**: write access (push images)
+- **Numspot IAM**: permission to manage registry instances
 
 ---
 
-## Partie 1 : Gestion des instances de Container Registry Numspot
+## Part 1: Managing Numspot Container Registry instances
 
-### 1.1 Créer une instance de Container Registry
+### 1.1 Create a Container Registry instance
 
-Avant de configurer la réplication, créez une instance de registry via l'API Numspot :
+Before configuring replication, create a registry instance via the Numspot API:
 
 ```bash
 curl -X POST "https://api.cloudgouv-eu-west-1.numspot.com/registry/spaces/{spaceId}/registries" \
@@ -92,15 +92,15 @@ curl -X POST "https://api.cloudgouv-eu-west-1.numspot.com/registry/spaces/{space
   }'
 ```
 
-**Paramètres :**
+**Parameters:**
 
-| Champ | Type | Description | Valeurs |
+| Field | Type | Description | Values |
 |-------|------|-------------|--------|
-| `name` | string | Nom du registry (compatible DNS) | `my-registry`, `prod-registry` |
-| `version` | string | Version Harbor | `2.13`, `2.14` |
-| `visibility` | string | Accessibilité réseau | `EXTERNAL` (endpoint public), `INTERNAL` (nécessite VPN) |
+| `name` | string | Registry name (DNS-compatible) | `my-registry`, `prod-registry` |
+| `version` | string | Harbor version | `2.13`, `2.14` |
+| `visibility` | string | Network accessibility | `EXTERNAL` (public endpoint), `INTERNAL` (requires VPN) |
 
-**Réponse :**
+**Response:**
 
 ```json
 {
@@ -112,20 +112,20 @@ curl -X POST "https://api.cloudgouv-eu-west-1.numspot.com/registry/spaces/{space
     "state": "CREATING",
     "message": "Registry is being provisioned"
   },
-  "host": "https://reg-123e4567.space-123e4567.hcp.cloudgouv-eu-west-1.numspot.com"
+  "host": "https://registry-123e4567-e89b-12d3-a456-426614174000.hcp.cloudgouv-eu-west-1.numspot.com"
 }
 ```
 
-### 1.2 Récupérer les identifiants admin
+### 1.2 Retrieve admin credentials
 
-Obtenez le mot de passe admin pour votre registry :
+Obtain the admin password for your registry:
 
 ```bash
 curl -X GET "https://api.cloudgouv-eu-west-1.numspot.com/registry/spaces/{spaceId}/registries/{registryId}/password" \
   -H "Authorization: Bearer {token}"
 ```
 
-**Réponse :**
+**Response:**
 
 ```json
 {
@@ -133,45 +133,45 @@ curl -X GET "https://api.cloudgouv-eu-west-1.numspot.com/registry/spaces/{spaceI
 }
 ```
 
-Nom d'utilisateur par défaut : `admin`
+Default username: `admin`
 
-### 1.3 Lister les instances de Registry
+### 1.3 List Registry instances
 
-Listez tous les registries dans votre espace :
+List all registries in your space:
 
 ```bash
 curl -X GET "https://api.cloudgouv-eu-west-1.numspot.com/registry/spaces/{spaceId}/registries" \
   -H "Authorization: Bearer {token}"
 ```
 
-### 1.4 Obtenir les détails d'un Registry
+### 1.4 Get Registry details
 
-Récupérez les informations d'un registry spécifique :
+Retrieve the information of a specific registry:
 
 ```bash
 curl -X GET "https://api.cloudgouv-eu-west-1.numspot.com/registry/spaces/{spaceId}/registries/{registryId}" \
   -H "Authorization: Bearer {token}"
 ```
 
-**États du Registry :**
+**Registry states:**
 
-| État | Description |
+| State | Description |
 |------|-------------|
-| `CREATING` | Le registry est en cours de provisionnement |
-| `RUNNING` | Le registry est opérationnel |
-| `PENDING` | Le registry est en cours de configuration |
-| `UPGRADING` | Mise à jour de version en cours |
-| `REPAIRING` | Réparation automatique en cours |
-| `FAILED` | Échec du provisionnement |
-| `DELETING` | Le registry est en cours de suppression |
+| `CREATING` | The registry is being provisioned |
+| `RUNNING` | The registry is operational |
+| `PENDING` | The registry is being configured |
+| `UPGRADING` | A version upgrade is in progress |
+| `REPAIRING` | Automatic repair is in progress |
+| `FAILED` | Provisioning failed |
+| `DELETING` | The registry is being deleted |
 
 ---
 
-## Partie 2 : Scénario 1 - Migration d'images vers Numspot
+## Part 2: Scenario 1 - Migrating images to Numspot
 
-Utilisez la **réplication Pull-based** pour migrer des images depuis un registry externe vers Numspot.
+Use **Pull-based replication** to migrate images from an external registry to Numspot.
 
-### 2.1 Vue d'ensemble de l'architecture
+### 2.1 Architecture overview
 
 ```text
 External Registry          Numspot Container Registry
@@ -181,100 +181,100 @@ External Registry          Numspot Container Registry
                                   (Destination)
 ```
 
-### 2.2 Configuration étape par étape
+### 2.2 Step-by-step configuration
 
-#### Étape 1 : Accéder à l'interface Harbor
+#### Step 1: Access the Harbor interface
 
-1. Récupérez l'hôte de votre registry depuis la réponse de l'API ou la console Numspot
-2. Accédez à : `https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com`
-3. Connectez-vous avec :
-   - **Nom d'utilisateur** : `admin`
-   - **Mot de passe** : Utilisez le mot de passe obtenu via l'API (section 1.2)
+1. Retrieve your registry host from the API response or the Numspot console
+2. Go to: `https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com`
+3. Log in with:
+   - **Username**: `admin`
+   - **Password**: use the password obtained via the API (section 1.2)
 
-#### Étape 2 : Créer un endpoint de réplication (Registry externe)
+#### Step 2: Create a replication endpoint (external registry)
 
-1. Allez dans **Administration** → **Registries**
-2. Cliquez sur **+ New Endpoint**
-3. Configurez le registry externe :
+1. Go to **Administration** → **Registries**
+2. Click **+ New Endpoint**
+3. Configure the external registry:
 
-   | Champ | Valeur |
+   | Field | Value |
    |-------|--------|
    | **Provider** | `Docker Hub`, `AWS ECR`, etc. |
    | **Name** | `source-docker-hub` |
    | **Endpoint URL** | `https://registry-1.docker.io` (Docker Hub) |
-   | **Access ID** | Votre nom d'utilisateur Docker Hub |
-   | **Access Secret** | Votre mot de passe/token Docker Hub |
-   | **Verify Remote Cert** | Activé |
+   | **Access ID** | Your Docker Hub username |
+   | **Access Secret** | Your Docker Hub password/token |
+   | **Verify Remote Cert** | Enabled |
 
-4. Cliquez sur **Test Connection**
-5. Cliquez sur **OK** pour enregistrer
+4. Click **Test Connection**
+5. Click **OK** to save
 
-#### Étape 3 : Créer une règle de réplication Pull
+#### Step 3: Create a Pull replication rule
 
-1. Allez dans **Administration** → **Replications**
-2. Cliquez sur **New Replication Rule**
-3. Configurez :
+1. Go to **Administration** → **Replications**
+2. Click **New Replication Rule**
+3. Configure:
 
-   **Paramètres de base :**
+   **Basic parameters:**
 
-   | Champ | Valeur |
+   | Field | Value |
    |-------|--------|
    | **Name** | `migrate-docker-hub-images` |
    | **Description** | `Pull critical images from Docker Hub to Numspot` |
    | **Replication Mode** | `Pull-based` |
 
-   **Source (Registry externe) :**
+   **Source (external registry):**
 
-   | Champ | Valeur |
+   | Field | Value |
    |-------|--------|
    | **Source Registry** | `source-docker-hub` |
 
-   **Filtres :**
+   **Filters:**
 
-   | Champ | Valeur |
+   | Field | Value |
    |-------|--------|
    | **Name** | `library/nginx`, `library/redis` |
    | **Tag** | `latest`, `alpine` |
    | **Resource** | `All` |
 
-   **Mode de déclenchement :**
+   **Trigger mode:**
 
-   - **Manual** : Migration ponctuelle
-   - **Scheduled** : Synchronisation périodique (ex : `0 2 * * *` quotidien à 2h du matin)
+   - **Manual**: one-off migration
+   - **Scheduled**: periodic synchronization (e.g. `0 2 * * *` daily at 2 a.m.)
 
-   **Avancé :**
+   **Advanced:**
 
-   | Champ | Valeur |
+   | Field | Value |
    |-------|--------|
-   | **Override** | (remplacer les images existantes) |
-   | **Bandwidth** | `-1` (illimité) ou limite selon vos besoins |
+   | **Override** | (overwrite existing images) |
+   | **Bandwidth** | `-1` (unlimited) or a limit according to your needs |
 
-4. Cliquez sur **Save**
+4. Click **Save**
 
-#### Étape 4 : Exécuter la réplication
+#### Step 4: Run the replication
 
-1. Sélectionnez la règle de réplication
-2. Cliquez sur **Replicate**
-3. Surveillez la progression dans l'onglet **Executions**
+1. Select the replication rule
+2. Click **Replicate**
+3. Monitor progress in the **Executions** tab
 
-#### Étape 5 : Vérifier la migration
+#### Step 5: Verify the migration
 
-Une fois la réplication terminée :
+Once replication is complete:
 
 ```bash
-## Lister les dépôts dans le registry Numspot
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/1/repositories" \
+## List the repositories in the Numspot registry
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/1/repositories" \
   -u "admin:{password}"
 
-## Tirer une image depuis Numspot
-docker pull reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/library/nginx:latest
+## Pull an image from Numspot
+docker pull registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/library/nginx:latest
 ```
 
-### 2.3 Exemple : Migrer depuis AWS ECR
+### 2.3 Example: Migrate from AWS ECR
 
 ```bash
-## Créer un endpoint pour AWS ECR
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/registries" \
+## Create an endpoint for AWS ECR
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/registries" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -289,8 +289,8 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
     "insecure": false
   }'
 
-## Créer une règle de réplication pull
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/policies" \
+## Create a pull replication rule
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/policies" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -306,8 +306,8 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
     "override": true
   }'
 
-## Déclencher la réplication
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/executions" \
+## Trigger the replication
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/executions" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{"policy_id": 1}'
@@ -315,11 +315,11 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
 
 ---
 
-## Partie 3 : Scénario 2 - Réversibilité (Quitter Numspot)
+## Part 3: Scenario 2 - Reversibility (Leaving Numspot)
 
-Utilisez la **réplication Push-based** pour migrer des images depuis Numspot vers un registry externe.
+Use **Push-based replication** to migrate images from Numspot to an external registry.
 
-### 3.1 Vue d'ensemble de l'architecture
+### 3.1 Architecture overview
 
 ```text
 Numspot Container Registry     External Registry
@@ -329,112 +329,112 @@ Numspot Container Registry     External Registry
     (Source)                      (Destination)
 ```
 
-### 3.2 Configuration étape par étape
+### 3.2 Step-by-step configuration
 
-#### Étape 1 : Créer un endpoint de registry de destination
+#### Step 1: Create a destination registry endpoint
 
-1. Accédez à votre interface Harbor Numspot
-2. Allez dans **Administration** → **Registries**
-3. Cliquez sur **+ New Endpoint**
-4. Configurez le registry de destination :
+1. Access your Numspot Harbor interface
+2. Go to **Administration** → **Registries**
+3. Click **+ New Endpoint**
+4. Configure the destination registry:
 
-   | Champ | Valeur |
+   | Field | Value |
    |-------|--------|
    | **Provider** | `Harbor`, `AWS ECR`, etc. |
    | **Name** | `destination-external-registry` |
    | **Endpoint URL** | `https://your-registry.example.com` |
-   | **Access ID** | Nom d'utilisateur ou clé d'accès |
-   | **Access Secret** | Mot de passe ou clé secrète |
-   | **Verify Remote Cert** | Activé |
+   | **Access ID** | Username or access key |
+   | **Access Secret** | Password or secret key |
+   | **Verify Remote Cert** | Enabled |
 
-5. Cliquez sur **Test Connection**
-6. Cliquez sur **OK**
+5. Click **Test Connection**
+6. Click **OK**
 
-#### Étape 2 : Créer une règle de réplication Push
+#### Step 2: Create a Push replication rule
 
-1. Allez dans **Administration** → **Replications**
-2. Cliquez sur **New Replication Rule**
-3. Configurez :
+1. Go to **Administration** → **Replications**
+2. Click **New Replication Rule**
+3. Configure:
 
-   **Paramètres de base :**
+   **Basic parameters:**
 
-   | Champ | Valeur |
+   | Field | Value |
    |-------|--------|
    | **Name** | `reversibility-full-export` |
    | **Description** | `Push all images to external registry for reversibility` |
    | **Replication Mode** | `Push-based` |
 
-   **Destination (Registry externe) :**
+   **Destination (external registry):**
 
-   | Champ | Valeur |
+   | Field | Value |
    |-------|--------|
    | **Destination Registry** | `destination-external-registry` |
-   | **Destination Namespace** | `numspot-backup` (ou laissez vide pour préserver la structure) |
+   | **Destination Namespace** | `numspot-backup` (or leave empty to preserve the structure) |
 
-   **Filtres :**
+   **Filters:**
 
-   | Champ | Valeur |
+   | Field | Value |
    |-------|--------|
-   | **Name** | `**` (tous les dépôts) |
-   | **Tag** | `*` (tous les tags) |
+   | **Name** | `**` (all repositories) |
+   | **Tag** | `*` (all tags) |
    | **Resource** | `All` |
 
-   **Mode de déclenchement :**
+   **Trigger mode:**
 
-   - **Manual** : Export ponctuel pour réversibilité
-   - **Event Based** : Synchronisation continue (avec option de suppression)
+   - **Manual**: one-off export for reversibility
+   - **Event Based**: continuous synchronization (with deletion option)
 
-   **Aplatissement de destination :**
+   **Destination flattening:**
 
-   Sélectionnez selon votre registry cible :
-   - **No Flattening** : Préserver la hiérarchie complète des namespaces
-   - **Flatten 1-3 Levels** : Simplifier la structure des chemins
+   Select according to your target registry:
+   - **No Flattening**: preserve the full namespace hierarchy
+   - **Flatten 1-3 Levels**: simplify the path structure
 
-   **Avancé :**
+   **Advanced:**
 
-   | Champ | Valeur |
+   | Field | Value |
    |-------|--------|
-   | **Override** | (remplacer les images existantes) |
-   | **Delete remote resources when locally deleted** | (pour Event Based) |
+   | **Override** | (overwrite existing images) |
+   | **Delete remote resources when locally deleted** | (for Event Based) |
 
-4. Cliquez sur **Save**
+4. Click **Save**
 
-#### Étape 3 : Exécuter l'export complet
+#### Step 3: Run the full export
 
-1. Sélectionnez la règle de réplication
-2. Cliquez sur **Replicate**
-3. Surveillez la progression :
-   - Consultez l'onglet **Executions**
-   - Cliquez sur l'ID d'exécution pour la liste détaillée des tâches
-   - Suivez les artefacts répliqués, la vitesse et la durée
+1. Select the replication rule
+2. Click **Replicate**
+3. Monitor progress:
+   - Check the **Executions** tab
+   - Click the execution ID for the detailed task list
+   - Track the replicated artifacts, the speed and the duration
 
-#### Étape 4 : Vérifier l'export
+#### Step 4: Verify the export
 
-Une fois la réplication terminée, vérifiez les images dans le registry de destination :
+Once replication is complete, verify the images in the destination registry:
 
 ```bash
-## Lister les dépôts dans la destination
+## List the repositories in the destination
 curl -X GET "https://your-registry.example.com/api/v2.0/projects/1/repositories" \
   -u "username:password"
 
-## Tirer une image depuis la destination
+## Pull an image from the destination
 docker pull your-registry.example.com/numspot-backup/myapp:v1.0
 ```
 
-#### Étape 5 : Documenter la réversibilité
+#### Step 5: Document the reversibility
 
-Maintenez une documentation de :
+Keep documentation of:
 
-1. La configuration de la règle de réplication
-2. Les journaux d'exécution et horodatages
-3. Les résultats de vérification
-4. Toutes les étapes de post-traitement manuelles
+1. The replication rule configuration
+2. The execution logs and timestamps
+3. The verification results
+4. Any manual post-processing steps
 
-### 3.3 Exemple : Push vers AWS ECR
+### 3.3 Example: Push to AWS ECR
 
 ```bash
-## Créer un endpoint pour AWS ECR (destination)
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/registries" \
+## Create an endpoint for AWS ECR (destination)
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/registries" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -448,8 +448,8 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
     }
   }'
 
-## Créer une règle de réplication push
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/policies" \
+## Create a push replication rule
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/policies" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -467,29 +467,29 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
     "speed": -1
   }'
 
-## Exécuter la réplication push
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/executions" \
+## Run the push replication
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/executions" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{"policy_id": 2}'
 ```
 
-### 3.4 Liste de contrôle pour la conformité de réversibilité
+### 3.4 Checklist for reversibility compliance
 
-Pour la conformité réglementaire, assurez-vous que :
+For regulatory compliance, ensure that:
 
-- [ ] Tous les projets/dépôts sont inclus dans les filtres de réplication
-- [ ] Tous les tags d'images sont répliqués (pas d'exclusions de filtres)
-- [ ] Les signatures d'images (Cosign) sont répliquées
-- [ ] Les journaux d'exécution de réplication sont sauvegardés
-- [ ] Le registry de destination est accessible et fonctionnel
-- [ ] Les images peuvent être tirées depuis le registry de destination
-- [ ] Les charges de travail applicatives peuvent utiliser les images de destination
-- [ ] La documentation inclut la configuration complète de réplication
+- [ ] All projects/repositories are included in the replication filters
+- [ ] All image tags are replicated (no filter exclusions)
+- [ ] Image signatures (Cosign) are replicated
+- [ ] The replication execution logs are backed up
+- [ ] The destination registry is accessible and functional
+- [ ] Images can be pulled from the destination registry
+- [ ] Application workloads can use the destination images
+- [ ] The documentation includes the full replication configuration
 
 ---
 
-## Partie 4 : Configuration spécifique par Registry
+## Part 4: Registry-specific configuration
 
 ### Docker Hub
 
@@ -504,7 +504,7 @@ Pour la conformité réglementaire, assurez-vous que :
 }
 ```
 
-**Note** : Pour les images officielles, utilisez le préfixe `library/` dans les filtres (ex : `library/nginx`).
+**Note**: for official images, use the `library/` prefix in the filters (e.g. `library/nginx`).
 
 ### AWS ECR
 
@@ -519,7 +519,7 @@ Pour la conformité réglementaire, assurez-vous que :
 }
 ```
 
-**Permissions IAM requises :**
+**Required IAM permissions:**
 
 ```json
 {
@@ -558,7 +558,7 @@ Pour la conformité réglementaire, assurez-vous que :
 }
 ```
 
-**Note** : Le namespace doit commencer par l'ID du projet.
+**Note**: the namespace must start with the project ID.
 
 ### Azure Container Registry
 
@@ -586,7 +586,7 @@ Pour la conformité réglementaire, assurez-vous que :
 }
 ```
 
-### Autres instances Harbor
+### Other Harbor instances
 
 ```json
 {
@@ -602,19 +602,19 @@ Pour la conformité réglementaire, assurez-vous que :
 
 ---
 
-## Partie 5 : Scénarios de réplication avancés
+## Part 5: Advanced replication scenarios
 
-### 5.1 Réplication croisée entre Registry Numspot
+### 5.1 Cross-replication between Numspot Registry instances
 
-Répliquez entre deux instances de Container Registry Numspot :
+Replicate between two Numspot Container Registry instances:
 
-**Scénario** : Registry de production dans EU-West-1 vers registry de reprise après sinistre (DR) dans EU-West-2
+**Scenario**: production registry in EU-West-1 to disaster recovery (DR) registry in EU-West-2
 
 ```bash
-## Source : Registry EU-West-1 (source-registry-id)
-## Destination : Registry EU-West-2 (dest-registry-id)
+## Source: EU-West-1 Registry (source-registry-id)
+## Destination: EU-West-2 Registry (dest-registry-id)
 
-## Sur le registry source, créer un endpoint pour la destination
+## On the source registry, create an endpoint for the destination
 curl -X POST "https://registry-{source-registry-id}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/registries" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
@@ -628,7 +628,7 @@ curl -X POST "https://registry-{source-registry-id}.hcp.cloudgouv-eu-west-1.nums
     }
   }'
 
-## Créer une règle de réplication push pour le DR
+## Create a push replication rule for the DR
 curl -X POST "https://registry-{source-registry-id}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/policies" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
@@ -647,13 +647,13 @@ curl -X POST "https://registry-{source-registry-id}.hcp.cloudgouv-eu-west-1.nums
   }'
 ```
 
-### 5.2 Sauvegarde cross-cloud planifiée
+### 5.2 Scheduled cross-cloud backup
 
-Créez une sauvegarde quotidienne vers un fournisseur cloud externe :
+Create a daily backup to an external cloud provider:
 
 ```bash
-## Créer une réplication planifiée (s'exécute quotidiennement à 2h du matin)
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/policies" \
+## Create a scheduled replication (runs daily at 2 a.m.)
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/policies" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -676,13 +676,13 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
   }'
 ```
 
-### 5.3 Migration sélective avec filtres
+### 5.3 Selective migration with filters
 
-Migrez uniquement des images spécifiques :
+Migrate only specific images:
 
 ```bash
-## Migrer uniquement les images de production avec versioning sémantique
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/policies" \
+## Migrate only production images with semantic versioning
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/policies" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -709,154 +709,154 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
 
 ---
 
-## Partie 6 : Surveillance et dépannage
+## Part 6: Monitoring and troubleshooting
 
-### 6.1 Surveiller le statut de réplication
+### 6.1 Monitor the replication status
 
-#### Via l'interface Harbor
+#### Via the Harbor interface
 
-1. Allez dans **Administration** → **Replications**
-2. Cliquez sur une règle de réplication
-3. Consultez l'onglet **Executions**
-4. Cliquez sur l'ID d'exécution pour voir les tâches détaillées
+1. Go to **Administration** → **Replications**
+2. Click a replication rule
+3. Check the **Executions** tab
+4. Click the execution ID to view the detailed tasks
 
-#### Via l'API
+#### Via the API
 
 ```bash
-## Lister les exécutions de réplication
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/executions?policy_id=1" \
+## List the replication executions
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/executions?policy_id=1" \
   -u "admin:{password}"
 
-## Obtenir les détails d'une exécution spécifique
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/executions/{execution_id}/tasks" \
+## Get the details of a specific execution
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/executions/{execution_id}/tasks" \
   -u "admin:{password}"
 
-## Vérifier le statut d'une exécution
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/executions/{execution_id}" \
+## Check the status of an execution
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/executions/{execution_id}" \
   -u "admin:{password}" | jq '.status'
 ```
 
-### 6.2 Problèmes courants et solutions
+### 6.2 Common issues and solutions
 
-#### Problème 1 : Registry non démarré
+#### Issue 1: Registry not started
 
-**Symptôme** : Impossible d'accéder à l'interface Harbor ou l'API renvoie 503
+**Symptom**: unable to access the Harbor interface, or the API returns 503
 
-**Solution** :
+**Solution**:
 ```bash
-## Vérifier le statut du registry via l'API Numspot
+## Check the registry status via the Numspot API
 curl -X GET "https://api.cloudgouv-eu-west-1.numspot.com/registry/spaces/{spaceId}/registries/{registryId}" \
   -H "Authorization: Bearer {token}"
 
-## État attendu : "RUNNING"
-## Si "FAILED", vérifiez le message d'erreur et contactez le support
+## Expected state: "RUNNING"
+## If "FAILED", check the error message and contact support
 ```
 
-#### Problème 2 : Délai de connexion au registry externe
+#### Issue 2: Connection timeout to the external registry
 
-**Symptôme** : Test Connection échoue avec un délai d'attente
+**Symptom**: Test Connection fails with a timeout
 
-**Solutions** :
-1. Vérifiez que l'URL du registry externe est correcte et accessible
-2. Vérifiez si le registry externe nécessite un VPN/whitelist
-3. Désactivez **Verify Remote Cert** si vous utilisez des certificats auto-signés (non recommandé en production)
-4. Testez la connectivité :
+**Solutions**:
+1. Check that the external registry URL is correct and accessible
+2. Check whether the external registry requires a VPN/whitelist
+3. Disable **Verify Remote Cert** if you use self-signed certificates (not recommended in production)
+4. Test the connectivity:
    ```bash
    curl -vk https://external-registry.example.com/v2/
    ```
 
-#### Problème 3 : Échec d'authentification
+#### Issue 3: Authentication failure
 
-**Symptôme** : La tâche de réplication échoue avec 401 Unauthorized
+**Symptom**: the replication task fails with 401 Unauthorized
 
-**Solutions** :
+**Solutions**:
 
-Pour **AWS ECR** :
-- Utilisez des clés d'accès, pas de rôle IAM
-- Vérifiez que les clés ont les permissions ECR requises
-- Vérifiez que les clés ne sont pas expirées
+For **AWS ECR**:
+- Use access keys, not an IAM role
+- Check that the keys have the required ECR permissions
+- Check that the keys are not expired
 
-Pour **GCR** :
-- Assurez-vous que le JSON du compte de service est complet
-- Vérifiez que le compte de service a le rôle `roles/storage.objectAdmin`
+For **GCR**:
+- Ensure that the service account JSON is complete
+- Check that the service account has the `roles/storage.objectAdmin` role
 
-Pour **Harbor** (Numspot ou externe) :
-- Vérifiez que le mot de passe admin est correct
-- Utilisez des comptes robot avec des permissions limitées
-- Vérifiez que le compte robot a les permissions push/pull sur les projets cibles
+For **Harbor** (Numspot or external):
+- Check that the admin password is correct
+- Use robot accounts with limited permissions
+- Check that the robot account has push/pull permissions on the target projects
 
-#### Problème 4 : Échec partiel de la réplication
+#### Issue 4: Partial replication failure
 
-**Symptôme** : Certains artefacts réussissent, d'autres échouent
+**Symptom**: some artifacts succeed, others fail
 
-**Solutions** :
-1. Vérifiez le quota de stockage de destination :
+**Solutions**:
+1. Check the destination storage quota:
    ```bash
-   curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/systeminfo" \
+   curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/systeminfo" \
      -u "admin:{password}" | jq '.storage'
    ```
 
-2. Consultez les journaux des tâches échouées :
+2. Check the logs of the failed tasks:
    ```bash
-   curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/executions/{execution_id}/tasks?status=error" \
+   curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/replication/executions/{execution_id}/tasks?status=error" \
      -u "admin:{password}"
    ```
 
-3. Vérifiez les limites de taille d'image et les capacités d'upload de blob
+3. Check the image size limits and the blob upload capabilities
 
-#### Problème 5 : Problèmes de bande passante réseau
+#### Issue 5: Network bandwidth issues
 
-**Symptôme** : La réplication est lente ou se bloque
+**Symptom**: replication is slow or hangs
 
-**Solutions** :
-- Augmentez la limite de bande passante dans la règle de réplication (ou définissez sur `-1` pour illimité)
-- Réduisez le nombre de workers concurrents si le réseau est saturé
-- Utilisez **Copy by Chunk** pour les grandes images :
+**Solutions**:
+- Increase the bandwidth limit in the replication rule (or set it to `-1` for unlimited)
+- Reduce the number of concurrent workers if the network is saturated
+- Use **Copy by Chunk** for large images:
   ```bash
-  # Activer Copy by Chunk dans la règle de réplication
-  # Ou définir la variable d'environnement dans Harbor jobservice
+  # Enable Copy by Chunk in the replication rule
+  # Or set the environment variable in Harbor jobservice
   REPLICATION_CHUNK_SIZE=10485760  # 10MB
   ```
 
-### 6.3 Journaux Harbor
+### 6.3 Harbor logs
 
-Accédez aux journaux des composants Harbor (pour le débogage interne Numspot) :
+Access the logs of the Harbor components (for internal Numspot debugging):
 
 ```bash
-## Journaux jobservice (tâches de réplication)
+## jobservice logs (replication tasks)
 kubectl logs -n registry-instance-{registryId} deployment/harbor-jobservice -f
 
-## Journaux core (requêtes API)
+## core logs (API requests)
 kubectl logs -n registry-instance-{registryId} deployment/harbor-core -f
 
-## Journaux registry (push/pull d'images)
+## registry logs (image push/pull)
 kubectl logs -n registry-instance-{registryId} deployment/harbor-registry -f
 ```
 
 :::note
-L'accès aux journaux nécessite un accès au [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/). Contactez le support Numspot pour obtenir de l'aide.
+Accessing the logs requires access to the [Kubernetes cluster](/docs/managed-services/kubernetes/concepts/). Contact Numspot support for assistance.
 :::
 
 ---
 
-## Partie 7 : Référence API
+## Part 7: API reference
 
-### API Registry Numspot
+### Numspot Registry API
 
-#### URL de base
+#### Base URL
 
 ```text
 https://api.cloudgouv-eu-west-1.numspot.com
 ```
 
-#### Lister les Registries
+#### List Registries
 
 ```http
 GET /registry/spaces/{spaceId}/registries
 Authorization: Bearer {token}
 ```
 
-#### Créer un Registry
+#### Create a Registry
 
 ```http
 POST /registry/spaces/{spaceId}/registries
@@ -870,36 +870,36 @@ Content-Type: application/json
 }
 ```
 
-#### Obtenir un Registry
+#### Get a Registry
 
 ```http
 GET /registry/spaces/{spaceId}/registries/{registryId}
 Authorization: Bearer {token}
 ```
 
-#### Obtenir le mot de passe admin
+#### Get the admin password
 
 ```http
 GET /registry/spaces/{spaceId}/registries/{registryId}/password
 Authorization: Bearer {token}
 ```
 
-#### Supprimer un Registry
+#### Delete a Registry
 
 ```http
 DELETE /registry/spaces/{spaceId}/registries/{registryId}
 Authorization: Bearer {token}
 ```
 
-### API de réplication Harbor
+### Harbor replication API
 
-#### URL de base
+#### Base URL
 
 ```text
-https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com
+https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com
 ```
 
-#### Créer un endpoint de réplication
+#### Create a replication endpoint
 
 ```http
 POST /api/v2.0/registries
@@ -919,7 +919,7 @@ Content-Type: application/json
 }
 ```
 
-#### Créer une politique de réplication
+#### Create a replication policy
 
 ```http
 POST /api/v2.0/replication/policies
@@ -949,7 +949,7 @@ Content-Type: application/json
 }
 ```
 
-#### Déclencher une réplication
+#### Trigger a replication
 
 ```http
 POST /api/v2.0/replication/executions
@@ -961,14 +961,14 @@ Content-Type: application/json
 }
 ```
 
-#### Obtenir une exécution de réplication
+#### Get a replication execution
 
 ```http
 GET /api/v2.0/replication/executions/{executionId}
 Authorization: Basic {base64(admin:password)}
 ```
 
-#### Obtenir les tâches de réplication
+#### Get the replication tasks
 
 ```http
 GET /api/v2.0/replication/executions/{executionId}/tasks
@@ -979,21 +979,21 @@ Authorization: Basic {base64(admin:password)}
 
 ## Limitations
 
-- La réplication entre Harbor v1.x et v2.x n'est **pas prise en charge**
-- Harbor ne prend pas en charge le manifest schema1 du registry Docker dans les registries Quay
-- Les informations des membres ne sont **pas répliquées** entre les instances Harbor
-- Les opérations de suppression ne sont **pas répliquées** dans les modes de déclenchement Manuel ou Planifié
-- Pour les registries Numspot : la version doit être `2.13` ou `2.14`
-- Les changements d'API entre les versions Harbor peuvent provoquer des incompatibilités
-- Les grandes images (>5Go) doivent utiliser Copy by Chunk pour plus de fiabilité
+- Replication between Harbor v1.x and v2.x is **not supported**
+- Harbor does not support the Docker registry manifest schema1 in Quay registries
+- Member information is **not replicated** between Harbor instances
+- Deletion operations are **not replicated** in Manual or Scheduled trigger modes
+- For Numspot registries: the version must be `2.13` or `2.14`
+- API changes between Harbor versions may cause incompatibilities
+- Large images (>5GB) must use Copy by Chunk for greater reliability
 
 ---
 
-## Ressources supplémentaires
+## Additional resources
 
-- [Documentation officielle Harbor](https://goharbor.io/docs/2.14.0/)
-- [Guide de réplication Harbor](https://goharbor.io/docs/2.14.0/administration/configuring-replication/)
-- [Console Numspot](https://console.eu-west-2.numspot.com)
-- [Spécification OpenAPI Numspot](https://api.cloudgouv-eu-west-1.numspot.com/openapi)
+- [Official Harbor documentation](https://goharbor.io/docs/2.14.0/)
+- [Harbor replication guide](https://goharbor.io/docs/2.14.0/administration/configuring-replication/)
+- [Numspot console](https://console.eu-west-2.numspot.com)
+- [Numspot OpenAPI specification](https://api.cloudgouv-eu-west-1.numspot.com/openapi)
 
 ---

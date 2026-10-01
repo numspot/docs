@@ -1,5 +1,5 @@
 ---
-title: Supprimer un Compute Bridge
+title: Delete a Compute Bridge
 sidebar_position: 3
 draft: false
 ---
@@ -7,19 +7,19 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Supprimer un Compute Bridge
+# Delete a Compute Bridge
 
-Vous pouvez supprimer un bridge pour mettre fin à la communication entre deux [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) connectés.
+You can delete a bridge to end the communication between two connected [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
 
-La possibilité de supprimer un bridge dépend de son état :
+The ability to delete a bridge depends on its state:
 
-* Si la connexion est à l'état `active`, il peut être supprimé.
-* Si elle est dans l'état `failed`, il ne peut pas être supprimé.
+* If the connection is in the `active` state, it can be deleted.
+* If it is in the `failed` state, it cannot be deleted.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **connectivity.bridge.delete**
 
@@ -28,22 +28,16 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="api" label="API" default>
 
-## API {#tabhead-api}
+The `DELETE /connectivity/spaces/{spaceId}/computeBridges/{id}` command deletes the bridge. <br/>
+If the bridge is in the "Active" state, it can be deleted.<br/>
+If it is in the "Failed" state, it cannot be deleted.
 
-
-La commande `DELETE /connectivity/spaces/{spaceId}/computeBridges/{id}` supprime le bridge. <br/>
-Si le bridge est dans l'état "Actif", il peut être supprimé.<br/>
-S'il est dans l'état "Échoué", il ne peut pas être supprimé.
-
-[Exemple de requête : Suppression d'un Compute Bridge](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/computeBridges/{id})
+[Example request: Deleting a Compute Bridge](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/computeBridges/{id})
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/compute_bridge).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/compute_bridge).
 
 </TabItem>
 </Tabs>

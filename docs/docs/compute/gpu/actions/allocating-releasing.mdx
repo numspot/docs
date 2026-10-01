@@ -1,5 +1,5 @@
 ---
-title: Allouer ou libérer un GPU
+title: Allocate or release a GPU
 sidebar_position: 2
 draft: false
 ---
@@ -8,72 +8,67 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Allouer ou libérer un GPU
+# Allocate or release a GPU
 
 :::note info
-Vous pouvez réserver un [GPU (Graphics Processing Unit)](/docs/compute/gpu/concept/) pour votre compte et le libérer à votre convenance. <br/>
-Cette réservation vous donne la possibilité d'associer ce GPU à une [VM (Virtual Machine)](/docs/compute/concept/).
+You can reserve a [GPU](/docs/compute/gpu/concept/) (Graphics Processing Unit) for your account and release it at your convenience. <br/>
+This reservation gives you the ability to attach this GPU to a [VM](/docs/compute/concept/) (Virtual Machine).
 :::
 
 ## Permissions
 
 :::info
-Ces actions nécessitent les permissions IAM (Identity and Access Management) suivantes :
+These actions require the following IAM (Identity and Access Management) permissions:
 
 - **compute.gpu.create**
 
 :::
 
-## Allouer un GPU
+## Allocate a GPU
 <Tabs>
    <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/gpu/allocate-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Compute → GPU.", hotspot: { x: 0, y: 0.4605, w: 0.1944, h: 0.0457 } },
-    { img: "/img/walkthrough/gpu/allocate-01-list.png", text: "Dans le tableau de bord GPU, cliquez sur « Allouer un GPU » en haut à droite.", hotspot: { x: 0.8517, y: 0.2329, w: 0.1094, h: 0.0494 } },
-    { img: "/img/walkthrough/gpu/allocate-02-form.png", text: "Choisissez la sous-région, le modèle de GPU et le comportement à la suppression de la VM, puis cliquez sur « Allouer le GPU ».", hotspot: { x: 0.6688, y: 0.921, w: 0.0805, h: 0.0494 } },
+    { img: "/img/walkthrough/en/gpu/allocate-01-list.png", text: "From the left-hand side menu, click Compute → GPUs.", hotspot: { x: 0, y: 0.4605, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/en/gpu/allocate-01-list.png", text: "In the GPU dashboard, click “Allocate a GPU” at the top right.", hotspot: { x: 0.8529, y: 0.2329, w: 0.1082, h: 0.0494 } },
+    { img: "/img/walkthrough/en/gpu/allocate-02-form.png", text: "Choose the availability zone, the GPU model and the behavior on VM deletion, then click “Allocate GPU”.", hotspot: { x: 0.6738, y: 0.921, w: 0.0755, h: 0.0494 } },
   ]}
 />
 
-1. Connectez-vous à la console Numspot en utilisant vos identifiants.
-2. Dans le menu de gauche, cliquez sur **Compute** → **GPU**.
+1. Log in to the Numspot console using your credentials.
+2. From the left-hand side menu, click **Compute** → **GPU**.
 
-3. Dans le tableau de bord GPU, cliquez sur **Allouer un GPU** situé en haut à droite de l'écran.
+3. In the GPU dashboard, click **Allocate a GPU** at the top right of the screen.
 
-4. L'écran **Allocation d'un GPU** apparaît.
+4. The **GPU allocation** screen appears.
 
-5. Dans la liste "Availability Zone", sélectionnez la sous-région pour le GPU.
-6. Dans la liste "Modèle de GPU", sélectionnez le modèle de GPU que vous souhaitez allouer.
-7. Sélectionnez le "Comportement à la suppression de la VM" :
-    * "Libération du GPU", le GPU sera automatiquement libéré de votre compte lorsque la VM à laquelle il est lié est terminée.
-    * "Maintien de l'allocation", le GPU sera détaché et restera alloué à votre compte lorsque la VM à laquelle il est lié est terminée.
-8. Cliquez sur **Allouer le GPU**.
+5. In the "Availability Zone" list, select the sub-region for the GPU.
+6. In the "GPU model" list, select the GPU model you want to allocate.
+7. Select the "Behavior on VM deletion":
+    * "Release the GPU": the GPU will be automatically released from your account when the VM to which it is linked is terminated.
+    * "Keep the allocation": the GPU will be detached and will remain allocated to your account when the VM to which it is linked is terminated.
+8. Click **Allocate the GPU**.
 
-9. Un message de confirmation s'affiche en bas indiquant que le GPU est bien alloué et vous êtes redirigé vers la liste des GPU.
+9. A confirmation message appears at the bottom indicating that the GPU is successfully allocated, and you are redirected to the list of GPU.
 
   </TabItem>
 
   <TabItem value="api" label="API">
+    The `POST /compute/spaces/{spaceId}/flexibleGpus` command allocates a flexible GPU (fGPU) to your account.
+You can then attach this fGPU to a VM.
 
-## API {#tabhead-api}
-
-    La commande `POST /compute/spaces/{spaceId}/flexibleGpus` alloue un GPU flexible (fGPU) à votre compte.
-Vous pouvez ensuite attacher ce fGPU à une VM.
-
-[Exemple de requête : Création d'un fGPU](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/flexibleGpus)
+[Example request: Creating an fGPU](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/flexibleGpus)
   </TabItem>
 
 {/*  </TabItem> */}
 
 </Tabs>
 
-## Libérer un GPU
+## Release a GPU
 
 :::info
-Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.gpu.delete**
 
@@ -81,35 +76,29 @@ Cette action nécessite les permissions IAM (Identity and Access Management) sui
 
 <Tabs>
   <TabItem value="console" label="Console" default>
-
-## Console {#tabhead-console}
-
-1. Ouvrez la Console Numspot.
-2. Dans le menu de gauche, cliquez sur **Compute** → **GPU**.
+1. Open the Numspot console.
+2. From the left-hand side menu, click **Compute** → **GPU**.
 
          ![GPU: Image](/img/console/general/sidebar/sidebar-compute-gpu.png)
 
-3. Sélectionnez le GPU que vous souhaitez libérer et choisissez l'action, **Libérer le GPU**.<br/>
-   La boîte de dialogue "Libération de GPU" apparaît.
+3. Select the GPU you want to release and choose the **Release the GPU** action.<br/>
+   The "GPU release" dialog box appears.
 
             ![GPU: Image](/img/console/compute/gpus/dropdown-gpu.png)
 
-4. Pour confirmer la suppression, saisissez l'ID du GPU, puis cliquez sur **Libérer**.
+4. To confirm the deletion, enter the ID of the GPU, then click **Release**.
 
             ![GPU: Image](/img/console/compute/gpus/button-release-gpu.png)
 
-Le GPU est libéré de votre compte et un message de confirmation s'affiche en bas de la page.
+The GPU is released from your account and a confirmation message appears at the bottom of the page.
 
     </TabItem>
 
     <TabItem value="api" label="API">
+        The `DELETE /compute/spaces/{spaceId}/flexibleGpus/{id}` command releases a flexible GPU (fGPU) from your account.
+The fGPU then becomes available for use by another user.
 
-## API {#tabhead-api}
-
-        La commande `DELETE /compute/spaces/{spaceId}/flexibleGpus/{id}` libère un GPU flexible (fGPU) de votre compte.
-Le fGPU devient alors disponible pour être utilisé par un autre utilisateur.
-
-[Exemple de requête : Suppression d'un fGPU](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/flexibleGpus/{id})
+[Example request: Deleting an fGPU](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/flexibleGpus/{id})
     </TabItem>
 
   

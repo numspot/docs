@@ -1,0 +1,106 @@
+---
+title: "Object Storage - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+---
+
+# Concepts du stockage objet 
+
+Le stockage objet est une architecture de stockage qui gère les données en tant qu'objets accessibles par URL, plutôt qu'en tant que fichiers. Il est particulièrement efficace et scalable pour les grandes quantités de données non structurées, telles que les sauvegardes et archives, les images et contenus audio et vidéo, le big data, etc.
+
+Ce service est compatible avec l'API Simple Storage Service (S3) d'AWS (Amazon Web Services). Vous pouvez donc utiliser le service de stockage objet Numspot avec n'importe quel outil compatible S3.
+
+## Buckets
+
+Un bucket est une ressource logique servant à héberger des objets.
+
+Le versioning peut être activé sur un bucket, de sorte que chaque nouveau dépôt d'objet soit conservé et reste accessible.
+
+Les buckets peuvent aussi servir à :
+- Héberger des sites statiques.
+- Stocker vos images et vos snapshots.
+- Stocker les access logs de vos [load balancers](/docs/network/load-balancer/concepts/).
+
+:::warning
+Le nom d'un bucket doit :
+- Être unique pour toute la région.
+- Contenir entre 3 et 63 caractères.
+- Commencer par un caractère alphanumérique.
+- Contenir uniquement des minuscules, chiffres et tirets (-).
+:::
+
+Vous pouvez configurer le partage de ressources cross-origin (CORS) sur vos buckets, sous votre entière responsabilité. Numspot ne vérifie pas la validité des règles CORS et ne peut être tenu responsable des accès non autorisés résultant d'une configuration incorrecte. Un cas d'utilisation de CORS consiste à autoriser votre site web hébergé dans un bucket A à charger des fichiers hébergés dans un bucket B. Sans CORS, la politique same-origin du navigateur bloquerait ce chargement par défaut par mesure de sécurité.
+
+## Objets
+
+Un objet correspond à un fichier déposé ou à une donnée déposée. Vous pouvez déposer des objets dans vos propres buckets ou dans des buckets sur lesquels vous avez des droits d'écriture.
+
+Un objet est identifié par une clé, qui s'apparente à un nom. Pour organiser vos objets, vous pouvez ajouter un préfixe à la clé, selon le format `<PREFIXE>/<RESTE_DE_LA_CLE>`. Les outils d'utilisation de stockage objet regroupent généralement les mêmes préfixes sous forme d'arborescences, similairement à la représentation des dossiers dans un explorateur de fichiers.
+
+Vous pouvez également ajouter des tags aux objets afin de mieux les identifier et de les classer.
+
+Si vous avez droit de lecture sur un objet, vous pouvez télécharger cet objet à l'aide d'une URL.
+
+Les objets ne sont pas limités en taille. La taille maximale pour un dépôt simple (non partitionné) est de 5 Gio, mais vous pouvez effectuer vos dépôts en plusieurs parties. Ainsi, il est recommandé de déposer les fichiers supérieurs à 100 Mio en plusieurs parties afin de s'assurer une performance de dépôt optimale.
+
+Vous pouvez gérer le cycle de vie de vos objets en leur appliquant des dates d'expiration, après lesquelles ils seront supprimés automatiquement.
+
+## ACL et URL pré-signées
+
+Par défaut, seul le créateur d'un objet peut accéder à l'objet. Deux fonctionnalités permettent de rendre l'objet accessible à d'autres utilisateurs :
+
+- Les Access Control Lists (ACL) : Une ACL vous permet d'accorder à un autre utilisateur des droits de lecture ou d'écriture sur un bucket ou un objet.
+:::tip
+Vous pouvez accorder des droits en spécifiant des ID utilisateur S3. Vous pouvez obtenir ces ID S3 via les méthodes Lister vos buckets et Lister les objets d'un bucket.
+:::
+- Les URL pré-signées : Vous pouvez générer une URL pré-signée pour rendre un objet accessible à toute personne disposant du lien, pendant une durée définie.
+
+## Référence API
+
+La référence complète de l'API Object Storage est disponible dans la [documentation OpenAPI Scalar](/openapi-object-storage).
+
+| **Méthode API S3**              | **Commande `s3api`**               | **Commande s3** | **Procédure**                                         |
+| ------------------------------- | ---------------------------------- | ----------------- | ----------------------------------------------------- |
+| AbortMultipartUpload            | abort-multipart-upload             | /                 | Annuler un multipart upload                           |
+| CompleteMultipartUpload         | complete-multipart-upload          | /                 | Finaliser un multipart upload                         |
+| CopyObject                      | copy-object                        | cp ou mv          | Copier un objet dans un bucket                        |
+| CreateBucket                    | create-bucket                      | mb                | Créer un bucket                                       |
+| CreateMultipartUpload           | create-multipart-upload            | /                 | Créer un multipart upload                             |
+| DeleteBucket                    | delete-bucket                      | rb                | Supprimer un bucket                                   |
+| DeleteObject                    | delete-object                      | rm                | Supprimer un objet d'un bucket                        |
+| GetObject                       | get-object                         | cp                | Télécharger un objet                                  |
+| ListBuckets                     | list-buckets                       | ls                | Lister les buckets                                    |
+| ListMultipartUploads            | list-multipart-uploads             | /                 | Lister les uploads multipart                          |
+| ListObjects                     | list-objects                       | ls                | Lister les objets d'un bucket                         |
+| ListParts                       | list-parts                         | /                 | Lister les parties d'un upload multipart              |
+| PutObject                       | put-object                         | cp                | Déposer un objet                                      |
+| UploadPart                      | upload-part                        | /                 | Déposer une partie                                    |
+
+## Compatibilité AWS CLI
+
+Numspot Object Storage est compatible avec certaines fonctionnalités de l'AWS CLI (Command Line Interface). Numspot ne garantit pas la compatibilité avec toutes les versions ou fonctionnalités d'AWS. Une mise à jour d'AWS en janvier 2025 a introduit un nouveau mécanisme de vérification des intégrités (checksums) pour les transferts S3, non pris en charge par Numspot. Consultez la documentation technique pour les limitations spécifiques.
+
+### Versions recommandées
+Pour éviter toute erreur (400 Bad Request: trailing checksum is not supported), utilisez l'une des versions suivantes :
+
+- v1.36.40 (dernière stable pour AWS CLI v1)
+
+- v2.22.35 (dernière stable avant activation des checksums)
+
+- v2.23.5 ou supérieure (intègre une gestion conditionnelle des checksums compatible avec Numspot)
+
+### Versions à éviter
+- v1.37.0
+
+- v2.23.0 à v2.23.4
+
+Ces versions activent les checksums sans option de contournement complète, provoquant des erreurs avec Numspot S3.
+
+### Contournement possible
+Si une version entre v2.23.0 et v2.23.4 est utilisée, ajouter ces variables d'environnement peut temporairement restaurer la compatibilité :
+
+````bash
+export AWS_REQUEST_CHECKSUM_CALCULATION=WHEN_REQUIRED
+export AWS_RESPONSE_CHECKSUM_VALIDATION=WHEN_REQUIRED
+````

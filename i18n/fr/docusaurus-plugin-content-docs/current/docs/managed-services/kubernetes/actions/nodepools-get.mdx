@@ -1,0 +1,76 @@
+---
+title: Obtenir les détails d'un groupe de nœuds d'un cluster Kubernetes - Kubernetes managé
+sidebar_label: Obtenir les détails d'un groupe de nœuds d'un cluster Kubernetes
+sidebar_position: 7
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Obtenir les détails d'un groupe de nœuds d'un cluster Kubernetes
+
+Récupérez les détails d'un groupe de nœuds (node pool) d'un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) au sein de votre espace.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+
+- **kubernetes.cluster.get**
+
+:::
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+    1. Depuis le menu latéral de gauche, cliquez sur **Services managés** → **Kubernetes** pour accéder à la liste des clusters Kubernetes.
+
+    ![Menu Services managés](/img/console/managed-services/fr-menu-managed-services.png)
+
+    2. Cliquez sur l'ID du cluster contenant le groupe de nœuds dont vous souhaitez consulter les détails.
+
+    3. Les informations de chaque groupe de nœuds s'affichent dans la section **Node pools** de la page de détails du cluster.
+
+    ![Détails d'un node pool](/img/managed-services/kubernetes/fr/kubernetes_get_cluster_details_1.png)
+
+    Vous y trouverez les informations suivantes pour chaque groupe de nœuds :
+
+    - **ID** : identifiant unique du groupe de nœuds ;
+    - **Statut** : état actuel du groupe de nœuds ;
+    - **Zone de disponibilité** : zone dans laquelle le groupe de nœuds est déployé ;
+    - **Type de nodes** : profil des nodes du groupe de nœuds ;
+    - **Volume système** : type et taille du volume système ;
+    - **Nombre de nodes** : nombre de nodes actifs dans le groupe de nœuds.
+</TabItem>
+
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+    Utilisez la route `GET /kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools/{nodePoolId}` pour obtenir les informations d'un groupe de nœuds d'un cluster Kubernetes managé.
+
+### Exemple de réponse
+
+    ```json
+    {
+      "id": "nodepool-001-e29b-41d4-a716",
+      "name": "worker-nodepool-1",
+      "availabilityZone": "eu-west-2a",
+      "nodeProfile": "medium",
+      "replicas": 3,
+      "rootDisk": {
+        "size": 50,
+        "iops": 3000,
+        "type": "enterprise"
+      },
+      "status": {
+        "state": "RUNNING",
+        "message": "NodePool is healthy"
+      }
+    }
+    ```
+
+    [Voir la spécification complète](/openapi/#tag/kubernetes/GET/kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools/{nodePoolId})
+</TabItem>
+</Tabs>

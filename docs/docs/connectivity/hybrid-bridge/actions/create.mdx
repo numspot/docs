@@ -1,6 +1,6 @@
 ---
-title: Créer un Hybrid Bridge
-description: Créez un bridge entre un VPC et les services managés de votre espace
+title: Create a Hybrid Bridge
+description: Create a bridge between a VPC and the managed services of your space
 sidebar_position: 1
 draft: false
 ---
@@ -8,50 +8,50 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Créer un Hybrid Bridge
+# Create a Hybrid Bridge
 
-Vous pouvez créer un bridge dans un espace entre l'un de vos [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) et les services managés pour que ceux-ci puissent communiquer entre eux.
+You can create a bridge in a space between one of your [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud) and the managed services so that they can communicate with each other.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **connectivity.bridge.create**
 
-Avant de commencer, assurez-vous d'avoir :
-* l'ID du VPC que vous souhaitez connecter ;
-* l'ID de l'espace (le bridge donnera accès à tous les services managés de l'espace) ;
-* le service managé doit être exposé de manière privée (`visibility: INTERNAL`).
+Before you start, make sure you have:
+* the ID of the VPC you want to connect;
+* the ID of the space (the bridge will give access to all the managed services of the space);
+* the managed service must be exposed privately (`visibility: INTERNAL`).
 :::
 
-## Configuration nécessaire au fonctionnement du Hybrid Bridge
+## Configuration required for the Hybrid Bridge to work
 
-Vous devez configurer votre VPC pour autoriser le trafic depuis et vers son bridge.
-Cela inclut la configuration de la [route table (table de routage)](/docs/network/route-table/concepts/), et la mise à jour des règles des [security group (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/).
+You must configure your VPC to allow traffic to and from its bridge.
+This includes configuring the [route table](/docs/network/route-table/concepts/), and updating the rules of the [security groups](/docs/compute/security-groups/concepts/concept-sg/).
 
-### Configuration Route Table
+### Route Table configuration
 
-Dans les route table associées aux subnet (sous-réseaux) de votre VPC, créez une route pour chaque élément du tableau `routes` du bridge :
-* l'`ipRange` en destination ;
-* le `gatewayId` en target.
+In the route tables associated with the subnets of your VPC, create a route for each item in the bridge's `routes` array:
+* the `ipRange` as the destination;
+* the `gatewayId` as the target.
 
-### Configuration Security Group associé aux VM de votre VPC
+### Security Group configuration associated with the [VM](/docs/compute/concept) of your VPC
 
-Ajoutez les règles suivantes :
-* une ou plusieurs règles autorisant les flux sortants vers les services managés ;
-* une ou plusieurs règles autorisant les flux entrants depuis les services managés si nécessaire.
+Add the following rules:
+* one or more rules allowing outbound traffic to the managed services;
+* one or more rules allowing inbound traffic from the managed services if required.
 
-Votre bridge est configuré, et le VPC peut communiquer avec les services managés par une connexion privée.
+Your bridge is configured, and the VPC can communicate with the managed services over a private connection.
 
 <Tabs>
   <TabItem value="api" label="API" default>
 
 ## API {#tabhead-api}
 
-La commande `POST /connectivity/spaces/{spaceId}/bridges` permet de créer un bridge entre un VPC et les services managés de l'espace.
+The `POST /connectivity/spaces/{spaceId}/bridges` command lets you create a bridge between a VPC and the managed services of the space.
 
-**Corps de la requête** :
+**Request body**:
 
 ```json
 {
@@ -66,12 +66,12 @@ La commande `POST /connectivity/spaces/{spaceId}/bridges` permet de créer un br
 }
 ```
 
-[Exemple de requête : Création d'un Bridge](/openapi/#tag/connectivity/POST/connectivity/spaces/{spaceId}/bridges)
+[Example request: Creating a Bridge](/openapi/#tag/connectivity/POST/connectivity/spaces/{spaceId}/bridges)
 
 :::tip
-La création d'un bridge est asynchrone. L'API retourne un code **202 Accepted** et l'objet créé est partiel (le tableau `routes` n'est pas renseigné).
+Creating a bridge is asynchronous. The API returns a **202 Accepted** code and the created object is partial (the `routes` array is not populated).
 
-Pour obtenir les routes du bridge, utilisez l'endpoint de lecture après la création.
+To obtain the bridge's routes, use the read endpoint after creation.
 :::
   </TabItem>
   <TabItem value="terraform" label="Terraform">
@@ -79,7 +79,7 @@ Pour obtenir les routes du bridge, utilisez l'endpoint de lecture après la cré
 ## Terraform {#tabhead-terraform}
 
 
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/hybrid_bridge).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/hybrid_bridge).
 
   </TabItem>
 </Tabs>

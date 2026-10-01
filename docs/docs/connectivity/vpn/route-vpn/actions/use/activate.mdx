@@ -1,6 +1,6 @@
 ---
-title: Activer la propagation des routes
-description: Activez la propagation des routes vers une route table pour propager automatiquement les routes d'une virtual gateway.
+title: Enable route propagation
+description: Enable route propagation to a route table to automatically propagate the routes of a virtual gateway.
 sidebar_position: 1
 draft: false
 ---
@@ -8,16 +8,16 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Activer la propagation des routes
+# Enable route propagation
 
-Vous pouvez activer la propagation des routes vers une [route table (table de routage)](/docs/network/route-table/concepts/) pour qu'elle contienne les routes associées à une connexion **VPN** (Virtual Private Network).
+You can enable route propagation to a [route table](/docs/network/route-table/concepts/) so that it contains the routes associated with a VPN (Virtual Private Network) connection.
 
-Cette action actualise automatiquement la route table avec les routes de la connexion VPN, et les dirige vers la [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/). Sinon, vous devez ajouter manuellement chaque route à la route table. La propagation des routes est facultative, et fonctionne avec le routage statique ou dynamique. Vous pouvez utiliser une route table par défaut ou personnalisée.
+This action automatically updates the route table with the routes of the VPN connection, and directs them to the [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/). Otherwise, you must add each route to the route table manually. Route propagation is optional, and works with static or dynamic routing. You can use a default or custom route table.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **connectivity.vpnconnection.update**
 
@@ -26,43 +26,34 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
-
 :::warning
-### Avant de commencer
-* Créez un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
-* Créez une virtual gateway.
-* Liez la virtual gateway au VPC.
-* (optionnel) Créez une route table personnalisée pour le subnet (sous-réseau) du VPC.
+**Before you begin:**
+* Create a [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud).
+* Create a virtual gateway.
+* Link the virtual gateway to the VPC.
+* (optional) Create a custom route table for the subnet of the VPC.
 :::
 
-1. Cliquez dans le dashboard **Route Tables** pour faire apparaître des cases à cocher.
-2. Sélectionnez la route table vers laquelle vous voulez activer la propagation des routes.
-   La route table est sélectionnée et un menu d'actions apparaît.
-3. Cliquez sur **Activer la propagation des routes**.
-   La boîte de dialogue "Activer la propagation par Virtual Gateway" s'affiche.
-4. Dans la liste "Virtual Gateway", sélectionnez la virtual gateway dont vous voulez propager les routes.
-5. Cliquez sur **Activer**.
-   La propagation des routes est activée.
+1. Click in the **Route Tables** dashboard to display checkboxes.
+2. Select the route table for which you want to enable route propagation.
+   The route table is selected and an actions menu appears.
+3. Click **Enable route propagation**.
+   The "Enable propagation by Virtual Gateway" dialog box is displayed.
+4. In the "Virtual Gateway" list, select the virtual gateway whose routes you want to propagate.
+5. Click **Enable**.
+   Route propagation is enabled.
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `PUT /compute/spaces/{spaceId}/routeTables/{id}/routePropagation` command configures route propagation to a specified route table of a VPC through a virtual gateway.
 
-
-La commande `PUT /compute/spaces/{spaceId}/routeTables/{id}/routePropagation` configure la propagation des routes vers une table de routage spécifiée d'un VPC par une virtual gateway.
-
-[Exemple de requête : Activation de la propagation des routes](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/routeTables/{id}/routePropagation)
+[Example request: Enabling route propagation](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/routeTables/{id}/routePropagation)
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
 
 </TabItem>
 </Tabs>

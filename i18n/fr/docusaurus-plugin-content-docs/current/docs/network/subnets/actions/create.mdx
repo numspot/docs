@@ -1,0 +1,89 @@
+---
+title: Créer un subnet dans un VPC
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Créer un subnet dans un VPC
+
+Vous pouvez créer un ou plusieurs subnets (sous-réseaux) dans un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) pour pouvoir lancer des ressources dans celui-ci. Les subnets sont placés dans des sous-régions de la région de votre VPC.
+
+Une fois votre subnet créé, il est recommandé de créer un [security group (groupe de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) et une [route table (table de routage)](/docs/network/route-table/concepts/) qui lui sont dédiés.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.subnet.create**
+
+:::
+<Tabs>
+   <TabItem value="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/subnet/update-01-vpclist.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC.", hotspot: { x: 0, y: 0.5222, w: 0.1931, h: 0.0568 } },
+    { img: "/img/walkthrough/subnet/update-01-vpclist.png", text: "Dans la liste des VPC, cliquez sur l'ID du VPC dans lequel créer le subnet.", hotspot: { x: 0.2687, y: 0.4928, w: 0.0689, h: 0.0247 } },
+    { img: "/img/walkthrough/subnet/02-detail.png", text: "Depuis la page de détail du VPC, cliquez sur « Créer un subnet ».", hotspot: { x: 0.8499, y: 0.5025, w: 0.1293, h: 0.0741 } },
+    { img: "/img/walkthrough/subnet/03-form.png", text: "Renseignez le nom, la plage d'IP (CIDR, incluse dans celle du VPC) et la zone de disponibilité.", hotspot: { x: 0.2083, y: 0.2757, w: 0.5556, h: 0.1951 } },
+    { img: "/img/walkthrough/subnet/04-creer.png", text: "Cliquez sur « Créer ».", hotspot: { x: 0.701, y: 0.9086, w: 0.0552, h: 0.0741 } },
+  ]}
+/>
+
+ :::info
+ **Prérequis** : Créer un VPC.
+
+ **Optionnel** : Pour désactiver la fonctionnalité permettant aux [VM (Virtual Machines)](/docs/compute/concept/) d'un même subnet de communiquer entre elles sans règles de security group requises, ajoutez un tag (étiquette) à votre VPC avec "osc.fcu.enable_lan_security_groups" pour clé.
+ Ce tag doit être ajouté à votre VPC avant de créer des subnets dans celui-ci.
+ La valeur de ce tag n'est pas prise en compte, vous pouvez donc spécifier n'importe quelle valeur pour ce tag.   
+ ::: 
+
+ 1. Connectez-vous sur la console Numspot.
+
+ 2. Depuis le menu latéral gauche, cliquez sur **Réseau** → **VPC** → **VPC**. 
+
+ 3. La liste des VPC apparaît. Cliquez sur l'ID du VPC concerné.
+
+ 4. La page "Détails VPC" apparaît.
+
+ 5. Cliquez sur le bouton **Créer un subnet**.
+
+ 6. La page "Création de subnet" apparaît.
+
+ 7. Dans le champ "Nom", saisissez un nom pour le subnet.
+ :::info
+ Cette action ajoute un tag Name de 255 caractères maximum. Vous pouvez utiliser tous les caractères, y compris les lettres accentuées.
+ :::
+
+ 8. Dans le champ "Plage d'IP", entrez la plage d'adresses IP (Internet Protocol) pour votre subnet, en notation CIDR (Classless Inter-Domain Routing). La plage d'adresses IP doit être comprise dans le CIDR du VPC associé.
+:::warning
+Le bloc CIDR du subnet doit faire partie du bloc CIDR du VPC.
+Si vous créez plusieurs subnets dans un VPC, leurs blocs CIDR ne doivent pas se chevaucher.
+:::
+
+ 9. Dans la section "Availability Zone", sélectionnez la zone de disponibilité dans laquelle vous voulez créer le subnet.
+
+ 10. Cliquez ensuite sur le bouton **Créer**.
+
+ 11. Un message de confirmation s'affiche en bas indiquant que le subnet est bien créé et vous êtes redirigé vers la page détaillée du VPC associé.
+
+   </TabItem> 
+   <TabItem value="API">
+
+La commande `POST /compute/spaces/{spaceId}/subnets` crée un subnet dans un réseau existant.
+Pour créer un subnet dans un réseau, vous devez fournir l'ID du réseau et la plage d'adresses IP pour le subnet (sa plage réseau). Une fois le subnet créé, vous ne pouvez plus modifier sa plage d'adresses IP.
+
+[Exemple de requête : Création d'un subnet](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/subnets)
+  </TabItem>
+  <TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-Terraform}
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/subnet).
+  </TabItem>
+</Tabs>

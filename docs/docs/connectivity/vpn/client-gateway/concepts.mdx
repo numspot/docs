@@ -1,48 +1,48 @@
 ---
 title: "VPN Client Gateway - Concepts"
 sidebar_label: "Concepts"
-description: Découvrez les client gateways, points d'entrée de votre réseau d'entreprise vers le Cloud Numspot via VPN.
+description: Learn about client gateways, the entry points from your corporate network to the Numspot Cloud over VPN.
 sidebar_position: 1
 draft: false
 ---
 
 import ActionsSummary from '@site/src/components/ActionsSummary';
 
-# À propos des client gateways
+# About client gateways
 
 <ActionsSummary />
 
-Une client gateway (passerelle client) se situe de votre côté d'une connexion VPN (Virtual Private Network), et gère le trafic entre votre réseau d'entreprise et l'un de vos [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) dans le Cloud Numspot.
+A client gateway sits on your side of a VPN (Virtual Private Network) connection, and manages the traffic between your corporate network and one of your [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) in the Numspot Cloud.
 
-Son équivalent du côté Numspot de la connexion VPN est une [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/).
+Its counterpart on the Numspot side of the VPN connection is a [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/).
 
-## Informations générales
+## General information
 
-Une client gateway est le point d'entrée et de sortie vers votre réseau d'entreprise de votre côté de la connexion VPN.
+A client gateway is the entry and exit point to your corporate network on your side of the VPN connection.
 
-![Architecture d'une VPN Connection](/img/console/connectivity/vpn/sch-General-VPNConnectionArchitecture.png)
-<p align="center">*Architecture d'une VPN Connection*</p><br/>
+![Architecture of a VPN Connection](/img/console/connectivity/vpn/sch-General-VPNConnectionArchitecture.png)
+<p align="center">*Architecture of a VPN Connection*</p><br/>
 
-Vous identifiez une ressource existante dans votre réseau à utiliser comme client gateway. Il peut s'agir d'une ressource logicielle ou matérielle, par exemple une [VM](/docs/compute/concept/), un pare-feu ou un routeur. Lors de la création d'une client gateway, vous devez renseigner les informations suivantes :
+You identify an existing resource in your network to use as a client gateway. It can be a software or hardware resource, for example a [VM](/docs/compute/concept/), a firewall or a router. When creating a client gateway, you must provide the following information:
 
-* L'IP publique statique de la ressource que vous voulez utiliser comme client gateway ;
-* Le type de routage. Pour utiliser le routage dynamique, vous devez indiquer un numéro de système autonome (ASN) pour le protocole BGP (Border Gateway Protocol). Sinon, le routage est statique.
+* the static public IP of the resource you want to use as a client gateway;
+* the routing type. To use dynamic routing, you must indicate an autonomous system number (ASN) for the BGP (Border Gateway Protocol) protocol. Otherwise, the routing is static.
 
-Vous pouvez avoir plusieurs client gateways dans le même réseau d'entreprise en même temps. Ceci vous permet, par exemple, de connecter votre réseau d'entreprise à plusieurs de vos VPC dans le Cloud Numspot.
+You can have several client gateways in the same corporate network at the same time. This allows you, for example, to connect your corporate network to several of your VPC in the Numspot Cloud.
 
 :::note
-Si vous souhaitez utiliser différents VPC simultanément, vous pouvez créer plusieurs client gateways avec la même IP mais un ASN différent.
+If you want to use different VPC simultaneously, you can create several client gateways with the same IP but a different ASN.
 :::
 
-## Cycle de vie
+## Lifecycle
 
-Une client gateway peut être dans l'un des états suivants :
+A client gateway can be in one of the following states:
 
-* `pending` : le processus de création est en cours ;
-* `available` : la client gateway est créée et prête à être utilisée ;
-* `deleting` : le processus de suppression est en cours ;
-* `deleted` : la ressource n'est plus identifiée comme une client gateway. Cependant, la ressource elle-même n'est pas supprimée.
+* `pending`: the creation process is in progress;
+* `available`: the client gateway is created and ready to be used;
+* `deleting`: the deletion process is in progress;
+* `deleted`: the resource is no longer identified as a client gateway. However, the resource itself is not deleted.
 
 :::info
-Les ressources supprimées restent visibles pendant 1 heure.
+Deleted resources remain visible for 1 hour.
 :::

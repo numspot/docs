@@ -1,63 +1,63 @@
 ---
-title: Sauvegardes et restaurations - Secret Manager managé
-sidebar_label: Sauvegardes et restaurations
-description: Guide de sauvegarde et restauration des données d'une instance Secret Manager managée via les snapshots Raft
+title: Backups and restores - Managed Secret Manager
+sidebar_label: Backups and restores
+description: Guide to backing up and restoring the data of a managed Secret Manager instance using Raft snapshots
 sidebar_position: 4
 draft: false
 ---
 
-# Sauvegardes et restaurations
+# Backups and restores
 
-Les [instances Secret Manager](/docs/managed-services/secret-manager/concepts/) utilisent le stockage Raft d'OpenBao. Ce guide explique comment sauvegarder et restaurer les données de votre instance à l'aide des snapshots Raft, et comment demander une configuration de sauvegarde automatisée au support Numspot.
+[Secret Manager instances](/docs/managed-services/secret-manager/concepts/) use OpenBao's Raft storage. This guide explains how to back up and restore your instance's data using Raft snapshots, and how to request an automated backup configuration from Numspot support.
 
 :::warning
-Les snapshots Raft contiennent l'intégralité des données de l'instance, y compris les secrets chiffrés. Conservez-les dans un emplacement sécurisé et à accès restreint.
+Raft snapshots contain the instance's entire data, including the encrypted secrets. Keep them in a secure location with restricted access.
 :::
 
 ---
 
-## Prérequis
+## Prerequisites
 
-- Une instance Secret Manager à l'état `RUNNING` ;
-- Le token admin de l'instance ;
-- Le CLI `bao` installé, ou `curl` pour les appels API directs ;
-- Un emplacement de stockage sécurisé pour les fichiers de snapshot.
+- A Secret Manager instance in the `RUNNING` state;
+- The instance's admin token;
+- The `bao` CLI installed, or `curl` for direct API calls;
+- A secure storage location for the snapshot files.
 
-Configurez l'accès à l'instance :
+Configure access to the instance:
 
 ```bash
-export BAO_ADDR="https://{host-de-l-instance}"
-export BAO_TOKEN="{token-admin}"
+export BAO_ADDR="https://{instance-host}"
+export BAO_TOKEN="{admin-token}"
 ```
 
 ---
 
-## Sauvegarder une instance
+## Back up an instance
 
-### Via le CLI OpenBao
+### Using the OpenBao CLI
 
-La commande `bao operator raft snapshot save` crée un snapshot binaire de l'état complet du cluster Raft :
+The `bao operator raft snapshot save` command creates a binary snapshot of the complete state of the Raft cluster:
 
 ```bash
 bao operator raft snapshot save backup-$(date +%Y%m%d-%H%M%S).snap
 ```
 
-Le fichier généré contient l'intégralité des données stockées dans l'instance (secrets chiffrés, configuration, politiques, méthodes d'authentification).
+The generated file contains the entire data stored in the instance (encrypted secrets, configuration, policies, authentication methods).
 
-### Via l'API HTTP
+### Using the HTTP API
 
-Utilisez l'endpoint `GET /v1/sys/storage/raft/snapshot` :
+Use the `GET /v1/sys/storage/raft/snapshot` endpoint:
 
 ```bash
 curl \
   --header "X-Vault-Token: $BAO_TOKEN" \
   --output backup-$(date +%Y%m%d-%H%M%S).snap \
-  https://{host-de-l-instance}/v1/sys/storage/raft/snapshot
+  https://{instance-host}/v1/sys/storage/raft/snapshot
 ```
 
-### Vérifier l'intégrité du snapshot
+### Verify the snapshot's integrity
 
-Après une sauvegarde, vérifiez que le fichier est bien formé :
+After a backup, check that the file is well formed:
 
 ```bash
 bao operator raft snapshot verify backup-20260611-120000.snap
@@ -65,51 +65,51 @@ bao operator raft snapshot verify backup-20260611-120000.snap
 
 ---
 
-## Restaurer une instance
+## Restore an instance
 
 :::danger
-La restauration d'un snapshot remplace **l'intégralité** des données de l'instance par celles du snapshot. Toute donnée créée après le snapshot sera perdue. Cette opération est irréversible.
+Restoring a snapshot replaces the instance's **entire** data with that of the snapshot. Any data created after the snapshot will be lost. This operation is irreversible.
 :::
 
-### Via le CLI OpenBao
+### Using the OpenBao CLI
 
 ```bash
 bao operator raft snapshot restore backup-20260611-120000.snap
 ```
 
-### Via l'API HTTP
+### Using the HTTP API
 
-Utilisez l'endpoint `POST /v1/sys/storage/raft/snapshot` :
+Use the `POST /v1/sys/storage/raft/snapshot` endpoint:
 
 ```bash
 curl \
   --header "X-Vault-Token: $BAO_TOKEN" \
   --request POST \
   --data-binary @backup-20260611-120000.snap \
-  https://{host-de-l-instance}/v1/sys/storage/raft/snapshot
+  https://{instance-host}/v1/sys/storage/raft/snapshot
 ```
 
-### Après la restauration
+### After the restore
 
-1. Vérifiez l'état de l'instance :
+1. Check the instance's state:
 
    ```bash
    bao status
    ```
 
-2. Vérifiez que les secrets sont accessibles :
+2. Check that the secrets are accessible:
 
    ```bash
    bao kv list secret/
    ```
 
-3. Vérifiez les méthodes d'authentification :
+3. Check the authentication methods:
 
    ```bash
    bao auth list
    ```
 
-4. Si vous utilisez l'auto-unseal, vérifiez que le seal est correctement configuré :
+4. If you use auto-unseal, check that the seal is correctly configured:
 
    ```bash
    bao operator seal-status
@@ -117,64 +117,64 @@ curl \
 
 ---
 
-## Configurer des sauvegardes automatisées
+## Configure automated backups
 
-### Via le support Numspot
+### Using Numspot support
 
-Pour une sauvegarde automatisée planifiée (par exemple quotidienne ou hebdomadaire), contactez le [support Numspot](/docs/support/general/#demandes-de-support). L'équipe peut :
+For a scheduled automated backup (for example daily or weekly), contact [Numspot support](/docs/support/general/#support-requests). The team can:
 
-- Configurer des sauvegardes planifiées (quotidiennes ou hebdomadaires) via l'API OpenBao ;
-- Stocker les snapshots dans un stockage objet compatible S3 ;
-- Définir une politique de rétention et d'expiration des snapshots ;
-- Mettre en place des alertes en cas d'échec de sauvegarde.
+- Configure scheduled backups (daily or weekly) using the OpenBao API;
+- Store the snapshots in S3-compatible object storage;
+- Define a snapshot retention and expiry policy;
+- Set up alerts in the event of a backup failure.
 
-### Sauvegardes automatisées en libre-service via le snapshot agent
+### Self-service automated backups using the snapshot agent
 
-Vous pouvez configurer le snapshot agent OpenBao pour automatiser les sauvegardes. Cette configuration s'effectue via l'API OpenBao de votre instance et nécessite un stockage objet compatible S3 pour stocker les snapshots.
+You can configure the OpenBao snapshot agent to automate backups. This configuration is performed using your instance's OpenBao API and requires S3-compatible object storage to store the snapshots.
 
-Pour activer et configurer le snapshot agent, consultez la [documentation OpenBao sur les snapshots](https://openbao.org/docs/concepts/snapshot/).
-
----
-
-## Demander une restauration au support
-
-Si vous n'avez plus accès au token admin ou si l'instance est dans un état dégradé, vous pouvez demander au [support Numspot](/docs/support/general/#demandes-de-support) de déclencher une restauration :
-
-1. Fournissez l'identifiant de l'instance Secret Manager ;
-2. Indiquez le fichier de snapshot à restaurer (ou la date du snapshot si les sauvegardes sont gérées par Numspot) ;
-3. Le support effectue la restauration et vous accompagne pour vérifier l'intégrité des données après restauration.
+To enable and configure the snapshot agent, see the [OpenBao documentation on snapshots](https://openbao.org/docs/concepts/snapshot/).
 
 ---
 
-## Bonnes pratiques
+## Request a restore from support
 
-### Fréquence de sauvegarde
+If you no longer have access to the admin token or if the instance is in a degraded state, you can ask [Numspot support](/docs/support/general/#support-requests) to trigger a restore:
 
-| Environnement | Fréquence recommandée |
+1. Provide the Secret Manager instance identifier;
+2. Indicate the snapshot file to restore (or the snapshot date if the backups are managed by Numspot);
+3. Support carries out the restore and helps you check the integrity of the data after the restore.
+
+---
+
+## Best practices
+
+### Backup frequency
+
+| Environment | Recommended frequency |
 | --- | --- |
-| Production | Quotidienne (automatisée via le support) |
-| Staging | Hebdomadaire |
-| Développement | À la demande (avant chaque changement majeur) |
+| Production | Daily (automated via support) |
+| Staging | Weekly |
+| Development | On demand (before each major change) |
 
-### Rétention
+### Retention
 
-- Conservez au minimum **7 jours** de snapshots en production ;
-- Archivez un snapshot hebdomadaire pendant **30 jours** minimum ;
-- Conservez un snapshot mensuel pour la conformité SecNumCloud.
+- Keep at least **7 days** of snapshots in production;
+- Archive a weekly snapshot for at least **30 days**;
+- Keep a monthly snapshot for SecNumCloud compliance.
 
-### Sécurité des snapshots
+### Snapshot security
 
-- Stockez les snapshots dans un emplacement chiffré et à accès restreint ;
-- Ne stockez jamais les snapshots sur la même infrastructure que l'instance ;
-- Utilisez un stockage objet (S3) avec chiffrement au repos ;
-- Faites rotater les credentials d'accès au stockage régulièrement.
+- Store the snapshots in an encrypted location with restricted access;
+- Never store the snapshots on the same infrastructure as the instance;
+- Use object storage (S3) with encryption at rest;
+- Rotate the storage access credentials regularly.
 
-### Test de restauration
+### Restore testing
 
-- Effectuez un test de restauration au moins une fois par trimestre ;
-- Vérifiez la cohérence des données après restauration (secrets, politiques, méthodes d'authentification) ;
-- Documentez le temps de restauration observé pour le plan de reprise d'activité.
+- Perform a restore test at least once per quarter;
+- Check the consistency of the data after the restore (secrets, policies, authentication methods);
+- Document the observed restore time for the disaster recovery plan.
 
 :::tip
-Pour les environnements critiques, combinez les snapshots Raft avec une stratégie de réplication inter-instances. Contactez le support Numspot pour étudier les options disponibles.
+For critical environments, combine Raft snapshots with a cross-instance replication strategy. Contact Numspot support to explore the available options.
 :::

@@ -1,6 +1,6 @@
 ---
-title: Consulter le tableau de bord DLP - DLP managé
-sidebar_label: Consulter le tableau de bord DLP
+title: View the DLP dashboard - Managed DLP
+sidebar_label: View the DLP dashboard
 sidebar_position: 16
 draft: false
 ---
@@ -8,14 +8,14 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Consulter le tableau de bord DLP
+# View the DLP dashboard
 
-Consultez le tableau de bord [DLP](/docs/managed-services/dlp/concepts) pour visualiser les statistiques d'évaluation en temps réel : volume de requêtes, répartition des décisions, règles les plus déclenchées et répartition par plateforme.
+View the [DLP](/docs/managed-services/dlp/concepts) dashboard to see real-time evaluation statistics: request volume, decision breakdown, most triggered rules and per-platform distribution.
 
 ## Permissions
 
 :::info
-Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+This action requires the following [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) role:
 
 - **viewer**
 
@@ -28,43 +28,45 @@ Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Dat
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Connectez-vous à la console DLP. Le tableau de bord s'affiche par défaut.", hotspot: { x: 0.006, y: 0.085, w: 0.155, h: 0.044 } },
-    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Consultez les graphiques : évolution des évaluations, répartition par décision et par plateforme.", hotspot: { x: 0.201, y: 0.186, w: 0.765, h: 0.370 } },
-    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Consultez la répartition par plateforme consommatrice.", hotspot: { x: 0.609, y: 0.698, w: 0.357, h: 0.247 } },
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Log in to the DLP console. The dashboard is displayed by default.", hotspot: { x: 0.006, y: 0.085, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "View the charts: evaluation trends, decision breakdown and per-platform distribution.", hotspot: { x: 0.201, y: 0.186, w: 0.765, h: 0.370 } },
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "View the breakdown by consuming platform.", hotspot: { x: 0.609, y: 0.698, w: 0.357, h: 0.247 } },
   ]}
 />
 
-1. Connectez-vous à la console [DLP](/docs/managed-services/dlp/concepts). Le tableau de bord s'affiche par défaut.
+1. Go to the [DLP](/docs/managed-services/dlp/concepts) console dashboard.
 
-### Statistiques d'évaluation
+The dashboard displays the following elements:
 
-- **Sélecteur de période** : choisissez la plage temporelle — 1h, 24h, 7d ou 30d ;
-- **Graphique en courbes** : évolution des évaluations dans le temps, ventilée par type de décision (`pass`, `block`, `modify`, `monitor`) ;
-- **Graphique en barres** : règles les plus déclenchées sur la période sélectionnée ;
-- **Graphique en secteurs** : répartition des évaluations par plateforme consommatrice.
+### Evaluation statistics
 
-### Décisions récentes
+- **Time range selector**: choose the time period — 1h, 24h, 7d or 30d;
+- **Line chart**: evolution of evaluations over time, broken down by decision type (`pass`, `block`, `modify`, `monitor`);
+- **Bar chart**: most triggered rules over the selected period;
+- **Pie chart**: distribution of evaluations by consuming platform.
 
-Le tableau des décisions récentes affiche les dernières évaluations bloquées ou modifiées, avec :
+### Recent decisions
 
-- l'identifiant de la requête ;
-- la plateforme consommatrice ;
-- la décision rendue ;
-- les règles déclenchées ;
-- l'horodatage.
+The recent decisions table displays the latest blocked or modified evaluations, with:
+
+- the request identifier;
+- the consuming platform;
+- the decision rendered;
+- the rules triggered;
+- the timestamp.
 
 </TabItem>
 <TabItem value="api" label="API">
 
-La requête `GET /api/v1/dashboard/stats` permet de récupérer les statistiques du tableau de bord.
+The `GET /api/v1/dashboard/stats` request retrieves dashboard statistics.
 
-### Paramètres de requête
+### Query parameters
 
-| Paramètre | Description |
+| Parameter | Description |
 |-----------|-------------|
-| `range` | Période : `1h`, `24h`, `7d` ou `30d` |
+| `range` | Time period: `1h`, `24h`, `7d` or `30d` |
 
-### Exemple de réponse
+### Response example
 
 ```json
 {

@@ -1,7 +1,7 @@
 ---
-title: Installer et configurer Falco sur les workers Kubernetes
-sidebar_label: Installer et configurer Falco sur les workers
-description: Installer et configurer Falco pour la surveillance de sécurité sur les workers d'un cluster Kubernetes Numspot
+title: Install and configure Falco on the Kubernetes workers
+sidebar_label: Install and configure Falco on the workers
+description: Install and configure Falco for security monitoring on the workers of a Numspot Kubernetes cluster
 sidebar_position: 4.5
 draft: false
 ---
@@ -9,60 +9,60 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Installer et configurer Falco sur les workers
+# Install and configure Falco on the workers
 
-[Falco](https://falco.org/) est un outil de sécurité open source qui surveille en temps réel les comportements anormaux dans les [clusters Kubernetes](/docs/managed-services/kubernetes/concepts/). Il détecte les activités suspectes au niveau des appels système et des événements Kubernetes.
+[Falco](https://falco.org/) is an open source security tool that monitors abnormal behavior in real time within [Kubernetes clusters](/docs/managed-services/kubernetes/concepts/). It detects suspicious activity at the level of system calls and Kubernetes events.
 
-## Prérequis
+## Prerequisites
 
 :::info
-- [Avoir un cluster Kubernetes Numspot opérationnel](/docs/managed-services/kubernetes/concepts/)
-- [Télécharger le fichier kubeconfig](/docs/managed-services/kubernetes/actions/kubeconfig/)
-- `kubectl` installé et configuré
-- `helm` installé (version 3.x)
+- [Have an operational Numspot Kubernetes cluster](/docs/managed-services/kubernetes/concepts/)
+- [Download the kubeconfig file](/docs/managed-services/kubernetes/actions/kubeconfig/)
+- `kubectl` installed and configured
+- `helm` installed (version 3.x)
 :::
 
-## Architecture et responsabilité client
+## Architecture and customer responsibility
 
-### Responsabilités de sécurité
+### Security responsibilities
 
-Les workers (nœuds de travail) des clusters Kubernetes Numspot sont créés à partir d'une image système durcie suivant les recommandations de l'ANSSI (Agence nationale de la sécurité des systèmes d'information).
+The workers (worker nodes) of Numspot Kubernetes clusters are created from a hardened system image following the recommendations of the ANSSI (French National Cybersecurity Agency).
 
-L'installation et la configuration des outils de sécurité sur les workers sont de la **responsabilité du client** :
+The installation and configuration of security tools on the workers are the **customer's responsibility**:
 
-- Surveillance des comportements anormaux (Falco) ;
-- Détection des intrusions ;
-- Analyse des logs système ;
-- Recherche de vulnérabilités.
+- monitoring of abnormal behavior (Falco);
+- intrusion detection;
+- system log analysis;
+- vulnerability scanning.
 
 :::warning
-Numspot fournit une image durcie ANSSI, mais ne déploie pas automatiquement les outils de sécurité sur les workers. Le client doit installer et maintenir ces outils.
+Numspot provides an ANSSI-hardened image but does not automatically deploy security tools on the workers. The customer must install and maintain these tools.
 :::
 
-### Architecture Falco
+### Falco architecture
 
-Falco est déployé via un DaemonSet Kubernetes. Un pod Falco s'exécute sur chaque worker :
+Falco is deployed through a Kubernetes DaemonSet. A Falco pod runs on each worker:
 
-1. il capture les appels système via un module noyau ou eBPF ;
-2. il analyse les événements selon des règles prédéfinies ;
-3. il génère des alertes pour les comportements suspects.
+1. it captures system calls through a kernel module or eBPF;
+2. it analyses events according to predefined rules;
+3. it generates alerts for suspicious behavior.
 
 ---
 
-## Installation via Helm (recommandé)
+## Installation through Helm (recommended)
 
-L'installation via Helm permet une configuration fine et une gestion simplifiée des mises à jour.
+Installation through Helm allows fine-grained configuration and simplified update management.
 
-### Étape 1 : Ajouter le dépôt Helm
+### Step 1: Add the Helm repository
 
 ```bash
 helm repo add falcosecurity https://falcosecurity.github.io/charts
 helm repo update
 ```
 
-### Étape 2 : Créer le fichier de valeurs
+### Step 2: Create the values file
 
-Créez un fichier `values-falco.yaml` avec les paramètres adaptés aux workers Numspot :
+Create a `values-falco.yaml` file with the parameters suited to Numspot workers:
 
 ```yaml
 ## values-falco.yaml
@@ -143,10 +143,10 @@ falcosidekick:
 ```
 
 :::note
-Pour les workers Numspot, utilisez le driver eBPF au lieu du module noyau. Le module noyau nécessite des permissions privilégiées qui ne sont pas disponibles sur les images durcies ANSSI.
+For Numspot workers, use the eBPF driver instead of the kernel module. The kernel module requires privileged permissions that are not available on ANSSI-hardened images.
 :::
 
-### Étape 3 : Installer le chart
+### Step 3: Install the chart
 
 ```bash
 helm install falco falcosecurity/falco \
@@ -156,14 +156,14 @@ helm install falco falcosecurity/falco \
   --version 4.2.0
 ```
 
-### Étape 4 : Vérifier l'installation
+### Step 4: Check the installation
 
 ```bash
 kubectl get pods -n falco
 kubectl get daemonset -n falco
 ```
 
-Sortie attendue :
+Expected output:
 
 ```text
 NAME          READY   STATUS    RESTARTS   AGE
@@ -174,17 +174,17 @@ NAME    DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
 falco   3         3         3       3            3           <none>          2m
 ```
 
-Chaque worker exécute un pod Falco.
+Each worker runs a Falco pod.
 
 ---
 
-## Configuration avancée
+## Advanced configuration
 
-### Règles personnalisées
+### Custom rules
 
-Falco inclut un ensemble de règles par défaut. Ajoutez des règles personnalisées pour adapter la surveillance à votre contexte.
+Falco includes a set of default rules. Add custom rules to adapt monitoring to your context.
 
-#### Exemple : Surveillance des connexions réseau suspectes
+#### Example: Monitoring of suspicious network connections
 
 ```yaml
 ## custom-rules.yaml
@@ -214,7 +214,7 @@ customRules:
       tags: [network, inbound]
 ```
 
-#### Exemple : Surveillance des accès fichiers sensibles
+#### Example: Monitoring of sensitive file access
 
 ```yaml
 ## custom-rules.yaml
@@ -247,11 +247,11 @@ customRules:
       tags: [filesystem, binary, mitre_persistence]
 ```
 
-### Intégration avec les alertes
+### Integration with alerting
 
-Configurez Falcosidekick pour envoyer les alertes vers vos systèmes de surveillance.
+Configure Falcosidekick to send alerts to your monitoring systems.
 
-#### Configuration avec Slack
+#### Configuration with Slack
 
 ```yaml
 ## values-falco.yaml
@@ -264,7 +264,7 @@ falcosidekick:
       minimumpriority: "warning"
 ```
 
-#### Configuration avec Elasticsearch
+#### Configuration with Elasticsearch
 
 ```yaml
 ## values-falco.yaml
@@ -280,7 +280,7 @@ falcosidekick:
       password: "${ELASTIC_PASSWORD}"
 ```
 
-#### Configuration avec un SIEM
+#### Configuration with a SIEM
 
 ```yaml
 ## values-falco.yaml
@@ -296,15 +296,15 @@ falcosidekick:
 
 ---
 
-## Visualisation des logs
+## Viewing the logs
 
-### Consulter les logs Falco
+### Consult the Falco logs
 
 ```bash
 kubectl logs -n falco -l app.kubernetes.io/name=falco
 ```
 
-Exemple de sortie :
+Example output:
 
 ```json
 {
@@ -320,13 +320,13 @@ Exemple de sortie :
 }
 ```
 
-### Filtrer les logs par priorité
+### Filter the logs by priority
 
 ```bash
 kubectl logs -n falco -l app.kubernetes.io/name=falco | grep -E '"priority":"(Critical|Warning)"'
 ```
 
-### Surveiller en temps réel
+### Monitor in real time
 
 ```bash
 kubectl logs -n falco -l app.kubernetes.io/name=falco -f --max-log-requests=10
@@ -334,34 +334,34 @@ kubectl logs -n falco -l app.kubernetes.io/name=falco -f --max-log-requests=10
 
 ---
 
-## Dépannage
+## Troubleshooting
 
-### Erreur "eBPF probe cannot be loaded"
+### Error "eBPF probe cannot be loaded"
 
-**Cause** : Le noyau du worker ne supporte pas eBPF ou les capacités nécessaires ne sont pas disponibles.
+**Cause**: The worker kernel does not support eBPF or the required capabilities are not available.
 
-**Solution** :
+**Solution**:
 
-1. Vérifiez la version du noyau :
+1. Check the kernel version:
 
 ```bash
 kubectl debug node/<node-name> -it --image=busybox -- uname -r
 ```
 
-2. Pour les workers Numspot, eBPF est supporté. Si l'erreur persiste, utilisez le driver moderne-ebpf :
+2. For Numspot workers, eBPF is supported. If the error persists, use the modern-ebpf driver:
 
 ```yaml
 driver:
   kind: modern-ebpf
 ```
 
-### Erreur "Permission denied"
+### Error "Permission denied"
 
-**Cause** : Le contexte de sécurité restrictif bloque certaines opérations.
+**Cause**: The restrictive security context blocks certain operations.
 
-**Solution** :
+**Solution**:
 
-Vérifiez que le securityContext inclut les capabilities nécessaires :
+Check that the securityContext includes the required capabilities:
 
 ```yaml
 securityContext:
@@ -371,19 +371,19 @@ securityContext:
       - SYS_RESOURCE
 ```
 
-### Pas de logs générés
+### No logs generated
 
-**Cause** : Les règles par défaut ne détectent pas les événements de votre workload.
+**Cause**: The default rules do not detect the events of your workload.
 
-**Solutions** :
+**Solutions**:
 
-1. Vérifiez que Falco fonctionne :
+1. Check that Falco is running:
 
 ```bash
 kubectl exec -n falco <falco-pod> -- falco --version
 ```
 
-2. Testez avec une règle simple :
+2. Test with a simple rule:
 
 ```yaml
 customRules:
@@ -395,20 +395,20 @@ customRules:
       priority: INFO
 ```
 
-3. Générez un événement de test :
+3. Generate a test event:
 
 ```bash
 kubectl run test --image=busybox --restart=Never -- ls /
 kubectl logs -n falco -l app.kubernetes.io/name=falco --tail=10
 ```
 
-### Pods Falco en erreur sur certains workers
+### Falco pods failing on certain workers
 
-**Cause** : Configuration spécifique à un worker (labels, taints).
+**Cause**: Configuration specific to a worker (labels, taints).
 
-**Solution** :
+**Solution**:
 
-Vérifiez les tolerations et nodeSelector :
+Check the tolerations and nodeSelector:
 
 ```yaml
 tolerations:
@@ -426,33 +426,33 @@ nodeSelector: {}
 
 ---
 
-## Bonnes pratiques
+## Best practices
 
-### Priorité des alertes
+### Alert priority
 
-Configurez les seuils de priorité pour éviter la saturation :
+Configure the priority thresholds to avoid saturation:
 
-| Priorité | Description | Action recommandée |
+| Priority | Description | Recommended action |
 | --- | --- | --- |
-| Critical | Menace confirmée | Intervention immédiate |
-| Warning | Activité suspecte | Analyse rapide |
-| Notice | Événement notable | Revue quotidienne |
-| Info | Information | Archivage |
+| Critical | Confirmed threat | Immediate intervention |
+| Warning | Suspicious activity | Quick analysis |
+| Notice | Notable event | Daily review |
+| Info | Information | Archiving |
 
-### Règles recommandées pour les workers Numspot
+### Recommended rules for Numspot workers
 
-Activez ces règles pour les workers durcis ANSSI :
+Enable these rules for ANSSI-hardened workers:
 
-- Détection d'escalade de privilèges
-- Surveillance des shells interactifs
-- Accès aux fichiers sensibles
-- Connexions réseau non autorisées
-- Modification des binaires système
-- Création de processus suspects
+- privilege escalation detection;
+- monitoring of interactive shells;
+- sensitive file access;
+- unauthorized network connections;
+- modification of system binaries;
+- suspicious process creation.
 
-### Mise à jour des règles
+### Updating the rules
 
-Mettez à jour les règles Falco régulièrement :
+Update the Falco rules regularly:
 
 ```bash
 helm repo update
@@ -462,17 +462,17 @@ helm upgrade falco falcosecurity/falco \
   --version 4.2.0
 ```
 
-### Sauvegarde des configurations
+### Backing up the configurations
 
-Exportez vos règles personnalisées :
+Export your custom rules:
 
 ```bash
 kubectl get configmap -n falco falco -o yaml > falco-config-backup.yaml
 ```
 
-### Surveillance de Falco lui-même
+### Monitoring Falco itself
 
-Ajoutez une sonde de santé :
+Add a health probe:
 
 ```yaml
 livenessProbe:
@@ -496,9 +496,9 @@ readinessProbe:
 
 ## Maintenance
 
-### Rotation des logs
+### Log rotation
 
-Configurez la rotation pour éviter la saturation du disque :
+Configure rotation to avoid disk saturation:
 
 ```yaml
 extra:
@@ -519,9 +519,9 @@ mounts:
         type: DirectoryOrCreate
 ```
 
-### Désinstallation
+### Uninstallation
 
-Pour supprimer Falco :
+To remove Falco:
 
 ```bash
 helm uninstall falco -n falco
@@ -530,9 +530,9 @@ kubectl delete namespace falco
 
 ---
 
-## Références
+## References
 
-- [Documentation officielle Falco](https://falco.org/docs/)
-- [Règles Falco par défaut](https://github.com/falcosecurity/rules)
+- [Official Falco documentation](https://falco.org/docs/)
+- [Default Falco rules](https://github.com/falcosecurity/rules)
 - [Falcosidekick](https://github.com/falcosecurity/falcosidekick)
-- [Bonnes pratiques ANSSI](https://www.ssi.gouv.fr/)
+- [ANSSI best practices](https://www.ssi.gouv.fr/)

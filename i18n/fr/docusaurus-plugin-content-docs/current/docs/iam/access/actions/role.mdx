@@ -1,0 +1,122 @@
+---
+title: Consulter les permissions d'un rôle - IAM
+description: "Consultez les informations d'un rôle IAM et visualisez les permissions qui le composent, via la console ou l'API."
+sidebar_label: Consulter les permissions d'un rôle
+sidebar_position: 3
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Consulter les permissions d'un rôle
+
+Vous pouvez consulter les informations d'un rôle et visualiser les permissions qui le composent via la console ou l'API.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **iam.role.get**
+
+:::
+
+<Tabs>
+<TabItem value='console' label="Console" default>
+
+## Console {#tabhead-console}
+
+
+Les rôles se consultent depuis la page de détail d'une identité (utilisateur ou compte de service), dans la section "Espaces assignés".
+
+1. Depuis le menu latéral gauche, cliquez sur **IAM** → **Utilisateurs** (ou **Comptes de Service**).
+2. Cliquez sur l'identifiant de l'identité concernée pour ouvrir sa page de détails.
+3. Dans la section "Espaces assignés", cliquez sur **X rôles** pour l'espace voulu : la liste des rôles attribués sur cet espace s'affiche.
+4. Sélectionnez un rôle : la liste des permissions qui le composent s'affiche.
+
+:::info
+La liste complète des rôles et de leurs permissions est disponible par API (onglet API) : la console affiche les rôles attribués à une identité, espace par espace.
+:::
+
+</TabItem>
+
+<TabItem value='api' label="API">
+
+## API {#tabhead-api}
+
+
+### Obtenir la correspondance entre les noms des rôles et leurs UUID (Universally Unique Identifier)
+
+Les rôles sont propres à chaque espace. Pour les manipuler par API, il faut obtenir leur UUID.
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/roles
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/roles'
+```
+
+### Réponse
+
+```json
+{
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "totalSize": 150,
+  "items": [
+    {
+      "name": "…",
+      "uuid": "123e4567-e89b-12d3-a456-426614174000"
+    }
+  ]
+}
+```
+
+### Consulter les permissions d'un rôle d'un espace
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/roles/{roleUuid}/permissions
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/roles/{roleUuid}/permissions'
+```
+
+### Réponse
+
+```json
+{
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "totalSize": 150,
+  "items": [
+    {
+      "name": "…",
+      "id": "123e4567-e89b-12d3-a456-426614174000"
+    }
+  ]
+}
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+### Obtenir les détails d'un rôle au niveau de l'organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/roles/{roleUuid}/permissions
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/roles/{roleUuid}/permissions'
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+</Tabs>

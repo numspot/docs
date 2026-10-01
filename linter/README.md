@@ -112,7 +112,7 @@ The linter runs as a GitHub Actions job (`.github/workflows/ci.yml`). On pull re
   if: github.event_name == 'push'
   run: |
     node linter/cli.js docs/docs/ --ci
-    node linter/cli.js i18n/en/docusaurus-plugin-content-docs/current/docs/ --ci
+    node linter/cli.js i18n/fr/docusaurus-plugin-content-docs/current/docs/ --ci
 ```
 
 The `lint` job needs no install and no checkout depth beyond `fetch-depth: 0` (full history, to resolve the PR diff base) — the linter has zero external dependencies.

@@ -1,0 +1,37 @@
+---
+title: "Compte de service - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# À propos des comptes de service
+
+<ActionsSummary />
+
+Un compte de service (service account) est un compte non-humain utilisé pour automatiser des tâches ou réaliser des opérations à la place d'un utilisateur. Il s'authentifie auprès de l'API (Application Programming Interface) Numspot pour gérer les ressources des espaces auxquels il est rattaché, dans la limite des permissions IAM (Identity and Access Management) qui lui sont accordées.
+
+## Informations générales
+
+Un compte de service est caractérisé par :
+
+- un nom, choisi à la création ;
+- une clé d'accès, générée par Numspot ;
+- un code secret, généré par Numspot lors de la création et utilisé pour l'authentification ;
+- une date d'expiration optionnelle ;
+- un ou plusieurs espaces auxquels il a accès ;
+- des rôles IAM qui déterminent ses permissions.
+
+## Authentification
+
+À la création d'un compte de service, Numspot retourne sa clé d'accès **et** son code secret. Le code secret n'est jamais réaffiché par la suite — il faut le conserver dans un emplacement sécurisé dès la création.
+
+La clé d'accès et le code secret sont utilisés conjointement pour authentifier le compte auprès de l'API.
+
+## Espaces et permissions
+
+Un compte de service peut être rattaché à plusieurs espaces. Ses permissions sont définies par les rôles IAM qui lui sont attribués. Vous pouvez consulter à tout moment la liste des espaces assignés à un compte de service.

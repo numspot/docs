@@ -1,0 +1,135 @@
+---
+title: Configurer un load balancer
+sidebar_position: 3
+---
+
+# Configurer un load balancer
+
+Vous pouvez configurer un [load balancer](/docs/network/load-balancer/concepts/) pour répartir le trafic entre vos [VM (Virtual Machine)](/docs/compute/concept/) à l'aide de Terraform.
+
+## Avant de commencer
+
+Pour réaliser les actions présentées ci-dessous, vous devez disposer :
+
+* D'un compte Numspot
+* De [Terraform ↗](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform) installé
+* D'un navigateur ou d'un client HTTP
+
+:::warning
+Les health checks du load balancer doivent réussir à contacter vos services pour que ce dernier puisse diriger le trafic vers les bonnes instances.
+:::
+
+## Créer et déployer des ressources Numspot à l'aide de Terraform
+
+Pour démarrer, commencez par créer [le fichier de configuration ↗](/docs/terraform/quickstart/#création-du-fichier-de-configuration-terraform).
+
+Vous devez ensuite créer les ressources suivantes :
+
+- [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) ;
+- subnet (sous-réseau) ;
+- 2 VM ;
+- [internet gateway (passerelle Internet)](/docs/network/internet-gateway/concepts/) ;
+- [route table (table de routage)](/docs/network/route-table/concepts/) ;
+- [security group (groupe de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) ;
+- load balancer.
+
+Ajoutez les blocs suivants :
+
+```tf
+resource "numspot_vpc" "vpc" {
+  ip_range = "10.0.0.0/16"
+}
+
+resource "numspot_subnet" "subnet" {
+  vpc_id   = numspot_vpc.vpc.id
+  ip_range = "10.0.0.0/24"
+}
+
+resource "numspot_vm" "vm-1" {
+  image_id           = "<VM IMAGE>"
+  subnet_id          = numspot_subnet.subnet.id
+  type               = "<VM TYPE>"
+  security_group_ids = [numspot_security_group.security-group.id]
+}
+
+resource "numspot_vm" "vm-2" {
+  image_id           = "<VM IMAGE>"
+  subnet_id          = numspot_subnet.subnet.id
+  type               = "<VM TYPE>"
+  security_group_ids = [numspot_security_group.security-group.id]
+}
+
+resource "numspot_internet_gateway" "internet-gateway" {
+  vpc_id = numspot_vpc.vpc.id
+}
+
+resource "numspot_route_table" "route-table" {
+  vpc_id    = numspot_vpc.vpc.id
+  subnet_id = numspot_subnet.subnet.id
+
+  routes = [{
+    destination_ip_range = "0.0.0.0/0"
+    gateway_id           = numspot_internet_gateway.internet-gateway.id
+  }]
+}
+
+resource "numspot_security_group" "security-group" {
+  vpc_id      = numspot_vpc.vpc.id
+  name        = "security group name"
+  description = "security group description"
+
+  inbound_rules = [{
+    from_port_range = 80
+    to_port_range   = 80
+    ip_protocol     = "tcp"
+    ip_ranges       = ["0.0.0.0/0"]
+  }]
+}
+
+resource "numspot_load_balancer" "load-balancer" {
+  name = "nlb"
+  listeners = [{
+    load_balancer_port     = 80
+    backend_port           = 80
+    load_balancer_protocol = "TCP"
+  }]
+
+  subnets         = [numspot_subnet.subnet.id]
+  security_groups = [numspot_security_group.security-group.id]
+  backend_vm_ids  = [numspot_vm.vm-1.id, numspot_vm.vm-2.id]
+
+  type = "internet-facing"
+
+  health_check = {
+    healthy_threshold   = 10
+    check_interval      = 30
+    path                = "/"
+    port                = 80
+    protocol            = "HTTP"
+    timeout             = 5
+    unhealthy_threshold = 5
+  }
+}
+```
+
+Votre configuration est maintenant prête à être [déployée sur l'infrastructure de Numspot ↗](/docs/terraform/quickstart/#déployer-votre-configuration-à-laide-de-terraform).
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.vpc.create**
+- **compute.subnet.create**
+- **compute.vm.create**
+- **compute.internetGateway.create**
+- **compute.routeTable.create**
+- **compute.securityGroup.create**
+- **compute.loadBalancer.create**
+
+:::
+
+## Liens utiles
+
+* [Documentation du provider Numspot sur le registre d'HashiCorp ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs)
+* [Repository GitHub du provider Numspot ↗](https://github.com/numspot/terraform-provider-numspot)

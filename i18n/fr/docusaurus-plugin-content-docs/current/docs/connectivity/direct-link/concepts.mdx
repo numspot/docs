@@ -1,0 +1,70 @@
+---
+title: "Direct Link - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# À propos de DirectLink
+
+<ActionsSummary />
+
+DirectLink permet d'établir une connexion privée entre votre réseau et l'infrastructure Numspot. Cette interconnexion repose sur des liaisons dédiées de 1 Gb/s ou 10 Gb/s, sans transiter par le réseau Internet public. Les niveaux de service applicables sont définis dans les conditions contractuelles.
+
+:::info
+Le commanditaire doit adresser un mail à support-client@numspot.com pour demander la mise en place d'un DirectLink.
+:::
+
+## Informations générales sur les connexions DirectLink
+  
+> Une connexion DirectLink est une connexion physique entre votre réseau et un site DirectLink, qui correspond à un emplacement physique de l'infrastructure Numspot. 
+
+> Cette connexion est une fibre optique 1 Gb/s Ethernet ou 10 Gb/s Ethernet qui vous permet d'accéder directement à vos ressources Cloud situées dans la région correspondant à ce site, sans passer par Internet. 
+
+> Les DirectLink Interfaces vous permettent de configurer ces connexions en spécifiant le [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) auquel vous souhaitez vous connecter via votre connexion DirectLink.
+
+Avant de demander une connexion DirectLink, assurez-vous que :
+    - Votre fournisseur d'accès Internet ou opérateur réseau dispose d'un équipement dans le même datacenter que le site DirectLink visé.
+    - Vous disposez d'une fibre monomode compatible.
+    - Vous disposez d'un équipement supportant le protocole BGP.
+
+:::info
+Présence du fournisseur d'accès Internet ou opérateur réseau sur le site concerné :
+eu-west-2 :
+- **PAR1**, Téléhouse (Magny-Les-Hameaux)
+- **PAR4**, Equinix (Pantin)
+:::
+
+## Avantages
+
+L'utilisation de DirectLink offre plusieurs avantages significatifs par rapport à une connexion Internet standard :
+    - **Bande passante dédiée**, garantissant des performances et une vitesse constantes
+    - **Latence réduite** grâce à un chemin direct entre les points de terminaison
+    - **Connexion privée et dédiée**, offrant une meilleure protection des données
+    - **Réduction des risques** d'interception des communications par des parties non autorisées
+    - **Connexion plus stable** et moins sujette aux problèmes de congestion
+    - **Redondance** : Possibilité d'augmenter la disponibilité en déployant deux accès sécurisés
+    - Options de bande passante adaptables, de **1 Gb/s** ou **10 Gb/s**
+
+![Connexion DirectLink](/img/console/connectivity/directlink/directlink_mono_acces_dedie.png)
+
+## Demande de mise en place
+
+Voici la procédure pour demander une connexion DirectLink :
+
+    1. Identifiez le site DirectLink correspondant à la région où se trouvent vos ressources :<br/>
+    `curl 'https://api.{region}.numspot.com/connectivity/spaces/{spaceId}/readLocations'`<br/>
+    -- Remplacez `{region}` par **eu-west-2** ou **cloudgouv-eu-west-1**<br/>
+    -- Remplacez `{spaceId}` par votre SpaceID que vous pouvez copier comme indiqué ci-dessous :<br/><br/>
+    ![Copy SpaceID](/img/console/connectivity/directlink/copy_spaceid.png)<br/><br/>
+
+    Vous devriez voir apparaître ce message en bas de la page :<br/><br/>
+    ![Copy SpaceID](/img/console/connectivity/directlink/copy_spaceid2.png)
+    
+    2. Assurez-vous d'avoir un routeur ou une fibre optique dans le même datacenter que le site DirectLink,
+    ou faites appel à un prestataire pour l'installer.
+    3. Si ce n'est pas déjà fait, créez un VPC et une [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/) dans la région souhaitée, puis attachez la virtual gateway au VPC.
+
+    Une fois ces étapes effectuées, **contactez le support Numspot** pour enclencher le processus de mise en place du DirectLink.

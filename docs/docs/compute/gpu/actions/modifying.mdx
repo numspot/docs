@@ -1,5 +1,5 @@
 ---
-title: Modifier le comportement d'un GPU
+title: Change the behavior of a GPU
 sidebar_position: 4
 draft: false
 ---
@@ -7,47 +7,38 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Modifier le comportement d'un GPU
+# Change the behavior of a GPU
 
-Vous pouvez spécifier si un [GPU (Graphics Processing Unit)](/docs/compute/gpu/concept/) est automatiquement libéré de votre compte lorsque la [VM (Virtual Machine)](/docs/compute/concept/) sur laquelle il est attaché est terminée.
+You can specify whether a [GPU](/docs/compute/gpu/concept/) (Graphics Processing Unit) is automatically released from your account when the [VM](/docs/compute/concept/) (Virtual Machine) to which it is attached is terminated.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.gpu.update**
 
 :::
 <Tabs>
   <TabItem value="console" label="Console" default>
-
-## Console {#tabhead-console}
-
-  1. Connectez-vous à la console Numspot.
-  2. Depuis le menu latéral gauche, cliquez sur **Compute** → **GPU**.
-  3. Dans le tableau de bord GPU, choisissez dans la liste le GPU dont vous souhaitez modifier le comportement.
-  4. Cliquez sur le bouton **Modifier**. Une boîte de dialogue apparaît.
-  5. Sélectionnez le **Comportement à la suppression de la VM** :
-     * **Libération du GPU** : le GPU sera automatiquement libéré de votre compte lorsque la VM à laquelle il est lié est terminée.
-     * **Maintien de l'allocation** : le GPU sera détaché et restera alloué à votre compte lorsque la VM à laquelle il est lié est terminée.
-  6. Cliquez sur **Modifier**. Le comportement du GPU est modifié.
+  1. Log in to the Numspot console.
+  2. From the left-hand side menu, click **Compute** → **GPU**.
+  3. In the GPU dashboard, choose from the list the GPU whose behavior you want to change.
+  4. Click the **Modify** button. A dialog box appears.
+  5. Select the **Behavior on VM deletion**:
+     * **Release the GPU**: the GPU will be automatically released from your account when the VM to which it is linked is terminated.
+     * **Keep the allocation**: the GPU will be detached and will remain allocated to your account when the VM to which it is linked is terminated.
+  6. Click **Modify**. The behavior of the GPU is changed.
   </TabItem>
 
   <TabItem value="api" label="API">
+    The `PUT /compute/spaces/{spaceId}/flexibleGpus/{id}` command changes the behavior of a flexible GPU (fGPU). The `DeleteOnVmDeletion` parameter controls whether the GPU and its VRAM (Video Random Access Memory) are automatically released.
 
-## API {#tabhead-api}
-
-    La commande `PUT /compute/spaces/{spaceId}/flexibleGpus/{id}` modifie le comportement d'un GPU flexible (fGPU). Le paramètre `DeleteOnVmDeletion` contrôle si le GPU et sa VRAM (Video Random Access Memory) sont automatiquement libérés.
-
-[Exemple de requête : Modification d'un fGPU](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/flexibleGpus/{id})
+[Example request: Modifying an fGPU](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/flexibleGpus/{id})
   </TabItem>
 
   <TabItem value="terraform" label="Terraform">
-
-## Terraform {#tabhead-terraform}
-
-    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/flexible_gpu).
+    The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/flexible_gpu).
   </TabItem>
 
 </Tabs>

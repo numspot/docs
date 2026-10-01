@@ -1,160 +1,160 @@
 ---
 title: VPC - Concepts
-sidebar_label: Concepts liés aux VPC
+sidebar_label: Concepts related to VPC
 sidebar_position: 2
 draft: false
 ---
 import ActionsSummary from '@site/src/components/ActionsSummary';
 
-# Concepts liés aux VPC
+# Concepts related to VPC
 
 <ActionsSummary />
 
-Les VPC (Virtual Private Cloud) sont des réseaux virtuels dédiés à votre compte dans une région donnée, dans lesquels vous pouvez lancer des ressources Cloud. Ces ressources doivent être lancées dans des subnets (sous-réseaux), qui sont des segments de réseau au sein du VPC. Les subnets peuvent être connectés à Internet ou non, en fonction de vos besoins.
+VPC (Virtual Private Cloud) are virtual networks dedicated to your account in a given region, in which you can launch Cloud resources. These resources must be launched in subnets, which are network segments within the VPC. Subnets can be connected to the Internet or not, depending on your needs.
 
-Pour gérer le trafic réseau dans chaque subnet, vous utilisez des [route tables (tables de routage)](/docs/network/route-table/concepts/). Les route tables permettent de définir les chemins d'accès pour le trafic entrant et sortant du subnet. Vous pouvez également utiliser des [security groups (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) pour contrôler le trafic réseau entrant et sortant de vos ressources Cloud.
+To manage network traffic in each subnet, you use [route tables](/docs/network/route-table/concepts/). Route tables allow you to define the access paths for traffic entering and leaving the subnet. You can also use [security groups](/docs/compute/security-groups/concepts/concept-sg/) to control the inbound and outbound network traffic of your Cloud resources.
 
-Les VPC offrent également des fonctionnalités avancées telles que la création de connexions de peering avec d'autres VPC, l'utilisation de plusieurs interfaces réseau pour vos [VM (Virtual Machines)](/docs/compute/concept/), et la création de connexions [DirectLink](/docs/connectivity/direct-link/concepts/) ou VPN (Virtual Private Network) pour étendre votre réseau local à votre VPC.
+VPC also offer advanced features such as creating peering connections with other VPC, using several network interfaces for your [VM](/docs/compute/concept/) (Virtual Machines), and creating [DirectLink](/docs/connectivity/direct-link/concepts/) or VPN (Virtual Private Network) connections to extend your local network to your VPC.
 
 :::tip
-Les VPC permettent de créer un réseau virtuel sécurisé et personnalisable pour vos ressources Cloud, avec un contrôle précis sur le trafic réseau et des fonctionnalités avancées pour répondre à vos besoins spécifiques.
+VPC allow you to create a secure and customisable virtual network for your Cloud resources, with precise control over network traffic and advanced features to meet your specific needs.
 :::
 
-## VPC et subnets
+## VPC and subnets
 
-Un VPC est un réseau virtuel que vous créez et qui est isolé au sein du Cloud Numspot. Il est dédié à votre compte et vous permet de créer des VM et d'autres ressources dans ce réseau. Les VPC sont créés pour une région spécifique.
+A VPC is a virtual network that you create and that is isolated within the Numspot Cloud. It is dedicated to your account and allows you to create VM and other resources in this network. VPC are created for a specific region.
 
-Lorsque vous créez un VPC, vous devez spécifier une plage d'adresses IP (Internet Protocol) en notation CIDR (Classless Inter-Domain Routing). Cette plage d'adresses IP peut ensuite être utilisée pour vos ressources lancées dans ce VPC. La plage d'adresses IP doit être incluse dans les plages RFC 1918, qui sont constituées des trois blocs suivants :
+When you create a VPC, you must specify an IP (Internet Protocol) address range in CIDR (Classless Inter-Domain Routing) notation. This IP address range can then be used for your resources launched in this VPC. The IP address range must be included in the RFC 1918 ranges, which consist of the following three blocks:
 
-* 10.0.0.0/8 (10.0.0.0 à 10.255.255.255) ;
-* 172.16.0.0/12 (172.16.0.0 à 172.31.255.255) ;
-* 192.168.0.0/16 (192.168.0.0 à 192.168.255.255).
+* 10.0.0.0/8 (10.0.0.0 to 10.255.255.255);
+* 172.16.0.0/12 (172.16.0.0 to 172.31.255.255);
+* 192.168.0.0/16 (192.168.0.0 to 192.168.255.255).
 
-Ces plages d'adresses IP sont réservées pour une utilisation privée et ne sont pas routables sur Internet. Vous pouvez utiliser ces plages d'adresses IP pour créer des sous-réseaux dans votre VPC et attribuer des adresses IP à vos ressources.
+These IP address ranges are reserved for private use and are not routable on the Internet. You can use these IP address ranges to create subnets in your VPC and assign IP addresses to your resources.
 
-Pour en savoir plus, consultez la [documentation RFC 1918](https://tools.ietf.org/html/rfc1918).
+For more information, see the [RFC 1918 documentation](https://tools.ietf.org/html/rfc1918).
 
 :::warning
-Vous ne pouvez pas modifier le bloc CIDR d'un VPC après sa création. Si votre VPC est trop petit, créez-en un plus large et migrez vos VM.
+You cannot modify the CIDR block of a VPC after its creation. If your VPC is too small, create a larger one and migrate your VM.
 :::
 
-Pour utiliser un VPC, vous devez créer un ou plusieurs subnets. Les subnets sont des sous-réseaux au sein de votre VPC, qui ont leur propre plage d'adresses IP en notation CIDR.
+To use a VPC, you must create one or more subnets. Subnets are sub-networks within your VPC, which have their own IP address range in CIDR notation.
 
-Cette plage d'adresses IP doit faire partie du bloc CIDR du VPC et ne doit pas se chevaucher avec celle des autres subnets.
+This IP address range must be part of the CIDR block of the VPC and must not overlap with that of the other subnets.
 
-Les subnets sont créés dans une Sous-région (Availability Zone) spécifique de la région du VPC, et vous pouvez créer plusieurs subnets dans chaque Sous-région. Les ressources Cloud doivent être lancées dans des subnets.
+Subnets are created in a specific Subregion (Availability Zone) of the VPC region, and you can create several subnets in each Subregion. Cloud resources must be launched in subnets.
 
 :::warning
-Dans chaque subnet d'un VPC, Numspot réserve les quatre premières IP ainsi que la dernière du bloc CIDR. Vous ne pouvez pas attribuer ces IP à des ressources.
-Par exemple, dans un subnet avec le bloc CIDR 10.0.0.0/24, les adresses IP suivantes sont réservées :
-* 10.0.0.0 : l'adresse réseau ;
-* 10.0.0.1 : réservée pour le routeur VPC ;
-* 10.0.0.2 : réservée pour le serveur DNS ;
-* 10.0.0.3 : réservée pour un usage futur ;
-* 10.0.0.255 : l'adresse de diffusion réseau.
+In each subnet of a VPC, Numspot reserves the first four IP addresses as well as the last one of the CIDR block. You cannot assign these IP addresses to resources.
+For example, in a subnet with the CIDR block 10.0.0.0/24, the following IP addresses are reserved:
+* 10.0.0.0: the network address;
+* 10.0.0.1: reserved for the VPC router;
+* 10.0.0.2: reserved for the DNS server;
+* 10.0.0.3: reserved for future use;
+* 10.0.0.255: the network broadcast address.
 :::
 
-*Architecture d'un VPC et des subnets :*
-![Architecture d'un VPC et de subnets](/img/console/network/vpc/vpc.png)
+*Architecture of a VPC and subnets:*
+![Architecture of a VPC and subnets](/img/console/network/vpc/vpc.png)
 
-Un VPC ou un subnet peut être dans un des états suivants :
+A VPC or a subnet can be in one of the following states:
 
-* "pending" : le processus de création est en cours ;
-* "available" : le VPC ou le subnet est créé et vous pouvez y lancer des ressources ;
-* "deleting" : le VPC ou le subnet est en cours de suppression.
+* "pending": the creation process is in progress;
+* "available": the VPC or the subnet is created and you can launch resources in it;
+* "deleting": the VPC or the subnet is being deleted.
 
-Lorsque vous utilisez un VPC, vous pouvez spécifier l'option d'allocation pour l'ensemble du VPC lors de sa création.
-* Si vous paramétrez l'option d'allocation du VPC sur "default", vous devez paramétrer l'attribut "tenancy" de chaque VM que vous souhaitez placer sur un serveur dédié sur "dedicated".
-* Si vous paramétrez l'option d'allocation du VPC sur "dedicated", l'attribut "tenancy" de toutes les VM lancées dans ce VPC est automatiquement paramétré sur "dedicated".
+When you use a VPC, you can specify the allocation option for the whole VPC during its creation.
+* If you set the VPC allocation option to "default", you must set the "tenancy" attribute of each VM that you want to place on a dedicated server to "dedicated".
+* If you set the VPC allocation option to "dedicated", the "tenancy" attribute of all VM launched in this VPC is automatically set to "dedicated".
 
-Vous ne pouvez pas modifier l'option d'allocation une fois votre VPC créé.
+You cannot modify the allocation option once your VPC is created.
 
-## Routage et sécurité d'un subnet
+## Routing and security of a subnet
 
-**Routage**
+**Routing**
 
-Pour contrôler le trafic sortant de chaque subnet, vous devez lui associer une route table. Une route table principale est créée automatiquement pour votre VPC et chaque subnet y est associé par défaut.
+To control the outbound traffic of each subnet, you must associate a route table with it. A main route table is created automatically for your VPC and each subnet is associated with it by default.
 
-Vous pouvez également créer vos propres route tables et les associer à vos subnets.
+You can also create your own route tables and associate them with your subnets.
 
-Les routes contenues dans la route table principale peuvent être modifiées, et vous pouvez également définir une de vos propres route tables comme route table principale.
+The routes contained in the main route table can be modified, and you can also set one of your own route tables as the main route table.
 
-> Il est recommandé d'utiliser une route table par subnet pour une gestion plus facile et plus précise du trafic réseau.
+> It is recommended to use one route table per subnet for easier and more precise management of network traffic.
 
 **Security groups**
 
-Les security groups sont des fonctionnalités de sécurité qui permettent de contrôler l'accès à vos VM dans votre VPC.
+Security groups are security features that allow you to control access to your VM in your VPC.
 
-> Ils agissent comme un ensemble de règles de pare-feu qui contrôlent les flux de trafic entrants et sortants.
+> They act as a set of firewall rules that control inbound and outbound traffic flows.
 
-Lorsque vous créez des VM dans un VPC, vous devez les associer à un ou plusieurs security groups.
+When you create VM in a VPC, you must associate them with one or more security groups.
 
-Si vous ne spécifiez pas de security group, la VM est automatiquement associée au security group par défaut créé avec votre VPC.
+If you do not specify a security group, the VM is automatically associated with the default security group created with your VPC.
 
-Vous pouvez ensuite modifier les règles du security group que vous avez créées ou du security group par défaut en fonction de votre architecture et des contrôles que vous souhaitez configurer.
+You can then modify the rules of the security group that you created or of the default security group according to your architecture and the controls that you want to configure.
 
-Il est recommandé d'utiliser des security groups pour restreindre l'accès à vos VM et ainsi renforcer la sécurité de votre VPC.
+It is recommended to use security groups to restrict access to your VM and thus strengthen the security of your VPC.
 
 :::warning
-Dans un VPC, vous pouvez autoriser l'accès vers et depuis :
-* un autre security group du VPC ou d'un VPC pair ;
-* un bloc CIDR.
+In a VPC, you can authorize access to and from:
+* another security group of the VPC or of a peer VPC;
+* a CIDR block.
 :::
 
 :::info
-Par défaut, grâce à une amélioration du réseau, les VM dans un même subnet peuvent communiquer entre elles sans aucune règle de security group nécessaire.
-Ceci permet de réduire la latence entre deux VM et d'éviter des conflits avec des protocoles spécifiques, tels que ceux utilisés par Microsoft Windows.
+By default, thanks to a network enhancement, the VM in the same subnet can communicate with each other without any security group rule required.
+This reduces the latency between two VM and avoids conflicts with specific protocols, such as those used by Microsoft Windows.
 
-Si vous voulez une sécurité accrue entre vos VM (par exemple une sur une DMZ et l'autre sur un réseau interne), placez-les dans des subnets différents ou désactivez cette fonctionnalité.
+If you want increased security between your VM (for example one on a DMZ and the other on an internal network), place them in different subnets or disable this feature.
 
-Vous pouvez désactiver cette fonctionnalité en ajoutant, avant de créer des subnets, le tag (étiquette) `osc.fcu.enable_lan_security_groups` à votre VPC.
-La valeur que vous spécifiez pour ce tag n'est pas prise en compte. Une fois ce tag ajouté, vous devez ajouter les règles appropriées aux security groups de vos VM placées dans un même subnet pour les autoriser à communiquer les unes avec les autres.
+You can disable this feature by adding, before creating subnets, the `osc.fcu.enable_lan_security_groups` tag to your VPC.
+The value that you specify for this tag is not taken into account. Once this tag is added, you must add the appropriate rules to the security groups of your VM placed in the same subnet to allow them to communicate with each other.
 
-Ce comportement ne peut être modifié en ajoutant ou retirant ce tag une fois que des subnets sont créés dans votre VPC.
+This behavior cannot be modified by adding or removing this tag once subnets are created in your VPC.
 :::
 
 :::tip
-Il est recommandé d'utiliser un security group par subnet, tout comme il est recommandé d'utiliser une route table par subnet. Cela revient à créer un subnet pour une application spécifique, avec sa propre route table et son propre security group adaptés à ses besoins en termes de connectivité réseau et de sécurité.
+It is recommended to use one security group per subnet, just as it is recommended to use one route table per subnet. This amounts to creating a subnet for a specific application, with its own route table and its own security group adapted to its network connectivity and security needs.
 :::
 
-## IP et accès à Internet
+## IP and Internet access
 
-Chaque VM créée dans un VPC a une adresse IP privée principale attribuée qui n'est pas accessible depuis Internet.
+Each VM created in a VPC has a main private IP address assigned that is not accessible from the Internet.
 
-Vous pouvez choisir l'adresse IP privée associée aux VM créées dans le subnet d'un VPC, ou elle peut être automatiquement choisie dans la plage d'IP du subnet.
-Vous pouvez également ajouter des adresses IP privées secondaires à une VM dans un VPC en utilisant des NIC (cartes réseau virtuelles).
+You can choose the private IP address associated with the VM created in the subnet of a VPC, or it can be automatically chosen from the IP range of the subnet.
+You can also add secondary private IP addresses to a VM in a VPC by using NIC (Network Interface Cards).
 
-Par défaut, les VM créées dans un VPC n'ont pas d'IP publique attribuée et ne peuvent communiquer qu'entre elles. Pour connecter des VM dans un VPC à Internet, vous devez utiliser des IP publiques, qui sont des adresses IP publiques statiques que vous pouvez associer à une VM, une interface réseau ou une [NAT gateway (passerelle nat)](/docs/network/nat/concepts/).
+By default, the VM created in a VPC have no public IP assigned and can only communicate with each other. To connect VM in a VPC to the Internet, you must use public IP, which are static public IP addresses that you can associate with a VM, a network interface or a [nat gateway](/docs/network/nat/concepts/).
 
-Il existe deux façons de connecter des VM d'un VPC à Internet :
+There are two ways to connect VM of a VPC to the Internet:
 
-* **Directe** :
-pour connecter directement des VM d'un VPC à Internet, vous devez leur associer une adresse IP publique et utiliser un [internet gateway (passerelle Internet)](/docs/network/internet-gateway/concepts/) pour envoyer le trafic vers et depuis Internet.
+* **Direct**:
+to directly connect VM of a VPC to the Internet, you must associate a public IP address with them and use an [internet gateway](/docs/network/internet-gateway/concepts/) to send the traffic to and from the Internet.
 
-* **Indirecte** :
-pour connecter indirectement des VM d'un VPC à Internet, vous devez utiliser une NAT gateway qui porte l'adresse IP publique et qui envoie le trafic vers et depuis Internet au nom des VM.
+* **Indirect**:
+to indirectly connect VM of a VPC to the Internet, you must use a nat gateway that carries the public IP address and that sends the traffic to and from the Internet on behalf of the VM.
 
-> Dans les deux cas, vous devez router le trafic 0.0.0.0/0 du subnet dans lequel se trouvent les VM vers l'internet gateway ou la NAT gateway.
+> In both cases, you must route the 0.0.0.0/0 traffic of the subnet in which the VM are located to the internet gateway or the nat gateway.
 
-> Vous devez également ajouter les règles appropriées aux security groups de vos subnets.
+> You must also add the appropriate rules to the security groups of your subnets.
 
-L'accès indirect à Internet permet, par exemple, à vos VM de rechercher les mises à jour disponibles.
+Indirect Internet access allows, for example, your VM to search for available updates.
 
 :::warning
-Pour accéder à des serveurs NTP (Network Time Protocol), les VM doivent être connectées à Internet. Ainsi, pour permettre à vos VM dans un VPC d'accéder à des serveurs NTP, vous devez ajouter une des routes suivantes à la route table associée à leur subnet :
-* une route qui leur autorise à accéder à l'ensemble d'Internet, avec 0.0.0.0/0 pour destination et un internet gateway ou une NAT gateway pour target ;
-* une route qui leur autorise à accéder uniquement à un serveur NTP, avec l'IP du serveur NTP pour destination et un internet gateway ou une NAT gateway pour target.
+To access NTP (Network Time Protocol) servers, the VM must be connected to the Internet. Therefore, to allow your VM in a VPC to access NTP servers, you must add one of the following routes to the route table associated with their subnet:
+* a route that allows them to access the whole Internet, with 0.0.0.0/0 as destination and an internet gateway or a nat gateway as target;
+* a route that allows them to access only an NTP server, with the IP of the NTP server as destination and an internet gateway or a nat gateway as target.
 :::
 
-## VPC et les autres services
+## VPC and the other services
 
-Les VPC peuvent être connectés à d'autres réseaux à l'aide des services suivants, qui requièrent également une [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/) et, pour les VPN Connections, une [client gateway (passerelle client)](/docs/connectivity/vpn/client-gateway/concepts/) :
+VPC can be connected to other networks using the following services, which also require a [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/) and, for VPN Connections, a [client gateway](/docs/connectivity/vpn/client-gateway/concepts/):
 
-* **Direct Link** : le service DirectLink permet d'établir une connexion physique dédiée entre votre réseau interne (on-premises) et un site DirectLink hébergeant votre environnement VPC Numspot.
-Cette connexion offre une liaison réseau privée, stable et à faible latence, pour accéder directement à vos ressources cloud sans transiter par Internet public.
+* **Direct Link**: the DirectLink service allows you to establish a dedicated physical connection between your internal network (on-premise) and a DirectLink site hosting your Numspot VPC environment.
+This connection offers a private, stable and low-latency network link, to directly access your cloud resources without transiting through the public Internet.
 
-Ce service n'est pas activé automatiquement : il nécessite une demande spécifique auprès de Numspot et la mise en place d'un lien physique (fibre optique ou interconnexion opérateur) entre votre infrastructure et un point d'accès DirectLink agréé.
+This service is not enabled automatically: it requires a specific request to Numspot and the setting up of a physical link (optical fiber or operator interconnection) between your infrastructure and an approved DirectLink access point.
 
-Une fois le lien établi, il est associé à une virtual gateway de votre VPC, permettant le routage privé entre votre réseau local et votre environnement cloud.
+Once the link is established, it is associated with a virtual gateway of your VPC, enabling private routing between your local network and your cloud environment.
 
-* **VPC Peering** : vous pouvez appairer deux VPC pour autoriser les ressources dans chacun d'eux à communiquer entre elles.
+* **VPC Peering**: you can peer two VPC to allow the resources in each of them to communicate with each other.

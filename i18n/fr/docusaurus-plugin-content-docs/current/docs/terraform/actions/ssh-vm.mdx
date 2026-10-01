@@ -1,0 +1,113 @@
+---
+title: Créer une VM et y accéder
+sidebar_position: 2
+---
+
+# Créer une VM et y accéder
+
+Vous pouvez créer une [VM (Virtual Machine)](/docs/compute/concept/) et y accéder via SSH (Secure Shell) en utilisant Terraform.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.vpc.create**
+- **compute.subnet.create**
+- **compute.keypair.create**
+- **compute.vm.create**
+- **compute.publicIp.create**
+- **compute.internetGateway.create**
+- **compute.routeTable.create**
+- **compute.securityGroup.create**
+
+:::
+
+## Avant de commencer
+
+:::info
+## Prérequis
+- [Disposer d'un compte Numspot ↗](https://docs.numspot.com)
+- [Installer Terraform ↗](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform)
+- [Disposer d'un client SSH ↗](https://www.openssh.com/)
+:::
+
+## Créer et déployer des ressources Numspot
+
+Pour démarrer, commencez par créer [le fichier de configuration ↗](/docs/terraform/quickstart/#création-du-fichier-de-configuration-terraform).
+
+Vous devez ensuite créer les ressources suivantes :
+
+- [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) ;
+- subnet (sous-réseau) ;
+- [key pair (paire de clés)](/docs/compute/keypairs/concept/) ;
+- VM ;
+- IP (Internet Protocol) publique ;
+- [internet gateway (passerelle Internet)](/docs/network/internet-gateway/concepts/) ;
+- [route table (table de routage)](/docs/network/route-table/concepts/) ;
+- [security group (groupe de sécurité)](/docs/compute/security-groups/concepts/concept-sg/).
+
+Ajoutez les blocs suivants :
+
+```tf
+resource "numspot_vpc" "vpc" {
+  ip_range = "10.0.0.0/16"
+}
+
+resource "numspot_subnet" "subnet" {
+  vpc_id                  = numspot_vpc.vpc.id
+  ip_range                = "10.0.0.0/24"
+  map_public_ip_on_launch = true
+}
+
+resource "numspot_keypair" "keypair" {
+  name       = "keypair_terraform"
+  public_key = "<PUBLIC KEYPAIR>"
+}
+
+resource "numspot_vm" "vm" {
+  image_id           = "<VM IMAGE>"
+  type               = "<VM TYPE>"
+  subnet_id          = numspot_subnet.subnet.id
+  keypair_name       = numspot_keypair.keypair.name
+  security_group_ids = [numspot_security_group.security-group.id]
+}
+
+resource "numspot_public_ip" "public-ip" {
+  vm_id = numspot_vm.vm.id
+}
+
+resource "numspot_internet_gateway" "internet-gateway" {
+  vpc_id = numspot_vpc.vpc.id
+}
+
+resource "numspot_route_table" "route-table" {
+  vpc_id    = numspot_vpc.vpc.id
+  subnet_id = numspot_subnet.subnet.id
+
+  routes = [{
+    destination_ip_range = "0.0.0.0/0"
+    gateway_id           = numspot_internet_gateway.internet-gateway.id
+  }]
+}
+
+resource "numspot_security_group" "security-group" {
+  vpc_id      = numspot_vpc.vpc.id
+  name        = "security group name"
+  description = "security group description"
+
+  inbound_rules = [{
+      from_port_range = 22
+      to_port_range   = 22
+      ip_protocol     = "tcp"
+      ip_ranges       = ["0.0.0.0/0"]
+    }]
+}
+```
+
+Votre configuration est maintenant prête à être [déployée sur l'infrastructure de Numspot ↗](/docs/terraform/quickstart/#déployer-votre-configuration-à-laide-de-terraform).
+
+## Liens utiles
+
+- [Documentation du provider Numspot sur le registre d'HashiCorp ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs)
+- [Repository GitHub du provider Numspot ↗](https://github.com/numspot/terraform-provider-numspot)

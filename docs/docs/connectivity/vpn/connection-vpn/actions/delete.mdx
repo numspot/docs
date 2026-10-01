@@ -1,6 +1,6 @@
 ---
-title: Supprimer une connexion VPN
-description: Supprimez un tunnel VPN sécurisé entre votre réseau d'entreprise et un VPC.
+title: Delete a VPN connection
+description: Delete a secure VPN tunnel between your corporate network and a VPC.
 sidebar_position: 4
 draft: false
 ---
@@ -8,16 +8,16 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Supprimer une connexion VPN
+# Delete a VPN connection
 
-Vous pouvez supprimer une connexion **VPN** (Virtual Private Network) entre votre réseau d'entreprise et un de vos [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) dans le Cloud Numspot.
+You can delete a VPN (Virtual Private Network) connection between your corporate network and one of your [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud) in the Numspot Cloud.
 
-Cette action supprime le tunnel VPN sécurisé entre la [client gateway (passerelle client)](/docs/connectivity/vpn/client-gateway/concepts/) et la [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/).
+This action deletes the secure VPN tunnel between the [client gateway](/docs/connectivity/vpn/client-gateway/concepts/) and the [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/).
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **connectivity.vpnconnection.delete**
 
@@ -26,39 +26,30 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
-
-1. Cliquez à l'intérieur du dashboard **VPN Connections** pour faire apparaître les cases à cocher.
-2. Cochez la case de la connexion VPN que vous voulez supprimer.
-   La connexion VPN est sélectionnée et un menu d'actions apparaît.
-3. Cliquez sur **Supprimer**.
-   Une boîte de dialogue de confirmation s'affiche.
-4. Cliquez sur **Supprimer**.
-   La connexion VPN est supprimée.
+1. Click inside the **VPN Connections** dashboard to display the tick boxes.
+2. Tick the box of the VPN connection you want to delete.
+   The VPN connection is selected and an actions menu appears.
+3. Click **Delete**.
+   A confirmation dialog box appears.
+4. Click **Delete**.
+   The VPN connection is deleted.
 
 :::info
-Les ressources supprimées restent visibles pendant 1 heure.
+Deleted resources remain visible for 1 hour.
 :::
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `DELETE /connectivity/spaces/{spaceId}/vpnConnections/{id}` command deletes a specified VPN connection.
+If you want to delete a VPC and all its dependencies, it is recommended to detach the virtual gateway from the VPC and to delete the VPC before deleting the VPN connection. This allows you to delete the VPC without waiting for the VPN connection to be deleted.
 
-
-La commande `DELETE /connectivity/spaces/{spaceId}/vpnConnections/{id}` supprime une connexion VPN spécifiée.
-Si vous souhaitez supprimer un VPC et toutes ses dépendances, il est recommandé de détacher la virtual gateway du VPC et de supprimer le VPC avant de supprimer la connexion VPN. Cela vous permet de supprimer le VPC sans attendre que la connexion VPN soit supprimée.
-
-[Exemple de requête : Suppression d'une VPN Connection](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/vpnConnections/{id})
+[Example request: Deleting a VPN Connection](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/vpnConnections/{id})
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection).
 
 </TabItem>
 </Tabs>

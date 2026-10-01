@@ -1,6 +1,6 @@
 ---
-title: Enregistrer une VM auprès d'un load balancer - Numspot
-sidebar_label: Enregistrer une VM auprès d'un load balancer
+title: Register a VM with a load balancer - Numspot
+sidebar_label: Register a VM with a load balancer
 sidebar_position: 5
 draft: false
 ---
@@ -8,14 +8,14 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Enregistrer une VM auprès d'un load balancer
+# Register a VM with a load balancer
 
-Vous pouvez attacher une ou plusieurs [VM (Virtual Machine)](/docs/compute/concept/) à un [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) spécifié. Vous devez spécifier au moins le paramètre BackendIps ou BackendVMIds. Les VM peuvent se trouver dans différents subnet (sous-réseaux) et différentes Subregions par rapport au load balancer, tant que les VM et les load balancers sont soit tous dans le Cloud public, soit tous dans le même [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/). L'enregistrement d'une VM avec le load balancer peut prendre un certain temps. Une fois enregistrée, la VM reçoit le trafic et les requêtes provenant de ce load balancer et est alors appelée une VM de backend (serveur dorsal).
+You can attach one or more [VM](/docs/compute/concept/) (Virtual Machine) to a specified [load balancer](/docs/network/load-balancer/concepts/). You must specify at least the BackendIps or BackendVMIds parameter. The VM can be located in different subnets and different Subregions from the load balancer, as long as the VM and the load balancers are either all in the public Cloud or all in the same [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud). Registering a VM with the load balancer can take some time. Once registered, the VM receives traffic and requests from that load balancer and is then called a backend VM.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.loadBalancer.update**
 
@@ -23,30 +23,28 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
   <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
+1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
+2. Click the name of the load balancer for which you want to register a VM.
+3. In the "Backend VM" tab, click **Register a VM**.
+4. Select the VM to register from the drop-down list.
 
-:::info
-L'enregistrement d'une VM backend n'est pas disponible depuis la console Numspot.
-
-Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::tip
+Multi-selection is available.
 :::
+
+5. Click **Register**.
+   The VM is registered with the load balancer.
 
   </TabItem>
   <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `PUT /compute/spaces/{spaceId}/loadBalancers/{id}/backendMachines/link` command attaches a VM to a load balancer.
 
-
-La commande `PUT /compute/spaces/{spaceId}/loadBalancers/{id}/backendMachines/link` attache une VM à un load balancer.
-
-[Exemple de requête : Attacher une VM à un load balancer](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/loadBalancers/{id}/backendMachines/link)
+[Example request: Attach a VM to a load balancer](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/loadBalancers/{id}/backendMachines/link)
   </TabItem>
   <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
 
   </TabItem>
 </Tabs>

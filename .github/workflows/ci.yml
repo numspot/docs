@@ -24,7 +24,7 @@ jobs:
         if: github.event_name == 'push'
         run: |
           node linter/cli.js docs/docs/ --ci
-          node linter/cli.js i18n/en/docusaurus-plugin-content-docs/current/docs/ --ci
+          node linter/cli.js i18n/fr/docusaurus-plugin-content-docs/current/docs/ --ci
 
   tests:
     name: Linter regression tests

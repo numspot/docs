@@ -1,6 +1,6 @@
 ---
-title: Modifier une policy DLP - DLP managé
-sidebar_label: Modifier une policy DLP
+title: Update a DLP policy - Managed DLP
+sidebar_label: Update a DLP policy
 sidebar_position: 5
 draft: false
 ---
@@ -8,14 +8,14 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Modifier une policy DLP
+# Update a DLP policy
 
-Modifiez une [policy DLP](/docs/managed-services/dlp/concepts) existante pour ajuster ses règles, leur ordre ou l'action par défaut. La modification crée une nouvelle version de la policy en tant que brouillon. Pour l'activer, publiez-la dans un [ruleset](/docs/managed-services/dlp/concepts) (ensemble de règles).
+Update an existing [DLP policy](/docs/managed-services/dlp/concepts) to adjust its rules, their order or the default action. The update creates a new version of the policy as a draft. To activate it, publish it in a [ruleset](/docs/managed-services/dlp/concepts).
 
 ## Permissions
 
 :::info
-Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+This action requires the following [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) role:
 
 - **rule_editor**
 
@@ -28,41 +28,41 @@ Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Dat
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/dlp/policies-list.png", text: "Dans la console DLP, cliquez sur Policies dans le menu latéral.", hotspot: { x: 0.006, y: 0.184, w: 0.155, h: 0.044 } },
-    { img: "/img/walkthrough/dlp/policies-list.png", text: "Cliquez sur le nom de la policy à modifier dans la liste.", hotspot: { x: 0.201, y: 0.320, w: 0.091, h: 0.075 } },
-    { img: "/img/walkthrough/dlp/policy-edit-top.png", text: "Modifiez le nom, le Platform Type, la description ou les règles de la policy. Le bloc « Version History » permet de consulter l'historique des versions.", hotspot: { x: 0.184, y: 0.190, w: 0.800, h: 0.270 } },
-    { img: "/img/walkthrough/dlp/policy-edit-save.png", text: "En bas du formulaire, cliquez sur « Save as Draft » pour enregistrer vos modifications en brouillon.", hotspot: { x: 0.900, y: 0.926, w: 0.083, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/policies-list.png", text: "In the DLP console, click Policies in the side menu.", hotspot: { x: 0.006, y: 0.184, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/policies-list.png", text: "Click the name of the policy to edit in the list.", hotspot: { x: 0.201, y: 0.320, w: 0.091, h: 0.075 } },
+    { img: "/img/walkthrough/dlp/policy-edit-top.png", text: "Edit the policy name, Platform Type, description or rules. The “Version History” section lets you view the version history.", hotspot: { x: 0.184, y: 0.190, w: 0.800, h: 0.270 } },
+    { img: "/img/walkthrough/dlp/policy-edit-save.png", text: "At the bottom of the form, click “Save as Draft” to save your changes as a draft.", hotspot: { x: 0.900, y: 0.926, w: 0.083, h: 0.044 } },
   ]}
 />
 
-1. Dans la console [DLP](/docs/managed-services/dlp/concepts), cliquez sur **Policies** dans le menu latéral.
-2. Cliquez sur le nom de la policy à modifier dans la liste.
+1. In the [DLP](/docs/managed-services/dlp/concepts) console, click **Policies** in the sidebar.
+2. Click the name of the policy to update in the list.
 
-### Éléments modifiables
+### Editable elements
 
-Vous pouvez modifier les éléments suivants :
+You can modify the following elements:
 
-| Élément | Description |
+| Element | Description |
 |---------|-------------|
-| Règles | Ajouter ou retirer des règles de la policy |
-| Ordre des règles | Réordonner les règles par glisser-déposer — l'ordre détermine la séquence d'évaluation |
-| Action par défaut | Modifier l'action par défaut (`pass` ou `block`) |
+| Rules | Add or remove rules from the policy |
+| Rule order | Reorder rules by drag and drop — the order determines the evaluation sequence |
+| Default action | Change the default action (`pass` or `block`) |
 
-### Enregistrement
+### Saving
 
-Cliquez sur **Save as Draft** pour enregistrer les modifications en tant que brouillon. La policy apparaît dans la liste avec le statut "Draft". Pour activer la policy modifiée, publiez-la dans un [ruleset](/docs/managed-services/dlp/concepts).
+Click **Save as Draft** to save the changes as a draft. The policy appears in the list with the "Draft" status. To activate the updated policy, publish it in a [ruleset](/docs/managed-services/dlp/concepts).
 
 </TabItem>
 <TabItem value="api" label="API">
 
-La requête `PUT /api/v1/policies/{id}` permet de modifier une [policy DLP](/docs/managed-services/dlp/concepts) existante. Le corps de la requête est identique à celui de la création.
+The `PUT /api/v1/policies/{id}` request updates an existing [DLP policy](/docs/managed-services/dlp/concepts). The request body is identical to the create request.
 
-### Exemple de requête
+### Request example
 
 ```json
 {
   "name": "mistral-prod-policy",
-  "description": "Policy de production pour Mistral (mise à jour)",
+  "description": "Production policy for Mistral (updated)",
   "platform_type": "mistral-platform",
   "rule_ids": [
     "rule-550e8400",
@@ -73,13 +73,13 @@ La requête `PUT /api/v1/policies/{id}` permet de modifier une [policy DLP](/doc
 }
 ```
 
-### Exemple de réponse
+### Response example
 
 ```json
 {
   "id": "policy-9f8e7d6c",
   "name": "mistral-prod-policy",
-  "description": "Policy de production pour Mistral (mise à jour)",
+  "description": "Production policy for Mistral (updated)",
   "platform_type": "mistral-platform",
   "rule_ids": [
     "rule-550e8400",

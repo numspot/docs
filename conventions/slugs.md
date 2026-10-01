@@ -57,7 +57,7 @@ slug: /docs/managed-services/mistral-ai-platform/concepts
 ```
 
 > **i18n**: the `slug` is read **per locale**. Setting an English `slug` in the
-> `i18n/en/…` file changes **only** the English URL; the French version keeps
+> `i18n/fr/…` file changes **only** the French URL; the English version keeps
 > its French slug. This is the case for `plateforme-ia-mistral` (FR) →
 > `mistral-ai-platform` (EN): the product is called "Plateforme IA Mistral" in
 > French and "Mistral AI Platform" in English.

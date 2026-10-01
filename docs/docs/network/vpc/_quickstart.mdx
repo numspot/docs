@@ -1,129 +1,129 @@
 ---
-title: Démarrage rapide
+title: Quickstart
 sidebar_position: 1
 draft: false
 ---
 
-# Démarrage rapide avec les VPC (Virtual Private Cloud)
+# Quickstart with VPC (Virtual Private Cloud)
 
-Dans le cadre de cette infrastructure cloud, vous allez mettre en place un réseau virtuel privé et sécurisé, appelé [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/). 
-Ce VPC sera l'environnement réseau dédié à vos ressources cloud, permettant de contrôler et de gérer efficacement votre trafic réseau.
+As part of this cloud infrastructure, you will set up a private and secure virtual network, called a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/). 
+This VPC will be the dedicated network environment for your cloud resources, allowing you to control and manage your network traffic effectively.
 
-## Créer un compte Numspot
+## Create a Numspot account
 
-Si vous n'avez pas encore de compte Numspot, inscrivez-vous sur [Numspot](https://www.numspot.com/) pour en créer un. 
-Renseignez les informations demandées et confirmez votre adresse e-mail.
+If you do not yet have a Numspot account, sign up on [Numspot](https://www.numspot.com/) to create one. 
+Fill in the required information and confirm your email address.
 
-## Connexion à la Console Numspot
+## Log in to the Numspot console
 
-Rendez-vous sur le site web de Numspot et connectez-vous à votre compte en utilisant votre adresse e-mail et votre mot de passe. 
+Go to the Numspot website and log in to your account using your email address and password. 
 ![Login](/img/screenshot/login.png)
 
-Tapez le code à 6 chiffres que vous avez reçu sur votre application d'authentification.
+Type the 6-digit code you received on your authentication application.
 ![TOTP](/img/screenshot/totp.png)
 
-Accédez ensuite à la console Numspot.
+Then access the Numspot console.
 ![Dashboard](/img/screenshot/dashboard.png)
 
-## Créer un VPC
-Vous allez définir un bloc CIDR (Classless Inter-Domain Routing) de 192.168.0.0/16 pour votre VPC.
-Cela fournira un large éventail d'adresses IP (Internet Protocol) (2^16 = 65536) que vous pourrez utiliser pour vos instances, vos bases de données, et d'autres ressources cloud.
+## Create a VPC
+You will define a CIDR (Classless Inter-Domain Routing) block of 192.168.0.0/16 for your VPC.
+This will provide a wide range of IP (Internet Protocol) addresses (2^16 = 65536) that you can use for your instances, databases, and other cloud resources.
 
-1. Dans le dashboard VPC, cliquez sur le bouton **Créer un VPC**. Une nouvelle fenêtre apparaît.
-2. Dans le champ "Nom", saisissez un nom pour le VPC (par exemple, `NS_Lab`).
-3. Dans le champ "Plage d'IP", entrez la plage `192.168.0.0/16` pour votre VPC.
+1. In the VPC dashboard, click the **Create a VPC** button. A new window appears.
+2. In the "Name" field, enter a name for the VPC (for example, `NS_Lab`).
+3. In the "IP range" field, enter the range `192.168.0.0/16` for your VPC.
 
 ![Create VPC](/img/screenshot/create_vpc_01.png)
-Cliquez sur **Créer un VPC**. Le VPC est créé.
+Click **Create a VPC**. The VPC is created.
 
 ![List VPC](/img/screenshot/list_vpc.png)
 
-## Créer un subnet
-Ensuite, vous allez créer un subnet (sous-réseau) à l'intérieur de votre VPC. 
-Un subnet est une subdivision d'un réseau IP, qui permet de segmenter votre VPC en plusieurs réseaux plus petits et plus faciles à gérer. 
-Vous allez définir un bloc CIDR de 192.168.0.0/24 pour votre subnet, ce qui donnera 2^8 = 256 adresses IP.
+## Create a subnet
+Next, you will create a subnet within your VPC. 
+A subnet is a subdivision of an IP network, which allows you to segment your VPC into several smaller and more manageable networks. 
+You will define a CIDR block of 192.168.0.0/24 for your subnet, which will give 2^8 = 256 IP addresses.
 
-1. Cliquez sur l'"ID" du VPC. Une nouvelle fenêtre apparaît, contenant les informations de votre VPC.
-2. Cliquez sur **Créer un subnet**
+1. Click the "ID" of the VPC. A new window appears, containing your VPC information.
+2. Click **Create a subnet**
    ![VPC details](/img/screenshot/vpc_details.png)
-3. Dans le champ "Nom", saisissez un nom pour le subnet.
-4. Dans le champ CIDR, saisissez la plage `192.168.0.0/24` pour votre subnet (par exemple, `NS_Subnet_1`).
-5. Dans la liste "Availability zone", sélectionnez la zone dans laquelle vous voulez créer le subnet.
+3. In the "Name" field, enter a name for the subnet.
+4. In the CIDR field, enter the range `192.168.0.0/24` for your subnet (for example, `NS_Subnet_1`).
+5. From the "Availability zone" list, select the zone in which you want to create the subnet.
    ![Create Subnet](/img/screenshot/create_subnet.png)
 
-Cliquez sur **Créer un subnet**. Le subnet est créé dans le VPC.
+Click **Create a subnet**. The subnet is created in the VPC.
 
-## Créer une internet gateway (IGW)
-Pour permettre à vos instances situées dans le VPC d'accéder à internet et vice versa, vous allez créer une [internet gateway (passerelle internet)](/docs/network/internet-gateway/concepts/) et l'attacher à votre VPC. 
-L'IGW est un composant qui fournit une passerelle pour le trafic réseau entrant et sortant.
+## Create an internet gateway (IGW)
+To allow your instances located in the VPC to access the Internet and vice versa, you will create an [internet gateway](/docs/network/internet-gateway/concepts/) and attach it to your VPC. 
+The IGW is a component that provides a gateway for inbound and outbound network traffic.
 
 ![Create IGW](/img/screenshot/create_igw.png)
 
-1. Dans le dashboard Internet Gateway, cliquez sur **Créer une IGW**.
-   <br/>Une nouvelle fenêtre "Créer une internet gateway" apparaît.
-2. Dans le champ "Nom", tapez un nom (par exemple, `NS_IGW`) pour l'internet gateway.
-   <br/>Cliquez sur **Créer une IGW**. L'internet gateway est créée. 
+1. In the Internet Gateway dashboard, click **Create an IGW**.
+   <br/>A new "Create an internet gateway" window appears.
+2. In the "Name" field, type a name (for example, `NS_IGW`) for the internet gateway.
+   <br/>Click **Create an IGW**. The internet gateway is created. 
 
-Ensuite, vous allez attacher l'internet gateway à votre VPC.
+Next, you will attach the internet gateway to your VPC.
 
 ![Link IGW to VPC](/img/screenshot/link_igw_vpc.png)
-1.	Cliquez à l'intérieur du dashboard Internet Gateway, puis sélectionnez l'internet gateway que vous souhaitez lier.
-2.	Cliquez sur **Lier à un VPC**. La boîte de dialogue "Lier à un VPC" apparaît.
-3.	Sélectionnez le VPC (`NS_Lab`) dans la liste des VPC.
-4.	Cliquez sur **Lier**.
+1.	Click inside the Internet Gateway dashboard, then select the internet gateway you want to link.
+2.	Click **Link to a VPC**. The "Link to a VPC" dialog box appears.
+3.	Select the VPC (`NS_Lab`) from the list of VPC.
+4.	Click **Link**.
    ![Link IGW to VPC](/img/screenshot/link_igw_vpc_1.png)
-L'internet gateway est liée au VPC.
+The internet gateway is linked to the VPC.
 
-## Créer une route table et l'associer à un subnet
+## Create a route table and associate it with a subnet
 
-Vous allez créer une [route table (table de routage)](/docs/network/route-table/concepts/), l'associer à votre subnet, et ajouter une route qui dirige tout le trafic sortant (`0.0.0.0/0`) vers l'IGW. 
-Une route table est un ensemble de règles qui déterminent où le trafic réseau est dirigé, ce qui permet de contrôler et de gérer efficacement votre trafic réseau.
+You will create a [route table](/docs/network/route-table/concepts/), associate it with your subnet, and add a route that directs all outbound traffic (`0.0.0.0/0`) to the IGW. 
+A route table is a set of rules that determine where network traffic is directed, which allows you to control and manage your network traffic effectively.
 :::tip
-Créez des route tables séparées pour vos différents subnets. 
-Cela permettra de mieux contrôler le trafic réseau entrant et sortant pour chaque subnet.
+Create separate route tables for your different subnets. 
+This will allow you to better control inbound and outbound network traffic for each subnet.
 :::
 :::warning
-Évitez de mettre toutes les routes dans la route table principale par défaut. 
-Cela peut entraîner des conflits de routage et des problèmes de connectivité réseau. 
+Avoid putting all routes in the default main route table. 
+This can cause routing conflicts and network connectivity issues. 
 
-Au lieu de cela, créez des route tables séparées pour vos différents subnets et associez-les aux subnets appropriés.
+Instead, create separate route tables for your different subnets and associate them with the appropriate subnets.
 :::
 
-### Créer une route table
+### Create a route table
 
 ![Create Route Table](/img/screenshot/create_route_table.png)
 
-1. Dans le dashboard Route Tables, cliquez sur le bouton **Créer une route table**. Une nouvelle fenêtre apparaît.
-2. Dans le champ "Nom", saisissez un nom (par exemple, `NS_RT_Subnet_1`).
-3. Sélectionnez le VPC auquel vous souhaitez associer la route table (par exemple, `NS_Lab`).
-4.	Cliquez sur **Créer**.
-   <br/>La route table est créée.
+1. In the Route Tables dashboard, click the **Create a route table** button. A new window appears.
+2. In the "Name" field, enter a name (for example, `NS_RT_Subnet_1`).
+3. Select the VPC to which you want to associate the route table (for example, `NS_Lab`).
+4.	Click **Create**.
+   <br/>The route table is created.
 
-### Ajouter une route
-1. Cliquez sur le lien des routes correspondant à la route table créée. Le volet "Création de routes" apparaît.
+### Add a route
+1. Click the routes link corresponding to the created route table. The "Create routes" pane appears.
    ![Create Route Table](/img/screenshot/add_route_1.png)
-2. Cliquez sur **Ajouter une route**. Une nouvelle fenêtre apparaît.
-3. Dans le menu déroulant "Type", sélectionnez "Internet Gateway".
-4. Dans le menu déroulant "Cible", sélectionnez l'IGW que vous avez créé précédemment (`NS_IGW`).
-5. Dans le champ Destination, entrez `0.0.0.0/0` en cliquant sur **All IPS**.
-6. Cliquez sur **Ajouter la route** puis **Valider**.
+2. Click **Add a route**. A new window appears.
+3. From the "Type" drop-down menu, select "Internet Gateway".
+4. From the "Target" drop-down menu, select the IGW you created earlier (`NS_IGW`).
+5. In the Destination field, enter `0.0.0.0/0` by clicking **All IPS**.
+6. Click **Add route** then **Validate**.
    ![Create Route Table](/img/screenshot/add_route_2.png)
-   <br/> La route apparaît dans la liste des routes de la route table.
+   <br/> The route appears in the list of routes for the route table.
 
 :::note
-* En créant des route tables séparées pour vos différents subnets, vous pouvez mieux contrôler le trafic réseau entrant et sortant pour chaque subnet. 
-* Cela permet également de mieux gérer la sécurité de votre réseau en utilisant des [security groups (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) pour contrôler le trafic réseau entrant et sortant pour vos instances.
-* Il est donc important de bien planifier votre réseau VPC et de définir des subnets et des route tables en fonction de vos besoins de connectivité réseau et de sécurité.
+* By creating separate route tables for your different subnets, you can better control inbound and outbound network traffic for each subnet. 
+* This also allows you to better manage your network security by using [security groups](/docs/compute/security-groups/concepts/concept-sg/) to control inbound and outbound network traffic for your instances.
+* It is therefore important to carefully plan your VPC network and define subnets and route tables according to your network connectivity and security requirements.
 :::
 
-### Associer une route table à un subnet
+### Associate a route table with a subnet
 
-1. Dans le dashboard Route tables, identifiez la route table à laquelle vous souhaitez associer un subnet.
-2. Dans le menu "Actions", sélectionnez **Associer à un subnet**.
-    ![Assoicate Route Table to Subnet](/img/screenshot/associate_rt_subnet_1.png)
-  <br/> Un volet latéral de dialogue "Subnets" apparaîtra.
-3. Sélectionnez le subnet que vous souhaitez associer à la route table, puis cliquez sur **Associer**.
-   ![Assoicate Route Table to Subnet](/img/screenshot/associate_rt_subnet_2.png)
-   <br/>La route table est associée au subnet.
+1. In the Route tables dashboard, identify the route table to which you want to associate a subnet.
+2. From the "Actions" menu, select **Associate to a subnet**.
+    ![Associate Route Table to Subnet](/img/screenshot/associate_rt_subnet_1.png)
+  <br/> A "Subnets" side dialog pane will appear.
+3. Select the subnet you want to associate with the route table, then click **Associate**.
+   ![Associate Route Table to Subnet](/img/screenshot/associate_rt_subnet_2.png)
+   <br/>The route table is associated with the subnet.
 
-Avec cette configuration, vous aurez une plateforme VPC robuste, sécurisée et évolutive pour votre infrastructure cloud.
+With this configuration, you will have a robust, secure and scalable VPC platform for your cloud infrastructure.

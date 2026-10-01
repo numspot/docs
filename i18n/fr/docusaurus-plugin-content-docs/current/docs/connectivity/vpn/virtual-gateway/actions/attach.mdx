@@ -1,0 +1,73 @@
+---
+title: Lier une virtual gateway
+description: Attachez une virtual gateway à un VPC pour permettre les connexions VPN.
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Lier une virtual gateway
+
+Vous pouvez lier une [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/) à un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/). Vous pouvez ensuite mettre en place une connexion **VPN** (Virtual Private Network) entre ce VPC et une [client gateway (passerelle client)](/docs/connectivity/vpn/client-gateway/concepts/).
+
+Cette action modifie l'état d'attachement de la virtual gateway de `detached` en `attached`, mais l'état de la virtual gateway reste `available`.
+
+Vous pouvez lier chaque virtual gateway à un seul VPC à la fois. Vous pouvez lier une virtual gateway à un VPC avant ou après avoir créé la connexion VPN.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **connectivity.bridge.update**
+
+:::
+
+:::info
+## Avant de commencer
+* Créez une virtual gateway.
+* Assurez-vous que la virtual gateway est dans l'état `available`.
+* Créez un VPC.
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+
+1. Cliquez dans le dashboard **Virtual Gateways** pour faire apparaître des cases à cocher.
+2. Cochez la case de la virtual gateway que vous voulez lier à un VPC.
+   La virtual gateway est sélectionnée et un menu d'actions apparaît.
+3. Cliquez sur **Lier à un VPC**.
+   La boîte de dialogue "Lier à un VPC" apparaît.
+4. Dans la liste "VPC", sélectionnez l'ID du VPC auquel vous voulez lier la virtual gateway.
+5. Cliquez sur **Lier**.
+   La virtual gateway est liée au VPC spécifié.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `POST /connectivity/spaces/{spaceId}/virtualGateways/{id}/link` attache une virtual gateway à un VPC.
+
+:::warning
+Cette action ne peut être effectuée que si la virtual gateway est dans l'état `available`.
+:::
+
+[Exemple de requête : Attacher une virtual gateway à un VPC](/openapi/#tag/connectivity/POST/connectivity/spaces/{spaceId}/virtualGateways/{id}/link)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/virtual_gateway).
+
+</TabItem>
+</Tabs>

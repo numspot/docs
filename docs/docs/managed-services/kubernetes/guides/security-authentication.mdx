@@ -1,311 +1,311 @@
 ---
-title: Sécuriser l'authentification Kubernetes - Kubernetes managé
-sidebar_label: Sécuriser l'authentification Kubernetes
-description: Sécuriser l'authentification Kubernetes pour la conformité SecNumCloud
+title: Secure Kubernetes authentication - Managed Kubernetes
+sidebar_label: Secure Kubernetes authentication
+description: Secure Kubernetes authentication for SecNumCloud compliance
 sidebar_position: 10
 draft: false
 ---
 
-# Sécuriser l'authentification Kubernetes
+# Secure Kubernetes authentication
 
-Le service managé Kubernetes intègre des mécanismes de sécurité pour protéger l'accès au cluster et les ressources. Cette page présente les bonnes pratiques pour sécuriser l'authentification, notamment dans un contexte de conformité SecNumCloud.
+The managed Kubernetes service includes security mechanisms to protect access to the cluster and its resources. This page presents best practices for securing authentication, particularly in a SecNumCloud compliance context.
 
-## Connexions sécurisées TLS
+## TLS secure connections
 
-Toutes les communications avec l'API (Application Programming Interface) server Kubernetes sont chiffrées avec TLS (Transport Layer Security).
+All communications with the Kubernetes API (Application Programming Interface) server are encrypted with TLS (Transport Layer Security).
 
-### Vérifier le chiffrement TLS
+### Check TLS encryption
 
-Le fichier `kubeconfig` utilise automatiquement TLS pour toutes les connexions. Vérifiez la configuration :
+The `kubeconfig` file automatically uses TLS for all connections. Check the configuration:
 
 ```bash
 kubectl config view --raw -o jsonpath='{.clusters[*].cluster.server}'
 ```
 
-L'URL doit commencer par `https://`.
+The URL must start with `https://`.
 
-### Certificats
+### Certificates
 
-Le service managé Kubernetes gère automatiquement les certificats TLS pour l'API server. Les certificats sont renouvelés automatiquement avant expiration.
+The managed Kubernetes service automatically manages the TLS certificates for the API server. The certificates are renewed automatically before expiry.
 
-## Authentification avec le kubeconfig
+## Authentication with the kubeconfig
 
-### Télécharger le kubeconfig
+### Download the kubeconfig
 
-Pour télécharger le fichier `kubeconfig`, consultez [Télécharger le kubeconfig](/docs/managed-services/kubernetes/actions/kubeconfig/).
+To download the `kubeconfig` file, see [Download the kubeconfig](/docs/managed-services/kubernetes/actions/kubeconfig/).
 
 ```bash
-#Définir le fichier kubeconfig
+#Set the kubeconfig file
 export KUBECONFIG=~/chemin/vers/kubeconfig
 
-#Vérifier la connexion
+#Check the connection
 kubectl get nodes
 ```
 
-### Sécuriser le kubeconfig
+### Secure the kubeconfig
 
-Le fichier `kubeconfig` contient des identifiants sensibles. Appliquez ces bonnes pratiques :
+The `kubeconfig` file contains sensitive credentials. Apply these best practices:
 
 ```bash
-#Restreindre les permissions du fichier
+#Restrict the file permissions
 chmod 600 ~/chemin/vers/kubeconfig
 
-#Ne jamais commiter le kubeconfig dans un dépôt git
+#Never commit the kubeconfig to a git repository
 ```
 
-## Authentification forte et conformité SecNumCloud
+## Strong authentication and SecNumCloud compliance
 
-Pour répondre aux exigences SecNumCloud en matière d'authentification forte, combinez plusieurs couches de sécurité.
+To meet SecNumCloud requirements for strong authentication, combine several layers of security.
 
-### Architecture multi-facteurs recommandée
+### Recommended multi-factor architecture
 
-| Facteur | Mécanisme | Protection |
+| Factor | Mechanism | Protection |
 | --- | --- | --- |
-| Ce que vous savez | Token `kubeconfig` | Authentification Kubernetes |
-| Ce que vous possédez | Accès VPN | Couche réseau |
-| Ce que vous êtes | Contrôle d'accès réseau — IP (Internet Protocol), [VPC](/docs/network/vpc/concepts/) | Périmètre de sécurité |
+| Something you know | `kubeconfig` token | Kubernetes authentication |
+| Something you have | VPN access | Network layer |
+| Something you are | Network access control — IP (Internet Protocol), [VPC](/docs/network/vpc/concepts/) | Security perimeter |
 
-### Configuration recommandée pour environnements sensibles
+### Recommended configuration for sensitive environments
 
-1. **Accès via réseau privé** : Connectez-vous au cluster via un VPN (Virtual Private Network) ou un VPC (Virtual Private Cloud) pour limiter l'exposition du control plane ;
+1. **Access through a private network**: Connect to the cluster through a VPN (Virtual Private Network) or a VPC (Virtual Private Cloud) to limit exposure of the control plane;
 
-2. **Restriction des IP** : Limitez l'accès aux plages d'adresses IP autorisées ;
+2. **IP restriction**: Limit access to the authorized IP address ranges;
 
-3. **Rotation des identifiants** : Régénérez régulièrement le `kubeconfig`.
+3. **Credential rotation**: Regenerate the `kubeconfig` regularly.
 
 :::note
-L'authentification multi-facteurs native Kubernetes n'est pas actuellement configurable via l'API Numspot. Pour une authentification forte, utilisez le contrôle d'accès au niveau réseau (VPN, bastion).
+Native Kubernetes multi-factor authentication is not currently configurable through the Numspot API. For strong authentication, use network-level access control (VPN, bastion).
 :::
 
-## Authentification multi-facteurs (MFA)
+## Multi-factor authentication (MFA)
 
-Kubernetes ne dispose pas de MFA natif. Pour implémenter une authentification multi-facteurs, utilisez une architecture en couches.
+Kubernetes has no native MFA. To implement multi-factor authentication, use a layered architecture.
 
-### Approche MFA recommandée
+### Recommended MFA approach
 
-| Couche | Mécanisme | Facteur |
+| Layer | Mechanism | Factor |
 | --- | --- | --- |
-| Couche 1 | Token/Certificat `kubeconfig` | Ce que vous savez |
-| Couche 2 | VPN avec MFA | Ce que vous possédez |
-| Couche 3 | Certificat client | Ce que vous possédez |
-| Couche 4 | Restriction IP/VPC | Ce que vous êtes |
+| Layer 1 | `kubeconfig` token/certificate | Something you know |
+| Layer 2 | VPN with MFA | Something you have |
+| Layer 3 | Client certificate | Something you have |
+| Layer 4 | IP/VPC restriction | Something you are |
 
-### Configuration MFA via bastion
+### MFA configuration through a bastion
 
-Pour implémenter le MFA, installez un bastion avec authentification forte :
+To implement MFA, install a bastion with strong authentication:
 
-1. **Bastion SSH avec MFA** :
-   - Déployez un bastion SSH avec support MFA : TOTP (Time-based One-Time Password) ou clé hardware ;
-   - Configurez l'accès au cluster uniquement via le bastion.
+1. **SSH bastion with MFA**:
+   - Deploy an SSH bastion with MFA support: TOTP (Time-based One-Time Password) or hardware key;
+   - Configure access to the cluster only through the bastion.
 
-2. **Accès via VPN avec MFA** :
-   - Configurez un VPN avec authentification MFA ;
-   - Limitez l'accès au cluster aux clients connectés au VPN.
+2. **Access through a VPN with MFA**:
+   - Configure a VPN with MFA authentication;
+   - Limit access to the cluster to clients connected to the VPN.
 
-### Architecture MFA type
+### Typical MFA architecture
 
 ```text
-[Utilisateur/kubectl] 
-    → [VPN avec MFA] 
-    → [Bastion SSH] 
+[User/kubectl] 
+    → [VPN with MFA] 
+    → [SSH Bastion] 
     → [Cluster Kubernetes]
 ```
 
-### Intégration OIDC
+### OIDC integration
 
-Pour les déploiements critiques, intégrez un fournisseur d'identité externe OIDC (OpenID Connect) :
+For critical deployments, integrate an external OIDC (OpenID Connect) identity provider:
 
-- Authentification centralisée ;
-- Support MFA natif via le fournisseur d'identité ;
-- Gestion des groupes et des utilisateurs externe.
+- centralized authentication;
+- native MFA support through the identity provider;
+- external management of groups and users.
 
-Consultez le support Numspot pour configurer l'authentification OIDC.
+Contact Numspot support to configure OIDC authentication.
 
-## Politique de mots de passe
+## Password policy
 
-Les [clusters Kubernetes](/docs/managed-services/kubernetes/concepts/) managés n'utilisent pas de mots de passe traditionnels. L'authentification repose sur des tokens et certificats.
+Managed [Kubernetes clusters](/docs/managed-services/kubernetes/concepts/) do not use traditional passwords. Authentication relies on tokens and certificates.
 
-### Gestion des tokens
+### Token management
 
-- Les tokens sont générés automatiquement lors de la création du cluster ;
-- Les tokens ont une durée de vie limitée ;
-- Renouvelez le `kubeconfig` si vous suspectez une compromission.
+- tokens are generated automatically when the cluster is created;
+- tokens have a limited lifetime;
+- renew the `kubeconfig` if you suspect a compromise.
 
 ## RBAC (Role-Based Access Control)
 
-Kubernetes utilise RBAC pour gérer les permissions. Configurez RBAC selon le principe du moindre privilège.
+Kubernetes uses RBAC to manage permissions. Configure RBAC according to the principle of least privilege.
 
-### Structure RBAC
+### RBAC structure
 
-| Composant | Description |
+| Component | Description |
 | --- | --- |
-| Role | Permissions au niveau d'un namespace |
-| ClusterRole | Permissions au niveau du cluster |
-| RoleBinding | Lie un Role à un utilisateur ou groupe |
-| ClusterRoleBinding | Lie un ClusterRole à un utilisateur ou groupe |
+| Role | Permissions at the namespace level |
+| ClusterRole | Permissions at the cluster level |
+| RoleBinding | Binds a Role to a user or group |
+| ClusterRoleBinding | Binds a ClusterRole to a user or group |
 
-Pour plus de détails, consultez [Gérer les utilisateurs et les rôles](/docs/managed-services/kubernetes/guides/manage-users-roles/).
+For more details, see [Manage users and roles](/docs/managed-services/kubernetes/guides/manage-users-roles/).
 
-## Audit des connexions
+## Connection auditing
 
-Le cluster Kubernetes journalise les événements d'authentification pour permettre l'audit et la détection d'anomalies.
+The Kubernetes cluster logs authentication events to enable auditing and anomaly detection.
 
-### Événements journalisés
+### Logged events
 
-| Événement | Description |
+| Event | Description |
 | --- | --- |
-| Connexion à l'API | Appels à l'API server |
-| Opérations sur les ressources | Création, modification, suppression |
-| Échecs d'authentification | Tentatives avec identifiants invalides |
+| API connection | Calls to the API server |
+| Operations on resources | Creation, modification, deletion |
+| Authentication failures | Attempts with invalid credentials |
 
-### Consulter les logs d'audit
+### View the audit logs
 
-Les logs Kubernetes sont disponibles via les outils d'observabilité de votre cluster. Contactez le support pour accéder aux logs d'audit.
+Kubernetes logs are available through your cluster's observability tools. Contact support to access the audit logs.
 
-### Audit des accès RBAC
+### RBAC access auditing
 
-Vérifiez les accès existants avec ces commandes :
+Check the existing accesses with these commands:
 
 ```bash
-#Lister les roles
+#List the roles
 kubectl get roles --all-namespaces
 
-#Lister les clusterroles
+#List the clusterroles
 kubectl get clusterroles
 
-#Lister les rolebindings
+#List the rolebindings
 kubectl get rolebindings --all-namespaces
 
-#Lister les clusterrolebindings
+#List the clusterrolebindings
 kubectl get clusterrolebindings
 
-#Vérifier les permissions d'un utilisateur
+#Check a user's permissions
 kubectl auth can-i --list --as=system:anonymous
 ```
 
-## Protection contre les attaques
+## Protection against attacks
 
-### Limitation des tentatives
+### Attempt limiting
 
-Le service managé Kubernetes applique des protections contre les attaques par force brute :
+The managed Kubernetes service applies protections against brute-force attacks:
 
-- Rate limiting sur l'API server ;
-- Blocage temporaire après échecs répétés ;
-- Protection contre les dénis de service.
+- rate limiting on the API server;
+- temporary blocking after repeated failures;
+- protection against denial-of-service attacks.
 
 :::note
-Le service Kubernetes managé n'applique pas de blocage automatique configurable après un nombre défini d'échecs de connexion. Pour un blocage automatique basé sur le nombre de tentatives, utilisez un outil externe comme un pare-feu applicatif ou une solution de sécurité périmétrique.
+The managed Kubernetes service does not apply a configurable automatic block after a defined number of failed connections. For an automatic block based on the number of attempts, use an external tool such as an application firewall or a perimeter security solution.
 :::
 
-### Détection des anomalies
+### Anomaly detection
 
-Surveillez les comportements suspects :
+Monitor suspicious behavior:
 
-- Multiples échecs de connexion depuis une même IP ;
-- Tentatives d'accès à des ressources non autorisées ;
-- Appels API inhabituels ou à des heures anormales.
+- multiple failed connections from the same IP;
+- attempts to access unauthorized resources;
+- unusual API calls or calls at abnormal times.
 
-## Bloquer un utilisateur en cas d'utilisation abusive
+## Block a user in case of abuse
 
-Si vous détectez une activité suspecte ou un compte compromis, vous pouvez bloquer immédiatement l'accès.
+If you detect suspicious activity or a compromised account, you can block access immediately.
 
-### Révoquer un kubeconfig
+### Revoke a kubeconfig
 
-En cas de compromission, contactez le support Numspot pour régénérer le `kubeconfig` principal.
+In case of compromise, contact Numspot support to regenerate the main `kubeconfig`.
 
-En attendant, révoquez immédiatement les accès via RBAC :
+In the meantime, revoke access immediately through RBAC:
 
 ```bash
-#Supprimer les RoleBindings de l'utilisateur compromis
-kubectl delete rolebinding -n <namespace> <nom_rolebinding>
+#Delete the compromised user's RoleBindings
+kubectl delete rolebinding -n <namespace> <rolebinding_name>
 
-#Supprimer les ClusterRoleBindings
-kubectl delete clusterrolebinding <nom_clusterrolebinding>
+#Delete the ClusterRoleBindings
+kubectl delete clusterrolebinding <clusterrolebinding_name>
 ```
 
-Consultez [Gérer les utilisateurs et les rôles](/docs/managed-services/kubernetes/guides/manage-users-roles/) pour plus de détails sur la gestion RBAC.
+See [Manage users and roles](/docs/managed-services/kubernetes/guides/manage-users-roles/) for more details on RBAC management.
 
-### Bloquer un ServiceAccount
+### Block a ServiceAccount
 
 ```bash
-#Supprimer un ServiceAccount compromis
-kubectl delete serviceaccount <nom_serviceaccount> -n <namespace>
+#Delete a compromised ServiceAccount
+kubectl delete serviceaccount <serviceaccount_name> -n <namespace>
 ```
 
-### Vérifier les accès actifs
+### Check active accesses
 
 ```bash
-#Vérifier qui peut effectuer une action
-kubectl auth can-i <verbe> <ressource> --all-namespaces
+#Check who can perform an action
+kubectl auth can-i <verb> <resource> --all-namespaces
 
-#Vérifier les permissions d'un utilisateur spécifique
-kubectl auth can-i --list --as=<utilisateur>
+#Check a specific user's permissions
+kubectl auth can-i --list --as=<user>
 ```
 
-## Supprimer définitivement un accès
+## Permanently remove an access
 
-Si le compte n'est plus nécessaire ou si la compromission est confirmée :
+If the account is no longer needed or the compromise is confirmed:
 
 ```bash
-#Supprimer les RoleBindings de l'utilisateur
-kubectl delete rolebinding -n <namespace> --field-selector=subjects\[0\].name=<utilisateur>
+#Delete the user's RoleBindings
+kubectl delete rolebinding -n <namespace> --field-selector=subjects\[0\].name=<user>
 
-#Supprimer les ClusterRoleBindings de l'utilisateur
-kubectl delete clusterrolebinding --field-selector=subjects\[0\].name=<utilisateur>
+#Delete the user's ClusterRoleBindings
+kubectl delete clusterrolebinding --field-selector=subjects\[0\].name=<user>
 ```
 
 :::warning
-La suppression est irréversible. Vérifiez qu'aucune application ne dépend de cet accès avant la suppression.
+Deletion is irreversible. Check that no application depends on this access before deletion.
 :::
 
-### Procédure de réponse à un incident
+### Incident response procedure
 
-En cas de détection d'utilisation abusive :
+If abuse is detected:
 
-1. **Régénérer le kubeconfig** pour invalider les anciens tokens ;
-2. **Révoquer les RBAC** de l'utilisateur compromis ;
-3. **Analyser les logs** pour identifier l'origine de l'attaque ;
-4. **Restreindre l'accès réseau** via les groupes de sécurité ou le VPN ;
-5. **Appliquer des restrictions réseau** sur le cluster si nécessaire.
+1. **Regenerate the kubeconfig** to invalidate the old tokens;
+2. **Revoke the RBAC** of the compromised user;
+3. **Analyze the logs** to identify the origin of the attack;
+4. **Restrict network access** through the [security groups](/docs/compute/security-groups/concepts/concept-sg) or the VPN;
+5. **Apply network restrictions** on the cluster if necessary.
 
-## Extraire les droits pour audit
+## Extract rights for auditing
 
-### Audit des permissions RBAC
+### RBAC permissions auditing
 
 ```bash
-#Exporter toutes les permissions RBAC
+#Export all RBAC permissions
 kubectl get roles,rolebindings,clusterroles,clusterrolebindings --all-namespaces -o yaml > rbac-audit.yaml
 
-#Lister les accès par utilisateur
+#List access by user
 kubectl get rolebindings,clusterrolebindings --all-namespaces -o json | jq '.items[] | select(.subjects[]?.name != null) | {name: .metadata.name, namespace: .metadata.namespace, subjects: .subjects}'
 ```
 
-### Audit croisé
+### Cross-auditing
 
-Vérifiez que les permissions appliquées correspondent aux politiques de sécurité :
+Check that the applied permissions match the security policies:
 
 ```bash
-#Vérifier qu'aucun utilisateur anonyme n'a d'accès
+#Check that no anonymous user has access
 kubectl auth can-i --list --as=system:anonymous
 
-#Vérifier les accès à des ressources sensibles
-kubectl auth can-i create pods --as=<utilisateur> -n <namespace>
-kubectl auth can-i delete deployments --as=<utilisateur> -n <namespace>
-kubectl auth can-i create secrets --as=<utilisateur> -n <namespace>
+#Check access to sensitive resources
+kubectl auth can-i create pods --as=<user> -n <namespace>
+kubectl auth can-i delete deployments --as=<user> -n <namespace>
+kubectl auth can-i create secrets --as=<user> -n <namespace>
 ```
 
-## Résumé des bonnes pratiques SecNumCloud
+## Summary of SecNumCloud best practices
 
-| Exigence | Implémentation recommandée |
+| Requirement | Recommended implementation |
 | --- | --- |
-| Chiffrement des connexions | TLS obligatoire (https) |
-| Authentification forte | Réseau privé (VPN/VPC) + `kubeconfig` |
-| Politique RBAC | Principe du moindre privilège |
-| Audit des accès | Logs d'audit activés, revue régulière RBAC |
-| Contrôle d'accès | RBAC par namespace, restriction réseau |
-| Blocage de compte | Révocation `kubeconfig` et RoleBindings en cas d'incident |
-| Audit des droits | Extraction régulière des RBAC, audit croisé |
+| Connection encryption | TLS mandatory (https) |
+| Strong authentication | Private network (VPN/VPC) + `kubeconfig` |
+| RBAC policy | Principle of least privilege |
+| Access auditing | Audit logs enabled, regular RBAC review |
+| Access control | RBAC per namespace, network restriction |
+| Account blocking | `kubeconfig` and RoleBindings revocation in case of incident |
+| Rights auditing | Regular RBAC extraction, cross-auditing |
 
 :::tip
-Pour les architectures critiques, installez un bastion SSH ou un proxy d'accès pour centraliser et auditer toutes les connexions au cluster Kubernetes.
+For critical architectures, install an SSH bastion or an access proxy to centralize and audit all connections to the Kubernetes cluster.
 :::

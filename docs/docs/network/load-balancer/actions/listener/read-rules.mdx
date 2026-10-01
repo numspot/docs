@@ -1,6 +1,6 @@
 ---
-title: Obtenir des informations sur vos règles de listener de load balancer - Numspot
-sidebar_label: Obtenir des informations sur vos règles de listener de load balancer
+title: Get information about your load balancer listener rules - Numspot
+sidebar_label: Get information about your load balancer listener rules
 sidebar_position: 4
 draft: false
 ---
@@ -8,14 +8,14 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Obtenir des informations sur vos règles de listener de load balancer
+# Get information about your load balancer listener rules
 
-Vous pouvez consulter les informations concernant les règles de vos listener (écouteurs) de [load balancer (équilibreurs de charge)](/docs/network/load-balancer/concepts/).
+You can view the information about the rules of your [load balancer](/docs/network/load-balancer/concepts/) listeners.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.loadBalancer.get**
 
@@ -23,27 +23,21 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
   <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
-:::info
-La consultation des règles d'un listener n'est pas disponible depuis la console Numspot.
-
-Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
-:::
+1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
+2. Click the name of the load balancer for which you want to view the rules.
+3. In the "Listeners" tab, click the listener for which you want to view the rules.
+4. The rules associated with the listener are displayed in the "Rules" section.
 
   </TabItem>
   <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `GET /compute/spaces/{spaceId}/listenerRules` command lists the rules for your listeners.
 
+[Example request: List all the rules for your listeners ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/listenerRules)
 
-La commande `GET /compute/spaces/{spaceId}/listenerRules` permet de lister vos règles pour vos listener.
+The `GET /compute/spaces/{spaceId}/listenerRules/{id}` command retrieves the information about your rules for a listener.
 
-[Exemple de requête : Lister toutes les règles pour vos listener ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/listenerRules)
-
-La commande `GET /compute/spaces/{spaceId}/listenerRules/{id}` permet de récupérer les informations de vos règles pour un listener.
-
-[Exemple de requête : Récupérer les informations de vos règles pour un listener ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/listenerRules/{id})
+[Example request: Retrieve the information about your rules for a listener ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/listenerRules/{id})
 
   </TabItem>
 </Tabs>

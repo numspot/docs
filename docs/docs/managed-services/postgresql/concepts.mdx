@@ -1,7 +1,6 @@
 ---
 title: "PostgreSQL - Concepts"
 sidebar_label: "Concepts"
-description: "Découvrez le service managé PostgreSQL de Numspot : déployez et faites évoluer des bases de données haute disponibilité sans gérer l'infrastructure."
 sidebar_position: 1
 draft: false
 ---
@@ -14,91 +13,91 @@ import ActionsSummary from '@site/src/components/ActionsSummary';
 
 ## Introduction
 
-Le **service managé PostgreSQL** permet aux entreprises de déployer, gérer et faire évoluer des bases de données PostgreSQL dans un environnement cloud hautement disponible.
-Grâce à ce service, les clients peuvent créer une instance PostgreSQL dans un **Cluster de service** sans avoir à gérer l'infrastructure sous-jacente.
-Ils peuvent également gérer les bases de données, et utiliser des fonctionnalités avancées pour optimiser les performances et la sécurité.
+The **PostgreSQL managed service** enables companies to deploy, manage and scale PostgreSQL databases in a highly available cloud environment.
+With this service, customers can create a PostgreSQL instance in a **service Cluster** without having to manage the underlying infrastructure.
+They can also manage the databases, and use advanced features to optimize performance and security.
 
-### Avantages du service managé PostgreSQL
+### Benefits of the PostgreSQL managed service
 
-- **Haute disponibilité** : Les instances sont conçues pour éviter au maximum les temps d'arrêt.
-- **Gestion simplifiée** : Pas besoin de gérer l'infrastructure PostgreSQL.
-- **Évolutivité** : Ajout ou suppression de ressources en fonction des besoins.
-- **Sécurité** : Mises à jour et correctifs de sécurité gérés par Numspot. Pour plus de détails sur les versions supportées et leur cycle de vie, consultez [Versions et cycle de vie](/docs/managed-services/postgresql/supported-versions/).
-- **Sauvegardes automatiques** : Protection des données avec des sauvegardes régulières.
+- **High availability**: Instances are designed to minimize downtime as much as possible.
+- **Simplified management**: There is no need to manage the PostgreSQL infrastructure.
+- **Scalability**: Resources can be added or removed depending on needs.
+- **Security**: Security updates and patches are managed by Numspot. For more details on the supported versions and their lifecycle, see [Versions and lifecycle](/docs/managed-services/postgresql/supported-versions/).
+- **Automatic backups**: Data is protected with regular backups.
 
-## Fonctionnalités clés
+## Key features
 
-### 1. Création d'une instance hautement disponible
+### 1. Creating a highly available instance
 
-Une **instance PostgreSQL hautement disponible** est conçue pour offrir une haute disponibilité.
-Cela signifie que l'instance est répliquée sur plusieurs nœuds, garantissant ainsi la continuité du service même en cas de défaillance d'un composant.
+A **highly available PostgreSQL instance** is designed to provide high availability.
+This means that the instance is replicated across several nodes, thereby guaranteeing service continuity even if a component fails.
 
-**Étapes pour créer une instance hautement disponible via la Console Numspot** :
+**Steps to create a highly available instance through the Numspot Console**:
 
-1. Se connecter à la Console Numspot.
-2. Sélectionner l'option de création d'une instance PostgreSQL.
-3. Spécifier un nombre de réplicas supérieur à 0 pour obtenir une configuration hautement disponible de l'instance.
-4. Spécifier le type de volume pour les données.
-5. Configurer les backups : rétention, archivage WAL (Write-Ahead Logging), backups automatiques.
-6. Valider la création de l'instance.
+1. Log in to the Numspot Console.
+2. Select the option to create a PostgreSQL instance.
+3. Specify a number of replicas greater than 0 to obtain a highly available configuration of the instance.
+4. Specify the volume type for the data.
+5. Configure the backups: retention, WAL (Write-Ahead Logging) archiving, automatic backups.
+6. Confirm the creation of the instance.
 
-### 2. Gestion des backups
+### 2. Backup management
 
-Le service PostgreSQL propose plusieurs types de backups :
+The PostgreSQL service offers several types of backups:
 
-- **Backups automatiques** : planifiés selon une fréquence définie (format cron)
-- **Backups on-demand** : déclenchés manuellement à tout moment
+- **Automatic backups**: scheduled according to a defined frequency (cron format)
+- **On-demand backups**: triggered manually at any time
 
 :::warning
-Pour pouvoir effectuer des backups, l'archivage des WAL (Write-Ahead Logging) (i.e. l'archivage continu des journaux de transactions) doit être activé sur votre cluster.
+To be able to perform backups, WAL (Write-Ahead Logging) archiving (that is, the continuous archiving of transaction logs) must be enabled on your cluster.
 :::
 
-**Caractéristiques** :
+**Characteristics**:
 
-- Rétention configurable de 1 à 90 jours
-- Compression et chiffrement optionnels (chiffrement côté serveur uniquement, clés personnalisées non supportées)
-- Target de backup configurable (primaire, standby, préférence standby)
-- Restauration possible à tout point dans le temps (PITR - Point-In-Time Recovery) avec l'archivage WAL
+- Configurable retention from 1 to 90 days
+- Optional compression and encryption (server-side encryption only, custom keys are not supported)
+- Configurable backup target (primary, standby, standby preference)
+- Restoration possible at any point in time (PITR - Point-In-Time Recovery) with WAL archiving
 
-### 3. Récupération des détails de connexion
+### 3. Retrieving the connection details
 
-Les **détails de connexion** incluent l'hôte, le port, le nom d'utilisateur, et le mot de passe nécessaires pour se connecter à l'instance PostgreSQL.
+The **connection details** include the host, the port, the username, and the password required to connect to the PostgreSQL instance.
 
-**Étapes pour récupérer les détails de connexion via la Console Numspot** :
+**Steps to retrieve the connection details through the Numspot Console**:
 
-1. Accéder à la Console Numspot.
-2. Naviguer vers la section dédiée à l'instance PostgreSQL.
-3. Récupérer l'hôte, le port (5432 par défaut), le nom du cluster (qui sera le nom de la base de données) et le nom de l'utilisateur principal depuis l'interface utilisateur.
-4. Récupérer également le mot de passe de l'utilisateur principal depuis la Console Numspot.
-5. Utiliser ces informations pour se connecter à la base de données ayant le nom du cluster avec un client PostgreSQL, comme psql :
+1. Access the Numspot Console.
+2. Navigate to the section dedicated to the PostgreSQL instance.
+3. Retrieve the host, the port (5432 by default), the cluster name (which will be the database name) and the name of the primary user from the user interface.
+4. Also retrieve the password of the primary user from the Numspot Console.
+5. Use this information to connect to the database with the cluster name using a PostgreSQL client, such as psql:
 
 ```bash
-psql "host=<hôte> port=<port> dbname=<base_de_données> user=<utilisateur> sslmode=require"
+psql "host=<host> port=<port> dbname=<database> user=<user> sslmode=require"
 ```
 
 :::note
-Il est également possible de générer un nouveau mot de passe pour l'utilisateur principal en cas d'oubli ou de compromission du mot de passe existant.
+It is also possible to generate a new password for the primary user in the event that the existing password is forgotten or compromised.
 :::
 
-## Cas d'utilisation
+## Use cases
 
-### 1. Applications métier critiques
+### 1. Business-critical applications
 
-- Les instances PostgreSQL hautement disponibles sont idéales pour les applications nécessitant une disponibilité élevée, comme les systèmes de gestion ou les plateformes transactionnelles.
+- Highly available PostgreSQL instances are ideal for applications requiring high availability, such as management systems or transactional platforms.
 
-### 2. Analyse de données
+### 2. Data analysis
 
-- PostgreSQL peut être utilisé pour stocker et analyser de grandes quantités de données.
+- PostgreSQL can be used to store and analyze large amounts of data.
 
-### 3. Environnements de développement et de test
+### 3. Development and testing environments
 
-- Créer des environnements de bases de données isolés pour le développement et les tests, avec des configurations spécifiques.
+- Create isolated database environments for development and testing, with specific configurations.
 
-## Bonnes pratiques
+## Best practices
 
-- **Backups** : Configurez l'archivage WAL dès la création pour permettre les backups on-demand. Planifiez des backups automatiques quotidiens.
-- **Rétention** : Adaptez la durée de rétention selon vos besoins de conformité (minimum 7 jours recommandé).
-- **Surveillance** : Utiliser des outils de surveillance pour suivre l'état de l'instance et des requêtes.
-- **Sécurité** : Appliquer les bonnes pratiques de sécurité, comme le chiffrement des données et le contrôle d'accès.
-- **Optimisation** : Ajuster les paramètres de configuration pour optimiser les performances en fonction de la charge.
-- **Test de restauration** : Testez régulièrement les procédures de restauration pour vous assurer de la validité des backups.
+- **Backups**: Configure WAL archiving from creation to enable on-demand backups. Schedule daily automatic backups.
+- **Retention**: Adapt the retention period to your compliance needs (a minimum of 7 days is recommended).
+- **Monitoring**: Use monitoring tools to track the state of the instance and of the queries.
+- **Security**: Apply security best practices, such as data encryption and access control.
+- **Optimization**: Adjust the configuration parameters to optimize performance according to the load.
+- **Restoration testing**: Regularly test the restoration procedures to ensure the validity of the backups.

@@ -1,6 +1,6 @@
 ---
-title: Modifier le groupe d'options DHCP associé à un VPC - Numspot
-sidebar_label: Modifier le groupe d'options DHCP associé à un VPC
+title: Modify the DHCP options set associated with a VPC - Numspot
+sidebar_label: Modify the DHCP options set associated with a VPC
 sidebar_position: 4
 draft: false
 ---
@@ -8,18 +8,18 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Modifier le groupe d'options DHCP associé à un VPC
+# Modify the DHCP options set associated with a VPC
 
-Vous pouvez associer un groupe d'options [DHCP (Dynamic Host Configuration Protocol)](/docs/network/dhcp/concepts/) par défaut ou personnalisé à un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) pour appliquer les options qu'il contient aux [VM (Virtual Machine)](/docs/compute/concept/) créées dans ce VPC.
+You can associate a default or custom [DHCP (Dynamic Host Configuration Protocol)](/docs/network/dhcp/concepts/) options set with a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) to apply the options it contains to the [VM (Virtual Machine)](/docs/compute/concept/) created within this VPC.
 
-Cette action remplace le groupe d'options DHCP par un autre, car vous ne pouvez associer un VPC qu'à un seul groupe d'options DHCP à la fois.
+This action replaces the DHCP options set with another one, as you can associate a VPC with only one DHCP options set at a time.
 
-Lorsque vous modifiez le groupe d'options DHCP associé à un VPC, les options qu'il contient sont automatiquement appliquées aux VM existantes, ainsi qu'aux VM lancées ultérieurement. Les VM existantes appliquent ces options quelques heures après la modification, selon la fréquence de renouvellement de leur bail DHCP. Vous n'avez pas besoin de redémarrer ces VM. Vous pouvez cependant forcer le renouvellement du bail DHCP avec la commande `dhclient` pour les VM Linux, ou la commande `ipconfig/renew` pour les VM Windows.
+When you modify the DHCP options set associated with a VPC, the options it contains are automatically applied to existing VM, as well as to VM launched later. Existing VM apply these options a few hours after the modification, depending on the renewal frequency of their DHCP lease. You do not need to restart these VM. You can, however, force the DHCP lease renewal with the `dhclient` command for Linux VM, or the `ipconfig/renew` command for Windows VM.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.vpc.update**
 
@@ -28,27 +28,31 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
+:::info
+**Prerequisites**
+- [Create a VPC ↗](/docs/network/vpc/actions/create)
+- [Create a DHCP options set ↗](./create.mdx)
+:::
 
-L'association d'un groupe d'options DHCP à un VPC n'est pas disponible depuis la Console. Utilisez l'API ou Terraform.
+1. From the left-hand side menu, click **Network** → **VPC** to access the list of VPC.
+2. On the row of the relevant VPC, click the **Actions** button.
+3. In the dialog box, click **Associate DHCP**.
+4. Select the desired DHCP options set from the drop-down list.
+5. Click **Associate** to confirm.
+
+A confirmation message appears at the bottom of the page indicating that the DHCP options set has been associated with the VPC.
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `PUT /compute/spaces/{spaceId}/vpcs/{id}` command associates a DHCP options set with a specified network.
 
-
-La commande `PUT /compute/spaces/{spaceId}/vpcs/{id}` associe un ensemble d'options DHCP à un réseau spécifié.
-
-[Exemple de requête : Associer un ensemble d'options DHCP à un réseau ↗](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/vpcs/{id})
+[Example request: Associate a DHCP options set with a network ↗](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/vpcs/{id})
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/dhcp_options).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/dhcp_options).
 
 </TabItem>
 </Tabs>

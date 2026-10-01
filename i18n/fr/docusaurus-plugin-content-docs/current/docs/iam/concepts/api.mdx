@@ -1,0 +1,106 @@
+---
+title: Utilisation des API - IAM
+sidebar_label: Utilisation des API
+sidebar_position: 6
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+# Utilisation des API
+
+Les API de l'**IAM** (Identity and Access Management) ont un comportement commun.
+
+## Les organisations et les espaces
+
+Les API fonctionnent sur le périmètre d'une organisation ou d'un espace : la présence des termes `spaces` ou `organisations` dans l'URL permet de distinguer la portée des requêtes.
+
+L'URL pour agir au niveau de l'organisation est de la forme : `...iam/organisations/"organisationId"/`
+
+Celle pour agir sur un espace est de la forme : `...iam/spaces/"spaceId"/`
+
+## Le jeton d'accès (token)
+
+Les API nécessitent un jeton d'accès (token) valide pour fonctionner.
+
+Il est de la forme bearer (conformément à la [RFC 6750 - The OAuth 2.0 Authorization Framework: Bearer Token Usage](https://datatracker.ietf.org/doc/html/rfc6750)).
+
+**Exemple de demande de jeton d'accès**
+
+```bash
+export REGION="myregion"
+curl -X POST https://api.$REGION.numspot.com/iam/token \
+-H 'Accept: */*' \
+-H 'Authorization: Basic <base64([Id:secret])>' \
+-H 'Content-Length: 57' \
+-H 'Content-Type: application/x-www-form-urlencoded' \
+-d 'grant_type=client_credentials&scope=openid+offline_access'
+```
+
+Une fois le jeton renvoyé, il sera ajouté aux autres demandes sous cette forme :
+
+**Ajout d'un jeton d'accès dans l'entête d'une requête Curl**
+
+```bash
+curl  ... -H "Authorization: Bearer {token}"
+```
+
+## La pagination pour les listes
+
+Les requêtes qui peuvent retourner un nombre indéterminé d'éléments disposent d'une pagination.
+
+Il est recommandé d'utiliser la pagination afin d'éviter une trop forte sollicitation du système.
+
+La pagination se présente sous la forme suivante :
+
+- par défaut, la page est limitée à 30 éléments ;
+- le paramètre **page[size]** renseigne le nombre d'éléments par page ;
+- le paramètre **page[nextToken]** est renvoyé dans la réponse et est à ajouter à la requête suivante ;
+- des informations pour obtenir la page suivante sont indiquées dans la réponse de la première page.
+
+**Exemple de requête d'une liste avec pagination**
+
+```bash
+        page[size]=30&page[nextToken]=bee04e3c-850f-4f25-8597-04ba43b24877
+   (format encodé: /organisations?page%5BnextToken%5D=bee04e3c-850f-4f25-8597-04ba43b24877)
+```
+
+Le corps de la réponse contiendra un jeton à fournir pour avoir la suite :
+
+**Exemple de réponse**
+
+```bash
+..'nextPageToken': '287ccb59-0c94-4c90-9798-02c9179f5a3f'
+```
+
+Ce jeton sera à ajouter comme paramètre à la deuxième requête. Si une troisième page est nécessaire, la deuxième page fournira un nouveau jeton de page.
+
+```bash
+'nextPageToken=287ccb59-0c94-4c90-9798-02c9179f5a3f'
+
+#ligne complete
+https://...?page%5Bsize%5D=30&page%5BnextToken%5D=bee04e3c-850f-4f25-8597-04ba43b24877
+```
+
+La dernière page ne contiendra pas ce jeton.
+
+## Les conventions
+
+Les URL des exemples sont parfois présentées avec des termes entre accolades : `organisationId`, `userId`, etc. Ces expressions sont à remplacer par les identifiants des entités manipulées.
+
+Les identifiants sont sous la forme d'UUID (Universally Unique Identifier, voir [RFC 4122](https://datatracker.ietf.org/doc/html/rfc4122)).
+
+## Les traitements asynchrones
+
+La création d'un espace peut prendre plusieurs minutes. L'interrogation d'un espace retourne une clé "status" contenant l'état de l'espace. Le statut peut prendre quatre valeurs :
+
+- QUEUED ;
+- RUNNING ;
+- READY ;
+- FAILED.
+
+L'état nominal d'un espace est READY. Il faut donc attendre sa création complète avant de lancer d'autres opérations.
+
+## La correspondance des identifiants
+
+Toutes les entités manipulées sont identifiées par un UUID. Les API fonctionnent à partir de ces UUID. Pour obtenir le nom correspondant, il est nécessaire de passer par l'API de récupération d'informations de la ressource (exemple : retrouver les informations d'un espace ou d'un utilisateur par son identifiant).

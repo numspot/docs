@@ -1,6 +1,6 @@
 ---
-title: Obtenir une sauvegarde PostgreSQL - PostgreSQL managé
-sidebar_label: Obtenir une sauvegarde PostgreSQL
+title: Get a PostgreSQL backup - Managed PostgreSQL
+sidebar_label: Get a PostgreSQL backup
 sidebar_position: 9
 draft: false
 last_update:
@@ -10,14 +10,14 @@ last_update:
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Obtenir une sauvegarde PostgreSQL
+# Get a PostgreSQL backup
 
-Vous pouvez obtenir les détails d'une sauvegarde d'un [cluster PostgreSQL](/docs/managed-services/postgresql/concepts/) au sein de votre espace.
+You can get the details of a backup of a [PostgreSQL cluster](/docs/managed-services/postgresql/concepts/) within your space.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **postgresql.cluster.get**
 
@@ -28,24 +28,24 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 ## API {#tabhead-api}
 
-    La requête `GET /postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId}` permet de récupérer les détails d'une sauvegarde d'un cluster PostgreSQL.
+    The request `GET /postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId}` retrieves the details of a PostgreSQL cluster backup.
 
-### Paramètres
+### Parameters
 
-| Paramètre | Type   | Requis | Description                            |
-| --------- | ------ | ------ | -------------------------------------- |
-| spaceId   | string | Oui    | Identifiant de l'espace Numspot.       |
-| clusterId | string | Oui    | Identifiant du cluster PostgreSQL.     |
-| backupId  | string | Oui    | Identifiant de la sauvegarde.          |
+| Parameter | Type   | Required | Description                 |
+| --------- | ------ | -------- | --------------------------- |
+| spaceId   | string | Yes      | The Numspot space ID.       |
+| clusterId | string | Yes      | The PostgreSQL cluster ID.  |
+| backupId  | string | Yes      | The backup ID.              |
 
-### Exemple de réponse
+### Example response
 
     ```json
     {
       "id": "123e4567-e89b-42d3-a456-426614174000",
       "clusterId": "550e8400-e29b-41d4-a716-446655440002",
-      "clusterName": "mon-cluster-postgresql",
-      "name": "sauvegarde-quotidienne",
+      "clusterName": "my-cluster-postgresql",
+      "name": "daily-backup",
       "type": "ON_DEMAND",
       "target": "PREFER_STANDBY",
       "status": {
@@ -57,6 +57,6 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
     }
     ```
 
-    [Voir la spécification complète](/openapi/#tag/postgresql/GET/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId})
+    [View the full specification](/openapi/#tag/postgresql/GET/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId})
 </TabItem>
 </Tabs>

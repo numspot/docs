@@ -1,5 +1,5 @@
 ---
-title: Créer une route
+title: Create a route
 sidebar_position: 1
 draft: false
 ---
@@ -8,27 +8,27 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Créer une route
+# Create a route
 
-Vous pouvez créer une route dans une [route table](/docs/network/route-table/concepts/) pour spécifier comment le trafic est routé pour les [VM (Virtual Machines)](/docs/compute/concept/) dans les subnets (sous-réseaux) auxquels elle est associée.
+You can create a route in a [route table](/docs/network/route-table/concepts/) to specify how traffic is routed for the [VM](/docs/compute/concept/) (Virtual Machine) in the subnets to which it is associated.
 
-Vous pouvez créer des routes avec les targets suivants :
+You can create routes with the following targets:
 
-* Une [internet gateway (passerelle Internet)](/docs/network/internet-gateway/concepts/), pour permettre aux VM avec une IP (Internet Protocol) publique associée d'être directement connectées à Internet.
-* Une [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/), pour router le trafic vers une connexion [DirectLink](/docs/connectivity/direct-link/concepts/) ou VPN (Virtual Private Network).
-* Une [NAT gateway (passerelle NAT)](/docs/network/nat/concepts/), pour permettre aux VM d'être indirectement connectées à Internet.
-* Une VM.
-* Une interface réseau d'une VM.
-* Un [VPC](/docs/network/vpc/concepts/) peering (peering VPC), pour permettre aux VM d'envoyer du trafic vers un VPC pair.
+* An [internet gateway](/docs/network/internet-gateway/concepts/), to allow VM with an associated public IP (Internet Protocol) to be directly connected to the Internet.
+* A [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/), to route traffic to a [DirectLink](/docs/connectivity/direct-link/concepts/) or VPN (Virtual Private Network) connection.
+* A [nat gateway](/docs/network/nat/concepts/), to allow VM to be indirectly connected to the Internet.
+* A VM.
+* A network interface of a VM.
+* A [VPC](/docs/network/vpc/concepts/) peering, to allow VM to send traffic to a peer VPC.
 
 :::warning
-Lorsque vous créez un VPC access point, la route appropriée est automatiquement créée et ajoutée aux route tables que vous spécifiez.
+When you create a VPC access point, the appropriate route is automatically created and added to the route tables you specify.
 :::
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.routeTable.update**
 
@@ -36,52 +36,53 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
    <TabItem value="Console" default> 
 
- ## Créer une route sur la console Numspot 
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/route-table/list.png", text: "From the left-hand side menu, click Network → VPC → Route Tables.", hotspot: { x: 0, y: 0.579, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/route-table/list.png", text: "From Network → VPC → Route Tables, click the “Routes” column link of the relevant route table.", hotspot: { x: 0.7456, y: 0.4953, w: 0.0343, h: 0.0247 } },
+    { img: "/img/walkthrough/en/route-table/route-panel.png", text: "The “Routes” panel lists existing routes. Click “Add Route”.", hotspot: { x: 0.9234, y: 0.3041, w: 0.0655, h: 0.0494 } },
+    { img: "/img/walkthrough/en/route-table/route-form.png", text: "Choose the type and target, enter the destination IP range (CIDR), click “Add the Route”, then “Submit”.", hotspot: { x: 0.24, y: 0.09, w: 0.36, h: 0.85 } },
+  ]}
+/>
+
+
+ ## Create a route in the Numspot console 
 
  :::info
- **Avant de commencer :** Créez une route table. Pour en savoir plus, voir [Créer une Route table](../create.mdx).
+ **Before you begin:** Create a route table. To find out more, see [Create a route table](/docs/network/route-table/actions/create).
  
 
  :::
 
-<Walkthrough
-  steps={[
-    { img: "/img/walkthrough/route-table/route-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC → Route Tables.", hotspot: { x: 0, y: 0.579, w: 0.194, h: 0.0568 } },
-    { img: "/img/walkthrough/route-table/route-01-list.png", text: "Depuis Réseau → VPC → Route Tables, cliquez sur le lien de la colonne « Routes » de la route table concernée.", hotspot: { x: 0.7456, y: 0.4953, w: 0.0343, h: 0.0247 } },
-    { img: "/img/walkthrough/route-table/route-02-panel.png", text: "Le panneau « Routes » liste les routes existantes. Cliquez sur « Ajouter une Route ».", hotspot: { x: 0.8885, y: 0.3041, w: 0.1004, h: 0.0494 } },
-    { img: "/img/walkthrough/route-table/route-03-form.png", text: "Choisissez le type et la cible, saisissez la plage d'IP de destination (CIDR), cliquez sur « Ajouter la Route », puis sur « Valider ».", hotspot: { x: 0.24, y: 0.09, w: 0.36, h: 0.85 } },
-  ]}
-/>
-
- 1.  Depuis le menu latéral gauche, cliquez sur **Réseau** → **VPC** → **Route Table**.
- 2.  Identifiez la table de routage à laquelle vous souhaitez créer une nouvelle route.
- 3.  Cliquez dans la ligne concernée sur le lien de la colonne **Routes**.
- 4.  Une nouvelle boîte de dialogue s'affichera.
- 5.  Cliquez sur le bouton **Ajouter une Route**.
- 6.  Une fenêtre pour la création d'une route apparaît :
- 7.  Dans le champ "Cible", choisissez la ressource.
- 8.  Dans le champ "Plage d'IP de destination", tapez le CIDR (Classless Inter-Domain Routing).
+ 1.  From the left-hand side menu, click **Network** → **VPC** → **Route Table**.
+ 2.  Identify the route table in which you want to create a new route.
+ 3.  In the relevant row, click the link in the **Routes** column.
+ 4.  A new dialog box is displayed.
+ 5.  Click the **Add a Route** button.
+ 6.  A window for creating a route appears:
+ 7.  In the "Target" field, choose the resource.
+ 8.  In the "Destination IP range" field, type the CIDR (Classless Inter Domain Routing).
       
       :::info
-      Pour spécifier le CIDR 0.0.0.0/0, cliquez sur **ALL IPS**.
+      To specify the CIDR 0.0.0.0/0, click **ALL IPS**.
       :::
      
- 9.  Cliquez sur le bouton **Ajouter la Route**.
+ 9.  Click the **Add the Route** button.
      
      :::info
-     Vous pouvez saisir autant de nouvelles routes que vous le souhaitez. Le volet latéral vous indique le récapitulatif des routes existantes et en cours de création.
+     You can enter as many new routes as you want. The side panel shows you a summary of the existing routes and those being created.
      :::
      
- 10. Cliquez sur le bouton **Valider**.  
-     Les routes associées ont été créées.
+ 10. Click the **Validate** button.  
+     The associated routes have been created.
 
    </TabItem> 
    <TabItem value="API">
    :::info
-   Avant de commencer : créez une route table.
+   Before you begin: create a route table.
    :::
 
-   La commande `POST /compute/spaces/{spaceId}/routeTables/{id}/routes` crée une route dans une Route Table spécifiée au sein d'un VPC spécifié. Vous devez spécifier l'un des éléments suivants comme cible :
+   The `POST /compute/spaces/{spaceId}/routeTables/{id}/routes` command creates a route in a specified route table within a specified VPC. You must specify one of the following as the target:
    - VPC Peering
    - NAT VM
    - Internet Gateway
@@ -89,14 +90,11 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
    - NAT Gateway
    - Network Interface Card (NIC)
 
-   L'algorithme de routage est basé sur la correspondance la plus spécifique.
+   The routing algorithm is based on the most specific match.
 
-   [Exemple de requête : Création d'une Route](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/routeTables/{id}/routes)
+   [Example request: Creating a Route](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/routeTables/{id}/routes)
    </TabItem>
    <TabItem value="terraform" label="Terraform">
-
-## Terraform {#tabhead-terraform}
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
    </TabItem>
 </Tabs>

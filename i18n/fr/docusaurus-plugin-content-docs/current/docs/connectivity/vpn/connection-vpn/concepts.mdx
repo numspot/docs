@@ -1,0 +1,68 @@
+---
+title: "Connexion VPN - Concepts"
+sidebar_label: "Concepts"
+description: Découvrez les connexions VPN, tunnels sécurisés entre votre réseau d'entreprise et un VPC dans le Cloud Numspot.
+sidebar_position: 1
+draft: false
+last_update:
+  date: 2026-09-17
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# À propos des connexions VPN
+
+<ActionsSummary />
+
+Une connexion VPN (Virtual Private Network) est une connexion sécurisée entre votre réseau d'entreprise et l'un de vos [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) dans le Cloud Numspot. Les ressources placées de chaque côté de la connexion peuvent communiquer entre elles.
+
+## Informations générales
+
+Une connexion VPN se compose des éléments suivants :
+
+* Une [client gateway (passerelle client)](/docs/connectivity/vpn/client-gateway/concepts/), de votre côté de la connexion. Cette ressource se situe dans votre réseau d'entreprise, et peut être logicielle ou matérielle.
+* Une [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/), du côté Numspot de la connexion. Cette ressource est attachée à l'un de vos VPC.
+* Un tunnel VPN, qui relie la client gateway et la virtual gateway de manière sécurisée à travers le réseau internet.
+
+![Architecture d'une connexion VPN](/img/console/connectivity/vpn/sch-General-VPNConnectionArchitecture.png)
+*_Architecture d'une connexion VPN_*
+
+Le tunnel VPN est sécurisé par la suite de protocoles IPsec : IKEv2 (Internet Key Exchange) négocie les clés du tunnel, et ESP (Encapsulating Security Payload) chiffre les données qui le traversent. Les algorithmes et paramètres supportés sont listés dans la page [Référence pour la configuration des VPN](/docs/connectivity/vpn/reference/).
+
+Une fois la connexion VPN créée, le tunnel VPN devient actif dès que du trafic est généré depuis votre côté de la connexion. C'est donc à partir de votre client gateway que s'établit le tunnel, non de la virtual gateway.
+
+Pour assurer la redondance et la haute disponibilité, vous pouvez créer plusieurs connexions VPN entre votre réseau et un même VPC.
+
+:::note
+Vous pouvez aussi relier votre réseau d'entreprise à un VPC avec [DirectLink](/docs/connectivity/direct-link/concepts/), une connexion sécurisée physique.
+:::
+
+:::warning
+Une connexion VPN ne fournit pas d'accès à internet. Pour relier le VPC à internet, vous devez lui ajouter un [internet gateway (passerelle Internet)](/docs/network/internet-gateway/concepts/).
+Vous pouvez aussi associer l'internet gateway à une [NAT Gateway (passerelle NAT)](/docs/network/nat/concepts/).
+:::
+
+## Cycle de vie
+
+Une connexion VPN peut être dans l'un des états suivants :
+
+* Pending : Le processus de création est en cours. La connexion VPN conserve cet état jusqu'à ce que du trafic soit généré depuis la client gateway.
+* Available : La connexion VPN est créée et prête à être utilisée.
+* Deleting : Le processus de suppression est en cours.
+* Deleted : La connexion VPN est supprimée. Pour relier à nouveau votre réseau d'entreprise et le VPC, vous devez en créer une nouvelle.
+
+:::info
+Les ressources supprimées restent visibles pendant 1 heure.
+:::
+
+De plus, pour une connexion VPN dans l'état available, le tunnel VPN peut être dans l'un des états suivants :
+
+* Up : Le tunnel est actif et reçoit le trafic entre la client gateway et la virtual gateway.
+* Down : Le tunnel est inactif, et aucun trafic ne circule entre la client gateway et la virtual gateway. Ceci est dû, par exemple, à une mauvaise configuration de la connexion VPN, ou après une période d'inactivité selon la configuration.
+
+## Configuration réseau
+
+Pour autoriser le trafic entre les deux côtés de la connexion VPN, vous devez configurer les ressources suivantes :
+
+* De votre côté de la connexion, le pare-feu de la client gateway. Vous devez ouvrir les ports adéquats pour autoriser les flux depuis la virtual gateway.
+* Du côté Numspot de la connexion, les [security groups (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) associés aux [VM (Virtual Machine)](/docs/compute/concept/) dans le VPC. Vous devez ajouter les règles autorisant les flux entrants et sortants depuis et vers votre réseau d'entreprise.

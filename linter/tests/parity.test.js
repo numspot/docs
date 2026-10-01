@@ -18,8 +18,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const ROOT = path.join(__dirname, '..', '..');
-const EN_DIR = path.join(ROOT, 'i18n/en/docusaurus-plugin-content-docs/current/docs');
-const FR_DIR = path.join(ROOT, 'docs/docs');
+const EN_DIR = path.join(ROOT, 'docs/docs');
+const FR_DIR = path.join(ROOT, 'i18n/fr/docusaurus-plugin-content-docs/current/docs');
 
 // Frontmatter flags that must have the same value in both locales.
 const PARITY_FLAGS = [

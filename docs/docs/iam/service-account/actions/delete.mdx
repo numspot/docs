@@ -1,7 +1,7 @@
 ---
-title: Supprimer un compte de service - IAM
-description: "Supprimez définitivement un compte de service IAM de votre espace Numspot et révoquez ses accès, via la console, l'API ou Terraform."
-sidebar_label: Supprimer un compte de service
+title: Delete a service account - IAM
+description: "Permanently delete an IAM service account from your Numspot space and revoke its access, via the console, the API or Terraform."
+sidebar_label: Delete a service account
 sidebar_position: 7
 draft: false
 last_update:
@@ -12,12 +12,12 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Supprimer un compte de service
+# Delete a service account
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **iam.serviceAccount.delete**
 
@@ -30,21 +30,21 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/service-account/list-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Comptes de Service.", hotspot: { x: 0, y: 0.8, w: 0.1944, h: 0.0494 } },
-    { img: "/img/walkthrough/service-account/list-02-menu.png", text: "Depuis IAM → Comptes de Service, ouvrez le menu « Actions » du compte de service, puis cliquez sur « Supprimer ».", hotspot: { x: 0.7299, y: 0.7, w: 0.2348, h: 0.05 } },
-    { img: "/img/walkthrough/service-account/delete-02-modal.png", text: "Confirmation forte : saisissez le nom exact du compte de service, puis cliquez sur « Supprimer ». La suppression est définitive.", hotspot: { x: 0.3333, y: 0.1858, w: 0.3333, h: 0.6284 } },
+    { img: "/img/walkthrough/en/service-account/list-01-list.png", text: "From the left-hand side menu, click IAM → Service Accounts.", hotspot: { x: 0, y: 0.8, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/service-account/list-02-menu.png", text: "From IAM → Service Accounts, open the service account's “Actions” menu, then click “Delete”.", hotspot: { x: 0.7576, y: 0.7, w: 0.2069, h: 0.05 } },
+    { img: "/img/walkthrough/en/service-account/delete-02-modal.png", text: "Strong confirmation: enter the exact name of the service account, then click “Delete”. The deletion is permanent.", hotspot: { x: 0.3333, y: 0.1858, w: 0.3333, h: 0.6284 } },
   ]}
 />
 
-1. Depuis le menu latéral gauche, cliquez sur **IAM** → **Comptes de Service**.
-2. Cliquez sur le menu **Actions** du compte de service concerné, puis sur **Supprimer**.
-3. Une boîte de dialogue "Suppression d'un Compte de Service" apparaît. Dans le champ "Confirmation forte", tapez le nom du compte de service.
-4. Cliquez sur le bouton **Supprimer** pour confirmer la suppression du compte de service.
+1. From the left-hand side menu, click **IAM** → **Service Accounts**.
+2. Open the **Actions** menu of the relevant service account, then click **Delete**.
+3. The "Deleting Service Account" dialog appears. In the "Strong confirmation" field, enter the name of the service account.
+4. Click the **Delete** button to confirm the deletion of the service account.
 
-Vous pouvez également supprimer le compte de service depuis sa page "Détails Compte de Service", via le bouton **Supprimer le Compte de Service** en haut à droite.
+You can also delete the service account from its "Service Account details" page, using the **Delete Service Account** button at the top right.
 
 :::note
-La suppression est asynchrone : un message confirme que la demande de suppression du compte de service a bien été prise en compte, puis le compte disparaît de la liste.
+The deletion is asynchronous: a message confirms that the deletion request has been taken into account, then the service account disappears from the list.
 :::
 
 </TabItem>
@@ -53,46 +53,46 @@ La suppression est asynchrone : un message confirme que la demande de suppressio
 ## API {#tabhead-api}
 
 
-### Supprimer un compte de service dans une organisation
+### Delete a service account in an organisation
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/DELETE/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}
 
-### Exemple avec curl
+### curl example
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}' \
   --request DELETE
 ```
 
-### Réponse
+### Response
 
 ```json
 {}
 ```
 
 :::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
-### Supprimer un compte de service dans un espace
+### Delete a service account in a space
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/DELETE/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}
 
-### Exemple avec curl
+### curl example
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}' \
   --request DELETE
 ```
 
-### Réponse
+### Response
 
 ```json
 {}
 ```
 
 :::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
 </TabItem>
@@ -101,7 +101,7 @@ Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la m
 ## Terraform {#tabhead-terraform}
 
 
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/service_account).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/service_account).
 
 </TabItem>
 </Tabs>

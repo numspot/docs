@@ -1,7 +1,7 @@
 ---
-title: Supprimer un espace - IAM
-description: "Demandez la suppression d'un espace IAM auprès du support Numspot, une fois toutes ses ressources supprimées."
-sidebar_label: Supprimer un espace
+title: Delete a space - IAM
+description: "Request the deletion of an IAM space from Numspot support, once all its resources have been deleted."
+sidebar_label: Delete a space
 sidebar_position: 5
 draft: false
 last_update:
@@ -12,24 +12,24 @@ import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import Walkthrough from "@site/src/components/Walkthrough";
 
-# Supprimer un espace
+# Delete a space
 
-Supprimez un espace dont vous n'avez plus besoin. Cette opération est irréversible.
+Delete a space you no longer need. This operation is irreversible.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **iam.role.delete**
 
 :::
 
 :::danger
-La suppression d'un espace est irréversible. Cette action est à réaliser avec précaution. L'accès à l'espace ne sera plus possible après suppression.
+Deleting a space is irreversible. This action must be carried out with caution. The space will no longer be accessible after deletion.
 :::
 
-Pour supprimer un espace, assurez-vous que **toutes les ressources créées dans votre espace ont été supprimées**. L'existence de ressources empêche la suppression de l'espace. Elles doivent être préalablement supprimées par les utilisateurs pour s'assurer qu'elles ne seront plus facturées.
+To delete a space, make sure that **all resources created in your space have been deleted**. The existence of resources prevents the space from being deleted. They must first be deleted by the users to ensure that they are no longer billed.
 
 <Tabs>
 <TabItem value="console" label="Console" default>
@@ -38,17 +38,17 @@ Pour supprimer un espace, assurez-vous que **toutes les ressources créées dans
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/space/list-02-menu.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Espaces.", hotspot: { x: 0, y: 0.6963, w: 0.1944, h: 0.0494 } },
-    { img: "/img/walkthrough/space/list-02-menu.png", text: "Depuis IAM → Espaces, ouvrez le menu « Actions » de l'espace concerné, puis cliquez sur « Supprimer ».", hotspot: { x: 0.7708, y: 0.63, w: 0.19, h: 0.045 } },
-    { img: "/img/walkthrough/space/delete-02-modal.png", text: "La boîte de dialogue « Suppression de l'espace » vous invite à faire une demande auprès du support. Contactez le support en fournissant l'identifiant de votre organisation et celui de l'espace à supprimer.", hotspot: { x: 0.2917, y: 0.3186, w: 0.4167, h: 0.3629 } },
+    { img: "/img/walkthrough/en/space/list-02-menu.png", text: "From the left-hand side menu, click IAM → Spaces.", hotspot: { x: 0, y: 0.6963, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/space/list-02-menu.png", text: "From IAM → Spaces, open the relevant space's “Actions” menu, then click “Delete”.", hotspot: { x: 0.7972, y: 0.63, w: 0.17, h: 0.045 } },
+    { img: "/img/walkthrough/en/space/delete-02-modal.png", text: "The “Deleting space” dialog asks you to submit a request to support. Contact support with your organisation ID and the ID of the space to delete.", hotspot: { x: 0.2917, y: 0.3416, w: 0.4167, h: 0.3168 } },
   ]}
 />
 
-1. Dans le menu des **Espaces**, ouvrez le menu **Actions** de l'espace concerné, puis cliquez sur **Supprimer**.
-2. Une boîte de dialogue **Suppression de l'espace** apparaît, vous invitant à faire une demande auprès du support. Contactez-nous à [support@numspot.com](mailto:support@numspot.com) ou via [support.numspot.com](https://support.numspot.com) en fournissant l'identifiant de votre organisation ainsi que l'identifiant de l'espace à supprimer.
+1. In the **Spaces** menu, open the relevant space's **Actions** menu, then click **Delete**.
+2. The **Deleting space** dialog appears, asking you to submit a request to support. Contact us at [support@numspot.com](mailto:support@numspot.com) or via [support.numspot.com](https://support.numspot.com) providing your organisation ID and the ID of the space to delete.
 
 :::info
-Depuis la console, la suppression d'un espace n'est pas réalisée directement : elle fait l'objet d'une demande auprès du support Numspot.
+From the console, deleting a space is not performed directly: it is a request submitted to Numspot support.
 :::
 
 </TabItem>
@@ -59,7 +59,7 @@ Depuis la console, la suppression d'un espace n'est pas réalisée directement :
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/DELETE/organisations/{organisationId}/spaces/{spaceId}
 
-### Exemple
+### Example
 
 ```bash
 curl 'https://api.{region}.numspot.com/organisations/{organisationId}/spaces/{spaceId}' \
@@ -67,7 +67,7 @@ curl 'https://api.{region}.numspot.com/organisations/{organisationId}/spaces/{sp
 ```
 
 :::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
 </TabItem>
@@ -76,7 +76,7 @@ Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la m
 ## Terraform {#tabhead-terraform}
 
 
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/space).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/space).
 
 </TabItem>
 </Tabs>

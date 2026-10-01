@@ -1,34 +1,33 @@
 ---
-title: "FAQ - Technique"
-sidebar_label: "Technique"
+title: "FAQ - Technical"
+sidebar_label: "Technical"
 sidebar_position: 2
 ---
 
-# FAQ - Technique
+# FAQ - Technical
 
-Ce guide est conçu pour vous fournir des réponses rapides et précises aux questions les plus courantes concernant nos produits et services.
+This guide is designed to provide you with quick and precise answers to the most common questions about our products and services.
 
-## 1. Comment modifier mes informations sur mon espace ?
-Pour modifier vos informations, accédez à la console. Sur la bannière de gauche, cliquez sur la rubrique IAM (Identity and Access Management). Ensuite, dans Espaces, cliquez sur l'ID de l'espace concerné : vous aurez accès aux informations générales de l'espace ainsi qu'aux utilisateurs assignés. Cliquez sur l'ID de l'utilisateur que vous souhaitez modifier, et vous pourrez modifier le nom, le prénom, l'adresse e-mail, le statut du compte, ainsi que les espaces assignés avec leurs rôles et permissions.
+## 1. How do I edit my information in my space?
+To edit your information, go to the console. On the left-hand banner, click the IAM (Identity and Access Management) section. Then, in Spaces, click the ID of the relevant space: you will have access to the general information of the space as well as the assigned users. Click the ID of the user you want to edit, and you will be able to edit the surname, first name, email address, account status, and the assigned spaces along with their roles and permissions.
 
-## 2. Comment signaler un problème technique ?
-Pour signaler un problème technique, veuillez contacter notre support technique en fournissant autant de détails que possible.
+## 2. How do I report a technical issue?
+To report a technical issue, please contact our technical support, providing as much detail as possible.
 
-## 3. Où puis-je trouver des mises à jour sur les services ?
-Les mises à jour concernant nos services seront publiées prochainement sur notre page de statut. Actuellement en cours de création, cette page vous permettra de consulter les interventions planifiées.
+## 3. Where can I find updates on the services?
+Updates regarding our services will be published shortly on our status page. Currently being created, this page will allow you to view planned interventions.
 
-## 4. Quels sont les gabarits de [VM (Virtual Machine)](/docs/compute/concept/) auxquels j'ai accès ?
-Les gabarits de machines virtuelles disponibles sont consultables sur notre site internet [Tarification - Numspot](https://numspot.com/tarification/#tarifs).
+## 4. Which [VM (Virtual Machine)](/docs/compute/concept/) templates do I have access to?
+The available virtual machine templates can be viewed on our website [Pricing - Numspot](https://numspot.com/tarification/#tarifs).
 
-## 5. Est-ce que Numspot restreint l'accès aux services via proxy ?
-Non, Numspot n'impose aucune limitation d'accès via proxy. Nos URLs sont entièrement publiques et accessibles sans exception. Si vous rencontrez des problèmes de connectivité lors de l'utilisation de Terraform, des API ou d'autres outils avec Numspot, vérifiez que la configuration de votre proxy autorise le trafic sortant vers Numspot.
+## 5. Does Numspot restrict access to services through a proxy?
+No, Numspot does not impose any access limitation through a proxy. Our URLs are entirely public and accessible without exception. If you encounter connectivity issues when using Terraform, the API or other tools with Numspot, check that your proxy configuration allows outbound traffic to Numspot.
 
-## 6. Pourquoi ma licence Windows n'est-elle pas activée automatiquement ?
-Dans certains cas, une activation manuelle de la licence Windows peut être nécessaire.
+## 6. Why is my Windows license not activated automatically?
+In some cases, a manual activation of the Windows license may be required.
 
-Pour activer votre licence manuellement, commencez par ajouter une règle sortante au groupe de sécurité associé à votre machine virtuelle afin d'autoriser le trafic vers l'adresse IP `169.254.169.254`. Ensuite, exécutez les commandes suivantes dans PowerShell :
+To activate your license manually, start by adding an outbound rule to the [security group](/docs/compute/security-groups/concepts/concept-sg) associated with your virtual machine in order to allow traffic to the IP address `169.254.169.254`. Then, run the following commands in PowerShell:
 ```powershell
 slmgr.vbs /skms 169.254.169.254
 slmgr.vbs /ato
 ```
-

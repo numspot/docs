@@ -1,6 +1,6 @@
 ---
-title: Lister les ressources d'un espace - Inventaire
-sidebar_label: Lister les ressources d'un espace
+title: List the resources of a space - inventory
+sidebar_label: List the resources of a space
 sidebar_position: 2
 draft: false
 ---
@@ -8,14 +8,14 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Lister les ressources d'un espace
+# List the resources of a space
 
-L'inventaire permet de visualiser l'ensemble des ressources déployées dans un espace Numspot via l'API (Application Programming Interface). Il offre une vue consolidée de toutes les ressources, quel que soit leur service d'origine (compute, connectivity, kubernetes, postgresql, objectstorage, registry, secrets).
+The inventory lets you view all the resources deployed in a Numspot space through the API (Application Programming Interface). It provides a consolidated view of all resources, regardless of their source service (compute, connectivity, Kubernetes, postgresql, objectstorage, registry, secrets).
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **inventory.resource.get**
 
@@ -24,25 +24,22 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `GET /inventory/spaces/{spaceId}/resources` command lists the resources of a space.
 
+### Path parameters
 
-La commande `GET /inventory/spaces/{spaceId}/resources` liste les ressources d'un espace.
-
-### Paramètres de chemin
-
-| Champ | Type | Description |
+| Field | Type | Description |
 | --- | --- | --- |
-| `spaceId` | UUID (Universally Unique Identifier) | Identifiant de l'espace |
+| `spaceId` | UUID (Universally Unique Identifier) | Identifier of the space |
 
-### Paramètres de requête
+### Query parameters
 
-| Champ | Type | Description |
+| Field | Type | Description |
 | --- | --- | --- |
-| `page[size]` | Entier (1-50) | Nombre maximum d'éléments à retourner (défaut : 20) |
-| `page[nextToken]` | Chaîne | Jeton pour la page suivante |
+| `page[size]` | Integer (1-50) | Maximum number of items to return (default: 20) |
+| `page[nextToken]` | String | Token for the next page |
 
-### Réponse
+### Response
 
 ```json
 {
@@ -50,14 +47,14 @@ La commande `GET /inventory/spaces/{spaceId}/resources` liste les ressources d'u
     {
       "id": "vm-622ef57d",
       "reference": "123e4567-e89b-12d3-a456-426614174000",
-      "name": "maVM-prod-1",
+      "name": "myVM-prod-1",
       "type": "VIRTUAL_MACHINE",
       "source": "compute",
       "state": "RUNNING",
       "details": {},
       "parent": {
         "parentId": "vpc-12b7fdbc",
-        "parentName": "monVPC",
+        "parentName": "myVPC",
         "parentType": "VIRTUAL_PRIVATE_CLOUD"
       }
     }
@@ -67,7 +64,7 @@ La commande `GET /inventory/spaces/{spaceId}/resources` liste les ressources d'u
 }
 ```
 
-[Exemple de requête : Lister les ressources d'un espace](/openapi/#tag/inventory/GET/inventory/spaces/%7BspaceId%7D/resources)
+[Request example: List the resources of a space](/openapi/#tag/inventory/GET/inventory/spaces/%7BspaceId%7D/resources)
 
 </TabItem>
 </Tabs>

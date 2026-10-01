@@ -1,6 +1,6 @@
 ---
-title: Créer un load balancer - Numspot
-sidebar_label: Créer un load balancer
+title: Create a load balancer - Numspot
+sidebar_label: Create a load balancer
 sidebar_position: 1
 draft: false
 ---
@@ -8,115 +8,123 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Créer un load balancer
+# Create a load balancer
 
-Un [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) reçoit le trafic entrant et le distribue vers des [VM (Virtual Machine)](/docs/compute/concept/) de backend (serveur dorsal). Par défaut, la création produit un load balancer **internet‑facing** (exposé à Internet) : la résolution DNS (Domain Name System) renvoie une IP publique. Pour créer un load balancer **interne** dans un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) (résolution DNS → IP privée), utilisez le paramètre `LoadBalancerType`. Vous devez fournir **soit** des subnet (sous-réseaux) **soit** des `AvailabilityZoneNames`.
+A [load balancer](/docs/network/load-balancer/concepts/) receives incoming traffic and distributes it to backend [VM (Virtual Machine)](/docs/compute/concept/). By default, creation produces an **internet-facing** load balancer: DNS (Domain Name System) resolution returns a public IP. To create an **internal** load balancer in a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) (DNS resolution → private IP), use the `LoadBalancerType` parameter. You must provide **either** subnets **or** `AvailabilityZoneNames`.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.loadBalancer.create**
 
 :::
 
-:::info Prérequis (API)
-- **Région** : `https://api.{region}.numspot.com`
-- **Auth** : Bearer token (tous les endpoints Load Balancer sont protégés).
-- **`spaceId`** requis dans l'URL.
-- **Nom du LB** : max **32** chars, `a-zA-Z0-9-` uniquement (s'applique aux ressources nommées : LB, listeners, règles, etc.).
-- **HTTPS** : Si vous terminez TLS (Transport Layer Security) sur le LB, créez d'abord un **certificat serveur** (endpoint *CreateServerCertificate*), puis attachez‑le via *UpdateLoadBalancer*.
+:::info Prerequisites (API)
+- **Region**: `https://api.{region}.numspot.com`
+- **Auth**: Bearer token (all Load Balancer endpoints are protected).
+- **`spaceId`** required in the URL.
+- **Load balancer name**: max **32** chars, `a-zA-Z0-9-` only (applies to named resources: load balancer, listeners, rules, etc.).
+- **HTTPS**: If you terminate TLS (Transport Layer Security) on the load balancer, first create a **server certificate** (endpoint *CreateServerCertificate*), then attach it via *UpdateLoadBalancer*.
 :::
 
-## Étapes via l'API
+## Steps via the API
 
-## Créer le load balancer
+**Create the load balancer**
    `POST /compute/spaces/{spaceId}/loadBalancers`
-   Le LB reçoit un **nom DNS unique**. Choisissez `internal` ou `internet-facing` via `LoadBalancerType`. Fournissez Subnets ou `AvailabilityZoneNames`.
+   The load balancer receives a **unique DNS name**. Choose `internal` or `internet-facing` via `LoadBalancerType`. Provide Subnets or `AvailabilityZoneNames`.
 
-## Ajouter un ou plusieurs listeners
+**Add one or more listeners**
    `POST /compute/spaces/{spaceId}/loadBalancers/{id}/listeners`
-   Les listeners définissent protocole/ports (ex. HTTP/HTTPS/TCP) et portent éventuellement un certificat TLS.
+   Listeners define the protocol and ports (e.g. HTTP/HTTPS/TCP) and may carry a TLS certificate.
 
-## (Optionnel) Créer une politique de session persistante — stickiness (persistance de session)
+**(Optional) Create a session persistence policy — stickiness**
    `POST /compute/spaces/{spaceId}/loadBalancers/{id}/policies`
-   Deux modes : **cookie géré par le LB** (durée = cookie navigateur) ou **cookie applicatif** (durée = cookie de l'app). **HTTP/HTTPS uniquement**.
+   Two modes: **cookie managed by the load balancer** (duration = browser cookie) or **application cookie** (duration = the app's cookie). **HTTP/HTTPS only**.
 
-## Enregistrer des VM backend
+**Register backend VM**
    `PUT /compute/spaces/{spaceId}/loadBalancers/{id}/backendMachines/link`
-   Fournissez **au moins** `BackendVmIds` **ou** `BackendIps`. Les VM peuvent être dans **d'autres subnet/AZ** tant que tout est dans **le même VPC**. L'enregistrement peut prendre un peu de temps.
+   Provide **at least** `BackendVmIds` **or** `BackendIps`. The VM may be in **other subnets/AZ** as long as everything is in **the same VPC**. Registration may take some time.
 
-## Contrôler l'état des VM
-   `GET /compute/spaces/{spaceId}/loadBalancers/{id}/vmsHealth` retourne la santé des backends enregistrés.
+**Check the state of the VM**
+   `GET /compute/spaces/{spaceId}/loadBalancers/{id}/vmsHealth` returns the health of the registered backends.
 
-## Cas d'usage rapides
-- **Site public** : LB **internet‑facing** + listeners 80/443, VM web.
-- **Micro‑services privés** : LB **interne** dans un VPC, exposé uniquement aux workloads internes.
-- **Terminaison TLS** : certificat via *CreateServerCertificate* puis attachement côté LB.
-- **Sessions persistantes** pour applis stateful (panier, portail) : stickiness (persistance de session) HTTP/HTTPS.
+## Quick use cases
+- **Public site**: **internet-facing** load balancer + listeners 80/443, web VM.
+- **Private micro-services**: **internal** load balancer in a VPC, exposed only to internal workloads.
+- **TLS termination**: certificate via *CreateServerCertificate* then attachment on the load balancer side.
+- **Persistent sessions** for stateful applications (cart, portal): HTTP/HTTPS stickiness.
 
-## Bonnes pratiques
-- **Nommage** : respectez la contrainte 32 chars / alphanum + tiret pour éviter les 400.
-- **Sécurité** : ouvrez uniquement les ports nécessaires dans les [security group (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) et isolez les LBs internes dans le VPC.
-- **Évolution** : pour changer de certificat ou de policy, passez par *UpdateLoadBalancer* (un seul attribut par appel).
-- **Traçabilité** : utilisez des **tags** (étiquettes) pour env/projet/service.
+## Best practices
+- **Naming**: respect the 32-char / alphanumeric plus hyphen constraint to avoid 400 errors.
+- **Security**: open only the necessary ports in the [security groups](/docs/compute/security-groups/concepts/concept-sg/) and isolate internal load balancers in the VPC.
+- **Evolution**: to change a certificate or a policy, use *UpdateLoadBalancer* (one attribute per call).
+- **Traceability**: use **tags** for env/project/service.
 
-## Erreurs fréquentes (et résolution)
-- Création sans Subnets **ni** `AvailabilityZoneNames` → 400 : fournissez l'un des deux.
-- Politique de stickiness (persistance de session) sur **TCP** → 400 : stickiness **HTTP/HTTPS** seulement.
-- Impossible de supprimer une **policy** encore activée sur un listener → désactivez d'abord la policy sur le listener (via *UpdateLoadBalancer*), puis appelez `DELETE /compute/spaces/{spaceId}/loadBalancers/{id}/policies`.
-- Détacher un **[Internet Gateway](/docs/network/internet-gateway/concepts/)** d'un VPC qui a des LBs **internet‑facing** → interdit : supprimez/convertissez d'abord les LBs publics.
+## Common errors (and resolution)
+- Creation without Subnets **or** `AvailabilityZoneNames` → 400: provide one of the two.
+- Stickiness policy on **TCP** → 400: stickiness is **HTTP/HTTPS** only.
+- Unable to delete a **policy** still enabled on a listener → first disable the policy on the listener (via *UpdateLoadBalancer*), then call `DELETE /compute/spaces/{spaceId}/loadBalancers/{id}/policies`.
+- Detaching an **[internet gateway](/docs/network/internet-gateway/concepts/)** from a VPC that has **internet-facing** load balancers → not allowed: first delete or convert the public load balancers.
 
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
+From the console, you can create a load balancer and configure its listeners.
 
-:::info
-La création d'un load balancer n'est pas disponible depuis la console Numspot.
+1. From the left-hand side menu, click **Network** → **Load Balancers**.
 
-Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
-:::
+2. Click **Create a Load Balancer**.
+
+3. Fill in the following information:
+   - **Name**: unique name of the load balancer (max 32 characters, alphanumeric and hyphens)
+   - **Type**: **internet-facing** (public) or **internal** (private)
+   - **VPC**: select the target VPC
+   - **Subnets**: select one or more subnets
+
+4. Configure the **security group** of the load balancer:
+   - Allow inbound traffic on the required ports (e.g. 80, 443)
+   - Allow outbound traffic to the backend VM
+
+5. Click **Create**. The load balancer is created with a unique DNS name.
+
+6. Add **listeners** to define the protocols and ports (HTTP, HTTPS, TCP).
+
+7. Register the backend VM via the **Backend VM** tab.
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
-
-
 :::info
-**Avant de commencer** :
+**Before you begin**:
 
-1. Créez un VPC.
+1. Create a VPC.
 
-2. Créez un security group pour le load balancer avec les règles suivantes :
+2. Create a security group for the load balancer with the following rules:
 
-   - Autorisez les flux entrants dans le protocole sur le port souhaité.
-   - Autorisez les flux entrants provenant des security group des VM qui lui envoient des requêtes.
-   - Autorisez les flux sortants vers tous les security group des VM de backend.
+   - Allow inbound traffic on the protocol on the desired port.
+   - Allow inbound traffic from the security groups of the VM that send it requests.
+   - Allow outbound traffic to all the security groups of the backend VM.
 
-3. Configurez le security group des futures VM de backend avec les règles suivantes :
+3. Configure the security group of the future backend VM with the following rules:
 
-   - Autorisez les flux entrants dans le protocole sur le port souhaité.
-   - Autorisez les flux entrants provenant du security group du load balancer.
+   - Allow inbound traffic on the protocol on the desired port.
+   - Allow inbound traffic from the security group of the load balancer.
 :::
 
-La commande `POST /compute/spaces/{spaceId}/loadBalancers` crée un load balancer.
+The `POST /compute/spaces/{spaceId}/loadBalancers` command creates a load balancer.
 
-Le load balancer est créé avec un nom DNS unique. Il reçoit le trafic entrant et le redirige vers ses VM enregistrées. Par défaut, cette action crée un load balancer accessible via Internet, qui résout vers des IP publiques. Pour créer un load balancer interne dans un VPC, résolvant vers des IP privées, utilisez le paramètre **type**.
+The load balancer is created with a unique DNS name. It receives incoming traffic and redirects it to its registered VM. By default, this action creates a load balancer accessible via the internet, which resolves to public IP. To create an internal load balancer in a VPC, resolving to private IP, use the **type** parameter.
 
-Vous devez spécifier soit les paramètres **subnets**, soit **AvailabilityZoneNames**.
+You must specify either the **subnets** or **AvailabilityZoneNames** parameters.
 
-[Exemple de requête : Création d'un load balancer ↗](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/loadBalancers)
+[Example request: Creating a load balancer ↗](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/loadBalancers)
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
 
 </TabItem>
 </Tabs>

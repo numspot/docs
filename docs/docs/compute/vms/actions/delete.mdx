@@ -1,6 +1,6 @@
 ---
-title: Supprimer une VM - Compute
-sidebar_label: Supprimer une VM
+title: Delete a VM - compute
+sidebar_label: Delete a VM
 sidebar_position: 11
 draft: false
 ---
@@ -9,22 +9,22 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Supprimer une VM
+# Delete a VM
 
-Vous pouvez supprimer une [VM (Virtual Machine)](/docs/compute/concept/) dont vous n'avez plus besoin. Supprimer une VM libère les ressources matérielles correspondantes. La VM ne peut donc pas être récupérée. Vous pouvez également spécifier que la VM est supprimée lorsque vous l'arrêtez avec la commande du système d'exploitation en activant l'attribut InstanceInitiatedShutDownBehavior.
+You can delete a [VM (Virtual Machine)](/docs/compute/concept/) you no longer need. Deleting a VM releases the corresponding hardware resources. The VM therefore cannot be recovered. You can also specify that the VM is deleted when you stop it with the operating system command by enabling the InstanceInitiatedShutDownBehavior attribute.
 
 :::warning
-L'action "Supprimer" est irréversible. Si vous confirmez cette action, la VM sera définitivement supprimée, ce qui entraînera les conséquences suivantes :
-- Les ressources rattachées à la VM seront libérées ;
-- Les données stockées dans la mémoire seront effacées ;
-- En cas d'IP publique rattachée, elle sera libérée mais restera allouée au compte ;
-- Le comportement des volumes de [stockage bloc (block storage)](/docs/storage/block-storage/concepts/) dépend du block device mapping.
+The "Delete" action is irreversible. If you confirm this action, the VM is permanently deleted, which causes the following consequences:
+- the resources attached to the VM are released;
+- the data stored in memory is erased;
+- if a public IP is attached, it is released but remains allocated to the account;
+- the behavior of [block storage](/docs/storage/block-storage/concepts/) volumes depends on the block device mapping.
 :::
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.vm.delete**
 
@@ -33,46 +33,43 @@ Cette action nécessite les permissions IAM (Identity and Access Management) sui
 <Tabs>
   <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/vm/list.png", text: "Depuis le menu latéral gauche, cliquez sur Compute → VM pour accéder à la liste des VM.", hotspot: { x: 0, y: 0.4123, w: 0.1944, h: 0.0457 } },
-    { img: "/img/walkthrough/vm/selected.png", text: "Cochez la VM à supprimer (la multi-sélection est disponible), puis cliquez sur « Supprimer » dans la barre d'actions.", hotspot: { x: 0.7217, y: 0.3304, w: 0.089, h: 0.0494 } },
-    { img: "/img/walkthrough/vm/delete-modal.png", text: "Confirmation forte : saisissez l'ID exact de la VM, puis cliquez sur « Supprimer la VM ». L'action est irréversible.", hotspot: { x: 0.6007, y: 0.7963, w: 0.0799, h: 0.0457 } },
+    { img: "/img/walkthrough/en/vm/delete-01-list.png", text: "From the left-hand side menu, click Compute → VMs to open the list of VMs.", hotspot: { x: 0, y: 0.4123, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/en/vm/delete-02-selected.png", text: "Tick the VM to remove (multi-selection is available), then click “Terminate” in the action bar.", hotspot: { x: 0.6301, y: 0.3304, w: 0.087, h: 0.0494 } },
+    { img: "/img/walkthrough/en/vm/delete-03-modal.png", text: "Strong confirmation: enter the exact VM ID, then click “Terminate VM”. This action is irreversible.", hotspot: { x: 0.6079, y: 0.7715, w: 0.0782, h: 0.0494 } },
   ]}
 />
 
-    1. Depuis le menu latéral gauche, cliquez sur **Compute** → **VM** pour accéder à la liste des VM.
+    1. From the left-hand side menu, click **Compute** → **VM** to access the list of VM.
 
-    2. Sélectionnez la VM que vous souhaitez supprimer.
+
+    2. Select the VM you want to delete.
+
 
        :::info
-       La multi-sélection est disponible.
+       Multi-selection is available.
        :::
 
-    3. Cliquez sur le bouton **Supprimer**.
+    3. Click the **Delete** button.
 
-    4. Confirmez votre choix dans la boîte de dialogue en entrant le nom de la VM.
+
+    4. Confirm your choice in the dialog box by entering the name of the VM.
+
   </TabItem>
 
   <TabItem value="api" label="API">
+    The `DELETE /compute/spaces/{spaceId}/vms/{id}` command lets you terminate a specified VM.
 
-## API {#tabhead-api}
+    This operation is idempotent, which means that all calls succeed even if you terminate a VM more than once.
 
-    La commande `DELETE /compute/spaces/{spaceId}/vms/{id}` permet de mettre fin à une VM spécifiée.
+    In other words, if you make several termination requests for the same VM, only the first request is taken into account. The subsequent requests have no effect, because the VM has already been terminated.
 
-    Cette opération est idempotente, ce qui signifie que tous les appels réussissent même si vous terminez une VM plus d'une fois.
-
-    En d'autres termes, si vous effectuez plusieurs demandes de terminaison pour une même VM, seule la première demande sera prise en compte. Les demandes suivantes n'auront aucun effet, car la VM aura déjà été terminée.
-
-    [Exemple de requête : Suppression d'une VM](/openapi/#tag/compute/DELETE/compute/spaces/%7BspaceId%7D/vms/%7Bid%7D)
+    [Example request: Deleting a VM](/openapi/#tag/compute/DELETE/compute/spaces/%7BspaceId%7D/vms/%7Bid%7D)
   </TabItem>
 
   <TabItem value="terraform" label="Terraform">
-
-## Terraform {#tabhead-terraform}
-
-    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
+    The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
   </TabItem>
 </Tabs>

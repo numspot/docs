@@ -1,0 +1,53 @@
+---
+title: Obtenir des informations sur vos Compute Bridges
+description: "Consultez le détail et l'état de vos Compute Bridges Numspot reliant deux VPC, et listez tous les bridges de votre espace."
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Obtenir des informations sur vos Compute Bridges
+
+Vous pouvez obtenir des informations sur un ou plusieurs bridges.
+
+Par défaut, cette action décrit tous vos bridges.
+
+:::warning
+Les connexions dont l'état est `failed` ou `deleted` restent visibles pendant 1 heure.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **connectivity.bridge.get**
+
+:::
+
+<Tabs>
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+
+La commande `GET /connectivity/spaces/{spaceId}/computeBridges` permet de lister une ou plusieurs connexions entre deux [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+
+[Exemple de requête : Lister tous les Compute Bridges](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/computeBridges)
+
+La commande `GET /connectivity/spaces/{spaceId}/computeBridges/{id}` permet de récupérer les informations d'une connexion Compute Bridge entre deux VPC.
+
+[Exemple de requête : Récupérer les informations d'un Compute Bridge](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/computeBridges/{id})
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/compute_bridge).
+
+</TabItem>
+</Tabs>

@@ -1,45 +1,45 @@
 ---
-title: Vue générale du service IAM
+title: IAM service overview
 sidebar_position: 1
 draft: false
 last_update:
   date: 2026-09-18
 ---
 
-# Vue générale du service IAM
+# IAM service overview
 
-## Présentation
+## Overview
 
-L'**IAM** (Identity and Access Management) est une infrastructure qui assure deux fonctions principales : l'identification et l'authentification d'un utilisateur ou compte de service, et l'autorisation d'accès à une ressource. Une identité peut être une personne physique (compte utilisateur) ou une machine (compte de service).
+**IAM** (Identity and Access Management) is an infrastructure that provides two main functions: identifying and authenticating a user or service account, and authorizing access to a resource. An identity can be a physical person (user account) or a machine (service account).
 
-Les commanditaires disposent d'une infrastructure **IAM** dédiée assurant un parfait isolement des ressources.
+Customers have a dedicated **IAM** infrastructure that ensures complete isolation of resources.
 
-## Fonctionnement
+## How it works
 
-Le système d'**IAM** gère l'identité des utilisateurs et des comptes de service selon les aspects suivants :
+The **IAM** system manages the identity of users and service accounts according to the following aspects:
 
-- identification d'un utilisateur ou d'un compte de service ;
-- critères de robustesse pour les mots de passe (longueur, composition) ;
-- authentification à deux facteurs pour les personnes physiques ;
-- blocage du compte utilisateur après trois tentatives d'authentification infructueuses.
+- identifying a user or a service account;
+- robustness criteria for passwords (length, composition);
+- two-factor authentication for physical persons;
+- locking of the user account after three failed authentication attempts.
 
-Un système **IAM** se compose de deux fonctions : authN et authZ.
+An **IAM** system is made up of two functions: authN and authZ.
 
-La stratégie d'authentification authN établit les règles pour vérifier l'identité d'un utilisateur ou d'un compte de service qui sollicite un accès.
+The authN authentication strategy establishes the rules for verifying the identity of a user or service account requesting access.
 
-Le dispositif de gestion des accès authZ contrôle les autorisations des utilisateurs et comptes de service. Ce composant, indépendant de la gestion des identités, est conçu pour répondre à des sollicitations élevées.
+The authZ access management mechanism controls the authorizations of users and service accounts. This component, which is independent of identity management, is designed to handle high request volumes.
 
-## Modèles de permissions
+## Permission models
 
-Le système de permissions de l'**IAM** permet de mettre en œuvre différents modèles de gestion des droits :
+The **IAM** permission system makes it possible to implement different models for managing rights:
 
-- **RBAC** (Role-Based Access Control) : attribue un ou plusieurs rôles à chaque utilisateur ou compte de service. Chaque rôle contient un ensemble de permissions. L'attribution d'un rôle accorde toutes les permissions qu'il contient.
-- **ACL** (liste de contrôle d'accès) : définit un droit unitaire d'un utilisateur sur une ressource spécifique (telle qu'une URL ou un fichier). C'est le niveau de permission le plus fin.
+- **RBAC** (Role-Based Access Control): assigns one or more roles to each user or service account. Each role contains a set of permissions. Assigning a role grants all the permissions it contains.
+- **ACL** (Access Control List): defines a single right of a user over a specific resource (such as a URL or a file). This is the most granular permission level.
 
-Entre ces deux modèles, il est possible d'attribuer une permission décrite dans un rôle à un utilisateur. Celui-ci pourra exécuter l'action sur l'ensemble des ressources encadrées par cette permission.
+Between these two models, you can assign a permission described in a role to a user. That user will then be able to perform the action on all the resources covered by that permission.
 
-Trois modalités d'attribution de permissions sont disponibles :
+Three permission assignment methods are available:
 
-- assignation d'un rôle à un utilisateur ou compte de service ;
-- assignation d'une permission à un utilisateur ou compte de service ;
-- assignation d'un droit spécifique à un utilisateur pour une ressource spécifique (ACL).
+- assigning a role to a user or service account;
+- assigning a permission to a user or service account;
+- assigning a specific right to a user for a specific resource (ACL).

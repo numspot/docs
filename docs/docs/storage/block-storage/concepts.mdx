@@ -7,101 +7,101 @@ draft: false
 
 # Block Storage
 
-Le stockage bloc (block storage) est une solution de stockage évolutive et performante qui offre des ressources de stockage par blocs pour une utilisation avec les [VM (virtual machines)](/docs/compute/concept/) de compute. Avec le stockage bloc, vous pouvez créer et gérer les éléments suivants :
+Block storage is a scalable and high-performance storage solution that provides block-level storage resources for use with compute [VM](/docs/compute/concept/). With block storage, you can create and manage the following elements:
 
-- **Volumes** : volumes de stockage attachables aux VM de calcul, utilisables comme un disque dur local. Ils permettent de stocker des fichiers ou d'installer des applications.
-- **Instantanés** : sauvegardes de volumes conservées indépendamment du volume d'origine. Les instantanés (snapshots) permettent de sauvegarder les données de vos volumes et de restaurer de nouveaux volumes à partir de ces sauvegardes à tout moment.
+- **Volumes**: storage volumes that can be attached to compute VM and used like a local hard drive. They allow you to store files or install applications.
+- **Snapshots**: volume backups kept independently of the original volume. Snapshots allow you to back up the data on your volumes and to restore new volumes from these backups at any time.
 
 ## Volumes
 
-Les volumes sont des disques durs virtuels que vous pouvez attacher à une instance créée dans la même Sous-région afin de stocker des données. Un volume est défini par sa taille et sa capacité d'IOPS (Input/Output Operations Per Second).
+Volumes are virtual hard drives that you can attach to an instance created in the same Subregion in order to store data. A volume is defined by its size and its IOPS (Input/Output Operations Per Second) capacity.
 
-### Volumes et VM
+### Volumes and VM
 
-Lors de la création d'une VM, un volume est automatiquement créé et attaché pour stocker les données du système d'exploitation. Ce volume, appelé volume système, a une taille par défaut de 10 Gio pour les VM Linux (8 Gio pour les VM CentOS 7) et de 50 Gio pour les VM Windows. Bien que vous puissiez stocker des données sur un volume système, celui-ci peut être supprimé lors de la terminaison de la VM, selon le block device mapping de l'image utilisée.
+When a VM is created, a volume is automatically created and attached to store the operating system data. This volume, called the system volume, has a default size of 10 GiB for Linux VM (8 GiB for CentOS 7 VM) and 50 GiB for Windows VM. Although you can store data on a system volume, it may be deleted when the VM is terminated, depending on the block device mapping of the image used.
 
-Pour augmenter la capacité de stockage de vos VM ou séparer vos données des fichiers du système d'exploitation, vous pouvez créer des volumes avec la capacité de stockage souhaitée (dans les limites des quotas alloués à votre compte). Ces volumes sont localisés dans une Sous-région, la Sous-région A étant utilisée par défaut si aucune n'est spécifiée.
+To increase the storage capacity of your VM or to separate your data from the operating system files, you can create volumes with the storage capacity you need (within the limits of the quotas allocated to your account). These volumes are located in a Subregion, with Subregion A used by default if none is specified.
 
-Vous pouvez attacher un volume à n'importe quelle VM dans la même Sous-région, que ce soit dans le Cloud public ou dans un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/). Une fois attaché, le volume fonctionne comme un disque dur physique et peut être initialisé et utilisé de la même manière. La VM peut alors interagir avec le volume et accéder à vos données. Lors de l'arrêt d'une VM, les volumes attachés restent associés à celle-ci, ce qui vous permet d'y accéder à nouveau après le redémarrage de la VM.
+You can attach a volume to any VM in the same Subregion, whether in the public Cloud or in a [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud). Once attached, the volume works like a physical hard drive and can be initialized and used in the same way. The VM can then interact with the volume and access your data. When a VM is stopped, the attached volumes remain associated with it, which allows you to access them again after the VM is restarted.
 
-La persistance d'un volume est indépendante du cycle de vie de la VM : un volume peut être détaché d'une VM à laquelle il était précédemment attaché, puis attaché à une autre VM. Lorsque vous terminez une VM, les volumes qui lui sont attachés sont soit supprimés, soit détachés selon le block device mapping de la VM.
+The persistence of a volume is independent of the VM lifecycle: a volume can be detached from a VM to which it was previously attached, then attached to another VM. When you terminate a VM, the volumes attached to it are either deleted or detached depending on the VM block device mapping.
 
-Vous pouvez attacher jusqu'à 40 volumes, y compris le volume système, à une seule VM. Toutefois, un volume ne peut être attaché qu'à une seule VM à la fois.
+You can attach up to 40 volumes, including the system volume, to a single VM. However, a volume can only be attached to one VM at a time.
 
-Un volume peut se trouver dans l'un des états suivants :
+A volume can be in one of the following states:
 
-- "Création" : le processus de création du volume est en cours.
-- "Disponible" : le volume est créé mais n'est pas attaché à une VM. Un volume est considéré comme étant dans l'état "disponible" même s'il contient des données.
-- "En cours d'utilisation" : le volume est attaché à une VM. Un volume est considéré comme étant dans l'état "en cours d'utilisation" même si la VM à laquelle il est attaché est arrêtée.
-- "Suppression" : le processus de suppression du volume est en cours.
-- "Erreur" : la création du volume a échoué.
+- "Creating": the volume creation process is in progress.
+- "Available": the volume is created but is not attached to a VM. A volume is considered to be in the "available" state even if it contains data.
+- "In use": the volume is attached to a VM. A volume is considered to be in the "in use" state even if the VM to which it is attached is stopped.
+- "Deleting": the volume deletion process is in progress.
+- "Error": the volume creation failed.
 
-### Attachement des volumes et noms de périphériques
+### Attaching volumes and device names
 
-Assurez-vous d'attacher et de monter toujours le volume système (bootdisk) d'une VM en utilisant le nom de périphérique `/dev/sda1`, même si celui-ci s'affiche sous le nom `/dev/vda1` dans la VM elle-même. Pour tous les autres volumes que vous attachez à une VM, vous devez utiliser un nom de périphérique suivant le format `/dev/xvdX` ou `/dev/xvdXX` (où le premier `X` représente une lettre comprise entre `b` et `z`, et le second `X` une lettre comprise entre `a` et `z`).
+Always make sure to attach and mount the system volume (bootdisk) of a VM using the device name `/dev/sda1`, even if it appears under the name `/dev/vda1` in the VM itself. For all other volumes that you attach to a VM, you must use a device name following the format `/dev/xvdX` or `/dev/xvdXX` (where the first `X` represents a letter between `b` and `z`, and the second `X` a letter between `a` and `z`).
 
-**Noms de périphériques pour les VM Linux**
+**Device names for Linux VM**
 
-Lorsque vous attachez des volumes à une VM Linux, le nom du périphérique dans `/dev/xvdX` ou `/dev/xvdXX` est transformé par Linux en `/dev/sdY` ou `/dev/sdYY`. L'ordre de transformation dépend du moment où vous attachez les volumes à la VM.
+When you attach volumes to a Linux VM, the device name in `/dev/xvdX` or `/dev/xvdXX` is transformed by Linux into `/dev/sdY` or `/dev/sdYY`. The transformation order depends on when you attach the volumes to the VM.
 
-**Noms de périphériques pour les VM Windows**
+**Device names for Windows VM**
 
-Dans une VM Windows, les volumes sont numérotés selon l'ordre d'attachement, sans tenir compte du nom de périphérique `/dev/xvdX` ou `/dev/xvdXX` choisi.
+In a Windows VM, volumes are numbered according to the order in which they are attached, without regard to the chosen device name `/dev/xvdX` or `/dev/xvdXX`.
 
-- Le volume système porte le numéro 0.
-- Le premier volume attaché est numéroté 1.
-- La numérotation continue ainsi pour les volumes suivants.
-- Si vous détachez un volume, son numéro est libéré et attribué au prochain volume attaché à la VM.
+- The system volume is numbered 0.
+- The first attached volume is numbered 1.
+- The numbering continues in this way for the following volumes.
+- If you detach a volume, its number is released and assigned to the next volume attached to the VM.
 
-### Persistance des données
+### Data persistence
 
-Les données stockées sur un volume persistent tant que le volume existe et est attaché à une VM. Supprimer un volume efface définitivement les données qu'il contient. Détacher un volume le rend disponible et conserve ses données intactes. Vous pouvez ensuite l'attacher à une autre VM pour retrouver l'accès aux données.
+The data stored on a volume persists as long as the volume exists and is attached to a VM. Deleting a volume permanently erases the data it contains. Detaching a volume makes it available and keeps its data intact. You can then attach it to another VM to regain access to the data.
 
-Sauvegarder vos données est possible grâce aux instantanés. Vous pouvez les copier dans une autre région et les utiliser pour restaurer vos données en cas de problème ou de suppression accidentelle du volume.
+You can back up your data using snapshots. You can copy them to another region and use them to restore your data in the event of a problem or accidental deletion of the volume.
 
-### Types de volumes et IOPS
+### Volume types and IOPS
 
-La performance d'un volume se mesure en IOPS, c'est-à-dire le nombre d'opérations de lecture et d'écriture que peut effectuer un volume en une seconde. Vous pouvez choisir entre différents types de volumes, selon les performances dont vous avez besoin :
+The performance of a volume is measured in IOPS, that is, the number of read and write operations that a volume can perform in one second. You can choose between different volume types, depending on the performance you need:
 
-- **Magnetic** : offre un nombre d'IOPS fixe. La performance ne dépend pas de la taille du volume.
-- **Performance** : offre une possibilité de burst pour les volumes inférieurs à 1 Tio. Convient aux applications qui ont besoin de pics de performance occasionnels.
-- **Enterprise** : permet de créer un volume avec le nombre d'IOPS dont vous avez besoin. Offre une meilleure performance et une latence réduite. Les volumes Enterprise sont des volumes SSD.
+- **Magnetic**: provides a fixed number of IOPS. The performance does not depend on the size of the volume.
+- **Performance**: provides a burst capability for volumes smaller than 1 TiB. Suitable for applications that need occasional performance peaks.
+- **Enterprise**: allows you to create a volume with the number of IOPS you need. Provides better performance and reduced latency. Enterprise volumes are SSD volumes.
 
-Le tableau suivant présente des cas d'utilisation pour chaque type de volume et décrit leurs caractéristiques de performance :
+The following table presents use cases for each volume type and describes their performance characteristics:
 
-| Type de volume | Nom API/CLI | Cas d'utilisation | Taille du volume | Performance en IOPS | Taille E/S | IOPS min/volume | IOPS max/volume | IOPS max/VM | Débit max/volume | Débit max/VM |
+| Volume type | API/CLI name | Use case | Volume size | IOPS performance | I/O size | Min IOPS/volume | Max IOPS/volume | Max IOPS/VM | Max throughput/volume | Max throughput/VM |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Magnetic (HDD) | standard | Charges de travail froides | 1 GiB - 14,55 TiB | 250 lectures, 150 écritures | 4 KiB | / | / | 36 000 | 40 MiB/s | 600 MiB/s |
-| Performance (SSD) | gp2 | Charges de travail modérées | 1 GiB - 14,55 TiB | 3 IOPS/GiB (avec burst) | 4 KiB | / | 10 000 | 36 000 | 160 MiB/s | 600 MiB/s |
-| Enterprise (SSD) | io1 | Charges de travail à haute performance | 4 GiB - 14,55 TiB | Base : 3 IOPS/GiB, Burst : 300 IOPS/GiB | 4 KiB | 100 | 13 000 | 36 000 | 200 MiB/s | 600 MiB/s |
+| Magnetic (HDD) | standard | Cold workloads | 1 GiB - 14.55 TiB | 250 reads, 150 writes | 4 KiB | / | / | 36,000 | 40 MiB/s | 600 MiB/s |
+| Performance (SSD) | gp2 | Moderate workloads | 1 GiB - 14.55 TiB | 3 IOPS/GiB (with burst) | 4 KiB | / | 10,000 | 36,000 | 160 MiB/s | 600 MiB/s |
+| Enterprise (SSD) | io1 | High-performance workloads | 4 GiB - 14.55 TiB | Base: 3 IOPS/GiB, Burst: 300 IOPS/GiB | 4 KiB | 100 | 13,000 | 36,000 | 200 MiB/s | 600 MiB/s |
 
-## Instantanés
+## Snapshots
 
-Un instantané est une image d'un volume à un moment donné qui vous permet de sauvegarder vos données, créer des répliques d'un volume au moment où l'instantané a été créé, ou déplacer des données dans une autre Sous-région ou région.
+A snapshot is an image of a volume at a given point in time that allows you to back up your data, create replicas of a volume at the moment the snapshot was created, or move data to another Subregion or region.
 
-### Généralités
+### Overview
 
-Un instantané créé à un moment donné correspond à une image d'un volume qui contient toutes les informations nécessaires pour créer une réplique de ce volume, de la même taille ou de taille supérieure. Un instantané peut être utilisé pour sauvegarder vos données ou les partager avec d'autres comptes.
+A snapshot created at a given point in time corresponds to an image of a volume that contains all the information needed to create a replica of that volume, of the same size or a larger size. A snapshot can be used to back up your data or share it with other accounts.
 
-Tous les instantanés contiennent les informations requises pour créer un nouveau volume avec les données stockées sur le volume d'origine au moment où l'instantané a été créé. Ainsi, si vous supprimez des instantanés précédemment créés, vous pouvez toujours restaurer toutes les données du volume du moment où l'instantané a été créé.
+All snapshots contain the information required to create a new volume with the data stored on the original volume at the moment the snapshot was created. Therefore, if you delete previously created snapshots, you can still restore all the volume data from the moment the snapshot was created.
 
 :::info
-Pour identifier vos ressources, vous pouvez leur ajouter des étiquettes (tags).
+To identify your resources, you can add tags to them.
 :::
 
-Les instantanés sont placés dans une région et peuvent être utilisés dans toutes les Sous-régions au sein de cette région. Vous pouvez copier un instantané dans une autre région et ainsi l'utiliser dans les Sous-régions au sein de celle-ci, pour par exemple y créer des copies identiques d'un volume.
+Snapshots are placed in a region and can be used in all Subregions within that region. You can copy a snapshot to another region and thus use it in the Subregions within that region, for example to create identical copies of a volume there.
 
-Le nombre d'instantanés que vous pouvez créer dépend des quotas alloués à votre compte.
+The number of snapshots that you can create depends on the quotas allocated to your account.
 
-Un instantané peut être dans l'un des états suivants :
+A snapshot can be in one of the following states:
 
-- "in-queue" : la demande de création de l'instantané a été reçue.
-- "pending" : la création de l'instantané est en cours.
-- "completed" : l'instantané est prêt et disponible.
+- "in-queue": the snapshot creation request has been received.
+- "pending": the snapshot creation is in progress.
+- "completed": the snapshot is ready and available.
 
   :::info
-  Les données contenues dans un instantané sont considérées figées lorsque l'instantané est dans l'état "completed".
+  The data contained in a snapshot is considered frozen when the snapshot is in the "completed" state.
   :::
 
-- "error" : la création de l'instantané a échoué.
-- "deleting" : la demande de suppression de l'instantané a été reçue.
+- "error": the snapshot creation failed.
+- "deleting": the snapshot deletion request has been received.

@@ -1,24 +1,24 @@
 ---
-title: Supprimer un backup PostgreSQL - PostgreSQL managé
-sidebar_label: Supprimer un backup PostgreSQL
+title: Delete a PostgreSQL backup - Managed PostgreSQL
+sidebar_label: Delete a PostgreSQL backup
 sidebar_position: 10
 draft: false
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Supprimer un backup PostgreSQL
+# Delete a PostgreSQL backup
 
-Vous pouvez supprimer un backup on-demand d'un [cluster PostgreSQL](/docs/managed-services/postgresql/concepts/).
+You can delete an on-demand backup of a [PostgreSQL cluster](/docs/managed-services/postgresql/concepts/).
 
 :::warning Restriction
-Seuls les backups de type `ON_DEMAND` peuvent être supprimés. Les backups automatiques (`AUTO`) ne peuvent pas être supprimés manuellement.
+Only backups of type `ON_DEMAND` can be deleted. Automatic backups (`AUTO`) cannot be deleted manually.
 :::
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **postgresql.cluster.delete**
 
@@ -26,27 +26,24 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 
 <TabItem value="api" label="API" default>
+    The `DELETE /postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId}` request deletes an on-demand backup of a cluster.
 
-## API {#tabhead-api}
+    **Parameters**
 
-    La requête `DELETE /postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId}` permet de supprimer un backup on-demand d'un cluster.
-
-### Paramètres
-
-    | Paramètre | Type | Requis | Description |
+    | Parameter | Type | Required | Description |
     |-----------|------|--------|-------------|
-    | `spaceId` | UUID (Universally Unique Identifier) | Oui | Identifiant de l'espace |
-    | `clusterId` | UUID | Oui | Identifiant unique du cluster |
-    | `backupId` | UUID | Oui | Identifiant unique du backup |
+    | `spaceId` | UUID (Universally Unique Identifier) | Yes | Space identifier |
+    | `clusterId` | UUID | Yes | Unique identifier of the cluster |
+    | `backupId` | UUID | Yes | Unique identifier of the backup |
 
-### Exemple de réponse
+    **Example response**
 
     ```text
     HTTP/1.1 204 No Content
     ```
 
-    Le backup passe en état `DELETING` le temps de la suppression.
+    The backup switches to the `DELETING` status for the duration of the deletion.
 
-    [Voir la spécification complète](/openapi/#tag/postgresql/DELETE/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId})
+    [See the full specification](/openapi/#tag/postgresql/DELETE/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId})
 </TabItem>
 </Tabs>

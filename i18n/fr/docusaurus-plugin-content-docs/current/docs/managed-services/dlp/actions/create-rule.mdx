@@ -1,0 +1,168 @@
+---
+title: Créer une règle DLP - DLP managé
+sidebar_label: Créer une règle DLP
+sidebar_position: 1
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Créer une règle DLP
+
+Créez une [règle DLP](/docs/managed-services/dlp/concepts) pour inspecter les requêtes transitant par les plateformes et appliquer une action lorsque des données sensibles sont détectées.
+
+Une règle est composée d'une condition — exprimée en DSL — et d'une action parmi `pass`, `block`, `modify` ou `monitor`. La règle est créée en tant que brouillon. Pour l'activer, publiez-la dans un [ruleset](/docs/managed-services/dlp/concepts) (ensemble de règles).
+
+## Permissions
+
+:::info
+Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+
+- **rule_editor**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Dans la console DLP, cliquez sur Rules dans le menu latéral.", hotspot: { x: 0.006, y: 0.233, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/02-rules-list.png", text: "Cliquez sur « New Rule » pour ouvrir l'éditeur de règle.", hotspot: { x: 0.901, y: 0.030, w: 0.082, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/03-rule-new.png", text: "Renseignez le nom, le Platform Type et la description de la règle.", hotspot: { x: 0.201, y: 0.214, w: 0.765, h: 0.167 } },
+    { img: "/img/walkthrough/dlp/03-rule-condition.png", text: "Configurez la condition : ajoutez un champ, un opérateur et un détecteur.", hotspot: { x: 0.201, y: 0.325, w: 0.765, h: 0.270 } },
+    { img: "/img/walkthrough/dlp/03-rule-action.png", text: "Sélectionnez l'action (Pass, Block, Modify ou Monitor).", hotspot: { x: 0.201, y: 0.774, w: 0.285, h: 0.091 } },
+    { img: "/img/walkthrough/dlp/03-rule-save.png", text: "Cliquez sur Save as Draft pour enregistrer la règle en tant que brouillon.", hotspot: { x: 0.900, y: 0.956, w: 0.083, h: 0.044 } },
+  ]}
+/>
+
+1. Dans la console [DLP](/docs/managed-services/dlp/concepts), cliquez sur **Rules** dans le menu latéral.
+2. Cliquez sur le bouton **New Rule** pour ouvrir l'éditeur de règle.
+
+### Informations générales
+
+Renseignez les informations de la règle :
+
+| Champ | Valeur d'exemple | Description |
+|-------|-----------------|-------------|
+| Name | `block-aws-keys` | Nom de la règle |
+| Description | Bloquer les clés d'accès AWS | Description de la règle |
+| Platform type | `mistral-platform` | Type de plateforme cible |
+
+### Configuration de la condition
+
+Construisez la condition de la règle à l'aide de l'éditeur visuel ou en saisissant directement le DSL.
+
+**Éditeur visuel** :
+
+1. Cliquez sur **Add condition** pour ajouter une condition ;
+2. Sélectionnez le champ à inspecter dans la liste déroulante (`tool_arguments`, `tool_called` ou `request_time`) ;
+3. Sélectionnez l'opérateur : `matches_detector` ou `not_matches_detector` ;
+4. Renseignez la référence du [détecteur DLP](/docs/managed-services/dlp/concepts) : `@preset:<id>` pour un détecteur prédéfini, `@custom:<id>` pour un détecteur personnalisé ;
+5. Pour combiner des conditions, utilisez les opérateurs **AND** ou **OR** ;
+6. Pour regrouper des conditions, utilisez les parenthèses.
+
+**Éditeur DSL** :
+
+Saisissez directement l'expression DSL. Exemple :
+
+```text
+tool_arguments matches_detector @preset:aws_access_key_id
+```
+
+Pour inspecter tous les champs de la requête avec un détecteur :
+
+```text
+* matches_detector @preset:aws_access_key_id
+```
+
+### Configuration de l'action
+
+Sélectionnez le type d'action à appliquer lorsque la condition est remplie :
+
+| Action | Configuration supplémentaire |
+|--------|------------------------------|
+| `pass` | Aucune |
+| `block` | Message de blocage obligatoire |
+| `modify` | Ajoutez des modifications : champ, détecteur, opération (`redact` ou `remove`), texte de remplacement si `redact` |
+| `monitor` | Aucune — la requête est autorisée mais l'événement est journalisé |
+
+### Test de la règle
+
+Avant d'enregistrer la règle, testez-la par rapport à des données d'exemple :
+
+1. Cliquez sur **Test rule** ;
+2. Renseignez les champs d'exemple conformément au schéma de la plateforme ;
+3. Cliquez sur **Run test** pour voir le résultat de l'évaluation.
+
+### Enregistrement
+
+Cliquez sur **Save** pour enregistrer la règle en tant que brouillon. La règle apparaît dans la liste avec le statut "Draft".
+
+</TabItem>
+<TabItem value="api" label="API">
+
+La requête `POST /api/v1/rules` permet de créer une [règle DLP](/docs/managed-services/dlp/concepts) en brouillon.
+
+### Exemple de requête
+
+```json
+{
+  "name": "block-aws-keys",
+  "description": "Bloquer les clés d'accès AWS",
+  "platform_type": "mistral-platform",
+  "condition": "tool_arguments matches_detector @preset:aws_access_key_id",
+  "action": {
+    "type": "block",
+    "message": "La requête contient une clé d'accès AWS"
+  }
+}
+```
+
+### Exemple de réponse
+
+```json
+{
+  "id": "rule-550e8400",
+  "name": "block-aws-keys",
+  "description": "Bloquer les clés d'accès AWS",
+  "platform_type": "mistral-platform",
+  "condition": "tool_arguments matches_detector @preset:aws_access_key_id",
+  "action": {
+    "type": "block",
+    "message": "La requête contient une clé d'accès AWS"
+  },
+  "draft": true,
+  "version": 1,
+  "created_at": "2026-08-27T10:00:00Z",
+  "updated_at": "2026-08-27T10:00:00Z"
+}
+```
+
+### Exemple avec action modify
+
+```json
+{
+  "name": "redact-github-tokens",
+  "description": "Caviarder les jetons GitHub",
+  "platform_type": "mistral-platform",
+  "condition": "* matches_detector @preset:github_token",
+  "action": {
+    "type": "modify",
+    "modifications": [
+      {
+        "field": "*",
+        "detector": "@preset:github_token",
+        "operation": "redact",
+        "replacement": "***"
+      }
+    ]
+  }
+}
+```
+
+</TabItem>
+</Tabs>

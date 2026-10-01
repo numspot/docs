@@ -1,0 +1,49 @@
+---
+title: Modifier un server certificate
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Modifier un server certificate
+
+Vous pouvez modifier le nom et/ou le chemin d'un server certificate existant.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.serverCertificate.update**
+
+:::
+
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+La modification d'un certificat serveur n'est pas disponible depuis la console Numspot.
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+La commande `PUT /compute/spaces/{spaceId}/serverCertificates/{id}` modifie le nom et/ou le chemin d'un server certificate spécifié.
+
+[Exemple de requête : Modification d'un server certificate](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/serverCertificates/{id})
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/server_certificate).
+  </TabItem>
+</Tabs>

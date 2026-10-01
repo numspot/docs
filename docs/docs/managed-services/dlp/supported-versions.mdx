@@ -1,52 +1,52 @@
 ---
-title: Versions et cycle de vie - DLP managé
-sidebar_label: Versions et cycle de vie
+title: Versions and lifecycle - Managed DLP
+sidebar_label: Versions and lifecycle
 sidebar_position: 5
 draft: false
 ---
 
-# Versions et cycle de vie
+# Versions and lifecycle
 
-Numspot opère le service [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) avec des versions stables bénéficiant d'un suivi actif des correctifs de sécurité, en conformité avec les exigences de sécurité appliquées au service.
+Numspot operates the [DLP](/docs/managed-services/dlp/concepts/) (Data Loss Prevention) service with stable versions receiving active security patch monitoring, in compliance with the security requirements applied to the service.
 
-## Version supportée
+## Supported version
 
-La version suivante est supportée :
+The following version is supported:
 
 - **DLP v0.16**
 
-Ce périmètre couvre la version stable et activement maintenue, avec un suivi continu des bulletins de sécurité.
+This scope covers the stable and actively maintained version, with continuous monitoring of security bulletins.
 
-## Suivi des patches de sécurité
+## Security patch monitoring
 
-Le service DLP intègre :
+The DLP service includes:
 
-- des mises à jour de correctifs appliquées régulièrement pour corriger les bugs et les failles de sécurité ;
-- un suivi actif des vulnérabilités critiques et hautes ;
-- des images conteneur durcies.
+- patch updates applied regularly to fix bugs and security vulnerabilities;
+- active monitoring of critical and high vulnerabilities;
+- hardened container images.
 
-Les mises à jour de correctifs sont appliquées automatiquement par Numspot et ne nécessitent aucune action de la part du client.
+Patch updates are applied automatically by Numspot and require no action from the customer.
 
 :::info
-Pour obtenir des informations sur les versions appliquées ou les correctifs récents, contactez le support Numspot.
+For information about applied versions or recent patches, contact Numspot support.
 :::
 
-## Cycle de vie des versions (lifecycle)
+## Version lifecycle
 
-### Politique de support
+### Support policy
 
-| Version | Statut du support | Fin de support Numspot estimée |
-|---------|-------------------|--------------------------------|
-| **v0.16** | Active | Non planifiée |
+| Version | Support status | Estimated Numspot end of support |
+|---------|----------------|----------------------------------|
+| **v0.16** | Active | Not planned |
 
-### Notification de fin de support
+### End of support notification
 
-Numspot notifie ses clients plusieurs mois avant la fin de support d'une version. Cette notification permet aux clients de planifier la migration vers une version plus récente.
+Numspot notifies its customers several months before the end of support for a version. This notification allows customers to plan migration to a newer version.
 
-## Mises à jour
+## Updates
 
-Les mises à jour du service DLP sont appliquées par Numspot de manière continue. Les [rulesets](/docs/managed-services/dlp/concepts) (ensembles de règles) publiés et les données de journalisation sont préservés lors des mises à jour.
+Updates to the DLP service are applied continuously by Numspot. Published [rulesets](/docs/managed-services/dlp/concepts/) and logging data are preserved during updates.
 
 :::warning
-Les mises à jour peuvent modifier les schémas de plateforme disponibles. Vérifiez la compatibilité de vos règles après chaque mise à jour signalée par Numspot.
+Updates may modify the available platform schemas. Check the compatibility of your rules after each update notified by Numspot.
 :::

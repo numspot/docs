@@ -1,137 +1,137 @@
 ---
-title: Cycle de vie d'une VM
+title: Life cycle of a VM
 sidebar_position: 3
 ---
 
-# Cycle de vie d'une VM
+# Life cycle of a VM
 
-Une [VM (Virtual Machine)](/docs/compute/concept/) passe par différents états entre le moment où vous la lancez et le moment où vous la terminez. Vous pouvez gérer leur cycle de vie, ce qui entraîne des conséquences sur les ressources qui lui sont allouées ou attachées.
+A [VM (Virtual Machine)](/docs/compute/concept/) goes through different states between the moment you launch it and the moment you terminate it. You can manage their life cycle, which has consequences on the resources allocated or attached to it.
 
-L'illustration suivante représente les transitions entre les états d'une VM :
+The following illustration represents the transitions between the states of a VM:
 
 ```mermaid
 graph TD
-    A[Lancement de VM] --> B(Pending)
+    A[VM Launch] --> B(Pending)
     B --> C(Running)
-    C --> D[Arrêt de VM]
+    C --> D[VM Stop]
     D --> E(Stopping)
     E --> F(Stopped)
-    F --> G[Démarrage de VM]
+    F --> G[VM Start]
     G --> B
-    C --> H[Redémarrage de VM]
+    C --> H[VM Restart]
     H --> C
-    C --> I[Suppression de VM]
+    C --> I[VM Deletion]
     I --> J(Shutting Down)
     J --> K(Terminated)
-    F --> L[Suppression de VM]
+    F --> L[Delete VM]
     L --> J
 
 ```
 
-## Création
+## Creation
 
-Créer une VM correspond à la fois à la créer puis à la démarrer. Une fois la VM créée, elle est à l'état "pending" jusqu'à ce qu'elle soit créée, démarrée et prête à l'usage. L'état de la VM passe alors à "running".
+Creating a VM corresponds to both creating it and then starting it. Once the VM is created, it is in the "pending" state until it is created, started and ready to use. The state of the VM then moves to "running".
 
-Le fait de créer une VM lui alloue les ressources matérielles correspondantes. Vous définissez la configuration matérielle du serveur qui l'héberge grâce à un type de VM, puis le système d'exploitation, sa configuration et possiblement des applications logicielles grâce à une Image.
+Creating a VM allocates the corresponding hardware resources to it. You define the hardware configuration of the server that hosts it using a VM type, then the operating system, its configuration and possibly software applications using an Image.
 
-La VM reçoit un ID unique, ainsi qu'une IP (Internet Protocol) privée et un nom DNS (Domain Name System) privé associé.
+The VM receives a unique ID, as well as a private IP (Internet Protocol) and an associated private DNS (Domain Name System) name.
 
-> Pour attribuer une adresse IP publique à une VM d'un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/), vous pouvez lui attacher une IP publique.
+> To assign a public IP address to a VM in a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/), you can attach a public IP to it.
 
-Vous pouvez également attacher des NIC (Network Interface Card) à une VM lors de sa création ou ultérieurement pour fragmenter son réseau.
+You can also attach NIC (Network Interface Card) to a VM when it is created or later to segment its network.
 
-## Arrêt et démarrage
+## Stop and start
 
-Vous pouvez arrêter une VM en cours de fonctionnement ("running") à tout moment, puis la démarrer à nouveau. Arrêter une VM avec l'API correspond à la couper avec la commande du système d'exploitation.
+You can stop a running ("running") VM at any time, then start it again. Stopping a VM with the API corresponds to shutting it down with the operating system command.
 
-Vous pouvez également forcer l'arrêt d'une VM. Cette action arrête la VM sans quitter proprement les applications en cours d'utilisation.
-
-:::warning
-Forcer l'arrêt d'une VM peut endommager le système et corrompre les données.
-:::
-
-Lorsque vous arrêtez une VM, celle-ci passe à l'état "stopping", puis à l'état "stopped". Lorsque vous démarrez une VM arrêtée, celle-ci est à l'état "pending", puis passe ensuite à l'état "running".
-
-Lors de l'arrêt et du démarrage de la VM, celle-ci conserve :
-
-- Son ID ;
-- Son IP privée et son nom DNS privé associé ;
-- Les volumes attachés ;
-- L'IP publique qui lui est attachée.
-
-:::tip
-Pour traiter un volume attaché à une VM, suivez ces étapes :
-1. Arrêtez la VM ;
-2. Détachez le volume ;
-3. Attachez-le à une autre VM pour le traiter ;
-4. Réattachez-le à la VM d'origine (en utilisant le même nom de périphérique que dans le block device mapping) ;
-5. Démarrez la VM.
-:::
-
-:::tip
-Pour une VM enregistrée auprès d'un [load balancer](/docs/network/load-balancer/concepts/) :
-1. Désenregistrez la VM du load balancer ;
-2. Arrêtez la VM ;
-3. Démarrez la VM ;
-4. Réenregistrez la VM auprès du load balancer si nécessaire.
-:::
-
-### Causes courantes d'échec de démarrage
-
-#### Volume système absent
-
-Le démarrage d'une VM échoue si aucun volume n'est attaché à son périphérique racine (par défaut, `/dev/sda1`). Cette situation survient notamment après le remplacement des volumes d'une VM.
-
-L'API renvoie alors une erreur `409 Conflict` dont le message identifie le périphérique racine concerné.
-
-**Solutions possibles :**
-- Réattacher le volume système d'origine à la VM, en utilisant le même nom de périphérique que dans le block device mapping (`/dev/sda1` par défaut) ;
-- Si le volume système d'origine est perdu, créer une nouvelle VM à partir d'une Image officielle et restaurer les données depuis une sauvegarde.
-
-## Arrêt forcé
+You can also force the stop of a VM. This action stops the VM without properly closing the applications in use.
 
 :::warning
-L'arrêt forcé d'une VM est une opération risquée qui peut endommager le système et corrompre les données. Utilisez cette option uniquement en dernier recours et assurez-vous d'avoir une sauvegarde de vos données.
+Forcing the stop of a VM can damage the system and corrupt the data.
 :::
 
-L'arrêt forcé d'une VM correspond à une coupure brutale de l'alimentation, similaire à un débranchement électrique. Cette méthode peut empêcher le système de s'éteindre proprement.
+When you stop a VM, it moves to the "stopping" state, then to the "stopped" state. When you start a stopped VM, it is in the "pending" state, then moves to the "running" state.
+
+When the VM is stopped and started, it keeps:
+
+- its ID;
+- its private IP and associated private DNS name;
+- the attached volumes;
+- the public IP attached to it.
 
 :::tip
-Avant de procéder à un arrêt forcé, consultez la sortie de la console de la VM pour identifier la cause du problème.
+To process a volume attached to a VM, follow these steps:
+1. Stop the VM;
+2. Detach the volume;
+3. Attach it to another VM to process it;
+4. Reattach it to the original VM (using the same device name as in the block device mapping);
+5. Start the VM.
 :::
 
-### Causes courantes d'échec d'arrêt
+:::tip
+For a VM registered with a [load balancer](/docs/network/load-balancer/concepts/):
+1. Deregister the VM from the load balancer;
+2. Stop the VM;
+3. Start the VM;
+4. Re-register the VM with the load balancer if necessary.
+:::
 
-#### Programme en cours d'exécution
+### Common causes of start failure
 
-La cause la plus fréquente est un programme qui utilise un système de fichiers (par exemple, NFS ou CRFS). Dans ce cas, le système de fichiers ne peut pas être démonté, ce qui empêche l'arrêt de la VM.
+#### Missing system volume
 
-**Solutions possibles :**
-- Attendre que le programme se termine naturellement ;
-- Arrêter le programme manuellement ;
-- Démonter le volume concerné.
+Starting a VM fails when no volume is attached to its root device (by default, `/dev/sda1`). This situation occurs in particular after replacing the volumes of a VM.
 
-#### Mise à jour système en cours
+The API then returns a `409 Conflict` error whose message identifies the affected root device.
+
+**Possible solutions:**
+- Reattach the original system volume to the VM, using the same device name as in the block device mapping (`/dev/sda1` by default);
+- If the original system volume is lost, create a new VM from an official Image and restore the data from a backup.
+
+## Forced stop
 
 :::warning
-Ne forcez jamais l'arrêt d'une VM pendant une mise à jour système. Cela peut :
-- Endommager votre VM ;
-- Empêcher le redémarrage ;
-- Corrompre les données système.
+The forced stop of a VM is a risky operation that can damage the system and corrupt the data. Use this option only as a last resort and make sure you have a backup of your data.
+:::
+
+The forced stop of a VM corresponds to an abrupt power cut, similar to unplugging the power supply. This method can prevent the system from shutting down properly.
+
+:::tip
+Before proceeding with a forced stop, view the console output of the VM to identify the cause of the problem.
+:::
+
+### Common causes of stop failure
+
+#### Running program
+
+The most frequent cause is a program that uses a file system (for example, NFS or CRFS). In this case, the file system cannot be unmounted, which prevents the VM from stopping.
+
+**Possible solutions:**
+- wait for the program to finish naturally;
+- stop the program manually;
+- unmount the volume concerned.
+
+#### System update in progress
+
+:::warning
+Never force the stop of a VM during a system update. This can:
+- damage your VM;
+- prevent the restart;
+- corrupt the system data.
 :::
 
 :::tip
-Les mises à jour peuvent prendre plusieurs heures sur les VM de faible capacité. Soyez patient et surveillez la progression.
+Updates can take several hours on low-capacity VM. Be patient and monitor the progress.
 :::
 
-#### Problèmes ACPI
+#### ACPI problems
 
-Les problèmes ACPI (Advanced Configuration and Power Interface) peuvent survenir pour deux raisons principales :
+ACPI (Advanced Configuration and Power Interface) problems can occur for two main reasons:
 
-1. **VM hors-service** : Les requêtes ACPI sont ignorées ;
-2. **Modules manquants** : Les modules `pci-hotplug` et `acpiphp` ne sont pas installés.
+1. **VM out of service**: the ACPI requests are ignored;
+2. **Missing modules**: the `pci-hotplug` and `acpiphp` modules are not installed.
 
-Pour vérifier la présence des modules requis, consultez le fichier `/etc/modules` :
+To check that the required modules are present, view the `/etc/modules` file:
 
 ```shell
 #/etc/modules: kernel modules to load at boot time.
@@ -144,79 +144,79 @@ acpiphp
 ```
 
 :::tip
-Si les modules sont manquants, créez une nouvelle Image à partir d'une Image officielle et recréez votre VM.
+If the modules are missing, create a new Image from an official Image and recreate your VM.
 :::
 
 :::danger
-Si la VM ne répond toujours pas après un arrêt forcé, contactez notre équipe Support. Dans ce cas, le support devra procéder à une coupure forcée, ce qui pourrait corrompre vos données. Assurez-vous d'avoir effectué une sauvegarde avant toute intervention.
+If the VM still does not respond after a forced stop, contact our Support team. In this case, the support team must carry out a forced shutdown, which could corrupt your data. Make sure you have made a backup before any intervention.
 :::
 
-## Redémarrage
+## Restart
 
 :::tip
-Le redémarrage d'une VM est une opération rapide qui conserve toutes les ressources et données en mémoire.
+Restarting a VM is a fast operation that keeps all the resources and data in memory.
 :::
 
-Le redémarrage d'une VM s'effectue via l'API et correspond à un redémarrage du système d'exploitation. Cette opération :
-- Ne suit pas le processus complet d'arrêt/démarrage ;
-- Maintient la VM en état `running` ;
-- Conserve toutes les ressources allouées : allocation CPU (Central Processing Unit), allocation RAM (Random Access Memory), hyperviseur sur lequel la VM est instanciée.
+Restarting a VM is performed via the API and corresponds to a restart of the operating system. This operation:
+- does not follow the full stop/start process;
+- keeps the VM in the `running` state;
+- keeps all the allocated resources: CPU (Central Processing Unit) allocation, RAM (Random Access Memory) allocation, hypervisor on which the VM is instantiated.
 
-## Suppression
+## Deletion
 
 :::warning
-La suppression d'une VM est une opération irréversible. Les données en mémoire sont perdues et la VM ne peut pas être récupérée.
+Deleting a VM is an irreversible operation. The data in memory is lost and the VM cannot be recovered.
 :::
 
-### Processus de suppression
+### Deletion process
 
-1. La VM passe à l'état `shutting-down` ;
-2. Une fois la suppression effectuée, elle passe à l'état `terminated` ;
-3. La VM reste visible à l'état `terminated` pendant 1 heure ;
-4. Après 1 heure, la VM est définitivement supprimée.
+1. The VM moves to the `shutting-down` state;
+2. Once the deletion is complete, it moves to the `terminated` state;
+3. The VM remains visible in the `terminated` state for 1 hour;
+4. After 1 hour, the VM is permanently deleted.
 
-### Conséquences de la suppression
+### Consequences of the deletion
 
-- **Ressources** : Toutes les ressources matérielles sont libérées ;
-- **Mémoire** : Les données en mémoire sont effacées ;
-- **IP publique** : L'IP publique est libérée mais reste allouée à votre compte ;
-- **Volumes** :
-  - Le volume système est supprimé par défaut ;
-  - Les autres volumes sont détachés.
+- **Resources**: all the hardware resources are released;
+- **Memory**: the data in memory is erased;
+- **Public IP**: the public IP is released but remains allocated to your account;
+- **Volumes**:
+  - the system volume is deleted by default;
+  - the other volumes are detached.
 
-### Protection contre la suppression
+### Deletion protection
 
 :::tip
-Ces protections peuvent être configurées à la création de la VM ou modifiées ultérieurement.
+These protections can be configured when the VM is created or modified later.
 :::
 
-#### Attributs de protection
+#### Protection attributes
 
 1. **`DisableApiTermination`**
-   - Empêche la suppression de la VM ;
-   - Par défaut : suppression autorisée.
+   - prevents the deletion of the VM;
+   - by default: deletion allowed.
 
 2. **`InstanceInitiatedShutDownBehavior`**
-   - Définit le comportement lors de l'arrêt/terminaison ;
-   - Options disponibles :
-     - `stop` (par défaut) : Arrête la VM ;
-     - `restart` : Arrête puis redémarre automatiquement ;
-     - `terminate` : Arrête puis termine la VM.
+   - defines the behavior on stop/termination;
+   - available options:
+     - `stop` (default): stops the VM;
+     - `restart`: stops then restarts automatically;
+     - `terminate`: stops then terminates the VM.
 
 :::tip
-L'option `terminate` est utile pour automatiser la suppression d'une VM à la fin d'une application.
+The `terminate` option is useful to automate the deletion of a VM at the end of an application.
 :::
 
-## Comparaison des opérations
+## Comparison of operations
 
-Le tableau suivant compare les caractéristiques principales des différentes opérations sur une VM :
+The following table compares the main characteristics of the different operations on a VM:
 
-| Caractéristiques | Redémarrer | Arrêt/démarrage | Terminer |
+| Characteristics | Restart | Stop/start | Terminate |
 |:----------------|:-----------|:----------------|:---------|
-| **Ordinateur hôte** | Même hôte | Nouvel hôte (possiblement) | Supprimé |
-| **IP publique** | Conservée | Détachée | Libérée (reste allouée) |
-| **IP privée** | Conservée | Conservée | Libérée |
-| **Volume root** | Conservé | Conservé | Supprimé par défaut |
-| **Allocation RAM** | Conservée | Libérée | Libérée |
-| **Contenu Mémoire RAM** | Effacée | Effacée | Effacée |
-| **Facturation** | Continue | Arrêtée (VM) / Continue (volumes) | Arrêtée |
+| **Host computer** | Same host | New host (possibly) | Deleted |
+| **Public IP** | Kept | Detached | Released (remains allocated) |
+| **Private IP** | Kept | Kept | Released |
+| **Root volume** | Kept | Kept | Deleted by default |
+| **RAM allocation** | Kept | Released | Released |
+| **RAM memory content** | Erased | Erased | Erased |
+| **Billing** | Continues | Stopped (VM) / Continues (volumes) | Stopped |

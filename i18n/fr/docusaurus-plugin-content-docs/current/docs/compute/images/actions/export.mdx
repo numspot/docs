@@ -1,0 +1,63 @@
+---
+title: Exporter une image
+description: "Exportez une image de VM Numspot vers un bucket Object Storage pour la sauvegarder, la partager ou la réutiliser, via la console, l'API ou Terraform."
+sidebar_position: 5
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Exporter une image
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+
+- **compute.image.get**
+
+:::
+
+Numspot permet l'export d'image à des fins de backup (sauvegarde).
+Les formats d'export permis sont `raw` ou `qcow2`.
+
+:::info
+## Prérequis
+
+- [Créer un bucket ↗](/docs/storage/object-storage/quickstart/)
+:::
+
+Afin de réaliser l'export d'une image, vous devez utiliser l'API et fournir les informations suivantes :
+* l'identifiant de l'espace ;
+* l'identifiant de l'image à exporter ;
+* le nom du bucket object storage (stockage objet) dans lequel l'export devra être mis à disposition ;
+* le format d'export désiré (`raw` ou `qcow2`).
+
+L'opération d'export est alors acceptée et un identifiant d'export vous est fourni.
+
+Le fichier d'export sera disponible dans le bucket indiqué lors de la requête.
+
+Suivant la taille de l'image à exporter, l'export peut nécessiter quelques minutes pour se compléter.
+Vous pouvez vérifier l'état de l'export en cours grâce à l'API (cf. API ci-dessous) en fournissant l'identifiant d'export.
+
+:::warning
+Avant d'exporter une image ou un snapshot (instantané) vers une autre région, assurez-vous que cette action est autorisée par toutes les licences tierces applicables.
+Si l'export est autorisé, seul l'export d'image garantit l'application des licences tierces dans la région cible, alors que l'export de snapshot ne garantit pas leur application.
+:::
+
+<Tabs>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `POST /compute/spaces/{spaceId}/imageExportTasks` permet de créer un export d'une image.
+
+[Exemple de requête : Créer un export d'image](/openapi/#tag/compute/POST/compute/spaces/%7BspaceId%7D/imageExportTasks)
+
+La commande `GET /compute/spaces/{spaceId}/imageExportTasks/{id}` permet de récupérer les informations d'un export d'image.
+
+[Exemple de requête : Récupérer les informations d'un export d'image](/openapi/#tag/compute/GET/compute/spaces/%7BspaceId%7D/imageExportTasks/%7Bid%7D)
+  </TabItem>
+</Tabs>

@@ -1,0 +1,66 @@
+---
+title: Supprimer un groupe de nœuds d'un cluster Kubernetes - Kubernetes managé
+sidebar_label: Supprimer un groupe de nœuds d'un cluster Kubernetes
+sidebar_position: 8
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer un groupe de nœuds d'un cluster Kubernetes
+
+Supprimez un groupe de nœuds (node pool) d'un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) au sein de votre espace.
+
+:::warning
+Cette action est irréversible. Une fois le groupe de nœuds supprimé, ses nodes et les données associées seront définitivement perdus.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+
+- **kubernetes.cluster.update**
+
+:::
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+
+1. Depuis le menu latéral gauche, cliquez sur **Services managés** → **Kubernetes** pour accéder à la liste des clusters Kubernetes.
+
+   ![Menu Services managés](/img/console/managed-services/fr-menu-managed-services.png)
+
+2. Cliquez sur l'ID du cluster dont vous souhaitez supprimer un groupe de nœuds pour accéder à sa page de détails.
+
+   ![Liste des clusters Kubernetes](/img/console/managed-services/kubernetes/fr-kubernetes-cluster-list.png)
+
+3. Dans la section **Node pools**, cliquez sur le bouton **Supprimer** du groupe de nœuds concerné.
+
+   ![Section Node pools du cluster](/img/console/managed-services/kubernetes/fr-kubernetes-nodepools-list.png)
+
+4. Dans la fenêtre **Suppression d'un node pool**, saisissez le nom du groupe de nœuds dans le champ de confirmation, puis cliquez sur **Supprimer le node pool**.
+
+   ![Confirmation de suppression d'un node pool](/img/console/managed-services/kubernetes/fr-kubernetes-nodepool-delete-confirmation.png)
+
+Une fois la suppression validée, le groupe de nœuds et ses nodes sont supprimés : le groupe de nœuds disparaît de la section **Node pools** du cluster.
+
+</TabItem>
+
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+    Utilisez la route `DELETE /kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools/{nodePoolId}` pour supprimer un groupe de nœuds d'un cluster Kubernetes managé.
+
+### Exemple de réponse
+
+```text
+HTTP/1.1 204 No Content
+```
+
+    [Voir la spécification complète](/openapi/#tag/kubernetes/DELETE/kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools/{nodePoolId})
+</TabItem>
+</Tabs>

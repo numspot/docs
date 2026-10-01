@@ -1,59 +1,59 @@
 ---
-title: Premiers pas chez Numspot - Documentation
-sidebar_label: Premiers pas
-description: "Parcours du premier utilisateur sur la console Numspot : vérification des droits, création du premier espace, des utilisateurs, attribution des droits et des espaces, premières VM et services managés."
+title: First steps with Numspot - Documentation
+sidebar_label: First steps
+description: "The first user's journey on the Numspot console: rights verification, first space creation, user creation, rights and space assignment, first VMs and managed services."
 last_update:
   date: 2026-09-30
 ---
 
-# Premiers pas chez Numspot
+# First steps with Numspot
 
-Ce guide décrit le parcours du premier utilisateur de votre organisation, depuis la connexion à la console jusqu'à la création des premières ressources : vérification des droits, création d'un premier espace, création des utilisateurs, attribution des droits et des espaces, puis création de vos premières VM et services managés.
+This guide describes the first user's journey in your organization, from signing in to the console to creating the first resources: rights verification, creation of a first space, creation of the users, assignment of rights and spaces, then creation of your first VMs and managed services.
 
 :::note
-Avant ce parcours, Numspot a créé votre organisation et votre premier utilisateur, puis a envoyé un email d'activation, objet « Action requise : création ou réinitialisation de votre mot de passe Numspot », à cliquer sous 48 heures ; si le lien a expiré, Numspot renvoie l'email avec un nouveau délai de 48 heures. Le premier utilisateur étant le super admin et ne pouvant pas être modifié, une adresse email générique est recommandée pour palier au turnover. Le déroulé détaillé figure sur la page [Première connexion à la console Numspot](/docs/iam/connection/first-connection/).
+Before this journey, Numspot created your organization and your first user, then sent an activation email titled "Action required: Numspot password creation or reset", to click within 48 hours; if the link has expired, Numspot sends the email again with a new 48-hour window. Since the first user is the super admin and cannot be changed, a generic email address is recommended to cope with staff turnover. The full process is described on the [First sign-in to the Numspot console](/docs/iam/connection/first-connection/) page.
 :::
 
-## 1. Se connecter à la console
+## 1. Sign in to the console
 
-Connectez-vous à la [console Numspot](/docs/iam/connection/first-connection/) avec votre adresse email, votre mot de passe et votre MFA (Multi-Factor Authentication). Vous accédez au portail de votre organisation, dont vous êtes le super admin.
+Sign in to the [Numspot console](/docs/iam/connection/first-connection/) with your password and your MFA (Multi-Factor Authentication). You land on the portal of your organization.
 
-## 2. Vérifier vos droits
+## 2. Check your rights
 
-La plateforme Numspot applique le moindre privilège : chaque action de la console et de l'API exige des permissions précises, attribuées par rôle ou unitairement.
+The Numspot platform follows the principle of least privilege: every console or API action requires specific permissions.
 
-Avant de réaliser une action, vérifiez les permissions qui lui sont nécessaires :
+Before performing an action, check the permissions it requires:
 
-- chaque page d'action de cette documentation indique, dans sa section Permissions, les permissions requises, au format **Domaine.Permission**, par exemple **iam.space.create** ;
-- pour consulter les rôles et permissions associés à votre compte, suivez le [Démarrage rapide de la gestion des accès](/docs/iam/access/quickstart/).
+- every action page of this documentation lists them in its Permissions section, in the **Domain.Permission** format, for example **iam.space.create**;
+- to view the roles and permissions granted to your account, follow the [access management quickstart](/docs/iam/access/quickstart/).
 
-Le premier utilisateur est le super admin de l'organisation : il dispose des droits nécessaires pour s'attribuer l'ensemble des droits, mais n'en n'a aucun par défaut. Avant chaque action de ce guide, vérifiez les permissions requises et attribuez-vous-les via la page [Ajouter ou supprimer des rôles, permissions et ACL](/docs/iam/access/actions/attribute/).
+The first user is the super admin of the organization: they have the rights needed to grant themselves all rights, but they hold none by default. Before each action of this guide, check the required permissions and grant them to yourself through the [Add or remove roles, permissions and ACLs](/docs/iam/access/actions/attribute/) page.
 
-## 3. Créer votre premier espace
+## 3. Create your first space
 
-L'espace est le cloisonnement de base de vos ressources : les VM, les services managés et les utilisateurs y sont rattachés.
+The space is the basic partition of your resources: VMs, managed services and users are attached to it.
 
-1. Suivez la page [Créer un espace au sein d'une organisation](/docs/iam/space/actions/create/) : dans le menu **IAM** → **Espaces**, cliquez sur **Créer un espace**, saisissez le nom et la description, puis cliquez sur **Créer l'espace**.
-2. La création pouvant prendre quelques secondes, l'espace peut n'apparaître qu'après un rafraîchissement de la liste.
+1. Follow the [Create a space](/docs/iam/space/actions/create/) page: in the **IAM** → **Spaces** menu, click **Create a space**, enter the name and description, then click **Create the space**.
+2. Creation may take a few seconds: the space may only appear after refreshing the list.
 
-## 4. Créer les utilisateurs
+## 4. Create the users
 
-Créez les comptes des autres membres de votre équipe via la page [Créer un utilisateur](/docs/iam/user/actions/create/) : renseignez le prénom, le nom et l'adresse email, puis suivez l'assistant d'assignation des espaces, des rôles et des permissions.
+Follow the [Create a user](/docs/iam/user/actions/create/) page to provide your organization with the accounts it needs. The creation wizard walks you through assigning spaces, roles and permissions.
 
-Après la création, [générez un lien d'activation](/docs/iam/user/actions/generate/) pour chaque utilisateur : il configure son mot de passe et sa MFA (Multi-Factor Authentication) à partir de cet email.
+After creation, [generate an activation link](/docs/iam/user/actions/generate/) for each user: they set their password and their MFA (Multi-Factor Authentication) from that link.
 
-## 5. Attribuer les droits et les espaces
+## 5. Assign rights and spaces
 
-Un utilisateur n'a accès qu'aux espaces qui lui sont assignés, et n'y dispose que des rôles et permissions qui lui sont attribués :
+Users only have access to the spaces assigned to them, and only with the rights granted there:
 
-- pour attribuer ou ajuster les rôles et permissions d'un utilisateur, ou gérer ses ACL (Access Control List), suivez la page [Ajouter ou supprimer des rôles, permissions et ACL](/docs/iam/access/actions/attribute/) ;
-- pour restreindre les droits par espace, consultez le [Démarrage rapide de la gestion des accès](/docs/iam/access/quickstart/) : chaque espace étant cloisonné, les droits se définissent espace par espace.
+- to add or remove roles, permissions and ACLs (Access Control Lists), follow the [Add or remove roles, permissions and ACLs](/docs/iam/access/actions/attribute/) page;
+- to restrict rights per space, see the [access management quickstart](/docs/iam/access/quickstart/): each space being isolated from the others, rights are defined space by space.
 
-## 6. Créer vos premières ressources
+## 6. Create your first resources
 
-Votre organisation et vos espaces sont prêts ; les utilisateurs disposent de leurs droits. Vous pouvez créer vos premières ressources :
+Your organization and spaces are ready; you can now create your first resources:
 
-- **Créer votre première VM** : suivez le [Démarrage rapide : créer une VM](/docs/compute/vms/quickstart/) qui couvre la création d'une [VM](/docs/compute/concept), du [VPC](/docs/network/vpc/concepts) (Virtual Private Cloud) au [security group](/docs/compute/security-groups/concepts/concept-sg) ;
-- **Créer vos premiers services managés** : consultez la création d'un [cluster Kubernetes](/docs/managed-services/kubernetes/actions/create/) ou d'un [cluster PostgreSQL](/docs/managed-services/postgresql/actions/create/).
+- **Create your first VM**: follow the [Quickstart: create a VM](/docs/compute/vms/quickstart/) which covers the creation of a [VM](/docs/compute/concept), from the [VPC](/docs/network/vpc/concepts) (Virtual Private Cloud) to the [security group](/docs/compute/security-groups/concepts/concept-sg);
+- **Create your first managed services**: see the creation of a [Kubernetes cluster](/docs/managed-services/kubernetes/actions/create/) or a [PostgreSQL cluster](/docs/managed-services/postgresql/actions/create/).
 
-Votre organisation est opérationnelle : vous pouvez à présent construire vos infrastructures sur le cloud souverain Numspot.
+Your organization is up and running: you can now build your infrastructures on the Numspot sovereign cloud.

@@ -1,0 +1,78 @@
+---
+title: Modifier un attribut d'une VM
+sidebar_position: 9
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Modifier un attribut d'une VM
+
+Les actions possibles sur une [VM (Virtual Machine)](/docs/compute/concept/) Numspot dépendent de son état actuel :
+- Pour modifier l'attribut Type de VM (`Type`, `UserData`, `Performance` et `NestedVirtualization`), vous devez arrêter la VM ;
+- Les autres attributs peuvent être modifiés lorsque la VM est en exécution ou à l'arrêt.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.vm.update**
+
+:::
+
+<Tabs>
+  <TabItem value="Console" label="Console" default>
+
+## Console {#tabhead-Console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/vm/upd-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Compute → VM.", hotspot: { x: 0, y: 0.4123, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/vm/upd-02-actions.png", text: "Sur la ligne de la VM, ouvrez le menu « Actions », puis cliquez sur « Modifier la VM ».", hotspot: { x: 0.8278, y: 0.663, w: 0.1352, h: 0.0457 } },
+    { img: "/img/walkthrough/vm/upd-03-form.png", text: "Sur la page « Modification d'une VM », ajustez le nom, le comportement à l'arrêt et la protection contre la suppression, puis cliquez sur « Modifier la VM ».", hotspot: { x: 0.6797, y: 0.9259, w: 0.0787, h: 0.0494 } },
+  ]}
+/>
+
+Depuis la console, la modification des attributs d'une VM se fait sur une page unique **Modification d'une VM**.
+
+1. Depuis le menu latéral gauche, cliquez sur **Compute** → **VM** ;
+2. Sur la ligne de la VM concernée, ouvrez le menu **Actions**, puis cliquez sur **Modifier la VM**.
+
+   La page **Modification d'une VM** apparaît. Le récapitulatif de droite (image, type, réseau, security group, key pair) est en lecture seule ;
+3. Ajustez les attributs modifiables :
+   - **Nom de la VM** ;
+   - **Comportement à l'arrêt** : "Stop" (la VM s'arrête), "Redémarrage" (la VM redémarre automatiquement) ou "Supprimer" (la VM est supprimée) ;
+   - **Protection contre la suppression** : lorsqu'elle est cochée, la VM ne peut pas être supprimée ;
+4. Cliquez sur **Modifier la VM** pour appliquer les modifications.
+
+:::info
+La modification des **security groups** associés et du **type (gabarit)** d'une VM n'est pas disponible depuis la console Numspot. Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+  </TabItem>
+
+  <TabItem value="API" label="API">
+
+## API {#tabhead-API}
+
+    La commande `PUT /compute/spaces/{spaceId}/vms/{id}` modifie les attributs d'une VM.
+
+    Vous devez arrêter la VM avant de modifier les attributs suivants :
+    - `nestedVirtualization` ;
+    - `performance` ;
+    - `userData` ;
+    - `type`.
+
+    [Exemple de requête : Modification d'une VM](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/vms/{id})
+  </TabItem>
+
+  <TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-Terraform}
+
+    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
+  </TabItem>
+</Tabs>

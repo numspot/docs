@@ -1,6 +1,6 @@
 ---
-title: Lister les versions PostgreSQL disponibles - PostgreSQL managé
-sidebar_label: Lister les versions PostgreSQL disponibles
+title: List available PostgreSQL versions - Managed PostgreSQL
+sidebar_label: List available PostgreSQL versions
 sidebar_position: 1.5
 draft: false
 last_update:
@@ -10,15 +10,15 @@ last_update:
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Lister les versions PostgreSQL disponibles
+# List available PostgreSQL versions
 
-Vous pouvez lister les versions PostgreSQL disponibles pour créer votre [cluster PostgreSQL](/docs/managed-services/postgresql/concepts/).
+You can list the PostgreSQL versions available to create your [PostgreSQL cluster](/docs/managed-services/postgresql/concepts/).
 
-Lors de la création, spécifiez la version `<majeure>.<mineure>` souhaitée.
+When creating, specify the desired `<major>.<minor>` version.
 
 ## Permissions
 
-Aucune permission **IAM** (Identity and Access Management) n'est requise pour effectuer cette action.
+No **IAM** (Identity and Access Management) permission is required to perform this action.
 
 <Tabs>
 
@@ -26,9 +26,9 @@ Aucune permission **IAM** (Identity and Access Management) n'est requise pour ef
 
 ## API {#tabhead-api}
 
-    La requête `GET /postgresql/versions` permet de lister les versions PostgreSQL proposées par Numspot.
+    The request `GET /postgresql/versions` lists the PostgreSQL versions offered by Numspot.
 
-### Exemple de réponse
+### Example response
 
     ```json
     {
@@ -49,6 +49,6 @@ Aucune permission **IAM** (Identity and Access Management) n'est requise pour ef
     }
     ```
 
-    [Voir la spécification complète](/openapi/#tag/postgresql/GET/postgresql/versions)
+    [View the full specification](/openapi/#tag/postgresql/GET/postgresql/versions)
 </TabItem>
 </Tabs>

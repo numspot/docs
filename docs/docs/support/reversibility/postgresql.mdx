@@ -1,57 +1,57 @@
 ---
-title: Réversibilité - PostgreSQL managé
-sidebar_label: Réversibilité du PostgreSQL managé
-description: Informations sur la réversibilité du service managé PostgreSQL
+title: Reversibility - managed PostgreSQL
+sidebar_label: Reversibility of managed PostgreSQL
+description: Information about the reversibility of the managed PostgreSQL service
 sidebar_position: 3
 draft: false
 ---
 
-# Réversibilité du PostgreSQL managé
+# Reversibility of managed PostgreSQL
 
-Le service managé PostgreSQL est conçu pour garantir la réversibilité, c'est-à-dire la possibilité pour le client de récupérer ses données et de migrer vers une autre solution sans verrouillage.
+The managed PostgreSQL service is designed to guarantee reversibility, that is, the ability for the customer to retrieve their data and migrate to another solution without lock-in.
 
-## Données exportables
+## Exportable data
 
-L'ensemble des données stockées dans un [cluster PostgreSQL](/docs/managed-services/postgresql/concepts/) peut être exporté via les outils standards de l'écosystème PostgreSQL.
+All data stored in a [PostgreSQL cluster](/docs/managed-services/postgresql/concepts/) can be exported using the standard tools of the PostgreSQL ecosystem.
 
-## Outils de réversibilité
+## Reversibility tools
 
-### Export logique avec pg_dump
+### Logical export with pg_dump
 
-Utilisez `pg_dump` pour exporter une base de données au format SQL :
+Use `pg_dump` to export a database in SQL format:
 
 ```bash
 pg_dump -h <host> -U <user> -d <database> -F c -f backup.dump
 ```
 
-Pour exporter toutes les bases de données :
+To export all databases:
 
 ```bash
 pg_dumpall -h <host> -U <user> -f full_backup.sql
 ```
 
-### Restauration
+### Restore
 
-Restaurez les données sur un serveur PostgreSQL externe :
+Restore the data to an external PostgreSQL server:
 
 ```bash
 pg_restore -h <new_host> -U <user> -d <database> backup.dump
 ```
 
-### Backup Numspot
+### Numspot backup
 
-Les [backups](/docs/managed-services/postgresql/actions/backup-create/) créés via le service managé sont compatibles avec les versions standards de PostgreSQL.
+The [backups](/docs/managed-services/postgresql/actions/backup-create/) created through the managed service are compatible with standard PostgreSQL versions.
 
-## Formats ouverts
+## Open formats
 
-- Les données sont au format natif PostgreSQL, compatible avec toute distribution PostgreSQL.
-- Les backups sont au format standard PostgreSQL (`pg_dump` / `pg_restore`).
-- Les protocoles de connexion sont standard (PostgreSQL wire protocol).
+- The data is in the native PostgreSQL format, compatible with any PostgreSQL distribution.
+- The backups are in the standard PostgreSQL format (`pg_dump` / `pg_restore`).
+- The connection protocols are standard (PostgreSQL wire protocol).
 
-## Procédure de sortie
+## Exit procedure
 
-1. Exportez les données via `pg_dump` ou `pg_dumpall`.
-2. Déployez un serveur PostgreSQL sur la nouvelle plateforme.
-3. Restaurez les données via `pg_restore` ou `psql`.
-4. Mettez à jour les chaînes de connexion des applications.
-5. Vérifiez la cohérence des données restaurées.
+1. Export the data using `pg_dump` or `pg_dumpall`.
+2. Deploy a PostgreSQL server on the new platform.
+3. Restore the data using `pg_restore` or `psql`.
+4. Update the connection strings of the applications.
+5. Check the consistency of the restored data.

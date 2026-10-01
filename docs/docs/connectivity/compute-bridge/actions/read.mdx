@@ -1,6 +1,5 @@
 ---
-title: Obtenir des informations sur vos Compute Bridges
-description: "Consultez le détail et l'état de vos Compute Bridges Numspot reliant deux VPC, et listez tous les bridges de votre espace."
+title: Get information about your Compute Bridges
 sidebar_position: 2
 draft: false
 ---
@@ -8,20 +7,20 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Obtenir des informations sur vos Compute Bridges
+# Get information about your Compute Bridges
 
-Vous pouvez obtenir des informations sur un ou plusieurs bridges.
+You can get information about one or more bridges.
 
-Par défaut, cette action décrit tous vos bridges.
+By default, this action describes all your bridges.
 
 :::warning
-Les connexions dont l'état est `failed` ou `deleted` restent visibles pendant 1 heure.
+Connections whose status is `failed` or `deleted` remain visible for 1 hour.
 :::
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **connectivity.bridge.get**
 
@@ -30,24 +29,18 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="api" label="API" default>
 
-## API {#tabhead-api}
+The `GET /connectivity/spaces/{spaceId}/computeBridges` command lists one or more connections between two [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
 
+[Example request: List all Compute Bridges](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/computeBridges)
 
-La commande `GET /connectivity/spaces/{spaceId}/computeBridges` permet de lister une ou plusieurs connexions entre deux [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+The `GET /connectivity/spaces/{spaceId}/computeBridges/{id}` command retrieves the information of a Compute Bridge connection between two VPC.
 
-[Exemple de requête : Lister tous les Compute Bridges](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/computeBridges)
-
-La commande `GET /connectivity/spaces/{spaceId}/computeBridges/{id}` permet de récupérer les informations d'une connexion Compute Bridge entre deux VPC.
-
-[Exemple de requête : Récupérer les informations d'un Compute Bridge](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/computeBridges/{id})
+[Example request: Retrieve the information of a Compute Bridge](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/computeBridges/{id})
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/compute_bridge).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/compute_bridge).
 
 </TabItem>
 </Tabs>

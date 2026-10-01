@@ -1,0 +1,119 @@
+---
+title: Consulter les accès d'une identité
+description: "Consultez les rôles et permissions attribués à un utilisateur ou un compte de service, par espace, via la console ou l'API."
+sidebar_position: 2
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Consulter les accès d'une identité
+
+Cette opération peut s'effectuer au niveau de l'organisation ou d'un espace.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **iam.permission.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/user/detail.png", text: "Sur la page de détail d'un utilisateur (IAM → Utilisateurs → identifiant), la section « Espaces assignés » liste ses espaces.", hotspot: { x: 0.223, y: 0.5362, w: 0.76, h: 0.35 } },
+    { img: "/img/walkthrough/user/detail.png", text: "Cliquez sur « X rôles » pour voir les rôles attribués sur un espace donné.", hotspot: { x: 0.5486, y: 0.7562, w: 0.12, h: 0.05 } },
+    { img: "/img/walkthrough/user/detail.png", text: "Cliquez sur « X permissions » pour voir les permissions attribuées sur ce même espace.", hotspot: { x: 0.7132, y: 0.7562, w: 0.14, h: 0.05 } },
+  ]}
+/>
+1.  Dans la page de détail d'un compte utilisateur, vous pouvez voir la liste des espaces assignés à un utilisateur.
+
+
+2.  En cliquant sur **X rôles**, vous pourrez voir la liste des rôles attribués à cet utilisateur, sur l'espace qui lui est associé.
+
+
+3.  En cliquant sur **X permissions**, vous pourrez voir la liste des permissions attribuées à cet utilisateur, sur l'espace qui lui est associé.
+
+
+### Consulter les accès d'un compte de service
+
+1.  Dans la page de détail d'un [compte de service](/docs/iam/concepts/identity/) vous pouvez voir la liste des espaces associés au compte de service.
+
+
+2.  En cliquant sur le lien **X rôles**, vous pourrez voir la liste des rôles attribués à ce compte de service pour l'espace qui lui est associé.
+
+
+3.  En cliquant sur le lien **X permissions**, vous pourrez voir la liste des permissions attribuées à ce compte de service pour l'espace qui lui est associé.
+
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+### Rôles et permissions dans une organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}
+
+### Exemple avec un curl
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}'
+```
+
+Réponse :
+
+```json
+{
+  "roles": [
+    "123e4567-e89b-12d3-a456-426614174000"
+  ],
+  "permissions": [
+    "123e4567-e89b-12d3-a456-426614174000"
+  ]
+}
+```
+
+:::info
+Consulter la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+### Rôles et permissions dans un espace
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}
+
+### Exemple avec un curl
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}'
+```
+
+Réponse :
+
+```json
+{
+  "roles": [
+    "123e4567-e89b-12d3-a456-426614174000"
+  ],
+  "permissions": [
+    "123e4567-e89b-12d3-a456-426614174000"
+  ]
+}
+```
+
+:::info
+Consulter la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+</TabItem>
+</Tabs>

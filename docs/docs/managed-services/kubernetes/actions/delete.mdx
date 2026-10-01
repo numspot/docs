@@ -1,28 +1,28 @@
 ---
-title: Supprimer un cluster Kubernetes - Kubernetes managé
-sidebar_label: Supprimer un cluster Kubernetes
+title: Delete a cluster Kubernetes - Managed Kubernetes
+sidebar_label: Delete a cluster Kubernetes
 sidebar_position: 9
 draft: false
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Supprimer un cluster Kubernetes
+# Delete a cluster Kubernetes
 
-Supprimez un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) au sein de votre espace, quel que soit son statut.
+Delete a [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) within your space, regardless of its status.
 
 :::info
-**Prérequis :** Vérifiez que le cluster n'est pas en cours d'utilisation avant de le supprimer.
+**Prerequisites:** Make sure that the cluster is not in use before deleting it.
 :::
 
 :::warning
-Cette action est irréversible. Une fois le cluster supprimé, toutes ses ressources et configurations associées seront définitivement perdues.
+This action is irreversible. Once the cluster is deleted, all its associated resources and configurations will be permanently lost.
 :::
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **kubernetes.cluster.delete**
 
@@ -31,39 +31,33 @@ Cette action nécessite les permissions IAM (Identity and Access Management) sui
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
+1. From the left-hand side menu, click **Managed Services** → **Kubernetes** to access the list of clusters Kubernetes.
 
+   ![Managed Services menu](/img/console/managed-services/en-menu-managed-services.png)
 
-1. Depuis le menu latéral gauche, cliquez sur **Services managés** → **Kubernetes** pour accéder à la liste des clusters Kubernetes.
+2. In the list, locate the cluster to delete, click the **Actions** button on its row, then click **Delete**.
 
-   ![Menu Services managés](/img/console/managed-services/fr-menu-managed-services.png)
+   ![Delete a cluster from the list](/img/console/managed-services/kubernetes/en-kubernetes-cluster-delete-action.png)
 
-2. Dans la liste, repérez le cluster à supprimer, cliquez sur le bouton **Actions** situé sur sa ligne, puis sur **Supprimer**.
+3. In the **Deleting a cluster** window, enter the exact name of the cluster in the confirmation field, then click **Delete the cluster**.
 
-   ![Supprimer un cluster depuis la liste](/img/console/managed-services/kubernetes/fr-kubernetes-cluster-delete-action.png)
+   ![Cluster deletion confirmation](/img/console/managed-services/kubernetes/en-kubernetes-cluster-delete-confirmation.png)
 
-3. Dans la fenêtre **Suppression d'un cluster**, saisissez le nom exact du cluster dans le champ de confirmation, puis cliquez sur **Supprimer le cluster**.
-
-   ![Confirmation de suppression d'un cluster](/img/console/managed-services/kubernetes/fr-kubernetes-cluster-delete-confirmation.png)
-
-Le cluster passe à l'état **Suppression en cours** dans la liste.
+The cluster moves to the "Deletion in progress" status in the list.
 
 </TabItem>
 
 <TabItem value="api" label="API">
+The `DELETE /kubernetes/spaces/{spaceId}/clusters/{clusterId}` request lets you delete a cluster Kubernetes.
+The cluster moves to the "deleting" status during the deletion.
 
-## API {#tabhead-api}
-
-La requête `DELETE /kubernetes/spaces/{spaceId}/clusters/{clusterId}` permet de supprimer un cluster Kubernetes. 
-Le cluster passe dans l'état "deleting" le temps de la suppression.
-
-### Exemple de réponse
+**Example response**
 
 ```text
 HTTP/1.1 204 No Content
 ```
 
-[Voir la spécification complète](/openapi/#tag/kubernetes/DELETE/kubernetes/spaces/{spaceId}/clusters/{clusterId})
+[See the full specification](/openapi/#tag/kubernetes/DELETE/kubernetes/spaces/{spaceId}/clusters/{clusterId})
 
 </TabItem>
 </Tabs>

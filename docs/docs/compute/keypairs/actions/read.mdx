@@ -1,5 +1,5 @@
 ---
-title: Obtenir des informations sur vos key pairs
+title: Obtain information about your key pairs
 sidebar_position: 4
 draft: false
 ---
@@ -8,16 +8,16 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Obtenir des informations sur vos key pairs
+# Obtain information about your key pairs
 
-Vous pouvez obtenir des informations à propos de vos [key pairs (paires de clés)](/docs/compute/keypairs/concept/) créées et importées.
+You can obtain information about your created and imported [key pairs](/docs/compute/keypairs/concept/).
 
-Des informations concernant la partie publique d'une key pair sont également disponibles, uniquement depuis les [VM (Virtual Machine)](/docs/compute/concept/) associées à la key pair.
+Information about the public part of a key pair is also available, only from the [VM](/docs/compute/concept/) (Virtual Machine) associated with the key pair.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.keypair.get**
 
@@ -26,38 +26,31 @@ Cette action nécessite les permissions IAM (Identity and Access Management) sui
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/keypair/list.png", text: "Depuis le menu latéral gauche, cliquez sur Compute → Key Pairs.", hotspot: { x: 0, y: 0.5086, w: 0.1944, h: 0.0457 } },
-    { img: "/img/walkthrough/keypair/list.png", text: "La liste présente vos key pairs avec, pour chacune, son fingerprint et son type (défini à la création).", hotspot: { x: 0.223, y: 0.42, w: 0.75, h: 0.28 } },
+    { img: "/img/walkthrough/en/keypair/list.png", text: "From the left-hand side menu, click Compute → Key Pairs.", hotspot: { x: 0, y: 0.5086, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/en/keypair/list.png", text: "The list shows your key pairs with, for each, its fingerprint and type (set at creation).", hotspot: { x: 0.223, y: 0.42, w: 0.75, h: 0.28 } },
   ]}
 />
 
-1. Connectez-vous sur la console Numspot.
+1. Log in to the Numspot console.
 
-2. Depuis le menu latéral gauche, cliquez sur **Compute → Key pairs**.
+2. From the left-hand side menu, click **Compute → Key pairs**.
 
-La liste présentée est celle des key pairs existantes avec les informations de Fingerprint pour chacune ainsi que le type de la key pair défini à sa création.
+
+The list shown is that of the existing key pairs with the Fingerprint information for each one as well as the type of the key pair defined at its creation.
 
 </TabItem>
   <TabItem value="api" label="API">
+The `GET /compute/spaces/{spaceId}/keypairs` command lets you list your key pairs.
 
-## API {#tabhead-api}
+[Example request: Listing all your key pairs](/openapi/#tag/compute/get/compute/spaces/{spaceId}/keypairs)
 
-La commande `GET /compute/spaces/{spaceId}/keypairs` permet de lister vos key pairs.
+The `GET /compute/spaces/{spaceId}/keypairs/{id}` command lets you retrieve the information of a key pair.
 
-[Exemple de requête : Lister toutes vos key pairs](/openapi/#tag/compute/get/compute/spaces/{spaceId}/keypairs)
-
-La commande `GET /compute/spaces/{spaceId}/keypairs/{id}` permet de récupérer les informations d'une key pair.
-
-[Exemple de requête : Récupérer les informations d'une key pair](/openapi/#tag/compute/get/compute/spaces/{spaceId}/keypairs/{id})
+[Example request: Retrieving the information of a key pair](/openapi/#tag/compute/get/compute/spaces/{spaceId}/keypairs/{id})
   </TabItem>
 <TabItem value="terraform" label="Terraform">
-
-## Terraform {#tabhead-terraform}
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/keypair).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/keypair).
 </TabItem>
 </Tabs>

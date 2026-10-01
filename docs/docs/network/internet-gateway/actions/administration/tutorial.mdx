@@ -1,49 +1,49 @@
 ---
-title: Mettre en place une connexion directe entre des VM d'un VPC et internet - Numspot
-sidebar_label: Mettre en place une connexion directe entre des VM d'un VPC et internet
+title: Set up a direct connection between the VM of a VPC and the internet - Numspot
+sidebar_label: Set up a direct connection between the VM of a VPC and the internet
 sidebar_position: 1
 draft: false
 ---
 
-# Tutoriel : Mettre en place une connexion directe entre des VM d'un VPC et internet
+# Tutorial: Set up a direct connection between the VM of a VPC and the internet
 
-Le but de ce tutoriel est de permettre aux [VM (Virtual Machine)](/docs/compute/concept/) d'un subnet (sous-réseau) d'être connectées à Internet de manière directe en utilisant une [internet gateway](/docs/network/internet-gateway/concepts/) et une **IP publique**.
+The purpose of this tutorial is to allow the [VM](/docs/compute/concept/) (Virtual Machine) of a subnet to be connected to the internet directly by using an [internet gateway](/docs/network/internet-gateway/concepts/) and a **public IP**.
 
-Dans ce tutoriel, vous apprenez à :
+In this tutorial, you learn how to:
 
-* Mettre en place une internet gateway pour votre [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/)
-* Configurer vos [route tables (tables de routage)](/docs/network/route-table/concepts/) et [security groups (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) pour une connexion directe à Internet
+* set up an internet gateway for your [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud);
+* configure your [route tables](/docs/network/route-table/concepts/) and [security groups](/docs/compute/security-groups/concepts/concept-sg/) for a direct connection to the internet.
 
 ## Permissions
 
-Aucune permission **IAM** (Identity and Access Management) n'est requise pour effectuer cette action.
+No IAM (Identity and Access Management) permission is required to perform this action.
 
-## Prérequis
+## Prerequisites
 
 :::info
-## Avant de commencer
-1. Mettez en place une architecture VPC. 
-2. Allouez à votre compte autant d'IP publiques que nécessaire pour vos VM.
+**Before you begin:**
+1. Set up a VPC architecture.
+2. Allocate to your account as many public IP as required for your VM.
 :::
 
-1. Créez une internet gateway.
-2. Attachez une internet gateway au VPC.
-3. Dans la route table associée au subnet où se trouvent vos VM, créez une route avec 0.0.0.0/0 en destination et l'ID de l'internet gateway en target.
+1. Create an internet gateway.
+2. Attach an internet gateway to the VPC.
+3. In the route table associated with the subnet where your VM are located, create a route with 0.0.0.0/0 as the destination and the ID of the internet gateway as the target.
 
 :::tip
-Vous pouvez utiliser le bloc CIDR 0.0.0.0/0 en destination pour prendre en compte toutes les destinations qui ne sont pas explicitement routées dans la route table, ou vous pouvez utiliser une plage d'IP plus petite correspondant, par exemple, aux IP publiques de votre réseau interne.
+You can use the CIDR block 0.0.0.0/0 as the destination to take into account all destinations that are not explicitly routed in the route table, or you can use a smaller IP range matching, for example, the public IP of your internal network.
 :::
 
-4. Pour autoriser les flux allant de vos VM vers Internet, ajoutez une règle autorisant les flux sortants vers Internet (bloc CIDR 0.0.0.0/0, ou une plage d'IP plus petite) aux security groups utilisés pour vos VM dans le subnet.
+4. To allow the traffic going from your VM to the internet, add a rule allowing outbound traffic to the internet (CIDR block 0.0.0.0/0, or a smaller IP range) to the security groups used for your VM in the subnet.
 
 :::info
-Pour autoriser internet à initier des connexions avec vos VM, ajoutez une autre règle autorisant les flux entrants depuis Internet.
+To allow the internet to initiate connections with your VM, add another rule allowing inbound traffic from the internet.
 :::
 
-5. Associez une IP publique à chaque VM créée dans votre subnet que vous souhaitez connecter directement à Internet.
+5. Associate a public IP with each VM created in your subnet that you want to connect directly to the internet.
 
 :::info
-Cette IP publique est l'IP publique utilisée par la VM pour accéder à Internet et est accessible depuis Internet via l'internet gateway.
+This public IP is the public IP used by the VM to access the internet and is reachable from the internet through the internet gateway.
 :::
 
-Les VM dans votre subnet qui ont une IP publique associée sont connectées à Internet de manière directe à travers l'internet gateway.
+The VM in your subnet that have a public IP associated are connected to the internet directly through the internet gateway.

@@ -1,6 +1,6 @@
 ---
-title: Lister les clusters PostgreSQL - PostgreSQL managé
-sidebar_label: Lister les clusters PostgreSQL
+title: List PostgreSQL clusters - Managed PostgreSQL
+sidebar_label: List PostgreSQL clusters
 sidebar_position: 3.5
 draft: false
 last_update:
@@ -10,14 +10,14 @@ last_update:
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Lister les clusters PostgreSQL
+# List PostgreSQL clusters
 
-Vous pouvez lister l'ensemble des [clusters PostgreSQL](/docs/managed-services/postgresql/concepts/) au sein de votre espace.
+You can list all the [PostgreSQL clusters](/docs/managed-services/postgresql/concepts/) within your space.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **postgresql.cluster.get**
 
@@ -28,22 +28,22 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 ## API {#tabhead-api}
 
-    La requête `GET /postgresql/spaces/{spaceId}/clusters` permet de lister les clusters PostgreSQL d'un espace.
+    The request `GET /postgresql/spaces/{spaceId}/clusters` lists the PostgreSQL clusters of a space.
 
-### Paramètres
+### Parameters
 
-| Paramètre | Type   | Requis | Description                      |
-| --------- | ------ | ------ | -------------------------------- |
-| spaceId   | string | Oui    | Identifiant de l'espace Numspot. |
+| Parameter | Type   | Required | Description              |
+| --------- | ------ | -------- | ------------------------ |
+| spaceId   | string | Yes      | The Numspot space ID.    |
 
-### Exemple de réponse
+### Example response
 
     ```json
     {
       "items": [
         {
           "id": "123e4567-e89b-42d3-a456-426614174000",
-          "name": "mon-cluster-postgresql",
+          "name": "my-cluster-postgresql",
           "databaseName": "appdb",
           "user": "admin",
           "majorVersion": "17",
@@ -61,7 +61,7 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
             "sizeGiB": 100
           },
           "replicaCount": 1,
-          "host": "mon-cluster-postgresql.postgres.eu-west-2.numspot.com",
+          "host": "my-cluster-postgresql.postgres.eu-west-2.numspot.com",
           "port": 5432,
           "visibility": "EXTERNAL",
           "createdOn": "2026-08-15T12:41:00Z"
@@ -70,6 +70,6 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
     }
     ```
 
-    [Voir la spécification complète](/openapi/#tag/postgresql/GET/postgresql/spaces/{spaceId}/clusters)
+    [View the full specification](/openapi/#tag/postgresql/GET/postgresql/spaces/{spaceId}/clusters)
 </TabItem>
 </Tabs>

@@ -34,12 +34,12 @@ const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
  * French labels for status tags
  */
 const STATUS_LABELS: Record<Status, string> = {
-    [Status.Added]: translate({ id: "changelog.status.added", message: "Ajout" }),
-    [Status.Changed]: translate({ id: "changelog.status.changed", message: "Modification" }),
-    [Status.Deprecated]: translate({ id: "changelog.status.deprecated", message: "Dépréciation" }),
-    [Status.Fixed]: translate({ id: "changelog.status.fixed", message: "Correction" }),
-    [Status.Removed]: translate({ id: "changelog.status.removed", message: "Suppression" }),
-    [Status.Security]: translate({ id: "changelog.status.security", message: "Sécurité" }),
+    [Status.Added]: translate({ id: "changelog.status.added", message: "Added" }),
+    [Status.Changed]: translate({ id: "changelog.status.changed", message: "Changed" }),
+    [Status.Deprecated]: translate({ id: "changelog.status.deprecated", message: "Deprecated" }),
+    [Status.Fixed]: translate({ id: "changelog.status.fixed", message: "Fixed" }),
+    [Status.Removed]: translate({ id: "changelog.status.removed", message: "Removed" }),
+    [Status.Security]: translate({ id: "changelog.status.security", message: "Security" }),
 }
 
 /**
@@ -49,10 +49,10 @@ const STATUS_LABELS: Record<Status, string> = {
  * glossary, which documents the same FR→EN correspondence.
  */
 const SERVICE_LABELS: Record<string, string> = {
-    "Connectivité": translate({ id: "changelog.service.connectivity", message: "Connectivité" }),
-    "Inventaire": translate({ id: "changelog.service.inventory", message: "Inventaire" }),
-    "Services Managés": translate({ id: "changelog.service.managed-services", message: "Services Managés" }),
-    "Plateforme IA Mistral": translate({ id: "changelog.service.mistral-ai-platform", message: "Plateforme IA Mistral" }),
+    "Connectivité": translate({ id: "changelog.service.connectivity", message: "Connectivity" }),
+    "Inventaire": translate({ id: "changelog.service.inventory", message: "Inventory" }),
+    "Services Managés": translate({ id: "changelog.service.managed-services", message: "Managed Services" }),
+    "Plateforme IA Mistral": translate({ id: "changelog.service.mistral-ai-platform", message: "Mistral AI Platform" }),
 }
 
 const serviceLabel = (service: string) => SERVICE_LABELS[service] ?? service
@@ -81,18 +81,18 @@ const generateTag = (entryStatus: Status) => {
  */
 const getMonthAndYear = (date: Date) => {
     const months = [
-        translate({ id: "changelog.month.1", message: "Janvier" }),
-        translate({ id: "changelog.month.2", message: "Février" }),
-        translate({ id: "changelog.month.3", message: "Mars" }),
-        translate({ id: "changelog.month.4", message: "Avril" }),
-        translate({ id: "changelog.month.5", message: "Mai" }),
-        translate({ id: "changelog.month.6", message: "Juin" }),
-        translate({ id: "changelog.month.7", message: "Juillet" }),
-        translate({ id: "changelog.month.8", message: "Août" }),
-        translate({ id: "changelog.month.9", message: "Septembre" }),
-        translate({ id: "changelog.month.10", message: "Octobre" }),
-        translate({ id: "changelog.month.11", message: "Novembre" }),
-        translate({ id: "changelog.month.12", message: "Décembre" }),
+        translate({ id: "changelog.month.1", message: "January" }),
+        translate({ id: "changelog.month.2", message: "February" }),
+        translate({ id: "changelog.month.3", message: "March" }),
+        translate({ id: "changelog.month.4", message: "April" }),
+        translate({ id: "changelog.month.5", message: "May" }),
+        translate({ id: "changelog.month.6", message: "June" }),
+        translate({ id: "changelog.month.7", message: "July" }),
+        translate({ id: "changelog.month.8", message: "August" }),
+        translate({ id: "changelog.month.9", message: "September" }),
+        translate({ id: "changelog.month.10", message: "October" }),
+        translate({ id: "changelog.month.11", message: "November" }),
+        translate({ id: "changelog.month.12", message: "December" }),
     ];
 
     const month = months[date.getMonth()]
@@ -292,7 +292,7 @@ export default function Changelog({ changelog }: Readonly<ChangelogProps>) {
     const latestDate = latestEntry ? new Date(latestEntry.date) : null
     const lastUpdateLabel = latestDate
         ? translate(
-            { id: "changelog.lastUpdate", message: "Dernière mise à jour le {day} {monthYear}" },
+            { id: "changelog.lastUpdate", message: "Last updated on {day} {monthYear}" },
             { day: latestDate.getDate(), monthYear: getMonthAndYear(latestDate) },
         )
         : ""
@@ -306,12 +306,12 @@ export default function Changelog({ changelog }: Readonly<ChangelogProps>) {
         <div className="changelog-layout">
             <div className="changelog">
                 <div className='changelog-intro'>
-                    <div className="changelog-title body-lg">{translate({ id: "changelog.intro", message: "Découvrez les dernières évolutions des produits et fonctionnalités Numspot." })}</div>
+                    <div className="changelog-title body-lg">{translate({ id: "changelog.intro", message: "Discover the latest changes to Numspot products and features." })}</div>
                     {lastUpdateLabel && <div className="changelog-last-update body-sm">{lastUpdateLabel}</div>}
                 </div>
 
                 {Object.keys(entriesByMonth).length === 0 ? (
-                    <div className="changelog-empty body-sm">{translate({ id: "changelog.empty", message: "Aucune entrée ne correspond aux filtres sélectionnés." })}</div>
+                    <div className="changelog-empty body-sm">{translate({ id: "changelog.empty", message: "No entry matches the selected filters." })}</div>
                 ) : (
                     Object.keys(entriesByMonth).map(month => (
                         <div key={month} className='changelog-month-entries'>
@@ -322,21 +322,21 @@ export default function Changelog({ changelog }: Readonly<ChangelogProps>) {
                 )}
             </div>
 
-            <aside className="changelog-filters" aria-label={translate({ id: "changelog.filters.aria", message: "Filtres du changelog" })}>
+            <aside className="changelog-filters" aria-label={translate({ id: "changelog.filters.aria", message: "Changelog filters" })}>
                 <div className="changelog-filters-header">
-                    <span className="changelog-filters-title subtitle-sm">{translate({ id: "changelog.filters.title", message: "Filtres" })}</span>
+                    <span className="changelog-filters-title subtitle-sm">{translate({ id: "changelog.filters.title", message: "Filters" })}</span>
                     <button
                         type="button"
                         className="changelog-filter-count caption-sm"
                         onClick={resetFilters}
                         disabled={activeCount === 0}
-                        title={activeCount > 0 ? translate({ id: "changelog.filters.reset", message: "Réinitialiser les filtres" }) : undefined}
+                        title={activeCount > 0 ? translate({ id: "changelog.filters.reset", message: "Reset filters" }) : undefined}
                     >
                         {activeCount}
                     </button>
                 </div>
 
-                <FilterSection title={translate({ id: "changelog.filters.status", message: "Statut" })}>
+                <FilterSection title={translate({ id: "changelog.filters.status", message: "Status" })}>
                     {availableStatuses.map(status => (
                         <FilterOption
                             key={status}

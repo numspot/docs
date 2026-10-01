@@ -1,0 +1,68 @@
+---
+title: "Images - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# Concepts
+
+<ActionsSummary />
+
+## À propos des Images
+
+Une Image est un modèle de [VM (Virtual Machine)](/docs/compute/concept/) qui contient au moins un OS (Operating System) et éventuellement d'autres applications logicielles et configurations, tels que des mappages de périphériques de blocs.
+
+Les Images vous permettent de créer des VM avec une configuration prédéfinie et les applications logicielles dont vous avez besoin, sans avoir à installer ces applications sur chaque VM que vous créez pour un même cas d'utilisation. Cela vous permet de gagner du temps et de garantir la cohérence de vos configurations VM.
+
+Il est important de noter que les Images peuvent être créées à partir de VM existantes ou importées à partir de fichiers images. Vous pouvez également créer vos propres Images personnalisées en fonction de vos besoins.
+
+## Informations générales
+
+Une Image est utilisée comme modèle pour créer des VM basées sur un volume de [block storage (stockage bloc)](/docs/storage/block-storage/concepts/) comme volume root. Une Image fournit au moins un système d'exploitation Linux et peut inclure des applications logicielles ou des copies d'autres volumes de block storage.
+
+Une Image fournit également une configuration pour les attributs de la VM, telle que `DisableApiTermination`.
+
+Les Images peuvent être créées de deux manières :
+
+- **à partir d'un snapshot (instantané) d'un volume**
+    - dans ce cas, le snapshot est utilisé pour créer le volume root des VM qui sont créées à partir de l'Image.
+- **à partir d'une VM**
+    - un snapshot du volume système de la VM est créé. Ce snapshot est utilisé pour créer l'Image.
+    - l'Image est ensuite utilisée pour créer le volume système des nouvelles VM.
+    - si la VM source a d'autres volumes de block storage attachés, des snapshots de ces volumes sont également créés.
+    - les nouvelles VM sont créées avec une copie de tous ces volumes attachés. En somme, chaque volume de la VM source est copié et attaché aux nouvelles VM créées à partir de l'Image.
+
+## Types d'Images
+
+Il existe deux types d'Images dans Numspot :
+
+### Images officielles
+
+Les Images officielles sont des Images fournies par Numspot, basées sur des distributions Linux open source (Debian, Ubuntu, AlmaLinux, RockyLinux). Elles sont prêtes à l'emploi et intègrent les dernières mises à jour de sécurité.
+
+Pour consulter la liste complète des Images officielles disponibles, voir [Référence des images officielles](/docs/compute/images/official-images/).
+
+:::warning
+Numspot garantit que le contenu des Images officielles est à jour. Cependant, une fois qu'une VM est lancée depuis une de ces Images, il vous incombe de mettre à jour vos environnements.
+:::
+
+### Images privées
+
+Les Images privées sont des Images que vous avez créées à partir d'une VM ou d'un snapshot, ou importées à partir d'un export stocké sur un bucket [object storage](/docs/storage/object-storage/quickstart/). Par défaut, toute Image que vous créez est privée.
+
+Pour partager une Image privée avec d'autres espaces ou organisations, vous pouvez utiliser la fonctionnalité d'[export d'image](/docs/compute/images/actions/export/) vers un bucket object storage, puis l'importer depuis ce bucket dans l'espace cible.
+
+:::danger
+Numspot ne peut pas garantir le bon fonctionnement des VM créées à partir de sources non officielles.
+:::
+
+## Architecture
+
+Les Images officielles et les Images privées sont disponibles en architecture 64 bits (x86_64) uniquement.
+
+:::warning
+- Nous vous recommandons fortement d'utiliser uniquement des Images officielles pour créer vos VM. Les Images issues d'autres sources peuvent contenir un mot de passe root ou une clé SSH (Secure Shell) intégrée, qui ne sont pas supprimés lorsque vous créez une nouvelle VM et ajoutez votre [key pair (paire de clés)](/docs/compute/keypairs/concept/). Dans ce cas, vous devez vérifier le fichier ~/.ssh/authorized_keys et garder uniquement la dernière entrée qui correspond à la partie publique de votre key pair.
+:::

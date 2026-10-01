@@ -1,0 +1,76 @@
+---
+title: Options DHCP
+sidebar_label: À propos des options DHCP
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# À propos des options DHCP
+
+<ActionsSummary />
+
+Le protocole DHCP (Dynamic Host Configuration Protocol) est un protocole réseau utilisé pour attribuer automatiquement des paramètres de configuration réseau, tels que les adresses IP (Internet Protocol), les serveurs DNS ou NTP (Network Time Protocol).
+
+Dans Numspot, chaque [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) est associé à un jeu d'options DHCP qui définit ces paramètres pour les [VM](/docs/compute/concept/) qu'il contient.
+
+Vous pouvez utiliser le jeu d'options DHCP par défaut (créé automatiquement lors de la création du VPC), ou créer votre propre jeu d'options personnalisé et l'associer au VPC pour remplacer celui par défaut.
+
+## VPC et options DHCP
+
+Les VM que vous créez dans un VPC reçoivent un nom de domaine privé (DNS) pour leur adresse IP privée, et un nom de domaine public si une adresse IP publique leur est associée. Ces noms de domaine sont configurés à partir du serveur DNS spécifié dans le jeu d'options DHCP associé au VPC.
+
+Lorsque vous créez un jeu d'options DHCP, vous pouvez spécifier les informations suivantes :
+
+- **Le serveur DNS et le nom de domaine** à utiliser pour les VM créées dans le VPC.
+  Dans l'option `domain-name-servers`, vous pouvez spécifier les adresses IP d'un ou plusieurs serveurs DNS.
+  Dans l'option `domain-name`, vous pouvez définir le nom de domaine à utiliser pour vos VM.
+
+- **Les serveurs NTP** à utiliser pour synchroniser les horloges des VM avec d'autres systèmes réseau.
+  Dans l'option `ntp-servers`, vous pouvez spécifier les adresses IP d'un ou plusieurs serveurs NTP.
+
+- **Les serveurs de logs** à utiliser pour centraliser les journaux système.
+  Dans l'option `log-servers`, vous pouvez spécifier les adresses IP d'un ou plusieurs serveurs de logs.
+
+:::info
+Pour utiliser le domaine DNS par défaut de Numspot (hérité d'Outscale), spécifiez les valeurs suivantes :
+- `domain-name-servers` : `OutscaleProvidedDNS`
+- `domain-name` : `<nom_région>.compute.internal`
+:::
+
+:::note
+Si vous ne spécifiez pas de serveur NTP, les Images officielles Numspot intègrent déjà un serveur NTP configuré par défaut. Vous n'avez donc pas besoin d'ajouter de route spécifique.
+:::
+
+:::warning
+Si les serveurs NTP ou de logs que vous indiquez sont situés dans un autre réseau — par exemple via un appairage (peering), une connexion VPN ou [DirectLink](/docs/connectivity/direct-link/concepts/) —, vous devez ajouter une route correspondante dans la [table de routage](/docs/network/route-table/concepts/) de votre VPC.
+:::
+
+Les jeux d'options DHCP que vous créez sont disponibles pour votre compte et peuvent être associés à un ou plusieurs VPC. Cependant, un VPC ne peut avoir qu'un seul jeu d'options DHCP associé à la fois.
+
+Vous ne pouvez pas modifier un jeu d'options DHCP après sa création. Toutefois, vous pouvez remplacer le jeu d'options associé à un VPC par un autre (par défaut ou personnalisé).
+
+Lorsque vous modifiez le jeu d'options DHCP associé à un VPC, les nouvelles options sont automatiquement appliquées aux VM existantes et aux VM lancées ultérieurement. Les VM existantes appliquent ces changements lors du renouvellement de leur bail DHCP, sans qu'il soit nécessaire de les redémarrer. Vous pouvez forcer ce renouvellement avec :
+
+- `dhclient` sur Linux
+- `ipconfig /renew` sur Windows
+
+Vous pouvez supprimer à tout moment un jeu d'options DHCP que vous avez créé, mais vous ne pouvez pas supprimer celui par défaut.
+
+## Jeu d'options DHCP par défaut
+
+Le jeu d'options DHCP par défaut contient les paramètres suivants :
+
+- `domain-name-servers` : `OutscaleProvidedDNS` (serveur DNS intégré au réseau Numspot).
+- `domain-name` : le nom de domaine de votre Région, au format `<nom_région>.compute.internal`.
+  Par exemple, une VM avec l'adresse IP privée `10.0.1.5` dans la Région `eu-west-2` a pour nom d'hôte :
+  `ip-10-0-1-5.eu-west-2.compute.internal`.
+
+:::warning
+Le jeu d'options DHCP par défaut ne contient aucun serveur NTP, mais un serveur NTP est déjà configuré dans les Images officielles Numspot. Pour utiliser un autre serveur NTP, créez un jeu d'options DHCP personnalisé contenant `ntp-servers` et ajoutez une route vers son adresse IP si nécessaire.
+:::
+
+> Le serveur de nom de domaine `OutscaleProvidedDNS` appartient à 3DS OUTSCALE.
+> La première adresse IP du bloc CIDR de votre VPC est réservée à ce serveur.
+> Par exemple, dans un VPC avec le bloc CIDR `10.0.0.0/16`, l'adresse IP du serveur DNS est `10.0.0.1`.

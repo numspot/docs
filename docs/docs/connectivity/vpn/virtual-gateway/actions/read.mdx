@@ -1,6 +1,6 @@
 ---
-title: Obtenir des informations sur vos virtual gateways
-description: Consultez les informations et l'état de vos virtual gateways.
+title: Get information about your virtual gateways
+description: View the information and status of your virtual gateways.
 sidebar_position: 3
 draft: false
 ---
@@ -8,16 +8,16 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Obtenir des informations sur vos virtual gateways
+# Get information about your virtual gateways
 
-Vous pouvez obtenir des informations sur une ou plusieurs de vos [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/).
+You can get information about one or more of your [virtual gateways](/docs/connectivity/vpn/virtual-gateway/concepts/).
 
-Par défaut, cette action décrit toutes vos virtual gateways.
+By default, this action describes all your virtual gateways.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **connectivity.bridge.get**
 
@@ -26,32 +26,23 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
-
-Consultez le dashboard **Virtual Gateways** pour visualiser la liste de vos virtual gateways et leurs informations.
+View the **Virtual Gateways** dashboard to see the list of your virtual gateways and their information.
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `GET /connectivity/spaces/{spaceId}/virtualGateways` command lists the virtual gateways.
 
+[Example request: List all virtual gateways](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/virtualGateways)
 
-La commande `GET /connectivity/spaces/{spaceId}/virtualGateways` permet de lister les virtual gateways.
+The `GET /connectivity/spaces/{spaceId}/virtualGateways/{id}` command retrieves information about a virtual gateway.
 
-[Exemple de requête : Lister toutes les virtual gateways](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/virtualGateways)
-
-La commande `GET /connectivity/spaces/{spaceId}/virtualGateways/{id}` permet de récupérer des informations concernant une virtual gateway.
-
-[Exemple de requête : Récupérer les informations d'une virtual gateway](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/virtualGateways/{id})
+[Example request: Retrieve information about a virtual gateway](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/virtualGateways/{id})
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/virtual_gateway).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/virtual_gateway).
 
 </TabItem>
 </Tabs>

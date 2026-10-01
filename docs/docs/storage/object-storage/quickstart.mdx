@@ -1,23 +1,23 @@
 ---
-title: "Object Storage - Démarrage rapide"
-sidebar_label: "Démarrage rapide"
+title: "Object Storage - Quickstart"
+sidebar_label: "Quickstart"
 sidebar_position: 3
 draft: false
 ---
 
-# Démarrage rapide
+# Quickstart
 
-En suivant ce tutoriel, vous mettrez en œuvre les mécanismes permettant de vous authentifier, créer des buckets et de gérer vos objets.
+By following this tutorial, you will set up the mechanisms that allow you to authenticate, create buckets and manage your objects.
 
-La référence complète de l'API Object Storage est disponible dans la [documentation OpenAPI Scalar](/openapi-object-storage).
+The complete reference of the Object Storage API is available in the [Scalar OpenAPI documentation](/openapi-object-storage).
 
-## 1. Obtention d'une paire de clés (accès et secret)
+## 1. Obtaining a key pair (access and secret)
 
-Dans un premier temps, vous devez disposer d'une [paire de clés](/docs/compute/keypairs/concept) AK/SK (Access Key/Secret Key) qui vous permettra de vous authentifier auprès de l'API Object Storage Numspot.
+First, you must have an AK/SK [key pair](/docs/compute/keypairs/concept) (Access Key/Secret Key) that allows you to authenticate against the Numspot Object Storage API.
 
-Pour commencer, vous aurez besoin d'[un token](/docs/iam/concepts/api/#le-jeton-daccès-token).
+To begin, you will need [a token](/docs/iam/concepts/api/#the-access-token).
 
-Muni de votre token, vous devez l'échanger contre une paire de clés AK/SK, en utilisant [l'endpoint "convert"](/openapi/#tag/identity-access-management/PUT/iam/token/convert).
+With your token, you must exchange it for an AK/SK key pair, using [the "convert" endpoint](/openapi/#tag/identity-access-management/PUT/iam/token/convert).
 ```shell
 ## request
 curl 'https://api.{{region}}.numspot.com/iam/token/convert' \
@@ -28,7 +28,7 @@ curl 'https://api.{{region}}.numspot.com/iam/token/convert' \
 }'
 ```
 
-Vous obtiendrez alors les AK/SK :
+You will then obtain the AK/SK:
 ```shell
 ## response
 {
@@ -38,12 +38,12 @@ Vous obtiendrez alors les AK/SK :
 ```
 
 :::warning
-La durée de validité de la paire de clés est de 24 heures.
+The key pair is valid for 24 hours.
 :::
 
-## 2. Créer un bucket
+## 2. Create a bucket
 
-Pour créer un bucket, utilisez la commande **mb** en suivant cette syntaxe :
+To create a bucket, use the **mb** command following this syntax:
 
 ```shell
 ## request
@@ -53,18 +53,18 @@ aws s3 mb s3://BUCKET_NAME \
     --endpoint https://objectstorage.{{region}}.numspot.com/spaces/{{spaceId}}
 ```
 
-Cette commande contient les options suivantes que vous devez spécifier :
-  - `s3://BUCKET_NAME` : Le nom que vous souhaitez donner à votre bucket, selon les règles de nommage correspondantes.
-  - endpoint : Le endpoint correspondant à la région à laquelle vous voulez envoyer la requête.
-  - (optionnel) `profile` : Le profil nommé que vous voulez utiliser, créé pendant la configuration d'AWS CLI (Command Line Interface). Pour en savoir plus, voir [Installer et configurer AWS CLI](/docs/storage/object-storage/config/).
-  - (optionnel) `debug` : Si inclus, renvoie un rapport détaillé de l'opération. Cette option est utile pour analyser et résoudre les problèmes que vous pouvez rencontrer.
+This command contains the following options that you must specify:
+  - `s3://BUCKET_NAME`: The name you want to give to your bucket, according to the corresponding naming rules.
+  - endpoint: The endpoint corresponding to the region to which you want to send the request.
+  - (optional) profile: The named profile you want to use, created during the configuration of the AWS CLI (Command Line Interface). To find out more, see [Install and configure the AWS CLI](/docs/storage/object-storage/config/).
+  - (optional) `debug`: If included, returns a detailed report of the operation. This option is useful for analyzing and troubleshooting the issues you may encounter.
 
 
-Le bucket est créé.
+The bucket is created.
 
-## 3. Déposer un objet
+## 3. Upload an object
 
-Pour déposer un objet local dans un bucket, utilisez la commande **cp** en suivant cette syntaxe :
+To upload a local object into a bucket, use the **cp** command following this syntax:
 
 ```shell
 ## request
@@ -74,17 +74,17 @@ aws s3 cp LOCAL_PATH/OBJECT_TO_UPLOAD s3://BUCKET_NAME/PATH \
    --endpoint https://objectstorage.{{region}}.numspot.com/spaces/{{spaceId}}
 ```
 
-Cette commande contient les options suivantes que vous devez spécifier :
+This command contains the following options that you must specify:
 
-    - `LOCAL_PATH/OBJECT_TO_UPLOAD` : Le chemin local de l'objet que vous voulez déposer dans le bucket.
-    - `s3://BUCKET_NAME/PATH` : Le chemin d'accès vers l'objet que vous voulez déposer dans le bucket.
-    - endpoint : Le endpoint correspondant à la région à laquelle vous voulez envoyer la requête.
-    - (optionnel) `profile` : Le profil nommé que vous voulez utiliser, créé pendant la configuration d'AWS CLI. Pour en savoir plus, voir [Installer et configurer AWS CLI](/docs/storage/object-storage/config/).
-    - (optionnel) `debug` : Si inclus, renvoie un rapport détaillé de l'opération. Cette option est utile pour analyser et résoudre les problèmes que vous pouvez rencontrer.
+    - `LOCAL_PATH/OBJECT_TO_UPLOAD`: The local path of the object you want to upload into the bucket.
+    - `s3://BUCKET_NAME/PATH`: The access path to the object you want to upload into the bucket.
+    - endpoint: The endpoint corresponding to the region to which you want to send the request.
+    - (optional) profile: The named profile you want to use, created during the configuration of the AWS CLI. To find out more, see [Install and configure the AWS CLI](/docs/storage/object-storage/config/).
+    - (optional) `debug`: If included, returns a detailed report of the operation. This option is useful for analyzing and troubleshooting the issues you may encounter.
 
-## 4. Télécharger un objet depuis un bucket
+## 4. Download an object from a bucket
 
-Pour télécharger un objet depuis un bucket, utilisez la commande **cp** en suivant cette syntaxe :
+To download an object from a bucket, use the **cp** command following this syntax:
 
 ```shell
 ## request
@@ -94,17 +94,17 @@ aws s3 cp s3://YOUR_BUCKET/YOUR_OBJECT PATH/TO/FILE \
     --endpoint https://objectstorage.{{region}}.numspot.com/spaces/{{spaceId}}
 ```
 
-Cette commande contient les options suivantes que vous devez spécifier :
+This command contains the following options that you must specify:
 
-    - `s3://YOUR_BUCKET/YOUR_OBJECT` : Le nom du bucket et le nom de l'objet qu'il contient.
-    - `PATH/TO/FILE` : Le chemin vers l'endroit où vous souhaitez que l'objet soit téléchargé.
-    - endpoint : Le endpoint correspondant à la région à laquelle vous voulez envoyer la requête.
-    - (optionnel) `profile` : Le profil nommé que vous voulez utiliser, créé pendant la configuration d'AWS CLI. Pour en savoir plus, voir [Installer et configurer AWS CLI](/docs/storage/object-storage/config/).
-    - (optionnel) `debug` : Si inclus, renvoie un rapport détaillé de l'opération. Cette option est utile pour analyser et résoudre les problèmes que vous pouvez rencontrer.
+    - `s3://YOUR_BUCKET/YOUR_OBJECT`: The name of the bucket and the name of the object it contains.
+    - `PATH/TO/FILE`: The path to the location where you want the object to be downloaded.
+    - endpoint: The endpoint corresponding to the region to which you want to send the request.
+    - (optional) profile: The named profile you want to use, created during the configuration of the AWS CLI. To find out more, see [Install and configure the AWS CLI](/docs/storage/object-storage/config/).
+    - (optional) `debug`: If included, returns a detailed report of the operation. This option is useful for analyzing and troubleshooting the issues you may encounter.
 
-## 5. Supprimer les objets d'un bucket
+## 5. Delete objects from a bucket
 
-Pour supprimer plusieurs objets d'un bucket, utilisez la commande **rm** en suivant cette syntaxe :
+To delete several objects from a bucket, use the **rm** command following this syntax:
 
 ```shell
 ## request
@@ -114,21 +114,21 @@ aws s3 rm s3://YOUR_BUCKET/YOUR_OBJECT \
     --endpoint https://objectstorage.{{region}}.numspot.com/spaces/{{spaceId}}
 ```
 
-Cette commande contient les options suivantes que vous devez spécifier :
+This command contains the following options that you must specify:
 
-    - `s3://YOUR_BUCKET/YOUR_OBJECT` : Le chemin vers l'objet que vous voulez supprimer du bucket.
+    - `s3://YOUR_BUCKET/YOUR_OBJECT`: The path to the object you want to delete from the bucket.
 
         :::info
-        Vous pouvez spécifier le version ID d'un objet en suivant cette syntaxe : `s3://YOUR_BUCKET/YOUR_OBJECT?versionID=<YOUR_VERSION_ID>`.
+        You can specify the version ID of an object following this syntax: `s3://YOUR_BUCKET/YOUR_OBJECT?versionID=<YOUR_VERSION_ID>`.
         :::
 
-    - endpoint : Le endpoint correspondant à la région à laquelle vous voulez envoyer la requête.
-    - (optionnel) `profile` : Le profil nommé que vous voulez utiliser, créé pendant la configuration d'AWS CLI. Pour en savoir plus, voir [Installer et configurer AWS CLI](/docs/storage/object-storage/config/).
-    - (optionnel) `debug` : Si inclus, renvoie un rapport détaillé de l'opération. Cette option est utile pour analyser et résoudre les problèmes que vous pouvez rencontrer.
+    - endpoint: The endpoint corresponding to the region to which you want to send the request.
+    - (optional) profile: The named profile you want to use, created during the configuration of the AWS CLI. To find out more, see [Install and configure the AWS CLI](/docs/storage/object-storage/config/).
+    - (optional) `debug`: If included, returns a detailed report of the operation. This option is useful for analyzing and troubleshooting the issues you may encounter.
 
-## 6. Supprimer un bucket
+## 6. Delete a bucket
 
-Pour supprimer un bucket, utilisez la commande **rb** en suivant cette syntaxe :
+To delete a bucket, use the **rb** command following this syntax:
 
 ```shell
 ## request
@@ -139,13 +139,13 @@ aws s3 rb s3://YOUR_BUCKET \
     --endpoint https://objectstorage.{{region}}.numspot.com/spaces/{{spaceId}}
 ```
 
-Cette commande contient les options suivantes que vous devez spécifier :
-    - `s3://YOUR_BUCKET` : Le nom du bucket que vous souhaitez supprimer.
-    - endpoint : Le endpoint correspondant à la région à laquelle vous voulez envoyer la requête.
-    - (optionnel) `profile` : Le profil nommé que vous voulez utiliser, créé pendant la configuration d'AWS CLI. Pour en savoir plus, voir [Installer et configurer AWS CLI](https://github.com/aws/aws-cli?tab=readme-ov-file#getting-started).
-    - (optionnel) `debug` : Si inclus, renvoie un rapport détaillé de l'opération. Cette option est utile pour analyser et résoudre les problèmes que vous pouvez rencontrer.
-    - (optionnel) `force` : Supprime tous les objets contenus dans le bucket ainsi que le bucket lui-même.
+This command contains the following options that you must specify:
+    - `s3://YOUR_BUCKET`: The name of the bucket you want to delete.
+    - endpoint: The endpoint corresponding to the region to which you want to send the request.
+    - (optional) profile: The named profile you want to use, created during the configuration of the AWS CLI. To find out more, see [Install and configure the AWS CLI](https://github.com/aws/aws-cli?tab=readme-ov-file#getting-started).
+    - (optional) `debug`: If included, returns a detailed report of the operation. This option is useful for analyzing and troubleshooting the issues you may encounter.
+    - (optional) `force`: Deletes all the objects contained in the bucket as well as the bucket itself.
 
         :::warning
-            La commande échoue si le bucket contient des objets versionnés. Pour supprimer des objets versionnés, voir [Supprimer les objets d'un bucket](#5-supprimer-les-objets-dun-bucket).
+            The command fails if the bucket contains versioned objects. To delete versioned objects, see [Delete objects from a bucket](#5-delete-objects-from-a-bucket).
         :::

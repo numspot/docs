@@ -1,5 +1,5 @@
 ---
-title: "Utilisateur - Concepts"
+title: "User - Concepts"
 sidebar_label: "Concepts"
 sidebar_position: 1
 draft: false
@@ -9,29 +9,29 @@ last_update:
 
 import ActionsSummary from '@site/src/components/ActionsSummary';
 
-# À propos des utilisateurs
+# About users
 
 <ActionsSummary />
 
-Un utilisateur représente un compte humain au sein de votre organisation Numspot. Il accède à la console Numspot et à l'API (Application Programming Interface) pour gérer les ressources des espaces auxquels il est rattaché, dans la limite des permissions IAM (Identity and Access Management) qui lui sont accordées.
+A user represents a human account within your Numspot organization. The user accesses the Numspot console and the API (Application Programming Interface) to manage the resources of the spaces they are attached to, within the limit of the IAM (Identity and Access Management) permissions granted to them.
 
-## Informations générales
+## General information
 
-Un utilisateur est créé avec les informations suivantes :
+A user is created with the following information:
 
-- un prénom et un nom ;
-- une adresse e-mail unique, qui sert d'identifiant ;
-- un ou plusieurs espaces auxquels il a accès ;
-- des rôles IAM qui déterminent ses permissions.
+- a first name and a last name;
+- a unique email address, which serves as the identifier;
+- one or more spaces they have access to;
+- IAM roles that determine their permissions.
 
-Les espaces, les rôles et les permissions peuvent être attribués dès la création de l'utilisateur, ou ajoutés et modifiés ultérieurement.
+Spaces, roles and permissions can be assigned when the user is created, or added and modified later.
 
-## Activation et authentification
+## Activation and authentication
 
-À la création d'un utilisateur, un lien d'activation est envoyé à son adresse e-mail. Ce lien permet de définir un mot de passe et de configurer l'authentification à deux facteurs, requise pour se connecter à la console.
+When a user is created, an activation link is sent to their email address. This link is used to set a password and configure two-factor authentication, which is required to sign in to the console.
 
-Un nouveau lien d'activation peut être envoyé à tout moment depuis la page de détails de l'utilisateur. Ce lien réinitialise le mot de passe et l'authentification à deux facteurs : l'utilisateur ne peut plus se reconnecter avec son ancien mot de passe, mais sa session en cours n'est pas interrompue.
+A new activation link can be sent at any time from the user's details page. This link resets both the password and two-factor authentication: the user can no longer sign in with their previous password, but their current session is not terminated.
 
-## Espaces et permissions
+## Spaces and permissions
 
-Un utilisateur peut être rattaché à plusieurs espaces. Ses permissions sont définies par les rôles IAM qui lui sont attribués. Vous pouvez consulter à tout moment la liste des espaces assignés à un utilisateur.
+A user can be attached to several spaces. Their permissions are defined by the IAM roles assigned to them. You can view the list of spaces assigned to a user at any time.

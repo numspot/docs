@@ -1,0 +1,101 @@
+---
+title: Première connexion à la console Numspot - IAM
+sidebar_label: Première connexion à la console Numspot
+sidebar_position: 1
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+# Première connexion à la console Numspot
+
+
+**Les étapes de première connexion seront les mêmes que lors de la réinitialisation de votre mot de passe.**  
+**Un lien de récupération, ainsi qu'un code de récupération seront envoyés par courriel.**
+
+## 1. Prérequis
+
+Pour effectuer votre première connexion, assurez-vous de disposer des éléments suivants :
+
+- **Une adresse email valide** (ex : `utilisateur@domaine.fr`)
+- **Un compte utilisateur Numspot** créé pour cette adresse de messagerie.
+    - Si besoin, approchez-vous de l'administrateur de votre organisation pour qu'il crée votre compte utilisateur.
+- **Le lien de récupération** et le **code de récupération** reçus par email.
+    - Si besoin, approchez-vous de votre administrateur, il sera en mesure de renvoyer un lien d'activation (recovery link).
+- **Un navigateur web moderne** et à jour (Chrome, Firefox, Edge, Safari).
+
+---
+
+## 2. Étapes de connexion
+
+### Étape 1 : Ouvrir l'email d'activation
+
+- Consultez votre boîte de messagerie à l'adresse enregistrée.
+- Cherchez un email avec l'objet : **« Action requise : création ou réinitialisation de votre mot de passe Numspot »**.
+- ![image](/img/console/iam/login/FR_mail_recovery.png)
+
+
+- **Ne supprimez pas cet email** avant la fin de la procédure.
+
+**Attention** :
+
+- Vérifiez que l'expéditeur est bien un domaine officiel (ex : `@numspot.com`).
+- Si vous n'avez pas reçu l'email, vérifiez des **courriers indésirables** (spams) ou demandez un **renvoi du lien** à votre administrateur.
+
+---
+
+### Étape 2 : Cliquer sur le lien de récupération
+
+- Dans le courriel, cliquez sur le **lien de récupération** ou copiez-collez le dans votre navigateur.
+- Vous serez redirigé vers une page de confirmation.
+
+**Note :** Pourquoi ce lien ?
+
+- Il est **unique** et **temporaire** (validité de 48h).
+- Il confirme que l'adresse email vous appartient.
+
+---
+
+### Étape 3 : Saisir le code de récupération
+
+- Sur la page d'activation, entrez le **code de récupération** inclus dans le courriel envoyé suite aux actions de votre administrateur (ex : `984899`).
+- ![image](/img/console/iam/login/FR_recovery_code.png)
+- Cliquez sur **Soumettre**.
+
+---
+
+### Étape 4 : Définir un mot de passe
+
+![image](/img/console/iam/login/FR_create_Password.png)
+
+- Saisissez un **nouveau mot de passe** conforme aux règles :
+    - **16 caractères minimum et 72 caractères maximum**.
+    - Au moins **1 majuscule**, **1 minuscule,** **1 chiffre**, **1 caractère spécial**.
+- Confirmez le mot de passe en le ressaisissant.
+
+---
+
+### Étape 5 : Configurer la double authentification (MFA) via TOTP
+
+![image](/img/console/iam/login/FR_install_TOTP_app.png)
+
+- Choisissez une application TOTP (Time-based One-Time Password) pour l'utilisation de la double authentification (MFA) :
+    - **Applications d'authentifications** recommandées : Google Authenticator, FreeOTP, Microsoft Authenticator.
+- Scannez le **QR code** ou saisissez la clé secrète manuellement.
+    - ![image](/img/console/iam/login/FR_totp_first_setup.png)
+    - *Capture d'illustration : le QR code et la clé secrète affichés sont factices (données de démonstration).*
+    - ![FR_TOTP_login](/img/console/iam/login/FR_TOTP_login.png)
+
+**Important** :
+
+- Sans MFA, l'accès sera bloqué après 3 tentatives infructueuses.
+
+### Étape 6 : Accéder au portail
+
+- Vous êtes redirigé vers le **portail de la console Numspot**.
+
+![dashboard](/img/console/general/dashboard.png)
+
+
+
+Votre compte est désormais activé et sécurisé.

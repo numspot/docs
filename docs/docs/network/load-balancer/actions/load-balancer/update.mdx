@@ -1,6 +1,6 @@
 ---
-title: Modifier un attribut d'un load balancer - Numspot
-sidebar_label: Modifier un attribut d'un load balancer
+title: Modify an attribute of a load balancer - Numspot
+sidebar_label: Modify an attribute of a load balancer
 sidebar_position: 3
 draft: false
 ---
@@ -8,14 +8,14 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Modifier un attribut d'un load balancer
+# Modify an attribute of a load balancer
 
-Vous pouvez modifier les attributs d'un [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/), tels que son nom, son certificat SSL (Secure Sockets Layer) ou sa politique de persistance.
+You can modify the attributes of a [load balancer](/docs/network/load-balancer/concepts/), such as its name, its SSL (Secure Sockets Layer) certificate or its persistence policy.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.loadBalancer.update**
 
@@ -23,34 +23,27 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
   <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
-:::info
-La modification d'un load balancer n'est pas disponible depuis la console Numspot.
-
-Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
-:::
+1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
+2. Click the name of the load balancer that you want to modify.
+3. Click **Modify** at the top right of the screen.
+4. Modify the desired attributes.
+5. Click **Save**.
+   The changes are applied to the load balancer.
 
   </TabItem>
   <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `PUT /compute/spaces/{spaceId}/loadBalancers/{id}` command modifies the specified attribute of a load balancer. You can specify only one attribute at a time.
 
+You can set a new SSL certificate for an SSL or HTTPS listener of a load balancer. This certificate replaces any certificate used on the same load balancer and port.
 
-La commande `PUT /compute/spaces/{spaceId}/loadBalancers/{id}` modifie l'attribut spécifié d'un load balancer. Vous pouvez spécifier un seul attribut à la fois.
+You can also replace the policy currently enabled for the load balancer with another one. If the `policyNames` parameter is empty, the policy currently enabled is disabled.
 
-Vous pouvez définir un nouveau certificat SSL pour un listener SSL ou HTTPS d'un load balancer. Ce certificat remplace tout certificat utilisé sur le même load balancer et port.
-
-Vous pouvez également remplacer la politique actuellement activée pour le load balancer par une autre. Si le paramètre "policyNames" est vide, la politique actuellement activée est désactivée.
-
-[Exemple de requête : Modification d'un load balancer](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/loadBalancers/{id})
+[Request example: Modifying a load balancer](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/loadBalancers/{id})
   </TabItem>
   <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
 
   </TabItem>
 </Tabs>

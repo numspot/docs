@@ -1,5 +1,5 @@
 ---
-title: Obtenir des informations sur vos security groups
+title: Get information about your security groups
 sidebar_position: 4
 draft: false
 ---
@@ -8,16 +8,16 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Obtenir des informations sur vos security groups
+# Get information about your security groups
 
-Vous pouvez obtenir des informations à propos d'un ou plusieurs [security groups (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) et les règles qu'ils contiennent.
+You can get information about one or more [security groups](/docs/compute/security-groups/concepts/concept-sg/) and the rules they contain.
 
-Des informations sur vos security groups sont également disponibles depuis les [VM (Virtual Machine)](/docs/compute/concept/) elles-mêmes.
+Information about your security groups is also available from the [VM](/docs/compute/concept/) (Virtual Machine) themselves.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.securityGroup.get**
 
@@ -25,38 +25,31 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
    <TabItem value="console" label="Console" default> 
 
-## Console {#tabhead-console}
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/security-group/list.png", text: "Depuis le menu latéral gauche, cliquez sur Compute → Security Groups.", hotspot: { x: 0, y: 0.5568, w: 0.1944, h: 0.0457 } },
-    { img: "/img/walkthrough/security-group/list.png", text: "Dans la liste, cliquez sur l'ID du security group à consulter.", hotspot: { x: 0.2687, y: 0.4946, w: 0.0624, h: 0.0204 } },
-    { img: "/img/walkthrough/security-group/details.png", text: "La page « Détails Security Group » affiche ses informations générales et ses règles (onglets « Règles entrantes » et « Règles sortantes »).", hotspot: { x: 0.223, y: 0.2, w: 0.55, h: 0.42 } },
+    { img: "/img/walkthrough/en/security-group/list.png", text: "From the left-hand side menu, click Compute → Security Groups.", hotspot: { x: 0, y: 0.5568, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/en/security-group/list.png", text: "In the list, click the ID of the security group to view.", hotspot: { x: 0.2687, y: 0.4946, w: 0.0624, h: 0.0204 } },
+    { img: "/img/walkthrough/en/security-group/details.png", text: "The “Security Group details” page shows its general information and its rules (“Inbound rules” and “Outbound rules” tabs).", hotspot: { x: 0.223, y: 0.2, w: 0.55, h: 0.42 } },
   ]}
 />
 
-   1. Connectez-vous sur la console Numspot. 
-   2. Depuis le menu latéral gauche, cliquez sur **Compute** → **Security Groups**.
+   1. Log in to the Numspot console. 
+   2. From the left-hand side menu, click **Compute** → **Security Groups**.
 
-   3. Cliquez sur l'ID du security group. 
-   4. La page "Détails Security Group" apparaît. 
+
+   3. Click the ID of the security group. 
+   4. The "Security Group Details" page appears. 
    </TabItem> 
   <TabItem value="api" label="API">
+The `GET /compute/spaces/{spaceId}/securityGroups` command lets you list your security groups.
 
-## API {#tabhead-api}
+[Example request: Listing all your Security Groups](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/securityGroups)
 
-La commande `GET /compute/spaces/{spaceId}/securityGroups` permet de lister vos security groups.
+The `GET /compute/spaces/{spaceId}/securityGroups/{id}` command lets you retrieve the information of a security group.
 
-[Exemple de requête : Lister tous vos Security Groups](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/securityGroups)
-
-La commande `GET /compute/spaces/{spaceId}/securityGroups/{id}` permet de récupérer les informations d'un security group.
-
-[Exemple de requête : Récupérer les informations d'un Security Group](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/securityGroups/{id})
+[Example request: Retrieving the information of a Security Group](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/securityGroups/{id})
   </TabItem>
   <TabItem value="terraform" label="Terraform">
-
-## Terraform {#tabhead-terraform}
-
-    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/security_group).
+    The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/security_group).
   </TabItem>
 </Tabs>
