@@ -2,6 +2,8 @@
 title: Créer un volume
 sidebar_position: 1
 draft: false
+last_update:
+  date: 2026-09-25
 ---
 
 import Tabs from '@theme/Tabs';
@@ -17,7 +19,8 @@ Vous pouvez créer des `volumes` que vous pouvez attacher à des [VM (Virtual Ma
 :::info
 Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
 
-- **compute.blockStorage.create**
+- **Section :** compute — **Permission :** `blockStorage.create` (créer le volume)
+- **Section :** compute — **Permission :** `blockStorage.get` (consulter le volume après sa création)
 
 :::
 
@@ -70,11 +73,102 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 ## API {#tabhead-api}
 
 
-La commande `POST /compute/spaces/{spaceId}/volumes` permet de créer un `volume` de type block storage dans une région spécifiée. Les `volumes` de type block storage peuvent être attachés à une VM dans la même sous-région. Vous pouvez créer un `volume` vide ou restaurer un `volume` à partir d'un snapshot existant.
+Créez un `volume` block storage au sein d'un espace, vide ou restauré à partir d'un snapshot existant. Le `volume` créé peut ensuite être attaché à une [VM (Virtual Machine)](/docs/compute/concept/) de la même sous-région.
 
-Vous pouvez créer les types de `volumes` suivants : Enterprise (`io1`) pour les `volumes` SSD à IOPS provisionnés, Performance (`gp2`) pour les `volumes` SSD à usage général, ou Magnetic (`standard`) pour les `volumes` magnétiques.
+:::info
+**Prérequis** : aucun. Pour restaurer un `volume` depuis un snapshot, ce dernier doit exister (créer un [snapshot ↗](/docs/storage/block-storage/snapshots/actions/create)).
 
-[Exemple de requête : Création d'un Volume ↗](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/volumes)
+Cette opération nécessite un [jeton d'accès](/docs/iam/concepts/api/) et les permissions listées en tête de page.
+:::
+
+`POST https://api.eu-west-2.numspot.com/compute/spaces/{spaceId}/volumes`
+
+[Documentation complète de cet endpoint ↗](/openapi/#tag/compute/POST/compute/spaces/%7BspaceId%7D/volumes)
+
+### Paramètres
+
+| Paramètre | Emplacement | Requis | Type | Exemple | Description |
+| --- | --- | --- | --- | --- | --- |
+| `availabilityZoneName` | corps | oui | enum | `eu-west-2a` | Sous-région du `volume` : `eu-west-2a`, `eu-west-2b`, `eu-west-2c`, `cloudgouv-eu-west-1a`, `cloudgouv-eu-west-1b` ou `cloudgouv-eu-west-1c` |
+| `spaceId` | chemin | oui | UUID | `123e4567-e89b-12d3-a456-426614174000` | Espace dans lequel créer le `volume` |
+| `iops` | corps | type `io1` uniquement | integer | `100` | Nombre d'IOPS provisionnés, 13000 maximum, ratio de 300 IOPS par Go |
+| `size` | corps | sans snapshot | integer | `10` | Taille du `volume`, en Go (maximum 14901) |
+| `snapshotId` | corps | si size absent | string | `snap-12345678` | Identifiant du snapshot à restaurer |
+| `type` | corps | non | string | `gp2` | Type de `volume` : `io1` (Enterprise), `gp2` (Performance) ou `standard` (défaut) |
+
+Les types utilisés dans ce tableau sont décrits dans la page [Types de paramètres](/docs/reference/parameter-types).
+
+### Exemple
+
+```bash
+export TOKEN="{TOKEN}"
+
+curl 'https://api.eu-west-2.numspot.com/compute/spaces/{SPACE-ID}/volumes' \
+  --request POST \
+  --header "Authorization: Bearer $TOKEN" \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "availabilityZoneName": "{AVAILABILITY-ZONE-NAME}",
+  "size": 10,
+  "type": "gp2"
+}'
+```
+
+| Variable | Représente | Où trouver sa valeur |
+| --- | --- | --- |
+| `{TOKEN}` | Jeton d'accès OAuth 2.0 de la requête | Généré par l'authentification API (voir [Jeton d'accès](/docs/iam/concepts/api/)) |
+| `{SPACE-ID}` | Espace Numspot dans lequel créer le `volume` | Console Numspot (espace actif) ou réponse de l'API [Lister les espaces ↗](/docs/iam/space/actions/list) |
+| `{AVAILABILITY-ZONE-NAME}` | Sous-région du `volume` | L'une des six sous-régions listées dans le tableau des paramètres ci-dessus |
+
+### Réponse
+
+`201 Created` — le payload décrit le `volume` créé :
+
+| Champ | Type | Description |
+| --- | --- | --- |
+| `id` | string | Identifiant du `volume` (`vol-…`) |
+| `availabilityZoneName` | string | Sous-région du `volume` |
+| `size` | integer | Taille, en Go |
+| `type` | string | `standard`, `gp2` ou `io1` |
+| iops | integer | IOPS provisionnés (`io1`) ou performance de base (`gp2`) |
+| `state` | string | `creating`, `available`, `in-use`, `updating`, `deleting` ou `error` |
+| `snapshotId` | string | Snapshot source, si le `volume` a été restauré |
+| `linkedVolumes` | array | Informations d'attachement à une VM |
+| `tags` | array | Tags associés (dont le tag "Name") |
+| `creationDate` | date-time | Date de création |
+
+```json
+{
+  "availabilityZoneName": "eu-west-2c",
+  "creationDate": "2026-09-21T10:15:30.485Z",
+  "id": "vol-12345678",
+  "iops": 100,
+  "linkedVolumes": [],
+  "size": 10,
+  "state": "creating",
+  "tags": [
+    {
+      "key": "Name",
+      "value": "mon-volume"
+    }
+  ],
+  "type": "gp2"
+}
+```
+
+:::info
+La création est asynchrone : le `volume` est retourné avec l'état `creating`, puis passe à `available` lorsque sa création est terminée. Pour suivre l'état, interrogez l'endpoint [Lire les volumes d'un espace ↗](/openapi/#tag/compute/GET/compute/spaces/%7BspaceId%7D/volumes).
+:::
+
+### Erreurs principales
+
+| Code | Cas |
+| --- | --- |
+| 400 | Corps invalide : taille hors bornes du type de `volume` (maximum 14901 Go), iops fourni hors type `io1`, iops supérieur à 13000 ou ratio supérieur à 300 IOPS par Go |
+| 401 | Jeton d'accès absent, expiré ou invalide |
+| 403 | Permission `blockStorage.create` manquante |
+| 404 | `spaceId` inconnu |
+| 500 | Erreur interne du service — réessayer plus tard |
 
 </TabItem>
 <TabItem value="Terraform">
@@ -82,7 +176,81 @@ Vous pouvez créer les types de `volumes` suivants : Enterprise (`io1`) pour les
 ## Terraform {#tabhead-terraform}
 
 
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/volume).
+Gérez le `volume` avec la ressource `numspot_volume` du [provider Terraform Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs). Le provider s'authentifie avec les identifiants d'un compte de service (client_id / client_secret) et opère au niveau de l'espace configuré.
+
+:::info
+**Prérequis** : aucun. Le volume peut être rattaché à une VM dès sa création via `link_vm` : la VM et son subnet doivent alors exister.
+
+Les permissions nécessaires sont listées en tête de page.
+:::
+
+### Exemple
+
+```hcl
+terraform {
+  required_providers {
+    numspot = {
+      source = "numspot/numspot"
+    }
+  }
+}
+
+variable "client_id" {
+  type = string
+}
+
+variable "client_secret" {
+  type      = string
+  sensitive = true
+}
+
+provider "numspot" {
+  client_id     = var.client_id
+  client_secret = var.client_secret
+}
+
+resource "numspot_volume" "volume" {
+  type                   = "standard"
+  size                   = 11
+  availability_zone_name = "eu-west-2a"
+  tags = [
+    {
+      key   = "name"
+      value = "Mon volume"
+    }
+  ]
+}
+```
+
+| Variable | Représente | Où trouver sa valeur |
+| --- | --- | --- |
+| `var.client_id` | Identifiant du compte de service utilisé par le provider | Créé lors de la création du compte de service (console Numspot, section IAM) |
+| `var.client_secret` | Secret du compte de service | Généré à la création du compte de service, à conserver dans un gestionnaire de secrets |
+
+### Arguments
+
+| Argument | Requis | Type | Exemple | Description |
+| --- | --- | --- | --- | --- |
+| `availability_zone_name` | oui | string | `eu-west-2a` | Sous-région du `volume` : `eu-west-2a`, `eu-west-2b`, `eu-west-2c`, `cloudgouv-eu-west-1a`, `cloudgouv-eu-west-1b` ou `cloudgouv-eu-west-1c` |
+| iops | type `io1` uniquement | number | `100` | IOPS provisionnés, 13000 maximum, ratio de 300 IOPS par Gio |
+| `link_vm` | non | object | `{vm_id = "i-12345678", device_name = "/dev/sdb"}` | Attache le `volume` à une VM à la création (`vm_id`, `device_name`) |
+| `replace_volume_on_downsize` | non | bool | `false` | Recrée le `volume` lors d'une réduction de taille |
+| `size` | sans snapshot | number | `11` | Taille, en Gio (maximum 14901) |
+| `snapshot_id` | sans size | string | `snap-12345678` | Identifiant du snapshot à restaurer |
+| `tags` | non | set | `{key = "name", value = "mon-volume"}` | Tags key/value associés au `volume` |
+| `type` | non | string | `standard` | Type de `volume` : `standard`, `gp2` ou `io1` |
+
+Les types utilisés dans ce tableau sont décrits dans la page [Types de paramètres](/docs/reference/parameter-types).
+
+### Import
+
+Si le `volume` existe déjà (créé via la console ou l'API), importez-le dans l'état Terraform au lieu de le recréer :
+
+```bash
+terraform import numspot_volume {VOLUME-ID}
+```
+
+`{VOLUME-ID}` est l'identifiant du `volume` (`vol-…`, visible sur la console ou en réponse de l'API). La commande associe la ressource existante au bloc `resource "numspot_volume"` correspondant dans votre configuration, sans la modifier. Terraform n'importe pas les attributs dans la configuration : vérifiez ensuite avec `terraform plan` que la configuration décrit bien l'état réel, sous peine de destruction ou de modification non souhaitée au prochain `apply`.
 
 </TabItem>
 </Tabs>

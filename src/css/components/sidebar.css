@@ -202,6 +202,10 @@ a.menu__link[href*="/getting-started"]::before {
   -webkit-mask-image: url(../../../static/img/sidebar/connectivity.svg);
   mask-image: url(../../../static/img/sidebar/connectivity.svg);
 }
+.section-title.reference > div > a::before {
+  -webkit-mask-image: url(../../../static/img/sidebar/governance.svg);
+  mask-image: url(../../../static/img/sidebar/governance.svg);
+}
 .section-title.storage > div > a::before {
   -webkit-mask-image: url(../../../static/img/sidebar/storage.svg);
   mask-image: url(../../../static/img/sidebar/storage.svg);

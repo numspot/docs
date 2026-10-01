@@ -45,10 +45,10 @@ function docsOf(items) {
 }
 
 test('level 0: highlighted first, then alphabetical (A,B,C,D,E with B,E highlighted -> B,E,A,C,D)', () => {
-  // Mapped on real tools-group entries: A=resources, B=support, C=faq,
+  // Mapped on real tools-group entries: A=reference, B=support, C=faq,
   // D=glossary, E=terraform; highlights {support, terraform}.
   const items = [
-    cat('Ressources', 'section-title resource', [doc('docs/resources/resources')]),
+    cat('Référence', 'section-title reference', [doc('docs/reference/parameter-types')]),
     cat('Support', 'section-title support', [doc('docs/support/general')]),
     cat('Foire aux questions', 'section-title faq', [doc('docs/faq/general')]),
     cat('Glossaire', 'section-title glossary', [doc('docs/glossary/general')]),
@@ -57,7 +57,7 @@ test('level 0: highlighted first, then alphabetical (A,B,C,D,E with B,E highligh
   const result = sortSidebarEntries(items, docsOf(items), new Set(['support', 'terraform']));
   assert.deepStrictEqual(
     result.map((i) => i.label),
-    ['Support', 'Terraform', 'Foire aux questions', 'Glossaire', 'Ressources'],
+    ['Support', 'Terraform', 'Foire aux questions', 'Glossaire', 'Référence'],
   );
 });
 

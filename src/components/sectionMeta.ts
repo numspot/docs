@@ -60,6 +60,11 @@ export const SECTION_META: Record<string, SectionMeta> = {
     description:
       "View all the resources deployed in a Numspot space.",
   },
+  reference: {
+    icon: "/img/sidebar/governance.svg",
+    description:
+      "Transverse reference pages, such as the API and Terraform provider parameter types.",
+  },
   support: {
     icon: "/img/sidebar/support.svg",
     description:

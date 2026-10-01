@@ -181,9 +181,12 @@ function checkPage(diffRef, filePath) {
     if (baseDate !== undefined) {
       if (!isValidDate(baseDate)) {
         // Base was malformed; requiring the new date to simply be valid is enough.
-      } else if (date <= baseDate) {
+      } else if (date < baseDate) {
+        // "Refreshed" means not older than the base revision. Same-day
+        // revisions legitimately keep the same date (the rule is "the date
+        // of the revision"), so only strictly older dates are flagged.
         problems.push(
-          `\`last_update.date\` was not refreshed: "${date}" must be newer than "${baseDate}" (the page changed in this change set)`,
+          `\`last_update.date\` was not refreshed: "${date}" must be at least "${baseDate}" (the page changed in this change set)`,
         );
       }
     }

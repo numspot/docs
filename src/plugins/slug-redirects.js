@@ -48,10 +48,10 @@ const SLUG_RENAMES = [["plateforme-ia-mistral", "mistral-ai-platform"]];
  * build root gets the stub only if the target page exists for that locale.
  */
 const DELETED_PAGES = [
-  // Resources page (zones/regions/endpoints) removed: the Catalog concepts
-  // page describes the Numspot regions. The "docs/" prefix matches the site
-  // URL scheme (all doc routes live under /docs/).
-  ["docs/resources", "docs/catalog/concepts"],
+  // Resources page (resource locations) removed by D-023 (8): the useful
+  // information (full API base URLs) now lives inside the Reference section
+  // (parameter types) and the action pages.
+  ["docs/resources", "docs/reference/parameter-types"],
 ];
 
 function redirectHtml(targetUrl) {

@@ -16,7 +16,7 @@
       "status": "removed",
       "date": "2026-10-01",
       "title": "Resource locations page removed",
-      "description": "The \"Resource locations\" page (zones, regions and endpoints) is removed from the documentation. The /resources URL keeps answering as a noindex redirect to the Catalog concepts page, which describes the Numspot regions.",
+      "description": "The \"Resource locations\" page (zones, regions and endpoints) is removed from the documentation. The /resources URL keeps answering as a noindex redirect to the Reference parameter-types page, which describes the Numspot regions.",
       "components": [
         "docs"
       ]
@@ -99,6 +99,40 @@
       "description": "The mapPublicIpOnLaunch attribute of subnets is now documented: enabling it through the subnet attribute update, automatic assignment of a public IP (chosen randomly) to the primary NIC of each VM launched in the subnet, persistence of the link across stops and starts, deletion of the IP with the VM, absence from the \"Public IP\" section, and Internet access requirements (internet gateway, route table, security group).",
       "components": [
         "docs"
+      ]
+    },
+    {
+      "service": "Reference",
+      "status": "added",
+      "date": "2026-09-25",
+      "title": "New Reference section with the Parameter types page",
+      "description": "A Reference section appears in the “Ressources & outils” menu and opens with a Parameter types page: definitions and examples of the types used in the parameter tables of the API and Terraform tabs (string, UUID, integer, boolean, enum, array, set, object), with the mapping between the OpenAPI schema and the Terraform provider schema.",
+      "components": [
+        "docs",
+        "api",
+        "terraform"
+      ]
+    },
+    {
+      "service": "Compute",
+      "status": "changed",
+      "date": "2026-09-25",
+      "title": "Enriched API and Terraform documentation for VM creation",
+      "description": "The API tab of the VM creation page documents the POST https://api.eu-west-2.numspot.com/compute/spaces/{spaceId}/vms endpoint in detail: every request parameter (required ones first, then optional ones, in alphabetical order) with a usage example in the table, the prerequisites to create beforehand, a request example where every dynamic value is represented by a {VARIABLE} that is explained (what it represents and where to find its value), the response with the state machine (pending then running) and the full set of error cases. The Permissions section separates the IAM section from the permission (create, get, update). The Terraform tab presents the numspot_vm resource with the same rules: prerequisites, complete ordered arguments, explained variables and the import command with the {VM-ID} variable.",
+      "components": [
+        "docs",
+        "api"
+      ]
+    },
+    {
+      "service": "Compute",
+      "status": "changed",
+      "date": "2026-09-25",
+      "title": "Enriched API and Terraform documentation for block storage volume creation",
+      "description": "The API tab of the volume creation page documents the POST https://api.eu-west-2.numspot.com/compute/spaces/{spaceId}/volumes endpoint in detail: every request parameter (required ones first, then optional ones, in alphabetical order) with a usage example in the table, the prerequisites (none mandatory, optional snapshot), a request example where every dynamic value is represented by a {VARIABLE} that is explained, the response with asynchronous states (creating then available) and the full set of error cases. The Permissions section separates the IAM section from the permission (create, get). The Terraform tab presents the numspot_volume resource with the same rules: complete ordered arguments, explained variables and the import command with the {VOLUME-ID} variable.",
+      "components": [
+        "docs",
+        "api"
       ]
     },
     {
