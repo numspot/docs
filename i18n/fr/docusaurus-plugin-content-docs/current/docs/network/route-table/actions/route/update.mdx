@@ -1,0 +1,49 @@
+---
+title: Modifier une route
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Modifier une route
+
+Vous pouvez modifier une route que vous avez créée dans une [route table (table de routage)](/docs/network/route-table/concepts/) en la remplaçant par une autre. Cette action modifie automatiquement la façon dont le trafic est routé pour les [VM (Virtual Machines)](/docs/compute/concept/) placées dans les subnets (sous-réseaux) associés à cette route table.
+
+## Permissions
+
+Aucune permission **IAM** (Identity and Access Management) n'est requise pour effectuer cette action.
+
+<Tabs>
+  <TabItem value="Console" default>
+
+  :::info
+  La modification d'une route n'est pas disponible depuis la console Numspot : le panneau **Routes** d'une route table ne propose que la suppression d'une route.
+
+  Pour modifier une route, supprimez la route existante puis recréez-la avec la nouvelle cible, ou utilisez l'**API** / **Terraform** (voir les onglets correspondants).
+  :::
+
+  </TabItem>
+  <TabItem value="API">
+      La commande `PUT /compute/spaces/{spaceId}/routeTables/{id}/routes` remplace une route existante dans une route table d'un VPC (Virtual Private Cloud).
+Vous devez spécifier l'un des éléments suivants comme cible :
+
+- VPC Peering
+- `NAT VM` (machine virtuelle NAT)
+- [internet gateway (passerelle Internet)](/docs/network/internet-gateway/concepts/)
+- [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/)
+- [nat gateway (passerelle NAT)](/docs/network/nat/concepts/)
+- NIC (Network Interface Card)
+
+L'algorithme de routage est basé sur la correspondance la plus spécifique.
+
+[Exemple de requête : Modification d'une route](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/routeTables/{id}/routes)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
+  </TabItem>
+</Tabs>

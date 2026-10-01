@@ -1,0 +1,53 @@
+---
+title: Principales fonctionnalités de l'IAM - IAM
+sidebar_label: Principales fonctionnalités de l'IAM
+sidebar_position: 4
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+# Principales fonctionnalités de l'IAM
+
+## La création d'un utilisateur et l'authentification 2FA
+
+Un administrateur ou un utilisateur autorisé enregistre le nom, le prénom et l'adresse électronique d'un nouvel utilisateur. Ce dernier reçoit un lien par messagerie pour activer son compte, ce qui lui permet de définir son mot de passe et d'ajouter son smartphone comme second facteur d'authentification grâce à un QR code. L'utilisateur s'authentifie avec son adresse électronique et son mot de passe comme premier facteur d'authentification.
+
+Pour le deuxième facteur d'authentification, un jeton **OTP** (One-Time Password), sous forme de code de vérification, est à générer sur le téléphone déclaré. Comme pour chaque opération de gestion d'un utilisateur (création, affichage, modification, suppression), vous pouvez utiliser la Console ou les API.
+
+:::info
+Lien vers la [Documentation API](/docs/iam/concepts/api/).
+:::
+
+## La création d'un compte de service
+
+Pour un compte de service, il n'y a pas de contrôle par un deuxième facteur pour la connexion. La réponse à la requête de création contient le jeton d'accès à utiliser pour appeler les services.
+
+## Les parcours de connexion
+
+La connexion au système d'information se fait en suivant le protocole d'authentification **OpenID Connect** (OIDC), qui utilise le protocole sous-jacent **OAuth** 2.0. À l'issue des processus d'identification et d'authentification, l'utilisateur obtient un jeton d'accès (token) qu'il doit présenter à chaque accès à une ressource.
+
+### Pour un compte utilisateur
+
+La connexion d'un utilisateur se fera en deux temps, via une page d'authentification et le **TOTP** (Time-based One-Time Password). À l'issue des contrôles par le serveur d'identité, un jeton d'accès sera retourné à l'utilisateur.
+
+### Pour un compte de service
+
+Le schéma de connexion est plus simple car il ne passe pas par une double authentification avec un formulaire web. Le service présentera l'identifiant de son compte et la clé secrète au serveur d'identité qui, après contrôle, lui délivrera un jeton d'accès (token).
+
+## Le blocage et déblocage d'un compte utilisateur
+
+Au bout de trois tentatives de connexion infructueuses, le compte de l'utilisateur est automatiquement bloqué. Il ne pourra plus se connecter au système. Pour réactiver un compte :
+
+- assistance par administrateur/gestionnaire de compte : un administrateur ou un gestionnaire de compte peut intervenir en générant un lien de réactivation à envoyer à l'adresse électronique de l'utilisateur. Ils peuvent également directement mettre à jour l'état du compte utilisateur en le passant de "Inactif" à "Actif".
+
+## La suppression d'un compte et de ses permissions
+
+La transaction de suppression de compte supprime définitivement le compte du système. Aussi, pour des raisons de traçabilité et d'audit, il est recommandé de réaliser cette opération en deux temps :
+
+- rendre le compte inactif et supprimer ses permissions ;
+- procéder à la suppression du compte.
+
+## Le token d'accès
+
+Après avoir été identifié et authentifié, l'utilisateur ou le compte de service reçoit un jeton d'accès (token) valide pour une durée limitée. La Console présente ce jeton auprès de chaque ressource à laquelle il accède. Le compte de service fera de même dans l'entête de la requête à destination de l'API.

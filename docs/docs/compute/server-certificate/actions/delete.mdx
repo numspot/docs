@@ -1,5 +1,5 @@
 ---
-title: Supprimer un server certificate
+title: Delete a server certificate
 sidebar_position: 5
 draft: false
 ---
@@ -7,14 +7,14 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Supprimer un server certificate
+# Delete a server certificate
 
-Vous pouvez supprimer un server certificate que vous n'utilisez plus.
+You can delete a server certificate that you no longer use.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.serverCertificate.delete**
 
@@ -25,24 +25,21 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 ## Console {#tabhead-console}
 
 :::info
-La suppression d'un certificat serveur n'est pas disponible depuis la console Numspot.
+Deleting a server certificate is not available from the Numspot console.
 
-Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+Use the **API** or **Terraform** (see the corresponding tabs).
 :::
 
   </TabItem>
   <TabItem value="api" label="API">
+The `DELETE /compute/spaces/{spaceId}/serverCertificates/{id}` command deletes a specified server certificate.
 
-## API {#tabhead-api}
-
-La commande `DELETE /compute/spaces/{spaceId}/serverCertificates/{id}` supprime un server certificate spécifié.
-
-[Exemple de requête : Suppression d'un server certificate](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/serverCertificates/{id})
+[Example request: Deleting a server certificate](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/serverCertificates/{id})
   </TabItem>
   <TabItem value="terraform" label="Terraform">
 
 ## Terraform {#tabhead-terraform}
 
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/server_certificate).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/server_certificate).
   </TabItem>
 </Tabs>

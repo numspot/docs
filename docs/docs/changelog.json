@@ -4,8 +4,8 @@
       "service": "IAM",
       "status": "added",
       "date": "2026-09-30",
-      "title": "Page de référence Permissions et API associées",
-      "description": "Nouvelle page de référence dans le menu IAM : pour chaque permission du domaine IAM, la liste des API qui l'utilisent, avec recherche et autocomplétion par permission ou par API (méthode, chemin ou résumé), filtrage en direct et lien vers la définition de chaque endpoint dans la référence OpenAPI. Seuls les endpoints exposés sur l'API publique sont listés.",
+      "title": "Permissions and related APIs reference page",
+      "description": "New reference page in the IAM menu: for each permission of the IAM domain, the list of APIs using it, with search and autocompletion by permission or by API (method, path or summary), live filtering and a link to each endpoint definition in the OpenAPI reference. Only the endpoints exposed on the public API are listed.",
       "components": [
         "api"
       ]
@@ -14,8 +14,8 @@
       "service": "Kubernetes",
       "status": "added",
       "date": "2026-09-30",
-      "title": "Documentation des pages API Kubernetes listant les clusters et les profils de nœuds",
-      "description": "Deux nouvelles pages d'action Kubernetes : « Lister les clusters Kubernetes » (GET /kubernetes/spaces/{spaceId}/clusters, avec pagination via le champ nextToken) et « Lister les profils de nœuds disponibles » (GET /kubernetes/nodeProfiles).",
+      "title": "Documentation of the Kubernetes API pages listing clusters and node profiles",
+      "description": "Two new Kubernetes action pages: \"List Kubernetes clusters\" (GET /kubernetes/spaces/{spaceId}/clusters, with pagination via the nextToken field) and \"List available node profiles\" (GET /kubernetes/nodeProfiles).",
       "components": [
         "docs"
       ]
@@ -24,8 +24,8 @@
       "service": "PostgreSQL",
       "status": "added",
       "date": "2026-09-30",
-      "title": "Documentation des pages API PostgreSQL listant les versions, les clusters et les sauvegardes",
-      "description": "Quatre nouvelles pages d'action PostgreSQL : « Lister les versions PostgreSQL disponibles » (GET /postgresql/versions), « Lister les clusters PostgreSQL » (GET /postgresql/spaces/{spaceId}/clusters), « Lister les sauvegardes d'un espace PostgreSQL » (GET /postgresql/spaces/{spaceId}/backups) et « Obtenir une sauvegarde PostgreSQL » (GET /postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId}).",
+      "title": "Documentation of the PostgreSQL API pages listing versions, clusters and backups",
+      "description": "Four new PostgreSQL action pages: \"List available PostgreSQL versions\" (GET /postgresql/versions), \"List PostgreSQL clusters\" (GET /postgresql/spaces/{spaceId}/clusters), \"List the backups of a PostgreSQL space\" (GET /postgresql/spaces/{spaceId}/backups) and \"Get a PostgreSQL backup\" (GET /postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId}).",
       "components": [
         "docs"
       ]
@@ -34,8 +34,8 @@
       "service": "Container Registry",
       "status": "added",
       "date": "2026-09-30",
-      "title": "Documentation des pages API Container Registry listant les registries et réinitialisant le mot de passe administrateur",
-      "description": "Deux nouvelles pages d'action Container Registry : « Lister les registries » (GET /registry/spaces/{spaceId}/registries) et « Réinitialiser le mot de passe administrateur » (PUT /registry/spaces/{spaceId}/registries/{registryId}/password/reset, réponse 202 Accepted avec corps vide, nouveau mot de passe à récupérer via la requête de lecture du mot de passe).",
+      "title": "Documentation of the Container Registry API pages listing registries and resetting the administrator password",
+      "description": "Two new Container Registry action pages: \"List registries\" (GET /registry/spaces/{spaceId}/registries) and \"Reset the administrator password\" (PUT /registry/spaces/{spaceId}/registries/{registryId}/password/reset, 202 Accepted response with an empty body, new password to be retrieved via the password read request).",
       "components": [
         "docs"
       ]
@@ -44,8 +44,8 @@
       "service": "Container Registry",
       "status": "fixed",
       "date": "2026-09-30",
-      "title": "Correction du host des registries Harbor dans les exemples de réponse",
-      "description": "Les exemples de réponse de la page de création utilisent désormais le format réel du host des registries Harbor (reg-<id>.space-<id>.hcp.cloudgouv-eu-west-1.numspot.com) au lieu d'un host générique.",
+      "title": "Correction of the Harbor registry host in the response examples",
+      "description": "The response examples of the creation page now use the real format of the Harbor registry host (reg-<id>.space-<id>.hcp.cloudgouv-eu-west-1.numspot.com) instead of a generic host.",
       "components": [
         "docs"
       ]
@@ -54,8 +54,8 @@
       "service": "Secret Manager",
       "status": "added",
       "date": "2026-09-30",
-      "title": "Documentation de la récupération du token admin d'une instance Secret Manager",
-      "description": "Nouvelle page d'action Secret Manager : « Obtenir le token admin d'une instance Secret Manager » (GET /secrets/spaces/{spaceId}/instances/{instanceId}/password).",
+      "title": "Documentation of retrieving the admin token of a Secret Manager instance",
+      "description": "New Secret Manager action page: \"Get the admin token of a Secret Manager instance\" (GET /secrets/spaces/{spaceId}/instances/{instanceId}/password).",
       "components": [
         "docs"
       ]
@@ -64,18 +64,18 @@
       "service": "Console",
       "status": "added",
       "date": "2026-09-29",
-      "title": "Page Premiers pas chez Numspot",
-      "description": "Nouvelle page « Premiers pas chez Numspot » décrivant le parcours du premier utilisateur dans la console, du principe du moindre privilège aux premières ressources : vérification des droits, création du premier espace, création des utilisateurs et génération de leurs liens d'activation, attribution des rôles, permissions et espaces, puis création d'une première VM et des premiers services managés (Kubernetes, PostgreSQL). Une note rappelle le parcours d'arrivée : demande d'ouverture de compte, création du premier utilisateur super admin avec adresse email générique recommandée et activation sous 48 heures.",
+      "title": "First steps with Numspot page",
+      "description": "New \"First steps with Numspot\" page describing the first user's journey in the console, from the least privilege principle to the first resources: rights verification, first space creation, user creation and activation link generation, assignment of roles, permissions and spaces, then creation of a first VM and the first managed services (Kubernetes, PostgreSQL). A note recalls the arrival journey: account opening request, first super admin user with a recommended generic email address, and 48-hour account activation.",
       "components": [
         "console"
       ]
     },
     {
-      "service": "Réseau",
+      "service": "Network",
       "status": "changed",
       "date": "2026-09-28",
-      "title": "Documentation de l'attribution automatique d'IP publique via mapPublicIpOnLaunch",
-      "description": "L'attribut mapPublicIpOnLaunch des subnets est désormais documenté : activation via la modification d'un attribut de subnet, attribution automatique d'une IP publique (choisie de façon aléatoire) à la NIC principale de chaque VM lancée dans le subnet, persistance du lien lors des arrêts et redémarrages, suppression de l'IP avec la VM, non-apparition dans la section « IP publiques » et conditions d'accès à Internet (internet gateway, route table, security group).",
+      "title": "Documentation of automatic public IP assignment via mapPublicIpOnLaunch",
+      "description": "The mapPublicIpOnLaunch attribute of subnets is now documented: enabling it through the subnet attribute update, automatic assignment of a public IP (chosen randomly) to the primary NIC of each VM launched in the subnet, persistence of the link across stops and starts, deletion of the IP with the VM, absence from the \"Public IP\" section, and Internet access requirements (internet gateway, route table, security group).",
       "components": [
         "docs"
       ]
@@ -84,8 +84,8 @@
       "service": "IAM",
       "status": "changed",
       "date": "2026-09-18",
-      "title": "Documentation IAM mise à jour et illustrations régénérées",
-      "description": "Les 32 pages IAM sont alignées sur la console et l'API actuelles : parcours de création d'un utilisateur et d'un compte de service avec attribution des rôles et permissions dès la création (assistant Espaces, Rôles, Permissions) ou création sans droits, duplication d'une identité à partir d'un profil existant, suppression d'un utilisateur qui révoque automatiquement ses clés API, suppression asynchrone d'un compte de service, format du nom et bornes de durée de vie du token des comptes de service (1 seconde à 48 heures), suppression d'un espace réalisée via une demande au support, endpoint de génération du lien d'activation corrigé (POST /iam/organisations/{organisationId}/users/{userId}/recover), page Rôles refondée (les rôles se consultent depuis les pages de détails des identités, la page dédiée de la console n'existe plus) et walksinteractifs régénérés avec les écrans actuels de la console.",
+      "title": "IAM documentation updated and illustrations regenerated",
+      "description": "The 32 IAM pages are aligned with the current console and API: user and service account creation flows with roles and permissions assigned at creation time (Spaces, Roles, Permissions wizard) or without access rights, identity duplication from an existing profile, user deletion which automatically revokes their API keys, asynchronous service account deletion, service account name format and token duration bounds (1 second to 48 hours), space deletion handled through a support request, corrected activation link generation endpoint (POST /iam/organisations/{organisationId}/users/{userId}/recover), the Roles page redesigned (roles are viewed from the identity details pages, the dedicated console page no longer exists) and interactive walkthroughs regenerated with the current console screens.",
       "components": [
         "console",
         "api",
@@ -93,21 +93,21 @@
       ]
     },
     {
-      "service": "Connectivité",
+      "service": "Connectivity",
       "status": "changed",
       "date": "2026-09-17",
-      "title": "Sécurisation IPsec des tunnels VPN décrite précisément",
-      "description": "La page de concepts des connexions VPN corrige la description de la sécurisation du tunnel : IPsec n'est pas un protocole de chiffrement mais une suite de protocoles, avec IKEv2 qui négocie les clés et ESP qui chiffre les données. Un lien vers la page Référence pour la configuration des VPN est ajouté. Cette page de référence précise le rôle de chaque phase (phase 1 : SA IKE, phase 2 : SA enfant ESP), explique l'authentification HMAC requise par les algorithmes non AEAD et ajoute les durées de vie obligatoires (28800 secondes pour la phase 1, 3600 secondes pour la phase 2).",
+      "title": "IPsec securing of VPN tunnels described accurately",
+      "description": "The VPN connection concepts page corrects the description of how the tunnel is secured: IPsec is not an encryption protocol but a suite of protocols, with IKEv2 negotiating the keys and ESP encrypting the data. A link to the VPN Configuration Reference page is added. This reference page clarifies the role of each phase (phase 1: IKE SA, phase 2: ESP child SA), explains the HMAC authentication required by non-AEAD algorithms and adds the mandatory lifetimes (28800 seconds for phase 1, 3600 seconds for phase 2).",
       "components": [
         "docs"
       ]
     },
     {
-      "service": "Connectivité",
+      "service": "Connectivity",
       "status": "changed",
       "date": "2026-09-11",
-      "title": "Pages Hybrid Bridge harmonisées sur l'API et Terraform",
-      "description": "Les pages d'action Hybrid Bridge (création, lecture, suppression) sont alignées sur le modèle des Compute Bridges : l'onglet Console est retiré, la gestion des Hybrid Bridges s'effectuant uniquement par API, l'onglet API devient l'onglet par défaut et un onglet Terraform est ajouté avec le lien vers la ressource numspot_hybrid_bridge du registry. La page de concepts ajoute un lien vers le guide de connexion d'une VM à un cluster Kubernetes managé.",
+      "title": "Hybrid Bridge pages aligned on the API and Terraform",
+      "description": "The Hybrid Bridge action pages (create, read, delete) are aligned with the Compute Bridges model: the Console tab is removed since Hybrid Bridges are managed through the API only, the API tab becomes the default tab and a Terraform tab is added with the link to the numspot_hybrid_bridge resource of the registry. The concepts page adds a link to the guide for connecting a VM to a managed Kubernetes cluster.",
       "components": [
         "docs"
       ]
@@ -116,8 +116,8 @@
       "service": "Kubernetes",
       "status": "added",
       "date": "2026-09-11",
-      "title": "Guide de connexion d'une VM à un cluster Kubernetes managé",
-      "description": "Un nouveau guide est ajouté au service Kubernetes managé : « Connecter une VM à un cluster Kubernetes managé ». Il documente la connexion privée d'une VM d'un VPC au serveur d'API d'un cluster managé via un Hybrid Bridge : création du bridge, mise à jour de la route table avec les cibles VPC peering, ouverture du flux sortant vers le control plane, déploiement du fichier kubeconfig sur la VM, contrainte SNI sur l'URL du serveur d'API et dépannage.",
+      "title": "Guide for connecting a VM to a managed Kubernetes cluster",
+      "description": "A new guide is added to the managed Kubernetes service: \"Connect a VM to a managed Kubernetes cluster\". It documents the private connection of a VM in a VPC to the API server of a managed cluster through a Hybrid Bridge: bridge creation, route table update with VPC peering targets, outbound flow opening towards the control plane, kubeconfig file deployment on the VM, SNI constraint on the API server URL and troubleshooting.",
       "components": [
         "docs"
       ]
@@ -126,8 +126,8 @@
       "service": "Kubernetes",
       "status": "added",
       "date": "2026-09-11",
-      "title": "Guide d'exposition interne via un load balancer privé",
-      "description": "Un nouveau guide est ajouté au service Kubernetes managé : « Exposer une application en interne via un load balancer privé ». Il documente la création d'un Service Kubernetes de type LoadBalancer interne avec les annotations du cloud controller manager de la plateforme : load balancer privé dans un subnet, filtrage des sources autorisées, security groups, cycle de vie des adresses IP (privées auto-attribuées ou IP pré-allouée statique), vérification de l'accès depuis un VPC appairé et dépannage.",
+      "title": "Internal exposure guide through a private load balancer",
+      "description": "A new guide is added to the managed Kubernetes service: \"Expose an application internally through a private load balancer\". It documents the creation of an internal LoadBalancer type Kubernetes Service with the annotations of the cloud controller manager of the platform: private load balancer in a subnet, filtering of the allowed sources, security groups, IP address lifecycle (auto-allocated private IPs or pre-allocated static IP), access verification from a peered VPC and troubleshooting.",
       "components": [
         "docs"
       ]
@@ -136,29 +136,29 @@
       "service": "Object Storage",
       "status": "added",
       "date": "2026-09-08",
-      "title": "Page de suppression de bucket publiée",
-      "description": "Une nouvelle page d'action « Supprimer un bucket » est ajoutée en miroir de la page de création. Elle documente la suppression d'un bucket Object Storage via la commande S3 aws s3 rb (AWS CLI) et via Terraform (ressource numspot_bucket). La suppression nécessite la permission objectstorage.bucket.delete et un bucket vide, conformément au standard S3 d'AWS : la suppression d'un bucket ne supprime pas les objets qu'il contient, ils doivent être supprimés au préalable (ou via l'option --force d'AWS CLI). La suppression d'un bucket ou d'un objet est irréversible.",
+      "title": "Bucket deletion page published",
+      "description": "A new \"Delete a bucket\" action page is added as a mirror of the creation page. It documents the deletion of an Object Storage bucket through the S3 aws s3 rb command (AWS CLI) and through Terraform (numspot_bucket resource). Deletion requires the objectstorage.bucket.delete permission and an empty bucket, in accordance with the AWS S3 standard: deleting a bucket does not delete the objects it contains, they must be deleted beforehand (or through the --force option of AWS CLI). Deleting a bucket or an object is irreversible.",
       "components": [
         "api",
         "terraform"
       ]
     },
     {
-      "service": "Ressources",
+      "service": "Resources",
       "status": "changed",
       "date": "2026-09-08",
-      "title": "Page Emplacements des ressources réécrite autour des zones et régions",
-      "description": "La page « À propos des Régions, Endpoints et Sous-régions » devient « À propos des Zones, Régions et Endpoints » et décrit la hiérarchie réelle de Numspot : deux zones, STD (standard) et SNC (SecNumCloud), hébergeant actuellement une région chacune, respectivement eu-west-2 et cloudgouv-eu-west-1. Le modèle « sous-régions » (zones de disponibilité), sans réalité chez Numspot, est supprimé ainsi que le schéma associé. L'URL de l'exemple de requête API est corrigée en api.eu-west-2.numspot.com.",
+      "title": "Resource locations page rewritten around zones and regions",
+      "description": "The \"About Numspot Regions, Endpoints and Sub-regions\" page becomes \"About Numspot Zones, Regions and Endpoints\" and describes the actual Numspot hierarchy: two zones, STD (standard) and SNC (SecNumCloud), currently hosting one region each, eu-west-2 and cloudgouv-eu-west-1 respectively. The \"sub-regions\" model (availability zones), with no reality at Numspot, is removed along with the associated diagram. The API request example URL is fixed to api.eu-west-2.numspot.com.",
       "components": [
         "docs"
       ]
     },
     {
-      "service": "Ressources",
+      "service": "Resources",
       "status": "removed",
       "date": "2026-09-08",
-      "title": "Page Quotas supprimée",
-      "description": "La page Quotas décrivait une consultation des quotas depuis la console Numspot (onglet « Quotas » du compte) et une liste de limites par ressource qui ne correspondent pas à la console actuelle. Cette page est supprimée ; l'URL /docs/resources/quotas reste vivante en redirection noindex vers la page Emplacements des ressources.",
+      "title": "Quotas page removed",
+      "description": "The Quotas page described viewing quotas from the Numspot console (the \"Quotas\" tab of the account) and a list of per-resource limits that do not match the current console. This page is removed; the /docs/resources/quotas URL remains alive as a noindex redirect to the Resource locations page.",
       "components": [
         "docs"
       ]
@@ -167,8 +167,8 @@
       "service": "Compute",
       "status": "changed",
       "date": "2026-09-08",
-      "title": "Server certificates : section déplacée vers Compute et page concepts publiée",
-      "description": "La section Server Certificates est déplacée d'IAM vers Compute (nouvelles URLs /docs/compute/server-certificate/…, les anciennes URLs /docs/iam/server-certificate/… restent vivantes en redirection noindex). La page Démarrage rapide, qui reprenait le contenu des pages d'actions, est remplacée par une page concepts décrivant les server certificates : définition, contenu attendu (certificat x509 au format PEM, clé privée RSA PKCS1, chaîne des autorités intermédiaires), identification (nom, chemin, NRN), metadata renvoyées et utilisation pour la terminaison SSL d'un load balancer. La page de création, jusque-là intitulée à tort « Télécharger un server certificate », est renommée « Créer un server certificate » avec une introduction décrivant l'import du certificat et de sa clé privée. Les onglets Terraform des quatre pages d'actions, jusque-là non renseignés, renvoient désormais vers la documentation de la ressource numspot_server_certificate.",
+      "title": "Server certificates: section moved to Compute and concepts page published",
+      "description": "The Server Certificates section is moved from IAM to Compute (new URLs /docs/compute/server-certificate/…, the old /docs/iam/server-certificate/… URLs remain alive as noindex redirects). The quick start page, which duplicated the content of the action pages, is replaced by a concepts page describing server certificates: definition, expected content (x509 certificate in PEM format, RSA PKCS1 private key, intermediate authorities chain), identification (name, path, NRN), returned metadata and use for the SSL termination of a load balancer. The creation page, previously titled \"Télécharger un server certificate\" (Download a server certificate) by mistake, is renamed \"Créer un server certificate\" (Create a server certificate) with an introduction describing the import of the certificate and its private key. The Terraform tabs of the four action pages, previously empty, now link to the documentation of the numspot_server_certificate resource.",
       "components": [
         "api"
       ]
@@ -177,8 +177,8 @@
       "service": "Compute",
       "status": "changed",
       "date": "2026-09-08",
-      "title": "Erreur explicite au démarrage d'une VM sans volume système",
-      "description": "Lors du démarrage d'une VM dont le périphérique racine (/dev/sda1 par défaut) n'a plus de volume attaché, l'API renvoie désormais une erreur 409 Conflict détaillant la cause (volume système manquant) au lieu d'un message générique « Resource conflict. ». La page du cycle de vie des VM documente ce cas et ses résolutions.",
+      "title": "Explicit error when starting a VM without a system volume",
+      "description": "When starting a VM whose root device (/dev/sda1 by default) no longer has a volume attached, the API now returns a 409 Conflict error detailing the cause (missing system volume) instead of a generic \"Resource conflict.\" message. The VM lifecycle page documents this case and its resolutions.",
       "components": [
         "api"
       ]
@@ -187,8 +187,8 @@
       "service": "PostgreSQL",
       "status": "changed",
       "date": "2026-09-04",
-      "title": "Détail des extensions disponibles et restrictions de licence",
-      "description": "La page de création d'un cluster PostgreSQL détaille désormais les extensions TimescaleDB et Vector, leurs cas d'usage, les restrictions de licence Apache 2 pour TimescaleDB, les différences de fonctionnalités entre les éditions Apache 2 et Community, et le fait qu'une extension doit être choisie à la création du cluster.",
+      "title": "Details of available extensions and license restrictions",
+      "description": "The PostgreSQL cluster creation page now details the TimescaleDB and Vector extensions, their use cases, the Apache 2 license restriction for TimescaleDB, the feature differences between Apache 2 and Community editions, and the fact that an extension must be selected at cluster creation.",
       "components": [
         "console",
         "api"
@@ -198,8 +198,8 @@
       "service": "Compute",
       "status": "changed",
       "date": "2026-09-03",
-      "title": "Tags des ressources : pages publiées et permissions précisées",
-      "description": "Les pages de gestion des tags des ressources (consultation, ajout, suppression) sont désormais publiées. Les permissions IAM associées sont précisées : l'ajout ou la suppression de tags nécessite la permission de mise à jour de la ressource concernée (ex. compute.vm.update pour une VM, compute.loadBalancer.update pour un load balancer), et la consultation des tags nécessite la permission de lecture de chaque ressource (seuls les tags des ressources lisibles sont renvoyés).",
+      "title": "Resource tags: pages published and permissions clarified",
+      "description": "The resource tag management pages (viewing, adding, deleting) are now published. The associated IAM permissions are clarified: adding or deleting tags requires the update permission of the resource in question (e.g. compute.vm.update for a VM, compute.loadBalancer.update for a load balancer), and viewing tags requires the read permission of each resource (only the tags of resources you are allowed to read are returned).",
       "components": [
         "api",
         "console"
@@ -209,19 +209,19 @@
       "service": "DLP",
       "status": "changed",
       "date": "2026-09-02",
-      "title": "« Data Leak Protection » renommé en « Data Loss Prevention »",
-      "description": "Le service DLP est désormais appelé « Data Loss Prevention » dans toute la documentation : menus, pages, glossaire et référence API. L'acronyme DLP reste inchangé.",
+      "title": "\"Data Leak Protection\" renamed to \"Data Loss Prevention\"",
+      "description": "The DLP service is now called \"Data Loss Prevention\" throughout the documentation: menus, pages, glossary and API reference. The DLP acronym remains unchanged.",
       "components": [
         "console",
         "api"
       ]
     },
     {
-      "service": "Connectivité",
+      "service": "Connectivity",
       "status": "changed",
       "date": "2026-09-01",
-      "title": "Compute Bridge : gestion via API uniquement",
-      "description": "La section « Compute Bridges » n'est plus disponible dans la console. Les pages Compute Bridge (création, consultation, suppression) documentent désormais la gestion via API et Terraform uniquement.",
+      "title": "Compute Bridge: API management only",
+      "description": "The \"Compute Bridges\" section is no longer available in the console. The Compute Bridge pages (creation, viewing, deletion) now document API and Terraform management only.",
       "components": [
         "api",
         "terraform"
@@ -231,8 +231,8 @@
       "service": "DLP",
       "status": "added",
       "date": "2026-08-28",
-      "title": "Page Dépannage DLP et documentation de l'authentification API",
-      "description": "Ajout de la page « Dépannage » du service DLP et de la section d'authentification par token API (Bearer). Les termes DLP sont fusionnés dans le glossaire.",
+      "title": "DLP Troubleshooting page and API authentication documentation",
+      "description": "Added the DLP \"Troubleshooting\" page and the API token (Bearer) authentication section. DLP terms are merged into the glossary.",
       "components": [
         "console",
         "api"
@@ -242,8 +242,8 @@
       "service": "DLP",
       "status": "added",
       "date": "2026-08-28",
-      "title": "Référence OpenAPI DLP et corrections des walkthroughs",
-      "description": "Ajout de la référence OpenAPI DLP dans le menu du site et correction des captures interactives (walkthroughs) des pages d'action DLP.",
+      "title": "DLP OpenAPI reference and walkthrough fixes",
+      "description": "Added the DLP OpenAPI reference to the site menu and fixed the interactive screenshots (walkthroughs) of the DLP action pages.",
       "components": [
         "api",
         "console"
@@ -253,8 +253,8 @@
       "service": "DLP",
       "status": "added",
       "date": "2026-08-27",
-      "title": "Documentation du service managé DLP",
-      "description": "Ajout de la documentation complète du service DLP (Data Loss Prevention) : concepts, actions (règles, policies, détecteurs, publication, journaux, audit, tableau de bord), guides (démarrage, surveillance, conditions DSL), versions et cycle de vie, réversibilité.",
+      "title": "DLP managed service documentation",
+      "description": "Added the complete DLP (Data Loss Prevention) service documentation: concepts, actions (rules, policies, detectors, publishing, logs, audit, dashboard), guides (quick start, monitoring, DSL conditions), versions and lifecycle, reversibility.",
       "components": [
         "console",
         "api"
@@ -264,8 +264,8 @@
       "service": "DLP",
       "status": "added",
       "date": "2026-08-27",
-      "title": "Pages d'action DLP supplémentaires",
-      "description": "Ajout de 8 pages d'action : modifier/supprimer une règle, modifier/supprimer une policy, modifier/supprimer un détecteur personnalisé, supprimer un utilisateur, réinitialiser le mot de passe d'un utilisateur.",
+      "title": "Additional DLP action pages",
+      "description": "Added 8 action pages: update/delete a rule, update/delete a policy, update/delete a custom detector, delete a user, reset a user password.",
       "components": [
         "console",
         "api"
@@ -275,8 +275,8 @@
       "service": "Compute",
       "status": "changed",
       "date": "2026-08-19",
-      "title": "Mise à jour des images officielles - 2026-08-10",
-      "description": "Ajout des images officielles 2026-08-10 (AlmaLinux 9/10, Debian 12/13, RockyLinux 9/10, Ubuntu 22.04/24.04/26.04) pour les régions eu-west-2 et cloudgouv-eu-west-1. Les images 2026-06-17 passent en supportées.",
+      "title": "Official images update - 2026-08-10",
+      "description": "Added the 2026-08-10 official images (AlmaLinux 9/10, Debian 12/13, RockyLinux 9/10, Ubuntu 22.04/24.04/26.04) for the eu-west-2 and cloudgouv-eu-west-1 regions. The 2026-06-17 images move to supported.",
       "components": [
         "api"
       ]
@@ -285,8 +285,8 @@
       "service": "Compute",
       "status": "changed",
       "date": "2026-08-11",
-      "title": "Permissions IAM granulaires pour le domaine compute",
-      "description": "Remplacement de la permission fourre-tout compute.all par des permissions unitaires (compute.vm.create, compute.vpc.get, compute.loadBalancer.update, etc.) sur toutes les pages d'action. Permissions server-certificate (compute.serverCertificate.*). Tags restent sous compute.all. Suppression des pages VPC Access Point (non exposées).",
+      "title": "Granular IAM permissions for the compute domain",
+      "description": "Replacement of the catch-all compute.all permission with unitary permissions (compute.vm.create, compute.vpc.get, compute.loadBalancer.update, etc.) across all action pages. Server-certificate permissions (compute.serverCertificate.*). Tags remain under compute.all. Removal of the VPC Access Point pages (not exposed).",
       "components": [
         "api",
         "console",
@@ -294,11 +294,11 @@
       ]
     },
     {
-      "service": "Plateforme IA Mistral",
+      "service": "Mistral AI Platform",
       "status": "added",
       "date": "2026-07-06",
-      "title": "Réversibilité Plateforme IA Mistral",
-      "description": "Ajout de la page de réversibilité pour le service managé Plateforme IA Mistral.",
+      "title": "Mistral AI Platform reversibility",
+      "description": "Added the reversibility page for the Mistral AI Platform managed service.",
       "components": [
         "console"
       ]
@@ -307,18 +307,18 @@
       "service": "PostgreSQL",
       "status": "changed",
       "date": "2026-06-25",
-      "title": "Configuration TLS verify-full pour PostgreSQL",
-      "description": "Ajout dans le guide de sécurité PostgreSQL de la chaîne de certificats CA à placer dans le fichier ca.cert pour les zones standard et SecNumCloud, ainsi que de l'utilisation du paramètre sslrootcert pour activer le mode sslmode=verify-full.",
+      "title": "TLS verify-full configuration for PostgreSQL",
+      "description": "Added, in the PostgreSQL security guide, the CA certificate chain to place in the ca.cert file for the standard and SecNumCloud zones, along with the use of the sslrootcert parameter to enable sslmode=verify-full.",
       "components": [
         "docs"
       ]
     },
     {
-      "service": "Services Managés",
+      "service": "Managed Services",
       "status": "changed",
       "date": "2026-06-22",
-      "title": "Audit complet des accès",
-      "description": "Enrichissement du guide de gestion des utilisateurs et rôles PostgreSQL avec un ensemble complet de requêtes d'audit des rôles, permissions, privilèges par défaut, propriétaires d'objets, politiques RLS et connexions actives. Enrichissement du guide de gestion des utilisateurs et rôles Kubernetes avec des commandes d'audit RBAC complètes : rôles, ClusterRoles, RoleBindings, ClusterRoleBindings, ServiceAccounts, sujets, permissions effectives et accès sensibles. Enrichissement du guide de gestion des utilisateurs et rôles Harbor avec des commandes API complètes pour auditer les utilisateurs, administrateurs système, projets, projets publics, membres, comptes robot et permissions. ",
+      "title": "Full access audit",
+      "description": "Extended the PostgreSQL user and role management guide with a complete set of audit queries for roles, permissions, default privileges, object owners, RLS policies and active connections. Extended the Kubernetes user and role management guide with complete RBAC audit commands: roles, ClusterRoles, RoleBindings, ClusterRoleBindings, ServiceAccounts, subjects, effective permissions and sensitive access. Extended the Harbor user and role management guide with complete API commands to audit users, system administrators, projects, public projects, members, robot accounts and permissions.",
       "components": [
         "docs"
       ]
@@ -327,8 +327,8 @@
       "service": "Support",
       "status": "added",
       "date": "2026-06-16",
-      "title": "Politique de réversibilité",
-      "description": "Publication de la politique générale de réversibilité et des pages de réversibilité par service (Kubernetes, PostgreSQL, Container Registry) dans la section Support.",
+      "title": "Reversibility policy",
+      "description": "Publication of the general reversibility policy and per-service reversibility pages (Kubernetes, PostgreSQL, Container Registry) in the Support section.",
       "components": [
         "console"
       ]
@@ -337,18 +337,18 @@
       "service": "Secret Manager",
       "status": "added",
       "date": "2026-06-16",
-      "title": "Documentation Secret Manager",
-      "description": "Publication de la documentation Secret Manager : concepts, création et gestion des instances, guides de configuration SSO et de gestion des utilisateurs, réversibilité.",
+      "title": "Secret Manager documentation",
+      "description": "Publication of the Secret Manager documentation: concepts, instance creation and management, SSO configuration and user-management guides, and reversibility.",
       "components": [
         "api"
       ]
     },
     {
-      "service": "Services Managés",
+      "service": "Managed Services",
       "status": "changed",
       "date": "2026-06-12",
-      "title": "Réorganisation de la documentation des services managés",
-      "description": "Réorganisation de la documentation des services managés (Kubernetes, PostgreSQL, Container Registry) : séparation des actions (API/Console/Terraform) et des guides, ajout d'une page Réversibilité pour chaque service et application de la structure de menu obligatoire.",
+      "title": "Managed services documentation reorganization",
+      "description": "Reorganization of the managed services documentation (Kubernetes, PostgreSQL, Container Registry): separation of actions (API/Console/Terraform) and guides, addition of a Reversibility page for each service, and application of the mandatory menu structure.",
       "components": [
         "console"
       ]
@@ -357,8 +357,8 @@
       "service": "PostgreSQL",
       "status": "changed",
       "date": "2026-06-10",
-      "title": "Refonte des onglets Console PostgreSQL",
-      "description": "Refonte complète des onglets Console des pages d'actions PostgreSQL avec des instructions mises à jour et de nouvelles captures d'écran.",
+      "title": "PostgreSQL Console tabs redesign",
+      "description": "Complete redesign of the Console tabs on the PostgreSQL action pages, with updated instructions and new screenshots.",
       "components": [
         "console"
       ]
@@ -367,8 +367,8 @@
       "service": "Compute",
       "status": "changed",
       "date": "2026-06-10",
-      "title": "Renommage Keypairs en Key pairs",
-      "description": "Le menu et la terminologie Keypairs sont renommés en Key pairs pour alignement avec la terminologie officielle.",
+      "title": "Keypairs renamed to Key pairs",
+      "description": "The Keypairs menu and terminology have been renamed to Key pairs to align with the official terminology.",
       "components": [
         "api",
         "console"
@@ -378,8 +378,8 @@
       "service": "Object Storage",
       "status": "added",
       "date": "2026-06-08",
-      "title": "Référence API Object Storage",
-      "description": "Ajout de la page de référence API Scalar pour Object Storage, documentant l'ensemble des endpoints et opérations disponibles.",
+      "title": "Object Storage API reference",
+      "description": "Added the Scalar API reference page for Object Storage, documenting all available endpoints and operations.",
       "components": [
         "api"
       ]
@@ -388,8 +388,8 @@
       "service": "Compute",
       "status": "changed",
       "date": "2026-06-05",
-      "title": "Refonte du catalogue d'images",
-      "description": "Le catalogue d'images est désormais limité aux images officielles open source (Debian, Ubuntu, AlmaLinux, RockyLinux) et aux images privées du space. La notion d'image publique est supprimée. Le partage d'images privées via permissions est remplacé par la fonctionnalité d'export/import via Object Storage.",
+      "title": "Image catalog redesign",
+      "description": "The image catalog is now limited to official open-source images (Debian, Ubuntu, AlmaLinux, RockyLinux) and the space's private images. The public-image concept has been removed. Sharing private images through permissions is replaced by the export/import feature via Object Storage.",
       "components": [
         "api",
         "console"
@@ -399,8 +399,8 @@
       "service": "PostgreSQL",
       "status": "added",
       "date": "2026-06-04",
-      "title": "Politique de versions et cycle de vie PostgreSQL",
-      "description": "Ajout de la politique de versions supportées, du cycle de vie et des recommandations d'hygiène ANSSI pour les clusters PostgreSQL.",
+      "title": "PostgreSQL version policy and lifecycle",
+      "description": "Added the supported-versions policy, lifecycle and ANSSI hardening recommendations for PostgreSQL clusters.",
       "components": [
         "api"
       ]
@@ -409,8 +409,8 @@
       "service": "Container Registry",
       "status": "added",
       "date": "2026-05-29",
-      "title": "Configuration SSO/OIDC du Container Registry",
-      "description": "Ajout du guide de configuration SSO/OIDC pour le Container Registry, incluant l'intégration UAA, LDAP et les sections de dépannage.",
+      "title": "Container Registry SSO/OIDC configuration",
+      "description": "Added the SSO/OIDC configuration guide for the Container Registry, including UAA and LDAP integration and troubleshooting sections.",
       "components": [
         "console"
       ]
@@ -419,8 +419,8 @@
       "service": "Kubernetes",
       "status": "added",
       "date": "2026-05-22",
-      "title": "Guides de sécurité et conformité Kubernetes",
-      "description": "Ajout des guides d'installation de Falco et metrics-server, de configuration de l'authentification sécurisée et de gestion des utilisateurs et des rôles pour les clusters Kubernetes.",
+      "title": "Kubernetes security and compliance guides",
+      "description": "Added guides for installing Falco and metrics-server, configuring secure authentication and managing users and roles for Kubernetes clusters.",
       "components": [
         "console"
       ]
@@ -429,8 +429,8 @@
       "service": "PostgreSQL",
       "status": "added",
       "date": "2026-05-22",
-      "title": "Gestion des utilisateurs et sécurité PostgreSQL",
-      "description": "Ajout de la documentation sur la gestion des utilisateurs et rôles, l'authentification sécurisée et les procédures de blocage et suppression de comptes pour les clusters PostgreSQL.",
+      "title": "PostgreSQL user management and security",
+      "description": "Added documentation on user and role management, secure authentication, and account blocking and deletion procedures for PostgreSQL clusters.",
       "components": [
         "api"
       ]
@@ -439,8 +439,8 @@
       "service": "PostgreSQL",
       "status": "added",
       "date": "2026-05-11",
-      "title": "Auto-tuning PostgreSQL",
-      "description": "Ajout de la documentation auto-tuning PostgreSQL : optimisation automatique de la configuration des clusters en fonction de la taille des instances.",
+      "title": "PostgreSQL auto-tuning",
+      "description": "Added the PostgreSQL auto-tuning documentation: automatic optimization of cluster configuration based on instance size.",
       "components": [
         "api"
       ]
@@ -449,8 +449,8 @@
       "service": "Kubernetes",
       "status": "added",
       "date": "2026-05-05",
-      "title": "Sauvegarde et restauration avec Velero",
-      "description": "Ajout du guide de sauvegarde et restauration des clusters Kubernetes avec Velero, incluant la configuration, les opérations de sauvegarde et de restauration.",
+      "title": "Backup and restore with Velero",
+      "description": "Added the guide for backing up and restoring Kubernetes clusters with Velero, covering configuration, backup and restore operations.",
       "components": [
         "console"
       ]
@@ -459,8 +459,8 @@
       "service": "Container Registry",
       "status": "added",
       "date": "2026-05-05",
-      "title": "Guides Container Registry",
-      "description": "Ajout des guides Container Registry : réplication Harbor, cache proxy, comptes robot et scan de vulnérabilités.",
+      "title": "Container Registry guides",
+      "description": "Added the Container Registry guides: Harbor replication, proxy cache, robot accounts and vulnerability scanning.",
       "components": [
         "console"
       ]
@@ -469,29 +469,29 @@
       "service": "PostgreSQL",
       "status": "added",
       "date": "2026-04-08",
-      "title": "Gestion des sauvegardes PostgreSQL",
-      "description": "Nouvelle fonctionnalité de gestion des sauvegardes pour les clusters PostgreSQL : lister, créer et supprimer des sauvegardes on-demand. Les sauvegardes automatiques sont également disponibles.",
+      "title": "PostgreSQL backup management",
+      "description": "New backup management feature for PostgreSQL clusters: list, create and delete on-demand backups. Automatic backups are also available.",
       "components": [
         "api"
       ]
     },
     {
-      "service": "Connectivité",
+      "service": "Connectivity",
       "status": "added",
       "date": "2026-03-25",
-      "title": "Documentation Hybrid Bridge",
-      "description": "Publication de la documentation Hybrid Bridge : concepts, configuration et gestion des passerelles hybrides pour interconnecter votre infrastructure on-premise avec Numspot.",
+      "title": "Hybrid Bridge documentation",
+      "description": "Publication of the Hybrid Bridge documentation: concepts, configuration and management of hybrid bridges to interconnect your on-premises infrastructure with Numspot.",
       "components": [
         "api",
         "console"
       ]
     },
     {
-      "service": "Inventaire",
+      "service": "Inventory",
       "status": "added",
       "date": "2026-03-25",
-      "title": "Documentation Catalogue et Inventaire",
-      "description": "Publication de la documentation Catalogue et Inventaire : exploration et gestion centralisée des ressources du space.",
+      "title": "Catalog and Inventory documentation",
+      "description": "Publication of the Catalog and Inventory documentation: centralized exploration and management of space resources.",
       "components": [
         "api",
         "console"
@@ -501,18 +501,18 @@
       "service": "Container Registry",
       "status": "added",
       "date": "2026-02-20",
-      "title": "Nouveau service managé Container Registry",
-      "description": "Le service managé Container Registry permet de stocker, gérer et sécuriser les artefacts logiciels.",
+      "title": "New Container Registry managed service",
+      "description": "The Container Registry managed service lets you store, manage and secure software artifacts.",
       "components": [
         "api"
       ]
     },
     {
-      "service": "Inventaire",
+      "service": "Inventory",
       "status": "added",
       "date": "2026-02-18",
-      "title": "Nouveau service d'inventaire",
-      "description": "Notre service d'inventaire, disponible via API et sur la console, permet de lister et d'explorer l'ensemble des ressources liées à vos clusters PostgreSQL (pods, persistent volumes) et Kubernetes (nodes, load balancers, persistent volumes). Cette fonctionnalité offre une vision centralisée et détaillée de toutes les ressources actives dans chaque espace client, avec la possibilité de les regrouper par hiérarchie parent-enfant pour une analyse simplifiée. Idéal pour auditer, optimiser ou surveiller vos environnements managés, cet outil facilite la gestion des infrastructures en temps réel.",
+      "title": "New inventory service",
+      "description": "Our inventory service, available via API and in the console, lets you list and explore all the resources linked to your PostgreSQL clusters (pods, persistent volumes) and Kubernetes clusters (nodes, load balancers, persistent volumes). This feature provides a centralized, detailed view of all active resources in each customer space, with the ability to group them by parent-child hierarchy for simpler analysis. Ideal for auditing, optimizing or monitoring your managed environments, this tool makes real-time infrastructure management easier.",
       "components": [
         "api",
         "console"
@@ -522,8 +522,8 @@
       "service": "PostgreSQL",
       "status": "added",
       "date": "2026-02-16",
-      "title": "Console de création de cluster PostgreSQL",
-      "description": "Ajout de l'onglet Console pour la création de clusters PostgreSQL, permettant de créer un cluster directement depuis l'interface Numspot.",
+      "title": "PostgreSQL cluster creation from the console",
+      "description": "Added the Console tab for creating PostgreSQL clusters, letting you create a cluster directly from the Numspot interface.",
       "components": [
         "console"
       ]
@@ -532,8 +532,8 @@
       "service": "Compute",
       "status": "changed",
       "date": "2026-01-29",
-      "title": "Export de snapshots et d'images",
-      "description": "Ajout de la documentation pour l'export de snapshots et d'images vers Object Storage, permettant la portabilité et la réversibilité des données.",
+      "title": "Snapshot and image export",
+      "description": "Added documentation for exporting snapshots and images to Object Storage, enabling data portability and reversibility.",
       "components": [
         "api",
         "console"
@@ -543,8 +543,8 @@
       "service": "Kubernetes",
       "status": "added",
       "date": "2026-01-26",
-      "title": "Nouveau service managé Kubernetes",
-      "description": "Le service managé Kubernetes permet de créer des clusters Kubernetes hautement disponibles, avec de la GPU si besoin pour les charges de travail de calcul intensif, de simulation scientifique, d'analyse de données massives et de traitement temps réel, offrant une architecture optimisée pour la performance, la mémoire et la stabilité opérationnelle à grande échelle.",
+      "title": "New Kubernetes managed service",
+      "description": "The Kubernetes managed service lets you create highly available Kubernetes clusters, with GPU support where required for intensive-compute workloads, scientific simulation, big-data analysis and real-time processing, offering an architecture optimized for performance, memory and operational stability at scale.",
       "components": [
         "api"
       ]
@@ -553,8 +553,8 @@
       "service": "PostgreSQL",
       "status": "added",
       "date": "2026-01-26",
-      "title": "Nouveau service managé PostgreSQL",
-      "description": "Le service managé PostgreSQL permet de créer des bases de données relationnelles PostgreSQL hautement disponibles.",
+      "title": "New PostgreSQL managed service",
+      "description": "The PostgreSQL managed service lets you create highly available PostgreSQL relational databases.",
       "components": [
         "api",
         "console"
@@ -564,8 +564,8 @@
       "service": "Compute",
       "status": "added",
       "date": "2025-10-15",
-      "title": "Documentation Security Groups",
-      "description": "Publication de la documentation Security Groups : concepts, création et gestion des groupes de sécurité pour le filtrage du trafic réseau.",
+      "title": "Security Groups documentation",
+      "description": "Publication of the Security Groups documentation: concepts, creation and management of security groups for filtering network traffic.",
       "components": [
         "api",
         "console"
@@ -575,8 +575,8 @@
       "service": "Compute",
       "status": "added",
       "date": "2025-09-17",
-      "title": "Nouvelle offre de VM v7",
-      "description": "Les VM v7 sont conçues pour les charges de travail de calcul intensif, de simulation scientifique, d'analyse de données massives et de traitement temps réel, offrant une architecture optimisée pour la performance, la mémoire et la stabilité opérationnelle à grande échelle.",
+      "title": "New v7 VM offer",
+      "description": "The v7 VMs are designed for intensive-compute workloads, scientific simulation, big-data analysis and real-time processing, offering an architecture optimized for performance, memory and operational stability at scale.",
       "components": [
         "api",
         "console"
@@ -586,8 +586,8 @@
       "service": "Compute",
       "status": "added",
       "date": "2025-08-06",
-      "title": "Nouvelle offre de VM Inférence",
-      "description": "Lancement d'une nouvelle gamme de machines virtuelles optimisées pour l'inférence IA, offrant des performances GPU accrues, une latence réduite et une meilleure efficacité pour le déploiement de modèles d'apprentissage automatique en production.",
+      "title": "New Inference VM offer",
+      "description": "Launch of a new range of virtual machines optimized for AI inference, delivering greater GPU performance, reduced latency and improved efficiency for deploying machine-learning models in production.",
       "components": [
         "api",
         "console"
@@ -597,8 +597,8 @@
       "service": "Object Storage",
       "status": "added",
       "date": "2025-07-11",
-      "title": "Documentation Object Storage",
-      "description": "Publication de la documentation Object Storage : concepts, création et gestion des buckets et des objets.",
+      "title": "Object Storage documentation",
+      "description": "Publication of the Object Storage documentation: concepts, creation and management of buckets and objects.",
       "components": [
         "api"
       ]
@@ -607,19 +607,19 @@
       "service": "Compute",
       "status": "added",
       "date": "2025-07-02",
-      "title": "Documentation Key pairs",
-      "description": "Publication de la documentation Key pairs : création, import et gestion des paires de clés SSH pour l'accès aux instances.",
+      "title": "Key pairs documentation",
+      "description": "Publication of the Key pairs documentation: creation, import and management of SSH key pairs for instance access.",
       "components": [
         "api",
         "console"
       ]
     },
     {
-      "service": "Connectivité",
+      "service": "Connectivity",
       "status": "added",
       "date": "2025-06-30",
-      "title": "Documentation VPN",
-      "description": "Publication de la documentation VPN : configuration, gestion et utilisation des connexions VPN pour sécuriser les accès à votre infrastructure.",
+      "title": "VPN documentation",
+      "description": "Publication of the VPN documentation: configuration, management and use of VPN connections to secure access to your infrastructure.",
       "components": [
         "console"
       ]

@@ -1,30 +1,30 @@
 ---
-title: Créer un espace au sein d'une organisation - IAM
-description: "Créez un espace IAM au sein de votre organisation Numspot pour cloisonner vos ressources et vos identités, via la console ou l'API."
-sidebar_label: Créer un espace au sein d'une organisation
+title: Create a space within an organisation - IAM
+description: "Create an IAM space within your Numspot organisation to compartmentalise your resources and identities, via the console or the API."
+sidebar_label: Create a space within an organisation
 sidebar_position: 2
 draft: false
 last_update:
   date: 2026-09-18
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import Walkthrough from '@site/src/components/Walkthrough';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Walkthrough from "@site/src/components/Walkthrough";
 
-# Créer un espace au sein d'une organisation
+# Create a space within an organisation
 
-Une organisation peut créer autant d'espaces qu'elle le souhaite. Un espace permet de cloisonner des ressources et des identités. Un utilisateur ou un compte de service peut appartenir à plusieurs espaces de l'organisation et disposer de permissions différentes pour chaque espace. Exemple : un administrateur sur un espace peut être un utilisateur en lecture ou écriture sur certaines ressources sur d'autres.
+An organisation can create as many spaces as it needs. A space compartmentalises resources and identities. A user or a service account can belong to several spaces of the organisation and have different permissions for each space. Example: an administrator on one space can be a read or write user on some resources in others.
 
-Un espace a pour propriétés :
+A space has the following properties:
 
-- un nom ;
-- une description.
+- a name;
+- a description.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **iam.role.create**
 
@@ -37,19 +37,20 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/space/list-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Espaces.", hotspot: { x: 0, y: 0.6963, w: 0.1944, h: 0.0494 } },
-    { img: "/img/walkthrough/space/list-01-list.png", text: "Dans le menu IAM → Espaces, cliquez sur « Créer un espace ».", hotspot: { x: 0.8452, y: 0.2296, w: 0.1159, h: 0.0494 } },
-    { img: "/img/walkthrough/space/create-02-form.png", text: "Saisissez le nom et la description de l'espace, puis cliquez sur « Créer l'espace ».", hotspot: { x: 0.6679, y: 0.921, w: 0.0814, h: 0.0494 } },
+    { img: "/img/walkthrough/en/space/list-01-list.png", text: "From the left-hand side menu, click IAM → Spaces.", hotspot: { x: 0, y: 0.6963, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/space/list-01-list.png", text: "In the IAM → Spaces menu, click “Create a space”.", hotspot: { x: 0.8508, y: 0.2296, w: 0.1103, h: 0.0494 } },
+    { img: "/img/walkthrough/en/space/create-02-form.png", text: "Enter the space's name and description, then click “Create space”.", hotspot: { x: 0.6721, y: 0.921, w: 0.0772, h: 0.0494 } },
   ]}
 />
 
-1. Dans le menu des **Espaces**, cliquez sur le bouton **Créer un espace**.
+1. In the **Spaces** menu, click the **Create a space** button.
 
-   Une nouvelle fenêtre apparaît.
-2. Dans les champs "Nom de l'espace" et "Description de l'espace", tapez le nom et la description du nouvel espace à créer.
-3. Cliquez sur le bouton **Créer l'espace**. De retour sur la liste des espaces, un message confirme que le nouvel espace a été créé.
+   A new window appears.
+
+2. In the "Space name" and "Space description" fields, enter the name and description of the new space.
+3. Click the **Create space** button. Back on the spaces list, a message confirms that the new space has been created.
 :::warning
-Un espace peut prendre plusieurs secondes à être créé. Ainsi, il se peut qu'il n'apparaisse pas immédiatement dans la liste des espaces.
+A space can take several seconds to be created. Therefore, it may not appear immediately in the list of spaces.
 :::
 
 </TabItem>
@@ -60,7 +61,7 @@ Un espace peut prendre plusieurs secondes à être créé. Ainsi, il se peut qu'
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/POST/organisations/{organisationId}/spaces
 
-### Exemple
+### Example
 
 ```bash
 curl 'https://api.{region}.numspot.com/organisations/{organisationId}/spaces' \
@@ -72,7 +73,7 @@ curl 'https://api.{region}.numspot.com/organisations/{organisationId}/spaces' \
 }'
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -87,7 +88,7 @@ curl 'https://api.{region}.numspot.com/organisations/{organisationId}/spaces' \
 ```
 
 :::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
 </TabItem>
@@ -96,7 +97,7 @@ Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la m
 ## Terraform {#tabhead-terraform}
 
 
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/space).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/space).
 
 </TabItem>
 </Tabs>

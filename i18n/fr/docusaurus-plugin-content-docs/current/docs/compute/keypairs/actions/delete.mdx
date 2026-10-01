@@ -1,0 +1,68 @@
+---
+title: Supprimer une key pair
+description: "Supprimez une key pair SSH devenue inutile de votre espace Numspot, via la console, l'API ou Terraform."
+sidebar_position: 6
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Supprimer une key pair
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+
+- **compute.keypair.delete**
+
+:::
+
+Vous pouvez supprimer une [key pair (paire de clés)](/docs/compute/keypairs/concept/) spécifiée. Cette action supprime la clé publique conservée par Numspot.
+
+Supprimer une key pair ne supprime pas la clé privée sauvegardée sur votre ordinateur, et ne supprime pas la clé publique dans les metadata d'autres [VM (virtual machine)](/docs/compute/concept/) créées avec la même key pair. Vous ne pouvez pas créer de nouvelles VM à l'aide de la key pair supprimée. Cependant, vous pouvez continuer à vous connecter à d'autres VM déjà créées avec la même key pair, tant que vous pouvez en fournir la clé privée.
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/keypair/list.png", text: "Depuis le menu latéral gauche, cliquez sur Compute → Key Pairs.", hotspot: { x: 0, y: 0.5086, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/keypair/actions-menu.png", text: "Cochez la key pair à supprimer, ou ouvrez son menu « Actions », puis cliquez sur « Supprimer ».", hotspot: { x: 0.875, y: 0.5136, w: 0.0884, h: 0.0457 } },
+    { img: "/img/walkthrough/keypair/delete-modal.png", text: "Confirmation forte : saisissez le nom exact de la key pair, puis cliquez sur « Supprimer ».", hotspot: { x: 0.6221, y: 0.7286, w: 0.064, h: 0.0494 } },
+  ]}
+/>
+
+1. Connectez-vous sur la console Numspot.
+
+2. Depuis le menu latéral gauche, cliquez sur **Compute → Key pairs**.
+
+3. Cochez la case de la key pair que vous voulez supprimer ou cliquez sur le menu déroulant "Actions" sur la même ligne.
+  La key pair est sélectionnée ou un menu d'actions apparaît.
+
+4. Cliquez sur **Supprimer**.
+  Une boîte de dialogue de confirmation apparaît.
+
+5. Confirmez la suppression en tapant le nom de la key pair.
+
+6. Cliquez sur **Supprimer**.
+
+  La key pair est supprimée et un message de confirmation s'affiche en bas de la page.
+
+</TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+La commande `DELETE /compute/spaces/{spaceId}/keypairs/{id}` supprime la key pair spécifiée. Cette action supprime la clé publique stockée par Numspot, ce qui entraîne la suppression de la key pair.
+
+[Exemple de requête : Suppression d'une key pair](/openapi/#tag/compute/delete/compute/spaces/{spaceId}/keypairs/{id})
+  </TabItem>
+
+{/*   ## Supprimer une key pair avec Terraform */}
+{/*   </TabItem> */}
+</Tabs>

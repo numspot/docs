@@ -1,5 +1,5 @@
 ---
-title: Lister les images
+title: List images
 sidebar_position: 1
 draft: false
 ---
@@ -8,19 +8,19 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Lister les images
+# List images
 
-Vous pouvez obtenir des informations sur les Images que vous pouvez utiliser pour lancer des [VM (Virtual Machine)](/docs/compute/concept/) soit par la console Numspot, soit par l'API (Application Programming Interface). Ces informations peuvent vous aider à choisir l'Image la plus adaptée à vos besoins pour créer vos VM.
+You can obtain information about the images you can use to launch [VM (Virtual Machine)](/docs/compute/concept/) either through the Numspot console or through the API (Application Programming Interface). This information can help you choose the image best suited to your needs to create your VM.
 
-La liste des images retourne les images officielles et les images privées de l'espace. Vous pouvez filtrer la liste par type d'image à l'aide du paramètre `imageType` :
+The list of images returns the official images and the private images of the space. You can filter the list by image type using the `imageType` parameter:
 
-- `official` : retourne uniquement les images officielles Numspot (distributions Linux open source)
-- `private` : retourne uniquement les images privées de l'espace
+- `official`: returns only the official Numspot images (open source Linux distributions)
+- `private`: returns only the private images of the space
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.image.get**
 
@@ -29,38 +29,32 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
   <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
-     Depuis le menu latéral gauche, cliquez sur **Compute** → **Images** pour accéder à la liste des images.
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/images/images-list.png", text: "Depuis le menu latéral, ouvrez Compute → Images.", hotspot: { x: 0, y: 0.5975, w: 0.1986, h: 0.0605 } },
-    { img: "/img/walkthrough/images/images-list.png", text: "La liste de vos images s'affiche : images officielles Numspot et vos images personnalisées.", hotspot: { x: 0.2083, y: 0.3897, w: 0.5556, h: 0.6103 } },
+    { img: "/img/walkthrough/en/images/images-list.png", text: "From the left-hand side menu, open Compute → Images.", hotspot: { x: 0, y: 0.5975, w: 0.1986, h: 0.0605 } },
+    { img: "/img/walkthrough/en/images/images-list.png", text: "Your images are listed: official Numspot images and your custom images.", hotspot: { x: 0.2083, y: 0.3897, w: 0.5556, h: 0.6103 } },
   ]}
 />
 
-Depuis le menu latéral gauche, cliquez sur **Compute** → **Images** pour accéder à la liste des images.
+     From the left-hand side menu, click **Compute** → **Images** to access the list of images.
+
+
+    You thus access the list of images.
+
   </TabItem>
   <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `GET /compute/spaces/{spaceId}/images` command lists your images that you can use to create VM.
 
+[Example request: List all your images](/openapi/#tag/compute/GET/compute/spaces/%7BspaceId%7D/images)
 
-La commande `GET /compute/spaces/{spaceId}/images` permet de lister vos Images que vous pouvez utiliser pour créer des VM.
+## Obtain information about an image with the API
 
-[Exemple de requête : Lister toutes vos Images](/openapi/#tag/compute/GET/compute/spaces/%7BspaceId%7D/images)
+The `GET /compute/spaces/{spaceId}/images/{id}` command retrieves the information of an image.
 
-### Obtenir des informations sur une Image avec API
-
-La commande `GET /compute/spaces/{spaceId}/images/{id}` permet de récupérer les informations d'une Image.
-
-[Exemple de requête : Récupérer les informations d'une Image](/openapi/#tag/compute/GET/compute/spaces/%7BspaceId%7D/images/%7Bid%7D)
+[Example request: Retrieve the information of an image](/openapi/#tag/compute/GET/compute/spaces/%7BspaceId%7D/images/%7Bid%7D)
   </TabItem>
   <TabItem value="terraform" label="Terraform">
-
-## Terraform {#tabhead-terraform}
-
-    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/image).
+    The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/image).
   </TabItem>
 </Tabs>

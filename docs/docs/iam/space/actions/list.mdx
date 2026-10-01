@@ -1,7 +1,7 @@
 ---
-title: Lister les espaces de l'organisation - IAM
-description: "Listez les espaces de votre organisation Numspot et accédez à leurs détails, via la console ou l'API."
-sidebar_label: Lister les espaces de l'organisation
+title: List the spaces of the organisation - IAM
+description: "List the spaces of your Numspot organisation and access their details, via the console or the API."
+sidebar_label: List the spaces of the organisation
 sidebar_position: 2
 draft: false
 last_update:
@@ -12,14 +12,14 @@ import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import Walkthrough from "@site/src/components/Walkthrough";
 
-# Lister les espaces de l'organisation
+# List the spaces of the organisation
 
-Visualisez l'ensemble des espaces de votre organisation.
+View all the spaces of your organisation.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **iam.role.get**
 
@@ -32,19 +32,19 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/space/list-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Espaces.", hotspot: { x: 0, y: 0.6963, w: 0.1944, h: 0.0494 } },
-    { img: "/img/walkthrough/space/list-01-list.png", text: "Depuis IAM → Espaces, le tableau liste tous les espaces de votre organisation (ID, nom, description, statut).", hotspot: { x: 0.2229, y: 0.39, w: 0.7493, h: 0.5 } },
-    { img: "/img/walkthrough/space/list-02-menu.png", text: "Le menu « Actions » d'un espace permet de le modifier, d'y assigner des utilisateurs ou des comptes de service, ou de le supprimer. Cliquez sur l'ID d'un espace pour ouvrir sa page de détails.", hotspot: { x: 0.7708, y: 0.42, w: 0.19, h: 0.25 } },
+    { img: "/img/walkthrough/en/space/list-01-list.png", text: "From the left-hand side menu, click IAM → Spaces.", hotspot: { x: 0, y: 0.6963, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/space/list-01-list.png", text: "From IAM → Spaces, the table lists all the spaces of your organisation (ID, name, description, status).", hotspot: { x: 0.2229, y: 0.39, w: 0.7493, h: 0.5 } },
+    { img: "/img/walkthrough/en/space/list-02-menu.png", text: "A space's “Actions” menu lets you edit it, assign users or service accounts to it, or delete it. Click a space's ID to open its details page.", hotspot: { x: 0.7972, y: 0.42, w: 0.17, h: 0.25 } },
   ]}
 />
 
-1. Dans le menu **IAM**, cliquez sur **Espaces**.
+1. In the **IAM** menu, click **Spaces**.
 
-   Vous accédez au tableau des **Espaces** où vous pouvez visualiser l'ensemble des espaces de votre organisation.
+   You access the **Spaces** table where you can view all the spaces of your organisation.
 
-2. En cliquant sur **Actions** pour un espace donné, vous pouvez modifier l'espace, y assigner des utilisateurs ou des comptes de service, ou le supprimer.
+2. Clicking **Actions** for a given space lets you edit the space, assign users or service accounts to it, or delete it.
 
-3. En cliquant sur l'identifiant d'un espace, vous accédez à une vision plus détaillée de l'espace, avec la liste des utilisateurs et des comptes de service qui lui sont assignés.
+3. Clicking a space's identifier opens a more detailed view of the space, with the list of users and service accounts assigned to it.
 
 </TabItem>
 <TabItem value="api" label="API">
@@ -54,13 +54,13 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/organisations/{organisationId}/spaces
 
-### Exemple
+### Example
 
 ```bash
 curl 'https://api.{region}.numspot.com/organisations/{organisationId}/spaces'
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -81,7 +81,7 @@ curl 'https://api.{region}.numspot.com/organisations/{organisationId}/spaces'
 ```
 
 :::info
-Consulter la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
 </TabItem>
@@ -90,7 +90,7 @@ Consulter la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la m
 ## Terraform {#tabhead-terraform}
 
 
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/space).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/space).
 
 </TabItem>
 </Tabs>

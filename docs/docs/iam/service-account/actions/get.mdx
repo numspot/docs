@@ -1,74 +1,77 @@
 ---
-title: Obtenir les détails d'un compte de service - IAM
-description: "Consultez les informations d'un compte de service IAM, ses espaces assignés et ses rôles et permissions, via la console ou l'API."
-sidebar_label: Obtenir les détails d'un compte de service
+title: Get the details of a service account - IAM
+sidebar_label: Get the details of a service account
 sidebar_position: 4
-draft: false
-last_update:
-  date: 2026-09-18
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Obtenir les détails d'un compte de service
+# Get the details of a service account
 
-Tous les détails d'un compte de service sont retournés, sauf le code secret.
+All the details of a service account are returned, except the secret.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **iam.serviceAccount.get**
 
 :::
-
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/service-account/list-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Comptes de Service.", hotspot: { x: 0, y: 0.8, w: 0.1944, h: 0.0494 } },
-    { img: "/img/walkthrough/service-account/list-01-list.png", text: "Dans le tableau « Comptes de Service », cliquez sur la clé d'accès du compte de service (le champ « Rechercher » permet de le filtrer).", hotspot: { x: 0.234, y: 0.45, w: 0.11, h: 0.035 } },
-    { img: "/img/walkthrough/service-account/detail.png", text: "La page « Détails Compte de Service » affiche ses informations : nom, durée de vie du token et date d'expiration.", hotspot: { x: 0.22, y: 0.29, w: 0.76, h: 0.2 } },
-    { img: "/img/walkthrough/service-account/detail.png", text: "La section « Espaces assignés » liste ses espaces ; cliquez sur « X rôles » ou « X permissions » pour détailler les rôles et permissions par espace.", hotspot: { x: 0.223, y: 0.5, w: 0.76, h: 0.35 } },
+    { img: "/img/walkthrough/en/service-account/list.png", text: "From the left-hand side menu, click IAM → Service Accounts.", hotspot: { x: 0, y: 0.7926, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/en/service-account/list.png", text: "In the “Service Accounts” table, click the service account's ID (the “Search” field lets you filter).", hotspot: { x: 0.2687, y: 0.4811, w: 0.199, h: 0.0247 } },
+    { img: "/img/walkthrough/en/service-account/detail.png", text: "The “Service Account details” page shows its information: name, token lifetime and expiry date.", hotspot: { x: 0.22, y: 0.33, w: 0.76, h: 0.14 } },
+    { img: "/img/walkthrough/en/service-account/detail.png", text: "The “Assigned spaces” section lists its spaces; click “X roles” or “X permissions” to detail the roles and permissions per space.", hotspot: { x: 0.5375, y: 0.7165, w: 0.3514, h: 0.0642 } },
   ]}
 />
 
-1. Dans le tableau **Comptes de Service**, cliquez sur la clé d'accès du compte de service dont vous souhaitez obtenir les informations.
-:::tip
-Vous avez la possibilité de rechercher un compte de service en particulier en utilisant le champ **Rechercher**.
+
+1.  Log in to the Numspot console
+2.  From the left-hand side menu, click **IAM → Service accounts**
+
+
+3.  You are redirected to the list of **Service accounts**
+
+
+In the **Service accounts** table, click the identifier of the service account whose details you want to obtain.
+
+:::info
+You can search for a specific service account using the "Search" field.
 :::
 
-2. La page "Détails Compte de Service" s'affiche : nom du compte de service, durée de vie du token et date d'expiration.
+4.  The page containing the details of the service account is displayed.
 
-3. Vous pouvez voir la liste des espaces assignés au compte de service, avec les rôles et permissions associés à chaque espace.
 
-4. En cliquant sur **X rôles**, vous pouvez voir la liste des rôles attribués à ce compte de service sur un de ses espaces assignés.
+5.  You can view the list of spaces assigned to the service account
 
-5. En cliquant sur **X permissions**, vous pouvez voir la liste des permissions attribuées à ce compte de service sur un de ses espaces assignés.
+
+6.  By clicking the **role** link, you can view the list of roles assigned to this service account on one of its assigned spaces
+
+
+7.  By clicking the **permissions** link, you can view the list of permissions assigned to this service account on one of its assigned spaces
+
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
-
-
-### Obtenir les détails d'un compte de service dans une organisation
+**Get the details of a service account in an organization**
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}
 
-### Exemple avec curl
+**Example with curl**
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}'
 ```
 
-### Réponse
+Response
 
 ```json
 {
@@ -80,20 +83,20 @@ curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/servic
 ```
 
 :::info
-Consulter la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [page on using the API](/docs/iam/concepts/api/) for the implementation.
 :::
 
-### Obtenir les informations d'un compte de service dans un espace
+**Get the details of a service account in a space**
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}
 
-### Exemple avec curl
+**Example with curl**
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}'
 ```
 
-### Réponse
+Response
 
 ```json
 {
@@ -105,44 +108,67 @@ curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/serviceAccounts/{ser
 ```
 
 :::info
-Consulter la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [page on using the API](/docs/iam/concepts/api/) for the implementation.
 :::
 
-### Lister les espaces assignés à un compte de service
+**Get the roles and permissions of a service account in an organization**
 
-https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/spaces
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}
 
-### Exemple avec curl
+**Example with curl**
 
 ```bash
-curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/spaces'
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}'
 ```
 
-### Réponse
+Response
 
 ```json
 {
-  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
-  "totalSize": 150,
-  "items": [
-    {
-      "id": "123e4567-e89b-12d3-a456-426614174000"
-    }
+  "roles": [
+    "123e4567-e89b-12d3-a456-426614174000"
+  ],
+  "permissions": [
+    "123e4567-e89b-12d3-a456-426614174000"
   ]
 }
 ```
 
 :::info
-Consulter la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [page on using the API](/docs/iam/concepts/api/) for the implementation.
+:::
+
+**Get the roles and permissions of a service account in a space**
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}
+
+**Example with curl**
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}'
+```
+
+Response
+
+```json
+{
+  "roles": [
+    "123e4567-e89b-12d3-a456-426614174000"
+  ],
+  "permissions": [
+    "123e4567-e89b-12d3-a456-426614174000"
+  ]
+}
+```
+
+:::info
+See the [page on using the API](/docs/iam/concepts/api/) for the implementation.
 :::
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/service_account).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/service_account).
 
 </TabItem>
 </Tabs>

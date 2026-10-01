@@ -1,62 +1,62 @@
 ---
-title: Accéder à la console DLP - DLP managé
-sidebar_label: Accéder à la console DLP
-description: "Accédez à la console dédiée du service DLP depuis son URL propre, distincte de la console Numspot."
+title: Access the DLP console - Managed DLP
+sidebar_label: Access the DLP console
+description: "Access the dedicated console of the DLP service via its own URL, separate from the Numspot console."
 sidebar_position: 1
 draft: false
 ---
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Accéder à la console DLP
+# Access the DLP console
 
 ## Introduction
 
-Le service [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) dispose de sa propre console web, indépendante de la console Numspot. Cette console est accessible via une URL dédiée, fournie lors du déploiement du service.
+The [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) service has its own standalone web console, independent of the Numspot console. This console is accessible via a dedicated URL, provided when the service is deployed.
 
-## Obtenir l'URL de la console
+## Getting the console URL
 
-L'URL de la console DLP est définie par le paramètre `TLS_HOSTNAME` configuré lors du déploiement du service. Pour obtenir cette URL :
+The DLP console URL is defined by the `TLS_HOSTNAME` parameter configured during service deployment. To obtain this URL:
 
-1. Connectez-vous à la console Numspot ;
-2. Accédez aux détails de l'instance DLP déployée ;
-3. Relevez l'URL d'accès affichée dans les informations de l'instance.
+1. Log in to the Numspot console;
+2. Access the details of the deployed DLP instance;
+3. Note the access URL displayed in the instance information.
 
-## Se connecter
+## Logging in
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/dlp/00-login.png", text: "Saisissez vos identifiants sur la page de connexion de la console DLP.", hotspot: { x: 0.35, y: 0.25, w: 0.30, h: 0.45 } },
+    { img: "/img/walkthrough/dlp/00-login.png", text: "Enter your credentials on the DLP console login page.", hotspot: { x: 0.35, y: 0.25, w: 0.30, h: 0.45 } },
   ]}
 />
 
-1. Ouvrez l'URL de la console DLP dans votre navigateur ;
-2. Saisissez vos identifiants sur la page de connexion ;
-3. Lors de la première connexion avec le compte admin, changez le mot de passe — la modification est obligatoire (8 caractères minimum).
+1. Open the DLP console URL in your browser;
+2. Enter your credentials on the login page;
+3. On the first login with the admin account, change the password — the change is mandatory (8 characters minimum).
 
 :::warning
-Après 5 tentatives de connexion échouées, un verrouillage de 5 minutes est appliqué par nom d'utilisateur.
+After 5 failed login attempts, a 5-minute lockout is applied per username.
 :::
 
-## Navigation dans la console
+## Console navigation
 
-La console DLP comporte les sections suivantes dans le menu latéral :
+The DLP console has the following sections in the sidebar menu:
 
-- **Dashboard** : statistiques d'évaluation en temps réel ;
-- **Publish** : publication et rollback des [ruleset](/docs/managed-services/dlp/concepts) (ensemble de règles) ;
-- **Policies** : gestion des policies ;
-- **Rules** : gestion des règles ;
-- **Detectors** : gestion des détecteurs prédéfinis et personnalisés ;
-- **Users** : gestion des utilisateurs ;
-- **API Tokens** : création et gestion des [tokens API](/docs/managed-services/dlp/guides/api-authentication) (authentification Bearer) ;
-- **Decision Logs** : consultation des journaux de décision ;
-- **Monitored Rules** : consultation des événements monitorés ;
-- **Audit Logs** : consultation de la piste d'audit ;
-- **Documentation** : documentation intégrée du service.
+- **Dashboard**: real-time evaluation statistics;
+- **Publish**: publication and rollback of [rulesets](/docs/managed-services/dlp/concepts);
+- **Policies**: management of policies;
+- **Rules**: management of rules;
+- **Detectors**: management of predefined and custom detectors;
+- **Users**: management of users;
+- **API Tokens**: creation and management of [API tokens](/docs/managed-services/dlp/guides/api-authentication) (Bearer authentication);
+- **Decision Logs**: viewing of decision logs;
+- **Monitored Rules**: viewing of monitored events;
+- **Audit Logs**: viewing of the audit trail;
+- **Documentation**: built-in service documentation.
 
-## Déconnexion
+## Logging out
 
-Cliquez sur votre nom d'utilisateur en haut à droite de la console, puis sélectionnez **Sign out**. La session est détruite et vous êtes redirigé vers la page de connexion.
+Click your username in the top right corner of the console, then select **Sign out**. The session is destroyed and you are redirected to the login page.
 
 :::info
-La durée de session est de 8 heures. Au-delà, vous devez vous reconnecter.
+The session duration is 8 hours. After that, you must log in again.
 :::

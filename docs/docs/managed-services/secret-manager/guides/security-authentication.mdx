@@ -1,108 +1,108 @@
 ---
-title: Sécuriser l'authentification du Secret Manager
-description: Sécuriser l'authentification du Secret Manager pour la conformité SecNumCloud
+title: Secure Secret Manager authentication
+description: Secure Secret Manager authentication for SecNumCloud compliance
 sidebar_position: 2
 draft: false
 ---
 
-# Sécuriser l'authentification du Secret Manager
+# Secure Secret Manager authentication
 
-Le service managé [Secret Manager](/docs/managed-services/secret-manager/concepts/) intègre des mécanismes de sécurité pour protéger l'accès aux secrets. Cette page présente les bonnes pratiques pour sécuriser l'authentification, notamment dans un contexte de conformité SecNumCloud.
+The [Secret Manager](/docs/managed-services/secret-manager/concepts/) managed service includes security mechanisms to protect access to secrets. This page presents the best practices for securing authentication, particularly in a SecNumCloud compliance context.
 
-## Connexions sécurisées TLS
+## Secure TLS connections
 
-Les communications avec le Secret Manager sont chiffrées avec TLS (Transport Layer Security). L'instance est accessible via son host en HTTPS.
+Communications with the Secret Manager are encrypted with TLS (Transport Layer Security). The instance is accessible via its host over HTTPS.
 
-### Vérifier le chiffrement TLS
+### Verify TLS encryption
 
 ```bash
-curl -v https://{host-de-l-instance}/v1/sys/health
+curl -v https://{instance-host}/v1/sys/health
 ```
 
-## Authentification forte et conformité SecNumCloud
+## Strong authentication and SecNumCloud compliance
 
-Pour répondre aux exigences SecNumCloud en matière d'authentification forte, combinez plusieurs couches de sécurité selon une approche multi-facteurs.
+To meet the SecNumCloud strong authentication requirements, combine several layers of security following a multi-factor approach.
 
-### Architecture multi-facteurs recommandée
+### Recommended multi-factor architecture
 
-| Facteur | Mécanisme | Protection |
+| Factor | Mechanism | Protection |
 | --- | --- | --- |
-| Ce que vous savez | Identifiants d'accès au Secret Manager | Authentification applicative |
-| Ce que vous possédez | VPN avec MFA | Couche réseau |
-| Ce que vous êtes | Contrôle d'accès réseau (IP, [VPC](/docs/network/vpc/concepts/)) | Périmètre de sécurité |
+| Something you know | Secret Manager access credentials | Application-level authentication |
+| Something you have | VPN with MFA | Network layer |
+| Something you are | Network access control (IP, [VPC](/docs/network/vpc/concepts/)) | Security perimeter |
 
-### Configuration recommandée pour environnements sensibles
+### Recommended configuration for sensitive environments
 
-1. **Restriction des IP** : Limitez l'accès aux plages d'adresses IP autorisées ;
+1. **IP restriction**: Restrict access to the authorized IP address ranges;
 
-2. **Accès via VPN avec MFA** : Connectez-vous au Secret Manager via un VPN doté d'une authentification MFA pour ajouter une couche de sécurité réseau ;
+2. **Access via VPN with MFA**: Connect to the Secret Manager through a VPN with MFA authentication to add a network security layer;
 
-3. **Bastion avec MFA** : Déployez un bastion avec authentification forte (TOTP, clé hardware) et configurez l'accès au Secret Manager uniquement via ce bastion ;
+3. **Bastion with MFA**: Deploy a bastion with strong authentication (TOTP, hardware key) and configure access to the Secret Manager only through this bastion;
 
-4. **Principe du moindre privilège** : Accordez uniquement les permissions nécessaires pour accéder aux secrets.
+4. **Principle of least privilege**: Grant only the permissions required to access the secrets.
 
-### Architecture type
+### Typical architecture
 
 ```text
-[Application/Utilisateur] 
-    → [VPN avec MFA] 
+[Application/User] 
+    → [VPN with MFA] 
     → [Bastion/Proxy] 
     → [Secret Manager]
 ```
 
-## Contrôle d'accès
+## Access control
 
-### Permissions IAM Numspot
+### Numspot IAM permissions
 
-L'accès aux opérations de gestion des instances Secret Manager est contrôlé par les permissions IAM :
+Access to Secret Manager instance management operations is controlled by IAM (Identity and Access Management) permissions:
 
 | Permission | Description |
 | --- | --- |
-| `secrets.instance.get` | Obtenir les informations d'une instance ou lister les instances |
-| `secrets.instance.create` | Créer une instance |
-| `secrets.instance.delete` | Supprimer une instance |
+| `secrets.instance.get` | Retrieve the information of an instance or list the instances |
+| `secrets.instance.create` | Create an instance |
+| `secrets.instance.delete` | Delete an instance |
 
-### Contrôle d'accès applicatif
+### Application-level access control
 
-Le contrôle d'accès aux secrets au sein de l'instance est géré par les mécanismes internes du Secret Manager. Pour plus d'informations sur la configuration des accès applicatifs, consultez la documentation de l'interface de l'instance.
+Access control for secrets within the instance is managed by the internal mechanisms of the Secret Manager. For more information on configuring application-level access, refer to the documentation of the instance interface.
 
-## Audit des accès
+## Access auditing
 
-### Événements de gestion des instances
+### Instance management events
 
-Les opérations de gestion des instances (création, consultation, suppression) sont tracées par l'API Numspot.
+Instance management operations (creation, viewing, deletion) are logged by the Numspot API.
 
-### Audit des accès aux secrets
+### Auditing secret access
 
-La journalisation des accès aux secrets est gérée par les mécanismes internes du Secret Manager. Pour configurer et consulter les logs d'audit, consultez la documentation de l'interface de l'instance.
+Logging of secret access is managed by the internal mechanisms of the Secret Manager. To configure and view the audit logs, refer to the documentation of the instance interface.
 
-## Protection contre les attaques
+## Protection against attacks
 
-### Limitation des tentatives
+### Attempt limiting
 
-Des protections contre les attaques par force brute sont appliquées :
+Protections against brute-force attacks are applied:
 
-- Verrouillage temporaire après échecs répétés ;
-- Rate limiting sur les opérations sensibles.
+- temporary lockout after repeated failures;
+- rate limiting on sensitive operations.
 
-### Détection des anomalies
+### Anomaly detection
 
-Surveillez les comportements suspects dans les logs d'audit :
+Monitor suspicious behavior in the audit logs:
 
-- Multiples échecs de connexion ;
-- Accès à des secrets depuis des IP inhabituelles ;
-- Tentatives d'accès non autorisées.
+- multiple connection failures;
+- access to secrets from unusual IP addresses;
+- unauthorized access attempts.
 
-## Résumé des bonnes pratiques SecNumCloud
+## Summary of SecNumCloud best practices
 
-| Exigence | Implémentation recommandée |
+| Requirement | Recommended implementation |
 | --- | --- |
-| Chiffrement des connexions | TLS obligatoire (HTTPS) |
-| Authentification forte | VPN avec MFA + identifiants du Secret Manager |
-| Contrôle d'accès | Permissions IAM restrictives, principe du moindre privilège |
-| Audit des accès | Logs d'audit activés, revue régulière |
-| Révocation | Suppression ou révocation immédiate en cas de compromission |
+| Connection encryption | Mandatory TLS (HTTPS) |
+| Strong authentication | VPN with MFA + Secret Manager credentials |
+| Access control | Restrictive IAM permissions, principle of least privilege |
+| Access auditing | Audit logs enabled, regular review |
+| Revocation | Immediate deletion or revocation in case of compromise |
 
 :::tip
-Pour les architectures critiques, utilisez un bastion SSH ou un proxy d'accès pour centraliser et auditer toutes les connexions au Secret Manager. Mettez en place une revue trimestrielle des accès.
+For critical architectures, use an SSH bastion or an access proxy to centralize and audit all connections to the Secret Manager. Set up a quarterly access review.
 :::

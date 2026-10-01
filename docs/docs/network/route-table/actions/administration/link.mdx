@@ -1,5 +1,5 @@
 ---
-title: Lier une route table à un subnet
+title: Link a route table to a subnet
 sidebar_position: 1
 draft: false
 ---
@@ -8,14 +8,14 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Lier une route table à un subnet
+# Link a route table to a subnet
 
-Vous pouvez lier une [route table (table de routage)](/docs/network/route-table/concepts/) à un ou plusieurs subnets (sous-réseaux) du [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) pour lequel elle est créée. Les routes contenues dans la route table sont ainsi automatiquement appliquées aux [VM (Virtual Machine)](/docs/compute/concept/) placées dans le subnet pour router le trafic réseau.
+You can link a [route table](/docs/network/route-table/concepts/) to one or more subnets of the [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) for which it is created. The routes contained in the route table are then automatically applied to the [VM (Virtual Machine)](/docs/compute/concept/) placed in the subnet to route the network traffic.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.routeTable.update**
 
@@ -24,55 +24,47 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="console" default>
 
-## console {#tabhead-console}
-
-
-:::info
-**Prérequis :** [Créer une route table ↗](../create.mdx)
-:::
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/route-table/lk-01-menu.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC → Route Tables.", hotspot: { x: 0, y: 0.579, w: 0.194, h: 0.0568 } },
-    { img: "/img/walkthrough/route-table/lk-01-menu.png", text: "Depuis Réseau → VPC → Route Tables, ouvrez le menu « Actions » de la route table, puis cliquez sur « Associer à un Subnet ».", hotspot: { x: 0.8438, y: 0.5284, w: 0.1197, h: 0.0457 } },
-    { img: "/img/walkthrough/route-table/lk-02-panel.png", text: "Dans le panneau « Association de Subnet(s) », cochez le ou les subnets à associer (multi-sélection possible), puis cliquez sur « Associer ».", hotspot: { x: 0.5972, y: 0, w: 0.4028, h: 1 } },
+    { img: "/img/walkthrough/en/route-table/list.png", text: "From the left-hand side menu, click Network → VPC → Route Tables.", hotspot: { x: 0, y: 0.579, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/route-table/actions.png", text: "From Network → VPC → Route Tables, open the route table's “Actions” menu, then click “Link Subnet”.", hotspot: { x: 0.8819, y: 0.5284, w: 0.0809, h: 0.0457 } },
+    { img: "/img/walkthrough/en/route-table/link-panel.png", text: "In the “Subnets” panel, tick the subnet(s) to link (multi-selection is available), then click “Link”.", hotspot: { x: 0.5972, y: 0, w: 0.4028, h: 1 } },
   ]}
 />
 
-1. Depuis le menu latéral gauche, cliquez sur **Réseau** → **VPC** → **Route Table**.
+
+:::info
+**Prerequisite:** [Create a route table ↗](/docs/network/route-table/actions/create)
+:::
+
+1. From the left-hand side menu, click **Network** → **VPC** → **Route Table**.
 
 
-2. Identifiez la route table que vous souhaitez associer à un subnet, puis depuis la liste des actions, cliquez sur **Associer à un Subnet**.
+2. Identify the route table that you want to associate with a subnet, then from the list of actions, click **Associate with a Subnet**.
 
 
-    Une nouvelle boîte de dialogue **Associer à un Subnet** apparaît.
+    A new **Associate with a Subnet** dialog box appears.
 
 
-3. Sélectionnez le subnet que vous souhaitez associer à la route table.
+3. Select the subnet that you want to associate with the route table.
 
-4. Cliquez sur le bouton **Associer** (la multi-sélection est disponible).
+4. Click the **Associate** button (multi-selection is available).
 
 
-5. Le subnet a été associé et le message "La route table a bien été associée au subnet" apparaît.
+5. The subnet has been associated and the "The route table has been successfully associated with the subnet" message appears.
 
 
 </TabItem>
 <TabItem value="api">
 
-## api {#tabhead-api}
+The `PUT /compute/spaces/{spaceId}/routeTables/{id}/subnets/link` command associates a subnet with a route table. The subnet and the route table must be in the same VPC. Traffic is routed according to the route table defined in this VPC. You can associate a route table with several subnets.
 
-
-La commande `PUT /compute/spaces/{spaceId}/routeTables/{id}/subnets/link` associe un subnet à une route table. Le subnet et la route table doivent être dans le même VPC. Le trafic est routé selon la route table définie dans ce VPC. Vous pouvez associer une route table à plusieurs subnets.
-
-[Exemple de requête : Lier une route table ↗](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/routeTables/{id}/subnets/link)
+[Request example: Link a route table ↗](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/routeTables/{id}/subnets/link)
 
 </TabItem>
 <TabItem value="terraform">
 
-## terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
 
 </TabItem>
 </Tabs>

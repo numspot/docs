@@ -1,48 +1,48 @@
 ---
-title: Emplacements des ressources
+title: Resource locations
 sidebar_position: 1
 draft: false
 ---
 
-# À propos des Zones, Régions et Endpoints Numspot
+# About Numspot Zones, Regions and Endpoints
 
-Numspot est une plateforme de cloud computing qui offre une infrastructure de calcul, de stockage et de réseau flexible et évolutive. Les ressources Numspot sont organisées en zones et en régions : vous créez vos ressources au sein d'une région, et chaque région appartient à une zone.
+Numspot is a cloud computing platform that provides flexible and scalable compute, storage and network infrastructure. Numspot resources are organized into zones and regions: you create your resources within a region, and each region belongs to a zone.
 
 ## Zones
 
-Une zone correspond au périmètre d'hébergement de l'infrastructure cloud Numspot. Une zone peut héberger une ou plusieurs régions.
+A zone corresponds to the hosting perimeter of the Numspot cloud infrastructure. A zone can host one or more regions.
 
-Numspot dispose de deux zones :
+Numspot has two zones:
 
-- la zone `STD` (standard) ;
-- la zone `SNC` (SecNumCloud).
+- the `STD` (standard) zone;
+- the `SNC` (SecNumCloud) zone.
 
-## Régions
+## Regions
 
-Une région est une zone géographique dans laquelle sont hébergées les ressources cloud. Les régions de Numspot sont indépendantes les unes des autres.
+A region is a geographical area in which cloud resources are hosted. The Numspot regions are independent of one another.
 
-Actuellement, à chaque zone correspond une région :
+Currently, each zone corresponds to one region:
 
-| Zone | Région                 |
-| ---- | ---------------------- |
-| STD  | `eu-west-2`            |
-| SNC  | `cloudgouv-eu-west-1`  |
+| Zone | Region                |
+| ---- | --------------------- |
+| STD  | `eu-west-2`           |
+| SNC  | `cloudgouv-eu-west-1` |
 
-Les régions sont identifiées par leur nom (par exemple `eu-west-2`). C'est ce nom qui est utilisé dans les URLs d'API.
+Regions are identified by their name (for example `eu-west-2`). This name is what is used in the API URLs.
 
 ## Endpoints
 
-Les endpoint sont des URL utilisées pour accéder aux services Numspot dans une région donnée. Chaque service Numspot a son propre endpoint, qui est composé d'un nom de service et du nom de la région.
+Endpoints are URL used to access Numspot services in a given region. Each Numspot service has its own endpoint, which is made up of a service name and the region name.
 
 ```text
-https://(nom du service).(nom de la région).numspot.com/
+https://(service name).(region name).numspot.com/
 ```
 
-## Utilisation des endpoints
+## Using endpoints
 
-Pour utiliser les services Numspot dans une région donnée, vous devez utiliser les endpoint correspondant à cette région. Vous pouvez utiliser les endpoint pour accéder aux services Numspot à l'aide de l'API Numspot ou de la console d'administration Numspot.
+To use Numspot services in a given region, you must use the endpoints corresponding to that region. You can use the endpoints to access Numspot services through the Numspot API or the Numspot administration console.
 
-Voici un exemple de commande API pour créer une [VM (Virtual Machine)](/docs/compute/concept/) dans la région `eu-west-2` de la zone `STD` :
+Here is an example of an API command to create a [VM (Virtual Machine)](/docs/compute/concept/) in the `eu-west-2` region of the `STD` zone:
 
 ```bash
 POST https://api.eu-west-2.numspot.com/compute/spaces/{spaceId}/vms
@@ -55,4 +55,4 @@ POST https://api.eu-west-2.numspot.com/compute/spaces/{spaceId}/vms
 }
 ```
 
-Dans cet exemple, l'endpoint `api.eu-west-2.numspot.com` est utilisé pour accéder au service de création de VM dans la région `eu-west-2`.
+In this example, the `api.eu-west-2.numspot.com` endpoint is used to access the VM creation service in the `eu-west-2` region.

@@ -1,0 +1,58 @@
+---
+title: Emplacements des ressources
+sidebar_position: 1
+draft: false
+---
+
+# À propos des Zones, Régions et Endpoints Numspot
+
+Numspot est une plateforme de cloud computing qui offre une infrastructure de calcul, de stockage et de réseau flexible et évolutive. Les ressources Numspot sont organisées en zones et en régions : vous créez vos ressources au sein d'une région, et chaque région appartient à une zone.
+
+## Zones
+
+Une zone correspond au périmètre d'hébergement de l'infrastructure cloud Numspot. Une zone peut héberger une ou plusieurs régions.
+
+Numspot dispose de deux zones :
+
+- la zone `STD` (standard) ;
+- la zone `SNC` (SecNumCloud).
+
+## Régions
+
+Une région est une zone géographique dans laquelle sont hébergées les ressources cloud. Les régions de Numspot sont indépendantes les unes des autres.
+
+Actuellement, à chaque zone correspond une région :
+
+| Zone | Région                 |
+| ---- | ---------------------- |
+| STD  | `eu-west-2`            |
+| SNC  | `cloudgouv-eu-west-1`  |
+
+Les régions sont identifiées par leur nom (par exemple `eu-west-2`). C'est ce nom qui est utilisé dans les URLs d'API.
+
+## Endpoints
+
+Les endpoint sont des URL utilisées pour accéder aux services Numspot dans une région donnée. Chaque service Numspot a son propre endpoint, qui est composé d'un nom de service et du nom de la région.
+
+```text
+https://(nom du service).(nom de la région).numspot.com/
+```
+
+## Utilisation des endpoints
+
+Pour utiliser les services Numspot dans une région donnée, vous devez utiliser les endpoint correspondant à cette région. Vous pouvez utiliser les endpoint pour accéder aux services Numspot à l'aide de l'API Numspot ou de la console d'administration Numspot.
+
+Voici un exemple de commande API pour créer une [VM (Virtual Machine)](/docs/compute/concept/) dans la région `eu-west-2` de la zone `STD` :
+
+```bash
+POST https://api.eu-west-2.numspot.com/compute/spaces/{spaceId}/vms
+{
+    "imageId": "string",
+    "KeypairName": "string",
+    "maxVMsCount": 1,
+    "minVMsCount": 1,
+    "vmType": "string"
+}
+```
+
+Dans cet exemple, l'endpoint `api.eu-west-2.numspot.com` est utilisé pour accéder au service de création de VM dans la région `eu-west-2`.

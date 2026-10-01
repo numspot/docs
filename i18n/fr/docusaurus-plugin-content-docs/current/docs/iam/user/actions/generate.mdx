@@ -1,0 +1,95 @@
+---
+title: Générer un lien d'activation - IAM
+description: "Envoyez un nouveau lien d'activation à un utilisateur IAM pour réinitialiser son mot de passe et son authentification à deux facteurs, via la console ou l'API."
+sidebar_label: Générer un lien d'activation
+sidebar_position: 8
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Générer un lien d'activation
+
+Lors de la première connexion ou dans le cadre d'une réinitialisation des informations d'authentification, un nouveau lien d'activation est généré. Ce lien est envoyé par e-mail à l'adresse déclarée lors de la création de l'utilisateur.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **iam.user.recover**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/user/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Utilisateurs.", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/user/create-01-list.png", text: "Dans le tableau « Utilisateurs », cliquez sur l'identifiant de l'utilisateur.", hotspot: { x: 0.234, y: 0.32, w: 0.11, h: 0.035 } },
+    { img: "/img/walkthrough/user/detail.png", text: "Sur la page « Détails utilisateur », cliquez sur « Nouveau lien d'activation ».", hotspot: { x: 0.444, y: 0.1185, w: 0.1521, h: 0.0494 } },
+    { img: "/img/walkthrough/user/generate-02-modal.png", text: "La boîte de dialogue récapitule l'effet du lien : cliquez sur « Envoyer l'email » pour l'envoyer à l'utilisateur.", hotspot: { x: 0.2917, y: 0.3416, w: 0.4167, h: 0.3168 } },
+  ]}
+/>
+
+1. Dans le tableau des **utilisateurs**, cliquez sur l'identifiant de l'utilisateur.
+
+   :::tip
+   Vous avez la possibilité de rechercher un utilisateur en particulier en utilisant le champ **Rechercher**.
+   :::
+
+2. Sur la page "Détails utilisateur", cliquez sur **Nouveau lien d'activation**.
+
+3. Confirmez l'envoi en cliquant sur **Envoyer l'email**. L'utilisateur reçoit un email contenant un nouveau lien permettant de réinitialiser son mot de passe et son authentification à deux facteurs.
+:::warning
+Si l'utilisateur est connecté, sa session actuelle reste active. Cependant, il ne pourra plus se reconnecter avec son ancien mot de passe.
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La génération d'un lien d'activation peut se faire via l'API, mais les étapes suivantes sont à réaliser par l'utilisateur dans son navigateur.
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/POST/iam/organisations/{organisationId}/users/{userId}/recover
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users/{userId}/recover' \
+  --request POST
+```
+
+### Réponse
+
+```json
+{
+  "link": "https://example.com",
+  "code": "…",
+  "expiration": "2018-11-13T20:20:39+00:00"
+}
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/user).
+
+</TabItem>
+</Tabs>

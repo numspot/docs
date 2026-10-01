@@ -1,24 +1,24 @@
 ---
-title: Réversibilité - Container Registry managé
-sidebar_label: Réversibilité du Container Registry managé
-description: Informations sur la réversibilité du service managé Container Registry
+title: Reversibility - managed Container Registry
+sidebar_label: Reversibility of the managed Container Registry
+description: Information about the reversibility of the managed Container Registry service
 sidebar_position: 4
 draft: false
 ---
 
-# Réversibilité du Container Registry managé
+# Reversibility of the managed Container Registry
 
-Le service managé Container Registry est conçu pour garantir la réversibilité, c'est-à-dire la possibilité pour le client de récupérer ses données et de migrer vers une autre solution sans verrouillage.
+The managed Container Registry service is designed to guarantee reversibility, that is, the ability for the customer to retrieve their data and migrate to another solution without lock-in.
 
-## Données exportables
+## Exportable data
 
-L'ensemble des images de conteneurs et artefacts stockés dans le Container Registry peut être exporté via les outils standards de l'écosystème OCI (Open Container Initiative).
+All container images and artifacts stored in the Container Registry can be exported using the standard tools of the OCI (Open Container Initiative) ecosystem.
 
-## Outils de réversibilité
+## Reversibility tools
 
-### Push vers un registry externe
+### Push to an external registry
 
-Utilisez les commandes standards Docker pour copier les images vers un registry externe :
+Use the standard Docker commands to copy the images to an external registry:
 
 ```bash
 docker pull <registry-url>/<project>/<image>:<tag>
@@ -26,28 +26,28 @@ docker tag <registry-url>/<project>/<image>:<tag> <new-registry>/<project>/<imag
 docker push <new-registry>/<project>/<image>:<tag>
 ```
 
-### Réplication Harbor
+### Harbor replication
 
-La [réplication Harbor](/docs/managed-services/registry/guides/harbor-replication/) permet de répliquer automatiquement les images vers un registry externe.
+[Harbor replication](/docs/managed-services/registry/guides/harbor-replication/) automatically replicates the images to an external registry.
 
-### Export via l'API Harbor
+### Export via the Harbor API
 
-L'API Harbor permet de lister les projets et les images pour automatiser l'export :
+The Harbor API (Application Programming Interface) lists the projects and the images to automate the export:
 
 ```bash
 curl -u "admin:password" "https://<registry-url>/api/v2.0/projects"
 ```
 
-## Formats ouverts
+## Open formats
 
-- Les images de conteneurs sont au format OCI (Open Container Initiative), compatible avec tout registry conforme (Docker Registry, Quay, etc.).
-- Les charts Helm sont au format standard Helm, compatible avec tout repository Helm.
-- Le protocole de registre est le Docker Registry HTTP API V2, standard du marché.
+- container images use the OCI (Open Container Initiative) format, compatible with any compliant registry (Docker Registry, Quay, etc.);
+- Helm charts use the standard Helm format, compatible with any Helm repository;
+- the registry protocol is the Docker Registry HTTP API V2, an industry standard.
 
-## Procédure de sortie
+## Exit procedure
 
-1. Identifiez l'ensemble des projets et images à migrer.
-2. Configurez la réplication vers le registry cible ou effectuez un push manuel.
-3. Vérifiez l'intégrité des images copiées sur le registry cible.
-4. Mettez à jour les configurations de déploiement (URL du registry).
-5. Supprimez l'instance Container Registry Numspot après validation.
+1. Identify all the projects and images to migrate.
+2. Configure the replication to the target registry or perform a manual push.
+3. Verify the integrity of the images copied to the target registry.
+4. Update the deployment configurations (registry URL).
+5. Delete the Numspot Container Registry instance after validation.

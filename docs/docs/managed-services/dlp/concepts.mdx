@@ -1,88 +1,88 @@
 ---
 title: "DLP - Concepts"
 sidebar_label: "Concepts"
-description: "Découvrez le service managé DLP de Numspot : protection contre les fuites de données, règles, détecteurs, policies et journaux de décision."
+description: "Discover the Numspot managed DLP service: data loss prevention, rules, detectors, policies and decision logs."
 sidebar_position: 1
 draft: false
 ---
 
 import ActionsSummary from '@site/src/components/ActionsSummary';
 
-# À propos du service managé DLP
+# About the managed DLP service
 
 <ActionsSummary />
 
 ## Introduction
 
-Le service managé [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) permet d'inspecter, d'évaluer et de protéger les données sensibles en temps réel. Le service DLP s'intercale entre les plateformes internes et leurs backends, inspecte les requêtes entrantes et renvoie une décision : passer, bloquer, modifier ou surveiller.
+The managed [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) service inspects, evaluates and protects sensitive data in real time. The DLP service sits between internal platforms and their backends, inspects incoming requests and returns a decision: pass, block, modify or monitor.
 
-Ce service est conçu pour prévenir les fuites de données sensibles — clés API, identifiants cloud, tokens d'accès — dans les flux transitant par les plateformes de Numspot.
+This service is designed to prevent leaks of sensitive data — API keys, cloud credentials, access tokens — in the traffic flowing through Numspot platforms.
 
-### Avantages du service managé DLP
+### Benefits of the managed DLP service
 
-- Protection en temps réel : inspection des requêtes à la volée, sans latence perceptible ;
-- Règles personnalisables : création de règles et de détecteurs adaptés aux besoins de chaque organisation ;
-- Détecteurs prédéfinis : bibliothèque de détecteurs couvrant les secrets cloud, les tokens d'API et les services IA ;
-- Modification automatique : caviardage ou suppression des données sensibles détectées dans les flux ;
-- Audit complet : traçabilité des décisions et journalisation des actions d'administration ;
-- Haute disponibilité : architecture avec composants redondants et mise à l'échelle automatique des workers.
+- Real-time protection: inspection of requests on the fly, with no perceptible latency;
+- Customisable rules: creation of rules and detectors tailored to each organisation's needs;
+- Predefined detectors: library of detectors covering cloud secrets, API tokens and AI services;
+- Automatic modification: redaction or removal of sensitive data detected in traffic;
+- Comprehensive auditing: traceability of decisions and logging of administration actions;
+- High availability: architecture with redundant components and automatic scaling of workers.
 
-### Accès à la console DLP
+### Accessing the DLP console
 
-La console DLP est une interface web standalone, accessible via sa propre URL. Elle n'est pas accessible depuis la console Numspot.
+The DLP console is a standalone web interface, accessible via its own URL. It is not accessible from the Numspot console.
 
 ## Architecture
 
-Le service DLP repose sur cinq composants :
+The DLP service relies on five components:
 
-| Composant | Rôle |
+| Component | Role |
 |-----------|------|
-| Control | API d'administration, gestion des règles, des utilisateurs et des détecteurs |
-| Control Frontend | Interface web de gestion DLP |
-| Control Gateway | Proxy inverse qui route les requêtes vers le frontend ou l'API Control |
-| worker | Moteur d'évaluation sans état, exposé aux plateformes consommatrices |
-| Log Collector | Collecte, stockage et interrogation des journaux de décision |
+| Control | Administration API, management of rules, users and detectors |
+| Control Frontend | Web interface for DLP management |
+| Control Gateway | Reverse proxy that routes requests to the frontend or the Control API |
+| worker | Stateless evaluation engine, exposed to consuming platforms |
+| Log Collector | Collection, storage and querying of decision logs |
 
-### Fonctionnement de l'évaluation
+### How evaluation works
 
-1. La plateforme consommatrice envoie une requête au worker DLP ;
-2. Le worker authentifie la requête via une clé API ;
-3. Le worker valide la requête par rapport au schéma de la plateforme ;
-4. Le worker évalue toutes les règles actives dans l'ordre des policies ;
-5. Le worker renvoie la décision : `pass`, `block` ou `modify`.
+1. The consuming platform sends a request to the DLP worker;
+2. The worker authenticates the request via an API key;
+3. The worker validates the request against the platform schema;
+4. The worker evaluates all active rules in the order defined by policies;
+5. The worker returns the decision: `pass`, `block` or `modify`.
 
-Les workers se synchronisent avec le composant Control toutes les 30 secondes pour récupérer la dernière version publiée des règles et de la configuration. Si aucune modification n'est détectée, la synchronisation renvoie un statut 304 (non modifié).
+Workers synchronise with the Control component every 30 seconds to retrieve the latest published version of rules and configuration. If no changes are detected, the synchronisation returns a 304 (not modified) status.
 
-## Concepts clés
+## Key concepts
 
-### Règles
+### Rules
 
-Une règle DLP définit une condition et une action à appliquer lorsque la condition est remplie.
+A DLP rule defines a condition and an action to apply when the condition is met.
 
-- **Condition** : expression DSL (Domain Specific Language) sous forme de chaîne de caractères qui spécifie le champ à inspecter et le détecteur à utiliser ;
-- **Action** : décision à appliquer lorsque la condition est remplie.
+- **Condition**: DSL (Domain Specific Language) expression as a string that specifies the field to inspect and the detector to use;
+- **Action**: decision to apply when the condition is met.
 
-Les actions disponibles sont les suivantes :
+The available actions are:
 
 | Action | Description |
 |--------|-------------|
-| `pass` | Autorise la requête sans modification |
-| `block` | Bloque la requête et renvoie un message d'erreur |
-| `modify` | Modifie les champs sensibles détectés (caviardage ou suppression) |
-| `monitor` | Autorise la requête mais journalise l'événement et stocke la charge utile |
+| `pass` | Allows the request without modification |
+| `block` | Blocks the request and returns an error message |
+| `modify` | Modifies detected sensitive fields (redaction or removal) |
+| `monitor` | Allows the request but logs the event and stores the payload |
 
-Les règles sont créées en tant que brouillons. Elles doivent être publiées dans un [ruleset](/docs/managed-services/dlp/concepts) (ensemble de règles) pour être actives.
+Rules are created as drafts. They must be published in a [ruleset](/docs/managed-services/dlp/concepts) to become active.
 
-#### Opérateurs DSL
+#### DSL operators
 
-Le langage DSL dispose de deux opérateurs :
+The DSL language has two operators:
 
-| Opérateur | Description |
-|-----------|-------------|
-| `matches_detector` | Vérifie si le champ spécifié correspond au détecteur indiqué |
-| `not_matches_detector` | Vérifie si le champ spécifié ne correspond pas au détecteur indiqué |
+| Operator | Description |
+|----------|-------------|
+| `matches_detector` | Checks whether the specified field matches the indicated detector |
+| `not_matches_detector` | Checks whether the specified field does not match the indicated detector |
 
-Exemple de condition DSL :
+Example DSL condition:
 
 ```text
 matches_detector(tool_arguments, @preset:aws_access_key)
@@ -90,120 +90,120 @@ matches_detector(tool_arguments, @preset:aws_access_key)
 
 ### Policies
 
-Une [policy DLP](/docs/managed-services/dlp/concepts) (politique DLP) regroupe un ensemble de règles et définit une action par défaut.
+A [DLP policy](/docs/managed-services/dlp/concepts) groups a set of rules and defines a default action.
 
-- **Règles** : liste ordonnée de règles à évaluer ;
-- **Action par défaut** : décision appliquée lorsqu'aucune règle ne déclenche une action terminale — `pass` ou `block`.
+- **Rules**: ordered list of rules to evaluate;
+- **Default action**: decision applied when no rule triggers a terminal action — `pass` or `block`.
 
-L'évaluation suit l'ordre des règles dans la policy. Une action `pass` ou `block` termine l'évaluation. L'action `modify` accumule les modifications et poursuit l'évaluation. L'action `monitor` journalise l'événement et poursuit l'évaluation.
+Evaluation follows the order of rules in the policy. A `pass` or `block` action terminates the evaluation. The `modify` action accumulates modifications and continues the evaluation. The `monitor` action logs the event and continues the evaluation.
 
-### Détecteurs
+### Detectors
 
-Un détecteur identifie un type de données sensible à l'aide d'expressions régulières.
+A detector identifies a type of sensitive data using regular expressions.
 
-Il existe deux catégories de détecteurs :
+There are two categories of detectors:
 
-- **Détecteurs prédéfinis** : fournis par Numspot, répartis en trois catégories :
-  - **secrets** (~80 détecteurs) : clés d'accès cloud, tokens d'API, secrets d'infrastructure ;
-  - **mistral-service** (2 détecteurs) : détecteurs spécifiques aux services Mistral ;
-  - **generic** (1 détecteur) : détecteur générique.
-- **Détecteurs personnalisés** : créés par l'utilisateur avec des expressions régulières propres à son organisation.
+- **Predefined detectors**: provided by Numspot, divided into three categories:
+  - **secrets** (~80 detectors): cloud access keys, API tokens, infrastructure secrets;
+  - **mistral-service** (2 detectors): detectors specific to Mistral services;
+  - **generic** (1 detector): generic detector.
+- **Custom detectors**: created by the user with regular expressions specific to their organisation.
 
-Les détecteurs sont référencés dans les conditions des règles via la syntaxe `@preset:<id>` pour les prédéfinis et `@custom:<id>` pour les personnalisés.
+Detectors are referenced in rule conditions using the syntax `@preset:<id>` for predefined ones and `@custom:<id>` for custom ones.
 
 ### Rulesets
 
-Un ruleset est une version immuable de l'ensemble des règles, policies et détecteurs personnalisés actifs. La publication d'un ruleset fige toutes les règles et policies en brouillon dans une nouvelle version numérotée.
+A ruleset is an immutable version of the set of active rules, policies and custom detectors. Publishing a ruleset freezes all draft rules and policies into a new numbered version.
 
-Le rollback restaure une version précédente en créant une nouvelle version (N+1) identique à la version sélectionnée.
+Rollback restores a previous version by creating a new version (N+1) identical to the selected version.
 
-### Schémas de plateforme
+### Platform schemas
 
-Chaque plateforme consommatrice possède un schéma qui définit les champs attendus dans les requêtes d'évaluation. Le schéma spécifie pour chaque champ :
+Each consuming platform has a schema that defines the expected fields in evaluation requests. The schema specifies for each field:
 
-- le nom en notation pointée ;
-- le type : `string`, `number`, `boolean`, `enum`, `array` ou `datetime` ;
-- le caractère obligatoire ou facultatif ;
-- la description.
+- the name in dot notation;
+- the type: `string`, `number`, `boolean`, `enum`, `array` or `datetime`;
+- whether it is mandatory or optional;
+- the description.
 
-#### Schéma de la plateforme Mistral
+#### Mistral platform schema
 
-| Champ | Type | Obligatoire | Description |
-|-------|------|-------------|-------------|
-| `tool_arguments` | `string` | Oui | Arguments de l'outil appelé |
-| `tool_called` | `string` | Non | Nom de l'outil appelé |
-| `request_time` | `datetime` | Oui | Horodatage de la requête |
+| Field | Type | Mandatory | Description |
+|-------|------|-----------|-------------|
+| `tool_arguments` | `string` | Yes | Arguments of the called tool |
+| `tool_called` | `string` | No | Name of the called tool |
+| `request_time` | `datetime` | Yes | Request timestamp |
 
-Lorsqu'un champ référencé par une règle est absent de la requête, la politique de champ absent détermine le comportement :
+When a field referenced by a rule is absent from the request, the missing field policy determines the behaviour:
 
-- `fail_open` : la règle ne se déclenche pas ;
-- `fail_closed` : la règle se déclenche.
+- `fail_open`: the rule does not trigger;
+- `fail_closed`: the rule triggers.
 
-## Rôles et permissions
+## Roles and permissions
 
-Le service DLP utilise un modèle de contrôle d'accès basé sur les rôles. Les rôles disponibles sont les suivants :
+The DLP service uses a role-based access control model. The available roles are:
 
-| Rôle | Permissions |
+| Role | Permissions |
 |------|------------|
-| `viewer` | Lecture des règles, policies, détecteurs, journaux et audit |
-| `detector_editor` | Lecture + écriture des détecteurs personnalisés |
-| `rule_editor` | Lecture + écriture des règles et des policies |
-| `rule_publisher` | Lecture + publication des rulesets |
-| `admin` | Toutes les permissions, y compris la gestion des utilisateurs |
+| `viewer` | Read rules, policies, detectors, logs and audit |
+| `detector_editor` | Read + write custom detectors |
+| `rule_editor` | Read + write rules and policies |
+| `rule_publisher` | Read + publish rulesets |
+| `admin` | All permissions, including user management |
 
-Les modifications de rôles prennent effet immédiatement sur les sessions existantes.
+Role changes take effect immediately on existing sessions.
 
-## Authentification
+## Authentication
 
-L'accès à l'API Control se fait via des sessions basées sur des cookies sécurisés (HttpOnly, SameSite=Strict), d'une durée de 8 heures configurable.
+Access to the Control API is via sessions based on secure cookies (HttpOnly, SameSite=Strict), with a configurable duration of 8 hours.
 
-L'accès au worker DLP se fait via des clés API par instance de plateforme, avec une authentification Bearer.
+Access to the DLP worker is via API keys per platform instance, with Bearer authentication.
 
-Après 5 tentatives de connexion échouées, un verrouillage de 5 minutes est appliqué par nom d'utilisateur.
+After 5 failed login attempts, a 5-minute lockout is applied per username.
 
-## Journaux et audit
+## Logs and audit
 
-### Journaux de décision
+### Decision logs
 
-Chaque évaluation par le worker produit un journal de décision contenant :
+Each evaluation by the worker produces a decision log containing:
 
-- l'identifiant de la requête ;
-- la plateforme consommatrice ;
-- la décision rendue ;
-- les règles déclenchées ;
-- les champs modifiés ;
-- la latence de traitement.
+- the request identifier;
+- the consuming platform;
+- the decision rendered;
+- the rules triggered;
+- the fields modified;
+- the processing latency.
 
-Les journaux de décision sont consultables depuis la section **Decision Logs** de la console DLP.
+Decision logs are accessible from the **Decision Logs** section of the DLP console.
 
-### Événements monitorés
+### Monitored events
 
-Les règles en mode `monitor` génèrent des événements qui stockent la charge utile originale dans un stockage objet compatible S3. Les charges utiles peuvent être consultées en version complète ou caviardée.
+Rules in `monitor` mode generate events that store the original payload in S3-compatible object storage. Payloads can be viewed in full or redacted versions.
 
 ### Audit Logs
 
-Toutes les actions d'administration — création, modification, suppression de règles, policies, détecteurs, publication de ruleset, gestion des utilisateurs — sont enregistrées dans les journaux d'audit.
+All administration actions — creation, modification, deletion of rules, policies, detectors, ruleset publication, user management — are recorded in audit logs.
 
-Les journaux d'audit sont consultables depuis la section **Audit Logs** de la console DLP.
+Audit logs are accessible from the **Audit Logs** section of the DLP console.
 
-## Cas d'utilisation
+## Use cases
 
-### Protection des clés d'accès cloud
+### Protecting cloud access keys
 
-Détectez et bloquez la transmission accidentelle de clés d'accès AWS, GCP ou d'autres fournisseurs cloud dans les requêtes transitant par les plateformes de Numspot.
+Detect and block the accidental transmission of AWS, GCP or other cloud provider access keys in requests flowing through Numspot platforms.
 
-### Caviardage des données sensibles
+### Redacting sensitive data
 
-Remplacez automatiquement les secrets détectés — clés API, tokens d'accès, identifiants — par des masques dans les flux de données.
+Automatically replace detected secrets — API keys, access tokens, credentials — with masks in data flows.
 
-### Surveillance conformitaire
+### Compliance monitoring
 
-Journalisez les requêtes contenant des données sensibles sans les bloquer, afin de constituer une trace d'audit pour les exigences de conformité.
+Log requests containing sensitive data without blocking them, to build an audit trail for compliance requirements.
 
-## Bonnes pratiques
+## Best practices
 
-- Règles spécifiques : créez des règles ciblant des champs précis plutôt que le champ générique `*` pour limiter les faux positifs ;
-- Test avant publication : utilisez la fonctionnalité de test des règles et des détecteurs avant de publier un ruleset ;
-- Action monitor en premier : commencez par surveiller les flux en mode `monitor` pour mesurer l'impact avant de passer en `block` ;
-- Rollback rapide : en cas de faux positifs massifs, utilisez le rollback pour restaurer la version précédente du ruleset ;
-- Moindre privilège : attribuez le rôle minimal nécessaire à chaque utilisateur — `viewer` par défaut, `rule_editor` uniquement pour les utilisateurs créant des règles.
+- Specific rules: create rules targeting precise fields rather than the generic `*` field to limit false positives;
+- Test before publishing: use the rule and detector testing feature before publishing a ruleset;
+- Monitor action first: start by monitoring traffic in `monitor` mode to measure the impact before switching to `block`;
+- Quick rollback: in case of massive false positives, use rollback to restore the previous version of the ruleset;
+- Least privilege: assign the minimum necessary role to each user — `viewer` by default, `rule_editor` only for users creating rules.

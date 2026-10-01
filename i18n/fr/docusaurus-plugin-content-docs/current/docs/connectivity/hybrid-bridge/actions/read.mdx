@@ -1,0 +1,46 @@
+---
+title: Obtenir des informations sur vos Hybrid Bridges
+description: Consultez les informations de vos bridges entre VPC et services managés.
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Obtenir des informations sur vos Hybrid Bridges
+
+Vous pouvez obtenir des informations sur un ou plusieurs bridges.
+
+Par défaut, cette action décrit tous vos bridges.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+
+- **connectivity.bridge.get**
+
+:::
+<Tabs>
+  <TabItem value='api' label="API" default>
+
+## API {#tabhead-api}
+
+La commande `GET /connectivity/spaces/{spaceId}/bridges` permet de lister tous vos bridges.
+
+[Exemple de requête : Lister tous les Hybrid Bridges](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/bridges)
+
+La commande `GET /connectivity/spaces/{spaceId}/bridges/{id}` permet de récupérer les informations d'un bridge spécifique.
+
+[Exemple de requête : Récupérer les informations d'un Hybrid Bridge](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/bridges/{id})
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/hybrid_bridge).
+
+  </TabItem>
+</Tabs>

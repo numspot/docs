@@ -1,23 +1,23 @@
 ---
-title: Supprimer une instance Secret Manager
+title: Delete a Secret Manager instance
 sidebar_position: 9
 draft: false
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Supprimer une instance Secret Manager
+# Delete a Secret Manager instance
 
-Vous pouvez supprimer une [instance Secret Manager](/docs/managed-services/secret-manager/concepts/) au sein de votre espace, quel que soit son statut.
+You can delete a [Secret Manager instance](/docs/managed-services/secret-manager/concepts/) within your space, whatever its status.
 
 :::warning
-Vérifiez que l'instance Secret Manager n'est pas en cours d'utilisation avant de la supprimer. La suppression est irréversible et entraîne la perte de tous les secrets stockés dans l'instance.
+Make sure the Secret Manager instance is not in use before deleting it. Deletion is irreversible and results in the loss of all secrets stored in the instance.
 :::
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **secrets.instance.delete**
 
@@ -25,19 +25,16 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
     
     <TabItem value="api" label="API" default>
+        The `DELETE /secrets/spaces/{spaceId}/instances/{instanceId}` request deletes a Secret Manager instance.
+        The instance switches to the `DELETING` status during the deletion.
 
-## API {#tabhead-api}
-
-        La requête `DELETE /secrets/spaces/{spaceId}/instances/{instanceId}` permet de supprimer une instance Secret Manager.
-        L'instance passe dans l'état `DELETING` le temps de la suppression.
-
-        ### Exemple de réponse
+        ### Example response
 
         ```http
         HTTP/1.1 204 No Content
         ```
 
-        [Voir la spécification complète](/openapi/#tag/Secret/DELETE/secrets/spaces/{spaceId}/instances/{instanceId})
+        [See the full specification](/openapi/#tag/Secret/DELETE/secrets/spaces/{spaceId}/instances/{instanceId})
 
     </TabItem>
 </Tabs>

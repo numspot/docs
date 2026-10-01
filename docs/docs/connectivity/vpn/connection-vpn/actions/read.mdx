@@ -1,6 +1,6 @@
 ---
-title: Obtenir des informations sur vos connexions VPN
-description: Consultez les informations de vos connexions VPN entre réseau d'entreprise et VPC.
+title: Get information about your VPN connections
+description: View the information of your VPN connections between an enterprise network and a VPC.
 sidebar_position: 2
 draft: false
 ---
@@ -8,16 +8,16 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Obtenir des informations sur vos connexions VPN
+# Get information about your VPN connections
 
-Vous pouvez obtenir des informations sur une ou plusieurs de vos connexions **VPN** (Virtual Private Network).
+You can get information about one or several of your VPN (Virtual Private Network) connections.
 
-Par défaut, cette action décrit toutes vos connexions VPN.
+By default, this action describes all your VPN connections.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **connectivity.vpnconnection.get**
 
@@ -26,37 +26,28 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
-
-1. Dans la console, naviguez vers **Réseau** → **VPC** → **VPN Connections**.
-2. La liste de toutes vos connexions VPN s'affiche avec leurs informations principales :
+1. In the console, navigate to **Network** → **[VPC](/docs/network/vpc/concepts)** → **VPN Connections**.
+2. The list of all your VPN connections is displayed with their main information:
    - ID
-   - [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/)
-   - [client gateway (passerelle client)](/docs/connectivity/vpn/client-gateway/concepts/)
-   - État
+   - [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/)
+   - [client gateway](/docs/connectivity/vpn/client-gateway/concepts/)
+   - State
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `GET /connectivity/spaces/{spaceId}/vpnConnections` command lists your VPN connections.
 
+[Example request: List all your VPN Connections](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/vpnConnections)
 
-La commande `GET /connectivity/spaces/{spaceId}/vpnConnections` permet de lister vos connexions VPN.
+The `GET /connectivity/spaces/{spaceId}/vpnConnections/{id}` command retrieves information about a VPN connection.
 
-[Exemple de requête : Lister toutes vos VPN Connections](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/vpnConnections)
-
-La commande `GET /connectivity/spaces/{spaceId}/vpnConnections/{id}` permet de récupérer des informations concernant une connexion VPN.
-
-[Exemple de requête : Récupérer les informations d'une VPN Connection](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/vpnConnections/{id})
+[Example request: Retrieve the information of a VPN Connection](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/vpnConnections/{id})
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection).
 
 </TabItem>
 </Tabs>

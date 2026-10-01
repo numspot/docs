@@ -44,33 +44,33 @@ type HomeEntry = {
 const POPULAR_PAGES: HomeEntry[] = [
   {
     id: "kubernetes-concepts",
-    title: "Concepts du Kubernetes managé",
+    title: "Managed Kubernetes concepts",
     description:
-      "Comprendre l'architecture et les objets du Kubernetes managé Numspot.",
+      "How the managed Kubernetes works on Numspot: architecture and objects.",
     url: "/docs/managed-services/kubernetes/concepts/",
     section: "managed-services",
     readMore: true,
   },
   {
     id: "managed-concepts",
-    title: "Concepts des Services managés",
-    description: "Kubernetes, PostgreSQL, Registry : les bases des services managés.",
+    title: "Managed services concepts",
+    description: "What managed services cover: Kubernetes, PostgreSQL and Container Registry.",
     url: "/docs/managed-services/concepts/",
     section: "managed-services",
     readMore: true,
   },
   {
     id: "postgresql-concepts",
-    title: "Concepts du PostgreSQL managé",
-    description: "Architecture, réplicas et sauvegardes du PostgreSQL managé.",
+    title: "Managed PostgreSQL concepts",
+    description: "Architecture, replicas and backups of the managed PostgreSQL.",
     url: "/docs/managed-services/postgresql/concepts/",
     section: "managed-services",
     readMore: true,
   },
   {
     id: "create-vm",
-    title: "Créer une VM",
-    description: "Créez et configurez une VM sur mesure dans votre VPC.",
+    title: "Create a VM",
+    description: "Create and configure a custom VM inside your VPC.",
     url: "/docs/compute/vms/actions/create/",
     section: "compute",
     readMore: true,
@@ -81,33 +81,33 @@ const POPULAR_PAGES: HomeEntry[] = [
 const GET_STARTED_PAGES: HomeEntry[] = [
   {
     id: "getting-started",
-    title: "Premiers pas chez Numspot",
+    title: "First steps with Numspot",
     description:
-      "Connectez-vous et construisez votre organisation : premier espace, utilisateurs, droits et premières ressources.",
+      "Sign in and build out your organization: first space, users, rights and first resources.",
     url: "/docs/getting-started/",
     section: "getting-started",
     readMore: true,
   },
   {
     id: "first-connection",
-    title: "Première connexion à la console Numspot",
-    description: "Connectez-vous à la console et prenez vos marques.",
+    title: "First sign-in to the Numspot console",
+    description: "Sign in to the console and get familiar with the interface.",
     url: "/docs/iam/connection/first-connection/",
     section: "iam",
     readMore: true,
   },
   {
     id: "terraform-quickstart",
-    title: "Démarrage rapide : Terraform",
-    description: "Provisionnez vos ressources Numspot en infrastructure as code.",
+    title: "Quickstart: Terraform",
+    description: "Provision your Numspot resources as code.",
     url: "/docs/terraform/quickstart/",
     section: "terraform",
     readMore: true,
   },
   {
     id: "vm-quickstart",
-    title: "Démarrage rapide : créer une VM",
-    description: "Déployez votre première VM en quelques minutes.",
+    title: "Quickstart: create a VM",
+    description: "Deploy your first VM in a few minutes.",
     url: "/docs/compute/vms/quickstart/",
     section: "compute",
     readMore: true,
@@ -121,22 +121,22 @@ const LABS_ENABLED = false;
 const LABS_SCENARIOS: HomeEntry[] = [
   {
     id: "labs-container-app",
-    title: "Déployer une application conteneurisée",
-    description: "Du build de l'image à l'exposition du service sur le cloud.",
+    title: "Deploy a containerized application end to end",
+    description: "From image build to service exposure on the sovereign cloud.",
     url: "#",
     section: "managed-services",
   },
   {
     id: "labs-private-connectivity",
-    title: "Connecter votre SI au cloud Numspot",
-    description: "Mettre en place une connectivité privée site-à-site.",
+    title: "Connect your IS to the Numspot cloud",
+    description: "Set up private site-to-site connectivity.",
     url: "#",
     section: "connectivity",
   },
   {
     id: "labs-terraform-automation",
-    title: "Industrialiser vos déploiements",
-    description: "Structurer, versionner et automatiser vos infrastructures.",
+    title: "Industrialize your deployments",
+    description: "Structure, version and automate your infrastructures.",
     url: "#",
     section: "terraform",
   },
@@ -176,7 +176,7 @@ function HomeCard({ entry }: Readonly<{ entry: HomeEntry }>): ReactNode {
         <span className="home-card__more">
           {translate({
             id: "home.card.read-more",
-            message: "En savoir plus",
+            message: "Read more",
             description: "Home page card call to action",
           })}
         </span>
@@ -192,7 +192,7 @@ export default function HomeZones(): ReactNode {
         <p className="home-section__title">
           {translate({
             id: "home.zones.popular.title",
-            message: "Pages les plus consultées",
+            message: "Most popular pages",
             description: "Home page section title for the most popular pages",
           })}
         </p>
@@ -206,7 +206,7 @@ export default function HomeZones(): ReactNode {
         <p className="home-section__title">
           {translate({
             id: "home.zones.get-started.title",
-            message: "Pour commencer",
+            message: "Get started",
             description: "Home page section title for getting started",
           })}
         </p>
@@ -221,7 +221,7 @@ export default function HomeZones(): ReactNode {
           <p className="home-section__title">
             {translate({
               id: "home.zones.labs.title",
-              message: "Labs — Apprendre & construire",
+              message: "Labs — Learn & build",
               description: "Home page section title for the labs zone",
             })}
           </p>

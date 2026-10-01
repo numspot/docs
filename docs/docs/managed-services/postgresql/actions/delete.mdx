@@ -1,25 +1,24 @@
 ---
-title: Supprimer un cluster PostgreSQL - PostgreSQL managé
-sidebar_label: Supprimer un cluster PostgreSQL
+title: Delete a PostgreSQL cluster - Managed PostgreSQL
+sidebar_label: Delete a PostgreSQL cluster
 sidebar_position: 11
 draft: false
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import Walkthrough from '@site/src/components/Walkthrough';
 
-# Supprimer un cluster PostgreSQL
+# Delete a PostgreSQL cluster
 
-Vous pouvez supprimer un [cluster PostgreSQL](/docs/managed-services/postgresql/concepts/) au sein de votre espace, quel que soit son statut.
+You can delete a [PostgreSQL cluster](/docs/managed-services/postgresql/concepts/) within your space, whatever its status.
 
 :::warning
-Vérifiez que le cluster n'est pas en cours d'utilisation avant de le supprimer.
+Make sure the cluster is not in use before deleting it.
 :::
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **postgresql.cluster.delete**
 
@@ -27,41 +26,30 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
+1. From the left-hand side menu, click **Managed Services** → **PostgreSQL** → **Clusters** to access the list of PostgreSQL clusters.
 
-<Walkthrough
-  steps={[
-    { img: "/img/walkthrough/postgresql/list.png", text: "Depuis le menu latéral gauche, cliquez sur Services Managés → PostgreSQL → Clusters.", hotspot: { x: 0, y: 0.5136, w: 0.1931, h: 0.0568 } },
-    { img: "/img/walkthrough/postgresql/actions-menu.png", text: "Sur la ligne du cluster à supprimer, ouvrez le menu « Actions », puis cliquez sur « Supprimer » (possible aussi depuis la page de détails).", hotspot: { x: 0.875, y: 0.4691, w: 0.0884, h: 0.0457 } },
-    { img: "/img/walkthrough/postgresql/delete-modal.png", text: "Confirmation forte : saisissez le nom exact du cluster, puis cliquez sur « Supprimer ». La suppression est définitive.", hotspot: { x: 0.6221, y: 0.7513, w: 0.064, h: 0.0494 } },
-  ]}
-/>
+   ![Managed Services menu](/img/console/managed-services/postgresql/en-menu-postgresql.png)
 
-1. Depuis le menu latéral gauche, cliquez sur **Services Managés** → **PostgreSQL** → **Clusters** pour accéder à la liste des clusters PostgreSQL.
+2. In the list, locate the cluster to delete, click the **Actions** button on its row, then click **Delete**.
 
-2. Dans la liste, repérez le cluster à supprimer, cliquez sur le bouton **Actions** situé sur sa ligne, puis sur **Supprimer**.
+   You can also open the cluster details page and click the **Delete** button at the top right.
 
-   Vous pouvez aussi ouvrir la page de détails du cluster et cliquer sur le bouton **Supprimer** situé en haut à droite.
+3. In the "Delete the cluster" window, enter the exact name of the cluster in the "Strong confirmation" field, then click **Delete**.
 
-3. Dans la fenêtre "Supprimer le cluster", saisissez le nom exact du cluster dans le champ de "Confirmation forte", puis cliquez sur **Supprimer**.
-
-   Le cluster passe à l'état "Suppression en cours" dans la liste.
+   The cluster switches to the "Deleting" status in the list.
 
 </TabItem>
 
 <TabItem value="api" label="API">
+    The `DELETE /postgresql/spaces/{spaceId}/clusters/{clusterId}` request deletes a PostgreSQL cluster.
+    The cluster switches to the `DELETING` status during the deletion.
 
-## API {#tabhead-api}
-
-    La requête `DELETE /postgresql/spaces/{spaceId}/clusters/{clusterId}` permet de supprimer un cluster PostgreSQL.
-    Le cluster passe dans l'état `DELETING` le temps de la suppression.
-
-    ### Exemple de réponse
+    ### Example response
 
     ```text
     HTTP/1.1 204 No Content
     ```
 
-    [Voir la spécification complète](/openapi/#tag/postgresql/DELETE/postgresql/spaces/{spaceId}/clusters/{clusterId})
+    [See the full specification](/openapi/#tag/postgresql/DELETE/postgresql/spaces/{spaceId}/clusters/{clusterId})
 </TabItem>
 </Tabs>

@@ -1,0 +1,147 @@
+---
+title: Gérer les utilisateurs DLP - DLP managé
+sidebar_label: Gérer les utilisateurs DLP
+sidebar_position: 12
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Gérer les utilisateurs DLP
+
+Gérez les utilisateurs du service [DLP](/docs/managed-services/dlp/concepts) : création, modification des rôles, réinitialisation du mot de passe et suppression.
+
+## Permissions
+
+:::info
+Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+
+- **admin**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Dans la console DLP, cliquez sur Users dans le menu latéral.", hotspot: { x: 0.006, y: 0.332, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/users-list.png", text: "Cliquez sur « Create User » en haut à droite.", hotspot: { x: 0.890, y: 0.030, w: 0.094, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/user-create-form.png", text: "Renseignez le nom d'utilisateur, le mot de passe et le type, puis sélectionnez un ou plusieurs rôles. Cochez éventuellement « Require password change at next login ».", hotspot: { x: 0.335, y: 0.300, w: 0.330, h: 0.430 } },
+    { img: "/img/walkthrough/dlp/user-create-form.png", text: "Cliquez sur « Create » pour créer l'utilisateur.", hotspot: { x: 0.608, y: 0.740, w: 0.053, h: 0.044 } },
+  ]}
+/>
+
+1. Dans la console [DLP](/docs/managed-services/dlp/concepts), cliquez sur **Users** dans le menu latéral.
+
+### Créer un utilisateur
+
+1. Cliquez sur le bouton **Create user** ;
+2. Renseignez les informations du nouvel utilisateur :
+
+| Champ | Valeur d'exemple | Description |
+|-------|-----------------|-------------|
+| Username | `jdupont` | Nom d'utilisateur |
+| Password | `********` | Mot de passe (8 caractères minimum) |
+| Role | `rule_editor` | Rôle attribué |
+
+3. Cliquez sur **Save** pour créer l'utilisateur.
+
+### Modifier les rôles d'un utilisateur
+
+1. Dans la liste des utilisateurs, cliquez sur le nom de l'utilisateur à modifier ;
+2. Modifiez les rôles attribués ;
+3. Cliquez sur **Save**.
+
+Les modifications de rôles prennent effet immédiatement sur les sessions existantes.
+
+### Réinitialiser le mot de passe
+
+1. Dans la liste des utilisateurs, cliquez sur le bouton **Actions** de l'utilisateur concerné ;
+2. Cliquez sur **Reset password** ;
+3. Saisissez le nouveau mot de passe (8 caractères minimum) ;
+4. Cliquez sur **Confirm**.
+
+L'utilisateur devra changer son mot de passe à la prochaine connexion.
+
+### Supprimer un utilisateur
+
+1. Dans la liste des utilisateurs, cliquez sur le bouton **Actions** de l'utilisateur concerné ;
+2. Cliquez sur **Delete** ;
+3. Confirmez la suppression.
+
+:::warning
+Le compte admin principal ne peut pas être supprimé.
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+### Créer un utilisateur
+
+La requête `POST /api/v1/users` permet de créer un utilisateur.
+
+#### Exemple de requête
+
+```json
+{
+  "username": "jdupont",
+  "password": "MotDePasseSecurise123!",
+  "roles": ["rule_editor"]
+}
+```
+
+#### Exemple de réponse
+
+```json
+{
+  "id": "user-123456",
+  "username": "jdupont",
+  "roles": ["rule_editor"],
+  "capabilities": ["read", "rule:write"],
+  "must_change_password": true,
+  "type": "local",
+  "created_at": "2026-08-27T10:00:00Z",
+  "updated_at": "2026-08-27T10:00:00Z"
+}
+```
+
+### Modifier les rôles
+
+La requête `PUT /api/v1/users/{id}` permet de modifier les rôles d'un utilisateur.
+
+#### Exemple de requête
+
+```json
+{
+  "roles": ["rule_editor", "rule_publisher"]
+}
+```
+
+### Réinitialiser le mot de passe
+
+La requête `PUT /api/v1/users/{id}/password` permet de réinitialiser le mot de passe d'un utilisateur.
+
+#### Exemple de requête
+
+```json
+{
+  "password": "NouveauMotDePasse456!"
+}
+```
+
+### Supprimer un utilisateur
+
+La requête `DELETE /api/v1/users/{id}` permet de supprimer un utilisateur.
+
+#### Exemple de réponse
+
+```text
+HTTP/1.1 204 No Content
+```
+
+</TabItem>
+</Tabs>

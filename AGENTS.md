@@ -13,7 +13,7 @@ Public documentation website for Numspot, a sovereign cloud provider. Built with
 - **Language**: TypeScript
 - **Node**: >=18.0 (recommended: Node 20+, see `.nvmrc`)
 - **Package Manager**: Yarn 1.22+
-- **Content**: French documentation (i18n configured for `fr`; published English version is `en-GB`)
+- **Content**: English documentation at the root (published as `en-GB`); French versions under `i18n/fr/`
 
 ## Essential Commands
 
@@ -164,8 +164,8 @@ Changelog entries land **when the affected pages become public on `main`** — n
 
 Edit **both** files in the same commit, keeping them ISO (same entries, same order, same `date`/`status`/`components`; only `title`, `description` and translated `service` names differ):
 
-- French (source of truth): `docs/docs/changelog.json`
-- English: `i18n/en/docusaurus-plugin-content-docs/current/docs/changelog.json`
+- English (source of truth): `docs/docs/changelog.json`
+- French: `i18n/fr/docusaurus-plugin-content-docs/current/docs/changelog.json`
 
 ```json
 {
@@ -318,7 +318,7 @@ The glossary is auto-detected at `consigns/glossary.json`. Override with `--glos
 
 GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request and push to `main`, with three jobs:
 
-- **`lint`** — on pull requests, only files changed vs `main` are linted (`node linter/cli.js --diff origin/main --ci`); on pushes to `main`, all documentation files are linted (French and English trees). No `yarn install` is needed — the linter has zero external dependencies.
+- **`lint`** — on pull requests, only files changed vs `main` are linted (`node linter/cli.js --diff origin/main --ci`); on pushes to `main`, all documentation files are linted (English and French trees). No `yarn install` is needed — the linter has zero external dependencies.
 - **`tests`** — the linter regression tests (`node --test linter/tests/*.test.js`).
 - **`build`** — `yarn install --frozen-lockfile`, then `yarn typecheck` and `yarn build`.
 

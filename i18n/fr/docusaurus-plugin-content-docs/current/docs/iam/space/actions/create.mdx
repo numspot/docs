@@ -1,0 +1,102 @@
+---
+title: Créer un espace au sein d'une organisation - IAM
+description: "Créez un espace IAM au sein de votre organisation Numspot pour cloisonner vos ressources et vos identités, via la console ou l'API."
+sidebar_label: Créer un espace au sein d'une organisation
+sidebar_position: 2
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Créer un espace au sein d'une organisation
+
+Une organisation peut créer autant d'espaces qu'elle le souhaite. Un espace permet de cloisonner des ressources et des identités. Un utilisateur ou un compte de service peut appartenir à plusieurs espaces de l'organisation et disposer de permissions différentes pour chaque espace. Exemple : un administrateur sur un espace peut être un utilisateur en lecture ou écriture sur certaines ressources sur d'autres.
+
+Un espace a pour propriétés :
+
+- un nom ;
+- une description.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **iam.role.create**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/space/list-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Espaces.", hotspot: { x: 0, y: 0.6963, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/space/list-01-list.png", text: "Dans le menu IAM → Espaces, cliquez sur « Créer un espace ».", hotspot: { x: 0.8452, y: 0.2296, w: 0.1159, h: 0.0494 } },
+    { img: "/img/walkthrough/space/create-02-form.png", text: "Saisissez le nom et la description de l'espace, puis cliquez sur « Créer l'espace ».", hotspot: { x: 0.6679, y: 0.921, w: 0.0814, h: 0.0494 } },
+  ]}
+/>
+
+1. Dans le menu des **Espaces**, cliquez sur le bouton **Créer un espace**.
+
+   Une nouvelle fenêtre apparaît.
+2. Dans les champs "Nom de l'espace" et "Description de l'espace", tapez le nom et la description du nouvel espace à créer.
+3. Cliquez sur le bouton **Créer l'espace**. De retour sur la liste des espaces, un message confirme que le nouvel espace a été créé.
+:::warning
+Un espace peut prendre plusieurs secondes à être créé. Ainsi, il se peut qu'il n'apparaisse pas immédiatement dans la liste des espaces.
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/POST/organisations/{organisationId}/spaces
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/organisations/{organisationId}/spaces' \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "",
+  "description": ""
+}'
+```
+
+### Réponse
+
+```json
+{
+  "name": "…",
+  "description": "…",
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "organisationId": "123e4567-e89b-12d3-a456-426614174000",
+  "status": "QUEUED",
+  "createdOn": "2025-12-16T15:38:31.485Z",
+  "updatedOn": "2025-12-16T15:38:31.485Z"
+}
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/space).
+
+</TabItem>
+</Tabs>

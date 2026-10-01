@@ -1,57 +1,43 @@
 ---
-title: Référence pour la configuration des VPN
-description: Paramètres de configuration IPsec requis pour les tunnels VPN entre votre réseau et le Cloud Numspot.
+title: Reference for configuring VPN
+description: IPsec configuration parameters required for VPN tunnels between your network and the Numspot Cloud.
 sidebar_position: 6
 draft: false
-last_update:
-  date: 2026-09-17
 ---
 
-# Référence pour la configuration des VPN
+# Reference for configuring VPN
 
-Lorsque vous mettez en place une connexion VPN (Virtual Private Network) entre votre réseau d'entreprise et le Cloud Numspot, vous devez configurer le tunnel VPN selon les spécifications suivantes.
+When you set up a VPN (Virtual Private Network) connection between your corporate network and the Numspot Cloud, you must configure the VPN tunnel according to the following specifications.
 
-La procédure exacte dépend de la solution VPN que vous utilisez.
-
-Le tunnel est sécurisé par la suite de protocoles IPsec, composée de deux protocoles :
-
-* IKEv2 (Internet Key Exchange) négocie les clés et les paramètres du tunnel ;
-* ESP (Encapsulating Security Payload) chiffre les données qui traversent le tunnel.
-
-Les algorithmes de chiffrement supportés (AES-CBC) n'ont pas d'authentification intégrée (AEAD) : une authentification HMAC est donc requise en complément du chiffrement, pour chacune des deux phases décrites ci-dessous.
+The exact procedure depends on the VPN solution that you use.
 
 :::info
-* Le support pour le protocole IKEv1 est End of Life. Nous recommandons fortement IKEv2.
-* Un VPN IKEv1 échoue s'il y a plus d'une connexion VPN sur la même [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/).
+* Support for the IKEv1 protocol is End of Life. We strongly recommend IKEv2.
+* An IKEv1 VPN fails if there is more than one VPN connection on the same [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/).
 :::
 
-Pour les propositions de phase 1 (SA IKE, échange et accord des clés), les options suivantes sont supportées :
+For phase 1 proposals, the following options are supported:
 
-* Chiffrement **256-bit AES-CBC**, avec authentification **SHA2_256_128 HMAC**, et groupe DH **2**, **14**, **16**, **19** ou **21**.
-* Chiffrement **128-bit AES-CBC**, avec authentification **SHA1 HMAC** ou **SHA2_256_128 HMAC**, et groupe DH **2** ou **14**.
+* **256-bit AES-CBC** encryption, with **SHA2_256_128 HMAC** authentication, and DH group **2**, **14**, **16**, **19** or **21**.
+* **128-bit AES-CBC** encryption, with **SHA1 HMAC** or **SHA2_256_128 HMAC** authentication, and DH group **2** or **14**.
 
-Pour les propositions de phase 2 (SA enfant, chiffrement ESP des données), les mêmes options sont supportées :
+For phase 2 proposals, the same options are supported:
 
-* Chiffrement **256-bit AES-CBC**, avec authentification **SHA2_256_128 HMAC**, et PFS **2**, **14**, **16**, **19** ou **21**.
-* Chiffrement **128-bit AES-CBC**, avec authentification **SHA1 HMAC** ou **SHA2_256_128 HMAC**, et PFS **2** ou **14**.
-
-Vous devez spécifier les valeurs suivantes pour la durée de vie de chaque phase :
-
-* 28800 secondes (8 heures) pour la phase 1.
-* 3600 secondes (1 heure) pour la phase 2.
+* **256-bit AES-CBC** encryption, with **SHA2_256_128 HMAC** authentication, and PFS **2**, **14**, **16**, **19** or **21**.
+* **128-bit AES-CBC** encryption, with **SHA1 HMAC** or **SHA2_256_128 HMAC** authentication, and PFS **2** or **14**.
 
 :::warning
-Nous recommandons les options suivantes pour les deux phases : chiffrement **256-bit AES-CBC**, avec authentification **SHA2_256_128 HMAC**, et groupe DH **16**, **19** ou **21**.
+We recommend the following options for both phases: **256-bit AES-CBC** encryption, with **SHA2_256_128 HMAC** authentication, and DH group **16**, **19** or **21**.
 :::
 
-Le dead peer detection (DPD) doit être activé, avec les réglages suivants :
+Dead peer detection (DPD) must be enabled, with the following settings:
 
-* Délai ou intervalle de 30 secondes.
-* Expiration (timeout) à 90 secondes / 3 nouvelles tentatives (retries).
+* Delay or interval of 30 seconds.
+* Timeout of 90 seconds / 3 retries.
 
-Comme le VPN policy-based n'est pas supporté, il faut utiliser une VTI (Virtual Tunnel Interface), avec les réglages suivants :
+As policy-based VPN is not supported, you must use a VTI (Virtual Tunnel Interface), with the following settings:
 
-* Sélecteurs de trafic : 0.0.0.0/0 aux deux extrémités.
-* IP : telle que définie aux champs "tunnel inside address" dans le fichier XML fourni par l'API ou la Console Numspot.
+* Traffic selectors: 0.0.0.0/0 at both ends.
+* IP: as defined in the "tunnel inside address" fields in the XML file provided by the API or the Numspot Console.
 
-L'ID local doit être l'IP de la [client gateway (passerelle client)](/docs/connectivity/vpn/client-gateway/concepts/) et l'ID distant doit être l'IP publique (External IP ou EIP dans les API AWS-compliant) de la virtual gateway.
+The local ID must be the IP of the [client gateway](/docs/connectivity/vpn/client-gateway/concepts/) and the remote ID must be the public IP (External IP or EIP in AWS-compliant API) of the virtual gateway.

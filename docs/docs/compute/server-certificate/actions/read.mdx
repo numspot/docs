@@ -1,5 +1,5 @@
 ---
-title: Obtenir des informations sur vos server certificates
+title: Get information about your server certificates
 sidebar_position: 3
 draft: false
 ---
@@ -7,14 +7,14 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Obtenir des informations sur vos server certificates
+# Get information about your server certificates
 
-Vous pouvez consulter les informations détaillées de vos server certificates.
+You can view the detailed information of your server certificates.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.serverCertificate.get**
 
@@ -25,26 +25,23 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 ## Console {#tabhead-console}
 
 :::info
-La consultation des certificats serveur n'est pas disponible depuis la console Numspot.
+Viewing server certificates is not available from the Numspot console.
 
-Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+Use the **API** or **Terraform** (see the corresponding tabs).
 :::
 
   </TabItem>
   <TabItem value="api" label="API">
+### Get information about your server certificates with the Numspot API
 
-## API {#tabhead-api}
+The `GET /compute/spaces/{spaceId}/serverCertificates` command lists your server certificates.
 
-### Obtenir des informations sur vos server certificates avec l'API Numspot
-
-La commande `GET /compute/spaces/{spaceId}/serverCertificates` permet de lister vos server certificates.
-
-[Exemple de requête : Lister tous vos server certificates](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/serverCertificates)
+[Example request: List all your server certificates](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/serverCertificates)
   </TabItem>
   <TabItem value="terraform" label="Terraform">
 
 ## Terraform {#tabhead-terraform}
 
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/server_certificate).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/server_certificate).
   </TabItem>
 </Tabs>

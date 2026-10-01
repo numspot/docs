@@ -160,7 +160,7 @@ export default function PageFeedback(): React.ReactNode {
               className={styles.close}
               aria-label={translate({
                 id: "feedback.modal.close",
-                message: "Fermer",
+                message: "Close",
                 description: "Libellé accessible du bouton de fermeture",
               })}
               onClick={cancelModal}
@@ -191,7 +191,7 @@ export default function PageFeedback(): React.ReactNode {
               rows={4}
               placeholder={translate({
                 id: "feedback.modal.placeholder",
-                message: "Dites-nous ce que nous pourrions améliorer… (optionnel)",
+                message: "Tell us what we could improve… (optional)",
                 description: "Placeholder du champ de commentaire",
               })}
             />

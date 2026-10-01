@@ -1,6 +1,6 @@
 ---
-title: Supprimer une route d'une connexion VPN
-description: Retirez une route statique d'une connexion VPN existante.
+title: Delete a route from a VPN connection
+description: Remove a static route from an existing VPN connection.
 sidebar_position: 2
 draft: false
 ---
@@ -8,18 +8,18 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Supprimer une route d'une connexion VPN
+# Delete a route from a VPN connection
 
-Vous pouvez supprimer une route statique d'une connexion **VPN** (Virtual Private Network).
+You can delete a static route from a VPN (Virtual Private Network) connection.
 
 :::warning
-Cette action s'applique au routage statique uniquement. Si votre connexion VPN utilise le routage dynamique, vous n'avez pas besoin de créer de nouvelles routes.
+This action applies to static routing only. If your VPN connection uses dynamic routing, you do not need to create new routes.
 :::
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **connectivity.vpnconnection.update**
 
@@ -28,36 +28,27 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
-
-1. Dans le dashboard **VPN Connections**, cliquez sur l'ID de la connexion VPN dont vous voulez supprimer une route.
-   Le volet des connexions VPN apparaît.
-2. Cliquez dans le dashboard "Route VPN" pour faire apparaître des cases à cocher.
-3. Cochez la case de la route que vous voulez supprimer.
-   La route est sélectionnée et un menu d'actions apparaît.
-4. Cliquez sur **Supprimer**.
-   Une boîte de dialogue de confirmation s'affiche.
-5. Cliquez sur **Supprimer**.
-   La route sélectionnée est supprimée de la connexion VPN.
+1. In the **VPN Connections** dashboard, click the ID of the VPN connection from which you want to delete a route.
+   The VPN connections panel appears.
+2. Click in the "Route VPN" dashboard to display the checkboxes.
+3. Select the checkbox of the route you want to delete.
+   The route is selected and an actions menu appears.
+4. Click **Delete**.
+   A confirmation dialog box appears.
+5. Click **Delete**.
+   The selected route is deleted from the VPN connection.
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `DELETE /connectivity/spaces/{spaceId}/vpnConnections/{id}/routes` command deletes a static route from a previously created VPN connection.
 
-
-La commande `DELETE /connectivity/spaces/{spaceId}/vpnConnections/{id}/routes` supprime une route statique d'une connexion VPN précédemment créée.
-
-[Exemple de requête : Suppression d'une route vers une connexion VPN](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/vpnConnections/{id}/routes)
+[Request example: Delete a route from a VPN connection](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/vpnConnections/{id}/routes)
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection_route).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection_route).
 
 </TabItem>
 </Tabs>

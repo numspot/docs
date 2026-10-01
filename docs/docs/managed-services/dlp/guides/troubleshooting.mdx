@@ -1,110 +1,111 @@
 ---
-title: Dépanner le service DLP - DLP managé
-sidebar_label: Dépanner le service DLP
-description: "Réponses aux questions les plus fréquentes sur le service DLP : règle sans effet, requête bloquée, bouton grisé, token API rejeté, annulation d'une publication."
+title: Troubleshoot the DLP service - Managed DLP
+sidebar_label: Troubleshoot the DLP service
+description: "Answers to the most common questions about the DLP service: a rule that does nothing, a blocked request, a greyed-out button, a rejected API token, undoing a publish."
 sidebar_position: 4
+draft: false
 ---
 
-# Dépanner le service DLP
+# Troubleshoot the DLP service
 
 ## Introduction
 
-Cette page rassemble les réponses aux questions les plus fréquentes lors de l'utilisation de la console [DLP](/docs/managed-services/dlp/concepts). Les points sont classés du plus courant au plus rare.
+This page gathers answers to the questions that come up most often when using the [DLP](/docs/managed-services/dlp/concepts) console. Items are ordered from the most common to the rarest.
 
-## Ma règle ne fait rien
+## My rule does not do anything
 
-Vérifiez les points suivants dans l'ordre — la cause est presque toujours l'une des trois premières.
+Work through this in order — the cause is almost always one of the first three.
 
-1. **Est-elle publiée ?** Une règle portant le badge *Draft* n'a aucun effet sur le trafic. Ouvrez **Publish** et vérifiez si elle apparaît sous *Draft Rules*. Si c'est le cas, elle n'est pas encore active.
-2. **Est-elle dans une policy ?** Une règle publiée qu'aucune policy ne référence n'est jamais évaluée. Ouvrez **Policies**, trouvez la policy du platform type concerné et vérifiez que la règle figure dans sa liste.
-3. **La policy est-elle publiée ?** La policy elle-même porte un badge *Draft* / *Published*. La règle **et** la policy doivent être publiées.
-4. **Une autre règle décide-t-elle avant ?** L'évaluation s'arrête à la première action `pass` ou `block`. Si une règle placée au-dessus de la vôtre dans la policy produit déjà une décision, la vôtre ne s'exécute jamais. Réordonnez la policy pour placer la règle la plus spécifique en premier.
-5. **La condition correspond-elle vraiment ?** Ouvrez la règle et utilisez **Test** avec un échantillon dont vous êtes certain qu'il doit correspondre. Si le test passe mais pas le trafic réel, le champ choisi n'est probablement pas celui qui porte le contenu — consultez les [journaux de décision](/docs/managed-services/dlp/actions/view-decision-logs) d'une vraie requête pour voir quels champs elle contient.
+1. **Is it published?** A rule with the *Draft* badge has no effect on traffic. Open **Publish** and check whether it is listed under *Draft Rules*. If it is, it is not live yet.
+2. **Is it in a policy?** A published rule that no policy references is never evaluated. Open **Policies**, find the policy for that platform type, and check the rule is in its list.
+3. **Is the policy published?** The policy itself has a *Draft* / *Published* badge. Both the rule **and** the policy need to be published.
+4. **Is another rule deciding first?** Evaluation stops at the first `pass` or `block`. If a rule above yours in the policy's list already produced a decision, yours never runs. Reorder the policy so the more specific rule comes first.
+5. **Does the condition actually match?** Open the rule and use **Test** with a sample you are certain should match. If the test passes but real traffic does not, the field you chose is probably not the one carrying the content — check the [decision logs](/docs/managed-services/dlp/actions/view-decision-logs) for a real request and see which fields it has.
 
-## Une requête légitime a été bloquée
+## A legitimate request was blocked
 
-1. Ouvrez [Decision Logs](/docs/managed-services/dlp/actions/view-decision-logs), réglez *Decision* sur **Block** et trouvez la requête — par Request ID si l'utilisateur vous l'a fourni, sinon par plateforme et horodatage.
-2. Ouvrez la ligne et lisez **Triggered By** : cela indique le champ, l'opérateur et le détecteur.
-3. Ouvrez **Detectors**, trouvez ce détecteur et utilisez **Test patterns** sur un texte similaire.
+1. Open [Decision Logs](/docs/managed-services/dlp/actions/view-decision-logs), set *Decision* to **Block**, and find the request — by Request ID if the user gave you one, or by platform and time.
+2. Open the row and read **Triggered By**. It names the field, the operator and the detector.
+3. Open **Detectors**, find that detector, and use **Test patterns** on text like the user's.
 
-Si le détecteur correspond à un texte qui n'est pas réellement sensible, le motif est trop large pour votre trafic. Soit vous écrivez un [détecteur personnalisé](/docs/managed-services/dlp/actions/create-detector) plus précis et basculez la règle dessus, soit vous ajoutez une règle `pass` pour le cas légitime, placée **au-dessus** de la règle de blocage dans la policy.
+If the detector matches text that is not really sensitive, the pattern is too broad for your traffic. Either write a tighter [custom detector](/docs/managed-services/dlp/actions/create-detector) and switch the rule to it, or add a `pass` rule for the legitimate case and place it **above** the blocking rule in the policy.
 
-Si le détecteur a correspondu à quelque chose de réellement sensible, le blocage était correct.
+If the detector matched something genuinely sensitive, the block was correct.
 
-## Une entrée de menu est absente
+## I cannot see a menu entry
 
-Les entrées de menu sont masquées lorsque vos rôles ne donnent pas accès à la fonctionnalité. Vos rôles sont affichés sous forme de badges en bas du menu latéral. Comparez-les au tableau de la page [Gérer les utilisateurs](/docs/managed-services/dlp/actions/manage-users) et demandez à un administrateur ce qu'il vous manque.
+Menu entries are hidden when your roles do not grant access to them. Your roles are shown as badges at the bottom of the sidebar. Compare them with the table on the [Manage users](/docs/managed-services/dlp/actions/manage-users) page and ask an administrator for what you need.
 
-Deux entrées piègent souvent :
+Two entries catch people out:
 
-- **Publish** requiert *Rule Publisher* ou *Admin* — *Rule Editor* ne suffit pas, par conception.
-- **Users** et **API Tokens** requièrent *Admin*.
+- **Publish** requires *Rule Publisher* or *Admin* — *Rule Editor* is not enough, by design.
+- **Users** and **API Tokens** require *Admin*.
 
-## Un bouton est grisé
+## A button is greyed out
 
-- **Save as Draft** sur une règle : un élément requis manque — un nom, une condition, un message de blocage (règle `block`) ou une modification complète (règle `modify`).
-- **Save as Draft** sur une policy : la policy a besoin d'un nom et d'un platform type.
-- **Test Rule** dans une boîte de dialogue de test : le champ d'échantillon doit contenir un objet JSON avec au moins une clé. La valeur par défaut `{}` ne suffit pas.
-- **Publish** : il n'y a aucune modification en brouillon à publier, ou la page n'a pas pu charger vos règles et policies — cherchez le message explicatif sous le titre de la page.
-- **Delete** sur un utilisateur : cet utilisateur est le dernier *Admin* restant.
+- **Save as Draft** on a rule: something required is missing — a name, a condition, a block message for a `block` rule, or a complete modification for a `modify` rule.
+- **Save as Draft** on a policy: the policy needs a name and a platform type.
+- **Test Rule** in a test dialog: the sample box must contain a JSON object with at least one key. The default `{}` is not enough.
+- **Publish**: there are no draft changes to publish, or the page could not load your rules and policies — look for the explanatory message under the page title.
+- **Delete** on a user: that user is the last remaining *Admin*.
 
-## Impossible de changer le platform type d'une règle
+## I cannot change a rule's platform type
 
-C'est intentionnel. Le platform type détermine quels champs une condition peut référencer ; il est donc figé une fois la règle enregistrée. Créez une nouvelle règle pour l'autre platform type et supprimez l'ancienne.
+By design. The platform type determines which fields a condition can reference, so it is fixed once the rule is saved. Create a new rule for the other platform type and delete the old one.
 
-## Renommer un détecteur personnalisé a cassé mes règles
+## Renaming a custom detector broke my rules
 
-Les règles référencent les détecteurs personnalisés **par leur nom**. En renommer un laisse chaque règle pointer vers un nom qui n'existe plus.
+Rules reference custom detectors **by name**. Renaming one leaves every rule pointing at a name that no longer exists.
 
-Renommez-le à l'identique si vous le pouvez. Sinon : créez le détecteur sous le nouveau nom, modifiez chaque règle affectée pour le référencer, publiez, puis supprimez l'ancien détecteur.
+Rename it back if you can. Otherwise: create the detector under the new name, edit each affected rule to reference it, publish, then delete the old detector.
 
-Pour éviter ce problème, considérez le nom d'un détecteur personnalisé comme **permanent** dès la première fois que vous le référencez.
+To avoid this, treat custom detector names as **permanent** from the moment you first reference them.
 
-## Impossible de supprimer un détecteur
+## I cannot delete a detector
 
-La suppression est refusée tant qu'une règle référence encore le détecteur. Trouvez les règles qui l'utilisent — parcourez la liste des règles ou vérifiez la condition de chacune —, retirez la référence, puis supprimez le détecteur.
+Deletion is refused while any rule still references the detector. Find the rules using it — search the rules list, or check each rule's condition — remove the reference, then delete the detector.
 
-## Le tableau de bord n'affiche aucune donnée
+## The dashboard shows no data
 
-- Si les trois courbes sont plates à zéro, le service ne reçoit aucun trafic. C'est une question côté plateforme, pas côté règles.
-- Si seules `block` et `modify` sont à zéro tandis que `pass` est en bonne santé, aucune règle ne correspond. Soit votre trafic est réellement propre, soit une condition est incorrecte — testez une règle avec un échantillon censé correspondre.
-- Vérifiez aussi la plage de temps : la valeur par défaut est **24h**, et une modification faite il y a une heure ne représente qu'une petite partie de cette image. Essayez **1h**.
+- If all three lines are flat at zero, the service is receiving no traffic. That is a platform-side question, not a rules question.
+- If only `block` and `modify` are at zero while `pass` is healthy, no rule is matching. Either your traffic really is clean, or a condition is wrong — test a rule against a sample you know should match.
+- Also check the time range: the default is **24h**, and a change you made an hour ago will be a very small part of that picture. Try **1h**.
 
-## Que signifie l'avertissement « dropped logs » ?
+## What does the "dropped logs" warning mean?
 
-Certains enregistrements d'évaluation n'ont pas pu être traités par le pipeline de logs. Les requêtes ont tout de même été évaluées et appliquées correctement — **la protection n'est pas affectée** —, mais les chiffres du tableau de bord et les journaux de décision sous-comptent de ce nombre. Signalez-le à votre fournisseur de service.
+Some evaluation records could not be processed by the log pipeline. Requests were still evaluated and enforced correctly — **protection is not affected** — but the dashboard figures and decision logs are under-counting by that number. Report it to your service provider.
 
-## La console affiche « Service Unavailable »
+## The console shows "Service Unavailable"
 
-Le backend est devenu injoignable. La console revérifie toutes les 10 secondes et efface le panneau d'elle-même dès que le service revient. Il n'y a rien à cliquer, et aucun travail déjà enregistré n'est perdu. Si cela dure plus de quelques minutes, contactez votre fournisseur de service.
+The backend became unreachable. The console re-checks every 10 seconds and clears the panel by itself once the service is back. There is nothing to click, and no work is lost that you had already saved. If it lasts more than a few minutes, contact your service provider.
 
-## Compte verrouillé après des échecs de connexion
+## I am locked out after failed sign-ins
 
-Cinq tentatives échouées verrouillent un compte pendant cinq minutes. Attendez, puis réessayez. Si vous avez réellement oublié le mot de passe, demandez à un administrateur de le [réinitialiser](/docs/managed-services/dlp/actions/reset-user-password) — il peut le faire sans connaître votre mot de passe actuel.
+Five failed attempts lock an account for five minutes. Wait, then try again. If you have genuinely forgotten the password, ask an administrator to [reset it](/docs/managed-services/dlp/actions/reset-user-password) — they can do it without knowing your current one.
 
-## Mon script ou pipeline est rejeté par l'API
+## My script or pipeline gets rejected by the API
 
-Ouvrez **API Tokens** et regardez le *Status* du token utilisé :
+Open **API Tokens** and look at the *Status* of the token it uses:
 
-- **Revoked** ou **Expired** — le token est mort et ne peut pas être réactivé. Créez un remplaçant et déployez-le.
-- **Active** — alors la valeur envoyée est incorrecte. Ce doit être la chaîne complète, commençant par `num_dlp_`, dans un en-tête `Authorization: Bearer`, sans troncature ni saut de ligne parasite issu de la copie. Vérifiez *Last used* : s'il n'avance jamais, les appels n'atteignent pas du tout le token.
+- **Revoked** or **Expired** — the token is dead and cannot be reinstated. Create a replacement and deploy it.
+- **Active** — then the value being sent is wrong. It must be the whole string, starting with `num_dlp_`, in an `Authorization: Bearer` header, with no truncation or trailing newline from however it was copied. Check *Last used*: if it never advances, the calls are not reaching the token at all.
 
-Si l'appel réussit mais est refusé pour une action précise, le token est valide mais ne possède pas le rôle nécessaire — ses rôles sont listés sur la même page, et un token ne peut pas être modifié, seulement remplacé. Voir [S'authentifier par token API](/docs/managed-services/dlp/guides/api-authentication).
+If the call succeeds but is refused for one particular thing, the token is valid and simply lacks the role — its roles are listed on the same page, and a token cannot be edited, only replaced. See [Authenticate with an API token](/docs/managed-services/dlp/guides/api-authentication).
 
-## J'ai perdu la valeur d'un token API
+## I lost an API token value
 
-Il n'existe aucun moyen de la récupérer : la console ne stocke qu'une empreinte. [Révoquez](/docs/managed-services/dlp/guides/api-authentication) l'ancien token et créez-en un nouveau.
+There is no way to recover it: the console stores only a fingerprint. [Revoke](/docs/managed-services/dlp/guides/api-authentication) the old token and create a new one.
 
-## Comment annuler une publication ?
+## How do I undo a publish?
 
-Vous ne pouvez pas « dé-publier », car les versions publiées sont immuables — c'est ce qui rend fiable le registre de ce qui a été appliqué. Pour revenir en arrière :
+You cannot un-publish, because published versions are immutable — that is what makes the record of what was enforced trustworthy. To go back:
 
-1. Ouvrez le **Publish History** et notez le contenu de la version souhaitée.
-2. Utilisez le panneau **History** de chaque règle ou policy concernée pour **Restore** la version antérieure, ce qui crée un brouillon.
-3. [Publiez](/docs/managed-services/dlp/actions/publish-ruleset) ces brouillons comme nouvelle version.
+1. Open the **Publish History** and note the content of the version you want.
+2. Use each affected rule's or policy's **History** panel to **Restore** the earlier version, which creates a draft.
+3. [Publish](/docs/managed-services/dlp/actions/publish-ruleset) those drafts as a new version.
 
-Le résultat correspond à l'état antérieur, et l'historique de ce qui a tourné et quand reste exact.
+The result matches the older state, and the history of what ran when stays accurate.
 
-## Toujours bloqué ?
+## Still stuck?
 
-Collectez le **Request ID** depuis le journal de décision, le **nom de la règle** et la **version du ruleset** affichée sur la page Publish, puis contactez votre fournisseur de service. Ces trois éléments identifient la situation précisément.
+Collect the **Request ID** from the decision log, the **rule name**, and the **ruleset version** shown on the Publish page, then contact your service provider. Those three identify the situation precisely.

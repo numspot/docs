@@ -1,5 +1,5 @@
 ---
-title: Modifier un attribut d'une VM
+title: Modify an attribute of a VM
 sidebar_position: 9
 draft: false
 ---
@@ -8,16 +8,16 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Modifier un attribut d'une VM
+# Modify an attribute of a VM
 
-Les actions possibles sur une [VM (Virtual Machine)](/docs/compute/concept/) Numspot dépendent de son état actuel :
-- Pour modifier l'attribut Type de VM (`Type`, `UserData`, `Performance` et `NestedVirtualization`), vous devez arrêter la VM ;
-- Les autres attributs peuvent être modifiés lorsque la VM est en exécution ou à l'arrêt.
+The actions available on a Numspot [VM (Virtual Machine)](/docs/compute/concept/) depend on its current state:
+- to modify the VM Type attribute (`Type`, `UserData`, `Performance` and `NestedVirtualization`), you must stop the VM;
+- the other attributes can be modified when the VM is running or stopped.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.vm.update**
 
@@ -26,53 +26,87 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
   <TabItem value="Console" label="Console" default>
 
-## Console {#tabhead-Console}
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/vm/upd-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Compute → VM.", hotspot: { x: 0, y: 0.4123, w: 0.1944, h: 0.0457 } },
-    { img: "/img/walkthrough/vm/upd-02-actions.png", text: "Sur la ligne de la VM, ouvrez le menu « Actions », puis cliquez sur « Modifier la VM ».", hotspot: { x: 0.8278, y: 0.663, w: 0.1352, h: 0.0457 } },
-    { img: "/img/walkthrough/vm/upd-03-form.png", text: "Sur la page « Modification d'une VM », ajustez le nom, le comportement à l'arrêt et la protection contre la suppression, puis cliquez sur « Modifier la VM ».", hotspot: { x: 0.6797, y: 0.9259, w: 0.0787, h: 0.0494 } },
+    { img: "/img/walkthrough/en/vm/upd-01-list.png", text: "From the left-hand side menu, click Compute → VMs.", hotspot: { x: 0, y: 0.4123, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/en/vm/upd-02-actions.png", text: "On the VM row, open the “Actions” menu, then click “Edit VM”.", hotspot: { x: 0.8451, y: 0.663, w: 0.118, h: 0.0457 } },
+    { img: "/img/walkthrough/en/vm/upd-03-form.png", text: "On the “VM Update” page, adjust the name, the shutdown behavior and the deletion protection, then click “Update VM”.", hotspot: { x: 0.6925, y: 0.9259, w: 0.0658, h: 0.0494 } },
   ]}
 />
 
-Depuis la console, la modification des attributs d'une VM se fait sur une page unique **Modification d'une VM**.
 
-1. Depuis le menu latéral gauche, cliquez sur **Compute** → **VM** ;
-2. Sur la ligne de la VM concernée, ouvrez le menu **Actions**, puis cliquez sur **Modifier la VM**.
+  ## Modify the associated security groups
 
-   La page **Modification d'une VM** apparaît. Le récapitulatif de droite (image, type, réseau, security group, key pair) est en lecture seule ;
-3. Ajustez les attributs modifiables :
-   - **Nom de la VM** ;
-   - **Comportement à l'arrêt** : "Stop" (la VM s'arrête), "Redémarrage" (la VM redémarre automatiquement) ou "Supprimer" (la VM est supprimée) ;
-   - **Protection contre la suppression** : lorsqu'elle est cochée, la VM ne peut pas être supprimée ;
-4. Cliquez sur **Modifier la VM** pour appliquer les modifications.
+  1. From the left-hand side menu, click **Compute** → **VM** to access the list of VM;
+  2. Select the VM and choose the **[Security groups](/docs/compute/security-groups/concepts/concept-sg/)** action.
+  
+     The "Update the security groups" dialog box appears;
+  3. Click in the field to display the list of security groups:
+     - in the list, select the security group or groups you want to associate with the VM;
+     - to dissociate a security group from a VM, deselect the name of the security group;
+  4. Click **Update the security groups**.
 
-:::info
-La modification des **security groups** associés et du **type (gabarit)** d'une VM n'est pas disponible depuis la console Numspot. Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
-:::
+  ## Modify the type of a VM
+
+  1. From the left-hand side menu, click **Compute** → **VM** to access the list of VM;
+  2. Select the VM and choose the **Modify VM type** action.
+  
+     The "Update the type of the VM" dialog box appears. You have two options:
+     - **Select a preconfigured VM template**: Numspot offers VM templates optimized for different use cases, such as compute, memory, standard and economy;
+     - **Custom VM**: if you have specific needs that are not covered by the preconfigured templates, you can create a custom VM by selecting the "Custom" option.
+     
+       Specify the following attributes for your VM:
+       - **CPU generation**: the generation of the processor;
+       - **Performance**: the performance indicator:
+         - **Highest**: maximum compute capacity on all the vCPU of the VM. This value is ideal for compute-intensive applications requiring stable performance throughout the life cycle of the VM;
+         - **High**: high compute capacity on all the vCPU of the VM. This value applies to most cases and offers performance that varies over time;
+         - **Moderate**: performance that varies significantly on all the vCPU of the VM. This value does not guarantee consistent performance, but is ideal for machines with low CPU demand;
+       - **Number of vCPU**: the number of vCores, up to 78;
+       - **RAM (GiB)**: the amount of memory, up to 1024 GiB.
+       
+       :::warning
+       To function correctly, Windows VM require at least a v5-generation processor, 2 vCores and 4 GiB of memory.
+       :::
+  3. Click **Submit**.
+
+  ## Modify the behavior of the VM on shutdown
+
+  1. From the left-hand side menu, click **Compute** → **VM** to access the list of VM;
+  2. Select the VM and choose the **Shutdown behavior** action.
+  
+     The "Update the shutdown behavior" dialog box appears;
+  3. In the list, select one of the following values:
+     - "Stop": when you shut down the VM, it stops;
+     - "Terminate": when you shut down the VM, it stops and is terminated;
+     - "Restart": when you shut down the VM, it stops and restarts automatically;
+  4. Click **Update the shutdown behavior**.
+
+  ## Modify the deletion protection
+
+  1. From the left-hand side menu, click **Compute** → **VM** to access the list of VM;
+  2. Select the VM and choose the **Deletion protection** action.
+  
+     The "Update the deletion protection" dialog box appears;
+  3. Enable or disable the button:
+     - if it is enabled, you cannot delete the VM;
+     - if it is disabled, you can delete it with any interface;
+  4. Click **Update the deletion protection**.
 
   </TabItem>
 
   <TabItem value="API" label="API">
+    The `PUT /compute/spaces/{spaceId}/vms/{id}` command modifies the attributes of a VM.
 
-## API {#tabhead-API}
-
-    La commande `PUT /compute/spaces/{spaceId}/vms/{id}` modifie les attributs d'une VM.
-
-    Vous devez arrêter la VM avant de modifier les attributs suivants :
-    - `nestedVirtualization` ;
-    - `performance` ;
-    - `userData` ;
+    You must stop the VM before modifying the following attributes:
+    - `nestedVirtualization`;
+    - `performance`;
+    - `userData`;
     - `type`.
 
-    [Exemple de requête : Modification d'une VM](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/vms/{id})
+    [Example request: Modifying a VM](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/vms/{id})
   </TabItem>
 
   <TabItem value="Terraform" label="Terraform">
-
-## Terraform {#tabhead-Terraform}
-
-    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
+    The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
   </TabItem>
 </Tabs>

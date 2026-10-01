@@ -1,115 +1,114 @@
 ---
-title: Exposer une application en interne via un load balancer privé - Kubernetes managé
-sidebar_label: Exposer une application en interne via un load balancer privé
-description: Créer un Service Kubernetes de type LoadBalancer interne, filtrer les sources autorisées et joindre l'application depuis un VPC distant avec des règles firewall stables
+title: Expose an application internally through a private load balancer
+description: Create an internal Kubernetes LoadBalancer Service, filter the allowed sources and reach the application from a remote VPC with stable firewall rules
 sidebar_position: 3
 draft: false
 ---
 
-# Exposer une application en interne via un load balancer privé
+# Expose an application internally through a private load balancer
 
-Par défaut, les applications d'un cluster Kubernetes sont exposées vers Internet via l'ingress public géré par la plateforme. Lorsque les outils de monitoring ou d'alerting sont hébergés dans un autre [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) — ou sur site via un peering (appairage) réseau —, il est préférable de les joindre par un endpoint privé, sans exposition publique.
+By default, the applications of a Kubernetes cluster are exposed to the Internet through the public ingress managed by the platform. When the monitoring or alerting tools are hosted in another [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) — or on-premises through a network peering — it is preferable to reach them through a private endpoint, without public exposure.
 
-Ce guide décrit la création d'un Service de type `LoadBalancer` interne : la plateforme provisionne un [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) privé qui attribue des adresses IP (Internet Protocol) privées à l'application, joignables depuis le réseau du cluster et les réseaux appairés.
+This guide describes the creation of a `LoadBalancer` type Service: the platform provisions a private [load balancer](/docs/network/load-balancer/concepts/) that allocates private IP (Internet Protocol) addresses to the application, reachable from the networks peered with the cluster network.
 
-## Prérequis
+## Prerequisites
 
 :::info
-- [Avoir un cluster Kubernetes Numspot opérationnel ↗](/docs/managed-services/kubernetes/concepts/)
-- [Télécharger le fichier kubeconfig ↗](/docs/managed-services/kubernetes/actions/kubeconfig/)
-- `kubectl` installé et configuré
-- Un peering actif entre le réseau des outils de monitoring et le réseau du cluster
-- [Un security group dédié au load balancer ↗](/docs/compute/security-groups/actions/create/)
+- [Have an operational Numspot Kubernetes cluster ↗](/docs/managed-services/kubernetes/concepts/)
+- [Download the kubeconfig file ↗](/docs/managed-services/kubernetes/actions/kubeconfig/)
+- `kubectl` installed and configured
+- An active peering between the network of the monitoring tools and the cluster network
+- [A dedicated security group for the load balancer ↗](/docs/compute/security-groups/actions/create/)
 :::
 
-## Load balancer public et load balancer interne
+## Public and internal load balancer
 
-Par défaut, un Service de type `LoadBalancer` provisionne un load balancer public : la plateforme lui attribue des adresses IP publiques et l'expose vers Internet.
+By default, a `LoadBalancer` type Service provisions a public load balancer: the platform allocates public IP addresses to it and exposes it to the Internet.
 
-L'annotation `service.beta.kubernetes.io/osc-load-balancer-internal: "true"` crée un load balancer interne : il reçoit des adresses IP privées dans le subnet (sous-réseau) indiqué et n'est joignable que depuis le réseau du cluster et les réseaux appairés. La plateforme s'appuie sur ce même mécanisme pour ses propres composants internes.
+The `service.beta.kubernetes.io/osc-load-balancer-internal: "true"` annotation creates an internal load balancer: it receives private IP addresses in the specified subnet and is only reachable from the cluster network and the peered networks. The platform itself relies on this same mechanism for its own internal components.
 
-### Cycle de vie des adresses IP
+### IP address lifecycle
 
-| Type d'adresse IP        | Attribution                                                        | Stabilité                                                                                      |
-| ------------------------ | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| IP privée (interne)      | Attribuée automatiquement dans le subnet au moment de la création  | Stable pendant toute la vie du load balancer, non épinglable, modifiée si le Service est recréé |
-| IP pré-allouée statique  | Adresse IP du compte référencée par annotation avant la création   | Conserve la même adresse IP même si le load balancer est recréé                                 |
+| IP address type        | Allocation                                                        | Stability                                                                                     |
+| ---------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Private IP (internal)  | Allocated automatically in the subnet at creation time            | Stable for the whole life of the load balancer, not pinnable, changed if the Service is recreated |
+| Pre-allocated static IP| IP address of the account referenced by annotation before creation| Keeps the same IP address even if the load balancer is recreated                               |
 
-Les règles firewall ne doivent donc pas cibler une adresse IP privée en dur : préférez un filtrage par [security group (groupe de sécurité)](/docs/compute/security-groups/concepts/concept-sg) — une règle entrante autorisant le security group du load balancer — ou par CIDR (Classless Inter Domain Routing) — les plages des réseaux appairés.
+Firewall rules must not target a private IP address hardcoded: prefer filtering by [security group](/docs/compute/security-groups/concepts/concept-sg) — an inbound rule allowing the load balancer security group — or by CIDR (Classless Inter-Domain Routing) — the ranges of the peered networks.
 
-Pour un endpoint privé avec une référence stable côté clients, utilisez un nom DNS (Domain Name System) privé : un enregistrement CNAME isole la valeur de l'adresse IP, et une recréation du load balancer ne demande la mise à jour que d'une seule entrée DNS.
+For a private endpoint with a stable reference on the client side, use a private DNS (Domain Name System) name: a CNAME record isolates the IP address value, and recreating the load balancer only requires updating a single DNS record.
 
-## Procédure
+## Procedure
 
 :::note
-Les clés d'annotation de ce guide sont définies par le cloud controller manager de la plateforme : utilisez-les telles quelles, en respectant la casse. N'utilisez que les clés documentées sur cette page.
+The annotation keys used in this guide are defined by the cloud controller manager of the platform: use them as they are, respecting the case. Only use the keys documented on this page.
 :::
 
-### Étape 1 : Vérifier le peering réseau
+### Step 1: Check the network peering
 
-Vérifiez que le VPC des outils de monitoring est appairé au réseau du cluster et que les [route table (table de routage)](/docs/network/route-table/concepts/) des deux réseaux autorisent le trafic entre les plages CIDR concernées.
+Check that the VPC of the monitoring tools is peered with the cluster network and that the [route table](/docs/network/route-table/concepts/) of both networks allows traffic between the relevant CIDR ranges.
 
-### Étape 2 : Préparer le subnet et le security group
+### Step 2: Prepare the subnet and the security group
 
-1. Identifiez le subnet du réseau du cluster dans lequel le load balancer sera créé : c'est dans ce subnet que les adresses IP privées seront attribuées. Récupérez son identifiant depuis la console ou l'API réseau.
-2. Créez un security group dédié au load balancer et ajoutez une règle entrante autorisant les CIDR des réseaux appairés vers le port d'écoute du Service. Consultez [Créer un security group ↗](/docs/compute/security-groups/actions/create/) et [Ajouter une règle à un security group ↗](/docs/compute/security-groups/actions/add-rule/).
-3. Si le trafic est filtré entre le load balancer et les nodes (nœuds) du cluster, ajoutez une règle autorisant le security group du load balancer à joindre le port cible de l'application.
+1. Identify the subnet of the cluster network in which the load balancer will be created: the private IP addresses are allocated in this subnet. Retrieve its identifier from the console or the network API.
+2. Create a security group dedicated to the load balancer and add an inbound rule allowing the CIDR of the peered networks towards the listening port of the Service. See [Create a security group ↗](/docs/compute/security-groups/actions/create/) and [Add a rule to a security group ↗](/docs/compute/security-groups/actions/add-rule/).
+3. If traffic is filtered between the load balancer and the nodes of the cluster, add a rule allowing the load balancer security group to reach the target port of the application.
 
-### Étape 3 : Déclarer le Service
+### Step 3: Declare the Service
 
-Créez le namespace si nécessaire, appliquez le manifest décrit dans la section [Manifestes d'exemple](#manifestes-dexemple) puis vérifiez le résultat :
+Create the namespace if needed, apply the manifest described in the [Example manifests](#example-manifests) section then check the result:
 
 ```bash
 kubectl create namespace demo
-kubectl apply -f service-interne.yaml
+kubectl apply -f internal-service.yaml
 ```
 
-### Annotations principales
+### Main annotations
 
-| Annotation                                                                          | Valeur d'exemple                   | Description                                                                                          |
-| ----------------------------------------------------------------------------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `service.beta.kubernetes.io/osc-load-balancer-internal`                             | `"true"`                           | Crée un load balancer interne : adresses IP privées dans le subnet indiqué                           |
-| `service.beta.kubernetes.io/osc-load-balancer-subnet-id`                            | `"11111111-2222-3333-4444-…"`      | UUID (Universally Unique Identifier) du subnet de création du load balancer                          |
-| `service.beta.kubernetes.io/osc-load-balancer-name`                                 | `"lb-demo-interne"`                | Nom fixe du load balancer, 32 caractères maximum                                                     |
-| `service.beta.kubernetes.io/osc-load-balancer-security-group`                       | `"aaaaaaaa-bbbb-cccc-dddd-…"`      | Security group principal du load balancer                                                            |
-| `service.beta.kubernetes.io/osc-load-balancer-extra-security-groups`                | `"11111111-…, 22222222-…"`         | Security groups additionnels, séparés par des virgules                                               |
-| `service.beta.kubernetes.io/load-balancer-source-ranges`                            | `"198.51.100.0/24, 203.0.113.0/24"`| CIDR sources autorisés à joindre le load balancer, sans préfixe supplémentaire                       |
+| Annotation                                                                          | Example value                      | Description                                                                  |
+| ------------------------------------------------------------------------------------ | ---------------------------------- | ---------------------------------------------------------------------------- |
+| `service.beta.kubernetes.io/osc-load-balancer-internal`                              | `"true"`                           | Creates an internal load balancer: private IP addresses in the specified subnet |
+| `service.beta.kubernetes.io/osc-load-balancer-subnet-id`                             | `"11111111-2222-3333-4444-…"`      | UUID (Universally Unique Identifier) of the subnet in which the load balancer is created |
+| `service.beta.kubernetes.io/osc-load-balancer-name`                                  | `"lb-demo-internal"`               | Fixed name of the load balancer, 32 characters maximum                        |
+| `service.beta.kubernetes.io/osc-load-balancer-security-group`                        | `"aaaaaaaa-bbbb-cccc-dddd-…"`      | Main security group of the load balancer                                      |
+| `service.beta.kubernetes.io/osc-load-balancer-extra-security-groups`                 | `"11111111-…, 22222222-…"`         | Additional security groups, separated by commas                               |
+| `service.beta.kubernetes.io/load-balancer-source-ranges`                             | `"198.51.100.0/24, 203.0.113.0/24"`| CIDR sources allowed to reach the load balancer, without additional prefix    |
 
-### Annotations complémentaires
+### Additional annotations
 
-| Annotation                                                                        | Valeur d'exemple  | Description                                                                                    |
-| --------------------------------------------------------------------------------- | ----------------- | ---------------------------------------------------------------------------------------------- |
-| `service.beta.kubernetes.io/osc-load-balancer-healthcheck-protocol`               | `"HTTP"`          | Protocole du health check (vérification d'état) : HTTP ou TCP                                  |
-| `service.beta.kubernetes.io/osc-load-balancer-healthcheck-port`                   | `"8080"`          | Port interrogé par le health check                                                             |
-| `service.beta.kubernetes.io/osc-load-balancer-healthcheck-path`                   | `"/healthz"`      | Chemin interrogé, pour un health check en HTTP                                                 |
-| `service.beta.kubernetes.io/osc-load-balancer-healthcheck-interval`               | `"30"`            | Intervalle entre deux health checks, en secondes                                               |
-| `service.beta.kubernetes.io/osc-load-balancer-healthcheck-timeout`                | `"5"`             | Délai d'attente de chaque health check, en secondes                                            |
-| `service.beta.kubernetes.io/osc-load-balancer-healthcheck-healthy-threshold`      | `"2"`             | Nombre de succès consécutifs avant de déclarer la cible saine                                  |
-| `service.beta.kubernetes.io/osc-load-balancer-healthcheck-unhealthy-threshold`    | `"3"`             | Nombre d'échecs consécutifs avant de retirer la cible                                          |
-| `service.beta.kubernetes.io/osc-load-balancer-ip-id`                              | `"ffffffff-…"`    | Adresse IP publique pré-allouée du compte, associée au load balancer                           |
-| `service.beta.kubernetes.io/osc-load-balancer-ip-pool`                            | `"mon-pool-prod"` | Sélectionne une adresse IP du compte portant le tag (étiquette) `OscK8sIPPool:<nom-du-pool>`   |
-| `service.beta.kubernetes.io/osc-load-balancer-ingress-address`                    | `"ip"`            | Adresse exposée par le Service : `ip`, `hostname` ou `both`                                    |
-| `service.beta.kubernetes.io/osc-load-balancer-ingress-ipmode`                     | `"Proxy"`         | Mode d'adressage des cibles : `Proxy` ou `VIP`                                                 |
+| Annotation                                                                        | Example value     | Description                                                                        |
+| --------------------------------------------------------------------------------- | ----------------- | ----------------------------------------------------------------------------------- |
+| `service.beta.kubernetes.io/osc-load-balancer-healthcheck-protocol`               | `"HTTP"`          | Health check protocol: HTTP or TCP                                                  |
+| `service.beta.kubernetes.io/osc-load-balancer-healthcheck-port`                   | `"8080"`          | Port queried by the health check                                                    |
+| `service.beta.kubernetes.io/osc-load-balancer-healthcheck-path`                   | `"/healthz"`      | Path queried, for an HTTP health check                                            |
+| `service.beta.kubernetes.io/osc-load-balancer-healthcheck-interval`               | `"30"`            | Interval between two health checks, in seconds                                      |
+| `service.beta.kubernetes.io/osc-load-balancer-healthcheck-timeout`                | `"5"`             | Timeout of each health check, in seconds                                            |
+| `service.beta.kubernetes.io/osc-load-balancer-healthcheck-healthy-threshold`      | `"2"`             | Number of consecutive successes before declaring the target healthy                 |
+| `service.beta.kubernetes.io/osc-load-balancer-healthcheck-unhealthy-threshold`    | `"3"`             | Number of consecutive failures before removing the target                           |
+| `service.beta.kubernetes.io/osc-load-balancer-ip-id`                              | `"ffffffff-…"`    | Pre-allocated public IP address of the account, attached to the load balancer      |
+| `service.beta.kubernetes.io/osc-load-balancer-ip-pool`                            | `"my-pool-prod"`  | Selects an IP address of the account carrying the `OscK8sIPPool:<pool-name>` tag    |
+| `service.beta.kubernetes.io/osc-load-balancer-ingress-address`                    | `"ip"`            | Address exposed by the Service: `ip`, `hostname` or `both`                          |
+| `service.beta.kubernetes.io/osc-load-balancer-ingress-ipmode`                     | `"Proxy"`         | Target addressing mode: `Proxy` or `VIP`                                            |
 
-## Manifestes d'exemple
+## Example manifests
 
-### Load balancer interne complet
+### Complete internal load balancer
 
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: demo-interne
+  name: demo-internal
   namespace: demo
   annotations:
-    # Load balancer interne : adresses IP privées dans le subnet indiqué
+    # Internal load balancer: private IP addresses in the specified subnet
     service.beta.kubernetes.io/osc-load-balancer-internal: "true"
     service.beta.kubernetes.io/osc-load-balancer-subnet-id: "11111111-2222-3333-4444-555555555555"
-    service.beta.kubernetes.io/osc-load-balancer-name: "lb-demo-interne"
+    service.beta.kubernetes.io/osc-load-balancer-name: "lb-demo-internal"
     service.beta.kubernetes.io/osc-load-balancer-security-group: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
-    # CIDR sources autorisés à joindre le load balancer
+    # CIDR sources allowed to reach the load balancer
     service.beta.kubernetes.io/load-balancer-source-ranges: "198.51.100.0/24, 203.0.113.0/24"
-    # Health check ajusté pour l'application
+    # Health check adjusted for the application
     service.beta.kubernetes.io/osc-load-balancer-healthcheck-protocol: "HTTP"
     service.beta.kubernetes.io/osc-load-balancer-healthcheck-port: "8080"
     service.beta.kubernetes.io/osc-load-balancer-healthcheck-path: "/healthz"
@@ -128,19 +127,19 @@ spec:
       protocol: TCP
 ```
 
-### Variante : IP pré-allouée statique {#variante-ip-pre-allouee-statique}
+### Variant: pre-allocated static IP
 
-Cette variante répond au besoin d'une adresse IP fixe pour les règles firewall : l'adresse IP pré-allouée du compte est conservée même si le load balancer est recréé. L'exposition reste toutefois publique : appliquez un filtrage strict par `load-balancer-source-ranges` et par security group.
+This variant answers the need for a fixed IP address for firewall rules: the pre-allocated IP address of the account is kept even if the load balancer is recreated. The exposure remains public however: apply a strict filtering with `load-balancer-source-ranges` and with security groups.
 
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: demo-statique
+  name: demo-static
   namespace: demo
   annotations:
-    # Nom fixe et adresse IP pré-allouée : la valeur survit à la recréation du load balancer
-    service.beta.kubernetes.io/osc-load-balancer-name: "lb-demo-statique"
+    # Fixed name and pre-allocated IP: the value survives the recreation of the load balancer
+    service.beta.kubernetes.io/osc-load-balancer-name: "lb-demo-static"
     service.beta.kubernetes.io/osc-load-balancer-ip-id: "ffffffff-8888-9999-aaaa-bbbbbbbbbbbb"
 spec:
   type: LoadBalancer
@@ -153,87 +152,87 @@ spec:
       protocol: TCP
 ```
 
-L'adresse IP doit être pré-allouée avant la création du Service : consultez [Allouer une IP publique ↗](/docs/network/public-ip/actions/allocate/). À la place d'une adresse unique, l'annotation `osc-load-balancer-ip-pool` sélectionne automatiquement une adresse IP du compte portant le tag `OscK8sIPPool:<nom-du-pool>`.
+The IP address must be pre-allocated before the creation of the Service: see [Allocate a public IP ↗](/docs/network/public-ip/actions/allocate/). Instead of a single address, the `osc-load-balancer-ip-pool` annotation automatically selects an IP address of the account carrying the `OscK8sIPPool:<pool-name>` tag.
 
-## Vérification
+## Verification
 
-### Récupérer l'adresse du load balancer
+### Retrieve the load balancer address
 
 ```bash
-kubectl get service demo-interne -n demo
+kubectl get service demo-internal -n demo
 ```
 
-Pendant la création du load balancer, la colonne `EXTERNAL-IP` affiche `<pending>` puis l'adresse IP privée attribuée :
+During the creation of the load balancer, the `EXTERNAL-IP` column displays `<pending>` then the allocated private IP address:
 
 ```text
-NAME           TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
-demo-interne   LoadBalancer   10.100.0.42    192.0.2.17    8080:30691/TCP   2m
+NAME             TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+demo-internal    LoadBalancer   10.100.0.42    192.0.2.17    8080:30691/TCP   2m
 ```
 
-Pour consulter les annotations appliquées et les événements de création :
+To check the applied annotations and the creation events:
 
 ```bash
-kubectl describe service demo-interne -n demo
+kubectl describe service demo-internal -n demo
 ```
 
-### Vérifier les cibles du load balancer
+### Check the load balancer targets
 
-Les endpoints du Service doivent référencer les adresses IP des pods de l'application :
+The endpoints of the Service must reference the IP addresses of the application pods:
 
 ```bash
-kubectl get endpoints demo-interne -n demo
+kubectl get endpoints demo-internal -n demo
 ```
 
-### Tester l'accès depuis un réseau appairé
+### Test the access from a peered network
 
-Depuis une [VM (Virtual Machine)](/docs/compute/concept) du VPC distant, ou depuis le réseau sur site via le peering :
+From a [VM (Virtual Machine)](/docs/compute/concept) of the remote VPC, or from the on-premises network through the peering:
 
 ```bash
 curl http://192.0.2.17:8080/healthz
 ```
 
-Une réponse HTTP 200 confirme que l'application est joignable par le load balancer interne. Si le Service est exposé via un nom d'hôte (`osc-load-balancer-ingress-address`), testez la résolution DNS depuis le réseau appairé.
+An HTTP 200 response confirms that the application is reachable through the load balancer. If the Service is exposed through a hostname (`osc-load-balancer-ingress-address`), test the DNS resolution from the peered network.
 
-## Limitations et bonnes pratiques
+## Limitations and best practices
 
-- Créez un Service de type `LoadBalancer` dédié à chaque exposition interne : ne modifiez pas le Service géré par la plateforme pour l'ingress public du cluster.
-- Les adresses IP privées du load balancer interne sont stables pendant toute sa vie, mais ne sont pas épinglables : elles changent si le Service est supprimé puis recréé.
-- Ne ciblez pas une adresse IP privée en dur dans vos règles firewall : ciblez des security groups ou des plages CIDR.
-- Référencez l'adresse IP par un enregistrement CNAME dans une zone DNS privée plutôt que de la communiquer aux configurations clientes.
-- Fixez le nom du load balancer avec l'annotation `osc-load-balancer-name` pour garantir la reproductibilité avec vos outils d'automatisation.
-- Déclarez systématiquement `load-balancer-source-ranges` pour limiter l'accès aux seuls réseaux autorisés.
+- Create a dedicated `LoadBalancer` type Service for each internal exposure: do not modify the Service managed by the platform for the public ingress of the cluster.
+- The private IP addresses of the internal load balancer are stable during its whole life, but are not pinnable: they change if the Service is deleted then recreated.
+- Do not target a private IP address hardcoded in your firewall rules: target security groups or CIDR ranges.
+- Reference the IP address through a CNAME record in a private DNS zone rather than communicating it to the client configurations.
+- Set the load balancer name with the `osc-load-balancer-name` annotation to guarantee reproducibility with your automation tools.
+- Always declare `load-balancer-source-ranges` to restrict the access to the allowed networks only.
 
 :::warning
-L'adresse IP privée d'un load balancer interne change si le Service est supprimé puis recréé. Une règle firewall ciblant cette adresse en dur deviendra silencieusement obsolète : utilisez un filtrage par security group ou par plage CIDR.
+The private IP address of an internal load balancer changes if the Service is deleted then recreated. A firewall rule targeting this address hardcoded will silently become obsolete: use a filtering by security group or by CIDR range.
 :::
 
-## Dépannage
+## Troubleshooting
 
-### Le Service reste en attente
+### The Service stays pending
 
-**Cause** : une annotation est invalide — subnet inexistant, nom de load balancer de plus de 32 caractères, adresse IP non pré-allouée ou déjà associée à une autre ressource.
+**Cause**: an annotation is invalid — non-existing subnet, load balancer name longer than 32 characters, IP address not pre-allocated or already attached to another resource.
 
-**Solution** : consultez les événements avec `kubectl describe service demo-interne -n demo`, corrigez l'annotation concernée puis recréez le Service.
+**Solution**: check the events with `kubectl describe service demo-internal -n demo`, fix the relevant annotation then recreate the Service.
 
-### Connexion impossible depuis le VPC distant
+### Connection impossible from the remote VPC
 
-**Cause** : le peering, le routage ou le filtrage bloque le trafic entre le réseau distant et le load balancer.
+**Cause**: the peering, the routing or the filtering blocks the traffic between the remote network and the load balancer.
 
-**Solution** : vérifiez dans l'ordre :
+**Solution**: check in order:
 
-1. le peering entre les deux réseaux et les route tables associées ;
-2. la règle entrante du security group du load balancer (port d'écoute et CIDR source) ;
-3. la valeur de `load-balancer-source-ranges`, qui doit inclure le CIDR du réseau source ;
-4. l'état des cibles avec `kubectl get endpoints demo-interne -n demo` : des endpoints vides indiquent un health check en échec.
+1. the peering between the two networks and the associated route tables;
+2. the inbound rule of the load balancer security group (listening port and source CIDR);
+3. the value of `load-balancer-source-ranges`, which must include the CIDR of the source network;
+4. the state of the targets with `kubectl get endpoints demo-internal -n demo`: empty endpoints indicate a failing health check.
 
-### Le health check échoue
+### The health check fails
 
-**Cause** : les annotations `osc-load-balancer-healthcheck-*` ne correspondent pas à l'application — protocole, port ou chemin incorrects.
+**Cause**: the `osc-load-balancer-healthcheck-*` annotations do not match the application — wrong protocol, port or path.
 
-**Solution** : alignez les annotations du health check sur l'application, par exemple HTTP, le port `8080` et le chemin `/healthz`, puis vérifiez que les endpoints se repeuplent.
+**Solution**: align the health check annotations with the application, for example HTTP, port `8080` and path `/healthz`, then check that the endpoints fill in again.
 
-### L'adresse IP a changé
+### The IP address has changed
 
-**Cause** : le Service a été supprimé puis recréé — comportement attendu pour une adresse IP privée, qui n'est pas épinglable.
+**Cause**: the Service has been deleted then recreated — expected behaviour for a private IP address, which is not pinnable.
 
-**Solution** : utilisez un enregistrement CNAME dans une zone DNS privée et automatisez la mise à jour de l'adresse. Pour une adresse réellement fixe, utilisez la variante [IP pré-allouée statique](#variante-ip-pre-allouee-statique).
+**Solution**: use a CNAME record in a private DNS zone and automate the address update. For a truly fixed address, use the [pre-allocated static IP](#variant-pre-allocated-static-ip) variant.

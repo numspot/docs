@@ -1,5 +1,5 @@
 ---
-title: Obtenir des informations sur vos Subnets
+title: Obtaining information about your subnets
 sidebar_position: 2
 draft: false
 ---
@@ -8,16 +8,16 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Obtenir des informations sur vos Subnets
+# Obtaining information about your subnets
 
-Vous pouvez obtenir des informations à propos d'un ou plusieurs de vos subnets (sous-réseaux), comme le [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) dans lequel ils sont, leur bloc CIDR (Classless Inter-Domain Routing) ou leur Sous-région.
+You can obtain information about one or several of your subnets, such as the [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) they belong to, their CIDR (Classless Inter-Domain Routing) block or their Sub-region.
 
-Des informations sur vos subnets sont également disponibles depuis les [VM (Virtual Machines)](/docs/compute/concept/) elles-mêmes.
+Information about your subnets is also available from the [VM (Virtual Machines)](/docs/compute/concept/) themselves.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.subnet.get**
 
@@ -25,37 +25,35 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
   <TabItem value="Console" default>
 
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/subnet/update-01-vpclist.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC.", hotspot: { x: 0, y: 0.5222, w: 0.1931, h: 0.0568 } },
-    { img: "/img/walkthrough/subnet/update-01-vpclist.png", text: "Dans la liste des VPC, cliquez sur l'ID du VPC concerné.", hotspot: { x: 0.2687, y: 0.4928, w: 0.0689, h: 0.0247 } },
-    { img: "/img/walkthrough/subnets/vpc-detail.png", text: "En bas de la page de détail du VPC, la section « Subnets » liste les sous-réseaux du VPC et leurs informations.", hotspot: { x: 0.2083, y: 0.52, w: 0.5556, h: 0.44 } },
+    { img: "/img/walkthrough/en/vpc/list.png", text: "From the left-hand side menu, click Network → VPC.", hotspot: { x: 0, y: 0.5222, w: 0.1931, h: 0.0568 } },
+    { img: "/img/walkthrough/en/vpc/list.png", text: "In the VPC list, click the ID of the relevant VPC.", hotspot: { x: 0.2687, y: 0.4928, w: 0.0689, h: 0.0247 } },
+    { img: "/img/walkthrough/en/subnet/vpc-detail.png", text: "At the bottom of the VPC details page, the “Subnets” section lists the VPC subnets and their information.", hotspot: { x: 0.2083, y: 0.5, w: 0.5556, h: 0.44 } },
   ]}
 />
- 1. Connectez-vous sur la console Numspot.
- 2. Depuis le menu latéral gauche, cliquez sur **Réseau** → **VPC** → **VPC**.
+
+
+ 1. Log in to the Numspot console.
+ 2. From the left-hand side menu, click **Network** → **VPC** → **VPC**.
 
      
- 3. La liste des VPC apparaît. Cliquez sur l'ID du VPC concerné.
- 4. La page "Détails VPC" apparaît.
- 5. En dessous des détails du VPC apparaît la section "Subnets" dans laquelle se trouve la liste des subnets associés au VPC.
+ 3. The list of VPC appears. Click the ID of the relevant VPC.
+ 4. The "VPC details" page appears.
+ 5. Below the VPC details, the "Subnets" section appears, containing the list of subnets associated with the VPC.
 
   </TabItem> 
   <TabItem value="API">
 
-La commande `GET /compute/spaces/{spaceId}/subnets` permet de lister les subnets.
+The `GET /compute/spaces/{spaceId}/subnets` command lists the subnets.
 
-[Exemple de requête : Lister tous les subnets](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/subnets)
+[Request example: List all subnets](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/subnets)
 
-La commande `GET /compute/spaces/{spaceId}/subnets/{id}` permet de récupérer les informations d'un subnet spécifié.
+The `GET /compute/spaces/{spaceId}/subnets/{id}` command retrieves the information of a specified subnet.
 
-[Exemple de requête : Récupérer les informations d'un subnet](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/subnets/{id})
+[Request example: Retrieve the information of a subnet](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/subnets/{id})
   </TabItem>
   <TabItem value="Terraform" label="Terraform">
-
-## Terraform {#tabhead-Terraform}
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/subnet).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/subnet).
   </TabItem>
 </Tabs>

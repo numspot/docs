@@ -1,0 +1,81 @@
+---
+title: Configuration de l'AWS CLI
+sidebar_position: 2
+draft: false
+---
+
+# Configuration de l'AWS CLI avec Numspot
+
+Ce guide vous aide à configurer l'AWS CLI (Amazon Web Services Command Line Interface) pour accéder aux services Numspot à l'aide des identifiants d'accès.
+
+La référence complète de l'API Object Storage est disponible dans la [documentation OpenAPI Scalar](/openapi-object-storage).
+
+## Étapes de configuration
+
+1. Installer l'AWS CLI
+
+   Téléchargez et installez l'AWS CLI en suivant la [documentation officielle AWS CLI](https://docs.aws.amazon.com/fr_fr/cli/latest/userguide/cli-chap-getting-started.html).
+
+2. Lancer la commande de configuration
+
+   Ouvrez un terminal et exécutez :
+
+   ```bash
+   aws configure
+   ```
+3. Saisir les informations suivantes :
+- `AWS Access Key ID` : Votre access key Numspot.
+- `AWS Secret Access Key` : Votre secret key Numspot. Pour en savoir plus, voir [Obtention d'une paire de clés](/docs/storage/object-storage/quickstart/#1-obtention-dune-paire-de-clés-accès-et-secret).
+- `Default region name` : La région que vous souhaitez utiliser.
+- `Default output format` : json
+
+    :::tip
+    Cette commande configure le profil par défaut (default). Pour configurer un profil nommé, utilisez la commande suivante :
+    ```bash
+    aws configure --profile VOTRE_PROFIL
+    ```
+    :::
+
+## Fichiers générés
+
+`~/.aws/credentials` :
+
+```ini
+[default]
+aws_access_key_id = VOTRE_ACCESS_KEY_ID
+aws_secret_access_key = VOTRE_SECRET_ACCESS_KEY
+
+[VOTRE_PROFIL]
+aws_access_key_id = AUTRE_ACCESS_KEY
+aws_secret_access_key = AUTRE_SECRET_KEY
+```
+
+`~/.aws/config` :
+
+```ini
+[default]
+region = eu-west-2
+output = json
+
+[profile VOTRE_PROFIL]
+region = eu-west-2
+output = json
+```
+
+## Utiliser un profil spécifique
+
+Pour utiliser un profil nommé dans vos commandes AWS CLI :
+```bash
+aws s3 ls --profile VOTRE_PROFIL
+```
+
+## Vérifier la configuration
+
+Vous pouvez afficher la configuration d'un profil à l'aide de la commande suivante :
+```bash
+aws configure list --profile VOTRE_PROFIL
+```
+
+## Configuration manuelle
+
+Si vous préférez, vous pouvez créer ou modifier manuellement les fichiers `~/.aws/credentials` et `~/.aws/config` en respectant les formats montrés ci-dessus.

@@ -1,0 +1,43 @@
+---
+title: Supprimer une instance Secret Manager
+sidebar_position: 9
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer une instance Secret Manager
+
+Vous pouvez supprimer une [instance Secret Manager](/docs/managed-services/secret-manager/concepts/) au sein de votre espace, quel que soit son statut.
+
+:::warning
+Vérifiez que l'instance Secret Manager n'est pas en cours d'utilisation avant de la supprimer. La suppression est irréversible et entraîne la perte de tous les secrets stockés dans l'instance.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **secrets.instance.delete**
+
+:::
+<Tabs>
+    
+    <TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+        La requête `DELETE /secrets/spaces/{spaceId}/instances/{instanceId}` permet de supprimer une instance Secret Manager.
+        L'instance passe dans l'état `DELETING` le temps de la suppression.
+
+        ### Exemple de réponse
+
+        ```http
+        HTTP/1.1 204 No Content
+        ```
+
+        [Voir la spécification complète](/openapi/#tag/Secret/DELETE/secrets/spaces/{spaceId}/instances/{instanceId})
+
+    </TabItem>
+</Tabs>

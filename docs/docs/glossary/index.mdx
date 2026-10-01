@@ -1,359 +1,306 @@
 ---
-title: "Glossaire"
-sidebar_label: "Glossaire"
+title: "Glossary"
+sidebar_label: "Glossary"
 sidebar_position: 1
 hide_feedback: true
 last_update:
   date: 2026-09-22
 ---
 
-# Glossaire
+# Glossary
 
-Ce glossaire a été conçu pour vous fournir une compréhension claire et concise des termes clés utilisés dans le domaine du cloud, facilitant ainsi votre navigation et votre utilisation.
+This glossary has been designed to give you a clear and concise understanding of the key terms used in the cloud field, making it easier for you to navigate and use it.
 
 ## A 
 
 #### Access Control List (ACL)
-Référence aux permissions granulaires, qui spécifie quels utilisateurs ou processus système ont accès à cet objet ou à cette ressource, ainsi que les opérations qu'ils sont autorisés à effectuer.
-
-#### Action (règle DLP)
-Résultat qu'une règle [DLP](/docs/managed-services/dlp/concepts) applique lorsqu'elle se déclenche : `pass` (laisser passer), `block` (bloquer), `modify` (caviarder ou supprimer le contenu détecté) ou `monitor` (journaliser sans changer la décision).  
-Pour aller plus loin : [Concepts DLP](/docs/managed-services/dlp/concepts)
+Reference to granular permissions, which specify which users or system processes have access to a given object or resource, as well as the operations they are authorized to perform.
 
 #### Application Programming Interface (API)
-Ensemble de règles et de protocoles qui permet à différents logiciels de communiquer entre eux, facilitant l'échange de données et de fonctionnalités.  
-Pour aller plus loin : [Qu'est-ce qu'une API ? | api.gouv.fr](https://api.gouv.fr/guides/api-definition)
+A set of rules and protocols that allows different software applications to communicate with each other, making it easier to exchange data and functionality.  
+Find out more: [What is an API? | api.gouv.fr](https://api.gouv.fr/guides/api-definition)
 
 #### Availability Zone
-De l'anglais signifiant « zone de disponibilité ». Centre de données isolé au sein d'une région, conçu pour être tolérant aux pannes. Les zones de disponibilité permettent aux utilisateurs de déployer des applications et des services de manière redondante pour assurer une haute disponibilité et une continuité des opérations en cas de défaillance d'un centre de données.
+An isolated data center within a region, designed to be fault-tolerant. Availability zones allow users to deploy applications and services redundantly to ensure high availability and continuity of operations in the event of a data center failure.
 
 ## B
 
-#### Base de données
-Ensemble organisé de données stockées et accessibles électroniquement. Les bases de données sont conçues pour faciliter la collecte, le stockage, la gestion et la récupération de grandes quantités d'informations.
+#### Database
+An organized set of data stored and accessed electronically. Databases are designed to make it easier to collect, store, manage and retrieve large amounts of information.
 
 #### Bastion
-Serveur spécialement conçu et configuré pour être le point d'entrée sécurisé dans un réseau privé, souvent utilisé pour administrer d'autres serveurs ou dispositifs au sein du réseau. Les bastions sont généralement renforcés contre les attaques et sont utilisés pour minimiser l'exposition des ressources internes à Internet.
+A server specifically designed and configured to be the secure entry point into a private network, often used to administer other servers or devices within the network. Bastions are generally hardened against attacks and are used to minimize the exposure of internal resources to the Internet.
 
 #### Block Storage
-Système de stockage de données qui divise les informations en blocs de taille fixe, chacun avec une adresse unique, permettant un accès rapide et efficace, souvent utilisé pour les bases de données et les applications nécessitant des performances élevées.  
-Pour aller plus loin : [Block Storage](/docs/storage/block-storage/concepts/)
+A data storage system that divides information into fixed-size blocks, each with a unique address, enabling fast and efficient access, often used for databases and applications requiring high performance.  
+Find out more: [Block Storage](/docs/storage/block-storage/concepts/)
 
 #### Bridge
-De l'anglais signifiant « pont ». Dispositif qui connecte deux segments de réseau distincts ([VPC](/docs/network/vpc/concepts/)) et gère le trafic de données entre eux de façon privée.  
-Pour aller plus loin : [Concepts du Compute Bridge | Numspot Docs](/docs/connectivity/compute-bridge/concepts/)
+A device that connects two distinct network segments ([VPC](/docs/network/vpc/concepts/)) and manages data traffic between them privately.  
+Find out more: [Compute Bridge concepts | Numspot Docs](/docs/connectivity/compute-bridge/concepts/)
 
 ## C
 
 #### Client Gateway
-De l'anglais signifiant « passerelle de client » ou simplement « passerelle ». Permet aux utilisateurs distants d'accéder en toute sécurité aux ressources du réseau interne comme s'ils étaient directement connectés à ce réseau.  
-Pour aller plus loin : [Client Gateway](/docs/connectivity/vpn/client-gateway/concepts/)
+Allows remote users to securely access internal network resources as if they were directly connected to that network.  
+Find out more: [Client Gateway](/docs/connectivity/vpn/client-gateway/concepts/)
 
-#### Cloud de confiance
-Référence à des services de cloud computing qui sont conçus pour répondre à des exigences strictes en matière de sécurité, de confidentialité et de conformité. Ces services sont souvent utilisés par des organisations qui manipulent des données sensibles ou critiques.  
-Pour aller plus loin [Qu'est-ce qu'un cloud de confiance ? | Numspot](https://numspot.com/ressource/qu-est-ce-qu-un-cloud-de-confiance/)
+#### Trusted cloud
+Reference to cloud computing services that are designed to meet strict requirements for security, confidentiality and compliance. These services are often used by organizations that handle sensitive or critical data.  
+Find out more: [What is a trusted cloud? | Numspot](https://numspot.com/ressource/qu-est-ce-qu-un-cloud-de-confiance/)
 
-#### Cloud privé, cloud public, cloud hybride
-Un cloud privé est une infrastructure cloud dédiée à une seule organisation. Il peut être hébergé dans les locaux de l'organisation ou par un fournisseur de services tiers, mais il est toujours utilisé exclusivement par cette organisation.  
-Un cloud public est une infrastructure cloud partagée entre plusieurs organisations et gérée par un fournisseur de services tiers. Les ressources sont accessibles via Internet et sont souvent facturées à l'usage.  
-Un cloud hybride combine des éléments de clouds privés et publics, permettant aux organisations de tirer parti des avantages des deux modèles.  
-Pour aller plus loin : [Cloud privé, cloud public, cloud hybride le point sur la question pour s'y retrouver | Numspot](https://numspot.com/ressource/cloud-prive-cloud-public-cloud-hybride-le-point-sur-la-question/)
+#### Private cloud, public cloud, hybrid cloud
+A private cloud is a cloud infrastructure dedicated to a single organization. It may be hosted on the organization's premises or by a third-party service provider, but it is always used exclusively by that organization.  
+A public cloud is a cloud infrastructure shared between several organizations and managed by a third-party service provider. The resources are accessible over the Internet and are often billed on a pay-as-you-go basis.  
+A hybrid cloud combines elements of private and public clouds, allowing organizations to take advantage of the benefits of both models.  
+Find out more: [Private cloud, public cloud, hybrid cloud: clarifying the question to find your way | Numspot](https://numspot.com/ressource/cloud-prive-cloud-public-cloud-hybride-le-point-sur-la-question/)
 
-#### Cloud souverain
-Référence à des services de cloud computing qui sont soumis à la juridiction et aux réglementations d'un pays spécifique, souvent pour des raisons de sécurité nationale, de confidentialité des données, et de conformité légale. Ces services sont généralement hébergés et gérés localement, assurant que les données sensibles restent sous le contrôle des lois et des normes locales.  
-Pour aller plus loin : [Qu'est-ce que le cloud souverain ? | Numspot](https://numspot.com/ressource/quest-ce-que-le-cloud-souverain/)
+#### Sovereign cloud
+Reference to cloud computing services that are subject to the jurisdiction and regulations of a specific country, often for reasons of national security, data confidentiality and legal compliance. These services are generally hosted and managed locally, ensuring that sensitive data remains under the control of local laws and standards.  
+Find out more: [What is the sovereign cloud? | Numspot](https://numspot.com/ressource/quest-ce-que-le-cloud-souverain/)
 
 #### Cluster
-Groupe de serveurs ou de nœuds de calcul qui travaillent ensemble pour fournir une puissance de traitement et de stockage accrue, permettant une meilleure performance, une haute disponibilité et une scalabilité des applications et des services.
+A group of servers or compute nodes that work together to provide increased processing and storage power, enabling better performance, high availability and scalability of applications and services.
 
 #### Command Line Interface (CLI)
-De l'anglais signifiant « interface en ligne de commande ». Moyen d'interagir avec un ordinateur ou un programme en tapant des commandes textuelles, offrant un contrôle précis et une automatisation des tâches.
+A way of interacting with a computer or program by typing text commands, offering precise control and task automation.
 
-#### Commanditaire
-Dans le référentiel SNC, le terme commanditaire est utilisé pour désigner le client ou l'entité qui sollicite des services cloud auprès d'un prestataire qualifié.
+#### Sponsor
+In the SNC framework, the term sponsor is used to designate the customer or entity that requests cloud services from a qualified provider.
 
-#### Compte de service
-Compte qui est attaché à un compte machine (système) et non pas à un utilisateur physique. Ces comptes permettent de faire des traitements de "machine à machine" ou des opérations automatisées sans intervention humaine.
+#### Service account
+An account that is attached to a machine (system) account rather than to a physical user. These accounts make it possible to perform "machine-to-machine" processing or automated operations without human intervention.
 
-#### Compte utilisateur
-Compte uninominal d'une personne physique. Les comptes utilisateurs peuvent avoir différents niveaux d'accès et de permissions en fonction de leurs rôles et responsabilités.
+#### User account
+An individual account of a natural person. User accounts can have different levels of access and permissions depending on their roles and responsibilities.
 
 #### Compute
-Référence aux ressources de calcul, telles que les processeurs (CPU) et la mémoire (RAM), qui sont fournies par un fournisseur de services cloud pour exécuter des applications et des charges de travail.  
-Pour aller plus loin : [Concepts du compute | Numspot Docs](/docs/compute/concept/)
+Reference to compute resources, such as processors (CPU) and memory (RAM), provided by a cloud service provider to run applications and workloads.  
+Find out more: [Compute concepts | Numspot Docs](/docs/compute/concept/)
 
-#### Condition (règle DLP)
-Expression qui détermine quand une règle [DLP](/docs/managed-services/dlp/concepts) se déclenche, écrite dans le langage de conditions (un champ, un opérateur et une référence de détecteur).  
-Pour aller plus loin : [Écrire des conditions de règles DLP](/docs/managed-services/dlp/guides/writing-rule-conditions)
-
-#### Conteneur
-Unité standard de logiciel qui empaquette le code et toutes ses dépendances afin que l'application s'exécute rapidement et de manière fiable d'un environnement informatique à un autre. Les conteneurs permettent une virtualisation au niveau du système d'exploitation, offrant une isolation légère et portable pour les applications.
+#### Container
+A standard unit of software that packages code and all its dependencies so that the application runs quickly and reliably from one computing environment to another. Containers enable operating-system-level virtualization, providing lightweight and portable isolation for applications.
 
 #### Classless Inter-Domain Routing (CIDR)
-Permet aux routeurs d'organiser plus efficacement les adresses IP en plusieurs sous-réseaux. Un sous-réseau est un réseau plus petit qui existe au sein d'un réseau. Par exemple, tous les périphériques connectés à un routeur se trouvent sur le même sous-réseau et ont le même préfixe d'adresse IP.
+Allows routers to organize IP addresses more efficiently into multiple subnets. A subnet is a smaller network that exists within a network. For example, all the devices connected to a router are on the same subnet and have the same IP address prefix.
 
 ## D
 
-#### Détecteur (DLP)
-Motif nommé qui reconnaît un type de contenu (token GitHub, identifiant employé, etc.). Les règles [DLP](/docs/managed-services/dlp/concepts) référencent des détecteurs ; seuls, les détecteurs n'ont aucun effet.  
-Pour aller plus loin : [Créer un détecteur personnalisé DLP](/docs/managed-services/dlp/actions/create-detector)
-
-#### Détecteur personnalisé (DLP)
-Détecteur que vous créez, défini par une ou plusieurs expressions régulières RE2.  
-Pour aller plus loin : [Créer un détecteur personnalisé DLP](/docs/managed-services/dlp/actions/create-detector)
-
-#### Détecteur prédéfini (DLP)
-Détecteur fourni avec le service DLP. Consultable et testable, mais non modifiable.
-
-#### DLP (Data Loss Prevention)
-Data Loss Prevention : discipline de prévention des fuites de données, et nom du service managé Numspot qui inspecte le trafic vers les plateformes connectées et empêche les informations sensibles d'en sortir.  
-Pour aller plus loin : [Concepts DLP](/docs/managed-services/dlp/concepts)
+#### Decision log (DLP)
+The record of a [DLP](/docs/managed-services/dlp/concepts/) evaluation: metadata only (which rule matched, on which field, via which detector). The request content is not stored.  
+Find out more: [View DLP decision logs](/docs/managed-services/dlp/actions/view-decision-logs/)
 
 #### DevOps
-Approche de développement logiciel qui combine les pratiques de développement (Dev) et d'exploitation (Ops) pour améliorer la collaboration et l'efficacité entre les équipes de développement et les équipes d'exploitation. L'objectif est de raccourcir le cycle de vie du développement des systèmes tout en assurant une livraison continue de haute qualité.
+A software development approach that combines development (Dev) and operations (Ops) practices to improve collaboration and efficiency between development teams and operations teams. The aim is to shorten the systems development life cycle while ensuring continuous high-quality delivery.
 
 #### DirectLink
-Service qui permet d'établir une connexion réseau dédiée et sécurisée entre l'infrastructure d'un client et un fournisseur de services cloud, offrant une alternative plus fiable et performante à une connexion Internet standard.  
-Pour aller plus loin : [DirectLink](/docs/connectivity/direct-link/concepts/)
+A service that allows you to establish a dedicated and secure network connection between a customer's infrastructure and a cloud service provider, offering a more reliable and high-performing alternative to a standard Internet connection.  
+Find out more: [DirectLink](/docs/connectivity/direct-link/concepts/)
 
 #### Docker
-Le logiciel Docker est une technologie de conteneurisation qui permet la création et l'utilisation de conteneurs Linux.  
-Pour aller plus loin : [What is Docker? | Docker Docs](https://docs.docker.com/get-started/docker-overview/)
+Docker software is a containerization technology that enables the creation and use of Linux containers.  
+Find out more: [What is Docker? | Docker Docs](https://docs.docker.com/get-started/docker-overview/)
 
 #### Domain Name System (DNS)
-Système qui traduit les noms de domaine, faciles à retenir par les humains, en adresses IP numériques nécessaires pour localiser et identifier les dispositifs et les services sur Internet.
-Pour aller plus loin : [Qu'est-ce que le DNS ? | Cloudflare](https://www.cloudflare.com/fr-fr/learning/dns/what-is-dns/)
+A system that translates domain names, which are easy for humans to remember, into the numerical IP addresses needed to locate and identify devices and services on the Internet.
+Find out more: [What is DNS? | Cloudflare](https://www.cloudflare.com/fr-fr/learning/dns/what-is-dns/)
 
 #### Dynamic Host Configuration Protocol (DHCP)
-Protocole réseau utilisé pour attribuer automatiquement des adresses IP et d'autres paramètres de configuration réseau aux dispositifs sur un réseau, simplifiant ainsi la gestion du réseau.  
-Pour aller plus loin : [DHCP](/docs/network/dhcp/concepts/)
+A network protocol used to automatically assign IP addresses and other network configuration parameters to devices on a network, thereby simplifying network management.  
+Find out more: [DHCP](/docs/network/dhcp/concepts/)
 
 ## E
 
-#### Espace
-Zone de travail virtuelle où les ressources sont allouées et gérées.
+#### Space
+A virtual workspace where resources are allocated and managed.
 
 ## G
 
 #### Graphics Processing Unit (GPU)
-De l'anglais signifiant « processeur graphique ». Processeur spécialisé conçu pour accélérer le rendu des images et des graphiques, ainsi que pour effectuer des calculs parallèles, souvent utilisé dans les jeux vidéo, le traitement vidéo et l'intelligence artificielle.  
-Pour aller plus loin : [GPU](/docs/compute/gpu/concept/)
+A specialized processor designed to accelerate the rendering of images and graphics, as well as to perform parallel computations, often used in video games, video processing and artificial intelligence.  
+Find out more: [GPU](/docs/compute/gpu/concept/)
 
 ## H
 
-#### Hébergement de Données de Santé (HDS)
-Cadre réglementaire qui définit les conditions dans lesquelles les données de santé peuvent être hébergées, afin d'assurer leur sécurité et leur confidentialité.  
-Pour aller plus loin : [Certification HDS - Tout savoir | e-santé](https://esante.gouv.fr/produits-services/hds)
+#### Health Data Hosting (HDS)
+A regulatory framework that defines the conditions under which health data may be hosted, in order to ensure its security and confidentiality.  
+Find out more: [HDS certification - Everything you need to know | e-santé](https://esante.gouv.fr/produits-services/hds)
 
 ## I
 
 #### Identity Access Management (IAM)
-Cadre de sécurité qui gère les identités numériques et les accès des utilisateurs aux ressources informatiques, assurant que les bonnes personnes ont accès aux bonnes ressources au bon moment.  
-Pour aller plus loin : [Concepts de l'IAM | Numspot Docs](/docs/iam/concepts/overview/)
+A security framework that manages digital identities and user access to IT resources, ensuring that the right people have access to the right resources at the right time.  
+Find out more: [IAM concepts | Numspot Docs](/docs/iam/concepts/overview/)
 
 #### Image
-Copie complète et sauvegardée d'une machine virtuelle, incluant le système d'exploitation, les applications et les configurations. Cette image peut être utilisée pour déployer rapidement de nouvelles instances de machines virtuelles identiques.
+A complete, saved copy of a virtual machine, including the operating system, applications and configurations. This image can be used to quickly deploy new identical virtual machine instances.
 
-#### Intelligence Artificielle (IA)
-Domaine de l'informatique qui vise à créer des machines capables d'exécuter des tâches qui nécessitent normalement l'intelligence humaine, comme le raisonnement, l'apprentissage, la perception et la prise de décision.  
-Pour aller plus loin : [Intelligence artificielle (IA) : de quoi parle-t-on ? | Ministère chargé de l'enseignement supérieur et de la recherche](https://www.enseignementsup-recherche.gouv.fr/fr/intelligence-artificielle-de-quoi-parle-t-91190)
+#### Artificial Intelligence (AI)
+A field of computer science that aims to create machines capable of performing tasks that normally require human intelligence, such as reasoning, learning, perception and decision-making.  
+Find out more: [Artificial intelligence (AI): what are we talking about? | Ministry of Higher Education and Research](https://www.enseignementsup-recherche.gouv.fr/fr/intelligence-artificielle-de-quoi-parle-t-91190)
 
 #### ISO/IEC 27001
-Norme internationale qui spécifie les exigences pour un système de management de la sécurité de l'information (SMSI). Elle fournit un cadre pour établir, mettre en œuvre, exploiter, surveiller, réviser, maintenir et améliorer un SMSI. L'objectif de cette norme est d'aider les organisations à gérer la sécurité de leurs actifs d'information de manière systématique et proactive, en tenant compte des risques de sécurité de l'information.  
-Pour aller plus loin : [Qu'est-ce qu'ISO/IEC 27001 ? | ISO](https://www.iso.org/fr/standard/27001)
+An international standard that specifies the requirements for an information security management system (ISMS). It provides a framework for establishing, implementing, operating, monitoring, reviewing, maintaining and improving an ISMS. The aim of this standard is to help organizations manage the security of their information assets in a systematic and proactive way, taking into account information security risks.  
+Find out more: [What is ISO/IEC 27001? | ISO](https://www.iso.org/fr/standard/27001)
 
 #### Internet Gateway
-De l'anglais signifiant « passerelle Internet ». Composant réseau qui permet la communication entre un réseau local ou un réseau virtuel privé (VPC) et Internet. Elle sert de point de sortie pour le trafic sortant vers Internet et de point d'entrée pour le trafic entrant provenant d'Internet, facilitant ainsi l'accès aux ressources en ligne pour les instances au sein du réseau.  
-Pour aller plus loin : [Internet Gateway](/docs/network/internet-gateway/concepts/)
-
-## J
-
-#### Journal de décision (DLP)
-Enregistrement d'une évaluation [DLP](/docs/managed-services/dlp/concepts) : métadonnées uniquement (quelle règle a correspondu, sur quel champ, via quel détecteur). Le contenu de la requête n'est pas stocké.  
-Pour aller plus loin : [Consulter les journaux de décision DLP](/docs/managed-services/dlp/actions/view-decision-logs)
+A network component that enables communication between a local network or a virtual private network (VPC) and the Internet. It serves as an exit point for outbound traffic to the Internet and as an entry point for inbound traffic coming from the Internet, thereby facilitating access to online resources for instances within the network.  
+Find out more: [Internet Gateway](/docs/network/internet-gateway/concepts/)
 
 ## K
 
 #### Key Pair
-Couple de clés cryptographiques, l'une publique et l'autre privée, utilisé pour authentifier et sécuriser l'accès à des ressources cloud.  
-Pour aller plus loin : [Key Pair](/docs/compute/keypairs/concept/)
+A pair of cryptographic keys, one public and one private, used to authenticate and secure access to cloud resources.  
+Find out more: [Key Pair](/docs/compute/keypairs/concept/)
 
 #### Kubelet
-Agent essentiel qui s'exécute sur chaque nœud (worker node) d'un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) ; il communique avec le control plane pour recevoir les instructions, veille à ce que les pods et leurs conteneurs soient créés, démarrés et maintenus selon les spécifications, surveille leur état de santé, gère les ressources du nœud, et remonte l'état du nœud et des pods au plan de contrôle.
+An essential agent that runs on each node (worker node) of a [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/); it communicates with the control plane to receive instructions, ensures that pods and their containers are created, started and maintained according to specifications, monitors their health, manages the node's resources, and reports the state of the node and pods to the control plane.
 
 #### Kubernetes
-Plateforme open-source conçue pour automatiser le déploiement, la mise à l'échelle et la gestion des applications conteneurisées. Il offre des outils pour orchestrer des conteneurs sur plusieurs hôtes, facilitant ainsi la gestion des applications distribuées et des microservices.  
-Pour aller plus loin : [Overview | Kubernetes](https://kubernetes.io/docs/concepts/overview/)
+An open-source platform designed to automate the deployment, scaling and management of containerized applications. It provides tools to orchestrate containers across multiple hosts, thereby making it easier to manage distributed applications and microservices.  
+Find out more: [Overview | Kubernetes](https://kubernetes.io/docs/concepts/overview/)
 
 #### Kube Proxy
-Agent qui s'exécute sur chaque nœud Kubernetes et gère les règles réseau pour assurer le routage du trafic entre les services et les pods.
+An agent that runs on each Kubernetes node and manages network rules to ensure traffic routing between services and pods.
 
 ## L
 
 #### Load Balancer
-De l'anglais signifiant « répartiteur de charge ». Dispositif qui distribue le trafic réseau ou les demandes de traitement entre plusieurs serveurs, afin d'optimiser l'utilisation des ressources, maximiser le débit, minimiser le temps de réponse et éviter la surcharge de tout serveur individuel.  
-Pour aller plus loin : [Load Balancer](/docs/network/load-balancer/concepts/)
+A device that distributes network traffic or processing requests across several servers, in order to optimize resource usage, maximize throughput, minimize response time and avoid overloading any individual server.  
+Find out more: [Load Balancer](/docs/network/load-balancer/concepts/)
 
 ## M
 
 #### Microservice
-Approche architecturale pour le développement d'applications logicielles, où une grande application est construite comme un ensemble de petits services indépendants. Chaque microservice est conçu pour accomplir une tâche spécifique, fonctionne dans son propre processus, et communique avec d'autres services via des interfaces bien définies
-
-#### Monitor (action DLP)
-Action de règle [DLP](/docs/managed-services/dlp/concepts) qui journalise une correspondance sans changer le sort de la requête. Utilisée pour tester une règle en mode « shadow » avant de l'appliquer en blocage.  
-Pour aller plus loin : [Surveiller les événements DLP](/docs/managed-services/dlp/guides/monitor-events)
+An architectural approach to developing software applications, where a large application is built as a set of small, independent services. Each microservice is designed to accomplish a specific task, runs in its own process, and communicates with other services through well-defined interfaces.
 
 ## N
 
 #### Namespace
-Espace logique dans un cluster Kubernetes qui permet d'isoler, d'organiser et de gérer séparément des groupes de ressources, facilitant ainsi la segmentation, le contrôle des accès et l'application de quotas au sein d'un même cluster.
+A logical space in a Kubernetes cluster that allows groups of resources to be isolated, organized and managed separately, thereby facilitating segmentation, access control and the application of quotas within a single cluster.
 
 #### Network Address Translation (NAT)
-Technique utilisée pour modifier les adresses IP dans les paquets de données lorsqu'ils traversent un routeur ou un pare-feu. Cela permet à plusieurs dispositifs sur un réseau local d'accéder à Internet en utilisant une seule adresse IP publique, améliorant ainsi la sécurité et économisant les adresses IP.
+A technique used to modify IP addresses in data packets as they pass through a router or firewall. This allows several devices on a local network to access the Internet using a single public IP address, thereby improving security and conserving IP addresses.
 #### Network Interface Card (NIC)
-De l'anglais signifiant « carte d'interface réseau ». Permet à un ordinateur de se connecter à un réseau, tel qu'un réseau local (LAN) ou Internet, en fournissant une interface physique entre l'ordinateur et le câble réseau ou la connexion sans fil.
+Allows a computer to connect to a network, such as a local area network (LAN) or the Internet, by providing a physical interface between the computer and the network cable or wireless connection.
 
 #### Node
-De l'anglais signifiant « nœuds ». Machine physique ou virtuelle dans un cluster Kubernetes, qui fournit les ressources nécessaires (processeur, mémoire, stockage) et exécute les pods grâce à des composants comme kubelet, kube-proxy et un runtime de conteneurs.
+A physical or virtual machine in a Kubernetes cluster, which provides the necessary resources (processor, memory, storage) and runs pods using components such as kubelet, kube-proxy and a container runtime.
 
 #### Nodepool
-Groupe de nœuds d'un cluster Kubernetes ayant la même configuration et avec une gestion commune.
+A group of nodes in a Kubernetes cluster with the same configuration and common management.
 
 ## O
 
 #### Object Storage
-Système de stockage de données qui gère les informations sous forme d'objets, chacun étant accompagné de métadonnées et d'un identifiant unique, plutôt que sous forme de fichiers hiérarchiques.
+A data storage system that manages information as objects, each accompanied by metadata and a unique identifier, rather than as hierarchical files.
 
 #### One Time Password (OTP)
-Courte séquence de chiffres autogénérés fournie par une application. Cette séquence n'est disponible que pendant une courte période, rendant ainsi plus difficile toute utilisation malveillante.
+A short, self-generated sequence of numbers provided by an application. This sequence is only available for a short period, thereby making any malicious use more difficult.
 
 #### OpenAPI
-Spécification pour décrire les API REST. Elle permet aux développeurs de définir le format des requêtes et des réponses pour une API, ainsi que les points de terminaison disponibles et les opérations supportées.  
-Pour aller plus loin : [What is OpenAPI? | OpenAPI Initiative](https://www.openapis.org/what-is-openapi)
+A specification for describing REST API. It allows developers to define the format of requests and responses for an API, as well as the available endpoints and supported operations.  
+Find out more: [What is OpenAPI? | OpenAPI Initiative](https://www.openapis.org/what-is-openapi)
 
 #### OpenID Connect (OIDC)
-Simple couche d'identification basée sur OAuth 2.0, un dispositif d'autorisation.  
-Pour aller plus loin : [Qu'est-ce qu'OpenID Connect (OIDC) ? | Auth0](https://auth0.com/fr/intro-to-iam/what-is-openid-connect-oidc)
+A simple identity layer based on OAuth 2.0, an authorization mechanism.  
+Find out more: [What is OpenID Connect (OIDC)? | Auth0](https://auth0.com/fr/intro-to-iam/what-is-openid-connect-oidc)
 
 #### OpenShift
-Plateforme de conteneurs d'entreprise basée sur Kubernetes, développée par Red Hat, qui permet aux développeurs de déployer, gérer et mettre à l'échelle des applications conteneurisées de manière efficace et sécurisée.  
-Pour aller plus loin : [Plateforme d'applications d'entreprise Red Hat OpenShift](https://www.redhat.com/fr/technologies/cloud-computing/openshift)
+A Kubernetes-based enterprise container platform, developed by Red Hat, that allows developers to deploy, manage and scale containerized applications efficiently and securely.  
+Find out more: [Red Hat OpenShift enterprise application platform](https://www.redhat.com/fr/technologies/cloud-computing/openshift)
 
-#### Organisation
-Entité ou une structure qui regroupe des utilisateurs, des ressources et des projets sous une même entité administrative, facilitant ainsi la gestion des accès, des permissions et des ressources partagées.
+#### Organization
+An entity or structure that brings together users, resources and projects under a single administrative entity, thereby making it easier to manage access, permissions and shared resources.
 
 ## P
 
 #### Pod
-Unité de base de Kubernetes, regroupant un ou plusieurs conteneurs qui partagent le même réseau, le même stockage et sont gérés ensemble comme une seule entité déployable dans le cluster.
+The basic unit of Kubernetes, grouping one or more containers that share the same network and the same storage and are managed together as a single deployable entity in the cluster.
 
 #### PostgreSQL (PSQL)
-Système de gestion de base de données relationnelle open source, connu pour sa robustesse, sa conformité aux standards et sa capacité à gérer des charges de travail complexes.  
-Pour aller plus loin : [About | PostgreSQL](https://www.postgresql.org/about/)
+An open-source relational database management system, known for its robustness, its standards compliance and its ability to handle complex workloads.  
+Find out more: [About | PostgreSQL](https://www.postgresql.org/about/)
 
 #### Permission
-Peut être assignée à un utilisateur ou compte de service indépendamment d'un rôle.
+Can be assigned to a user or service account independently of a role.
 
-#### Piste d'audit (DLP)
-Registre de chaque changement administratif effectué dans la console [DLP](/docs/managed-services/dlp/concepts) : qui a modifié quoi, et quand.  
-Pour aller plus loin : [Consulter la piste d'audit DLP](/docs/managed-services/dlp/actions/view-audit-trail)
-
-#### Policy (DLP)
-Liste ordonnée de règles pour un platform type, assortie d'une action par défaut appliquée lorsqu'aucune règle ne correspond.  
-Pour aller plus loin : [Créer une policy DLP](/docs/managed-services/dlp/actions/create-policy)
-
-#### Protocole
-Ensemble de règles et de conventions qui définissent la manière dont les données sont échangées entre des dispositifs dans un réseau. Les protocoles assurent que la communication se déroule de manière ordonnée et prévisible, en spécifiant des aspects tels que le format des messages, l'ordre des messages envoyés et reçus, et la manière de détecter et de corriger les erreurs. Des exemples courants de protocoles incluent TCP/IP, HTTP, et FTP.
+#### Protocol
+A set of rules and conventions that define how data is exchanged between devices in a network. Protocols ensure that communication takes place in an orderly and predictable manner, by specifying aspects such as the format of messages, the order of messages sent and received, and how to detect and correct errors. Common examples of protocols include TCP/IP, HTTP and FTP.
 
 #### Public IP
-De l'anglais signifiant « adresse IP publique ». Adresses uniques attribuées aux dispositifs connectés à Internet, permettant leur identification et leur communication sur le réseau mondial.
+Unique addresses assigned to devices connected to the Internet, enabling their identification and communication on the global network.
 
 ## R
 
-#### RE2
-Syntaxe d'expressions régulières utilisée par les détecteurs [DLP](/docs/managed-services/dlp/concepts). Garantie en temps linéaire, sans références arrière ni look-ahead.  
-Pour aller plus loin : [RE2 Syntax | GitHub](https://github.com/google/re2/wiki/Syntax)
-
-#### Règle (DLP)
-Association d'une condition et d'une action, rattachée à un seul platform type.  
-Pour aller plus loin : [Créer une règle DLP](/docs/managed-services/dlp/actions/create-rule)
-
-#### Région
-Zone géographique où un fournisseur de services cloud héberge ses centres de données.
-
-#### Ruleset (DLP)
-Instantané immuable et numéroté de l'ensemble des règles, policies et détecteurs personnalisés. C'est la seule chose que le moteur d'évaluation exécute.  
-Pour aller plus loin : [Publier un ruleset DLP](/docs/managed-services/dlp/actions/publish-ruleset)
+#### Region
+A geographical area where a cloud service provider hosts its data centers.
 
 #### Role-Based Access Control (RBAC)
-Système de contrôle d'accès basé sur le rôle assigné à l'utilisateur.
+An access control system based on the role assigned to the user.
 
 #### Route Table
-De l'anglais signifiant « table de routage ». Base de données ou un fichier qui contient les règles utilisées pour déterminer où le trafic doit être dirigé dans un réseau. Elle associe des destinations réseau à des interfaces de sortie ou à des passerelles, permettant ainsi aux routeurs de prendre des décisions sur la manière de transmettre le trafic vers leur destination finale.  
-Pour aller plus loin : [Route Table](/docs/network/route-table/concepts/)
+A database or file that contains the rules used to determine where traffic should be directed in a network. It associates network destinations with output interfaces or gateways, thereby allowing routers to make decisions about how to forward traffic to its final destination.  
+Find out more: [Route Table](/docs/network/route-table/concepts/)
 
 ## S
 
 #### Security Group
-Ensemble de règles de filtrage réseau, agissant comme un pare-feu virtuel, qui contrôle le trafic entrant et sortant des ressources cloud auxquelles il est associé.  
-Pour aller plus loin : [Security Group](/docs/compute/security-groups/concepts/concept-sg/)
+A set of network filtering rules, acting as a virtual firewall, that controls the inbound and outbound traffic of the cloud resources to which it is associated.  
+Find out more: [Security Group](/docs/compute/security-groups/concepts/concept-sg/)
 
 #### SecNumCloud (SNC)
-Label de sécurité français créé par l'Agence nationale de la sécurité des systèmes d'information (ANSSI). Il vise à certifier les services cloud qui respectent des exigences strictes en matière de sécurité et de protection des données.  
-Pour aller plus loin : [SecNumCloud pour les fournisseurs de services Cloud | ANSSI](https://cyber.gouv.fr/prestataires-de-services-dinformatique-en-nuage-secnumcloud)
+A French security label created by the French National Cybersecurity Agency (ANSSI). It aims to certify cloud services that comply with strict requirements for security and data protection.  
+Find out more: [SecNumCloud for cloud service providers | ANSSI](https://cyber.gouv.fr/prestataires-de-services-dinformatique-en-nuage-secnumcloud)
 
-#### Service Managés
-Services externalisés où un fournisseur prend en charge la gestion et l'exploitation de certaines fonctions ou infrastructures informatiques, permettant aux entreprises de se concentrer sur leurs activités principales.
+#### Managed Services
+Outsourced services where a provider takes charge of the management and operation of certain IT functions or infrastructures, allowing businesses to focus on their core activities.
 
 #### Snapshot
-De l'anglais signifiant « capture instantanée ». Copie ponctuelle de l'état d'un volume de stockage ou d'une machine virtuelle à un moment donné. Les snapshots sont utilisés pour sauvegarder des données ou des configurations, permettant de les restaurer ultérieurement en cas de besoin, comme la récupération après une défaillance ou une erreur de configuration.
+A point-in-time copy of the state of a storage volume or a virtual machine at a given moment. Snapshots are used to back up data or configurations, allowing them to be restored later if needed, such as recovery after a failure or a configuration error.
 
 #### Subnet
-De l'anglais signifiant « sous-réseau ». Subdivision logique d'un réseau IP. Les sous-réseaux sont utilisés pour diviser un réseau en plusieurs segments plus petits et plus gérables, ce qui peut améliorer la performance du réseau, simplifier la gestion et renforcer la sécurité en isolant différents groupes de dispositifs ou de services.
+A logical subdivision of an IP network. Subnets are used to divide a network into several smaller and more manageable segments, which can improve network performance, simplify management and strengthen security by isolating different groups of devices or services.
 
 ## T
 
 #### Tag
-Métadonnée sous forme de paire clé-valeur utilisée pour organiser et gérer les ressources de manière plus efficace.
+Metadata in the form of a key-value pair used to organize and manage resources more efficiently.
 
 #### Terraform
-Outil open-source développé par HashiCorp, utilisé pour l'infrastructure as code (IaC). Il permet aux utilisateurs de définir et de provisionner une infrastructure de centre de données à l'aide d'un langage de configuration déclaratif.  
-Pour aller plus loin : [Terraform | HashiCorp Developer](https://developer.hashicorp.com/terraform)
+An open-source tool developed by HashiCorp, used for infrastructure as code (IaC). It allows users to define and provision data center infrastructure using a declarative configuration language.  
+Find out more: [Terraform | HashiCorp Developer](https://developer.hashicorp.com/terraform)
 
 #### Time-based One Time Password (TOTP)
-Algorithme permettant de générer des OTP.
+An algorithm for generating OTP.
 
-#### Token API (DLP)
-Identifiant qu'un système utilise pour appeler l'API [DLP](/docs/managed-services/dlp/concepts) sans se connecter, commençant par `num_dlp_`. Il porte ses propres rôles et n'est affiché qu'une seule fois, au moment de sa création.  
-Pour aller plus loin : [S'authentifier par token API](/docs/managed-services/dlp/guides/api-authentication)
-
-#### Token d'authentification
-Aussi appelé jeton d'accès ou Bearer authentication, le token ajouté par les requêtes clientes qui permet aux ressources de vérifier la validité de l'authentification de l'utilisateur émettant la requête. Il fait partie du protocole OAuth2.
+#### Authentication token
+Also called an access token or Bearer authentication, the token added by client requests that allows resources to verify the validity of the authentication of the user issuing the request. It is part of the OAuth2 protocol.
 
 ## U
 
-#### Utilisateur
-Individu qui interagit avec les services et les ressources cloud. Cela peut inclure des administrateurs qui gèrent les ressources, des développeurs qui créent et déployent des applications.
+#### User
+An individual who interacts with cloud services and resources. This can include administrators who manage resources and developers who create and deploy applications.
 
 #### Universally Unique Identifier (UUID)
-De l'anglais signifiant « identifiant unique universel ». Système permettant à des systèmes distribués d'identifier de façon unique une information sans coordination centrale importante.  
-Pour aller plus loin : [RFC 9562 - Universally Unique IDentifiers (UUIDs)](https://datatracker.ietf.org/doc/html/rfc9562)
+A system that allows distributed systems to uniquely identify a piece of information without significant central coordination.  
+Find out more: [RFC 9562 - Universally Unique IDentifier (UUID)](https://datatracker.ietf.org/doc/html/rfc9562)
 
 ## V
 
 #### Virtual Gateway
-De l'anglais signifiant « passerelle virtuelle ». Composant réseau qui permet de connecter différents réseaux virtuels ou de relier un réseau virtuel à un réseau physique, facilitant ainsi la communication et le transfert de données entre eux.  
-Pour aller plus loin : [Virtual Gateway](/docs/connectivity/vpn/virtual-gateway/concepts/)
+A network component that allows different virtual networks to be connected, or a virtual network to be linked to a physical network, thereby facilitating communication and data transfer between them.  
+Find out more: [Virtual Gateway](/docs/connectivity/vpn/virtual-gateway/concepts/)
 
 #### Virtual Machine (VM)
-De l'anglais signifiant « machine virtuelle ». Environnement logiciel qui émule un ordinateur physique, permettant d'exécuter des programmes et des systèmes d'exploitation de manière isolée sur une seule machine physique.  
-Pour aller plus loin : [Virtual Machine (VM)](/docs/compute/concept/)
+A software environment that emulates a physical computer, allowing programs and operating systems to be run in isolation on a single physical machine.  
+Find out more: [Virtual Machine (VM)](/docs/compute/concept/)
 
 #### Virtual Private Cloud (VPC)
-Réseau virtuel isolé au sein d'un cloud public, permettant de définir et contrôler des ressources réseau telles que les sous-réseaux, les adresses IP, les tables de routage et les pare-feu.
+An isolated virtual network within a public cloud, allowing network resources such as subnets, IP addresses, route tables and firewalls to be defined and controlled.
 
 #### Virtual Private Network (VPN)
-Technologie qui crée une connexion sécurisée et cryptée sur un réseau moins sécurisé, comme Internet, permettant aux utilisateurs d'envoyer et de recevoir des données de manière privée et sécurisée.
+A technology that creates a secure, encrypted connection over a less secure network, such as the Internet, allowing users to send and receive data privately and securely.
 
 #### Volume
-Unité de stockage de données qui peut être attachée à une instance de machine virtuelle ou à un conteneur. Les volumes sont utilisés pour stocker des données de manière persistante, indépendamment de la durée de vie de l'instance à laquelle ils sont attachés.
+A unit of data storage that can be attached to a virtual machine instance or a container. Volumes are used to store data persistently, independently of the lifespan of the instance to which they are attached.

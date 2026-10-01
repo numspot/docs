@@ -1,5 +1,5 @@
 ---
-title: Se connecter à une VM
+title: Connect to a VM
 sidebar_position: 4
 draft: false
 ---
@@ -7,51 +7,51 @@ draft: false
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-# Se connecter à une VM
+# Connect to a VM
 
-Pour vous connecter à une [VM (Virtual Machine)](/docs/compute/concept/), vous devez configurer les règles de [security group](/docs/compute/security-groups/concepts/concept-sg/) appropriées et utiliser un client SSH ou RDP (Remote Desktop Protocol) selon le système d'exploitation de la VM.
+To connect to a [VM (Virtual Machine)](/docs/compute/concept/), you must configure the appropriate [security group](/docs/compute/security-groups/concepts/concept-sg/) rules and use an SSH or RDP (Remote Desktop Protocol) client depending on the operating system of the VM.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.vm.get**
 
 :::
 
-## Se connecter à une VM Linux
+## Connect to a Linux VM
 
-Pour autoriser la connexion de votre ordinateur source vers la VM de destination, ajoutez la règle **Entrante** de security group suivante :
+To allow the connection from your source computer to the destination VM, add the following **Inbound** security group rule:
 
-- Port : 22 — SSH (Secure Shell) ;
-- Protocole : TCP (Transmission Control Protocol) ;
-- CIDR (Classless Inter-Domain Routing) : L'IP (Internet Protocol) de votre ordinateur source.
+- Port: 22 — SSH (Secure Shell);
+- Protocol: TCP (Transmission Control Protocol);
+- CIDR (Classless Inter-Domain Routing): the IP (Internet Protocol) of your source computer.
 
-### Depuis un ordinateur Linux ou macOS
+### From a Linux or macOS computer
 
-Pour accéder à une VM Linux hébergée sur Numspot, vous devez utiliser un client SSH depuis votre ordinateur local. Voici les étapes à suivre pour vous connecter à votre VM Linux :
+To access a Linux VM hosted on Numspot, you must use an SSH client from your local computer. The steps to follow to connect to your Linux VM are:
 
-1. Identifiez l'adresse IP publique de votre VM Linux. Vous pouvez la trouver dans la Console Numspot, en sélectionnant votre VM dans la liste des VM ;
-2. Ouvrez un terminal (ou une fenêtre de commande) sur votre ordinateur local ;
-3. Assurez-vous que vous disposez de la clé privée correspondant à la [key pair (paire de clés)](/docs/compute/keypairs/concept/) que vous avez utilisée lors de la création de votre VM Linux. Par défaut, la clé privée est enregistrée au format ".pem" ;
-4. Modifiez les permissions de la clé privée pour garantir sa sécurité en exécutant la commande suivante :
-
-```bash
-chmod 400 chemin/vers/votre/clé/privée.pem
-```
-
-Remplacez "chemin/vers/votre/clé/privée.pem" par le chemin d'accès réel à votre clé privée.
-
-5. Connectez-vous à votre VM Linux en utilisant la commande SSH suivante :
+1. Identify the public IP address of your Linux VM. You can find it in the Numspot console by selecting your VM from the list of VM;
+2. Open a terminal (or a command window) on your local computer;
+3. Make sure you have the private key matching the [key pair](/docs/compute/keypairs/concept/) you used when creating your Linux VM. By default, the private key is saved in ".pem" format;
+4. Change the permissions of the private key to ensure its security by running the following command:
 
 ```bash
-ssh -i chemin/vers/votre/clé/privée.pem utilisateur@adresse_ip_publique_vm
+chmod 400 path/to/your/private/key.pem
 ```
 
-Remplacez "chemin/vers/votre/clé/privée.pem" par le chemin d'accès réel à votre clé privée, "utilisateur" par le nom d'utilisateur associé à votre VM Linux (généralement "centos", "ubuntu", "debian" ou "numspot"), et "adresse_ip_publique_vm" par l'adresse IP publique de votre VM Linux.
+Replace "path/to/your/private/key.pem" with the actual path to your private key.
 
-6. Lors de votre première connexion, vous serez invité à vérifier l'empreinte digitale (fingerprint) de la VM. Vérifiez-la et saisissez "yes" pour poursuivre.
+5. Connect to your Linux VM using the following SSH command:
+
+```bash
+ssh -i path/to/your/private/key.pem user@vm_public_ip_address
+```
+
+Replace "path/to/your/private/key.pem" with the actual path to your private key, "user" with the username associated with your Linux VM (usually "centos", "ubuntu", "debian" or "numspot"), and "vm_public_ip_address" with the public IP address of your Linux VM.
+
+6. On your first connection, you are prompted to verify the fingerprint of the VM. Verify it and enter "yes" to continue.
 
 ```text
 The authenticity of host '15.47.38.52 (15.47.38.52)' can't be established.
@@ -59,17 +59,17 @@ RSA key fingerprint is 49:f3:cd:65:cf:14:64:a7:1e:b6:07:7c:11:71:00:95:21:9b.
 Are you sure you want to continue connecting (yes/no)?
 ```
 
-7. Une fois connecté, vous accédez à l'invite de commande de votre VM Linux. Vous pouvez maintenant exécuter des commandes et gérer votre VM à distance.
+7. Once connected, you reach the command prompt of your Linux VM. You can now run commands and manage your VM remotely.
 
-N'oubliez pas de déconnecter votre session SSH en tapant "exit" lorsque vous avez terminé d'utiliser votre VM Linux.
+Remember to disconnect your SSH session by typing "exit" when you have finished using your Linux VM.
 
-### Depuis un ordinateur Windows
+### From a Windows computer
 
-## Restreindre l'accès à la key pair
+**Restrict access to the key pair**
 
-Suivez les étapes ci-dessous dans un terminal. Cette procédure permet de réduire les risques d'accès non autorisé et de prévenir les conséquences graves. Dans cette section, nous vous guiderons à travers les commandes nécessaires pour définir les autorisations appropriées sur votre fichier de clé privée, conformément aux bonnes pratiques de sécurité.
+Follow the steps below in a terminal. This procedure helps reduce the risk of unauthorized access and prevent serious consequences. In this section, the necessary commands to set the appropriate permissions on your private key file are described, in line with security best practices.
 
-Tapez les commandes suivantes dans un terminal :
+Type the following commands in a terminal:
 
 ```powershell
 $ Set filepath=keypair
@@ -78,105 +78,96 @@ $ icacls %filepath% /inheritance:d
 $ icacls %filepath% /remove *S-1-5-11 *S-1-5-18 *S-1-5-32-544 *S-1-5-32-545
 ```
 
-1. `$ Set filepath=keypair` : Cette commande définit une variable d'environnement `filepath` avec la valeur `keypair`. Remplacez `keypair` par le chemin d'accès complet et le nom de votre fichier de clé privée, par exemple `C:\Users\votre_nom_utilisateur\.ssh\nom_de_votre_clé_privée.ppk` ;
-2. `$ icacls %filepath% /grant %username%:rw` : Cette commande accorde les autorisations de lecture (`r`) et d'écriture (`w`) sur le fichier spécifié par `%filepath%` à l'utilisateur actuel (`%username%`) ;
-3. `$ icacls %filepath% /inheritance:d` : Cette commande supprime les autorisations héritées du fichier spécifié par `%filepath%` et empêche la propagation des autorisations héritées aux fichiers et répertoires enfants ;
-4. `$ icacls %filepath% /remove *S-1-5-11 *S-1-5-18 *S-1-5-32-544 *S-1-5-32-545` : Cette commande supprime les autorisations pour les groupes d'utilisateurs spécifiques suivants :
-   - `S-1-5-11` : Utilisateurs authentifiés ;
-   - `S-1-5-18` : Système local ;
-   - `S-1-5-32-544` : Administrateurs ;
-   - `S-1-5-32-545` : Utilisateurs.
-   
-   Ces commandes permettent que seul l'utilisateur actuel a accès en lecture/écriture à la key pair, et que les groupes d'utilisateurs spécifiés n'ont pas d'accès au fichier de clé privée.
+1. `$ Set filepath=keypair`: this command sets an environment variable `filepath` with the value `keypair`. Replace `keypair` with the full path and the name of your private key file, for example `C:\Users\your_username\.ssh\name_of_your_private_key.ppk`;
+2. `$ icacls %filepath% /grant %username%:rw`: this command grants read (`r`) and write (`w`) permissions on the file specified by `%filepath%` to the current user (`%username%`);
+3. `$ icacls %filepath% /inheritance:d`: this command removes the inherited permissions from the file specified by `%filepath%` and prevents inherited permissions from propagating to child files and directories;
+4. `$ icacls %filepath% /remove *S-1-5-11 *S-1-5-18 *S-1-5-32-544 *S-1-5-32-545`: this command removes the permissions for the following specific user groups:
+   - `S-1-5-11`: authenticated users;
+   - `S-1-5-18`: local system;
+   - `S-1-5-32-544`: administrators;
+   - `S-1-5-32-545`: users.
 
-[**Installer OpenSSH pour Windows**](https://learn.microsoft.com/fr-fr/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui#install-openssh-for-windows)
+   These commands ensure that only the current user has read/write access to the key pair, and that the specified user groups have no access to the private key file.
 
-Depuis Windows 10 version 1809, OpenSSH est intégré en tant que fonctionnalité facultative et peut être installé directement à partir des Paramètres de Windows. Voici comment procéder :
+[**Install OpenSSH for Windows**](https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui#install-openssh-for-windows)
 
-- Ouvrez les Paramètres de Windows en appuyant sur les touches Win + I ;
-- Ouvrez Paramètres, sélectionnez Système, puis Fonctionnalités facultatives ;
-- Parcourez la liste pour voir si OpenSSH est déjà installé. Si ce n'est pas le cas, sélectionnez Ajouter une fonctionnalité en haut de la page, puis :
-  - Recherchez OpenSSH Client, sélectionnez Suivant, puis Installer ;
-- Autre méthode pour installer OpenSSH Client sur Windows à l'aide de PowerShell :
-  - Ouvrez le menu Démarrer et recherchez "Windows PowerShell" ;
-  - Cliquez avec le bouton droit sur "Windows PowerShell" et sélectionnez "Exécuter en tant qu'administrateur" ;
-  - Dans la fenêtre PowerShell, exécutez la commande suivante pour installer OpenSSH Client :
+Since Windows 10 version 1809, OpenSSH is included as an optional feature and can be installed directly from the Windows Settings. Here is how to proceed:
+
+- Open the Windows Settings by pressing the Win + I keys;
+- Open Settings, select System, then Optional features;
+- Browse the list to see whether OpenSSH is already installed. If it is not, select Add a feature at the top of the page, then:
+  - search for OpenSSH Client, select Next, then Install;
+- Another method to install OpenSSH Client on Windows using PowerShell:
+  - open the Start menu and search for "Windows PowerShell";
+  - right-click "Windows PowerShell" and select "Run as administrator";
+  - in the PowerShell window, run the following command to install OpenSSH Client:
 
 ```powershell
 Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
 ```
 
-Une fois l'installation terminée, vous pouvez utiliser le client OpenSSH à partir de l'invite de commandes (cmd) ou de Windows PowerShell pour vous connecter à votre VM Linux.
+Once the installation is complete, you can use the OpenSSH client from the command prompt (cmd) or from Windows PowerShell to connect to your Linux VM.
 
 ```bash
-ssh utilisateur@adresse_ip_vm
+ssh user@vm_ip_address
 ```
 
-> Si vous utilisez une connexion VPN (Virtual Private Network) ou [DirectLink](/docs/connectivity/direct-link/concepts/), vous pouvez spécifier l'IP privée de la VM.
+> If you use a VPN (Virtual Private Network) connection or [DirectLink](/docs/connectivity/direct-link/concepts/), you can specify the private IP of the VM.
 
-## Se connecter à une VM Windows
+## Connect to a Windows VM
 
-Pour accéder à une VM Windows, vous pouvez utiliser une application de bureau à distance comme Microsoft Remote Desktop. Avant d'accéder à la VM, vous devez déchiffrer le mot de passe du compte administrateur avec la clé privée de la key pair associée à la VM. Seules les key pairs RSA peuvent déchiffrer le mot de passe.
+To access a Windows VM, you can use a remote desktop application such as Microsoft Remote Desktop. Before accessing the VM, you must decrypt the password of the administrator account with the private key of the key pair associated with the VM. Only RSA key pairs can decrypt the password.
 
-Vous pouvez récupérer le mot de passe uniquement lors du premier démarrage de la VM. Si vous ne le faites pas, vous ne pourrez pas accéder à la VM et devrez la terminer pour en créer une nouvelle. Cette procédure s'applique uniquement aux VM issues d'images officielles qui utilisent le système d'authentification par key pair par défaut. Dans d'autres cas, la méthode de connexion peut varier. La sauvegarde et la conservation sécurisée des clés privées et mots de passe associés relèvent de la responsabilité du client.
+You can retrieve the password only on the first start of the VM. If you do not, you cannot access the VM and must terminate it to create a new one. This procedure applies only to VM created from official images that use the key pair authentication system by default. In other cases, the connection method may vary. Backing up and securely storing the private keys and associated passwords is the customer's responsibility.
 
-### Déchiffrer le mot de passe de votre VM
+### Decrypt the password of your VM
 
 <Tabs>
   <TabItem value="Console" label="Console" default>
+    1. From the left-hand side menu, click **Compute** → **VM** to access the list of VM;
+    2. Select the Windows VM whose password you want to retrieve;
+    3. Click the **Retrieve the password** action;
+    4. In the dialog box, download your private key or paste its contents;
+    5. Click **Decrypt the password**.
 
-## Console {#tabhead-Console}
-
-    1. Depuis le menu latéral gauche, cliquez sur **Compute** → **VM** pour accéder à la liste des VM ;
-    2. Sélectionnez la VM Windows dont vous souhaitez récupérer le mot de passe ;
-    3. Cliquez sur l'action **Récupérer le mot de passe** ;
-    4. Dans la boîte de dialogue, téléchargez votre clé privée ou collez son contenu ;
-    5. Cliquez sur **Déchiffrer le mot de passe**.
-    
-    Le mot de passe administrateur est affiché. Copiez-le et conservez-le de manière sécurisée.
+    The administrator password is displayed. Copy it and store it securely.
   </TabItem>
 
   <TabItem value="API" label="API">
-
-## API {#tabhead-API}
-
-    La commande `GET /compute/spaces/{spaceId}/vms/{id}/adminPasswords` permet d'obtenir le mot de passe administrateur d'une VM Windows en cours d'exécution. Ce mot de passe est chiffré à l'aide de la key pair que vous avez spécifiée lors du lancement de la VM.
+    The `GET /compute/spaces/{spaceId}/vms/{id}/adminPasswords` command lets you obtain the administrator password of a running Windows VM. This password is encrypted using the key pair you specified when launching the VM.
 
     :::warning
-    Seules les paires de clés RSA sont capables de déchiffrer le mot de passe d'une VM Windows. Veuillez noter que le mot de passe administrateur est généré uniquement lors du premier démarrage de la VM Windows. Par conséquent, il ne sera pas renvoyé après ce premier démarrage.
+    Only RSA key pairs can decrypt the password of a Windows VM. Note that the administrator password is generated only on the first start of the Windows VM. Therefore, it is not returned after this first start.
     :::
 
-    [Exemple de requête : Récupérer le mot de passe admin d'une VM](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/vms/{id}/adminPasswords)
+    [Example request: Retrieve the admin password of a VM](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/vms/{id}/adminPasswords)
   </TabItem>
 
   <TabItem value="Terraform" label="Terraform">
-
-## Terraform {#tabhead-Terraform}
-
-    La récupération du mot de passe via Terraform n'est pas disponible. Utilisez la Console ou l'API.
+    Retrieving the password via Terraform is not available. Use the console or the API.
   </TabItem>
 </Tabs>
 
-### Accéder à une VM avec Microsoft Remote Desktop
+### Access a VM with Microsoft Remote Desktop
 
 :::info
-## Avant de commencer
+**Before you begin:**
 
-1. Installez Microsoft Remote Desktop sur votre machine :
-   - Sur Mac : voir la [version pour Mac](https://apps.apple.com/fr/app/microsoft-remote-desktop-10/id1295203466?mt=12) ;
-   - Sur Windows : voir la [version pour Windows](https://www.microsoft.com/en-us/store/p/microsoft-remote-desktop/9wzdncrfj3ps) ;
-2. Déchiffrez le mot de passe de la VM à l'aide d'une des méthodes ci-dessus ;
-3. Pour autoriser la connexion de votre machine à la VM, assurez-vous que la VM possède la règle de security group suivante :
-   - Port : RDP (Remote Desktop Protocol) (3389) ;
-   - Protocole : TCP ;
-   - CIDR : L'IP publique de votre machine.
+1. Install Microsoft Remote Desktop on your machine:
+   - on Mac: see the [version for Mac](https://apps.apple.com/fr/app/microsoft-remote-desktop-10/id1295203466?mt=12);
+   - on Windows: see the [version for Windows](https://www.microsoft.com/en-us/store/p/microsoft-remote-desktop/9wzdncrfj3ps);
+2. Decrypt the password of the VM using one of the methods above;
+3. To allow the connection from your machine to the VM, make sure the VM has the following security group rule:
+   - Port: RDP (Remote Desktop Protocol) (3389);
+   - Protocol: TCP;
+   - CIDR: the public IP of your machine.
 
-> L'IP CIDR attendue est l'IP publique de votre machine, pas celle de la VM.
+> The expected CIDR IP is the public IP of your machine, not that of the VM.
 
 :::
 
-1. Ouvrez l'application Microsoft Remote Desktop ;
-2. Connectez-vous à la VM à l'aide de son IP publique et du mot de passe administrateur.
+1. Open the Microsoft Remote Desktop application;
+2. Connect to the VM using its public IP and the administrator password.
 
-> - L'utilisateur par défaut pour les VM Windows créées avec les images officielles est "administrator" ;
-> - Si vous utilisez une connexion VPN ou DirectLink, vous pouvez utiliser l'IP privée de la VM.
+> - The default user for Windows VM created with the official images is "administrator";
+> - If you use a VPN or DirectLink connection, you can use the private IP of the VM.

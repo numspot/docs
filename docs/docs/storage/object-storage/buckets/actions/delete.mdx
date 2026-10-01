@@ -1,6 +1,6 @@
 ---
-title: Supprimer un bucket - stockage objet
-sidebar_label: Supprimer un bucket
+title: Delete a bucket - Object Storage
+sidebar_label: Delete a bucket
 sidebar_position: 2
 draft: false
 ---
@@ -8,16 +8,16 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Supprimer un bucket
+# Delete a bucket
 
-Vous pouvez supprimer un [bucket](/docs/storage/object-storage/concepts/) que vous n'utilisez plus, afin de libérer l'espace de stockage associé. Conformément au standard S3 (Simple Storage Service) d'AWS (Amazon Web Services), un bucket doit être vide pour être supprimé : la suppression d'un bucket ne supprime pas les objets qu'il contient, vous devez les supprimer au préalable. La suppression d'un bucket ou d'un objet est définitive.
+You can delete a [bucket](/docs/storage/object-storage/concepts/) that you no longer use, in order to free the associated storage space. In accordance with the AWS (Amazon Web Services) S3 (Simple Storage Service) standard, a bucket must be empty to be deleted: deleting a bucket does not delete the objects it contains, you must delete them beforehand. Deleting a bucket or an object is permanent.
 
-Avant de commencer, vous devez disposer d'une paire de clés AK/SK (Access Key/Secret Key), obtenue à partir d'un token, comme décrit dans la rubrique [Démarrage rapide](/docs/storage/object-storage/quickstart/).
+Before you begin, you need an AK/SK [key pair](/docs/compute/keypairs/concept) (Access Key/Secret Key), obtained from a token, as described in the [Quick start](/docs/storage/object-storage/quickstart/) section.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions IAM suivantes :
+This action requires the following IAM permissions:
 
 - **objectstorage.bucket.delete**
 
@@ -29,7 +29,7 @@ Cette action nécessite les permissions IAM suivantes :
 ## Console {#tabhead-console}
 
 :::info
-La suppression de buckets n'est pas disponible depuis la console Numspot. Utilisez l'API S3 (AWS CLI) ou Terraform.
+Bucket deletion is not available from the Numspot console. Use the S3 API (AWS CLI) or Terraform.
 :::
 
   </TabItem>
@@ -37,7 +37,7 @@ La suppression de buckets n'est pas disponible depuis la console Numspot. Utilis
 
 ## API {#tabhead-api}
 
-Pour supprimer un bucket, utilisez la commande **rb** en suivant cette syntaxe :
+To delete a bucket, use the **rb** command with the following syntax:
 
 ```shell
 ## request
@@ -47,26 +47,26 @@ aws s3 rb s3://BUCKET_NAME \
     --endpoint https://objectstorage.{{region}}.numspot.com/spaces/{{spaceId}}
 ```
 
-Cette commande contient les options suivantes que vous devez spécifier :
+This command contains the following options that you must specify:
 
-- `s3://BUCKET_NAME` : Le nom du bucket que vous souhaitez supprimer.
-- endpoint : Le endpoint correspondant à la région à laquelle vous voulez envoyer la requête.
-- (optionnel) `profile` : Le profil nommé que vous voulez utiliser, créé pendant la configuration d'AWS CLI (Command Line Interface). Pour en savoir plus, voir [Installer et configurer AWS CLI](/docs/storage/object-storage/config/).
-- (optionnel) `debug` : Si inclus, renvoie un rapport détaillé de l'opération. Cette option est utile pour analyser et résoudre les problèmes que vous pouvez rencontrer.
-- (optionnel) `force` : Si inclus, supprime d'abord tous les objets du bucket, puis supprime le bucket.
+- `s3://BUCKET_NAME` : The name of the bucket you want to delete.
+- endpoint : The endpoint corresponding to the region to which you want to send the request.
+- (optional) `profile` : The named profile you want to use, created during the AWS CLI (Command Line Interface) configuration. To find out more, see [Install and configure AWS CLI](/docs/storage/object-storage/config/).
+- (optional) `debug` : If included, returns a detailed report of the operation. This option is useful for analyzing and troubleshooting problems you may encounter.
+- (optional) `force` : If included, first deletes all the objects of the bucket, then deletes the bucket.
 
-Le bucket doit être vide pour être supprimé. S'il contient encore des objets, la commande échoue : supprimez d'abord les objets du bucket, ou utilisez l'option `force`.
+The bucket must be empty to be deleted. If it still contains objects, the command fails: delete the objects of the bucket first, or use the `force` option.
 
-Le bucket est supprimé. Cette action est irréversible : vous ne pouvez pas retrouver ultérieurement un bucket supprimé ni les objets qu'il contenait.
+The bucket is deleted. This action is irreversible: you cannot recover a deleted bucket or the objects it contained.
 
   </TabItem>
   <TabItem value="terraform" label="Terraform">
 
 ## Terraform {#tabhead-terraform}
 
-Pour supprimer un bucket avec Terraform, supprimez la ressource `numspot_bucket` de votre configuration, puis exécutez la commande `terraform apply`.
+To delete a bucket with Terraform, remove the `numspot_bucket` resource from your configuration, then run the `terraform apply` command.
 
-Consultez la documentation officielle de la ressource : [numspot_bucket](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/bucket).
+Refer to the official resource documentation: [numspot_bucket](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/bucket).
 
   </TabItem>
 </Tabs>

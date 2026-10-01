@@ -1,163 +1,163 @@
 ---
-title: Équilibreurs de charge
-sidebar_label: À propos des Load Balancers
+title: Load balancers
+sidebar_label: About Load Balancers
 sidebar_position: 1
 draft: false
 ---
 
 import ActionsSummary from '@site/src/components/ActionsSummary';
 
-# À propos des Load Balancers
+# About Load Balancers
 
 <ActionsSummary />
 
-Un équilibreur de charge (load balancer) distribue le trafic réseau entrant entre plusieurs [VM (Virtual Machines)](/docs/compute/concept/) pour répartir la charge et augmenter la disponibilité et la fiabilité de vos services.
+A load balancer distributes incoming network traffic across several [VM (Virtual Machine)](/docs/compute/concept/) to spread the load and increase the availability and reliability of your services.
 
-Vous pouvez :
+You can:
 
-- Distribuer la charge réseau à l'aide des protocoles TCP (Transmission Control Protocol)/SSL (Secure Sockets Layer) et HTTP (HyperText Transfer Protocol)/HTTPS (HyperText Transfer Protocol Secure).
-- Répartir le trafic entre plusieurs Sous-régions (Availability Zones) ou sous-réseaux (subnets).
-- Configurer des vérifications d'état (health checks) pour vérifier l'état de chaque VM et rediriger le trafic uniquement vers les instances saines.
+- distribute the network load using the TCP (Transmission Control Protocol)/SSL (Secure Sockets Layer) and HTTP (HyperText Transfer Protocol)/HTTPS (HyperText Transfer Protocol Secure) protocols;
+- distribute the traffic across several Availability Zones (AZ) or subnets;
+- configure health checks to verify the state of each VM and redirect traffic only to healthy instances.
 
-## Informations générales
+## General information
 
-### Équilibreurs de charge et VM backend
+### Load balancers and backend VM
 
-Les VM enregistrées auprès d'un équilibreur de charge sont appelées VM backend. Vous pouvez enregistrer autant de VM backend que nécessaire, et les (dés)enregistrer à tout moment selon vos besoins.
+The VM registered with a load balancer are called backend VM. You can register as many backend VM as needed, and (de)register them at any time according to your requirements.
 
 :::info
-- Vous pouvez enregistrer une VM backend auprès d'un équilibreur de charge relié à Internet en utilisant son adresse IP publique. Voir : *Lier une IP publique à une VM ou à une interface réseau* et *Enregistrer des VM auprès d'un équilibreur de charge*.
-- Un équilibreur de charge est créé dans une Sous-région ou un sous-réseau spécifique, mais il peut distribuer du trafic vers toutes les Sous-régions de sa région ou tous les sous-réseaux de son réseau.
+- You can register a backend VM with an Internet-facing load balancer using its public IP address. See: *Attach a public IP to a VM or to a network interface* and *Register VM with a load balancer*.
+- A load balancer is created in a specific Availability Zone or subnet, but it can distribute traffic to all the Availability Zones of its region or all the subnets of its network.
 :::
 
-Selon leurs [groupes de sécurité (security groups)](/docs/compute/security-groups/concepts/concept-sg/), les VM backend peuvent recevoir :
+Depending on their [security groups](/docs/compute/security-groups/concepts/concept-sg/), backend VM can receive:
 
-- uniquement le trafic venant de l'équilibreur de charge,
-- ou le trafic provenant d'autres sources (par exemple un autre équilibreur de charge ou Internet).
+- only the traffic coming from the load balancer;
+- or the traffic coming from other sources (for example another load balancer or the Internet).
 
-Les équilibreurs de charge fonctionnent en tourniquet (round robin) : les requêtes entrantes sont réparties équitablement entre toutes les VM backend. L'équilibreur de charge effectue également des vérifications d'état pour déterminer quelles VM sont disponibles pour le trafic. Pour en savoir plus, voir *Configurer les vérifications d'état*.
+Load balancers operate in round robin: incoming requests are distributed evenly across all the backend VM. The load balancer also performs health checks to determine which VM are available for the traffic. For more information, see *Configure health checks*.
 
 :::tip
-Un seul type de vérification d'état peut être configuré par équilibreur de charge. Il est recommandé de créer un équilibreur de charge par service afin d'éviter les faux positifs ou la non-détection d'une panne.
+Only one type of health check can be configured per load balancer. It is recommended to create one load balancer per service in order to avoid false positives or the failure to detect an outage.
 :::
 
-### Types d'équilibreurs de charge
+### Load balancer types
 
-Un équilibreur de charge peut être :
+A load balancer can be:
 
 - **Public (Internet-facing)**
-- **Interne (privé)**
+- **Internal (private)**
 
-**Équilibreur de charge public** :
+**Public load balancer**:
 
-Créé dans un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/), il distribue les flux entrants venant d'Internet entre les VM backend situées dans différentes Sous-régions d'une même région ou dans plusieurs sous-réseaux d'un même VPC. Ce type d'équilibreur de charge est accessible depuis Internet.
+Created in a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/), it distributes the incoming flows coming from the Internet across the backend VM located in different Availability Zones of the same region or in several subnets of the same VPC. This type of load balancer is accessible from the Internet.
 
-<img src="/img/console/network/load-balancer/FR-sch-LBU-InternetLBNet-v2.png" alt="Architecture d'un Load Balancer Internet distribuant le trafic vers plusieurs instances" />
+<img src="/img/console/network/load-balancer/en-sch-LBU-InternetLBNet-v2.png" alt="Architecture of an Internet-facing load balancer distributing traffic to several instances" />
 
-**Équilibreur de charge interne** :
+**Internal load balancer**:
 
-Créé dans un réseau privé (VPC ou Net), il distribue le trafic entre les VM backend dans un ou plusieurs sous-réseaux. Ce type d'équilibreur de charge est accessible uniquement depuis le bloc CIDR (Classless Inter-Domain Routing) interne du réseau.
+Created in a private network (VPC or Net), it distributes the traffic across the backend VM in one or more subnets. This type of load balancer is accessible only from the internal CIDR (Classless Inter-Domain Routing) block of the network.
 
-<img src="/img/console/network/load-balancer/FR-sch-LBU-InternalLB-v2.png" alt="Architecture d'un load balancer interne pour la répartition du trafic privé" />
+<img src="/img/console/network/load-balancer/FR-sch-LBU-InternalLB-v2.png" alt="Architecture of an internal load balancer for private traffic distribution" />
 
-### Nom DNS
+### DNS name
 
-Chaque équilibreur de charge reçoit automatiquement un nom DNS (Domain Name System), composé de son nom et de son point d'accès (`nom-du-load-balancer.endpoint`). Ce nom DNS permet d'y accéder et d'y envoyer du trafic.
+Each load balancer automatically receives a DNS (Domain Name System) name, made up of its name and its endpoint (`load-balancer-name.endpoint`). This DNS name is used to access it and send traffic to it.
 
-- Les équilibreurs de charge publics reçoivent un nom DNS public.
-- Les équilibreurs de charge internes reçoivent un nom DNS privé.
+- Public load balancers receive a public DNS name.
+- Internal load balancers receive a private DNS name.
 
 :::info
-Le nom DNS d'un équilibreur de charge interne est résolu vers son adresse IP privée, que ce soit en interne (dans le réseau) ou publiquement (dans un environnement connecté).
+The DNS name of an internal load balancer is resolved to its private IP address, whether internally (within the network) or publicly (in a connected environment).
 :::
 
-### Adresse IP publique
+### Public IP address
 
-Les adresses IP publiques sont des adresses IPv4 publiques que vous pouvez allouer à votre compte Numspot. Elles peuvent être associées à des équilibreurs de charge publics pour leur permettre de recevoir du trafic Internet.
+Public IP addresses are public IPv4 addresses that you can allocate to your Numspot account. They can be associated with public load balancers to allow them to receive Internet traffic.
 
-Les adresses IP publiques associées peuvent :
+The associated public IP addresses can:
 
-- soit appartenir à Numspot (lorsqu'elles sont créées automatiquement par la plateforme),
-- soit être provisionnées dans votre propre espace compte (lorsque vous les allouez explicitement).
+- either belong to Numspot (when they are created automatically by the platform);
+- or be provisioned in your own account space (when you allocate them explicitly).
 
-Le tableau ci-dessous décrit le comportement d'association selon les paramètres utilisés :
+The table below describes the association behavior depending on the parameters used:
 
-| Méthode de l'API Numspot | Spécification de l'adresse IP publique | Comportement d'association |
+| Numspot API method | Public IP address specification | Association behavior |
 |---|---|---|
-| `CreateLoadBalancer` | Spécifiée | L'adresse IP publique indiquée est associée à l'équilibreur de charge. |
-| `CreateLoadBalancer` | Non spécifiée | Une adresse IP publique gérée par Numspot est automatiquement créée et associée à l'équilibreur de charge. |
-| `UpdateLoadBalancer` | Spécifiée | Si l'adresse IP précédente vous appartenait, elle est dissociée. Si elle appartenait à Numspot, elle est libérée. |
-| `UpdateLoadBalancer` | Spécifiée avec une valeur vide | Si l'adresse IP précédente vous appartenait, elle est remplacée par une adresse IP gérée par Numspot. Si elle appartenait déjà à Numspot, elle reste inchangée. |
-| `UpdateLoadBalancer` | Non spécifiée | Aucun changement d'adresse IP. |
-| `DeleteLoadBalancer` | — | Si l'adresse IP publique vous appartient, elle est dissociée. Si elle est gérée par Numspot, elle est automatiquement supprimée. |
+| `CreateLoadBalancer` | Specified | The specified public IP address is associated with the load balancer. |
+| `CreateLoadBalancer` | Not specified | A public IP address managed by Numspot is automatically created and associated with the load balancer. |
+| `UpdateLoadBalancer` | Specified | If the previous IP address belonged to you, it is disassociated. If it belonged to Numspot, it is released. |
+| `UpdateLoadBalancer` | Specified with an empty value | If the previous IP address belonged to you, it is replaced by an IP address managed by Numspot. If it already belonged to Numspot, it remains unchanged. |
+| `UpdateLoadBalancer` | Not specified | No IP address change. |
+| `DeleteLoadBalancer` | — | If the public IP address belongs to you, it is disassociated. If it is managed by Numspot, it is automatically deleted. |
 
-Pour plus d'informations, voir [À propos des IP publiques](/docs/network/public-ip/concepts/).
+For more information, see [About public IP](/docs/network/public-ip/concepts/).
 
 ## Configuration
 
 ### Listeners
 
-Chaque équilibreur de charge doit être créé avec au moins un listener, c'est-à-dire un processus chargé d'écouter le trafic entrant sur un port et un protocole spécifiques.
+Each load balancer must be created with at least one listener, that is, a process responsible for listening to incoming traffic on a specific port and protocol.
 
-Un listener définit :
+A listener defines:
 
-- le protocole et le port frontend (côté client),
-- et le protocole et le port backend (côté VM).
+- the frontend protocol and port (client side);
+- and the backend protocol and port (VM side).
 
-Les protocoles pris en charge sont :
+The supported protocols are:
 
 - HTTP / HTTPS
 - TCP / SSL
 
 :::warning
-- Les protocoles sécurisés pris en charge sont TLS (Transport Layer Security) 1.1 et TLS 1.2. TLS 1.0 et les versions obsolètes de SSL ne sont pas supportées.
-- Un listener ne peut pas être modifié après création, mais vous pouvez en ajouter ou en supprimer plusieurs par équilibreur de charge.
+- The supported secure protocols are TLS (Transport Layer Security) 1.1 and TLS 1.2. TLS 1.0 and the deprecated versions of SSL are not supported.
+- A listener cannot be modified after creation, but you can add or remove several of them per load balancer.
 :::
 
-Les ports doivent être compris entre 1 et 65535 inclus. Les protocoles frontend et backend doivent être de même type :
+The ports must be between 1 and 65535 inclusive. The frontend and backend protocols must be of the same type:
 
 - HTTP(S) → HTTP
 - TCP/SSL → TCP
 
-Vous pouvez également configurer des listener rules pour rediriger le trafic selon le chemin URI ou d'autres critères. Voir *Créer une listener rule*.
+You can also configure listener rules to redirect traffic according to the URI path or other criteria. See *Create a listener rule*.
 
-### Sessions persistantes
+### Sticky sessions
 
-Par défaut, chaque requête réseau est distribuée indépendamment. Pour maintenir la session d'un même utilisateur sur la même VM backend, vous pouvez activer les sessions persistantes (sticky sessions) à l'aide d'un cookie de persistance.
+By default, each network request is distributed independently. To keep the session of a given user on the same backend VM, you can enable sticky sessions using a persistence cookie.
 
-Deux modes existent :
+Two modes exist:
 
-- **Basé sur une durée** : le cookie a une durée fixe.
-- **Contrôlé par l'application** : la session dure tant que le cookie défini par la VM backend est valide.
+- **Duration-based**: the cookie has a fixed duration.
+- **Application-controlled**: the session lasts as long as the cookie defined by the backend VM is valid.
 
 :::warning
-Les sessions persistantes sont disponibles uniquement pour les équilibreurs de charge avec des listeners HTTP ou HTTPS.
+Sticky sessions are available only for load balancers with HTTP or HTTPS listeners.
 :::
 
 :::info
-En cas de défaillance de la VM backend, la session est automatiquement redirigée vers une VM saine et reste active jusqu'à expiration du cookie.
+In the event of a backend VM failure, the session is automatically redirected to a healthy VM and remains active until the cookie expires.
 :::
 
 :::tip
-Vous pouvez activer des cookies sécurisés (secure cookies), utilisables uniquement via HTTPS, pour renforcer la sécurité des sessions.
+You can enable secure cookies, usable only over HTTPS, to strengthen session security.
 :::
 
-### Redirections SSL
+### SSL redirections
 
-Vous pouvez activer le chiffrement du trafic entre les clients et l'équilibreur de charge en configurant un listener HTTPS ou SSL à l'aide d'un certificat serveur x509. Ce certificat, délivré par une autorité de certification, contient la clé publique et la signature utilisée pour l'authentification du serveur.
+You can enable encryption of the traffic between clients and the load balancer by configuring an HTTPS or SSL listener using an x509 server certificate. This certificate, issued by a certification authority, contains the public key and the signature used for server authentication.
 
-- Dans le cas d'une **terminaison SSL**, l'équilibreur de charge déchiffre les requêtes avant de les transmettre aux VM backend (trafic en clair interne).
-- Dans le cas d'un **SSL passthrough**, le chiffrement est maintenu de bout en bout : le certificat est installé directement sur les VM backend.
+- In the case of an **SSL termination**, the load balancer decrypts the requests before forwarding them to the backend VM (internal cleartext traffic).
+- In the case of an **SSL passthrough**, encryption is maintained end-to-end: the certificate is installed directly on the backend VM.
 
 :::info
-Le certificat SSL peut être remplacé à tout moment via l'API Numspot ou la Console. Pour plus d'informations, voir *Remplacer le certificat SSL utilisé par un équilibreur de charge HTTPS*.
+The SSL certificate can be replaced at any time via the Numspot API or the Console. For more information, see *Replace the SSL certificate used by an HTTPS load balancer*.
 :::
 
-Pour utiliser la terminaison SSL :
+To use SSL termination:
 
-1. Téléchargez votre certificat serveur dans EIM (Elastic Identity Management).
-2. Référencez-le via son NRN (Numspot Resource Name) lors de la création du listener.
+1. Upload your server certificate to EIM (Elastic Identity Management).
+2. Reference it via its NRN (Numspot Resource Name) when creating the listener.
 
 :::tip
-Il est recommandé d'utiliser un certificat par équilibreur de charge pour une gestion simplifiée et un renouvellement indépendant.
+It is recommended to use one certificate per load balancer for simplified management and independent renewal.
 :::

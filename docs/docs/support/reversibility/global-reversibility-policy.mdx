@@ -1,71 +1,70 @@
 ---
-title: Politique générale de réversibilité - Numspot
-sidebar_label: Politique générale de réversibilité
-description: Politique générale de réversibilité de Numspot, garantissant la liberté de choix et la portabilité des données
+title: General reversibility policy - Numspot
+sidebar_label: General reversibility policy
+description: Numspot's general reversibility policy, guaranteeing freedom of choice and data portability
 sidebar_position: 1
 draft: false
 ---
 
-# Politique générale de réversibilité
+# General reversibility policy
 
-## Objectif
+## Objective
 
-La réversibilité est un engagement fondamental de Numspot. Nous favorisons un écosystème ouvert et interopérable pour garantir la liberté de choix de nos clients.
-À ce titre, nous nous conformons aux principes du code de conduite [SWIPO (SWItching et POrting)](https://swipo.eu/download-section/copyrighted-downloads/) pour les fournisseurs Cloud, conçu avec la Commission Européenne.
+Reversibility is a fundamental commitment of Numspot. We promote an open and interoperable ecosystem to guarantee our customers' freedom of choice.
+As such, we comply with the principles of the [SWIPO (SWItching and POrting)](https://swipo.eu/download-section/copyrighted-downloads/) code of conduct for cloud providers, designed with the European Commission.
 
-Nos principes de réversibilité sont les suivants : un environnement ouvert et standard dans lequel nos clients ont un contrôle étendu sur leurs systèmes et leurs données ; une documentation client détaillée pour faciliter au mieux la migration entrante et sortante.
+Our reversibility principles are as follows: an open and standard environment in which our customers have extensive control over their systems and their data; detailed customer documentation to facilitate inbound and outbound migration as much as possible.
 
-## Modèle de réversibilité général pour Numspot
+## General reversibility model for Numspot
 
-### Contrôle des infrastructures par nos clients
+### Infrastructure control by our customers
 
-Notre modèle en tant que fournisseur d'infrastructure cloud souveraine est de donner aux clients des droits d'administration étendus sur leurs infrastructures.
-En particulier, un client doit avoir la liberté de procéder à une migration en autonomie, par exemple d'importer des éléments, ou d'exporter ses données vers les infrastructures d'autres fournisseurs.
+Our model as a sovereign cloud infrastructure provider is to give customers extensive administration rights over their infrastructures.
+In particular, a customer must have the freedom to carry out a migration autonomously, for example to import elements, or to export their data to the infrastructures of other providers.
 
-En conséquence, nous considérons que notre responsabilité est d'offrir un environnement technique stable et standardisé, et que la mise en œuvre effective d'une réversibilité est en grande partie du domaine de responsabilité client.
-Les actions en responsabilité client incluent la planification, la prévision des volumes, l'export et l'import effectif de données, la sécurisation des transferts de données.
+As a result, we consider that our responsibility is to offer a stable and standardized technical environment, and that the effective implementation of reversibility largely falls within the customer's area of responsibility.
+Customer-responsibility actions include planning, volume forecasting, the actual export and import of data, and securing data transfers.
 
-En outre, nous ne faisons pas intervenir de tiers sur la fourniture de nos services ; cette fourniture et les responsabilités techniques qui en découlent (possibilité d'accéder ou d'intervenir sur les infrastructures clients, maintien en condition opérationnelle) restent la responsabilité de Numspot.
+In addition, we do not involve third parties in the provision of our services; this provision and the technical responsibilities that follow from it (the ability to access or operate on customer infrastructures, maintenance in operational condition) remain Numspot's responsibility.
 
-### Formats et outils standards
+### Standard formats and tools
 
-L'utilisation généralisée d'outils et de formats standards est un point clef pour la réversibilité.
-Nos infrastructures sont alignées sur des briques standards du marché, soit ouvertes, soit créées et maintenues par un éditeur reconnu.
-À ce titre, il doit toujours être possible de migrer le cœur de fonctionnalités d'une architecture.
+The widespread use of standard tools and formats is a key point for reversibility.
+Our infrastructures are aligned with standard market building blocks, either open, or created and maintained by a recognized vendor.
+As such, it must always be possible to migrate the core functionality of an architecture.
 
-Cependant, nous ne garantissons pas la possibilité de migrer l'intégralité des fonctionnalités des produits Numspot.
-En effet, certaines fonctionnalités additionnelles sont construites en se basant sur les caractéristiques spécifiques de l'environnement Numspot et ne peuvent être migrées telles quelles ; il sera nécessaire de reconstruire des équivalents le cas échéant.
-Reproduire certaines des fonctionnalités développées par Numspot peut être difficile et nécessiter une équipe projet dédiée.
+However, we do not guarantee the ability to migrate the entirety of the functionality of Numspot products.
+Indeed, some additional functionality is built based on the specific characteristics of the Numspot environment and cannot be migrated as is; it will be necessary to rebuild equivalents where applicable.
+Reproducing some of the functionality developed by Numspot may be difficult and require a dedicated project team.
 
-Nous distinguons donc :
+We therefore distinguish:
 
-- Le **cœur de fonctionnalité d'un produit** (par exemple, héberger une base de données, faire fonctionner des machines virtuelles et des espaces de stockage) dont nous garantissons la possibilité de migrer.
-- L'**implémentation Numspot** (par exemple l'API Numspot, la configuration des équipements réseaux), dont la migration nécessitera des adaptations à un nouvel environnement.
-- Les **fonctionnalités spécifiques** (par exemple les fonctionnalités avancées de la console Numspot, les intégrations propres à l'écosystème Numspot), dont la migration telle quelle est impossible à garantir.
+- The **core functionality of a product** (for example, hosting a database, running [virtual machines](/docs/compute/concept) and storage spaces), for which we guarantee the ability to migrate.
+- The **Numspot implementation** (for example the Numspot API, the configuration of network equipment), the migration of which will require adaptations to a new environment.
+- The **specific functionality** (for example the advanced functionality of the Numspot console, the integrations specific to the Numspot ecosystem), the migration of which as is cannot be guaranteed.
 
-### Documentation des procédures de migration
+### Documentation of migration procedures
 
-La documentation orientée réversibilité doit répondre à deux objectifs : en premier lieu, la documentation doit éliminer d'éventuels obstacles bloquants à une migration : par exemple, expliciter des configurations particulières ou des prérequis implicites.
-En second lieu, la documentation permet d'abaisser les compétences nécessaires à la mise en œuvre d'une migration, de la rendre accessible à plus de clients et de diminuer l'investissement humain nécessaire à son bon déroulement.
-En d'autres termes, le rôle de la documentation est de s'assurer qu'une migration possible techniquement est également possible à mettre en pratique dans un projet concret.
+Reversibility-oriented documentation must meet two objectives: first, the documentation must remove any blocking obstacles to a migration: for example, making explicit any particular configurations or implicit prerequisites.
+Second, the documentation makes it possible to lower the skills required to carry out a migration, to make it accessible to more customers and to reduce the human investment needed for it to proceed smoothly.
+In other words, the role of the documentation is to ensure that a migration that is technically possible is also possible to carry out in practice within a concrete project.
 
-La documentation doit, de la même manière que les autres fonctions de réversibilité, considérer l'ensemble des scénarios de migration :
+The documentation must, in the same way as the other reversibility functions, consider all migration scenarios:
 
-- De Numspot vers un autre fournisseur de cloud.
-- De Numspot vers les infrastructures propres au client.
-- D'un autre fournisseur de cloud vers Numspot.
-- Des infrastructures propres du client vers Numspot.
+- From Numspot to another cloud provider.
+- From Numspot to the customer's own infrastructures.
+- From another cloud provider to Numspot.
+- From the customer's own infrastructures to Numspot.
 
-Notre rôle est également de documenter :
+Our role is also to document:
 
-- La distinction entre les fonctionnalités qui appartiennent au cœur, à l'implémentation ou au spécifique Numspot.
-- D'éventuelles particularités d'implémentation, dépendances à un environnement ou une technologie mise en œuvre chez Numspot.
+- The distinction between the functionality that belongs to the core, to the implementation or to the Numspot-specific layer.
+- Any implementation specificities, dependencies on an environment or a technology implemented at Numspot.
 
-## Réversibilité par service
+## Reversibility per service
 
-Les politiques de réversibilité spécifiques à chaque service managé sont détaillées dans les pages suivantes :
+The reversibility policies specific to each managed service are detailed in the following pages:
 
-- [Réversibilité du Kubernetes managé](/docs/support/reversibility/kubernetes/) : export des ressources via `kubectl` et Velero, formats OCI et YAML, pilotes CSI.
-- [Réversibilité du PostgreSQL managé](/docs/support/reversibility/postgresql/) : export logique avec `pg_dump`, formats natifs PostgreSQL, protocoles standards.
-- [Réversibilité du Container Registry managé](/docs/support/reversibility/registry/) : push vers un registry externe, réplication Harbor, format OCI, Docker Registry HTTP API V2.
-- [Réversibilité du Secret Manager managé](/docs/support/reversibility/secret-manager/) : snapshots Raft, export via l'API OpenBao, formats JSON et binaire OpenBao.
+- [Reversibility of managed Kubernetes](/docs/support/reversibility/kubernetes/): export of resources via `kubectl` and Velero, OCI and YAML formats, CSI drivers.
+- [Reversibility of managed PostgreSQL](/docs/support/reversibility/postgresql/): logical export with `pg_dump`, native PostgreSQL formats, standard protocols.
+- [Reversibility of the managed Container Registry](/docs/support/reversibility/registry/): push to an external registry, Harbor replication, OCI format, Docker Registry HTTP API V2.

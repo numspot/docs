@@ -1,5 +1,5 @@
 ---
-title: Augmenter la taille d'un volume
+title: Increase the size of a volume
 sidebar_position: 4
 draft: false
 ---
@@ -7,20 +7,20 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Augmenter la taille d'un volume
+# Increase the size of a volume
 
-Vous pouvez augmenter la capacité de stockage d'un `volume` existant sans perdre les données stockées sur celui-ci.
+You can increase the storage capacity of an existing `volume` without losing the data stored on it.
 
-Vous pouvez modifier la taille de tout type de `volume`, qu'il s'agisse d'un `volume` système sur lequel le système d'exploitation de la [VM (Virtual Machine)](/docs/compute/concept/) est installé, ou d'un `volume` secondaire de la VM.
+You can modify the size of any type of `volume`, whether it is a system `volume` on which the operating system of the [VM (Virtual Machine)](/docs/compute/concept/) is installed, or a secondary `volume` of the VM.
 
 :::info
-Pour les VM créées à partir d'une Image, le paquet cloud-init ajuste automatiquement le système de fichiers du `volume` système après que la taille de ce dernier a été modifiée. Pour en savoir plus, voir la documentation officielle cloud-init (en anglais).
+For VM created from an Image, the cloud-init package automatically adjusts the file system of the system `volume` after its size has been modified. For more information, see the official cloud-init documentation (in English).
 :::
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.blockStorage.update**
 
@@ -29,107 +29,101 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="Linux" default>
 
-## Linux {#tabhead-linux}
+## Increase the size of a system volume in Linux
 
+1. Stop the VM.
+2. From the left-hand side menu, click **Storage** → **[Block Storage](/docs/storage/block-storage/concepts/)** → **Volumes**.
+3. Select the system `volume`.
+4. Click **Modify**.
+5. In the "Size" field, enter the new size of the `volume`.
+6. Click **Modify**.
+7. Start the VM.
 
-### Augmenter la taille d'un volume système dans Linux
+## Increase the size of a secondary volume in Linux
 
-1. Arrêtez la VM.
-2. Depuis le menu latéral gauche, cliquez sur **Storage** → **[Block Storage](/docs/storage/block-storage/concepts/)** → **Volumes**.
-3. Sélectionnez le `volume` système.
-4. Cliquez sur **Modifier**.
-5. Dans le champ "Taille", entrez la nouvelle taille du `volume`.
-6. Cliquez sur **Modifier**.
-7. Démarrez la VM.
+### Unmount the volume
 
-### Augmenter la taille d'un volume secondaire dans Linux
-
-### Démonter le volume
-
-1. Connectez-vous à la VM.
-2. (optionnel) Pour obtenir le nom du périphérique correspondant au `volume` que vous voulez démonter, exécutez la commande suivante pour afficher la liste des périphériques attachés à la VM :
+1. Connect to the VM.
+2. (optional) To obtain the device name corresponding to the `volume` you want to unmount, run the following command to display the list of devices attached to the VM:
     ```bash
     $ lsblk
     ```
-3. Pour démonter le `volume`, exécutez la commande suivante :
+3. To unmount the `volume`, run the following command:
     ```bash
     $ sudo umount /dev/DEVICE_NAME
     ```
 
-### Augmenter la taille du volume
+### Increase the size of the volume
 
-1. Détachez le `volume` de la VM.
-2. Modifiez la taille du `volume`.
-3. Rattachez le `volume` à la VM.
+1. Detach the `volume` from the VM.
+2. Modify the size of the `volume`.
+3. Reattach the `volume` to the VM.
 
-##### Configurer le système de fichiers du volume
+##### Configure the file system of the volume
 
-1. À l'intérieur de la VM, pour remonter le `volume` sur /MOUNT_POINT, exécutez la commande suivante :
+1. Inside the VM, to remount the `volume` on /MOUNT_POINT, run the following command:
     ```bash
     $ sudo mount /dev/DEVICE_NAME /MOUNT_POINT
     ```
-2. Modifiez la taille du système de fichiers du `volume` :
-    - Pour modifier la taille d'un système de fichiers ext4, exécutez la commande suivante :
+2. Modify the size of the file system of the `volume`:
+    - To modify the size of an ext4 file system, run the following command:
     ```bash
     $ sudo resize2fs /dev/DEVICE_NAME
     ```
-    - Pour modifier la taille d'un système de fichiers XFS, exécutez la commande suivante :
+    - To modify the size of an XFS file system, run the following command:
     ```bash
     $ sudo xfs_growfs /dev/DEVICE_NAME
     ```
-    - (optionnel) Exécutez la commande `df -hT` pour visualiser les tailles de vos systèmes de fichiers.
+    - (optional) Run the `df -hT` command to view the sizes of your file systems.
 
-Le système de fichiers du `volume` est configuré.
+The file system of the `volume` is configured.
 
 </TabItem>
 <TabItem value="Windows">
 
-## Windows {#tabhead-windows}
+## Increase the size of a system volume in Windows
 
+### Increase the size of the volume
 
-### Augmenter la taille d'un volume système dans Windows
+1. Stop the VM.
+2. Modify the size of the `volume`. 
+3. Start the VM.
 
-### Augmenter la taille du volume
+### Configure the file system of the volume
 
-1. Arrêtez la VM.
-2. Modifiez la taille du `volume`. 
-3. Démarrez la VM.
+1. Connect to your VM.
+2. Click the **Start** menu, type "diskmgmt.msc" and click the program that appears.
+3. Right-click the `volume` and select **Extend Volume**.
 
-### Configurer le système de fichiers du volume
+   The **Extend Volume Wizard** appears.
 
-1. Connectez-vous à votre VM.
-2. Cliquez sur le menu **Démarrer**, tapez "diskmgmt.msc" et cliquez sur le programme qui apparaît.
-3. Faites un clic droit sur le `volume` et sélectionnez **Étendre le volume**.
+4. Keep the default information and click **Next**.
+5. Click **Finish** to confirm.
 
-   L'**Assistant Extension** du volume apparaît.
+    The `volume` is configured and its file system appears in the "Disk Management" list.
 
-4. Conservez les informations par défaut et cliquez sur **Suivant**.
-5. Cliquez sur **Terminer** pour valider.
+## Increase the size of a secondary volume in Windows
 
-    Le `volume` est configuré et son système de fichiers apparaît dans la liste "Gestion des disques".
+### Increase the size of the volume
 
-### Augmenter la taille d'un volume secondaire dans Windows
+1. Connect to your VM.
+2. Click the **Start** menu, type "diskmgmt.msc" and click the program that appears.
+3. In the bottom left-hand panel, right-click the disk corresponding to the `volume` you want to unmount, then click **Offline**.
+4. Detach the `volume` from the VM.
+5. Modify the size of the `volume`.
+6. Reattach the `volume` to the VM. For more information, see Attach a `volume` to a VM.
 
-### Augmenter la taille du volume
+### Configure the file system of the volume
 
-1. Connectez-vous à votre VM.
-2. Cliquez sur le menu **Démarrer**, tapez "diskmgmt.msc" et cliquez sur le programme qui apparaît.
-3. Dans le panneau en bas à gauche, faites un clic droit sur le disque correspondant au `volume` que vous voulez démonter, puis cliquez sur **Hors connexion**.
-4. Détachez le `volume` de la VM.
-5. Modifiez la taille du `volume`.
-6. Rattachez le `volume` à la VM. Pour en savoir plus, voir Attacher un `volume` à une VM.
+1. Inside the VM, in the bottom left-hand panel, right-click the disk corresponding to the `volume` you want to mount, then click **Online**.
+2. Right-click the `volume` and select **Extend Volume**.
 
-### Configurer le système de fichiers du volume
+    The **Extend Volume Wizard** appears.
 
-1. À l'intérieur de la VM, dans le panneau en bas à gauche, faites un clic droit sur le disque correspondant au `volume` que vous voulez monter, puis cliquez sur **En ligne**.
-2. Faites un clic droit sur le `volume` et sélectionnez **Étendre le volume**.
-    
-    L'**Assistant Extension du volume** apparaît.
+3. Keep the default information and click **Next**.
+4. Click **Finish** to confirm.
 
-3. Conservez les informations par défaut et cliquez sur **Suivant**.
-4. Cliquez sur **Terminer** pour valider.
-    
-    Le `volume` est configuré et son système de fichiers apparaît dans la liste "Gestion des disques".
+    The `volume` is configured and its file system appears in the "Disk Management" list.
 
 </TabItem>
 </Tabs>

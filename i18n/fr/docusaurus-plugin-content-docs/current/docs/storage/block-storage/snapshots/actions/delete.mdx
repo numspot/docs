@@ -1,0 +1,56 @@
+---
+title: Supprimer un snapshot
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer un snapshot
+
+Vous pouvez supprimer un snapshot dont vous n'avez plus besoin pour libérer vos quotas de ressources. Un snapshot supprimé ne peut être retrouvé ultérieurement.
+
+Vous ne pouvez pas supprimer un snapshot en cours d'utilisation par une `image`. Pour ce faire, vous devez d'abord supprimer l'`image` correspondante.
+
+Vous ne pouvez pas supprimer un snapshot qu'un autre compte a partagé avec vous, car il ne vous appartient pas. De même, si vous supprimez un snapshot que vous avez partagé avec d'autres comptes, celui-ci est automatiquement supprimé de ces comptes également.
+
+:::info
+La suppression d'un snapshot est disponible uniquement via l'API.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.snapshot.delete**
+
+:::
+<Tabs>
+<TabItem value="Console" default>
+
+## Console {#tabhead-console}
+
+  La suppression de snapshot n'est pas disponible via la console. Utilisez l'API ou Terraform.
+</TabItem>
+<TabItem value="API">
+
+## API {#tabhead-api}
+
+    :::info
+Avant de commencer : assurez-vous que vous n'avez plus besoin des données contenues dans le snapshot, ou que vous en avez une sauvegarde, par exemple sur un `volume` ou dans un autre snapshot.
+:::
+
+La commande `DELETE /compute/spaces/{spaceId}/snapshots/{id}` supprime un snapshot spécifié.
+Vous ne pouvez pas supprimer un snapshot actuellement utilisé par une `image`. Pour ce faire, vous devez d'abord supprimer l'`image` correspondante.
+
+[Exemple de requête : Suppression d'un snapshot](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/snapshots/{id})
+</TabItem>
+<TabItem value="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+  La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/snapshot).
+</TabItem>
+</Tabs>

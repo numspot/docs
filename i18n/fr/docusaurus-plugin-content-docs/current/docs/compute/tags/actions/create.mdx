@@ -1,0 +1,126 @@
+---
+title: Créer ou modifier un ou plusieurs tags
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Créer ou modifier un ou plusieurs tags
+
+Pour créer ou modifier un tag, vous devez définir une clé et une valeur. La clé est le nom du tag et la valeur est la valeur du tag. Par exemple, vous pouvez créer un tag avec la clé "environnement" et la valeur "production".
+
+À la création d'une ressource, la Console Numspot permet de définir son tag **Name** (le nom de la ressource). Une fois la ressource créée, vous pouvez ajouter des tags supplémentaires via la Console Numspot ou l'API Numspot.
+
+## Permissions
+
+:::info
+L'ajout ou la modification de tags est une opération de mise à jour de la ressource concernée. Cette action nécessite la permission **IAM** (Identity and Access Management) de mise à jour de chaque ressource ciblée. Par exemple :
+
+- **compute.vm.update** pour une [VM (virtual machine)](/docs/compute/concept/) ;
+- **compute.blockStorage.update** pour un [volume (block storage)](/docs/storage/block-storage/concepts/) ;
+- **compute.loadBalancer.update** pour un [load balancer](/docs/network/load-balancer/concepts/) ;
+- **compute.vpc.update** pour un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+
+Cette liste est donnée à titre d'exemple et n'est pas exhaustive : pour chaque ressource, reportez-vous à sa page d'action.
+
+:::
+
+## Ajouter des tags à vos ressources
+
+<Tabs>
+<TabItem value="Console" label="Console" default>
+
+## Console {#tabhead-Console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/load-balancer/lb-02-actions.png", text: "Depuis la liste de la ressource concernée, ouvrez le menu « Actions » de sa ligne, puis cliquez sur « Gérer les tags ».", hotspot: { x: 0.875, y: 0.4358, w: 0.0884, h: 0.0457 } },
+    { img: "/img/walkthrough/load-balancer/lb-tags-panel.png", text: "Dans le panneau « Gérer les tags », cliquez sur « Créer un tag ».", hotspot: { x: 0.8915, y: 0.2795, w: 0.0974, h: 0.0494 } },
+    { img: "/img/walkthrough/load-balancer/lb-tags-form.png", text: "Renseignez la clé et la valeur du tag, puis cliquez sur « Ajouter le tag ».", hotspot: { x: 0.9104, y: 0.5914, w: 0.0785, h: 0.0444 } },
+    { img: "/img/walkthrough/load-balancer/lb-tags-form.png", text: "Cliquez sur « Valider » pour enregistrer le tag sur la ressource.", hotspot: { x: 0.8708, y: 0.9322, w: 0.1181, h: 0.0494 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, accédez à la liste de la ressource à laquelle vous souhaitez ajouter un tag ;
+2. Sur la ligne de la ressource, ouvrez le menu **Actions**, puis cliquez sur **Gérer les tags** ;
+3. Dans le panneau **Gérer les tags**, cliquez sur **Créer un tag** ;
+4. Renseignez la **clé** et la **valeur** du tag, puis cliquez sur **Ajouter le tag** ;
+5. Cliquez sur **Valider** pour enregistrer.
+
+:::info
+Le parcours est identique pour toutes les ressources qui supportent les tags (VM, volume, load balancer, VPC…). L'exemple ci-dessus est pris sur un load balancer.
+:::
+
+</TabItem>
+<TabItem value="API" label="API">
+
+## API {#tabhead-API}
+
+
+La commande `PATCH /compute/spaces/{spaceId}/bulk/tags` crée un ou plusieurs tag sur vos ressources.
+
+[Exemple de requête : Créer un tag ↗](/openapi/#tag/compute/PATCH/compute/spaces/{spaceId}/bulk/tags)
+
+</TabItem>
+<TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-Terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
+
+</TabItem>
+</Tabs>
+
+## Modifier les valeurs de vos tags
+
+<Tabs>
+<TabItem value="Console" label="Console" default>
+
+## Console {#tabhead-Console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/load-balancer/lb-02-actions.png", text: "Depuis la liste de la ressource concernée, ouvrez le menu « Actions » de sa ligne, puis cliquez sur « Gérer les tags ».", hotspot: { x: 0.875, y: 0.4358, w: 0.0884, h: 0.0457 } },
+    { img: "/img/walkthrough/load-balancer/lb-tags-panel.png", text: "Les tags s'affichent en pastilles non modifiables : supprimez le tag concerné en cliquant sur sa croix.", hotspot: { x: 0.7125, y: 0.3531, w: 0.0153, h: 0.0272 } },
+    { img: "/img/walkthrough/load-balancer/lb-tags-panel.png", text: "Recréez-le ensuite avec la même clé et la nouvelle valeur via « Créer un tag », puis cliquez sur « Valider ».", hotspot: { x: 0.8915, y: 0.2795, w: 0.0974, h: 0.0494 } },
+  ]}
+/>
+
+:::info
+La console Numspot ne permet pas de modifier un tag existant : les tags s'affichent en pastilles non éditables. Pour changer une valeur, supprimez le tag puis recréez-le avec la même clé. L'**API** et **Terraform** permettent en revanche une modification directe (voir les onglets correspondants).
+:::
+
+1. Depuis le menu latéral gauche, accédez à la liste de la ressource dont vous souhaitez modifier un tag ;
+2. Sur la ligne de la ressource, ouvrez le menu **Actions**, puis cliquez sur **Gérer les tags** ;
+3. Cliquez sur la **croix** du tag à modifier pour le supprimer ;
+4. Cliquez sur **Créer un tag**, saisissez la même **clé** et la nouvelle **valeur**, puis cliquez sur **Ajouter le tag** ;
+5. Cliquez sur **Valider** pour enregistrer.
+
+:::info
+Le parcours est identique pour toutes les ressources qui supportent les tags (VM, volume, load balancer, VPC…). L'exemple ci-dessus est pris sur un load balancer.
+:::
+
+</TabItem>
+<TabItem value="API" label="API">
+
+## API {#tabhead-API}
+
+
+La commande `PATCH /compute/spaces/{spaceId}/bulk/tags` modifie un ou plusieurs tag sur vos ressources.
+
+[Exemple de requête : Modifier un tag ↗](/openapi/#tag/compute/PATCH/compute/spaces/{spaceId}/bulk/tags)
+
+</TabItem>
+<TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-Terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
+
+</TabItem>
+</Tabs>

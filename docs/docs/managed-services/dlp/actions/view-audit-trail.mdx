@@ -1,6 +1,6 @@
 ---
-title: Consulter la piste d'audit DLP - DLP managé
-sidebar_label: Consulter la piste d'audit DLP
+title: View the DLP audit trail - Managed DLP
+sidebar_label: View the DLP audit trail
 sidebar_position: 15
 draft: false
 ---
@@ -8,14 +8,14 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Consulter la piste d'audit DLP
+# View the DLP audit trail
 
-Consultez la piste d'audit pour suivre toutes les actions d'administration effectuées sur le service [DLP](/docs/managed-services/dlp/concepts). Chaque action — création, modification, suppression de [règles DLP](/docs/managed-services/dlp/concepts), [policies DLP](/docs/managed-services/dlp/concepts), [détecteurs DLP](/docs/managed-services/dlp/concepts), publication de [ruleset](/docs/managed-services/dlp/concepts) et gestion des utilisateurs — est enregistrée avec l'utilisateur, l'horodatage et les détails de l'action.
+View the audit trail to track all administration actions performed on the [DLP](/docs/managed-services/dlp/concepts) service. Each action — creation, modification, deletion of [DLP rules](/docs/managed-services/dlp/concepts), [DLP policies](/docs/managed-services/dlp/concepts), [DLP detectors](/docs/managed-services/dlp/concepts), [ruleset](/docs/managed-services/dlp/concepts) publication and user management — is recorded with the user, timestamp and action details.
 
 ## Permissions
 
 :::info
-Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+This action requires the following [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) role:
 
 - **viewer**
 
@@ -28,46 +28,46 @@ Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Dat
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Dans la console DLP, cliquez sur Audit Logs dans le menu latéral.", hotspot: { x: 0.006, y: 0.530, w: 0.155, h: 0.044 } },
-    { img: "/img/walkthrough/dlp/audit-logs.png", text: "Utilisez le filtre pour affiner la recherche par type d'action.", hotspot: { x: 0.201, y: 0.159, w: 0.122, h: 0.044 } },
-    { img: "/img/walkthrough/dlp/audit-logs.png", text: "Consultez la liste des événements d'audit.", hotspot: { x: 0.201, y: 0.349, w: 0.786, h: 0.300 } },
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "In the DLP console, click Audit Logs in the side menu.", hotspot: { x: 0.006, y: 0.530, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/audit-logs.png", text: "Use the filter to refine the search by action type.", hotspot: { x: 0.201, y: 0.159, w: 0.122, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/audit-logs.png", text: "Browse the list of audit events.", hotspot: { x: 0.201, y: 0.349, w: 0.786, h: 0.300 } },
   ]}
 />
 
-1. Dans la console [DLP](/docs/managed-services/dlp/concepts), cliquez sur **Audit Logs** dans le menu latéral.
+1. In the [DLP](/docs/managed-services/dlp/concepts) console, click **Audit Logs** in the sidebar.
 
-### Filtrer les événements
+### Filtering events
 
-Utilisez les filtres disponibles pour affiner la recherche :
+Use the available filters to refine the search:
 
-- **Action** : filtrer par type d'action — `rule_create`, `rule_update`, `rule_delete`, `ruleset_publish`, `ruleset_rollback`, `detector_create`, `detector_update`, `detector_delete`, `policy_create`, `policy_update`, `policy_delete`, `user_create`, `user_update`, `user_delete`, `user_password_reset` ;
-- **Time range** : filtrer par période.
+- **Action**: filter by action type — `rule_create`, `rule_update`, `rule_delete`, `ruleset_publish`, `ruleset_rollback`, `detector_create`, `detector_update`, `detector_delete`, `policy_create`, `policy_update`, `policy_delete`, `user_create`, `user_update`, `user_delete`, `user_password_reset`;
+- **Time range**: filter by time period.
 
-### Détails d'un événement
+### Event details
 
-Chaque événement affiche :
+Each event displays:
 
-- l'utilisateur ayant effectué l'action ;
-- le type d'action ;
-- la cible de l'action (règle, détecteur, policy, utilisateur, ruleset) ;
-- le nom de la cible ;
-- les détails de l'action ;
-- l'horodatage.
+- the user who performed the action;
+- the action type;
+- the action target (rule, detector, policy, user, ruleset);
+- the target name;
+- the action details;
+- the timestamp.
 
 </TabItem>
 <TabItem value="api" label="API">
 
-La requête `GET /api/v1/audit` permet de consulter la piste d'audit.
+The `GET /api/v1/audit` request queries the audit trail.
 
-### Paramètres de requête
+### Query parameters
 
-| Paramètre | Description |
+| Parameter | Description |
 |-----------|-------------|
-| `action` | Filtrer par type d'action |
-| `time_start` | Date de début de la période (ISO 8601) |
-| `time_end` | Date de fin de la période (ISO 8601) |
+| `action` | Filter by action type |
+| `time_start` | Start date of the period (ISO 8601) |
+| `time_end` | End date of the period (ISO 8601) |
 
-### Exemple de réponse
+### Response example
 
 ```json
 {
@@ -89,7 +89,7 @@ La requête `GET /api/v1/audit` permet de consulter la piste d'audit.
       "event": "Published ruleset v3",
       "target_type": "ruleset",
       "target_name": "v3",
-      "details": "Description: Ajout de la règle de blocage des clés AWS",
+      "details": "Description: Added AWS key blocking rule",
       "created_at": "2026-08-27T10:30:00Z"
     }
   ],

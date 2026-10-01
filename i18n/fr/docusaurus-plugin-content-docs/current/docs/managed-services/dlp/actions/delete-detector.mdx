@@ -1,0 +1,59 @@
+---
+title: Supprimer un détecteur personnalisé DLP - DLP managé
+sidebar_label: Supprimer un détecteur personnalisé DLP
+sidebar_position: 9
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Supprimer un détecteur personnalisé DLP
+
+Supprimez définitivement un [détecteur DLP](/docs/managed-services/dlp/concepts) personnalisé. Cette action est irréversible. Si le détecteur est référencé dans des règles existantes, vous devez d'abord modifier ces règles.
+
+## Permissions
+
+:::info
+Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+
+- **detector_editor**
+
+:::
+
+:::warning
+La suppression est définitive. Si des règles actives référencent ce détecteur via `@custom:<id>`, elles échoueront lors de l'évaluation. Vérifiez les dépendances avant de supprimer un détecteur.
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Dans la console DLP, cliquez sur Detectors dans le menu latéral.", hotspot: { x: 0.006, y: 0.283, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/detectors-custom.png", text: "Dans le filtre « Type », sélectionnez « Custom » pour afficher les détecteurs personnalisés.", hotspot: { x: 0.649, y: 0.135, w: 0.089, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/detectors-custom.png", text: "Sur la ligne du détecteur à supprimer, cliquez sur l'icône corbeille (rouge).", hotspot: { x: 0.930, y: 0.274, w: 0.025, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/detector-delete.png", text: "Dans la fenêtre de confirmation, cliquez sur « Delete » pour supprimer le détecteur.", hotspot: { x: 0.608, y: 0.531, w: 0.051, h: 0.046 } },
+  ]}
+/>
+
+1. Dans la console [DLP](/docs/managed-services/dlp/concepts), cliquez sur **Detectors** dans le menu latéral.
+2. Cliquez sur l'onglet **Custom** pour afficher les détecteurs personnalisés.
+3. Cliquez sur l'icône de suppression (corbeille) sur la ligne du détecteur à supprimer.
+4. Confirmez la suppression dans la boîte de dialogue.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+La requête `DELETE /api/v1/detectors/custom/{id}` permet de supprimer un [détecteur DLP](/docs/managed-services/dlp/concepts) personnalisé.
+
+### Exemple de réponse
+
+```text
+HTTP/1.1 204 No Content
+```
+
+</TabItem>
+</Tabs>

@@ -56,7 +56,7 @@ function check(content, frontmatter, _glossaryIndex, _pageType, filePath) {
     fromSlug = true;
   } else {
     // Doc-relative path: everything after the last "/docs/" (works for both
-    // docs/docs/… and i18n/en/…/current/docs/…), without the extension.
+    // docs/docs/… and i18n/fr/…/current/docs/…), without the extension.
     const norm = file.replace(/\\/g, '/');
     const idx = norm.lastIndexOf('/docs/');
     target = (idx >= 0 ? norm.slice(idx + 6) : norm).replace(/\.[^.]+$/, '');

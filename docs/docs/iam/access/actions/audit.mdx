@@ -1,6 +1,6 @@
 ---
-title: Auditer les accès d'un espace
-description: "Auditez les accès aux ressources d'un espace, par ressource ou par identité, via l'API ou l'outil space-permission-extractor."
+title: Audit the access of a space
+description: "Audit access to the resources of a space, by resource or by user, via the API or the space-permission-extractor tool."
 sidebar_position: 4
 draft: false
 last_update:
@@ -10,14 +10,14 @@ last_update:
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Auditer les accès d'un espace
+# Audit the access of a space
 
-L'audit des accès permet de savoir quelles identités (utilisateurs ou comptes de service) ont accès aux ressources d'un espace, et à quelles ressources une identité donnée a accès. Vous pouvez procéder via l'API Numspot ou via l'outil space-permission-extractor.
+Access auditing lets you find out which identities (users or service accounts) have access to the resources of a space, and which resources a given identity has access to. You can proceed via the Numspot API or via the space-permission-extractor tool.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **iam.permission.get**
 
@@ -25,34 +25,28 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
-
-
-### Lister les identités ayant accès à une ressource donnée
+## List the identities with access to a given resource
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/resource/{resourceId}
 
-Retourne les identités ayant accès à une ressource donnée d'un espace, ainsi que leurs rôles et permissions.
+Returns the identities with access to a given resource of a space, along with their roles and permissions.
 
-### Lister les ressources accessibles à une identité donnée
+## List the resources accessible to a given identity
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/users/{userId}/resources
 
-Retourne l'ensemble des ressources d'un espace auxquelles une identité a accès.
+Returns all the resources of a space that an identity has access to.
 
 :::info
-Consulter la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [page on using the API](/docs/iam/concepts/api/) for the implementation.
 :::
 
 </TabItem>
 <TabItem value="github" label="GitHub">
 
-## GitHub {#tabhead-github}
+With a TUI (Terminal User Interface), the [space-permission-extractor](https://github.com/numspot/space-permission-extractor) tool queries the IAM API to extract and consolidate the access of a Numspot space, in order to make it easier to audit.
 
-
-Avec une TUI (Interface Utilisateur Terminal), l'outil [space-permission-extractor](https://github.com/numspot/space-permission-extractor) interroge les API IAM pour extraire et consolider les accès d'un espace Numspot, afin d'en faciliter l'audit.
-
-Consultez le [README du projet ↗](https://github.com/numspot/space-permission-extractor#readme) pour l'installation et l'utilisation.
+See the [project README ↗](https://github.com/numspot/space-permission-extractor#readme) for installation and usage.
 
 </TabItem>
 </Tabs>

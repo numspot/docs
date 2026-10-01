@@ -1,58 +1,58 @@
 ---
-title: Versions et cycle de vie - Kubernetes managé
-sidebar_label: Versions et cycle de vie
+title: Versions and lifecycle - Managed Kubernetes
+sidebar_label: Versions and lifecycle
 sidebar_position: 5
 draft: false
 ---
 
-# Versions et cycle de vie
+# Versions and lifecycle
 
-Numspot opère ses [clusters Kubernetes](/docs/managed-services/kubernetes/concepts/) avec des versions stables bénéficiant d'un suivi actif des correctifs de sécurité, en conformité avec les exigences de sécurité appliquées au service.
+Numspot operates its [clusters Kubernetes](/docs/managed-services/kubernetes/concepts/) with stable versions that benefit from active monitoring of security fixes, in compliance with the security requirements applied to the service.
 
-## Versions supportées
+## Supported versions
 
-La version mineure suivante est supportée :
+The following minor version is supported:
 
 - **Kubernetes 1.34**
 
-Ce périmètre couvre les versions stables et activement maintenues par la communauté Kubernetes, avec un suivi continu des bulletins de sécurité.
+This scope covers the stable versions actively maintained by the Kubernetes community, with continuous monitoring of security bulletins.
 
 :::note
-Lors de la création d'un cluster, la version la plus récente est sélectionnée par défaut. Pour plus d'informations, consultez [Créer un cluster Kubernetes](/docs/managed-services/kubernetes/actions/create/).
+When you create a cluster, the most recent version is selected by default. For more information, see [Create a cluster Kubernetes](/docs/managed-services/kubernetes/actions/create/).
 :::
 
-## Suivi des patches de sécurité
+## Security patch monitoring
 
-Les images utilisées pour les clusters Kubernetes intègrent :
+The images used for the clusters Kubernetes include:
 
-- Des mises à jour de correctifs (patch) appliquées régulièrement pour corriger les bugs et les failles de sécurité.
-- Un suivi actif des vulnérabilités critiques et hautes.
-- Une image système durcie suivant les recommandations de l'ANSSI.
+- patch updates applied regularly to fix bugs and security flaws;
+- active monitoring of critical and high vulnerabilities;
+- a hardened system image following the ANSSI recommendations.
 
-Les mises à jour de correctifs sont appliquées automatiquement par Numspot et ne nécessitent aucune action de la part du client. Elles ne concernent que les versions patch (par exemple, `1.34.0` vers `1.34.1`), sans modification de la compatibilité des données.
+Patch updates are applied automatically by Numspot and require no action from the customer. They concern only patch versions (for example, `1.34.0` to `1.34.1`), without any change to data compatibility.
 
 :::info
-Pour obtenir des informations sur les versions appliquées ou les correctifs récents, contactez le support Numspot.
+To obtain information about the applied versions or recent fixes, contact Numspot support.
 :::
 
-## Cycle de vie des versions (lifecycle)
+## Version lifecycle
 
-### Politique de support
+### Support policy
 
-| Version | Statut du support | Date de fin de support communautaire | Fin de support Numspot estimée |
-|---------|-------------------|--------------------------------------|--------------------------------|
-| **1.34** | Active | février 2027 | février 2027 |
+| Version | Support status | Community end-of-support date | Estimated Numspot end of support |
+|---------|----------------|-------------------------------|----------------------------------|
+| **1.34** | Active | February 2027 | February 2027 |
 
-Le statut de support est aligné sur les dates annoncées par le projet Kubernetes. Numspot suit la politique Kubernetes concernant le support des versions mineures.
+The support status is aligned with the dates announced by the Kubernetes project. Numspot follows the Kubernetes policy regarding the support of minor versions.
 
-### Notification de fin de support
+### End-of-support notification
 
-Numspot notifie ses clients **plusieurs mois avant la fin de support** d'une version mineure. Cette notification permet aux clients de planifier la migration vers une version plus récente.
+Numspot notifies its customers **several months before the end of support** of a minor version. This notification enables customers to plan the migration to a more recent version.
 
-## Mises à jour mineures
+## Minor updates
 
-Les mises à jour mineures (par exemple, de Kubernetes 1.33 vers Kubernetes 1.34) nécessitent la mise à jour du cluster. Numspot recommande de tester la compatibilité de vos applications avant de procéder à une mise à jour mineure.
+Minor updates (for example, from Kubernetes 1.33 to Kubernetes 1.34) require the update of the cluster. Numspot recommends testing the compatibility of your applications before performing a minor update.
 
 :::warning
-Numspot ne peut pas garantir la compatibilité ascendante entre les versions mineures. Il est de la responsabilité du client de vérifier que ses applications sont compatibles avec la nouvelle version avant toute migration.
+Numspot cannot guarantee backward compatibility between minor versions. It is the customer's responsibility to verify that their applications are compatible with the new version before any migration.
 :::

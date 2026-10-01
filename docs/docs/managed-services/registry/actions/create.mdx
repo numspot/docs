@@ -1,6 +1,6 @@
 ---
-title: Créer un Container Registry
-sidebar_label: Créer une instance Container Registry
+title: Create a Container Registry
+sidebar_label: Create a Container Registry instance
 sidebar_position: 2
 draft: false
 last_update:
@@ -9,61 +9,58 @@ last_update:
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Créer une instance Container Registry
+# Create a Container Registry instance
 
-Vous avez la possibilité de créer un Container Registry sur mesure au sein de votre espace.
+You can create a custom Container Registry within your space.
 
-Lors de la création, vous pouvez définir les caractéristiques, telles que le nom, la version, et la visibilité.
+During creation, you can define the characteristics, such as the name, the version and the visibility.
 
-Une fois l'instance Container Registry créée, vous avez la possibilité de récupérer le mot de passe administrateur vous permettant de vous connecter à Harbor.
+Once the Container Registry instance has been created, you can retrieve the administrator password that allows you to connect to Harbor.
 
-:::warning Choix du type de réseau
-Le choix entre réseau **Privé** et **Public** détermine qui peut accéder à votre registry :
+:::warning Choosing the network type
+The choice between a **Private** and a **Public** network determines who can access your registry:
 
-- **Privé** : votre Container Registry n'est accessible qu'au sein du réseau interne Numspot. Seules vos autres ressources présentes dans le même réseau peuvent s'y connecter. Cette option est recommandée pour les environnements de production, notamment les environnements SecNumCloud. Pour y accéder de façon sécurisée, vous pouvez utiliser une [VM](/docs/compute/concept/) de rebond et un VPN Numspot.
+- **Private**: your Container Registry is only accessible within the internal Numspot network. Only your other resources located in the same network can connect to it. This option is recommended for production environments, in particular SecNumCloud environments. To access it securely, you can use a bastion [VM](/docs/compute/concept/) (Virtual Machine) and a Numspot VPN (Virtual Private Network).
 
-- **Public** : votre Container Registry est accessible depuis Internet. Toute personne disposant des identifiants de connexion peut s'y connecter, où qu'elle se trouve. Cette option convient aux développements, tests ou environnements où la sécurité réseau n'est pas critique.
+- **Public**: your Container Registry is accessible from the Internet. Anyone with the connection credentials can connect to it, wherever they are located. This option is suitable for development, testing or environments where network security is not critical.
 
-**Recommandation** : Pour garantir la sécurité de vos données en production, privilégiez toujours le réseau **Privé**.
+**Recommendation**: To ensure the security of your data in production, always favor a **Private** network.
 :::
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **registry.instance.create**
 
 :::
 <Tabs>
     <TabItem value="api" label="API" default>
+        The `POST /registry/spaces/{spaceId}/registries` request lets you create and launch a Harbor registry.
+        The Container Registry is in a `PENDING` state until it is created, then moves to the `RUNNING` state.
 
-## API {#tabhead-api}
+        **Choosing the network type**:
 
-        La requête `POST /registry/spaces/{spaceId}/registries` permet de créer et lancer une registry Harbor.
-        Le Container Registry est dans un état `PENDING` jusqu'à sa création, puis passe à l'état `RUNNING`.
+        - **Public**: specify `"visibility": "EXTERNAL"`
+        - **Private**: specify `"visibility": "INTERNAL"`
 
-        **Choix du type de réseau** :
-
-        - **Public** : spécifiez `"visibility": "EXTERNAL"`
-        - **Privé** : spécifiez `"visibility": "INTERNAL"`
-
-        ### Exemple de requête
+        ### Example request
 
         ```json
         {
-          "name": "mon-container-registry",
+          "name": "my-container-registry",
           "version": "2.14",
           "visibility": "EXTERNAL"
         }
         ```
 
-        ### Exemple de réponse
+        ### Example response
 
         ```json
         {
           "id": "550e8400-e29b-41d4-a716-446655440002",
-          "name": "mon-container-registry",
+          "name": "my-container-registry",
           "status": {
             "state": "RUNNING",
             "message": "instance is healthy"
@@ -74,7 +71,7 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
         }
         ```
 
-        [Voir la spécification complète](/openapi/#tag/registry/POST/registry/spaces/{spaceId}/registries)
+        [See the full specification](/openapi/#tag/registry/POST/registry/spaces/{spaceId}/registries)
 
     </TabItem>
     

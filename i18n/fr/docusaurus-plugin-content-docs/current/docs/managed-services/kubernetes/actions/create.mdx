@@ -1,0 +1,255 @@
+---
+title: Créer des clusters Kubernetes - Kubernetes managé
+sidebar_label: Créer des clusters Kubernetes
+sidebar_position: 2
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Créer des clusters Kubernetes
+
+Créez un ou plusieurs [clusters Kubernetes](/docs/managed-services/kubernetes/concepts/) au sein de votre espace.
+
+Lors de la création, définissez les caractéristiques de chaque cluster :
+- Nom
+- Version de Kubernetes
+- CIDR (Classless Inter-Domain Routing)
+- Visibilité
+- profil du groupe de nœuds (node pool) par défaut : performance, taille de la mémoire vive et nombre de vCPU (virtual CPU)
+
+Une fois le cluster créé, récupérez le fichier kubeconfig pour vous connecter via la commande `kubectl`.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+
+- **kubernetes.cluster.create**
+
+:::
+
+:::warning Choix du type de réseau
+Le choix entre réseau **Privé** et **Public** détermine qui peut accéder à votre cluster :
+
+- **Privé** : votre cluster n'est accessible qu'au sein du réseau interne Numspot. Seules vos autres ressources présentes dans le même réseau peuvent s'y connecter. Cette option est recommandée pour les environnements de production, notamment les environnements SecNumCloud. Pour y accéder de façon sécurisée, vous pouvez utiliser une [VM](/docs/compute/concept/) de rebond et un VPN (Virtual Private Network) Numspot.
+
+- **Public** : votre cluster est accessible depuis Internet. Toute personne disposant des identifiants de connexion peut s'y connecter, où qu'elle se trouve. Cette option convient aux développements, tests ou environnements où la sécurité réseau n'est pas critique.
+
+**Recommandation** : Pour garantir la sécurité de vos données en production, privilégiez toujours le réseau **Privé**.
+:::
+
+<Tabs>
+    <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+        <Walkthrough
+          steps={[
+            { img: "/img/walkthrough/k8s/01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Services Managés → Kubernetes.", hotspot: { x: 0, y: 0.3556, w: 0.194, h: 0.0543 } },
+            { img: "/img/walkthrough/k8s/01-list.png", text: "Depuis la liste des clusters Kubernetes, cliquez sur « Créer un cluster » pour lancer l'assistant.", hotspot: { x: 0.8415, y: 0.223, w: 0.1252, h: 0.0691 } },
+            { img: "/img/walkthrough/k8s/02-nom.png", text: "Donnez un nom à votre cluster (3 à 63 caractères : lettres, chiffres, « - » ou « _ »).", hotspot: { x: 0.2444, y: 0.2691, w: 0.5153, h: 0.079 } },
+            { img: "/img/walkthrough/k8s/03-config.png", text: "Choisissez la version de Kubernetes (la plus récente par défaut) et renseignez la plage IP au format CIDR.", hotspot: { x: 0.2444, y: 0.5026, w: 0.5153, h: 0.1655 } },
+            { img: "/img/walkthrough/k8s/04-reseau.png", text: "Sélectionnez le type de réseau : Privé (recommandé en production) ou Public.", hotspot: { x: 0.2444, y: 0.4874, w: 0.5153, h: 0.214 } },
+            { img: "/img/walkthrough/k8s/05-controlplane.png", text: "Dimensionnez le control plane selon le nombre de nodes prévu.", hotspot: { x: 0.2444, y: 0.5022, w: 0.5153, h: 0.0742 } },
+            { img: "/img/walkthrough/k8s/06-nodepool-nom.png", text: "Nommez le premier node pool (groupe de nœuds) du cluster.", hotspot: { x: 0.2444, y: 0.5, w: 0.5153, h: 0.079 } },
+            { img: "/img/walkthrough/k8s/07-zone.png", text: "Choisissez la zone de disponibilité du node pool.", hotspot: { x: 0.2444, y: 0.4938, w: 0.5153, h: 0.1877 } },
+            { img: "/img/walkthrough/k8s/08-node-type.png", text: "Sélectionnez le type de nodes (avec ou sans GPU, puis le gabarit). Tous les nodes du pool partagent ce type.", hotspot: { x: 0.2444, y: 0.5129, w: 0.5153, h: 0.4706 } },
+            { img: "/img/walkthrough/k8s/09-volume.png", text: "Choisissez le type de volume système (Magnetic, Performance ou Enterprise) et sa taille.", hotspot: { x: 0.2444, y: 0.4936, w: 0.5153, h: 0.1877 } },
+            { img: "/img/walkthrough/k8s/10-nodes.png", text: "Activez l'autoscaling ou fixez le nombre de nodes (entre 1 et 20).", hotspot: { x: 0.2444, y: 0.6455, w: 0.5153, h: 0.0667 } },
+            { img: "/img/walkthrough/k8s/11-creer.png", text: "Vérifiez le récapitulatif à droite, puis cliquez sur « Créer ». Le cluster passe en cours de création.", hotspot: { x: 0.7281, y: 0.9405, w: 0.0524, h: 0.0595 } },
+          ]}
+        />
+
+        1. Depuis le menu latéral de gauche, cliquez sur **Services managés** → **Kubernetes** pour accéder à la liste des clusters Kubernetes.
+
+        2. Cliquez sur le bouton **Créer un cluster** situé en haut à droite de l'écran pour lancer l'assistant de création d'un cluster Kubernetes.
+
+### Nom du cluster
+
+        Spécifiez un nom qui vous permettra d'identifier votre cluster Kubernetes.
+        Ce nom doit respecter les critères suivants :
+
+        - Longueur : entre 3 et 63 caractères ;
+        - Caractères autorisés : uniquement des lettres (a-z, A-Z), des chiffres (0-9), des tirets (`-`) ou des tirets bas (`_`) ;
+        - Structure :
+          - doit commencer et se terminer par un caractère alphanumérique ;
+          - les tirets (`-`) ou tirets bas (`_`) ne peuvent pas être consécutifs ni placés en début ou fin de nom.
+        
+        Exemple valide : `mon-cluster_Kubernetes-2026`.
+
+### Configuration du cluster
+
+
+        1. Sélectionnez la version de Kubernetes souhaitée. La version la plus actuelle est sélectionnée par défaut.
+        2. Renseignez la plage IP de votre cluster au format CIDR.
+
+            La plage d'adresses IP est utilisée pour attribuer des adresses aux nodes du cluster. Elle ne doit pas chevaucher une autre plage existante pour éviter les conflits d'adressage réseau. Le masque de sous-réseau doit être compris entre /16 et /20.
+
+            - **Format attendu** : `adresse IP / masque de sous-réseau`
+            - **Exemple courant** : `192.168.1.0/16`
+
+        3. Sélectionnez le type de réseau parmi les options suivantes :
+
+            - Privé : le cluster est accessible uniquement depuis le réseau interne.
+            - Public : le cluster est accessible depuis Internet via une adresse IP publique ;
+        
+### Dimensionnement du control plane
+
+
+        Sélectionnez la taille du control plane adaptée à vos besoins.
+
+        :::danger Profil XS réservé aux tests
+        Le profil **XS** est strictement réservé aux tests et à l'expérimentation. En raison de ses ressources très limitées, il est **fortement déconseillé** de l'utiliser en production.
+        :::
+
+        | **Taille de t-shirt** | **vCPU max** | **RAM max** | **Nombre de nodes recommandé** |
+        | --- | --- | --- | --- |
+        | XS | 250m (0,25 vCPU) | 512 Mi | Jusqu'à 5 nodes (tests uniquement) |
+        | S | 250m (0,25 vCPU) | 1 Gi | Jusqu'à 20 nodes |
+        | M | 500m (0,5 vCPU) | 2 Gi | Jusqu'à 50 nodes |
+        | L | 1 vCPU | 4 Gi | Jusqu'à 100 nodes |
+
+        Le nombre de nodes recommandé est estimé à partir des limites de l'API-server. Plus le cluster est dense (pods, services, requêtes API), plus ces seuils doivent être ajustés à la baisse.
+
+### Configuration du groupe de nœuds
+
+        La création d'un cluster Kubernetes via la console comprend également la création du premier groupe de nœuds de ce cluster.
+
+
+        1. Spécifiez un nom qui vous permettra d'identifier votre groupe de nœuds.
+          Ce nom doit respecter les critères suivants :
+
+        - Longueur : entre 3 et 63 caractères ;
+        - Caractères autorisés : uniquement des lettres (a-z, A-Z), des chiffres (0-9), des tirets (`-`) ou des tirets bas (`_`) ;
+        - Structure :
+          - doit commencer et se terminer par un caractère alphanumérique ;
+          - les tirets (`-`) ou tirets bas (`_`) ne peuvent pas être consécutifs ni placés en début ou fin de nom.
+        
+        Exemple valide : `mon-node_pool-2026`.
+
+        2. Sélectionnez la zone de disponibilité de votre groupe de nœuds.
+
+
+        3. Sélectionnez le type de nodes de votre groupe de nœuds.
+          Tous les nodes d'un groupe de nœuds ont le même type.
+
+
+        4. Sélectionnez le type de volume système parmi les options suivantes :
+
+        - Magnetic : volume magnétique économique, adapté aux usages peu intensifs en lecture/écriture ;
+        - Performance : SSD performant pour la production ;
+        - Enterprise : SSD avec 300 IOPS (Input/Output Operations Per Second) par Gio garantis pour les charges de travail critiques.
+
+        5. Renseignez la taille de volume système nécessaire pour votre groupe de nœuds. Pour un volume **Enterprise**, renseignez également le nombre d'IOPS souhaité, compris entre 1000 et 13000.
+
+
+        6. Activez l'autoscaling si vous le souhaitez et renseignez les nombres minimum et maximum de nodes.
+          Le nombre de nodes peut varier entre 1 et 20.
+
+
+        Si vous ne souhaitez pas activer l'autoscaling, renseignez simplement le nombre de nodes nécessaires - compris entre 1 et 20.
+
+
+### Création du cluster
+
+        Pour finaliser la création du cluster, cliquez sur le bouton **Créer**.
+
+        Vous êtes redirigé vers la page de détails du cluster. Votre cluster est alors en cours de création. Son statut se mettra à jour dès qu'il sera opérationnel, après quelques minutes seulement.
+    </TabItem>
+    <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+        La commande `POST /kubernetes/spaces/{spaceId}/clusters` permet de créer et lancer un cluster Kubernetes.
+        - **États** : Le cluster passe de l'état "pending" à "running" une fois créé.
+
+        **Choix du type de réseau** :
+
+        - **Public** : spécifiez `"visibility": "EXTERNAL"`
+        - **Privé** : spécifiez `"visibility": "INTERNAL"`
+
+### Exemple de requête
+
+        ```json
+        {
+          "name": "mon-cluster-kubernetes",
+          "version": "1.34",
+          "cidr": "192.168.1.0/24",
+          "visibility": "EXTERNAL",
+          "profile": "small"
+        }
+        ```
+
+### Exemple de réponse
+
+        ```json
+        {
+          "id": "550e8400-e29b-41d4-a716-446655440000",
+          "name": "mon-cluster-kubernetes",
+          "version": "1.34",
+          "fullVersion": "1.34.0",
+          "cidr": "192.168.1.0/24",
+          "visibility": "EXTERNAL",
+          "profile": "small",
+          "createdOn": "2026-04-05T10:30:00Z",
+          "status": {
+            "state": "CREATING",
+            "message": "Cluster is being created"
+          }
+        }
+        ```
+
+        [Voir la spécification complète](/openapi/#tag/kubernetes/POST/kubernetes/spaces/{spaceId}/clusters)
+    </TabItem>
+    <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+        Pour créer un cluster Kubernetes avec Terraform, utilisez le bloc de ressource suivant :
+
+        ```hcl
+        resource "numspot_kubernetes_cluster" "mon_cluster" {
+          space_id   = var.space_id
+          name       = "mon-cluster"
+          version    = "1.34"
+          cidr       = "10.0.0.0/16"
+
+          node_pool {
+            name          = "default-pool"
+            node_type     = "standard-2"
+            min_nodes     = 1
+            max_nodes     = 3
+            auto_scaling  = true
+          }
+        }
+        ```
+
+### Paramètres clés
+
+        | Paramètre       | Description                                                                 | Exemple                     |
+        |-----------------|-----------------------------------------------------------------------------|-----------------------------|
+        | `space_id`      | ID de l'espace Numspot où créer le cluster.                                | `"sp-123456"`               |
+        | `name`          | Nom du cluster (1-63 caractères, lettres minuscules, chiffres, tirets).    | `"mon-cluster-prod"`         |
+        | `version`       | Version de Kubernetes (ex. : `1.34`).                                      | `"1.34"`                    |
+        | cidr          | Plage CIDR pour le cluster (ex. : `10.0.0.0/16`).                          | `"10.0.0.0/16"`             |
+        | `node_pool`     | Configuration du groupe de nœuds (type, autoscaling, etc.).               | Voir bloc ci-dessus.        |
+
+### Étapes suivantes
+
+        1. **Initialiser Terraform** :
+           ```bash
+           terraform init
+           ```
+        2. **Appliquer la configuration** :
+           ```bash
+           terraform apply
+           ```
+
+        :::tip
+        Assurez-vous d'avoir les permissions IAM requises :
+          - `Kubernetes.ClusterCreate`
+          - `Kubernetes.NodePoolManage`
+        Consultez la [documentation Terraform Numspot](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/kubernetes_cluster) pour plus de détails.
+        :::
+    </TabItem>
+</Tabs>

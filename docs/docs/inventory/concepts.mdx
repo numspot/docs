@@ -1,5 +1,5 @@
 ---
-title: "Inventaire - Concepts"
+title: "Inventory - Concepts"
 sidebar_label: "Concepts"
 sidebar_position: 1
 draft: false
@@ -7,36 +7,36 @@ draft: false
 
 import ActionsSummary from '@site/src/components/ActionsSummary';
 
-# Inventaire
+# Inventory
 
 <ActionsSummary />
 
-L'inventaire est une fonctionnalité qui permet de visualiser l'ensemble des ressources déployées dans un espace Numspot. Il offre une vue consolidée et unifiée de toutes les ressources, quel que soit leur service d'origine (compute, connectivity, Kubernetes, postgresql, objectstorage, registry, secrets).
+The inventory is a feature that lets you view all the resources deployed in a Numspot space. It provides a consolidated and unified view of every resource, regardless of its source service (compute, connectivity, Kubernetes, postgresql, objectstorage, registry, secrets).
 
-L'inventaire facilite la gestion et le suivi des ressources en fournissant une liste centralisée avec des informations essentielles : identifiant, référence, nom, type, source, état et relations de parenté.
+The inventory makes resources easier to manage and track by providing a centralized list with essential information: identifier, reference, name, type, source, state and parent relationships.
 
-## Accès à l'inventaire
+## Accessing the inventory
 
-L'inventaire est accessible via l'API avec l'endpoint (point d'accès) `GET /inventory/spaces/{spaceId}/resources`.
+The inventory is accessible through the API with the endpoint `GET /inventory/spaces/{spaceId}/resources`.
 
-## Structure d'une ressource
+## Structure of a resource
 
-Chaque ressource dans l'inventaire comprend les attributs suivants :
+Each resource in the inventory includes the following attributes:
 
-- **ID** : Identifiant unique de la ressource (par exemple `vm-622ef57d`, `vpc-12b7fdbc`) ;
-- **Référence** : NRN (Numspot Resource Name), identifiant unique sous forme d'un UUID (Universally Unique Identifier) ;
-- **Nom** : Nom attribué à la ressource lors de sa création ;
-- **Type** : Type de ressource, par exemple [VM (Virtual Machine)](/docs/compute/concept/), [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/), subnet (sous-réseau), [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) ;
-- **Source** : Service d'origine de la ressource ;
-- **État** : État actuel de la ressource ;
-- **Parent** : Ressource parente si applicable (relation hiérarchique).
+- **ID**: unique identifier of the resource (for example `vm-622ef57d`, `vpc-12b7fdbc`);
+- **Reference**: NRN (Numspot Resource Name), a unique identifier in the form of a UUID (Universally Unique Identifier);
+- **Name**: name assigned to the resource when it was created;
+- **Type**: resource type, for example [VM (Virtual Machine)](/docs/compute/concept/), [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/), subnet, [load balancer](/docs/network/load-balancer/concepts/);
+- **Source**: source service of the resource;
+- **State**: current state of the resource;
+- **Parent**: parent resource if applicable (hierarchical relationship).
 
-## Sources et types de ressources
+## Resource sources and types
 
-Les ressources de l'inventaire sont classées par source et par type. Pour consulter la liste exhaustive des domaines et kinds disponibles, reportez-vous à la documentation du [catalogue](/docs/catalog/concepts/#domaines-et-types-de-produits).
+Inventory resources are classified by source and by type. For the exhaustive list of available domains and kinds, refer to the [catalog](/docs/catalog/concepts/#domains-and-product-types) documentation.
 
-## Relations entre ressources
+## Relationships between resources
 
-L'inventaire affiche les relations de parenté entre ressources. Par exemple, un node a pour parent un cluster.
+The inventory displays the parent relationships between resources. For example, a node has a cluster as its parent.
 
-Cette hiérarchie permet de comprendre la structure de votre infrastructure et les dépendances entre ressources.
+This hierarchy lets you understand the structure of your infrastructure and the dependencies between resources.

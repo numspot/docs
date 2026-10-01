@@ -1,160 +1,160 @@
 ---
-title: Types de VM
+title: VM types
 sidebar_position: 4
 ---
 
-# Types de VM
+# VM types
 
-Les types de [VM (Virtual Machine)](/docs/compute/concept/) déterminent les caractéristiques matérielles de vos VM.
+The types of [VM (Virtual Machine)](/docs/compute/concept/) determine the hardware characteristics of your VM.
 
-Lorsque vous créez une VM, vous devez spécifier un type de VM. Celui-ci reste cependant modifiable par la suite.
+When you create a VM, you must specify a VM type. It remains modifiable afterwards, however.
 
-## Caractéristiques
+## Characteristics
 
-Un type de VM détermine les caractéristiques matérielles de votre VM, parmi lesquelles figurent :
+A VM type determines the hardware characteristics of your VM, among which are:
 
-* Caractéristiques de calcul : Génération de CPU (Central Processing Unit), nombre de vCPU (virtual Central Processing Unit), quantité de mémoire et indicateur de performance.
-* Caractéristiques réseau : Nombre maximum de NIC (Network Interface Card) que vous pouvez attacher et nombre maximum d'IP (Internet Protocol) privées que vous pouvez attribuer par NIC.
+* Compute characteristics: CPU (Central Processing Unit) generation, number of vCPU (virtual Central Processing Unit), amount of memory and performance indicator.
+* Network characteristics: maximum number of NIC (Network Interface Card) you can attach and maximum number of private IP (Internet Protocol) you can assign per NIC.
 
-La génération de CPU correspond à une famille de CPU Intel :
+The CPU generation corresponds to a family of Intel CPUs:
 
 {/* v5 : Intel Skylake */}
-* v6 : Intel Ice Lake
+* v6: Intel Ice Lake
 {/* v7 : Intel Sapphire Rapids */}
-Pour en savoir plus sur ces familles de CPU, voir la [documentation Intel officielle](https://ark.intel.com/content/www/fr/fr/ark.html).
+To learn more about these CPU families, see the [official Intel documentation](https://ark.intel.com/content/www/fr/fr/ark.html).
 
-L'indicateur de performance est une valeur qui détermine la performance globale des vCPU :
+The performance indicator is a value that determines the overall performance of the vCPU:
 
-* 1 (La plus élevée) : Capacité de calcul maximum sur tous les vCPU de la VM. Cette valeur est idéale pour les applications de calcul intensif demandant des performances stables durant le cycle de vie de la VM.
-* 2 (Élevée) : Haute capacité de calcul sur tous les vCPU de la VM. Cette valeur s'applique à la plupart des cas et offre des performances variables dans le temps.
-* 3 (Modérée) : Performance à variation significative sur tous les vCPU de la VM. Cette valeur ne garantit pas des performances constantes, mais est idéale pour les machines à faible demande CPU.
+* 1 (Highest): maximum compute capacity on all the vCPU of the VM. This value is ideal for compute-intensive applications requiring stable performance throughout the life cycle of the VM.
+* 2 (High): high compute capacity on all the vCPU of the VM. This value applies to most cases and offers performance that varies over time.
+* 3 (Moderate): performance that varies significantly on all the vCPU of the VM. This value does not guarantee consistent performance, but is ideal for machines with low CPU demand.
 
-## Types de VM disponibles
+## Available VM types
 
-Numspot propose une large gamme de types de VM optimisés pour différents cas d'utilisation.
+Numspot offers a wide range of VM types optimized for different use cases.
 
-Ces types d'instances correspondent à différentes combinaisons en termes de capacités de processeur (CPU), de mémoire et de mise en réseau. Vous pouvez ainsi choisir un ensemble de ressources parfaitement adapté à vos applications. 
+These instance types correspond to different combinations in terms of processor (CPU), memory and networking capabilities. You can thus choose a set of resources perfectly suited to your applications. 
 
-Chaque type de VM inclut une ou plusieurs tailles de VM, ce qui vous permet de mettre à l'échelle vos ressources en fonction des exigences de la charge de travail cible. Cette flexibilité vous permet de sélectionner le type de VM le plus approprié pour répondre aux besoins de vos applications, et de l'adapter en fonction de l'évolution de ces besoins.
+Each VM type includes one or more VM sizes, which lets you scale your resources according to the requirements of the target workload. This flexibility lets you select the most appropriate VM type to meet the needs of your applications, and to adapt it as those needs evolve.
 
 {/* :::info
-si vous avez des besoins spécifiques qui ne sont pas couverts par les gabarits préconfigurés, vous pouvez créer une VM personnalisée.
-Cette option vous permet de choisir la génération de CPU de performance, le nombre de cœurs de processeur, la quantité de mémoire vive et la taille du disque dur de votre VM.
-Vous pouvez ainsi créer une VM qui répond exactement à vos besoins en termes de performances et de coût.
+if you have specific needs that are not covered by the preconfigured templates, you can create a custom VM.
+This option lets you choose the performance CPU generation, the number of processor cores, the amount of RAM and the disk size of your VM.
+This way, you can create a VM that meets your performance and cost needs exactly.
 ::: */}
 
-### Usage économique (Economic) 
-Offrant un rapport coût-performance optimal, elles conviennent aux charges de travail modérées en ressources processeur et mémoire. <br/>
-Elles sont parfaites pour les serveurs web peu ou moyennement sollicités, les environnements de développement et de test, ou encore les applications à la demande inconstante. <br/>
-Elles s'avèrent également idéales pour les tâches peu gourmandes, comme les serveurs web statiques, les sites web à faible trafic et les microservices.
+### Economy use (Economic) 
+Offering an optimal cost-performance ratio, they suit workloads with moderate processor and memory resource needs. <br/>
+They are perfect for web servers with low or medium load, development and test environments, or applications with inconsistent demand. <br/>
+They are also ideal for low-demand tasks, such as static web servers, low-traffic websites and microservices.
 
-| Type de VM       | Taille de la VM    | Description         | vCPU | Mémoire (Gio) | Indice de performance |
+| VM type          | VM size            | Description         | vCPU | Memory (GiB)  | Performance index     |
 | ---------------- | ------------------ | ------------------- | ---- | ------------ | --------------------- |
-| Usage économique | ns-eco6-2c1r       | 2vCPU / 1GB         | 2    | 1            | Modérée (3)            |
-| Usage économique | ns-eco6-2c2r       | 2vCPU / 2GB         | 2    | 2            | Modérée (3)            |
-| Usage économique | ns-eco6-2c4r       | 2vCPU / 4GB         | 2    | 4            | Modérée (3)            |
-| Usage économique | ns-eco6-2c8r       | 2vCPU / 8GB         | 2    | 8            | Modérée (3)            |
-| Usage économique | ns-eco6-4c16r      | 4vCPU / 16GB        | 4    | 16           | Modérée (3)            |
-| Usage économique | ns-eco6-8c32r      | 8vCPU / 32GB        | 8    | 32           | Modérée (3)            |
-| Usage économique | ns-eco7-2c1r       | 2vCPU / 1GB         | 2    | 1            | Modérée (3)            |
-| Usage économique | ns-eco7-2c2r       | 2vCPU / 2GB         | 2    | 2            | Modérée (3)            |
-| Usage économique | ns-eco7-2c4r       | 2vCPU / 4GB         | 2    | 4            | Modérée (3)            |
-| Usage économique | ns-eco7-2c8r       | 2vCPU / 8GB         | 2    | 8            | Modérée (3)            |
-| Usage économique | ns-eco7-4c16r      | 4vCPU / 16GB        | 4    | 16           | Modérée (3)            |
-| Usage économique | ns-eco7-8c32r      | 8vCPU / 32GB        | 8    | 32           | Modérée (3)            |
+| Economy use      | ns-eco6-2c1r       | 2vCPU / 1GB         | 2    | 1            | Moderate (3)           |
+| Economy use      | ns-eco6-2c2r       | 2vCPU / 2GB         | 2    | 2            | Moderate (3)           |
+| Economy use      | ns-eco6-2c4r       | 2vCPU / 4GB         | 2    | 4            | Moderate (3)           |
+| Economy use      | ns-eco6-2c8r       | 2vCPU / 8GB         | 2    | 8            | Moderate (3)           |
+| Economy use      | ns-eco6-4c16r      | 4vCPU / 16GB        | 4    | 16           | Moderate (3)           |
+| Economy use      | ns-eco6-8c32r      | 8vCPU / 32GB        | 8    | 32           | Moderate (3)           |
+| Economy use      | ns-eco7-2c1r       | 2vCPU / 1GB         | 2    | 1            | Moderate (3)           |
+| Economy use      | ns-eco7-2c2r       | 2vCPU / 2GB         | 2    | 2            | Moderate (3)           |
+| Economy use      | ns-eco7-2c4r       | 2vCPU / 4GB         | 2    | 4            | Moderate (3)           |
+| Economy use      | ns-eco7-2c8r       | 2vCPU / 8GB         | 2    | 8            | Moderate (3)           |
+| Economy use      | ns-eco7-4c16r      | 4vCPU / 16GB        | 4    | 16           | Moderate (3)           |
+| Economy use      | ns-eco7-8c32r      | 8vCPU / 32GB        | 8    | 32           | Moderate (3)           |
 
-### Usage standard (General Use)
-Les VM standard offrent un rapport équilibré entre ressources de calcul, mémoire et capacités réseau. <br/>
-Elles sont adaptées à une grande variété de charges de travail courantes, telles que les serveurs web et d'application, les bases de données de taille moyenne, et les environnements de développement et de test. <br/>
-Les VM standard sont conçues pour gérer des charges de travail modérées et offrir des performances constantes.
+### Standard use (General Use)
+Standard VM offer a balanced ratio between compute resources, memory and network capabilities. <br/>
+They are suited to a wide variety of common workloads, such as web and application servers, medium-sized databases, and development and test environments. <br/>
+Standard VM are designed to handle moderate workloads and offer consistent performance.
 
-| Type de VM       | Taille de la VM    | Description         | vCPU | Mémoire (Gio) | Indice de performance |
+| VM type          | VM size            | Description         | vCPU | Memory (GiB)  | Performance index     |
 | ---------------- | ------------------ | ------------------- | ---- | ------------ | --------------------- |
-| Usage standard   | ns-gus6-2c8r       | 2vCPU / 8GB         | 2    | 8            | Élevée (2)             |
-| Usage standard   | ns-gus6-4c16r      | 4vCPU / 16GB        | 4    | 16           | Élevée (2)             |
-| Usage standard   | ns-gus6-8c32r      | 8vCPU / 32GB        | 8    | 32           | Élevée (2)             |
-| Usage standard   | ns-gus6-16c64r     | 16vCPU / 64GB       | 16   | 64           | Élevée (2)             |
-| Usage standard   | ns-gus6-32c128r    | 32vCPU / 128GB      | 32   | 128          | Élevée (2)             |
-| Usage standard   | ns-gus6-48c192r    | 48vCPU / 192GB      | 48   | 192          | Élevée (2)             |
-| Usage standard   | ns-gus6-64c256r    | 64vCPU / 256GB      | 64   | 256          | Élevée (2)             |
-| Usage standard   | ns-gus6-78c384r    | 78vCPU / 384GB      | 78   | 384          | Élevée (2)             |
-| Usage standard   | ns-gus7-2c8r       | 2vCPU / 8GB         | 2    | 8            | Élevée (2)             |
-| Usage standard   | ns-gus7-4c16r      | 4vCPU / 16GB        | 4    | 16           | Élevée (2)             |
-| Usage standard   | ns-gus7-8c32r      | 8vCPU / 32GB        | 8    | 32           | Élevée (2)             |
-| Usage standard   | ns-gus7-16c64r     | 16vCPU / 64GB       | 16   | 64           | Élevée (2)             |
-| Usage standard   | ns-gus7-32c128r    | 32vCPU / 128GB      | 32   | 128          | Élevée (2)             |
-| Usage standard   | ns-gus7-48c192r    | 48vCPU / 192GB      | 48   | 192          | Élevée (2)             |
-| Usage standard   | ns-gus7-64c256r    | 64vCPU / 256GB      | 64   | 256          | Élevée (2)             |
-| Usage standard   | ns-gus7-78c384r    | 78vCPU / 384GB      | 78   | 384          | Élevée (2)             |
+| Standard use     | ns-gus6-2c8r       | 2vCPU / 8GB         | 2    | 8            | High (2)               |
+| Standard use     | ns-gus6-4c16r      | 4vCPU / 16GB        | 4    | 16           | High (2)               |
+| Standard use     | ns-gus6-8c32r      | 8vCPU / 32GB        | 8    | 32           | High (2)               |
+| Standard use     | ns-gus6-16c64r     | 16vCPU / 64GB       | 16   | 64           | High (2)               |
+| Standard use     | ns-gus6-32c128r    | 32vCPU / 128GB      | 32   | 128          | High (2)               |
+| Standard use     | ns-gus6-48c192r    | 48vCPU / 192GB      | 48   | 192          | High (2)               |
+| Standard use     | ns-gus6-64c256r    | 64vCPU / 256GB      | 64   | 256          | High (2)               |
+| Standard use     | ns-gus6-78c384r    | 78vCPU / 384GB      | 78   | 384          | High (2)               |
+| Standard use     | ns-gus7-2c8r       | 2vCPU / 8GB         | 2    | 8            | High (2)               |
+| Standard use     | ns-gus7-4c16r      | 4vCPU / 16GB        | 4    | 16           | High (2)               |
+| Standard use     | ns-gus7-8c32r      | 8vCPU / 32GB        | 8    | 32           | High (2)               |
+| Standard use     | ns-gus7-16c64r     | 16vCPU / 64GB       | 16   | 64           | High (2)               |
+| Standard use     | ns-gus7-32c128r    | 32vCPU / 128GB      | 32   | 128          | High (2)               |
+| Standard use     | ns-gus7-48c192r    | 48vCPU / 192GB      | 48   | 192          | High (2)               |
+| Standard use     | ns-gus7-64c256r    | 64vCPU / 256GB      | 64   | 256          | High (2)               |
+| Standard use     | ns-gus7-78c384r    | 78vCPU / 384GB      | 78   | 384          | High (2)               |
 
-### Usage mémoire (Memory)
-Les VM à haute capacité de mémoire sont spécialement conçues pour les charges de travail qui exigent une grande quantité de mémoire vive (RAM - Random Access Memory). <br/>
-Elles se révèlent idéales pour les bases de données en mémoire, les systèmes de cache, les opérations de traitement de données en temps réel, les bases de données relationnelles et les applications d'analyse de données volumineuses. <br/>
-Ces VM offrent généralement un nombre élevé de gigaoctets de RAM par cœur de processeur, les rendant parfaitement adaptées aux charges de travail gourmandes en mémoire, comme les caches in-memory et les applications analytiques.
+### Memory use (Memory)
+High-memory-capacity VM are specially designed for workloads that require a large amount of RAM (Random Access Memory). <br/>
+They are ideal for in-memory databases, caching systems, real-time data-processing operations, relational databases and large-data analysis applications. <br/>
+These VM generally offer a high number of gigabytes of RAM per processor core, making them perfectly suited to memory-intensive workloads, such as in-memory caches and analytics applications.
 
-| Type de VM       | Taille de la VM    | Description         | vCPU | Mémoire (Gio) | Indice de performance |
+| VM type          | VM size            | Description         | vCPU | Memory (GiB)  | Performance index     |
 | ---------------- | ------------------ | ------------------- | ---- | ------------ | --------------------- |
-| Usage mémoire    | ns-mem6-2c16r      | 2vCPU / 16GB        | 2    | 16           | La plus élevée (1)    |
-| Usage mémoire    | ns-mem6-4c32r      | 4vCPU / 32GB        | 4    | 32           | La plus élevée (1)    |
-| Usage mémoire    | ns-mem6-8c64r      | 8vCPU / 64GB        | 8    | 64           | La plus élevée (1)    |
-| Usage mémoire    | ns-mem6-16c128r    | 16vCPU / 128GB      | 16   | 128          | La plus élevée (1)    |
-| Usage mémoire    | ns-mem6-32c256r    | 32vCPU / 256GB      | 32   | 256          | La plus élevée (1)    |
-| Usage mémoire    | ns-mem6-48c384r    | 48vCPU / 384GB      | 48   | 384          | La plus élevée (1)    |
-| Usage mémoire    | ns-mem6-64c512r    | 64vCPU / 512GB      | 64   | 512          | La plus élevée (1)    |
-| Usage mémoire    | ns-mem6-78c1024r   | 78vCPU / 1024GB     | 78   | 1024         | La plus élevée (1)    |
-| Usage mémoire    | ns-mem7-2c16r      | 2vCPU / 16GB        | 2    | 16           | La plus élevée (1)    |
-| Usage mémoire    | ns-mem7-4c32r      | 4vCPU / 32GB        | 4    | 32           | La plus élevée (1)    |
-| Usage mémoire    | ns-mem7-8c64r      | 8vCPU / 64GB        | 8    | 64           | La plus élevée (1)    |
-| Usage mémoire    | ns-mem7-16c128r    | 16vCPU / 128GB      | 16   | 128          | La plus élevée (1)    |
-| Usage mémoire    | ns-mem7-32c256r    | 32vCPU / 256GB      | 32   | 256          | La plus élevée (1)    |
-| Usage mémoire    | ns-mem7-48c384r    | 48vCPU / 384GB      | 48   | 384          | La plus élevée (1)    |
-| Usage mémoire    | ns-mem7-64c512r    | 64vCPU / 512GB      | 64   | 512          | La plus élevée (1)    |
-| Usage mémoire    | ns-mem7-78c1024r   | 78vCPU / 1024GB     | 78   | 1024         | La plus élevée (1)    |
+| Memory use       | ns-mem6-2c16r      | 2vCPU / 16GB        | 2    | 16           | Highest (1)           |
+| Memory use       | ns-mem6-4c32r      | 4vCPU / 32GB        | 4    | 32           | Highest (1)           |
+| Memory use       | ns-mem6-8c64r      | 8vCPU / 64GB        | 8    | 64           | Highest (1)           |
+| Memory use       | ns-mem6-16c128r    | 16vCPU / 128GB      | 16   | 128          | Highest (1)           |
+| Memory use       | ns-mem6-32c256r    | 32vCPU / 256GB      | 32   | 256          | Highest (1)           |
+| Memory use       | ns-mem6-48c384r    | 48vCPU / 384GB      | 48   | 384          | Highest (1)           |
+| Memory use       | ns-mem6-64c512r    | 64vCPU / 512GB      | 64   | 512          | Highest (1)           |
+| Memory use       | ns-mem6-78c1024r   | 78vCPU / 1024GB     | 78   | 1024         | Highest (1)           |
+| Memory use       | ns-mem7-2c16r      | 2vCPU / 16GB        | 2    | 16           | Highest (1)           |
+| Memory use       | ns-mem7-4c32r      | 4vCPU / 32GB        | 4    | 32           | Highest (1)           |
+| Memory use       | ns-mem7-8c64r      | 8vCPU / 64GB        | 8    | 64           | Highest (1)           |
+| Memory use       | ns-mem7-16c128r    | 16vCPU / 128GB      | 16   | 128          | Highest (1)           |
+| Memory use       | ns-mem7-32c256r    | 32vCPU / 256GB      | 32   | 256          | Highest (1)           |
+| Memory use       | ns-mem7-48c384r    | 48vCPU / 384GB      | 48   | 384          | Highest (1)           |
+| Memory use       | ns-mem7-64c512r    | 64vCPU / 512GB      | 64   | 512          | Highest (1)           |
+| Memory use       | ns-mem7-78c1024r   | 78vCPU / 1024GB     | 78   | 1024         | Highest (1)           |
 
-### Usage calcul (Compute)  
-Les VM de calcul sont conçues pour offrir des performances élevées en termes de puissance de traitement, grâce à leurs processeurs puissants et leur haute performance. <br/>
-Elles sont idéales pour les charges de travail exigeantes en matière de calcul, telles que le rendu 3D, la modélisation scientifique, l'apprentissage automatique, le machine learning, l'analyse scientifique et les simulations à haute performance. <br/>
-Ces VM offrent généralement un nombre élevé de cœurs de processeur et une capacité de traitement accrue par rapport aux autres types de VM, les rendant parfaitement adaptées aux applications de calcul intensif.
+### Compute use (Compute)  
+Compute VM are designed to offer high performance in terms of processing power, thanks to their powerful processors and high performance. <br/>
+They are ideal for compute-demanding workloads, such as 3D rendering, scientific modeling, machine learning, scientific analysis and high-performance simulations. <br/>
+These VM generally offer a high number of processor cores and increased processing capacity compared with the other VM types, making them perfectly suited to compute-intensive applications.
 
-| Type de VM       | Taille de la VM    | Description         | vCPU | Mémoire (Gio) | Indice de performance |
+| VM type          | VM size            | Description         | vCPU | Memory (GiB)  | Performance index     |
 | ---------------- | ------------------ | ------------------- | ---- | ------------ | --------------------- |
-| Usage calcul     | ns-cus6-2c4r       | 2vCPU / 4GB         | 2    | 4            | La plus élevée (1)    |
-| Usage calcul     | ns-cus6-4c8r       | 4vCPU / 8GB         | 4    | 8            | La plus élevée (1)    |
-| Usage calcul     | ns-cus6-8c16r      | 8vCPU / 16GB        | 8    | 16           | La plus élevée (1)    |
-| Usage calcul     | ns-cus6-16c32r     | 16vCPU / 32GB       | 16   | 32           | La plus élevée (1)    |
-| Usage calcul     | ns-cus6-32c64r     | 32vCPU / 64GB       | 32   | 64           | La plus élevée (1)    |
-| Usage calcul     | ns-cus6-48c96r     | 48vCPU / 96GB       | 48   | 96           | La plus élevée (1)    |
-| Usage calcul     | ns-cus6-64c128r    | 64vCPU / 128GB      | 64   | 128          | La plus élevée (1)    |
-| Usage calcul     | ns-cus6-78c192r    | 78vCPU / 192GB      | 78   | 192          | La plus élevée (1)    |
-| Usage calcul     | ns-cus7-2c4r       | 2vCPU / 4GB         | 2    | 4            | La plus élevée (1)    |
-| Usage calcul     | ns-cus7-4c8r       | 4vCPU / 8GB         | 4    | 8            | La plus élevée (1)    |
-| Usage calcul     | ns-cus7-8c16r      | 8vCPU / 16GB        | 8    | 16           | La plus élevée (1)    |
-| Usage calcul     | ns-cus7-16c32r     | 16vCPU / 32GB       | 16   | 32           | La plus élevée (1)    |
-| Usage calcul     | ns-cus7-32c64r     | 32vCPU / 64GB       | 32   | 64           | La plus élevée (1)    |
-| Usage calcul     | ns-cus7-48c96r     | 48vCPU / 96GB       | 48   | 96           | La plus élevée (1)    |
-| Usage calcul     | ns-cus7-64c128r    | 64vCPU / 128GB      | 64   | 128          | La plus élevée (1)    |
-| Usage calcul     | ns-cus7-78c192r    | 78vCPU / 192GB      | 78   | 192          | La plus élevée (1)    |
+| Compute use      | ns-cus6-2c4r       | 2vCPU / 4GB         | 2    | 4            | Highest (1)           |
+| Compute use      | ns-cus6-4c8r       | 4vCPU / 8GB         | 4    | 8            | Highest (1)           |
+| Compute use      | ns-cus6-8c16r      | 8vCPU / 16GB        | 8    | 16           | Highest (1)           |
+| Compute use      | ns-cus6-16c32r     | 16vCPU / 32GB       | 16   | 32           | Highest (1)           |
+| Compute use      | ns-cus6-32c64r     | 32vCPU / 64GB       | 32   | 64           | Highest (1)           |
+| Compute use      | ns-cus6-48c96r     | 48vCPU / 96GB       | 48   | 96           | Highest (1)           |
+| Compute use      | ns-cus6-64c128r    | 64vCPU / 128GB      | 64   | 128          | Highest (1)           |
+| Compute use      | ns-cus6-78c192r    | 78vCPU / 192GB      | 78   | 192          | Highest (1)           |
+| Compute use      | ns-cus7-2c4r       | 2vCPU / 4GB         | 2    | 4            | Highest (1)           |
+| Compute use      | ns-cus7-4c8r       | 4vCPU / 8GB         | 4    | 8            | Highest (1)           |
+| Compute use      | ns-cus7-8c16r      | 8vCPU / 16GB        | 8    | 16           | Highest (1)           |
+| Compute use      | ns-cus7-16c32r     | 16vCPU / 32GB       | 16   | 32           | Highest (1)           |
+| Compute use      | ns-cus7-32c64r     | 32vCPU / 64GB       | 32   | 64           | Highest (1)           |
+| Compute use      | ns-cus7-48c96r     | 48vCPU / 96GB       | 48   | 96           | Highest (1)           |
+| Compute use      | ns-cus7-64c128r    | 64vCPU / 128GB      | 64   | 128          | Highest (1)           |
+| Compute use      | ns-cus7-78c192r    | 78vCPU / 192GB      | 78   | 192          | Highest (1)           |
 
-### Usage inférence (Inference)  
-Les VM d'inférence sont optimisées pour les charges de travail d'inférence, en offrant des performances élevées pour l'exécution de modèles d'intelligence artificielle en production.
-Elles exploitent des processeurs haute performance — CPU ou [GPU (Graphics Processing Unit)](/docs/compute/gpu/concept/) selon les besoins — afin de garantir une latence minimale et un débit élevé lors du traitement de grandes volumétries de requêtes.
-Ces VM sont particulièrement adaptées aux cas d'usage tels que la prédiction en temps réel, l'analyse de données embarquée, le traitement d'images ou de langage naturel, ainsi que le déploiement de modèles d'apprentissage automatique optimisés pour l'inférence à grande échelle. 
+### Inference use (Inference)  
+Inference VM are optimized for inference workloads, offering high performance for running artificial-intelligence models in production.
+They use high-performance processors — CPU or [GPU (Graphics Processing Unit)](/docs/compute/gpu/concept/) as needed — to ensure minimal latency and high throughput when processing large volumes of requests.
+These VM are particularly suited to use cases such as real-time prediction, embedded data analysis, image or natural-language processing, as well as the deployment of machine learning models optimized for inference at scale. 
 
-| Type de VM       | Taille de la VM    | Description         | vCPU | Mémoire (Gio) | Indice de performance |
+| VM type          | VM size            | Description         | vCPU | Memory (GiB)  | Performance index     |
 | ---------------- | ------------------ | ------------------- | ---- | ------------ | --------------------- |
-| Usage inférence  | ns-inf7-126c1024r-8h200g | 126vCPU / 1024GB / 8x H200 | 126 | 1024 | La plus élevée (1) |
-| Usage inférence  | ns-inf7-64c450r-2h100g | 64vCPU / 450GB / 2x H100 | 64 | 450 | La plus élevée (1) |
-| Usage inférence  | ns-inf7-32c256r-2h100g | 32vCPU / 256GB / 2x H100 | 32 | 256 | La plus élevée (1) |
-| Usage inférence  | ns-inf7-32c256r-2l40g | 32vCPU / 256GB / 2x L40 | 32 | 256 | La plus élevée (1) |
-| Usage inférence  | ns-inf7-16c128r-1l40g | 16vCPU / 128GB / 1x L40 | 16 | 128 | La plus élevée (1) |
+| Inference use    | ns-inf7-126c1024r-8h200g | 126vCPU / 1024GB / 8x H200 | 126 | 1024 | Highest (1) |
+| Inference use    | ns-inf7-64c450r-2h100g | 64vCPU / 450GB / 2x H100 | 64 | 450 | Highest (1) |
+| Inference use    | ns-inf7-32c256r-2h100g | 32vCPU / 256GB / 2x H100 | 32 | 256 | Highest (1) |
+| Inference use    | ns-inf7-32c256r-2l40g | 32vCPU / 256GB / 2x L40 | 32 | 256 | Highest (1) |
+| Inference use    | ns-inf7-16c128r-1l40g | 16vCPU / 128GB / 1x L40 | 16 | 128 | Highest (1) |
 
-{/* ## VM GPU
+{/* ## GPU VMs
 
-Les VM équipées de processeurs graphiques (GPU) sont des instances de calcul optimisées pour les charges de travail nécessitant une puissance de traitement graphique importante, telles que l'apprentissage automatique, le rendu 3D et l'analyse de données volumineuses.
+VMs equipped with graphics processing units (GPUs) are compute instances optimized for workloads that require significant graphics processing power, such as machine learning, 3D rendering and large-scale data analysis.
 
-Les VM GPU sont équipées de cartes graphiques dédiées et de mémoire dédiée pour le traitement graphique, ce qui leur permet de gérer des charges de travail graphiques importantes sans affecter les performances du reste de l'instance. Elles sont disponibles dans différentes tailles et configurations, en fonction des besoins de votre application.
+GPU VMs are equipped with dedicated graphics cards and dedicated memory for graphics processing, which lets them handle heavy graphics workloads without affecting the performance of the rest of the instance. They are available in different sizes and configurations, depending on your application's needs.
 
-| Type de VM       | Taille de la VM    | Description         | vCPU | Mémoire (Gio) | GPU Qty | GPU type       |
+| VM type          | VM size            | Description         | vCPU | Memory (GiB)  | GPU Qty | GPU type       |
 | ---------------- | ------------------ | ------------------- | ---- | ------------ | ------- | -------------- |
 | GPU              | ns-gpu6@p6-2c16r   | 2vCPU / 16GB - p6   | 2    | 16           | 2       | Nvidia P6      |
 | GPU              | ns-gpu6@p100-2c16r | 2vCPU / 16GB - p100 | 2    | 16           | 2       | Nvidia P100    |

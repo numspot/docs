@@ -1,66 +1,66 @@
 ---
-title: Réversibilité - DLP managé
-sidebar_label: Réversibilité du DLP managé
-description: Informations sur la réversibilité du service managé DLP
+title: Reversibility - Managed DLP
+sidebar_label: Reversibility of managed DLP
+description: Information about the reversibility of the managed DLP service
 sidebar_position: 6
 draft: false
 ---
 
-# Réversibilité du DLP managé
+# Reversibility of managed DLP
 
-Le service managé [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) est conçu pour garantir la réversibilité, c'est-à-dire la possibilité pour le client de récupérer ses données et de migrer vers une autre solution sans verrouillage.
+The managed [DLP](/docs/managed-services/dlp/concepts/) (Data Loss Prevention) service is designed to guarantee reversibility, meaning the ability for the customer to recover their data and migrate to another solution without vendor lock-in.
 
-## Données exportables
+## Exportable data
 
-L'ensemble des données du service DLP peut être exporté via l'API Control :
+All DLP service data can be exported via the Control API:
 
-- les règles et leur historique de versions ;
-- les policies et leur historique de versions ;
-- les détecteurs personnalisés ;
-- les journaux de décision ;
-- les événements monitorés ;
-- la piste d'audit.
+- rules and their version history;
+- policies and their version history;
+- custom detectors;
+- decision logs;
+- monitored events;
+- the audit trail.
 
-## Outils de réversibilité
+## Reversibility tools
 
-### Export via l'API Control
+### Export via the Control API
 
-Utilisez l'API Control pour exporter les configurations :
+Use the Control API to export configurations:
 
 ```bash
-# Exporter les règles
+# Export rules
 curl -b dlp_session=<cookie> /api/v1/rules > rules.json
 
-# Exporter les policies
+# Export policies
 curl -b dlp_session=<cookie> /api/v1/policies > policies.json
 
-# Exporter les détecteurs personnalisés
+# Export custom detectors
 curl -b dlp_session=<cookie> /api/v1/detectors/custom > custom-detectors.json
 
-# Exporter les journaux de décision
+# Export decision logs
 curl -b dlp_session=<cookie> "/api/v1/logs/decisions?time_start=2020-01-01T00:00:00Z" > decisions.json
 ```
 
-### Export des rulesets publiés
+### Export of published rulesets
 
-Chaque version publiée du [ruleset](/docs/managed-services/dlp/concepts) (ensemble de règles) peut être récupérée via l'API :
+Each published version of the [ruleset](/docs/managed-services/dlp/concepts/) can be retrieved via the API:
 
 ```bash
 curl -b dlp_session=<cookie> /api/v1/rulesets/{version} > ruleset-v{version}.json
 ```
 
-## Formats ouverts
+## Open formats
 
-- Les règles et policies sont au format JSON, standard de l'industrie ;
-- Les détecteurs utilisent des expressions régulières compatibles RE2 ;
-- Les journaux de décision sont au format JSON ;
-- Les charges utiles monitorées sont stockées dans un stockage objet compatible S3.
+- Rules and policies are in JSON format, an industry standard;
+- Detectors use RE2-compatible regular expressions;
+- Decision logs are in JSON format;
+- Monitored payloads are stored in S3-compatible object storage.
 
-## Procédure de sortie
+## Exit procedure
 
-1. Exportez les règles, policies et détecteurs personnalisés via l'API Control ;
-2. Exportez les journaux de décision et la piste d'audit ;
-3. Téléchargez les charges utiles monitorées depuis le stockage objet ;
-4. Déployez une solution DLP alternative ;
-5. Importez les configurations exportées dans la nouvelle solution ;
-6. Supprimez l'instance DLP Numspot.
+1. Export rules, policies and custom detectors via the Control API;
+2. Export decision logs and the audit trail;
+3. Download monitored payloads from object storage;
+4. Deploy an alternative DLP solution;
+5. Import the exported configurations into the new solution;
+6. Delete the Numspot DLP instance.

@@ -1,6 +1,6 @@
 ---
-title: Gérer les utilisateurs DLP - DLP managé
-sidebar_label: Gérer les utilisateurs DLP
+title: Manage DLP users - Managed DLP
+sidebar_label: Manage DLP users
 sidebar_position: 12
 draft: false
 ---
@@ -8,14 +8,14 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Gérer les utilisateurs DLP
+# Manage DLP users
 
-Gérez les utilisateurs du service [DLP](/docs/managed-services/dlp/concepts) : création, modification des rôles, réinitialisation du mot de passe et suppression.
+Manage [DLP](/docs/managed-services/dlp/concepts) service users: creation, role modification, password reset and deletion.
 
 ## Permissions
 
 :::info
-Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+This action requires the following [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) role:
 
 - **admin**
 
@@ -28,73 +28,73 @@ Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Dat
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Dans la console DLP, cliquez sur Users dans le menu latéral.", hotspot: { x: 0.006, y: 0.332, w: 0.155, h: 0.044 } },
-    { img: "/img/walkthrough/dlp/users-list.png", text: "Cliquez sur « Create User » en haut à droite.", hotspot: { x: 0.890, y: 0.030, w: 0.094, h: 0.044 } },
-    { img: "/img/walkthrough/dlp/user-create-form.png", text: "Renseignez le nom d'utilisateur, le mot de passe et le type, puis sélectionnez un ou plusieurs rôles. Cochez éventuellement « Require password change at next login ».", hotspot: { x: 0.335, y: 0.300, w: 0.330, h: 0.430 } },
-    { img: "/img/walkthrough/dlp/user-create-form.png", text: "Cliquez sur « Create » pour créer l'utilisateur.", hotspot: { x: 0.608, y: 0.740, w: 0.053, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "In the DLP console, click Users in the side menu.", hotspot: { x: 0.006, y: 0.332, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/users-list.png", text: "Click “Create User” in the top right.", hotspot: { x: 0.890, y: 0.030, w: 0.094, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/user-create-form.png", text: "Enter the username, password and type, then select one or more roles. Optionally tick “Require password change at next login”.", hotspot: { x: 0.335, y: 0.300, w: 0.330, h: 0.430 } },
+    { img: "/img/walkthrough/dlp/user-create-form.png", text: "Click “Create” to create the user.", hotspot: { x: 0.608, y: 0.740, w: 0.053, h: 0.044 } },
   ]}
 />
 
-1. Dans la console [DLP](/docs/managed-services/dlp/concepts), cliquez sur **Users** dans le menu latéral.
+1. In the [DLP](/docs/managed-services/dlp/concepts) console, click **Users** in the sidebar.
 
-### Créer un utilisateur
+### Create a user
 
-1. Cliquez sur le bouton **Create user** ;
-2. Renseignez les informations du nouvel utilisateur :
+1. Click the **Create user** button;
+2. Fill in the new user's information:
 
-| Champ | Valeur d'exemple | Description |
-|-------|-----------------|-------------|
-| Username | `jdupont` | Nom d'utilisateur |
-| Password | `********` | Mot de passe (8 caractères minimum) |
-| Role | `rule_editor` | Rôle attribué |
+| Field | Example value | Description |
+|-------|---------------|-------------|
+| Username | `jdupont` | Username |
+| Password | `********` | Password (8 characters minimum) |
+| Role | `rule_editor` | Assigned role |
 
-3. Cliquez sur **Save** pour créer l'utilisateur.
+3. Click **Save** to create the user.
 
-### Modifier les rôles d'un utilisateur
+### Modify a user's roles
 
-1. Dans la liste des utilisateurs, cliquez sur le nom de l'utilisateur à modifier ;
-2. Modifiez les rôles attribués ;
-3. Cliquez sur **Save**.
+1. In the user list, click the name of the user to modify;
+2. Modify the assigned roles;
+3. Click **Save**.
 
-Les modifications de rôles prennent effet immédiatement sur les sessions existantes.
+Role changes take effect immediately on existing sessions.
 
-### Réinitialiser le mot de passe
+### Reset password
 
-1. Dans la liste des utilisateurs, cliquez sur le bouton **Actions** de l'utilisateur concerné ;
-2. Cliquez sur **Reset password** ;
-3. Saisissez le nouveau mot de passe (8 caractères minimum) ;
-4. Cliquez sur **Confirm**.
+1. In the user list, click the **Actions** button for the relevant user;
+2. Click **Reset password**;
+3. Enter the new password (8 characters minimum);
+4. Click **Confirm**.
 
-L'utilisateur devra changer son mot de passe à la prochaine connexion.
+The user will need to change their password at the next login.
 
-### Supprimer un utilisateur
+### Delete a user
 
-1. Dans la liste des utilisateurs, cliquez sur le bouton **Actions** de l'utilisateur concerné ;
-2. Cliquez sur **Delete** ;
-3. Confirmez la suppression.
+1. In the user list, click the **Actions** button for the relevant user;
+2. Click **Delete**;
+3. Confirm the deletion.
 
 :::warning
-Le compte admin principal ne peut pas être supprimé.
+The primary admin account cannot be deleted.
 :::
 
 </TabItem>
 <TabItem value="api" label="API">
 
-### Créer un utilisateur
+### Create a user
 
-La requête `POST /api/v1/users` permet de créer un utilisateur.
+The `POST /api/v1/users` request creates a user.
 
-#### Exemple de requête
+#### Request example
 
 ```json
 {
   "username": "jdupont",
-  "password": "MotDePasseSecurise123!",
+  "password": "SecurePassword123!",
   "roles": ["rule_editor"]
 }
 ```
 
-#### Exemple de réponse
+#### Response example
 
 ```json
 {
@@ -109,11 +109,11 @@ La requête `POST /api/v1/users` permet de créer un utilisateur.
 }
 ```
 
-### Modifier les rôles
+### Modify roles
 
-La requête `PUT /api/v1/users/{id}` permet de modifier les rôles d'un utilisateur.
+The `PUT /api/v1/users/{id}` request modifies a user's roles.
 
-#### Exemple de requête
+#### Request example
 
 ```json
 {
@@ -121,23 +121,23 @@ La requête `PUT /api/v1/users/{id}` permet de modifier les rôles d'un utilisat
 }
 ```
 
-### Réinitialiser le mot de passe
+### Reset password
 
-La requête `PUT /api/v1/users/{id}/password` permet de réinitialiser le mot de passe d'un utilisateur.
+The `PUT /api/v1/users/{id}/password` request resets a user's password.
 
-#### Exemple de requête
+#### Request example
 
 ```json
 {
-  "password": "NouveauMotDePasse456!"
+  "password": "NewPassword456!"
 }
 ```
 
-### Supprimer un utilisateur
+### Delete a user
 
-La requête `DELETE /api/v1/users/{id}` permet de supprimer un utilisateur.
+The `DELETE /api/v1/users/{id}` request deletes a user.
 
-#### Exemple de réponse
+#### Response example
 
 ```text
 HTTP/1.1 204 No Content

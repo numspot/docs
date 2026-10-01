@@ -1,24 +1,24 @@
 ---
-title: Créer un backup PostgreSQL - PostgreSQL managé
-sidebar_label: Créer un backup PostgreSQL
+title: Create a PostgreSQL backup - Managed PostgreSQL
+sidebar_label: Create a PostgreSQL backup
 sidebar_position: 8
 draft: false
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Créer un backup PostgreSQL
+# Create a PostgreSQL backup
 
-Vous pouvez créer un backup manuel (on-demand) de votre [cluster PostgreSQL](/docs/managed-services/postgresql/concepts/) à tout moment.
+You can create a manual (on-demand) backup of your [PostgreSQL cluster](/docs/managed-services/postgresql/concepts/) at any time.
 
-:::warning Prérequis
-L'archivage WAL (Write-Ahead Logging) doit être activé sur le cluster pour pouvoir créer des backups on-demand.
+:::warning Prerequisites
+WAL (Write-Ahead Logging) archiving must be enabled on the cluster in order to create on-demand backups.
 :::
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - `postgresql.cluster.create`
 
@@ -29,47 +29,44 @@ Cette action nécessite les permissions IAM (Identity and Access Management) sui
 
 {/* </TabItem> */}
 <TabItem value="api" label="API" default>
+    The `POST /postgresql/spaces/{spaceId}/clusters/{clusterId}/backups` request triggers an on-demand backup of a PostgreSQL cluster.
 
-## API {#tabhead-api}
+    **Parameters**
 
-    La requête `POST /postgresql/spaces/{spaceId}/clusters/{clusterId}/backups` permet de déclencher un backup on-demand d'un cluster PostgreSQL.
+    | Parameter | Type | Required | Description |
+    |-----------|------|----------|-------------|
+    | `spaceId` | UUID (Universally Unique Identifier) | Yes | Space identifier |
+    | `clusterId` | UUID | Yes | Unique identifier of the cluster |
 
-### Paramètres
-
-    | Paramètre | Type | Requis | Description |
-    |-----------|------|--------|-------------|
-    | `spaceId` | UUID (Universally Unique Identifier) | Oui | Identifiant de l'espace |
-    | `clusterId` | UUID | Oui | Identifiant unique du cluster |
-
-### Corps de la requête
+    **Request body**
 
     ```json
     {
-      "name": "mon-backup",
+      "name": "my-backup",
       "target": "PREFER_STANDBY"
     }
     ```
 
-    | Champ | Type | Requis | Description |
-    |-------|------|--------|-------------|
-    | `name` | string | Non | Nom du backup (max 63 caractères, format slug strict) |
-    | `target` | string | Non | Nœud cible pour l'exécution du backup. Valeurs possibles : `PREFER_STANDBY` (par défaut), `STANDBY`, `PRIMARY` |
+    | Field | Type | Required | Description |
+    |-------|------|----------|-------------|
+    | `name` | string | No | Backup name (max 63 characters, strict slug format) |
+    | `target` | string | No | Target node for running the backup. Possible values: `PREFER_STANDBY` (default), `STANDBY`, `PRIMARY` |
 
-### Valeurs du champ target
+    **Values of the target field**
 
-    | Valeur | Description |
-    |--------|-------------|
-    | `PREFER_STANDBY` | Exécute le backup depuis un nœud standby s'il est disponible, sinon depuis le primary (comportement par défaut) |
-    | `STANDBY` | Exécute le backup uniquement depuis un nœud standby. Échoue si aucun standby n'est disponible |
-    | `PRIMARY` | Exécute le backup uniquement depuis le nœud primary |
+    | Value | Description |
+    |-------|-------------|
+    | `PREFER_STANDBY` | Runs the backup from a standby node if one is available, otherwise from the primary (default behavior) |
+    | `STANDBY` | Runs the backup only from a standby node. Fails if no standby is available |
+    | `PRIMARY` | Runs the backup only from the primary node |
 
-### Exemple de réponse
+    **Sample response**
 
     ```json
     {
       "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
       "clusterId": "e592a4f6-2e49-46e7-b6d0-248a7711197a",
-      "name": "mon-backup",
+      "name": "my-backup",
       "type": "ON_DEMAND",
       "status": {
         "state": "CREATING",
@@ -80,12 +77,12 @@ Cette action nécessite les permissions IAM (Identity and Access Management) sui
     }
     ```
 
-    Le backup passe par les états suivants :
-    1. `CREATING` — demande soumise
-    2. `RUNNING` — backup en cours
-    3. `SUCCEEDED` — backup terminé avec succès
-    4. `FAILED` — backup terminé en erreur
+    The backup goes through the following states:
+    1. `CREATING` — request submitted
+    2. `RUNNING` — backup in progress
+    3. `SUCCEEDED` — backup completed successfully
+    4. `FAILED` — backup completed with an error
 
-    [Voir la spécification complète](/openapi/#tag/postgresql/POST/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups)
+    [See the full specification](/openapi/#tag/postgresql/POST/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups)
 </TabItem>
 </Tabs>

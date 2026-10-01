@@ -1,7 +1,7 @@
 ---
-title: Générer un lien d'activation - IAM
-description: "Envoyez un nouveau lien d'activation à un utilisateur IAM pour réinitialiser son mot de passe et son authentification à deux facteurs, via la console ou l'API."
-sidebar_label: Générer un lien d'activation
+title: Generate an activation link - IAM
+description: "Send a new activation link to an IAM user to reset their password and two-factor authentication, via the console or the API."
+sidebar_label: Generate an activation link
 sidebar_position: 8
 draft: false
 last_update:
@@ -12,14 +12,14 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Générer un lien d'activation
+# Generate an activation link
 
-Lors de la première connexion ou dans le cadre d'une réinitialisation des informations d'authentification, un nouveau lien d'activation est généré. Ce lien est envoyé par e-mail à l'adresse déclarée lors de la création de l'utilisateur.
+For the first sign-in or as part of resetting the authentication details, a new activation link is generated. This link is sent by email to the address provided when the user was created.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **iam.user.recover**
 
@@ -32,24 +32,24 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/user/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Utilisateurs.", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
-    { img: "/img/walkthrough/user/create-01-list.png", text: "Dans le tableau « Utilisateurs », cliquez sur l'identifiant de l'utilisateur.", hotspot: { x: 0.234, y: 0.32, w: 0.11, h: 0.035 } },
-    { img: "/img/walkthrough/user/detail.png", text: "Sur la page « Détails utilisateur », cliquez sur « Nouveau lien d'activation ».", hotspot: { x: 0.444, y: 0.1185, w: 0.1521, h: 0.0494 } },
-    { img: "/img/walkthrough/user/generate-02-modal.png", text: "La boîte de dialogue récapitule l'effet du lien : cliquez sur « Envoyer l'email » pour l'envoyer à l'utilisateur.", hotspot: { x: 0.2917, y: 0.3416, w: 0.4167, h: 0.3168 } },
+    { img: "/img/walkthrough/en/user/list.png", text: "From the left-hand side menu, click IAM → Users.", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/user/list.png", text: "In the “Users” table, click the user's identifier.", hotspot: { x: 0.234, y: 0.32, w: 0.11, h: 0.035 } },
+    { img: "/img/walkthrough/en/user/detail.png", text: "On the “User details” page, click “New activation link”.", hotspot: { x: 0.5689, y: 0.1185, w: 0.1231, h: 0.0494 } },
+    { img: "/img/walkthrough/en/user/generate-02-modal.png", text: "The dialog summarises the effect of the link: click “Send email” to send it to the user.", hotspot: { x: 0.2917, y: 0.3416, w: 0.4167, h: 0.3168 } },
   ]}
 />
 
-1. Dans le tableau des **utilisateurs**, cliquez sur l'identifiant de l'utilisateur.
+1. In the **users** table, click the identifier of the user.
 
    :::tip
-   Vous avez la possibilité de rechercher un utilisateur en particulier en utilisant le champ **Rechercher**.
+   You can search for a specific user using the **Search** field.
    :::
 
-2. Sur la page "Détails utilisateur", cliquez sur **Nouveau lien d'activation**.
+2. On the user's "User details" page, click **New activation link**.
 
-3. Confirmez l'envoi en cliquant sur **Envoyer l'email**. L'utilisateur reçoit un email contenant un nouveau lien permettant de réinitialiser son mot de passe et son authentification à deux facteurs.
+3. Confirm by clicking **Send email**. The user receives an email containing a new link to reset their password and two-factor authentication.
 :::warning
-Si l'utilisateur est connecté, sa session actuelle reste active. Cependant, il ne pourra plus se reconnecter avec son ancien mot de passe.
+If the user is logged in, their current session remains active. However, they will no longer be able to sign in with their previous password.
 :::
 
 </TabItem>
@@ -58,18 +58,18 @@ Si l'utilisateur est connecté, sa session actuelle reste active. Cependant, il 
 ## API {#tabhead-api}
 
 
-La génération d'un lien d'activation peut se faire via l'API, mais les étapes suivantes sont à réaliser par l'utilisateur dans son navigateur.
+Generating an activation link can be done via the API, but the following steps must be carried out by the user in their browser.
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/POST/iam/organisations/{organisationId}/users/{userId}/recover
 
-### Exemple
+### Example
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users/{userId}/recover' \
   --request POST
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -80,7 +80,7 @@ curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users/
 ```
 
 :::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
 </TabItem>
@@ -89,7 +89,7 @@ Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la m
 ## Terraform {#tabhead-terraform}
 
 
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/user).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/user).
 
 </TabItem>
 </Tabs>

@@ -1,0 +1,68 @@
+---
+title: Supprimer une passerelle virtuelle - VPN
+sidebar_label: Supprimer une passerelle virtuelle
+sidebar_position: 5
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer une passerelle virtuelle
+
+Vous pouvez supprimer une [passerelle virtuelle (virtual gateway)](/docs/connectivity/vpn/virtual-gateway/concepts/) qui n'est plus liée à un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+
+Cette action modifie l'état de la passerelle virtuelle de "available" en "deleted".
+
+:::info
+**Prérequis :** Détachez la passerelle virtuelle du VPC auquel elle est liée, le cas échéant.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+
+- **connectivity.bridge.delete**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+
+1. Cliquez dans le dashboard **Virtual Gateways** pour faire apparaître des cases à cocher.
+2. Cochez la case de la passerelle virtuelle que vous voulez supprimer.
+   La passerelle virtuelle est sélectionnée et un menu d'actions apparaît.
+3. Cliquez sur **Supprimer**.
+   Une boîte de dialogue de confirmation apparaît.
+4. Cliquez sur **Supprimer**.
+   La passerelle virtuelle est supprimée.
+
+:::info
+Les ressources supprimées restent visibles pendant 1 heure.
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `DELETE /connectivity/spaces/{spaceId}/virtualGateways/{id}` supprime une passerelle virtuelle spécifiée.
+Avant de supprimer une passerelle virtuelle, il est recommandé de la détacher du VPC et de supprimer la connexion VPN (Virtual Private Network).
+
+[Exemple de requête : Suppression d'une virtual gateway](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/virtualGateways/{id})
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/virtual_gateway).
+
+</TabItem>
+</Tabs>

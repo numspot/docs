@@ -1,0 +1,54 @@
+---
+title: Créer un groupe d'options DHCP - Numspot
+sidebar_label: Créer un groupe d'options DHCP
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Créer un groupe d'options DHCP
+
+Vous pouvez créer un groupe d'options [DHCP (Dynamic Host Configuration Protocol)](/docs/network/dhcp/concepts/) à associer à un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/). Vous pouvez spécifier un ou plusieurs serveurs NTP (Network Time Protocol) et serveurs DNS (Domain Name System) à utiliser, avec un nom de domaine correspondant.
+
+Numspot fournit automatiquement un groupe d'options DHCP par défaut. Cependant, vous pouvez créer autant de groupes personnalisés que vous le souhaitez.
+
+Vous pouvez associer un groupe d'options DHCP à un VPC pour personnaliser la configuration DHCP utilisée avec les [VM (Virtual Machine)](/docs/compute/concept/) créées dans ce VPC.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.dhcpOptions.create**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+La création d'un groupe d'options DHCP n'est pas disponible depuis la Console. Utilisez l'API ou Terraform.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `POST /compute/spaces/{spaceId}/dhcpOptions` crée un ensemble d'options DHCP, que vous pouvez ensuite associer à un réseau en utilisant la méthode pour modifier un VPC.
+
+[Exemple de requête : Création d'un ensemble d'options DHCP ↗](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/dhcpOptions)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/dhcp_options).
+
+</TabItem>
+</Tabs>

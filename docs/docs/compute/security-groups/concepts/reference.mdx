@@ -1,41 +1,41 @@
 ---
-title: Référence des quotas de security groups
+title: Security group quotas reference
 sidebar_position: 3
 draft: false
 ---
 
-# Référence des quotas de security groups
+# Security group quotas reference
 
-Cette page liste les quotas concernant les [security groups](/docs/compute/security-groups/concepts/concept-sg/).
+This page lists the quotas concerning [security groups](/docs/compute/security-groups/concepts/concept-sg/).
 
 ## Quotas
 
-Par défaut, votre compte a les quotas suivants :
+By default, your account has the following quotas:
 
-| Nom                                                   | Valeur par défaut |
+| Name                                                  | Default value     |
 | ----------------------------------------------------- | ----------------- |
-| Security groups (dans le Cloud public)                | 100               |
-| Règles par security group (dans le Cloud public)      | 50                |
-| Security groups par [VM](/docs/compute/concept/)             | 5                 |
-| Security groups (dans un [VPC](/docs/network/vpc/concepts/))                         | 500               |
-| Règles par security group (dans un VPC)               | 50                |
+| Security groups (in the public Cloud)                 | 100               |
+| Rules per security group (in the public Cloud)        | 50                |
+| Security groups per [VM](/docs/compute/concept/)            | 5                 |
+| Security groups (in a [VPC](/docs/network/vpc/concepts/))                         | 500               |
+| Rules per security group (in a VPC)                   | 50                |
 
 :::warning
-Si ces valeurs par défaut sont augmentées par l'équipe Support :
-* Le quota Security groups par VM multiplié par le quota Règles par security group ne peut pas dépasser 1000.
-* Le quota Security groups par VM ne peut pas dépasser 16.
+If these default values are increased by the Support team:
+* The Security groups per VM quota multiplied by the Rules per security group quota cannot exceed 1000.
+* The Security groups per VM quota cannot exceed 16.
 :::
 
-## Exemples
+## Examples
 
-| Security groups par VM             | Règles de security groups             | Nombre total de règles pour chaque VM |
+| Security groups per VM             | Security group rules                  | Total number of rules for each VM     |
 --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| 5 (par défaut)                        | 50 (par défaut)                       | 5 x 50 = 250 (par défaut)             |
+| 5 (default)                           | 50 (default)                          | 5 x 50 = 250 (default)                |
 | 10                                    | 100                                   | 10 x 100 = 1000 (maximum)             |
 | 16 (maximum)                          | 62                                    | 16 x 62 = 992 (maximum)               |
-| 10                                    | 40 (inférieur à la limite par défaut) | 10 x 40 = 400                         |
-| 3 (inférieur à la limite par défaut)  | 100                                   | 3 x 100 = 300                         |
+| 10                                    | 40 (below the default limit)          | 10 x 40 = 400                         |
+| 3 (below the default limit)           | 100                                   | 3 x 100 = 300                         |
 
 :::info
-Le quota Security groups par VM prend en compte le nombre de security groups uniques sur toutes les interfaces réseau d'une VM. Cela signifie qu'ajouter le même security group sur plusieurs interfaces réseau d'une même VM comptera seulement pour 1.
+The Security groups per VM quota takes into account the number of unique security groups across all the network interfaces of a VM. This means that adding the same security group on several network interfaces of the same VM will count only as 1.
 :::

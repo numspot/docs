@@ -22,7 +22,7 @@ const FILES = [
   path.join(ROOT, 'docs', 'docs', 'changelog.json'),
   path.join(
     ROOT,
-    'i18n/en/docusaurus-plugin-content-docs/current/docs/changelog.json'
+    'i18n/fr/docusaurus-plugin-content-docs/current/docs/changelog.json'
   ),
 ];
 

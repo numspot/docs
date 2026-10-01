@@ -1,6 +1,6 @@
 ---
-title: Créer une internet gateway - Numspot
-sidebar_label: Créer une internet gateway
+title: Create an internet gateway - Numspot
+sidebar_label: Create an internet gateway
 sidebar_position: 2
 draft: false
 ---
@@ -9,16 +9,16 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Créer une internet gateway
+# Create an internet gateway
 
-Vous pouvez créer une [internet gateway (passerelle Internet)](/docs/network/internet-gateway/concepts/) que vous pouvez ensuite attacher à un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) pour connecter des [VM (Virtual Machine)](/docs/compute/concept/) d'un ou plusieurs subnet (sous-réseaux) à Internet de manière directe.
+You can create an [internet gateway](/docs/network/internet-gateway/concepts/) that you can then attach to a [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud) to connect [VM](/docs/compute/concept/) (Virtual Machine) of one or more subnets directly to the Internet.
 
-Pour cela, vous devez également ajouter une route à la [route table (table de routage)](/docs/network/route-table/concepts/) de ces subnet dirigeant le trafic Internet vers l'internet gateway et mettre à jour vos [security group (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/). Pour en savoir plus, consultez le [Tutoriel : Mettre en place une connexion directe entre des VM d'un VPC et internet ↗](./administration/tutorial.mdx).
+To do so, you must also add a route to the [route table](/docs/network/route-table/concepts/) of these subnets directing Internet traffic to the internet gateway, and update your [security groups](/docs/compute/security-groups/concepts/concept-sg/). For more information, see the [Tutorial: Set up a direct connection between the VM of a VPC and the Internet ↗](/docs/network/internet-gateway/actions/administration/tutorial).
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.internetGateway.create**
 
@@ -27,57 +27,50 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/internet-gateway/01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC → Internet Gateways.", hotspot: { x: 0, y: 0.6358, w: 0.194, h: 0.0568 } },
-    { img: "/img/walkthrough/internet-gateway/01-list.png", text: "Depuis la liste des internet gateways, cliquez sur « Créer une Internet Gateway ».", hotspot: { x: 0.7879, y: 0.2206, w: 0.1802, h: 0.0741 } },
-    { img: "/img/walkthrough/internet-gateway/02-form.png", text: "Donnez un nom à votre internet gateway. Vous pouvez aussi la rattacher à un VPC dès maintenant.", hotspot: { x: 0.2083, y: 0.4049, w: 0.5556, h: 0.084 } },
-    { img: "/img/walkthrough/internet-gateway/02-form.png", text: "Cliquez sur « Créer ».", hotspot: { x: 0.635, y: 0.625, w: 0.095, h: 0.055 } },
+    { img: "/img/walkthrough/en/internet-gateway/list.png", text: "From the left-hand side menu, click Network → VPC → Internet Gateways.", hotspot: { x: 0, y: 0.6358, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/internet-gateway/list.png", text: "From the internet gateways list, click “Create an Internet Gateway”.", hotspot: { x: 0.7951, y: 0.2329, w: 0.166, h: 0.0494 } },
+    { img: "/img/walkthrough/en/internet-gateway/create.png", text: "Give your internet gateway a name. You can also attach it to a VPC right away.", hotspot: { x: 0.2083, y: 0.4049, w: 0.5556, h: 0.084 } },
+    { img: "/img/walkthrough/en/internet-gateway/create.png", text: "Click “Create”.", hotspot: { x: 0.6394, y: 0.6309, w: 0.0468, h: 0.0494 } },
   ]}
 />
 
-1. Connectez-vous sur la console Numspot.
-2. Depuis le menu latéral gauche, cliquez sur **Réseau** → **VPC** → **Internet Gateways**.
+
+1. Log in to the Numspot console.
+2. From the left-hand side menu, click **Network** → **VPC** → **Internet Gateways**.
 
 
-3. Cliquez sur le bouton **Créer une Internet Gateway**.
+3. Click the **Create an Internet Gateway** button.
 
 
-Une nouvelle fenêtre "Créer une Internet Gateway" apparaît.
+A new "Create an Internet Gateway" window appears.
 
 
-4. Dans le champ "Nom", saisissez un nom pour l'internet gateway.
+4. In the "Name" field, enter a name for the internet gateway.
 
 :::warning
-Cette action ajoute un tag Name de 255 caractères maximum. Vous pouvez utiliser tous les caractères, y compris les lettres accentuées.
+This action adds a Name tag of up to 255 characters. You can use any characters, including accented letters.
 :::
 
-5. Cliquez sur **Créer l'internet gateway**.
+5. Click **Create the internet gateway**.
 
-Un message de confirmation s'affiche en bas de page indiquant que l'internet gateway est bien créée.
+A confirmation message appears at the bottom of the page indicating that the internet gateway has been created.
 
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `POST /compute/spaces/{spaceId}/internetGateways` command creates an internet gateway that you can use with a VPC.
 
+An internet gateway allows VM launched in a network to connect to the Internet. It enables the routing of inbound and outbound Internet traffic as well as the management of public IP.
 
-La commande `POST /compute/spaces/{spaceId}/internetGateways` crée une internet gateway que vous pouvez utiliser avec un VPC.
-
-Une internet gateway permet aux VM lancées dans un réseau de se connecter à Internet. Elle permet le routage du trafic Internet entrant et sortant ainsi que la gestion des IP publiques.
-
-[Exemple de requête : Création d'une internet gateway ↗](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/internetGateways)
+[Example request: Creating an internet gateway ↗](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/internetGateways)
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/internet_gateway).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/internet_gateway).
 
 </TabItem>
 </Tabs>

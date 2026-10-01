@@ -234,24 +234,24 @@ export default function Walkthrough({ steps, width = 1440, height = 810 }: Props
 
       <div className={styles.controls}>
         <div className={styles.navGroup}>
-          <button className={styles.iconBtn} onClick={prev} disabled={i === 0} aria-label={translate({ id: 'walkthrough.prev', message: 'Étape précédente' })}>
+          <button className={styles.iconBtn} onClick={prev} disabled={i === 0} aria-label={translate({ id: 'walkthrough.prev', message: "Previous step" })}>
             <ChevronLeft />
           </button>
           <span className={styles.counter}>
             {i + 1} / {steps.length}
           </span>
-          <button className={styles.iconBtn} onClick={next} disabled={i === steps.length - 1} aria-label={translate({ id: 'walkthrough.next', message: 'Étape suivante' })}>
+          <button className={styles.iconBtn} onClick={next} disabled={i === steps.length - 1} aria-label={translate({ id: 'walkthrough.next', message: "Next step" })}>
             <ChevronRight />
           </button>
         </div>
 
-        <div className={styles.dots} role="tablist" aria-label={translate({ id: 'walkthrough.steps', message: 'Étapes' })}>
+        <div className={styles.dots} role="tablist" aria-label={translate({ id: 'walkthrough.steps', message: "Steps" })}>
           {steps.map((_, k) => (
             <button
               key={k}
               className={k === i ? styles.dotOn : styles.dot}
               onClick={() => go(k)}
-              aria-label={translate({ id: 'walkthrough.goToStep', message: "Aller à l'étape {n}" }, { n: k + 1 })}
+              aria-label={translate({ id: 'walkthrough.goToStep', message: 'Go to step {n}' }, { n: k + 1 })}
               aria-selected={k === i}
             />
           ))}
@@ -262,8 +262,8 @@ export default function Walkthrough({ steps, width = 1440, height = 810 }: Props
             className={styles.iconBtn}
             onClick={restart}
             disabled={i === 0}
-            aria-label={translate({ id: 'walkthrough.restart', message: 'Recommencer depuis le début' })}
-            title={translate({ id: 'walkthrough.restart', message: 'Recommencer depuis le début' })}
+            aria-label={translate({ id: 'walkthrough.restart', message: "Restart from the beginning" })}
+            title={translate({ id: 'walkthrough.restart', message: "Restart from the beginning" })}
           >
             <RestartIcon />
           </button>
@@ -271,13 +271,13 @@ export default function Walkthrough({ steps, width = 1440, height = 810 }: Props
             className={styles.fsBtn}
             onClick={toggleFs}
             aria-label={isFs
-              ? translate({ id: 'walkthrough.exitFullscreen', message: 'Quitter le plein écran' })
-              : translate({ id: 'walkthrough.enterFullscreen', message: 'Afficher en plein écran' })}
+              ? translate({ id: 'walkthrough.exitFullscreen', message: "Exit full screen" })
+              : translate({ id: 'walkthrough.enterFullscreen', message: "Show in full screen" })}
           >
             {isFs ? <CompressIcon /> : <ExpandIcon />}
             <span className={styles.fsLabel}>{isFs
-              ? translate({ id: 'walkthrough.reduce', message: 'Réduire' })
-              : translate({ id: 'walkthrough.fullscreen', message: 'Plein écran' })}</span>
+              ? translate({ id: 'walkthrough.reduce', message: "Exit full screen" })
+              : translate({ id: 'walkthrough.fullscreen', message: "Full screen" })}</span>
           </button>
         </div>
       </div>

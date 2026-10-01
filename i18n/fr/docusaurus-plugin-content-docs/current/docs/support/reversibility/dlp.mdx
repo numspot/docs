@@ -1,0 +1,66 @@
+---
+title: Réversibilité - DLP managé
+sidebar_label: Réversibilité du DLP managé
+description: Informations sur la réversibilité du service managé DLP
+sidebar_position: 6
+draft: false
+---
+
+# Réversibilité du DLP managé
+
+Le service managé [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) est conçu pour garantir la réversibilité, c'est-à-dire la possibilité pour le client de récupérer ses données et de migrer vers une autre solution sans verrouillage.
+
+## Données exportables
+
+L'ensemble des données du service DLP peut être exporté via l'API Control :
+
+- les règles et leur historique de versions ;
+- les policies et leur historique de versions ;
+- les détecteurs personnalisés ;
+- les journaux de décision ;
+- les événements monitorés ;
+- la piste d'audit.
+
+## Outils de réversibilité
+
+### Export via l'API Control
+
+Utilisez l'API Control pour exporter les configurations :
+
+```bash
+# Exporter les règles
+curl -b dlp_session=<cookie> /api/v1/rules > rules.json
+
+# Exporter les policies
+curl -b dlp_session=<cookie> /api/v1/policies > policies.json
+
+# Exporter les détecteurs personnalisés
+curl -b dlp_session=<cookie> /api/v1/detectors/custom > custom-detectors.json
+
+# Exporter les journaux de décision
+curl -b dlp_session=<cookie> "/api/v1/logs/decisions?time_start=2020-01-01T00:00:00Z" > decisions.json
+```
+
+### Export des rulesets publiés
+
+Chaque version publiée du [ruleset](/docs/managed-services/dlp/concepts) (ensemble de règles) peut être récupérée via l'API :
+
+```bash
+curl -b dlp_session=<cookie> /api/v1/rulesets/{version} > ruleset-v{version}.json
+```
+
+## Formats ouverts
+
+- Les règles et policies sont au format JSON, standard de l'industrie ;
+- Les détecteurs utilisent des expressions régulières compatibles RE2 ;
+- Les journaux de décision sont au format JSON ;
+- Les charges utiles monitorées sont stockées dans un stockage objet compatible S3.
+
+## Procédure de sortie
+
+1. Exportez les règles, policies et détecteurs personnalisés via l'API Control ;
+2. Exportez les journaux de décision et la piste d'audit ;
+3. Téléchargez les charges utiles monitorées depuis le stockage objet ;
+4. Déployez une solution DLP alternative ;
+5. Importez les configurations exportées dans la nouvelle solution ;
+6. Supprimez l'instance DLP Numspot.

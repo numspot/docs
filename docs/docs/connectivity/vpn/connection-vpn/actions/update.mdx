@@ -1,6 +1,6 @@
 ---
-title: Modifier une connexion VPN
-description: Modifiez les attributs d'une connexion VPN existante.
+title: Update a VPN connection
+description: Update the attributes of an existing VPN connection.
 sidebar_position: 3
 draft: false
 ---
@@ -8,14 +8,14 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Modifier une connexion VPN
+# Update a VPN connection
 
-Vous pouvez modifier les attributs d'une connexion **VPN** (Virtual Private Network).
+You can update the attributes of a VPN (Virtual Private Network) connection.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **connectivity.vpnconnection.update**
 
@@ -24,32 +24,23 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
+1. In the **VPN Connections** dashboard, click the ID of the VPN connection to update.
+2. Update the required attributes.
+3. Click **Save**.
 
-
-1. Dans le dashboard **VPN Connections**, cliquez sur l'ID de la connexion VPN à modifier.
-2. Modifiez les attributs souhaités.
-3. Cliquez sur **Enregistrer**.
-
-La connexion VPN est modifiée.
+The VPN connection is updated.
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `PUT /connectivity/spaces/{spaceId}/vpnConnections/{id}` command updates the specified attributes of a VPN connection.
 
-
-La commande `PUT /connectivity/spaces/{spaceId}/vpnConnections/{id}` modifie les attributs spécifiés d'une connexion VPN.
-
-[Exemple de requête : Modification d'une VPN Connection](/openapi/#tag/connectivity/PUT/connectivity/spaces/{spaceId}/vpnConnections/{id})
+[Request example: Updating a VPN Connection](/openapi/#tag/connectivity/PUT/connectivity/spaces/{spaceId}/vpnConnections/{id})
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection).
 
 </TabItem>
 </Tabs>

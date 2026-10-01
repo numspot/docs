@@ -1,6 +1,6 @@
 ---
-title: Obtenir des informations sur vos Hybrid Bridges
-description: Consultez les informations de vos bridges entre VPC et services managés.
+title: Get information about your Hybrid Bridges
+description: View the information of your bridges between VPC and managed services.
 sidebar_position: 2
 draft: false
 ---
@@ -8,16 +8,16 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Obtenir des informations sur vos Hybrid Bridges
+# Get information about your Hybrid Bridges
 
-Vous pouvez obtenir des informations sur un ou plusieurs bridges.
+You can get information about one or several bridges.
 
-Par défaut, cette action décrit tous vos bridges.
+By default, this action describes all your bridges.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **connectivity.bridge.get**
 
@@ -27,20 +27,20 @@ Cette action nécessite les permissions IAM (Identity and Access Management) sui
 
 ## API {#tabhead-api}
 
-La commande `GET /connectivity/spaces/{spaceId}/bridges` permet de lister tous vos bridges.
+The `GET /connectivity/spaces/{spaceId}/bridges` command lists all your bridges.
 
-[Exemple de requête : Lister tous les Hybrid Bridges](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/bridges)
+[Example request: List all Hybrid Bridges](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/bridges)
 
-La commande `GET /connectivity/spaces/{spaceId}/bridges/{id}` permet de récupérer les informations d'un bridge spécifique.
+The `GET /connectivity/spaces/{spaceId}/bridges/{id}` command retrieves the information of a specific bridge.
 
-[Exemple de requête : Récupérer les informations d'un Hybrid Bridge](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/bridges/{id})
+[Example request: Retrieve the information of a Hybrid Bridge](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/bridges/{id})
   </TabItem>
   <TabItem value="terraform" label="Terraform">
 
 ## Terraform {#tabhead-terraform}
 
 
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/hybrid_bridge).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/hybrid_bridge).
 
   </TabItem>
 </Tabs>

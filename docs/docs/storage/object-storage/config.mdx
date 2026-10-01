@@ -1,81 +1,81 @@
 ---
-title: Configuration de l'AWS CLI
+title: Configuring the AWS CLI
 sidebar_position: 2
 draft: false
 ---
 
-# Configuration de l'AWS CLI avec Numspot
+# Configuring the AWS CLI with Numspot
 
-Ce guide vous aide à configurer l'AWS CLI (Amazon Web Services Command Line Interface) pour accéder aux services Numspot à l'aide des identifiants d'accès.
+This guide helps you configure the AWS CLI (Amazon Web Services Command Line Interface) to access Numspot services using access credentials.
 
-La référence complète de l'API Object Storage est disponible dans la [documentation OpenAPI Scalar](/openapi-object-storage).
+The full reference of the Object Storage API is available in the [OpenAPI Scalar documentation](/openapi-object-storage).
 
-## Étapes de configuration
+## Configuration steps
 
-1. Installer l'AWS CLI
+1. Install the AWS CLI
 
-   Téléchargez et installez l'AWS CLI en suivant la [documentation officielle AWS CLI](https://docs.aws.amazon.com/fr_fr/cli/latest/userguide/cli-chap-getting-started.html).
+   Download and install the AWS CLI by following the [official AWS CLI documentation](https://docs.aws.amazon.com/fr_fr/cli/latest/userguide/cli-chap-getting-started.html).
 
-2. Lancer la commande de configuration
+2. Run the configuration command
 
-   Ouvrez un terminal et exécutez :
+   Open a terminal and run:
 
    ```bash
    aws configure
    ```
-3. Saisir les informations suivantes :
-- `AWS Access Key ID` : Votre access key Numspot.
-- `AWS Secret Access Key` : Votre secret key Numspot. Pour en savoir plus, voir [Obtention d'une paire de clés](/docs/storage/object-storage/quickstart/#1-obtention-dune-paire-de-clés-accès-et-secret).
-- `Default region name` : La région que vous souhaitez utiliser.
-- `Default output format` : json
+3. Enter the following information:
+- `AWS Access Key ID`: Your Numspot access key.
+- `AWS Secret Access Key`: Your Numspot secret key. For more information, see [Obtaining a key pair](/docs/storage/object-storage/quickstart/#1-obtaining-a-key-pair-access-and-secret).
+- `Default region name`: The region you want to use.
+- `Default output format`: json
 
     :::tip
-    Cette commande configure le profil par défaut (default). Pour configurer un profil nommé, utilisez la commande suivante :
+    This command configures the default profile (default). To configure a named profile, use the following command:
     ```bash
-    aws configure --profile VOTRE_PROFIL
+    aws configure --profile YOUR_PROFILE
     ```
     :::
 
-## Fichiers générés
+## Generated files
 
-`~/.aws/credentials` :
+`~/.aws/credentials`:
 
 ```ini
 [default]
-aws_access_key_id = VOTRE_ACCESS_KEY_ID
-aws_secret_access_key = VOTRE_SECRET_ACCESS_KEY
+aws_access_key_id = YOUR_ACCESS_KEY_ID
+aws_secret_access_key = YOUR_SECRET_ACCESS_KEY
 
-[VOTRE_PROFIL]
-aws_access_key_id = AUTRE_ACCESS_KEY
-aws_secret_access_key = AUTRE_SECRET_KEY
+[YOUR_PROFILE]
+aws_access_key_id = OTHER_ACCESS_KEY
+aws_secret_access_key = OTHER_SECRET_KEY
 ```
 
-`~/.aws/config` :
+`~/.aws/config`:
 
 ```ini
 [default]
 region = eu-west-2
 output = json
 
-[profile VOTRE_PROFIL]
+[profile YOUR_PROFILE]
 region = eu-west-2
 output = json
 ```
 
-## Utiliser un profil spécifique
+## Use a specific profile
 
-Pour utiliser un profil nommé dans vos commandes AWS CLI :
+To use a named profile in your AWS CLI commands:
 ```bash
-aws s3 ls --profile VOTRE_PROFIL
+aws s3 ls --profile YOUR_PROFILE
 ```
 
-## Vérifier la configuration
+## Check the configuration
 
-Vous pouvez afficher la configuration d'un profil à l'aide de la commande suivante :
+You can display the configuration of a profile using the following command:
 ```bash
-aws configure list --profile VOTRE_PROFIL
+aws configure list --profile YOUR_PROFILE
 ```
 
-## Configuration manuelle
+## Manual configuration
 
-Si vous préférez, vous pouvez créer ou modifier manuellement les fichiers `~/.aws/credentials` et `~/.aws/config` en respectant les formats montrés ci-dessus.
+If you prefer, you can manually create or edit the `~/.aws/credentials` and `~/.aws/config` files following the formats shown above.

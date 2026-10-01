@@ -1,7 +1,7 @@
 ---
-title: Supprimer un utilisateur - IAM
-description: "Supprimez définitivement un utilisateur IAM de votre organisation Numspot et révoquez ses accès et ses clés API, via la console ou l'API."
-sidebar_label: Supprimer un utilisateur
+title: Delete a user - IAM
+description: "Permanently delete an IAM user from your Numspot organisation and revoke their access and API keys, via the console or the API."
+sidebar_label: Delete a user
 sidebar_position: 7
 draft: false
 last_update:
@@ -12,18 +12,18 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Supprimer un utilisateur
+# Delete a user
 
-La suppression d'un utilisateur est une opération d'administration à fort impact, non réversible.
+Deleting a user is a high-impact, irreversible administration operation.
 
 :::warning
-Cette action est **irréversible**.
+This action is **irreversible**.
 :::
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **iam.user.delete**
 
@@ -36,22 +36,20 @@ Cette action nécessite les permissions IAM (Identity and Access Management) sui
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/user/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Utilisateurs.", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
-    { img: "/img/walkthrough/user/list-02-menu.png", text: "Dans le tableau des utilisateurs, ouvrez le menu « Actions » de l'utilisateur, puis cliquez sur « Supprimer ».", hotspot: { x: 0.7708, y: 0.635, w: 0.1929, h: 0.045 } },
-    { img: "/img/walkthrough/user/delete-02-modal.png", text: "Confirmation forte : saisissez le prénom et le nom exacts de l'utilisateur, puis cliquez sur « Supprimer ». La suppression est définitive.", hotspot: { x: 0.3333, y: 0.1981, w: 0.3333, h: 0.6037 } },
+    { img: "/img/walkthrough/en/user/list.png", text: "From the left-hand side menu, click IAM → Users.", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/user/list-02-menu.png", text: "In the users table, open the user's “Actions” menu, then click “Delete”.", hotspot: { x: 0.7972, y: 0.635, w: 0.1667, h: 0.045 } },
+    { img: "/img/walkthrough/en/user/delete-02-modal.png", text: "Strong confirmation: enter the user's exact first name and last name, then click “Delete”. The deletion is permanent.", hotspot: { x: 0.3333, y: 0.1981, w: 0.3333, h: 0.6037 } },
   ]}
 />
 
-1. Dans le tableau listant les **utilisateurs**, ouvrez le menu **Actions** de l'utilisateur à supprimer, puis cliquez sur **Supprimer**. La boîte de dialogue "Supprimer l'utilisateur" apparaît.
+1. In the **users** table, click the **Actions** button of the user to delete, then **Delete**. The "Delete user" dialog appears.
+2. In the "Strong confirmation" field, enter the first name and last name of the user to delete.
+3. Click **Delete**.
 
-2. Dans le champ "Confirmation forte", saisissez le prénom et le nom de l'utilisateur à supprimer.
-
-3. Cliquez sur **Supprimer**.
-
-Vous pouvez également supprimer un utilisateur depuis sa page "Détails utilisateur", via le bouton **Supprimer l'utilisateur** en haut à droite.
+You can also delete a user from their "User details" page, using the **Delete user** button at the top right.
 
 :::warning
-La suppression d'un utilisateur de l'organisation supprime automatiquement ses clés API. Les politiques qui lui sont directement associées restent orphelines.
+Deleting a user from the organisation automatically deletes their API keys. Policies directly associated with them are left orphaned.
 :::
 
 </TabItem>
@@ -60,11 +58,11 @@ La suppression d'un utilisateur de l'organisation supprime automatiquement ses c
 ## API {#tabhead-api}
 
 
-### Supprimer un utilisateur dans une organisation
+### Delete a user in an organisation
 
-[Documentation de l'API de suppression d'un utilisateur](/openapi/#tag/identity-access-management/DELETE/iam/organisations/{organisationId}/users/{userId})
+[User deletion API documentation](/openapi/#tag/identity-access-management/DELETE/iam/organisations/{organisationId}/users/{userId})
 
-### Exemple
+### Example
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users/{userId}' \
@@ -72,7 +70,7 @@ curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users/
 ```
 
 :::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
 </TabItem>
@@ -81,7 +79,7 @@ Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la m
 ## Terraform {#tabhead-terraform}
 
 
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/user).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/user).
 
 </TabItem>
 </Tabs>

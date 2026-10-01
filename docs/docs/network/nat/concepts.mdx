@@ -1,46 +1,46 @@
 ---
-title: Passerelles nat
-sidebar_label: À propos des NAT Gateways
+title: NAT gateways
+sidebar_label: About NAT Gateways
 sidebar_position: 1
 draft: false
 ---
 
 import ActionsSummary from '@site/src/components/ActionsSummary';
 
-# À propos des NAT Gateways
+# About NAT Gateways
 
 <ActionsSummary />
 
-Les passerelles nat (NAT gateways) permettent aux [VM (Virtual Machines)](/docs/compute/concept/) situées dans un réseau de se connecter à Internet en utilisant une adresse IP publique unique. Elles assurent ainsi la traduction d'adresses réseau et la connexion sortante pour les instances de VM dans un sous-réseau (subnet) privé.
+NAT gateways allow [VM (Virtual Machines)](/docs/compute/concept/) located in a network to connect to the Internet using a single public IP address. They thereby provide network address translation and outbound connectivity for VM instances in a private subnet.
 
-## Informations générales
+## General information
 
-Une passerelle nat assure l'envoi et la réception du trafic Internet pour une ou plusieurs VM d'un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/). Pour ce faire, la passerelle nat effectue une traduction d'adresses réseau en convertissant les adresses IP privées des VM en une adresse IP publique unique lorsque ces VM communiquent avec Internet. Cette traduction permet aux VM de se connecter à Internet tout en restant cachées derrière l'adresse IP publique de la passerelle nat.
+A nat gateway handles sending and receiving Internet traffic for one or more VM of a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/). To do so, the nat gateway performs network address translation by converting the private IP addresses of the VM into a single public IP address when these VM communicate with the Internet. This translation allows the VM to connect to the Internet while remaining hidden behind the public IP address of the nat gateway.
 
 :::warning
-Étant donné que vous disposez d'un quota limité d'adresses IP publiques pour votre compte, les passerelles nat vous permettent de connecter vos VM du VPC à Internet en utilisant une adresse IP publique unique. Cela vous permet de maximiser l'utilisation de vos adresses IP publiques tout en permettant aux VM de se connecter à Internet de manière sécurisée et efficace.
+Since you have a limited quota of public IP addresses for your account, nat gateways allow you to connect your VPC VM to the Internet using a single public IP address. This lets you maximize the use of your public IP addresses while allowing the VM to connect to the Internet securely and efficiently.
 :::
 
-Une passerelle nat peut avoir les états suivants :
+A nat gateway can have the following states:
 
-- "pending" : la passerelle nat est en cours de création.
-- "available" : la passerelle nat est prête à transmettre du trafic.
-- "deleting" : la passerelle nat est en cours de suppression.
-- "deleted" : la passerelle nat est supprimée.
+- "pending": the nat gateway is being created.
+- "available": the nat gateway is ready to forward traffic.
+- "deleting": the nat gateway is being deleted.
+- "deleted": the nat gateway is deleted.
 
 ## Architecture
 
-Une passerelle nat se crée dans un sous-réseau mais peut être utilisée par tous les sous-réseaux du VPC.
+A nat gateway is created in a subnet but can be used by all the subnets of the VPC.
 
-Pour router du trafic depuis vos VM jusqu'à Internet via la passerelle nat, vous devez ajouter les routes suivantes :
+To route traffic from your VM to the Internet through the nat gateway, you must add the following routes:
 
-- Dans la [table de routage](/docs/network/route-table/concepts/) du sous-réseau où se trouve la passerelle nat, une route dirigeant le trafic de la passerelle nat jusqu'à Internet avec la [passerelle Internet](/docs/network/internet-gateway/concepts/) comme cible.
-- Dans les tables de routage des sous-réseaux où se trouvent vos VM, des routes dirigeant le trafic de ces VM jusqu'à Internet avec la passerelle nat comme cible.
+- In the [route table](/docs/network/route-table/concepts/) of the subnet where the nat gateway is located, a route directing the nat gateway traffic to the Internet with the [internet gateway](/docs/network/internet-gateway/concepts/) as the target.
+- In the route tables of the subnets where your VM are located, routes directing the traffic of these VM to the Internet with the nat gateway as the target.
 
-<img src="/img/console/network/nat/sch-General-NATGateway_v2.png" alt="Schéma de fonctionnement d'une NAT Gateway dans un réseau Numspot" />
+<img src="/img/console/network/nat/sch-General-NATGateway_v2.png" alt="Diagram showing how a NAT Gateway works in a Numspot network" />
 
-*Architecture d'une passerelle nat*
+*Architecture of a nat gateway*
 
 :::warning
-Dans cette architecture, assurez-vous que les [groupes de sécurité](/docs/compute/security-groups/concepts/concept-sg/) des VM comportent une règle autorisant les flux sortants vers Internet (0.0.0.0/0 ou une plage d'adresses IP plus restreinte).
+In this architecture, make sure that the [security groups](/docs/compute/security-groups/concepts/concept-sg/) of the VM include a rule allowing outbound flows to the Internet (0.0.0.0/0 or a more restricted IP address range).
 :::

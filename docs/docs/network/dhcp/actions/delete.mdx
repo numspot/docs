@@ -1,6 +1,6 @@
 ---
-title: Supprimer un groupe d'options DHCP - Numspot
-sidebar_label: Supprimer un groupe d'options DHCP
+title: Delete a DHCP options group - Numspot
+sidebar_label: Delete a DHCP options group
 sidebar_position: 5
 draft: false
 ---
@@ -8,58 +8,55 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Supprimer un groupe d'options DHCP
+# Delete a DHCP options group
 
-Vous pouvez supprimer un groupe d'options [DHCP (Dynamic Host Configuration Protocol)](/docs/network/dhcp/concepts/) dont vous n'avez plus besoin. Celui-ci ne doit être associé à aucun [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+You can delete a [DHCP (Dynamic Host Configuration Protocol)](/docs/network/dhcp/concepts/) options group that you no longer need. It must not be associated with any [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
 
-Vous ne pouvez pas supprimer le groupe d'options DHCP par défaut.
+You cannot delete the default DHCP options group.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.dhcpOptions.delete**
 
 :::
 
-## Prérequis
+## Prerequisites
 
 :::info
-## Avant de commencer
+**Before you begin**
 
-Dissociez le groupe d'options DHCP de tous les VPC auxquels il est associé. Pour ce faire, effectuez l'une des actions suivantes pour chaque VPC :
+Dissociate the DHCP options group from all the VPC it is associated with. To do so, perform one of the following actions for each VPC:
 
-- Associez le VPC à un autre groupe d'options DHCP. Pour plus d'informations, consultez la section [Modifier le groupe d'options DHCP associé à un VPC ↗](./update.mdx) ;
-- Supprimez le VPC et ses ressources associées.
+- associate the VPC with another DHCP options group. For more information, see the [Modify the DHCP options group associated with a VPC ↗](./update.mdx) section;
+- delete the VPC and its associated resources.
 :::
 
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
+1. From the left-hand side menu, click **Network** → **DHCP Options** to access the list of DHCP options groups.
+2. Tick the checkbox of the DHCP options group you want to delete.
+3. Click the **Delete** button.
+4. In the confirmation dialog box, click **Delete**.
 
-La suppression d'un groupe d'options DHCP n'est pas disponible depuis la Console. Utilisez l'API ou Terraform.
+A confirmation message appears at the bottom of the page indicating that the DHCP options group has been deleted.
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `DELETE /compute/spaces/{spaceId}/dhcpOptions/{id}` command deletes a specified DHCP options set.
 
+Before deleting a DHCP options set, you must dissociate it from the networks it is associated with. To do so, associate each network with a new DHCP options set or with the default set.
 
-La commande `DELETE /compute/spaces/{spaceId}/dhcpOptions/{id}` supprime un ensemble d'options DHCP spécifié.
-
-Avant de supprimer un ensemble d'options DHCP, vous devez le dissocier des réseaux auxquels il est associé. Pour ce faire, associez à chaque réseau un nouvel ensemble d'options DHCP ou l'ensemble par défaut.
-
-[Exemple de requête : Suppression d'un ensemble d'options DHCP ↗](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/dhcpOptions/{id})
+[Request example: Deleting a DHCP options set ↗](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/dhcpOptions/{id})
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/dhcp_options).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/dhcp_options).
 
 </TabItem>
 </Tabs>

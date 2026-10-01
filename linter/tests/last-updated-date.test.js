@@ -25,11 +25,11 @@ const assert = require('node:assert');
 
 const REPO_ROOT = path.join(__dirname, '..', '..');
 
-const DOC_ROOTS = ['docs/docs/', 'i18n/en/docusaurus-plugin-content-docs/current/docs/'];
+const DOC_ROOTS = ['docs/docs/', 'i18n/fr/docusaurus-plugin-content-docs/current/docs/'];
 
 // Homepage never displays a review date (theme-level exclusion) and must not
 // carry one.
-const EXCLUDED_PATHS = new Set(['docs/docs/home.mdx', 'i18n/en/docusaurus-plugin-content-docs/current/docs/home.mdx']);
+const EXCLUDED_PATHS = new Set(['docs/docs/home.mdx', 'i18n/fr/docusaurus-plugin-content-docs/current/docs/home.mdx']);
 
 // --- pure helpers (self-tested below) ---------------------------------------
 
@@ -86,12 +86,19 @@ function resolveDiffRef() {
 
 function listChangedDocFiles(diffRef) {
   const output = execSync(
-    `git diff --name-only --diff-filter=ACMR ${diffRef}`,
+    `git diff --name-status --find-renames=100% --diff-filter=ACMR ${diffRef}`,
     {encoding: 'utf8'},
   );
   return output
     .split('\n')
     .map((f) => f.trim())
+    .filter(Boolean)
+    // A pure rename (R100) moves a file without touching its content: the
+    // displayed review date does not need a refresh, so renames are skipped.
+    // This keeps mass tree reorganizations (e.g. locale swaps) from tripping
+    // the guard for every moved page.
+    .filter((line) => !line.startsWith('R100'))
+    .map((line) => line.split('\t').pop())
     .filter((f) => DOC_ROOTS.some((root) => f.startsWith(root)))
     .filter((f) => f.endsWith('.md') || f.endsWith('.mdx'))
     .filter((f) => !f.split('/').some((seg) => seg.startsWith('_')))
@@ -109,12 +116,43 @@ function readBaseContent(diffRef, filePath) {
   }
 }
 
+// Pre-locale-swap mirrors of the locale trees (the 2026-10-01 EN-at-root
+// migration swapped docs/docs (was FR) with i18n/en (was EN). Kept so the
+// diff-base check can recognize pages whose content only moved across the
+// locale trees as unchanged; safe to drop once every branch bases on a
+// post-migration main.
+const LEGACY_LOCALE_MIRRORS = [
+  // EN content moved from the old i18n/en mirror to the docs root…
+  {current: 'docs/docs/', legacy: 'i18n/en/docusaurus-plugin-content-docs/current/docs/'},
+  // …and the FR content moved the other way, into the new i18n/fr tree.
+  {current: 'i18n/fr/docusaurus-plugin-content-docs/current/docs/', legacy: 'docs/docs/'},
+];
+
+// True when the page content is byte-identical to what the diff base carried
+// under one of the legacy locale-tree mirrors (i.e. it only changed location).
+function contentUnchangedAcrossLocaleSwap(diffRef, filePath, content) {
+  for (const {current, legacy} of LEGACY_LOCALE_MIRRORS) {
+    if (!filePath.startsWith(current)) continue;
+    const rel = filePath.slice(current.length);
+    if (readBaseContent(diffRef, legacy + rel) === content) return true;
+  }
+  return false;
+}
+
 // --- checks -----------------------------------------------------------------
 
 function checkPage(diffRef, filePath) {
   const problems = [];
   const content = fs.readFileSync(path.join(REPO_ROOT, filePath), 'utf8');
   const baseContent = readBaseContent(diffRef, filePath);
+  const localeSwapRename = contentUnchangedAcrossLocaleSwap(
+    diffRef, filePath, content,
+  );
+  if (localeSwapRename) {
+    // The page only moved across locale trees: not a content review, the
+    // guard does not apply.
+    return problems;
+  }
   const isNew = baseContent === null;
 
   const date = extractLastUpdateDate(content);

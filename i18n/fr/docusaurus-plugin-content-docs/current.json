@@ -1,0 +1,94 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.docsSidebar.category.Reversibility": {
+    "message": "Réversibilité",
+    "description": "The label for category 'Réversibilité' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Mistral AI Platform": {
+    "message": "Plateforme IA Mistral",
+    "description": "The label for category 'Plateforme IA Mistral' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Resources": {
+    "message": "Ressources",
+    "description": "The label for category 'Ressources' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Frequently Asked Questions": {
+    "message": "Foire aux questions",
+    "description": "The label for category 'Foire aux questions' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Managed Services": {
+    "message": "Services Managés",
+    "description": "The label for category 'Services Managés' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Networking": {
+    "message": "Réseau",
+    "description": "The label for category 'Réseau' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Create and manage routes in a route table": {
+    "message": "Créer et gérer les routes dans une route table",
+    "description": "The label for category 'Créer et gérer les routes dans une route table' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Route table administration": {
+    "message": "Administration d'une route table",
+    "description": "The label for category 'Administration d'une route table' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Storage": {
+    "message": "Stockage",
+    "description": "The label for category 'Stockage' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Objects": {
+    "message": "Objets",
+    "description": "The label for category 'Objets' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Connectivity": {
+    "message": "Connectivité",
+    "description": "The label for category 'Connectivité' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.VPN Route": {
+    "message": "Route VPN",
+    "description": "The label for category 'Route VPN' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Using route propagation": {
+    "message": "Utiliser la route propagation",
+    "description": "The label for category 'Utiliser la route propagation' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Managing routes manually": {
+    "message": "Gérer les routes manuellement",
+    "description": "The label for category 'Gérer les routes manuellement' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Sign in": {
+    "message": "Connexion",
+    "description": "The label for category 'Connexion' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.User management": {
+    "message": "Gestion des utilisateurs",
+    "description": "The label for category 'Gestion des utilisateurs' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Service accounts": {
+    "message": "Comptes de service",
+    "description": "The label for category 'Comptes de service' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Access management": {
+    "message": "Gestion des accès",
+    "description": "The label for category 'Gestion des accès' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Organisation and space management": {
+    "message": "Gestion des organisations et des espaces",
+    "description": "The label for category 'Gestion des organisations et des espaces' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.Inventory": {
+    "message": "Inventaire",
+    "description": "The label for category 'Inventaire' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.link.Global": {
+    "message": "Global",
+    "description": "The label for link 'Global' in sidebar 'docsSidebar', linking to '/openapi/'"
+  },
+  "sidebar.docsSidebar.link.Object Storage": {
+    "message": "Object Storage",
+    "description": "The label for link 'Object Storage' in sidebar 'docsSidebar', linking to '/openapi-object-storage/'"
+  }
+}

@@ -1,6 +1,6 @@
 ---
-title: Attribuer ou supprimer des accès à une identité
-description: "Ajoutez ou supprimez des rôles, des permissions et des ACL pour un utilisateur ou un compte de service, via la console ou l'API."
+title: Assign or remove access for an identity
+description: "Add or remove roles, permissions and ACLs for a user or a service account, via the console or the API."
 sidebar_position: 1
 draft: false
 last_update:
@@ -11,21 +11,21 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Attribuer ou supprimer des accès à une identité
+# Assign or remove access for an identity
 
-Vous pouvez ajouter ou enlever des rôles et des permissions unitairement ou par lot. Ces opérations sont réalisables par le portail ou par API. Une API pour les **ACL** (liste de contrôle d'accès) permet d'associer des ACL sur des ressources afin d'ajuster finement les comptes autorisés à y réaliser des opérations.
+You can add or remove roles and permissions individually or in bulk. These operations can be carried out via the portal or the API. An API for **ACLs** (Access Control List) lets you associate ACLs with resources to finely adjust which accounts are allowed to perform operations on them.
 
-## Prérequis
+## Prerequisites
 
-* Un compte avec les permissions nécessaires pour gérer des **ACL** (**IAM.getPolicy** et **IAM.setPolicy**)
-* Un jeton (token) de connexion associé au compte Numspot utilisé : [lien Documentation - obtenir un token](/docs/iam/concepts/api/)
-* L'identifiant de l'organisation ou de l'espace
-* L'identifiant (UUID) de la ressource
+* An account with the permissions required to manage **ACLs** (**IAM.getPolicy** and **IAM.setPolicy**)
+* A connection token associated with the Numspot account used: [Documentation link - obtain a token](/docs/iam/concepts/api/)
+* The identifier of the organisation or the space
+* The identifier (UUID) of the resource
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **iam.permission.get**
 
@@ -38,19 +38,19 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/user/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Utilisateurs (le parcours est identique pour les Comptes de Service).", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
-    { img: "/img/walkthrough/user/list-02-menu.png", text: "Sur la ligne de l'identité, ouvrez le menu « Actions », puis cliquez sur « Gérer les rôles » ou « Gérer les permissions ».", hotspot: { x: 0.7708, y: 0.5, w: 0.1929, h: 0.045 } },
-    { img: "/img/walkthrough/user/create-03-roles.png", text: "Dans l'assistant « Attribution des rôles », choisissez l'onglet « Organisation » ou l'espace concerné, cochez le ou les rôles à attribuer, puis cliquez sur « Enregistrer et continuer ».", hotspot: { x: 0.8442, y: 0.921, w: 0.1224, h: 0.0494 } },
+    { img: "/img/walkthrough/en/user/list.png", text: "From the left-hand side menu, click IAM → Users (the journey is the same for Service Accounts).", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/user/list-02-menu.png", text: "On the identity's row, open the “Actions” menu, then click “Manage roles” or “Manage permissions”.", hotspot: { x: 0.7972, y: 0.5, w: 0.1667, h: 0.045 } },
+    { img: "/img/walkthrough/en/user/roles.png", text: "In the “Role assignment” wizard, select the “Organisation” tab or the relevant space, tick the role or roles to assign, then click “Save and continue”.", hotspot: { x: 0.8665, y: 0.921, w: 0.1001, h: 0.0494 } },
   ]}
 />
 
-1. Depuis le menu latéral gauche, cliquez sur **IAM** → **Utilisateurs** (ou **Comptes de Service**).
-2. Ouvrez le menu **Actions** de l'identité concernée, puis sélectionnez **Gérer les rôles** ou **Gérer les permissions**.
+1. From the left-hand side menu, click **IAM** → **Users** (or **Service Accounts**).
+2. Open the identity's **Actions** menu, then select **Manage roles** or **Manage permissions**.
 :::tip
-Vous avez la possibilité d'assigner un ou plusieurs rôles en une seule fois.
+You can assign one or several roles in a single operation.
 :::
 
-3. Dans l'assistant, sélectionnez l'onglet "Organisation" ou l'espace concerné, cochez les éléments à attribuer, puis cliquez sur **Enregistrer et continuer** (rôles) ou **Enregistrer et quitter** (permissions). Vous pouvez aussi retirer des rôles ou des permissions déjà attribués en les décochant.
+3. In the wizard, select the "Organisation" tab or the relevant space, tick the items to assign, then click **Save and continue** (roles) or **Save and quit** (permissions). You can also remove roles or permissions already assigned by unticking them.
 
 </TabItem>
 
@@ -59,10 +59,10 @@ Vous avez la possibilité d'assigner un ou plusieurs rôles en une seule fois.
 ## API {#tabhead-api}
 
 
-Vous pouvez ajouter ou enlever unitairement ou par lot des rôles et des permissions.
-Il est nécessaire de connaître l'UUID (Universally Unique Identifier) des éléments à ajouter ou à enlever.
+You can add or remove roles and permissions individually or in bulk.
+You need to know the UUID (Universally Unique Identifier) of the items to add or remove.
 
-```console title="Exemple pour un espace"
+```console title="Example for a space"
 export REGION="myregion"
 curl -X 'PATCH' \
   'https://api.$REGION.numspot.com/iam/spaces/{spaceId}/iampolicy/users/b7bdb002-e737-46a6-b282-f5fe55aad110' \
@@ -80,16 +80,16 @@ curl -X 'PATCH' \
 }'
 ```
 
-### Les ACL ou permissions granulaires
+### ACLs or granular permissions
 
-Le dispositif d'**ACL** (liste de contrôle d'accès) permet d'attribuer finement des permissions à un utilisateur sur une ressource.
+The **ACL** (Access Control List) mechanism lets you assign permissions finely to a user on a resource.
 
-Une série API permet de réaliser les opérations de création, de suppression et enfin de lister les **ACL** pour un utilisateur.
-L'API reprend le comportement général des API Numspot :
-- on peut s'adresser à un compte utilisateur ou un compte de service.
+A set of APIs lets you create, delete and finally list the **ACLs** for a user.
+The API follows the general behaviour of the Numspot APIs:
+- it can address a user account or a service account.
 
-Les éléments à renseigner sont :
-```json title="Associer un ACL à une ressource"
+The elements to provide are:
+```json title="Associate an ACL with a resource"
 {
   "items": [
     {
@@ -103,9 +103,9 @@ Les éléments à renseigner sont :
 }
 ```
 
-La requête se présentera comme ceci :
+The request looks like this:
 
-Exemple : openshift.cluster.get
+Example: openshift.cluster.get
 ```console
 export REGION="myregion"
 curl -X 'POST' \
@@ -124,16 +124,16 @@ curl -X 'POST' \
 }
 ```
 :::info
-Items étant une donnée de type liste, vous pouvez manipuler plusieurs **ACL** dans une même requête.
+Items being a list, you can manipulate several **ACLs** in a single request.
 
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
-Les droits et permissions sont attribués à l'identité associée à l'identifiant de la requête.
+Rights and permissions are assigned to the identity associated with the identifier in the request.
 
-L'API peut adresser aussi bien des comptes utilisateur (users) que des comptes de service (serviceAccounts).
+The API can address user accounts (users) as well as service accounts (serviceAccounts).
 
-```console title="Exemple pour un compte de service"
+```console title="Example for a service account"
 
 https://..../iam/organisations/{organisationId}/serviceAccounts/3abcfff1-97fa-4016-832d-f63852e87bac/bulk/acl
 

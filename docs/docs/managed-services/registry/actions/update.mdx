@@ -1,20 +1,20 @@
 ---
-title: Mettre à jour la version de Harbor
-sidebar_label: Changer la version de Harbor
+title: Update the Harbor version
+sidebar_label: Change the Harbor version
 sidebar_position: 4
 draft: false
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Changer la version de Harbor
+# Change the Harbor version
 
-Vous pouvez mettre à jour la version de Harbor au sein de votre espace.
+You can update the Harbor version within your space.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **registry.instance.update**
 
@@ -23,12 +23,9 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 {/* </TabItem> */}
 <TabItem value="api" label="API" default>
+    The `PUT /registry/spaces/{spaceId}/registries/{registryId}` request updates the Harbor version.
 
-## API {#tabhead-api}
-
-    La requête `PUT /registry/spaces/{spaceId}/registries/{registryId}` permet de mettre à jour la version de Harbor.
-
-    ### Exemple de requête
+    ### Example request
 
     ```json
     {
@@ -36,23 +33,23 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
     }
     ```
 
-    ### Exemple de réponse
+    ### Example response
 
     ```json
     {
       "id": "550e8400-e29b-41d4-a716-446655440002",
-      "name": "mon-container-registry",
+      "name": "my-container-registry",
       "status": {
         "state": "UPGRADING",
         "message": "Registry is being upgraded"
       },
       "version": "2.14",
-      "host": "mon-container-registry.registry.eu-west-2.numspot.com",
+      "host": "my-container-registry.registry.eu-west-2.numspot.com",
       "visibility": "EXTERNAL"
     }
     ```
 
-    [Voir la spécification complète](/openapi/#tag/registry/PUT/registry/spaces/{spaceId}/registries/{registryId})
+    [View the full specification](/openapi/#tag/registry/PUT/registry/spaces/{spaceId}/registries/{registryId})
 
 </TabItem>
 </Tabs>

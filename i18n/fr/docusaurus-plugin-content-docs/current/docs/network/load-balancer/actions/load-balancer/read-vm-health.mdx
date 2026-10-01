@@ -1,0 +1,52 @@
+---
+title: Consulter l'état des VM d'un load balancer - Numspot
+sidebar_label: Consulter l'état des VM d'un load balancer
+sidebar_position: 7
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Consulter l'état des VM d'un load balancer
+
+Vous pouvez consulter l'état de santé des [VM (Virtual Machine)](/docs/compute/concept/) de backend enregistrées auprès d'un [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) pour vérifier leur disponibilité à recevoir du trafic.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.loadBalancer.get**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+La consultation de l'état de santé des VM backend n'est pas disponible depuis la console Numspot.
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `GET /compute/spaces/{spaceId}/loadBalancers/{id}/vmsHealth` répertorie l'état d'une ou plusieurs VM de backend enregistrées auprès d'un load balancer spécifié.
+
+[Exemple de requête : Lister l'état d'une VM d'un load balancer](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/loadBalancers/{id}/vmsHealth)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
+
+  </TabItem>
+</Tabs>

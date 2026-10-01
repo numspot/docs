@@ -1,5 +1,5 @@
 ---
-title: Créer un snapshot
+title: Create a snapshot
 sidebar_position: 1
 draft: false
 ---
@@ -7,50 +7,41 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Créer un snapshot
+# Create a snapshot
 
-Vous pouvez créer une copie instantanée d'un `volume` en créant un snapshot, ce qui vous permet de capturer l'état des données stockées sur le `volume` à un moment donné. À partir de ce snapshot, vous pouvez créer un nouveau `volume`, copier le snapshot dans une autre région ou le partager avec d'autres comptes.
+You can create a point-in-time copy of a `volume` by creating a snapshot, which allows you to capture the state of the data stored on the `volume` at a given moment. From this snapshot, you can create a new `volume`, copy the snapshot to another region or share it with other accounts.
 
 :::info
-La création d'un snapshot est disponible uniquement via l'API.
+Creating a snapshot is available only through the API.
 :::
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.snapshot.create**
 
 :::
 <Tabs>
 <TabItem value="Console" default>
-
-## Console {#tabhead-console}
-
-  La création de snapshot n'est pas disponible via la console. Utilisez l'API ou Terraform.
+  Creating a snapshot is not available through the console. Use the API or Terraform.
 </TabItem>
 <TabItem value="API">
+    The `POST /compute/spaces/{spaceId}/snapshots` command creates a snapshot. Snapshots are point-in-time images of a `volume` that you can use to back up your data or create replicas of that `volume`.
+You can use this method in three different ways:
 
-## API {#tabhead-api}
+1. **Creating from a volume**: You create a snapshot from one of your `volumes`.
 
-    La commande `POST /compute/spaces/{spaceId}/snapshots` crée un snapshot. Les snapshots sont des images à un moment donné d'un `volume` que vous pouvez utiliser pour sauvegarder vos données ou créer des répliques de ce `volume`.
-Vous pouvez utiliser cette méthode de trois façons différentes :
-
-1. **Création à partir d'un volume** : Vous créez un snapshot à partir de l'un de vos `volumes`.
-
-2. **Copie d'un snapshot** : Vous copiez un snapshot existant. Le snapshot source doit être l'un de vos propres instantanés.
+2. **Copying a snapshot**: You copy an existing snapshot. The source snapshot must be one of your own snapshots.
 
 :::info
-En cas d'utilisation excessive de la fonctionnalité de création d'instantanés sur un même `volume` sur une courte période, Numspot se réserve le droit de bloquer temporairement cette fonctionnalité.
+In the event of excessive use of the snapshot creation feature on the same `volume` over a short period, Numspot reserves the right to temporarily block this feature.
 :::
 
-[Exemple de requête : Création d'un snapshot](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/snapshots)
+[Example request: Creating a snapshot](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/snapshots)
 </TabItem>
 <TabItem value="Terraform">
-
-## Terraform {#tabhead-terraform}
-
-  La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/snapshot).
+  The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/snapshot).
 </TabItem>
 </Tabs>

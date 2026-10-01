@@ -1,0 +1,106 @@
+---
+title: Assigner une identité à un espace - IAM
+sidebar_label: Assigner une identité à un espace
+sidebar_position: 3
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Assigner une identité à un espace
+
+Assignez des utilisateurs ou des comptes de service à un espace pour leur donner accès aux ressources de cet espace.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **iam.role.create**
+
+:::
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/user/detail-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Utilisateurs.", hotspot: { x: 0, y: 0.7444, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/user/upd-01-detail.png", text: "Ouvrez le détail de l'identité, puis cliquez sur « Assigner des espaces ».", hotspot: { x: 0.812, y: 0.5461, w: 0.1394, h: 0.0494 } },
+    { img: "/img/walkthrough/space/assign-01-wizard.png", text: "Dans l'assistant « Assignation des espaces », cochez le ou les espaces à assigner, puis poursuivez avec les étapes Rôles et Permissions.", hotspot: { x: 0.222, y: 0.63, w: 0.42, h: 0.28 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, cliquez sur **IAM** → **Utilisateurs** (ou **Comptes de Service**) ;
+2. Cliquez sur l'identifiant de l'identité concernée pour ouvrir sa page de détail ;
+3. Dans la section **Espaces assignés**, cliquez sur **Assigner des espaces**.
+
+   L'assistant **Assignation des espaces** apparaît. Il se déroule en trois étapes : **Espaces**, **Rôles**, **Permissions** ;
+4. Cochez le ou les espaces à assigner (la multi-sélection est disponible), puis poursuivez l'assistant pour attribuer les rôles et les permissions correspondants.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+Pour assigner un compte utilisateur à un espace avec l'API, il faut connaître l'UUID (Universally Unique Identifier) de l'espace. Une variante dans l'URL permet d'intervenir sur un utilisateur ou sur un compte de service.
+
+À l'issue de cette opération, le compte sera assigné à l'espace mais sans rôle et permission.
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/POST/iam/spaces/{spaceId}/users/{userId}
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/users/{userId}' \
+  --request POST
+```
+
+La requête ne retourne aucune réponse.
+
+:::info
+Consulter la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+Pour supprimer (enlever l'assignation) un compte utilisateur d'un espace avec l'API :
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/DELETE/iam/spaces/{spaceId}/users/{userId}
+
+À l'issue de cette opération, le compte utilisateur ne sera plus assigné à l'espace mais sera toujours présent dans l'organisation ou assigné à d'autres espaces.
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/users/{userId}' \
+  --request DELETE
+```
+
+Pour assigner un compte de service à un espace avec l'API :
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/POST/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}' \
+  --request POST
+```
+
+Pour supprimer (enlever l'assignation) un compte de service d'un espace avec l'API :
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/DELETE/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}
+
+À l'issue de cette opération, le compte de service ne sera plus assigné à l'espace mais sera toujours présent dans l'organisation ou assigné à d'autres espaces.
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}' \
+  --request DELETE
+```
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/space).
+
+</TabItem>
+</Tabs>

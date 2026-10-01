@@ -1,0 +1,322 @@
+---
+title: Configurer la synchronisation temporelle NTP sur un cluster Kubernetes managé en airgap
+sidebar_label: Configurer NTP en environnement airgap
+description: Configurez la synchronisation temporelle NTP sur les workers d'un cluster Kubernetes en environnement airgap.
+sidebar_position: 4.3
+draft: false
+---
+
+# Configurer NTP en environnement airgap
+
+Dans un environnement **airgap** (sans accès direct à Internet), la synchronisation de l'heure entre les nœuds d'un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) est totalement déléguée au client. Configurez NTP (Network Time Protocol) sur les workers (nœuds de travail) Numspot pour éviter les problèmes de synchronisation temporelle.
+
+:::info
+**Prérequis**
+
+- Avoir un cluster Kubernetes opérationnel et en mode privé (airgap).
+- Avoir [récupéré le fichier kubeconfig](/docs/managed-services/kubernetes/actions/kubeconfig/).
+- Avoir configuré un serveur NTP interne (ex. : stratum 1 ou 2 interne à l’organisation).
+- Disposer d’un registre d’images interne si vous déployez par DaemonSet.
+:::
+
+## Pourquoi NTP est critique en airgap
+
+Un décalage horaire (clock skew) entre les workers Kubernetes peut entraîner :
+
+- des échecs de connexion TLS (Transport Layer Security)/SSL (Secure Sockets Layer) ;
+- des rejets de jetons d'authentification et de volumes chiffrés ;
+- des dysfonctionnements des outils de surveillance (logs désordonnés, métriques incohérentes) ;
+- des pertes de coordination du scheduler (ex. lease API).
+
+Les clusters Kubernetes Numspot injectent dès l'installation un serveur NTP par défaut (ex. `ntp.numspot.local`). En airgap, ce serveur doit être remplacé par une source temporelle interne.
+
+## Architecture et responsabilités
+
+### Approches possibles
+
+Le client dispose de deux approches pour configurer NTP :
+
+| Approche | Description | Cas d'usage |
+| --- | --- | --- |
+| `user-data` / `cloud-init` | Configuration au démarrage du nœud via les métadonnées d'instance. | Automatique lors de la création du node pool (groupe de nœuds). |
+| DaemonSet Kubernetes | Déploiement d'un agent NTP via un pod s'exécutant sur chaque nœud. | Modification a posteriori sur un cluster existant. |
+
+### Configuration du service de temps sur les workers
+
+Les workers Numspot utilisent **systemd-timesyncd** ou **chronyd** selon l'image système ANSSI (Agence Nationale de la Sécurité des Systèmes d'Information) :
+
+- **systemd-timesyncd** : service allégé suffisant pour la plupart des workload (charges de travail) ;
+- **chronyd** : recommandé si une synchronisation de haute précision est requise (ex. : bases transactionnelles).
+
+:::tip Sécurisation du flux NTP
+En environnement airgap, restreignez l'accès au port 123/UDP (User Datagram Protocol) entre les workers et le serveur NTP via une [Network Policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) ou le firewall (pare-feu) de l'OS (Operating System).
+:::
+
+## Configuration via user-data
+
+Lors de la création d'un groupe de nœuds, vous pouvez fournir un script `cloud-init` pour pointer instantanément vers votre serveur NTP interne.
+
+**Exemple `user-data` pour systemd-timesyncd**
+
+```bash
+#cloud-config
+runcmd:
+  - systemctl stop systemd-timesyncd || true
+  - sed -i 's/^#*NTP=.*/NTP=ntp.interne.monorg.lan/' /etc/systemd/timesyncd.conf
+  - sed -i 's/^#*FallbackNTP=.*/FallbackNTP=ntp2.interne.monorg.lan/' /etc/systemd/timesyncd.conf
+  - systemctl restart systemd-timesyncd
+  - timedatectl set-ntp true
+```
+
+**Exemple `user-data` pour chronyd**
+
+```bash
+#cloud-config
+packages:
+  - chrony
+runcmd:
+  - systemctl stop chronyd || true
+  - echo "server ntp.interne.monorg.lan iburst" > /etc/chrony/sources.d/local-ntp.sources
+  - echo "server ntp2.interne.monorg.lan iburst" >> /etc/chrony/sources.d/local-ntp.sources
+  - systemctl restart chronyd
+```
+
+:::info
+Ces scripts sont appliqués dès la création des nœuds. Pour les nœuds existants, privilégiez l'approche DaemonSet décrite ci-dessous.
+:::
+
+## Configuration via DaemonSet Kubernetes
+
+Pour modifier la configuration NTP a posteriori, sans recréer les nœuds, déployez un DaemonSet Linux privilégié qui modifie la configuration hôte.
+
+### Étape 1 : conteneuriser la configuration NTP
+
+Créez un `Dockerfile` simple :
+
+```dockerfile
+FROM alpine:3.19
+RUN apk add --no-cache tzdata systemd
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+```
+
+Le script `entrypoint.sh` :
+
+```bash
+#!/bin/sh
+set -e
+
+NTP_SERVER=${NTP_SERVER:-ntp.interne.monorg.lan}
+FALLBACK_SERVER=${FALLBACK_SERVER:-ntp2.interne.monorg.lan}
+
+if [ -f /host/etc/systemd/timesyncd.conf ]; then
+  echo "Configuration de systemd-timesyncd..."
+  sed -i "s/^#*NTP=.*/NTP=${NTP_SERVER}/" /host/etc/systemd/timesyncd.conf
+  sed -i "s/^#*FallbackNTP=.*/FallbackNTP=${FALLBACK_SERVER}/" /host/etc/systemd/timesyncd.conf
+  chroot /host systemctl restart systemd-timesyncd || true
+fi
+
+if [ -f /host/etc/chrony/chrony.conf ] || [ -f /host/etc/chrony.conf ]; then
+  echo "Configuration de chronyd..."
+  CONF_FILE="/host/etc/chrony/chrony.conf"
+  [ -f /host/etc/chrony.conf ] && CONF_FILE="/host/etc/chrony.conf"
+  sed -i '/^server /d' "${CONF_FILE}"
+  echo "server ${NTP_SERVER} iburst" >> "${CONF_FILE}"
+  echo "server ${FALLBACK_SERVER} iburst" >> "${CONF_FILE}"
+  chroot /host systemctl restart chronyd || true
+fi
+
+echo "Synchronisation temporelle configurée."
+sleep infinity
+```
+
+### Étape 2 : préparer le manifest Kubernetes
+
+```yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ntp-config
+  namespace: kube-system
+  labels:
+    app: ntp-config
+spec:
+  selector:
+    matchLabels:
+      app: ntp-config
+  template:
+    metadata:
+      labels:
+        app: ntp-config
+    spec:
+      hostNetwork: true
+      hostPID: true
+      containers:
+        - name: ntp-config
+          image: <REGISTRE_INTERNE>/ntp-config:latest
+          imagePullPolicy: Always
+          env:
+            - name: NTP_SERVER
+              value: "ntp.interne.monorg.lan"
+            - name: FALLBACK_SERVER
+              value: "ntp2.interne.monorg.lan"
+          volumeMounts:
+            - name: host
+              mountPath: /host
+          securityContext:
+            privileged: true
+            runAsUser: 0
+      volumes:
+        - name: host
+          hostPath:
+            path: /
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        - key: node-role.kubernetes.io/control-plane
+          effect: NoSchedule
+```
+
+Remplacez `<REGISTRE_INTERNE>` par l'adresse de votre registry airgap (ex. `registry.intranet.monorg.lan:5000`).
+
+:::warning Privilèges élevés
+Ce DaemonSet s'exécute en mode privilégié. L'ajustement du contexte de sécurité est de la responsabilité du client. Retirez le DaemonSet une fois la configuration appliquée pour limiter la surface d'attaque.
+:::
+
+### Étape 3 : déployer et vérifier
+
+```bash
+kubectl apply -f ntp-config-daemonset.yaml
+kubectl rollout status ds/ntp-config -n kube-system
+```
+
+## Vérification de la synchronisation
+
+### Vérifier l'état sur les nœuds
+
+```bash
+kubectl get nodes -o wide
+```
+
+Identifiez un nœud et exécutez :
+
+```bash
+NODE=<NOM_DU_NODE>
+kubectl debug node/${NODE} -it --image=busybox:stable -- /bin/sh
+```
+
+Dans le conteneur de debug :
+
+```bash
+chroot /host
+
+## Pour systemd-timesyncd
+timedatectl status
+systemctl status systemd-timesyncd
+
+## Pour chronyd
+chronyc tracking
+chronyc sources
+```
+
+**Sortie attendue (ex. systemd-timesyncd)**
+
+```text
+         Universal time: jeu. 2025-09-04 14:30:00 UTC
+       NTP synchronized: yes
+NTP enabled: yes
+```
+
+**Sortie attendue (ex. chronyd)**
+
+```text
+Reference ID    : 192.168.56.10 (ntp.interne.monorg.lan)
+Stratum         : 2
+Last offset     : +0.000001234 seconds
+RMS offset      : 0.000002345 seconds
+```
+
+### Vérifier le clock skew dans Kubernetes
+
+Lancez un pod éphémère pour comparer les dates entre le control plane (plan de contrôle) et les workers :
+
+```bash
+kubectl run date-check --image=busybox:stable --rm -it --restart=Never -- date
+```
+
+Le delta entre la date affichée et celle de votre poste local doit être inférieur à quelques secondes.
+
+:::tip Métrique Prometheus
+Si vous disposez d'une stack d'observabilité à l'intérieur de l'airgap, surveillez la métrique `node_timex_sync_status` (node_exporter). Une valeur de `1` indique que le nœud est synchronisé.
+:::
+
+## Dépannage
+
+### Le service NTP ne démarre pas
+
+**Cause** : le nœud n'a pas de connectivité réseau avec le serveur NTP (port 123/UDP bloqué).
+
+**Solution** : autorisez explicitement le flux UDP/123 entre les workers et le serveur NTP interne ; testez depuis un node :
+
+```bash
+chronyd -Q 'server ntp.interne.monorg.lan iburst'
+```
+
+### Erreur NTP synchronized: no malgré la configuration
+
+**Cause** : le service `systemd-timesyncd` est en conflit avec `chronyd`.
+
+**Solution** : désactivez le service non utilisé :
+
+```bash
+systemctl disable --now chronyd   # si vous utilisez timesyncd
+systemctl disable --now systemd-timesyncd  # si vous utilisez chronyd
+```
+
+### Les pods ne démarrent pas après modification de l'heure
+
+**Cause** : un brusque saut temporel (time jump) a provoqué l'expiration des certificats ou des jetons `serviceAccount`.
+
+**Solution** :
+
+1. Vérifiez la validité des certificats du cluster :
+   ```bash
+   openssl x509 -in /etc/kubernetes/pki/apiserver.crt -noout -dates
+   ```
+2. Redémarrez les pods affectés pour régénérer les tokens :
+   ```bash
+   kubectl rollout restart deployment/<nom> -n <namespace>
+   ```
+3. En cas de grand écart (plusieurs minutes), renouvelez les certificats via `kubeadm certs renew all` sur les control planes (support requis).
+
+## Bonnes pratiques
+
+| Bonne pratique | Détail |
+| --- | --- |
+| Serveur NTP redondant | Définissez au minimum deux sources NTP internes (primaire et fallback). |
+| Isolation réseau | Restreignez le port 123/UDP uniquement vers vos serveurs NTP autorisés. |
+| Suivi continu | Surveillez `node_timex_sync_status` et alertez si un nœud perd la synchronisation. |
+| Non-régression | Gérez le `user-data` NTP via votre chaîne d'infrastructure as code (Terraform, Pulumi) pour garantir la cohérence à chaque création de node pool. |
+
+### Intégration dans le cycle de création de node pool
+
+Lors de la création d'un [node pool](/docs/managed-services/kubernetes/actions/nodepools-add/), intégrez systématiquement le script `user-data` NTP dans votre automation. Exemple avec l'[API Numspot](https://api.eu-west-2.numspot.com/openapi) :
+
+```json
+{
+  "name": "pool-prod-01",
+  "nodeType": "standard-4",
+  "minNodes": 3,
+  "maxNodes": 10,
+  "userData": "IyEvYmluL2Jhc2gKc3VkbyBzeXN0ZW1jdGwgc3RvcCBzeXN0ZW1kLXRpbWVzeW5jZCA..."
+}
+```
+
+Le champ `userData` doit contenir votre script encodé en `base64`, garantissant que chaque nœud rejoindra le cluster avec la bonne configuration temporelle.
+
+## Références
+
+- [Documentation Kubernetes – Node Problem Detector ↗](https://kubernetes.io/docs/tasks/debug/debug-cluster/monitor-node-health/)
+- [systemd-timesyncd ↗](https://www.freedesktop.org/software/systemd/man/systemd-timesyncd.service.html)
+- [chronyc ↗](https://chrony-project.org/doc/4.5/chronyc.html)

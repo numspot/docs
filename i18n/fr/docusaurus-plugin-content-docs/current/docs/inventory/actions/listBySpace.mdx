@@ -1,0 +1,73 @@
+---
+title: Lister les ressources d'un espace - Inventaire
+sidebar_label: Lister les ressources d'un espace
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Lister les ressources d'un espace
+
+L'inventaire permet de visualiser l'ensemble des ressources déployées dans un espace Numspot via l'API (Application Programming Interface). Il offre une vue consolidée de toutes les ressources, quel que soit leur service d'origine (compute, connectivity, kubernetes, postgresql, objectstorage, registry, secrets).
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **inventory.resource.get**
+
+:::
+
+<Tabs>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `GET /inventory/spaces/{spaceId}/resources` liste les ressources d'un espace.
+
+### Paramètres de chemin
+
+| Champ | Type | Description |
+| --- | --- | --- |
+| `spaceId` | UUID (Universally Unique Identifier) | Identifiant de l'espace |
+
+### Paramètres de requête
+
+| Champ | Type | Description |
+| --- | --- | --- |
+| `page[size]` | Entier (1-50) | Nombre maximum d'éléments à retourner (défaut : 20) |
+| `page[nextToken]` | Chaîne | Jeton pour la page suivante |
+
+### Réponse
+
+```json
+{
+  "items": [
+    {
+      "id": "vm-622ef57d",
+      "reference": "123e4567-e89b-12d3-a456-426614174000",
+      "name": "maVM-prod-1",
+      "type": "VIRTUAL_MACHINE",
+      "source": "compute",
+      "state": "RUNNING",
+      "details": {},
+      "parent": {
+        "parentId": "vpc-12b7fdbc",
+        "parentName": "monVPC",
+        "parentType": "VIRTUAL_PRIVATE_CLOUD"
+      }
+    }
+  ],
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "totalSize": 42
+}
+```
+
+[Exemple de requête : Lister les ressources d'un espace](/openapi/#tag/inventory/GET/inventory/spaces/%7BspaceId%7D/resources)
+
+</TabItem>
+</Tabs>

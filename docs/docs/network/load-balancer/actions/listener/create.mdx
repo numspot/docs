@@ -1,6 +1,6 @@
 ---
-title: Créer un listener de load balancer - Numspot
-sidebar_label: Créer un listener de load balancer
+title: Create a load balancer listener - Numspot
+sidebar_label: Create a load balancer listener
 sidebar_position: 1
 draft: false
 ---
@@ -8,14 +8,14 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Créer un listener de load balancer
+# Create a load balancer listener
 
-Vous pouvez créer un listener (écouteur) pour un [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) afin de vérifier les demandes de connexion et de les transférer aux [VM (Virtual Machine)](/docs/compute/concept/) de backend.
+You can create a listener for a [load balancer](/docs/network/load-balancer/concepts/) to check connection requests and forward them to the backend [VM](/docs/compute/concept/) (Virtual Machine).
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.loadBalancer.create**
 
@@ -24,31 +24,25 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
+1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
+2. Click the name of the load balancer for which you want to create a listener.
+3. In the "Listeners" tab, click **Create a listener**.
+4. Configure the listener settings (protocol, port, etc.).
+5. Click **Create**.
 
-:::info
-La création d'un listener n'est pas disponible depuis la console Numspot.
-
-Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
-:::
+   The listener is created and associated with the load balancer.
 
 </TabItem>
 <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `POST /compute/spaces/{spaceId}/loadBalancers/{id}/listeners` command creates one or more listeners for a specified load balancer.
 
-
-La commande `POST /compute/spaces/{spaceId}/loadBalancers/{id}/listeners` crée un ou plusieurs listener pour un load balancer spécifié.
-
-[Exemple de requête : Création d'un listener](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/loadBalancers/{id}/listeners)
+[Example request: Creating a listener](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/loadBalancers/{id}/listeners)
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/listener).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/listener).
 
 </TabItem>
 </Tabs>

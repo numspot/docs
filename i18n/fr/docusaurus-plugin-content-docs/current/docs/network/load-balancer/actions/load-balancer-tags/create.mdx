@@ -1,0 +1,61 @@
+---
+title: Ajouter ou supprimer des tags à un load balancer - Numspot
+sidebar_label: Ajouter ou supprimer des tags (étiquettes) à un load balancer
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Ajouter ou supprimer des tags (étiquettes) à un load balancer
+
+Vous pouvez ajouter ou supprimer des tag (étiquettes) associés à un [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) pour organiser et identifier vos ressources.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.loadBalancer.update**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/load-balancer/lb-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → Load Balancers.", hotspot: { x: 0, y: 0.6136, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/load-balancer/lb-02-actions.png", text: "Sur la ligne du load balancer, ouvrez le menu « Actions », puis cliquez sur « Gérer les tags ».", hotspot: { x: 0.875, y: 0.4358, w: 0.0884, h: 0.0457 } },
+    { img: "/img/walkthrough/load-balancer/lb-tags-panel.png", text: "Dans le panneau « Gérer les tags », cliquez sur « Créer un tag » (ou sur la croix d'un tag existant pour le supprimer).", hotspot: { x: 0.8915, y: 0.2795, w: 0.0974, h: 0.0494 } },
+    { img: "/img/walkthrough/load-balancer/lb-tags-form.png", text: "Renseignez la clé et la valeur du tag, cliquez sur « Ajouter le tag », puis sur « Valider » pour enregistrer.", hotspot: { x: 0.9104, y: 0.5914, w: 0.0785, h: 0.0444 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, cliquez sur **Réseau** → **Load Balancers** pour accéder à la liste des load balancers.
+2. Sur la ligne du load balancer, ouvrez le menu **Actions**, puis cliquez sur **Gérer les tags**.
+3. Dans le panneau **Gérer les tags**, cliquez sur **Créer un tag** (ou sur la croix d'un tag existant pour le supprimer).
+4. Renseignez la clé et la valeur du tag, cliquez sur **Ajouter le tag**, puis sur **Valider** pour enregistrer.
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `PATCH /compute/spaces/{spaceId}/bulk/loadBalancersTags` ajoute un ou plusieurs tag au load balancer spécifié. Si un tag avec la même clé existe déjà pour le load balancer, la valeur du tag est remplacée.
+
+[Exemple de requête : Ajout de tag au load balancer ↗](/openapi/#tag/compute/PATCH/compute/spaces/{spaceId}/bulk/loadBalancersTags)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
+
+  </TabItem>
+</Tabs>

@@ -1,6 +1,6 @@
 ---
-title: Gérer les utilisateurs et les rôles Harbor
-description: Configurer les utilisateurs, les rôles et les permissions d'un Container Registry Harbor
+title: Manage Harbor users and roles
+description: Configure the users, roles and permissions of a Harbor Container Registry
 sidebar_position: 7
 draft: false
 ---
@@ -8,67 +8,67 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Gérer les utilisateurs et les rôles Harbor
+# Manage Harbor users and roles
 
-Le service managé Container Registry (Harbor) fournit un compte administrateur lors de la création. Pour une gestion fine des accès, créez des utilisateurs supplémentaires et configurez les permissions par projet.
+The Container Registry (Harbor) managed service provides an administrator account at creation. For fine-grained access management, create additional users and configure permissions per project.
 
 :::note
-L'API Numspot permet uniquement de gérer le mot de passe administrateur. La création d'utilisateurs et la gestion des permissions s'effectuent via l'interface Harbor ou l'API Harbor.
+The Numspot API only allows you to manage the administrator password. Creating users and managing permissions is performed through the Harbor interface or the Harbor API.
 :::
 
-## Se connecter à Harbor
+## Connect to Harbor
 
-Avant de gérer les utilisateurs, connectez-vous à l'interface Harbor :
+Before managing users, connect to the Harbor interface:
 
-1. Récupérez le mot de passe administrateur (voir [Récupérer le mot de passe](/docs/managed-services/registry/actions/password/)) ;
-2. Accédez à `https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com` ;
-3. Connectez-vous avec `admin` et le mot de passe.
+1. Retrieve the administrator password (see [Retrieve the password](/docs/managed-services/registry/actions/password/)) ;
+2. Go to `https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com` ;
+3. Log in with `admin` and the password.
 
-## Types d'utilisateurs
+## User types
 
-### Administrateur système {#administrateur-systeme}
+### System administrator
 
-- Accès complet à toutes les fonctions ;
-- Gestion des utilisateurs, projets et configuration système ;
-- Accès à tous les projets.
+- Full access to all functions ;
+- Management of users, projects and system configuration ;
+- Access to all projects.
 
-### Utilisateur standard {#utilisateur-standard}
+### Standard user
 
-- Accès aux projets selon les permissions attribuées ;
-- Opérations push/pull selon le rôle dans le projet.
+- Access to projects according to the permissions assigned ;
+- Push/pull operations according to the role within the project.
 
-### Compte robot {#compte-robot}
+### Robot account
 
-- Utilisateur pour l'automatisation (CI/CD, Kubernetes) ;
-- Permissions définies par projet ;
-- Secret token au lieu de mot de passe.
+- User for automation (CI/CD, Kubernetes) ;
+- Permissions defined per project ;
+- Secret token instead of a password.
 
-Pour plus de détails sur les comptes robot, consultez [Comptes robot](/docs/managed-services/registry/guides/robot-accounts/).
+For more details on robot accounts, see [Robot accounts](/docs/managed-services/registry/guides/robot-accounts/).
 
-## Créer un utilisateur {#creer-un-utilisateur}
+## Create a user
 
-### Via l'interface Harbor
+### Through the Harbor interface
 
-1. Connectez-vous en tant qu'administrateur ;
-2. Accédez à **Administration** → **Users** ;
-3. Cliquez sur **New User** ;
-4. Renseignez les champs :
+1. Log in as an administrator ;
+2. Go to **Administration** → **Users** ;
+3. Click **New User** ;
+4. Fill in the fields:
 
-| Champ | Description |
+| Field | Description |
 | --- | --- |
-| Username | Nom d'utilisateur unique |
-| Email | Adresse email |
-| Real Name | Nom complet (optionnel) |
-| Password | Mot de passe |
-| Confirm Password | Confirmation du mot de passe |
-| Comments | Commentaires (optionnel) |
+| Username | Unique username |
+| Email | Email address |
+| Real Name | Full name (optional) |
+| Password | Password |
+| Confirm Password | Password confirmation |
+| Comments | Comments (optional) |
 
-5. Cliquez sur **OK**.
+5. Click **OK**.
 
-### Via API
+### Through the API
 
 ```bash
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users" \
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -80,27 +80,27 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
   }'
 ```
 
-## Gérer les projets {#gerer-les-projets}
+## Manage projects
 
-### Créer un projet {#creer-un-projet}
+### Create a project
 
-#### Via l'interface Harbor
+#### Through the Harbor interface
 
-1. Cliquez sur **New Project** ;
-2. Renseignez :
+1. Click **New Project** ;
+2. Fill in:
 
-| Champ | Description |
+| Field | Description |
 | --- | --- |
-| Project Name | Nom du projet |
-| Access Level | Public ou Private |
-| Quota | Limite de stockage (optionnel) |
+| Project Name | Project name |
+| Access Level | Public or Private |
+| Quota | Storage limit (optional) |
 
-3. Cliquez sur **OK**.
+3. Click **OK**.
 
-#### Via API
+#### Through the API
 
 ```bash
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects" \
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -112,40 +112,40 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
   }'
 ```
 
-### Lister les projets
+### List projects
 
 ```bash
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects" \
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects" \
   -u "admin:{password}"
 ```
 
-## Rôles et permissions {#roles-et-permissions}
+## Roles and permissions
 
-### Niveaux de rôle {#niveaux-de-role}
+### Role levels
 
-| Rôle | Permissions |
+| Role | Permissions |
 | --- | --- |
-| Guest | Lire les images et les métadonnées |
-| Developer | Push/Pull des images, lire les logs |
-| Master | Gérer les membres, configurer le projet, push/pull |
-| Admin | Administration complète du projet |
-| Limited Guest | Lire les images dans certains dépôts uniquement |
+| Guest | Read images and metadata |
+| Developer | Push/pull images, read logs |
+| Master | Manage members, configure the project, push/pull |
+| Admin | Full project administration |
+| Limited Guest | Read images in certain repositories only |
 
-### Attribuer un rôle à un utilisateur {#attribuer-un-role-a-un-utilisateur}
+### Assign a role to a user
 
-#### Via l'interface Harbor
+#### Through the Harbor interface
 
-1. Accédez au projet ;
-2. Cliquez sur **Members** ;
-3. Cliquez sur **Add User** ;
-4. Entrez le nom d'utilisateur ou l'email ;
-5. Sélectionnez le rôle ;
-6. Cliquez sur **OK**.
+1. Go to the project ;
+2. Click **Members** ;
+3. Click **Add User** ;
+4. Enter the username or email ;
+5. Select the role ;
+6. Click **OK**.
 
-#### Via API
+#### Through the API
 
 ```bash
-curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/members" \
+curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/members" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -156,7 +156,7 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
   }'
 ```
 
-| role_id | Rôle |
+| role_id | Role |
 | --- | --- |
 | 1 | Limited Guest |
 | 2 | Guest |
@@ -164,22 +164,22 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
 | 4 | Master |
 | 5 | Admin |
 
-## Modifier un utilisateur {#modifier-un-utilisateur}
+## Modify a user
 
-### Modifier les informations {#modifier-les-informations}
+### Modify the information
 
-#### Via l'interface Harbor
+#### Through the Harbor interface
 
-1. Accédez à **Administration** → **Users** ;
-2. Sélectionnez l'utilisateur ;
-3. Cliquez sur **Edit** ;
-4. Modifiez les informations ;
-5. Cliquez sur **OK**.
+1. Go to **Administration** → **Users** ;
+2. Select the user ;
+3. Click **Edit** ;
+4. Modify the information ;
+5. Click **OK**.
 
-#### Via API
+#### Through the API
 
 ```bash
-curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}" \
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -188,19 +188,19 @@ curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-
   }'
 ```
 
-### Changer le mot de passe
+### Change the password
 
-#### Via l'interface Harbor
+#### Through the Harbor interface
 
-1. Accédez à **Administration** → **Users** ;
-2. Sélectionnez l'utilisateur ;
-3. Cliquez sur **Change Password** ;
-4. Entrez le nouveau mot de passe.
+1. Go to **Administration** → **Users** ;
+2. Select the user ;
+3. Click **Change Password** ;
+4. Enter the new password.
 
-#### Via API
+#### Through the API
 
 ```bash
-curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}/password" \
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}/password" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -209,12 +209,12 @@ curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-
   }'
 ```
 
-### Définir un administrateur {#definir-un-administrateur}
+### Set an administrator
 
-Pour accorder ou révoquer les privilèges administrateur :
+To grant or revoke administrator privileges:
 
 ```bash
-curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}/sysadmin" \
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}/sysadmin" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -222,35 +222,35 @@ curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-
   }'
 ```
 
-## Gérer les permissions {#gerer-les-permissions}
+## Manage permissions
 
-### Lister les membres d'un projet
+### List the members of a project
 
-#### Via l'interface Harbor
+#### Through the Harbor interface
 
-1. Accédez au projet ;
-2. Cliquez sur **Members**.
+1. Go to the project ;
+2. Click **Members**.
 
-#### Via API
+#### Through the API
 
 ```bash
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/members" \
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/members" \
   -u "admin:{password}"
 ```
 
-### Modifier le rôle d'un membre {#modifier-le-role-dun-membre}
+### Modify the role of a member
 
-#### Via l'interface Harbor
+#### Through the Harbor interface
 
-1. Accédez au projet → **Members** ;
-2. Sélectionnez le membre ;
-3. Changez le rôle ;
-4. Cliquez sur **OK**.
+1. Go to the project → **Members** ;
+2. Select the member ;
+3. Change the role ;
+4. Click **OK**.
 
-#### Via API
+#### Through the API
 
 ```bash
-curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/members/{member_id}" \
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/members/{member_id}" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -258,37 +258,37 @@ curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-
   }'
 ```
 
-### Retirer un membre d'un projet {#retirer-un-membre-dun-projet}
+### Remove a member from a project
 
-#### Via l'interface Harbor
+#### Through the Harbor interface
 
-1. Accédez au projet → **Members** ;
-2. Sélectionnez le membre ;
-3. Cliquez sur **Delete**.
+1. Go to the project → **Members** ;
+2. Select the member ;
+3. Click **Delete**.
 
-#### Via API
+#### Through the API
 
 ```bash
-curl -X DELETE "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/members/{member_id}" \
+curl -X DELETE "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/members/{member_id}" \
   -u "admin:{password}"
 ```
 
-## Désactiver ou supprimer un utilisateur {#desactiver-ou-supprimer-un-utilisateur}
+## Disable or delete a user
 
-### Désactiver un utilisateur {#desactiver-un-utilisateur}
+### Disable a user
 
-La désactivation empêche temporairement la connexion :
+Disabling temporarily prevents login:
 
-#### Via l'interface Harbor
+#### Through the Harbor interface
 
-1. Accédez à **Administration** → **Users** ;
-2. Sélectionnez l'utilisateur ;
-3. Cliquez sur **Disable**.
+1. Go to **Administration** → **Users** ;
+2. Select the user ;
+3. Click **Disable**.
 
-#### Via API
+#### Through the API
 
 ```bash
-curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}" \
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -296,20 +296,20 @@ curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-
   }'
 ```
 
-### Réactiver un utilisateur {#reactiver-un-utilisateur}
+### Re-enable a user
 
-Pour réactiver l'accès :
+To restore access:
 
-#### Via l'interface Harbor
+#### Through the Harbor interface
 
-1. Accédez à **Administration** → **Users** ;
-2. Sélectionnez l'utilisateur désactivé ;
-3. Cliquez sur **Enable**.
+1. Go to **Administration** → **Users** ;
+2. Select the disabled user ;
+3. Click **Enable**.
 
-#### Via API
+#### Through the API
 
 ```bash
-curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}" \
+curl -X PUT "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}" \
   -u "admin:{password}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -317,135 +317,108 @@ curl -X PUT "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-
   }'
 ```
 
-### Supprimer un utilisateur {#supprimer-un-utilisateur}
+### Delete a user
 
 :::warning
-La suppression est irréversible. L'historique des opérations de l'utilisateur est conservé.
+Deletion is irreversible. The history of the user's operations is retained.
 :::
 
-#### Via l'interface Harbor
+#### Through the Harbor interface
 
-1. Accédez à **Administration** → **Users** ;
-2. Sélectionnez l'utilisateur ;
-3. Cliquez sur **Delete** ;
-4. Confirmez la suppression.
+1. Go to **Administration** → **Users** ;
+2. Select the user ;
+3. Click **Delete** ;
+4. Confirm the deletion.
 
-#### Via API
+#### Through the API
 
 ```bash
-curl -X DELETE "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}" \
+curl -X DELETE "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users/{user_id}" \
   -u "admin:{password}"
 ```
 
-## Audit des accès {#audit-des-acces}
+## Access audit
 
-Utilisez l'API Harbor pour auditer les utilisateurs, les projets, les membres et les comptes robot.
-
-**Lister tous les utilisateurs**
+### List all users
 
 ```bash
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users" \
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users" \
   -u "admin:{password}"
 ```
 
-**Lister les administrateurs système**
+### List system administrators
 
 ```bash
-curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users" \
-  -u "admin:{password}" | jq '.[] | select(.sysadmin_flag == true) | {username, email, sysadmin_flag}'
+curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users" \
+  -u "admin:{password}" | jq '.[] | select(.sysadmin_flag == true)'
 ```
 
-**Lister les projets**
-
-```bash
-curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects" \
-  -u "admin:{password}"
-```
-
-**Lister les projets publics**
-
-```bash
-curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects?public=true" \
-  -u "admin:{password}"
-```
-
-**Lister les membres d'un projet**
-
-```bash
-curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/members" \
-  -u "admin:{password}"
-```
-
-**Lister les comptes robot**
-
-```bash
-curl -X GET "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/robots" \
-  -u "admin:{password}"
-```
-
-**Exporter les permissions par projet**
+### Export permissions
 
 ```bash
 #!/bin/bash
-REGISTRY="reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com"
+REGISTRY="registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com"
 AUTH="admin:password"
 
-echo "=== Export des permissions Harbor ==="
-for project in $(curl -s -X GET "https://$REGISTRY/api/v2.0/projects" -u "$AUTH" | jq -r '.[] | @base64'); do
-  project_json=$(echo "$project" | base64 --decode)
-  project_id=$(echo "$project_json" | jq -r '.project_id')
-  project_name=$(echo "$project_json" | jq -r '.name')
+echo "=== Export of Harbor permissions ==="
+echo ""
+echo "Projects and members:"
 
+for project in $(curl -s -X GET "https://$REGISTRY/api/v2.0/projects" -u "$AUTH" | jq -r '.[] | @base64'); do
+  project_json=$(echo $project | base64 --decode)
+  project_id=$(echo $project_json | jq -r '.project_id')
+  project_name=$(echo $project_json | jq -r '.name')
+  
   echo ""
   echo "Projet: $project_name (ID: $project_id)"
   curl -s -X GET "https://$REGISTRY/api/v2.0/projects/$project_id/members" -u "$AUTH" | jq '.[] | {username: .entity_name, role_id: .role_id, role_name: .role_name}'
 done
 ```
 
-**Vérifier les accès sensibles**
+### Checking sensitive access
 
-- Projets publics : identifiez les projets avec `public: true`.
-- Administrateurs système : listez les utilisateurs avec `sysadmin_flag == true`.
-- Comptes robot actifs : vérifiez les comptes robot et leurs dates d'expiration.
+- Public projects: which projects are publicly accessible?
+- Administrators: who has system admin rights?
+- Active robot accounts: which robot accounts are in use?
 
-## Bonnes pratiques
+## Best practices
 
-### Principe du moindre privilège
+### Principle of least privilege
 
-- Accordez les permissions minimales nécessaires ;
-- Utilisez le rôle Guest pour les utilisateurs en lecture seule ;
-- Limitez les rôles Admin et Master.
+- Grant the minimum permissions required ;
+- Use the Guest role for read-only users ;
+- Restrict the Admin and Master roles.
 
-### Organisation des projets {#organisation-des-projets}
+### Project organization
 
-| Type de projet | Permissions recommandées |
+| Project type | Recommended permissions |
 | --- | --- |
-| Production | Restricted - Master/Admin uniquement |
-| Staging | Developer pour l'équipe de dev |
-| Public | Developer pour push, accès public pour pull |
+| Production | Restricted - Master/Admin only |
+| Staging | Developer for the dev team |
+| Public | Developer for push, public access for pull |
 
-### Rotation des identifiants
+### Credential rotation
 
-- Changez régulièrement les mots de passe des utilisateurs ;
-- Rafraîchissez les secrets des comptes robot ;
-- Révoquez les accès inutilisés.
+- Change user passwords regularly ;
+- Refresh the secrets of robot accounts ;
+- Revoke unused access.
 
-### Audit régulier {#audit-regulier}
+### Regular audit
 
-- Revue mensuelle des accès aux projets sensibles ;
-- Suppression des comptes inactifs ;
-- Vérification des comptes robot expirés.
+- Monthly review of access to sensitive projects ;
+- Deletion of inactive accounts ;
+- Verification of expired robot accounts.
 
 ## Limitations
 
 | Action | Support |
 | --- | --- |
-| Récupérer le mot de passe admin | Via l'API Numspot |
-| Créer des utilisateurs | Via Harbor UI ou API Harbor |
-| Gérer les permissions | Via Harbor UI ou API Harbor |
-| Créer des projets | Via Harbor UI ou API Harbor |
-| Configurer les quotas | Via Harbor UI ou API Harbor |
+| Retrieve the admin password | Through the Numspot API |
+| Create users | Through the Harbor UI or Harbor API |
+| Manage permissions | Through the Harbor UI or Harbor API |
+| Create projects | Through the Harbor UI or Harbor API |
+| Configure quotas | Through the Harbor UI or Harbor API |
 
 :::tip
-Automatisez la gestion des utilisateurs avec des scripts utilisant l'API Harbor. Intégrez la gestion des accès dans vos processus de provisioning des environnements.
+Automate user management with scripts that use the Harbor API. Integrate access management into your environment provisioning processes.
 :::

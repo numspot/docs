@@ -1,5 +1,5 @@
 ---
-title: Obtenir des informations sur vos Public IP
+title: Get information about your public IP
 sidebar_position: 1
 draft: false
 ---
@@ -8,18 +8,18 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Obtenir des informations sur vos Public IP
+# Get information about your public IP
 
-Vous pouvez obtenir des informations sur les **Public IP** (adresses IP publiques) allouées à votre compte.
+You can get information about the **public IP** allocated to your account.
 
-Par défaut, cette action décrit toutes vos Public IP, qu'elles soient disponibles, associées à une **[VM](/docs/compute/concept/)** (Virtual Machine) ou à une interface réseau, ou utilisées pour une **[NAT Gateway](/docs/network/nat/concepts/)** (passerelle NAT).
+By default, this action describes all your public IP, whether they are available, associated with a **[VM](/docs/compute/concept/)** (Virtual Machine) or a network interface, or used for a **[NAT Gateway](/docs/network/nat/concepts/)**.
 
-Des informations sur vos Public IP sont également disponibles depuis les VM elles-mêmes.
+Information about your public IP is also available from the VM themselves.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.publicIp.get**
 
@@ -27,36 +27,28 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
   <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
-
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/public-ip/read-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → Public IP.", hotspot: { x: 0, y: 0.5222, w: 0.194, h: 0.0457 } },
-    { img: "/img/walkthrough/public-ip/read-list.png", text: "Depuis Réseau → Public IP, la liste de vos IP publiques s'affiche avec leur état et leurs associations.", hotspot: { x: 0.2083, y: 0.3872, w: 0.5556, h: 0.2173 } },
+    { img: "/img/walkthrough/en/public-ip/list.png", text: "From the left-hand side menu, click Network → Public IPs.", hotspot: { x: 0, y: 0.5222, w: 0.194, h: 0.0457 } },
+    { img: "/img/walkthrough/en/public-ip/list.png", text: "From Network → Public IPs, your public IPs are listed with their state and associations.", hotspot: { x: 0.2083, y: 0.3872, w: 0.5556, h: 0.2173 } },
   ]}
 />
-1.  Depuis le menu latéral gauche, cliquez sur **Réseau** → **Public IP**.
-2.  Vous arrivez ainsi sur la liste des **Public IP**.
+
+
+1.  From the left-hand side menu, click **Network** → **Public IP**.
+2.  You then arrive on the list of **Public IP**.
   </TabItem>
   <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `GET /compute/spaces/{spaceId}/publicIps` command lists the public IP.
 
+[Example request: List all public IP](/openapi/#tag/compute/GET/compute/spaces/%7BspaceId%7D/publicIps)
 
-La commande `GET /compute/spaces/{spaceId}/publicIps` permet de lister les Public IP.
+The `GET /compute/spaces/{spaceId}/publicIps/{id}` command retrieves the information of a public IP.
 
-[Exemple de requête : Lister toutes les Public IP](/openapi/#tag/compute/GET/compute/spaces/%7BspaceId%7D/publicIps)
-
-La commande `GET /compute/spaces/{spaceId}/publicIps/{id}` permet de récupérer les informations d'une Public IP.
-
-[Exemple de requête : Récupérer les informations d'une Public IP](/openapi/#tag/compute/GET/compute/spaces/%7BspaceId%7D/publicIps/%7Bid%7D)
+[Example request: Retrieve the information of a public IP](/openapi/#tag/compute/GET/compute/spaces/%7BspaceId%7D/publicIps/%7Bid%7D)
   </TabItem>
   <TabItem value="terraform" label="Terraform">
-
-## Terraform {#tabhead-terraform}
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/public_ip).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/public_ip).
   </TabItem>
 </Tabs>

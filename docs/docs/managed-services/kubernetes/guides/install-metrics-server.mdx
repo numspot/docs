@@ -1,6 +1,6 @@
 ---
-title: Installer et configurer metrics-server
-description: Installer et configurer metrics-server dans un cluster Kubernetes Numspot
+title: Install and configure metrics-server
+description: Install and configure metrics-server in a Numspot Kubernetes cluster
 sidebar_position: 4.4
 draft: false
 ---
@@ -8,62 +8,62 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Installer et configurer metrics-server
+# Install and configure metrics-server
 
-Le composant `metrics-server` collecte les métriques de ressources des conteneurs et des nodes (nœuds) dans un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/). Ces données sont utilisées par :
+The `metrics-server` component collects resource metrics from containers and nodes in a [Kubernetes cluster](/docs/managed-services/kubernetes/concepts/). These data are used by:
 
-- l'Horizontal Pod Autoscaler (HPA) pour la mise à l'échelle automatique des pods ;
-- le Vertical Pod Autoscaler (VPA) pour l'ajustement automatique des ressources ;
-- la commande `kubectl top` pour afficher l'utilisation des ressources.
+- the Horizontal Pod Autoscaler (HPA) for automatic pod scaling;
+- the Vertical Pod Autoscaler (VPA) for automatic resource adjustment;
+- the `kubectl top` command to display resource usage.
 
-Ce guide présente l'installation et la configuration de `metrics-server` dans un cluster Kubernetes Numspot, en respectant les restrictions de sécurité imposées par la conformité SecNumCloud.
+This guide describes the installation and configuration of `metrics-server` in a Numspot Kubernetes cluster, in compliance with the security restrictions imposed by SecNumCloud.
 
-## Prérequis
+## Prerequisites
 
 :::info
-- [Avoir un cluster Kubernetes Numspot opérationnel ↗](/docs/managed-services/kubernetes/concepts/)
-- [Télécharger le fichier kubeconfig ↗](/docs/managed-services/kubernetes/actions/kubeconfig/)
-- `kubectl` installé et configuré
+- [Have an operational Numspot Kubernetes cluster ↗](/docs/managed-services/kubernetes/concepts/)
+- [Download the kubeconfig file ↗](/docs/managed-services/kubernetes/actions/kubeconfig/)
+- `kubectl` installed and configured
 :::
 
-## Architecture et contraintes SecNumCloud
+## Architecture and SecNumCloud constraints
 
-### Architecture metrics-server
+### metrics-server architecture
 
-`metrics-server` fonctionne comme un agrégateur de métriques :
+`metrics-server` works as a metrics aggregator:
 
-1. il collecte les métriques de ressources (CPU — Central Processing Unit — et mémoire) depuis le kubelet de chaque node ;
-2. il agrège ces métriques au niveau du cluster ;
-3. il expose ces données via l'API Metrics.
+1. it collects resource metrics (CPU — Central Processing Unit — and memory) from the kubelet of each node;
+2. it aggregates these metrics at the cluster level;
+3. it exposes these data through the Metrics API.
 
-### Restrictions SecNumCloud
+### SecNumCloud restrictions
 
-Les clusters Kubernetes Numspot appliquent des restrictions de sécurité alignées avec les exigences SecNumCloud :
+Numspot Kubernetes clusters apply security restrictions aligned with SecNumCloud requirements:
 
-- **Pod Security Standards** : niveau "restricted" appliqué par défaut, interdisant les conteneurs privilégiés ;
-- **RBAC** (Role-Based Access Control) : permissions minimales requises, aucun droit cluster-admin pour les déploiements applicatifs ;
-- **Registre d'images** : seules les images issues de registres autorisés sont autorisées ;
-- **TLS** (Transport Layer Security) : communications chiffrées obligatoires ;
-- **Network Policies** : isolation réseau entre espaces de noms.
+- **Pod Security Standards**: "restricted" level applied by default, prohibiting privileged containers;
+- **RBAC** (Role-Based Access Control): minimum required permissions, no cluster-admin rights for application deployments;
+- **Image registry**: only images from authorized registries are allowed;
+- **TLS** (Transport Layer Security): encrypted communications are mandatory;
+- **Network Policies**: network isolation between namespaces.
 
-Ces restrictions nécessitent une configuration spécifique de `metrics-server`.
+These restrictions require a specific configuration of `metrics-server`.
 
 ---
 
-## Installation via Helm (recommandé)
+## Installation via Helm (recommended)
 
-L'installation via Helm permet une configuration fine adaptée aux contraintes SecNumCloud.
+Installation via Helm allows fine-grained configuration adapted to SecNumCloud constraints.
 
-### Étape 1 : Ajouter le dépôt Helm
+### Step 1: Add the Helm repository
 
 ```bash
 helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
 helm repo update
 ```
 
-### Étape 2 : Créer le fichier de valeurs
+### Step 2: Create the values file
 
-Créez un fichier `values-metrics-server.yaml` avec les paramètres adaptés aux restrictions SecNumCloud :
+Create a `values-metrics-server.yaml` file with the parameters adapted to SecNumCloud restrictions:
 
 ```yaml
 replicas: 2
@@ -117,7 +117,7 @@ nodeSelector: {}
 affinity: {}
 ```
 
-### Étape 3 : Installer le chart
+### Step 3: Install the chart
 
 ```bash
 helm install metrics-server metrics-server/metrics-server \
@@ -126,7 +126,7 @@ helm install metrics-server metrics-server/metrics-server \
   --version 3.12.1
 ```
 
-### Étape 4 : Vérifier l'installation
+### Step 4: Verify the installation
 
 ```bash
 kubectl get deployment metrics-server -n kube-system
@@ -134,7 +134,7 @@ kubectl get pods -n kube-system -l app.kubernetes.io/name=metrics-server
 kubectl get service metrics-server -n kube-system
 ```
 
-Sortie attendue :
+Expected output:
 
 ```text
 NAME             READY   UP-TO-DATE   AVAILABLE   AGE
@@ -152,21 +152,21 @@ metrics-server   ClusterIP   10.xx.xx.xx     <none>        443/TCP   2m
 
 ## Installation via manifest
 
-Pour les environnements sans Helm, utilisez les manifestes Kubernetes.
+For environments without Helm, use the Kubernetes manifests.
 
-### Étape 1 : Télécharger le manifest officiel
+### Step 1: Download the official manifest
 
 ```bash
 curl -LJO https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.7.1/components.yaml
 ```
 
-### Étape 2 : Modifier le manifest
+### Step 2: Modify the manifest
 
-Apportez les modifications suivantes au fichier `components.yaml` pour respecter les restrictions SecNumCloud.
+Apply the following modifications to the `components.yaml` file to comply with SecNumCloud restrictions.
 
-#### Modification 1 : Désactiver TLS au niveau kubelet
+#### Modification 1: Disable TLS at the kubelet level
 
-Les certificats kubelet autogénérés ne sont pas validés par défaut. Ajoutez l'argument suivant dans le conteneur `metrics-server` :
+Self-generated kubelet certificates are not validated by default. Add the following argument in the `metrics-server` container:
 
 ```yaml
 containers:
@@ -180,9 +180,9 @@ containers:
       - --authorization-always-allow-paths=/healthz,/livez,/readyz
 ```
 
-#### Modification 2 : Configurer le contexte de sécurité
+#### Modification 2: Configure the security context
 
-Configurez le conteneur pour respecter les Pod Security Standards :
+Configure the container to comply with the Pod Security Standards:
 
 ```yaml
 securityContext:
@@ -195,9 +195,9 @@ securityContext:
       - ALL
 ```
 
-#### Modification 3 : Définir les ressources
+#### Modification 3: Define resources
 
-Ajoutez des limites de ressources pour éviter une consommation excessive :
+Add resource limits to avoid excessive consumption:
 
 ```yaml
 resources:
@@ -209,13 +209,13 @@ resources:
     memory: 500Mi
 ```
 
-### Étape 3 : Appliquer le manifest
+### Step 3: Apply the manifest
 
 ```bash
 kubectl apply -f components.yaml
 ```
 
-### Étape 4 : Vérifier le déploiement
+### Step 4: Verify the deployment
 
 ```bash
 kubectl get deployment metrics-server -n kube-system
@@ -224,18 +224,18 @@ kubectl logs -n kube-system deployment/metrics-server
 
 ---
 
-## Configuration post-installation
+## Post-installation configuration
 
-### Vérifier le fonctionnement
+### Verify operation
 
-Testez que `metrics-server` collecte correctement les métriques :
+Test that `metrics-server` collects metrics correctly:
 
 ```bash
 kubectl top nodes
 kubectl top pods -A
 ```
 
-Sortie attendue :
+Expected output:
 
 ```text
 NAME              STATUS   ROLES           AGE   VERSION
@@ -247,9 +247,9 @@ kube-system       coredns-xxxxx-xxxxx              5m           20Mi
 kube-system       metrics-server-xxxxx-xxxxx       3m           15Mi
 ```
 
-### Configurer HPA
+### Configure HPA
 
-Exemple de configuration d'un Horizontal Pod Autoscaler utilisant `metrics-server` :
+Example configuration of a Horizontal Pod Autoscaler using `metrics-server`:
 
 ```yaml
 apiVersion: autoscaling/v2
@@ -279,13 +279,13 @@ spec:
           averageUtilization: 80
 ```
 
-Appliquez la configuration :
+Apply the configuration:
 
 ```bash
 kubectl apply -f hpa-example.yaml
 ```
 
-Vérifiez le statut de l'HPA :
+Check the HPA status:
 
 ```bash
 kubectl get hpa -n production
@@ -293,36 +293,36 @@ kubectl get hpa -n production
 
 ---
 
-## Dépannage
+## Troubleshooting
 
-### Erreur "unable to fetch metrics"
+### "unable to fetch metrics" error
 
-**Cause** : `metrics-server` ne peut pas communiquer avec les kubelets.
+**Cause**: `metrics-server` cannot communicate with the kubelets.
 
-**Solution** :
+**Solution**:
 
-1. Vérifiez que les nodes sont accessibles :
+1. Check that the nodes are reachable:
 
 ```bash
 kubectl get nodes
 kubectl describe node <node-name> | grep -A 5 Addresses
 ```
 
-2. Vérifiez la configuration réseau :
+2. Check the network configuration:
 
 ```bash
 kubectl logs -n kube-system deployment/metrics-server | grep -i error
 ```
 
-### Erreur "x509: certificate signed by unknown authority"
+### "x509: certificate signed by unknown authority" error
 
-**Cause** : Les certificats kubelet ne sont pas validés par l'autorité de certification du cluster.
+**Cause**: The kubelet certificates are not validated by the cluster certificate authority.
 
-**Solution** :
+**Solution**:
 
-Pour les clusters Numspot, les certificats kubelet sont gérés par le control plane. Deux options sont disponibles :
+For Numspot clusters, the kubelet certificates are managed by the control plane. Two options are available:
 
-**Option 1 : Configurer la validation TLS**
+**Option 1: Configure TLS validation**
 
 ```yaml
 args:
@@ -330,7 +330,7 @@ args:
   - --kubelet-preferred-address-types=InternalIP
 ```
 
-Cette option nécessite de monter le certificat de l'autorité dans le pod :
+This option requires mounting the authority certificate in the pod:
 
 ```yaml
 volumes:
@@ -344,17 +344,17 @@ volumeMounts:
     readOnly: true
 ```
 
-**Option 2 : Utiliser les certificats générés automatiquement**
+**Option 2: Use automatically generated certificates**
 
-Les clusters Numspot génèrent automatiquement des certificats valides pour les kubelets. Aucune configuration supplémentaire n'est requise si vous utilisez les arguments par défaut.
+Numspot clusters automatically generate valid certificates for the kubelets. No additional configuration is required if you use the default arguments.
 
-### Erreur "Pod Security Admission"
+### "Pod Security Admission" error
 
-**Cause** : Les Pod Security Standards bloquent le déploiement.
+**Cause**: The Pod Security Standards block the deployment.
 
-**Solution** :
+**Solution**:
 
-`metrics-server` est déployé dans l'espace de noms `kube-system`, qui dispose d'une exemption pour les composants système. Vérifiez que le manifest inclut les configurations de sécurité appropriées :
+`metrics-server` is deployed in the `kube-system` namespace, which has an exemption for system components. Check that the manifest includes the appropriate security configurations:
 
 ```yaml
 securityContext:
@@ -366,22 +366,22 @@ securityContext:
       - ALL
 ```
 
-### kubectl top ne retourne pas de données
+### kubectl top returns no data
 
-**Cause** : Les métriques ne sont pas encore disponibles ou l'API Metrics n'est pas accessible.
+**Cause**: The metrics are not yet available or the Metrics API is not reachable.
 
-**Solution** :
+**Solution**:
 
-1. Attendez quelques minutes après l'installation ;
+1. Wait a few minutes after the installation;
 
-2. Vérifiez le statut de l'API Metrics :
+2. Check the Metrics API status:
 
 ```bash
 kubectl get pods -n kube-system -l app.kubernetes.io/name=metrics-server
 kubectl logs -n kube-system -l app.kubernetes.io/name=metrics-server --tail=50
 ```
 
-3. Vérifiez les endpoints du service APIService :
+3. Check the APIService endpoints:
 
 ```bash
 kubectl get apiservice v1beta1.metrics.k8s.io -o yaml
@@ -389,17 +389,17 @@ kubectl get apiservice v1beta1.metrics.k8s.io -o yaml
 
 ---
 
-## Bonnes pratiques
+## Best practices
 
-### Haute disponibilité
+### High availability
 
-Déployez au minimum 2 réplicas de `metrics-server` :
+Deploy at least 2 replicas of `metrics-server`:
 
 ```yaml
 replicas: 2
 ```
 
-Configurez les anti-affinités pour répartir les pods sur différents nodes :
+Configure anti-affinities to spread the pods across different nodes:
 
 ```yaml
 affinity:
@@ -413,20 +413,20 @@ affinity:
           topologyKey: kubernetes.io/hostname
 ```
 
-### Limites de ressources
+### Resource limits
 
-Définissez des limites de ressources adaptées à la taille de votre cluster :
+Define resource limits adapted to the size of your cluster:
 
-| Taille du cluster | CPU request | CPU limit | Memory request | Memory limit |
+| Cluster size | CPU request | CPU limit | Memory request | Memory limit |
 |-------------------|-------------|-----------|----------------|--------------|
 | 1-10 nodes | 50m | 200m | 100Mi | 200Mi |
 | 11-50 nodes | 100m | 500m | 200Mi | 500Mi |
 | 51-100 nodes | 200m | 1000m | 500Mi | 1000Mi |
-| Plus de 100 nodes | 500m | 2000m | 1000Mi | 2000Mi |
+| More than 100 nodes | 500m | 2000m | 1000Mi | 2000Mi |
 
-### Surveillance
+### Monitoring
 
-Configurez des règles Prometheus pour surveiller `metrics-server` :
+Configure Prometheus rules to monitor `metrics-server`:
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1
@@ -444,12 +444,12 @@ spec:
           labels:
             severity: critical
           annotations:
-            summary: "Metrics Server est indisponible"
+            summary: "Metrics Server is unavailable"
         - alert: MetricsServerHighLatency
           expr: histogram_quantile(0.99, rate(metrics_server_api_request_duration_seconds_bucket[5m])) > 1
           for: 10m
           labels:
             severity: warning
           annotations:
-            summary: "Latence élevée de Metrics Server"
+            summary: "High Metrics Server latency"
 ```

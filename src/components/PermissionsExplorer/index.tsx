@@ -215,12 +215,12 @@ export default function PermissionsExplorer(): ReactNode {
           }}
           placeholder={translate({
             id: 'permexplorer.search.placeholder',
-            message: 'Rechercher une permission (iam.space.create) ou une API (POST /iam/spaces…)…',
+            message: "Search for a permission (iam.space.create) or an API (POST /iam/spaces…)…",
             description: 'Search placeholder of the IAM permissions page',
           })}
           aria-label={translate({
             id: 'permexplorer.search.aria',
-            message: 'Rechercher une permission ou une API',
+            message: "Search for a permission or an API",
             description: 'Search field accessible name of the IAM permissions page',
           })}
           spellCheck={false}
@@ -232,7 +232,7 @@ export default function PermissionsExplorer(): ReactNode {
             className={styles.clearButton}
             aria-label={translate({
               id: 'permexplorer.clear',
-              message: 'Effacer la recherche',
+              message: "Clear the search",
               description: 'Clear the permissions search field',
             })}
             onClick={() => {
@@ -291,7 +291,7 @@ export default function PermissionsExplorer(): ReactNode {
                 <div className={styles.suggestGroup}>
                   {translate({
                     id: 'permexplorer.group.apis',
-                    message: 'API',
+                    message: "APIs",
                     description: 'Suggestions group heading: APIs',
                   })}
                   {` (${suggestions.totalEps})`}
@@ -332,7 +332,7 @@ export default function PermissionsExplorer(): ReactNode {
         {translate(
           {
             id: 'permexplorer.stats',
-            message: '{count} permissions affichées · {apis} API',
+            message: '{count} permissions shown · {apis} API',
             description: 'Visible permissions and APIs count',
           },
           { count: String(matches.length), apis: String(apiTotal) },
@@ -343,7 +343,7 @@ export default function PermissionsExplorer(): ReactNode {
         <div className={styles.empty}>
           {translate({
             id: 'permexplorer.empty',
-            message: 'Aucune permission ni API ne correspond à cette recherche.',
+            message: "No permission or API matches this search.",
             description: 'Empty state of the permissions search',
           })}
         </div>

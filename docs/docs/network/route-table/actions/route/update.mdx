@@ -1,5 +1,5 @@
 ---
-title: Modifier une route
+title: Update a route
 sidebar_position: 2
 draft: false
 ---
@@ -7,43 +7,38 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Modifier une route
+# Update a route
 
-Vous pouvez modifier une route que vous avez créée dans une [route table (table de routage)](/docs/network/route-table/concepts/) en la remplaçant par une autre. Cette action modifie automatiquement la façon dont le trafic est routé pour les [VM (Virtual Machines)](/docs/compute/concept/) placées dans les subnets (sous-réseaux) associés à cette route table.
+You can update a route that you created in a [route table](/docs/network/route-table/concepts/) by replacing it with another one. This action automatically changes the way traffic is routed for the [VM (Virtual Machines)](/docs/compute/concept/) placed in the subnets associated with this route table.
 
 ## Permissions
 
-Aucune permission **IAM** (Identity and Access Management) n'est requise pour effectuer cette action.
+No **IAM** (Identity and Access Management) permission is required to perform this action.
 
 <Tabs>
   <TabItem value="Console" default>
 
   :::info
-  La modification d'une route n'est pas disponible depuis la console Numspot : le panneau **Routes** d'une route table ne propose que la suppression d'une route.
-
-  Pour modifier une route, supprimez la route existante puis recréez-la avec la nouvelle cible, ou utilisez l'**API** / **Terraform** (voir les onglets correspondants).
+  See the **[VPC](/docs/network/vpc/concepts/)** dashboard, from the **Route Table** tab.
   :::
 
   </TabItem>
   <TabItem value="API">
-      La commande `PUT /compute/spaces/{spaceId}/routeTables/{id}/routes` remplace une route existante dans une route table d'un VPC (Virtual Private Cloud).
-Vous devez spécifier l'un des éléments suivants comme cible :
+      The `PUT /compute/spaces/{spaceId}/routeTables/{id}/routes` command replaces an existing route in a route table of a VPC (Virtual Private Cloud).
+You must specify one of the following as the target:
 
 - VPC Peering
-- `NAT VM` (machine virtuelle NAT)
-- [internet gateway (passerelle Internet)](/docs/network/internet-gateway/concepts/)
-- [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/)
-- [nat gateway (passerelle NAT)](/docs/network/nat/concepts/)
+- `NAT VM` (NAT virtual machine)
+- [internet gateway](/docs/network/internet-gateway/concepts/)
+- [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/)
+- [nat gateway](/docs/network/nat/concepts/)
 - NIC (Network Interface Card)
 
-L'algorithme de routage est basé sur la correspondance la plus spécifique.
+The routing algorithm is based on the most specific match.
 
-[Exemple de requête : Modification d'une route](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/routeTables/{id}/routes)
+[Example request: Updating a route](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/routeTables/{id}/routes)
   </TabItem>
   <TabItem value="terraform" label="Terraform">
-
-## Terraform {#tabhead-terraform}
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
   </TabItem>
 </Tabs>

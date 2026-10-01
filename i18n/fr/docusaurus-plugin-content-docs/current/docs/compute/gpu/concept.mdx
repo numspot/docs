@@ -1,0 +1,70 @@
+---
+title: "GPU - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# À propos des GPU
+
+<ActionsSummary />
+
+:::note info
+Les GPU (Graphics Processing Unit) sont des ressources Cloud utilisées pour le rendu graphique et les calculs parallèles lourds.
+Vous pouvez allouer des GPU à votre compte et les attacher ou détacher de vos [VM (Virtual Machine)](/docs/compute/concept/).
+:::
+
+## Informations générales
+
+Un GPU est une ressource qui peut être allouée à votre compte et attachée ou détachée de vos VM. Vous pouvez attacher plusieurs GPU à la même VM si ces GPU sont du même modèle.
+
+Un GPU peut être dans l'un des états suivants :
+
+* `allocated` : Le GPU est réservé pour votre compte ;
+* `attaching` : L'attachement du GPU à une VM est prévu. Vous devez arrêter la VM pour faire passer le GPU à l'état attached ;
+* `attached` : Le GPU est utilisé par la VM. Il est considéré comme un périphérique connecté à la VM ;
+* `detaching` : Le détachement du GPU est prévu. Vous devez arrêter la VM pour faire passer le GPU à l'état allocated.
+
+<img src="/img/console/compute/gpus/FR-sch-FCU-fGPULifecycle-v2.png" alt="Cycle de vie d'une machine virtuelle équipée d'un GPU sur Numspot" />
+
+*Cycle de vie d'un GPU*
+
+:::warning
+Lorsque vous attachez un GPU, la VM doit respecter les conditions suivantes (voir le tableau des modèles de GPU ci-dessous) :
+
+* Avoir l'indicateur de performance `highest` (1) ;
+* Avoir moins d'un certain nombre de vCores, c'est-à-dire de vCPU (virtual Central Processing Unit) ;
+* Avoir moins d'une certaine quantité de mémoire ;
+* Avoir une génération de processeur compatible avec le GPU.
+
+En outre, la VM ne doit pas être une VM dédiée.
+
+:::
+
+## Modèles de GPU
+
+Numspot fournit différents modèles de GPU, avec différentes quantités de mémoire VRAM (Video Random Access Memory) :
+
+| Modèle de GPU | VRAM du GPU (en Mio) | Nombre maximum de vCores | Quantité maximum de mémoire (en Gio) | Générations de processeur compatibles | Régions |
+| --- | --- | --- | --- | --- | --- |
+| nvidia-l40 | 48000 | 35 | 250 | v7 | eu-west-2 <br/> cloudgouv-eu-west-1 |
+| nvidia-h100 | 80000 | 32 | 256 | v7 | eu-west-2 <br/> cloudgouv-eu-west-1 |
+| nvidia-a100-80 | 80000 | 35 | 256 | v6 | eu-west-2 |
+| nvidia-a100-80 | 80000 | 35 | 256 | v6, v7 | cloudgouv-eu-west-1 |
+
+:::tip
+Numspot propose également des **VM inférence** avec GPU intégrés (nvidia-l40, nvidia-h100, nvidia-h200). Contrairement aux fGPU (flexible GPU, GPU flexible), ces GPU ne nécessitent pas d'allocation préalable et sont directement disponibles sur la VM. Pour plus d'informations, consultez la page [Types de VM](/docs/compute/vms/types/#usage-inférence-inference).
+:::
+
+## Conversion de type de VM
+
+Comme pour toute VM, vous pouvez modifier le type d'une VM ayant des GPU attachés.
+Cependant, le nombre de GPU attachés peut être incompatible avec le nouveau type de VM (nombre de vCores, quantité de mémoire, génération de processeur).
+Il se produit différents comportements selon les types de VM.
+
+:::warning
+Si tous les GPU attachés à la VM sont compatibles avec le nouveau type de VM, la VM est convertie.
+<br/>Sinon, une erreur `vm-specs-mismatch` est renvoyée.
+:::

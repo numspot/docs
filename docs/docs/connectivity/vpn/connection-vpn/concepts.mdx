@@ -1,68 +1,66 @@
 ---
-title: "Connexion VPN - Concepts"
+title: "VPN connection - Concepts"
 sidebar_label: "Concepts"
-description: Découvrez les connexions VPN, tunnels sécurisés entre votre réseau d'entreprise et un VPC dans le Cloud Numspot.
+description: Learn about VPN connections, secure tunnels between your corporate network and a VPC in the Numspot Cloud.
 sidebar_position: 1
 draft: false
-last_update:
-  date: 2026-09-17
 ---
 
 import ActionsSummary from '@site/src/components/ActionsSummary';
 
-# À propos des connexions VPN
+# About VPN connections
 
 <ActionsSummary />
 
-Une connexion VPN (Virtual Private Network) est une connexion sécurisée entre votre réseau d'entreprise et l'un de vos [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) dans le Cloud Numspot. Les ressources placées de chaque côté de la connexion peuvent communiquer entre elles.
+A VPN (Virtual Private Network) connection is a secure connection between your corporate network and one of your [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud) in the Numspot Cloud. The resources on each side of the connection can communicate with each other.
 
-## Informations générales
+## General information
 
-Une connexion VPN se compose des éléments suivants :
+A VPN connection is made up of the following elements:
 
-* Une [client gateway (passerelle client)](/docs/connectivity/vpn/client-gateway/concepts/), de votre côté de la connexion. Cette ressource se situe dans votre réseau d'entreprise, et peut être logicielle ou matérielle.
-* Une [virtual gateway (passerelle virtuelle)](/docs/connectivity/vpn/virtual-gateway/concepts/), du côté Numspot de la connexion. Cette ressource est attachée à l'un de vos VPC.
-* Un tunnel VPN, qui relie la client gateway et la virtual gateway de manière sécurisée à travers le réseau internet.
+* A [client gateway](/docs/connectivity/vpn/client-gateway/concepts/), on your side of the connection. This resource is located in your corporate network, and can be software or hardware.
+* A [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/), on the Numspot side of the connection. This resource is attached to one of your VPC.
+* A VPN tunnel, which links the client gateway and the virtual gateway securely across the internet.
 
-![Architecture d'une connexion VPN](/img/console/connectivity/vpn/sch-General-VPNConnectionArchitecture.png)
-*_Architecture d'une connexion VPN_*
+![VPN connection architecture](/img/console/connectivity/vpn/sch-General-VPNConnectionArchitecture.png)
+*_VPN connection architecture_*
 
-Le tunnel VPN est sécurisé par la suite de protocoles IPsec : IKEv2 (Internet Key Exchange) négocie les clés du tunnel, et ESP (Encapsulating Security Payload) chiffre les données qui le traversent. Les algorithmes et paramètres supportés sont listés dans la page [Référence pour la configuration des VPN](/docs/connectivity/vpn/reference/).
+The encryption protocol of the VPN tunnel is IPsec.
 
-Une fois la connexion VPN créée, le tunnel VPN devient actif dès que du trafic est généré depuis votre côté de la connexion. C'est donc à partir de votre client gateway que s'établit le tunnel, non de la virtual gateway.
+Once the VPN connection is created, the VPN tunnel becomes active as soon as traffic is generated from your side of the connection. The tunnel is therefore established from your client gateway, not from the virtual gateway.
 
-Pour assurer la redondance et la haute disponibilité, vous pouvez créer plusieurs connexions VPN entre votre réseau et un même VPC.
+To ensure redundancy and high availability, you can create several VPN connections between your network and the same VPC.
 
 :::note
-Vous pouvez aussi relier votre réseau d'entreprise à un VPC avec [DirectLink](/docs/connectivity/direct-link/concepts/), une connexion sécurisée physique.
+You can also link your corporate network to a VPC with [DirectLink](/docs/connectivity/direct-link/concepts/), a secure physical connection.
 :::
 
 :::warning
-Une connexion VPN ne fournit pas d'accès à internet. Pour relier le VPC à internet, vous devez lui ajouter un [internet gateway (passerelle Internet)](/docs/network/internet-gateway/concepts/).
-Vous pouvez aussi associer l'internet gateway à une [NAT Gateway (passerelle NAT)](/docs/network/nat/concepts/).
+A VPN connection does not provide internet access. To link the VPC to the internet, you must add an [internet gateway](/docs/network/internet-gateway/concepts/) to it.
+You can also associate the internet gateway with a [NAT Gateway](/docs/network/nat/concepts/).
 :::
 
-## Cycle de vie
+## Lifecycle
 
-Une connexion VPN peut être dans l'un des états suivants :
+A VPN connection can be in one of the following states:
 
-* Pending : Le processus de création est en cours. La connexion VPN conserve cet état jusqu'à ce que du trafic soit généré depuis la client gateway.
-* Available : La connexion VPN est créée et prête à être utilisée.
-* Deleting : Le processus de suppression est en cours.
-* Deleted : La connexion VPN est supprimée. Pour relier à nouveau votre réseau d'entreprise et le VPC, vous devez en créer une nouvelle.
+* "Pending": the creation process is in progress. The VPN connection remains in this state until traffic is generated from the client gateway.
+* "Available": the VPN connection is created and ready to be used.
+* "Deleting": the deletion process is in progress.
+* "Deleted": the VPN connection is deleted. To link your corporate network and the VPC again, you must create a new one.
 
 :::info
-Les ressources supprimées restent visibles pendant 1 heure.
+Deleted resources remain visible for 1 hour.
 :::
 
-De plus, pour une connexion VPN dans l'état available, le tunnel VPN peut être dans l'un des états suivants :
+In addition, for a VPN connection in the "Available" state, the VPN tunnel can be in one of the following states:
 
-* Up : Le tunnel est actif et reçoit le trafic entre la client gateway et la virtual gateway.
-* Down : Le tunnel est inactif, et aucun trafic ne circule entre la client gateway et la virtual gateway. Ceci est dû, par exemple, à une mauvaise configuration de la connexion VPN, ou après une période d'inactivité selon la configuration.
+* "Up": the tunnel is active and receives traffic between the client gateway and the virtual gateway.
+* "Down": the tunnel is inactive, and no traffic flows between the client gateway and the virtual gateway. This is due, for example, to a misconfiguration of the VPN connection, or follows a period of inactivity depending on the configuration.
 
-## Configuration réseau
+## Network configuration
 
-Pour autoriser le trafic entre les deux côtés de la connexion VPN, vous devez configurer les ressources suivantes :
+To allow traffic between the two sides of the VPN connection, you must configure the following resources:
 
-* De votre côté de la connexion, le pare-feu de la client gateway. Vous devez ouvrir les ports adéquats pour autoriser les flux depuis la virtual gateway.
-* Du côté Numspot de la connexion, les [security groups (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) associés aux [VM (Virtual Machine)](/docs/compute/concept/) dans le VPC. Vous devez ajouter les règles autorisant les flux entrants et sortants depuis et vers votre réseau d'entreprise.
+* On your side of the connection, the firewall of the client gateway. You must open the appropriate ports to allow traffic from the virtual gateway.
+* On the Numspot side of the connection, the [security groups](/docs/compute/security-groups/concepts/concept-sg/) associated with the [VM](/docs/compute/concept/) (Virtual Machine) in the VPC. You must add the rules that allow inbound and outbound traffic from and to your corporate network.

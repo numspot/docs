@@ -1,56 +1,50 @@
 ---
-title: Obtenir les détails d'un groupe de nœuds d'un cluster Kubernetes - Kubernetes managé
-sidebar_label: Obtenir les détails d'un groupe de nœuds d'un cluster Kubernetes
+title: Get the details of a node pool of a Kubernetes cluster - Managed Kubernetes
+sidebar_label: Get the details of a node pool of a Kubernetes cluster
 sidebar_position: 7
 draft: false
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Obtenir les détails d'un groupe de nœuds d'un cluster Kubernetes
+# Get the details of a node pool of a Kubernetes cluster
 
-Récupérez les détails d'un groupe de nœuds (node pool) d'un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) au sein de votre espace.
+Retrieve the details of a node pool of a [Kubernetes cluster](/docs/managed-services/kubernetes/concepts/) within your space.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **kubernetes.cluster.get**
 
 :::
 <Tabs>
 <TabItem value="console" label="Console" default>
+    1. From the left-hand side menu, click **Managed Services** → **Kubernetes** to access the list of Kubernetes clusters.
 
-## Console {#tabhead-console}
+    ![Managed Services menu](/img/console/managed-services/en-menu-managed-services.png)
 
-    1. Depuis le menu latéral de gauche, cliquez sur **Services managés** → **Kubernetes** pour accéder à la liste des clusters Kubernetes.
+    2. Click the ID of the cluster containing the node pool whose details you want to view.
 
-    ![Menu Services managés](/img/console/managed-services/fr-menu-managed-services.png)
+    3. The information for each node pool appears in the **Node pools** section of the cluster details page.
 
-    2. Cliquez sur l'ID du cluster contenant le groupe de nœuds dont vous souhaitez consulter les détails.
+    ![Node pool details](/img/managed-services/kubernetes/fr/kubernetes_get_cluster_details_1.png)
 
-    3. Les informations de chaque groupe de nœuds s'affichent dans la section **Node pools** de la page de détails du cluster.
+    You will find the following information there for each node pool:
 
-    ![Détails d'un node pool](/img/managed-services/kubernetes/fr/kubernetes_get_cluster_details_1.png)
-
-    Vous y trouverez les informations suivantes pour chaque groupe de nœuds :
-
-    - **ID** : identifiant unique du groupe de nœuds ;
-    - **Statut** : état actuel du groupe de nœuds ;
-    - **Zone de disponibilité** : zone dans laquelle le groupe de nœuds est déployé ;
-    - **Type de nodes** : profil des nodes du groupe de nœuds ;
-    - **Volume système** : type et taille du volume système ;
-    - **Nombre de nodes** : nombre de nodes actifs dans le groupe de nœuds.
+    - **ID**: unique identifier of the node pool;
+    - **Status**: current state of the node pool;
+    - **Availability Zone**: zone in which the node pool is deployed;
+    - **Node type**: profile of the nodes of the node pool;
+    - **System volume**: type and size of the system volume;
+    - **Number of nodes**: number of active nodes in the node pool.
 </TabItem>
 
 <TabItem value="api" label="API">
+    Use the `GET /kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools/{nodePoolId}` route to get the information of a node pool of a managed Kubernetes cluster.
 
-## API {#tabhead-api}
-
-    Utilisez la route `GET /kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools/{nodePoolId}` pour obtenir les informations d'un groupe de nœuds d'un cluster Kubernetes managé.
-
-### Exemple de réponse
+    **Example response**
 
     ```json
     {
@@ -71,6 +65,6 @@ Cette action nécessite les permissions IAM (Identity and Access Management) sui
     }
     ```
 
-    [Voir la spécification complète](/openapi/#tag/kubernetes/GET/kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools/{nodePoolId})
+    [See the full specification](/openapi/#tag/kubernetes/GET/kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools/{nodePoolId})
 </TabItem>
 </Tabs>

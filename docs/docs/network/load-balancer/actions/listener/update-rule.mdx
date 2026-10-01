@@ -1,5 +1,5 @@
 ---
-title: Modifier une règle d'un listener de load balancer
+title: Update a load balancer listener rule
 sidebar_position: 5
 draft: false
 ---
@@ -7,14 +7,14 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Modifier une règle d'un listener de load balancer
+# Update a load balancer listener rule
 
-Vous pouvez modifier une règle de redirection de trafic d'un listener (écouteur) de [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) pour ajuster les conditions ou les actions de redirection.
+You can update a traffic redirection rule of a [load balancer](/docs/network/load-balancer/concepts/) listener to adjust the redirection conditions or actions.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.loadBalancer.update**
 
@@ -22,22 +22,19 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
   <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
-:::info
-La modification d'une règle de listener n'est pas disponible depuis la console Numspot.
-
-Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
-:::
+1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
+2. Click the name of the load balancer containing the rule to update.
+3. In the "Listeners" tab, click the listener containing the rule.
+4. In the "Rules" section, identify the rule to update and click **Edit**.
+5. Update the rule parameters as required.
+6. Click **Save**.
+   The rule is updated.
 
   </TabItem>
   <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `PUT /compute/spaces/{spaceId}/listenerRules/{id}` command updates the listener rule pattern. This call updates the pattern-matching algorithm for inbound traffic.
 
-
-La commande `PUT /compute/spaces/{spaceId}/listenerRules/{id}` met à jour le modèle de la règle de listener. Cet appel met à jour l'algorithme de correspondance des modèles pour le trafic entrant.
-
-[Exemple de requête : Modification d'une règle pour un Listener](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/listenerRules/{id})
+[Example request: Updating a rule for a Listener](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/listenerRules/{id})
   </TabItem>
 </Tabs>

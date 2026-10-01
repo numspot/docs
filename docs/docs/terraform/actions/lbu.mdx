@@ -1,39 +1,39 @@
 ---
-title: Configurer un load balancer
+title: Configure a load balancer
 sidebar_position: 3
 ---
 
-# Configurer un load balancer
+# Configure a load balancer
 
-Vous pouvez configurer un [load balancer](/docs/network/load-balancer/concepts/) pour répartir le trafic entre vos [VM (Virtual Machine)](/docs/compute/concept/) à l'aide de Terraform.
+You can configure a [load balancer](/docs/network/load-balancer/concepts/) to distribute traffic across your [VM](/docs/compute/concept/) (Virtual Machine) using Terraform.
 
-## Avant de commencer
+## Before you begin
 
-Pour réaliser les actions présentées ci-dessous, vous devez disposer :
+To perform the actions described below, you must have:
 
-* D'un compte Numspot
-* De [Terraform ↗](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform) installé
-* D'un navigateur ou d'un client HTTP
+* A Numspot account
+* [Terraform ↗](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform) installed
+* A browser or an HTTP client
 
 :::warning
-Les health checks du load balancer doivent réussir à contacter vos services pour que ce dernier puisse diriger le trafic vers les bonnes instances.
+The load balancer health checks must succeed in reaching your services so that the load balancer can direct traffic to the correct instances.
 :::
 
-## Créer et déployer des ressources Numspot à l'aide de Terraform
+## Create and deploy Numspot resources using Terraform
 
-Pour démarrer, commencez par créer [le fichier de configuration ↗](/docs/terraform/quickstart/#création-du-fichier-de-configuration-terraform).
+To get started, first create [the configuration file ↗](/docs/terraform/quickstart/#creating-the-terraform-configuration-file).
 
-Vous devez ensuite créer les ressources suivantes :
+You must then create the following resources:
 
-- [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) ;
-- subnet (sous-réseau) ;
-- 2 VM ;
-- [internet gateway (passerelle Internet)](/docs/network/internet-gateway/concepts/) ;
-- [route table (table de routage)](/docs/network/route-table/concepts/) ;
-- [security group (groupe de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) ;
+- [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud);
+- subnet;
+- 2 VM;
+- [internet gateway](/docs/network/internet-gateway/concepts/);
+- [route table](/docs/network/route-table/concepts/);
+- [security group](/docs/compute/security-groups/concepts/concept-sg/);
 - load balancer.
 
-Ajoutez les blocs suivants :
+Add the following blocks:
 
 ```tf
 resource "numspot_vpc" "vpc" {
@@ -112,12 +112,12 @@ resource "numspot_load_balancer" "load-balancer" {
 }
 ```
 
-Votre configuration est maintenant prête à être [déployée sur l'infrastructure de Numspot ↗](/docs/terraform/quickstart/#déployer-votre-configuration-à-laide-de-terraform).
+Your configuration is now ready to be [deployed on the Numspot infrastructure ↗](/docs/terraform/quickstart/#deploying-your-configuration-using-terraform).
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.vpc.create**
 - **compute.subnet.create**
@@ -129,7 +129,7 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 :::
 
-## Liens utiles
+## Useful links
 
-* [Documentation du provider Numspot sur le registre d'HashiCorp ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs)
-* [Repository GitHub du provider Numspot ↗](https://github.com/numspot/terraform-provider-numspot)
+* [Numspot provider documentation on the HashiCorp registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs)
+* [Numspot provider GitHub repository ↗](https://github.com/numspot/terraform-provider-numspot)

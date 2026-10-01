@@ -1,0 +1,49 @@
+---
+title: Obtenir le statut d'un Container Registry
+sidebar_position: 3
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Obtenir le statut d'un Container Registry
+
+Vous pouvez obtenir le statut de votre Container Registry au sein de votre espace.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **registry.instance.get**
+
+:::
+<Tabs>
+
+{/* </TabItem> */}
+<TabItem value="API" label="API" default>
+
+## API {#tabhead-API}
+
+    La requête `GET /registry/spaces/{spaceId}/registries/{registryId}` permet d'obtenir le statut actuel d'un Container Registry.
+
+    ### Exemple de réponse
+
+    ```json
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440002",
+      "name": "mon-container-registry",
+      "status": {
+        "state": "RUNNING",
+        "message": "instance is healthy"
+      },
+      "version": "2.14",
+      "host": "mon-container-registry.registry.eu-west-2.numspot.com",
+      "visibility": "EXTERNAL"
+    }
+    ```
+
+    [Voir la spécification complète](/openapi/#tag/registry/GET/registry/spaces/{spaceId}/registries/{registryId})
+
+</TabItem>
+</Tabs>

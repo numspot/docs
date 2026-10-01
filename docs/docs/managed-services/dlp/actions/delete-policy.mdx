@@ -1,6 +1,6 @@
 ---
-title: Supprimer une policy DLP - DLP managé
-sidebar_label: Supprimer une policy DLP
+title: Delete a DLP policy - Managed DLP
+sidebar_label: Delete a DLP policy
 sidebar_position: 6
 draft: false
 ---
@@ -8,21 +8,21 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Supprimer une policy DLP
+# Delete a DLP policy
 
-Supprimez définitivement une [policy DLP](/docs/managed-services/dlp/concepts). Cette action est irréversible. Seules les policies en brouillon peuvent être supprimées.
+Permanently delete a [DLP policy](/docs/managed-services/dlp/concepts). This action is irreversible. Only draft policies can be deleted.
 
 ## Permissions
 
 :::info
-Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+This action requires the following [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) role:
 
 - **rule_editor**
 
 :::
 
 :::warning
-La suppression est définitive. Les policies déjà publiées dans un ruleset ne sont pas affectées — seules les policies en brouillon sont supprimées.
+Deletion is permanent. Policies already published in a ruleset are not affected — only draft policies are deleted.
 :::
 
 <Tabs>
@@ -32,22 +32,22 @@ La suppression est définitive. Les policies déjà publiées dans un ruleset ne
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/dlp/policies-list.png", text: "Dans la console DLP, cliquez sur Policies dans le menu latéral.", hotspot: { x: 0.006, y: 0.184, w: 0.155, h: 0.044 } },
-    { img: "/img/walkthrough/dlp/policies-list.png", text: "Sur la ligne de la policy à supprimer, cliquez sur l'icône corbeille (rouge).", hotspot: { x: 0.930, y: 0.335, w: 0.030, h: 0.044 } },
-    { img: "/img/walkthrough/dlp/policy-delete.png", text: "Dans la fenêtre de confirmation, cliquez sur « Delete » pour supprimer définitivement la policy.", hotspot: { x: 0.609, y: 0.532, w: 0.052, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/policies-list.png", text: "In the DLP console, click Policies in the side menu.", hotspot: { x: 0.006, y: 0.184, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/policies-list.png", text: "On the row of the policy to delete, click the trash (red) icon.", hotspot: { x: 0.930, y: 0.335, w: 0.030, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/policy-delete.png", text: "In the confirmation window, click “Delete” to permanently delete the policy.", hotspot: { x: 0.609, y: 0.532, w: 0.052, h: 0.044 } },
   ]}
 />
 
-1. Dans la console [DLP](/docs/managed-services/dlp/concepts), cliquez sur **Policies** dans le menu latéral.
-2. Cliquez sur l'icône de suppression (corbeille) sur la ligne de la policy à supprimer.
-3. Confirmez la suppression dans la boîte de dialogue.
+1. In the [DLP](/docs/managed-services/dlp/concepts) console, click **Policies** in the sidebar.
+2. Click the delete icon (trash) on the row of the policy to delete.
+3. Confirm the deletion in the dialog box.
 
 </TabItem>
 <TabItem value="api" label="API">
 
-La requête `DELETE /api/v1/policies/{id}` permet de supprimer une [policy DLP](/docs/managed-services/dlp/concepts).
+The `DELETE /api/v1/policies/{id}` request deletes a [DLP policy](/docs/managed-services/dlp/concepts).
 
-### Exemple de réponse
+### Response example
 
 ```text
 HTTP/1.1 204 No Content

@@ -1,55 +1,55 @@
 ---
-title: Bloquer les accès abusifs - Secret Manager managé
-sidebar_label: Bloquer les accès abusifs
-description: Guide de blocage des accès abusifs sur une instance Secret Manager managée
+title: Block abusive access - managed Secret Manager
+sidebar_label: Block abusive access
+description: Guide to blocking abusive access on a managed Secret Manager instance
 sidebar_position: 3
 draft: false
 ---
 
-# Bloquer les accès abusifs
+# Block abusive access
 
-Le service managé [Secret Manager](/docs/managed-services/secret-manager/concepts/) intègre des mécanismes pour limiter les tentatives de connexion en échec et bloquer les comptes compromis. Ce guide explique comment configurer le verrouillage automatique, supprimer un compte et révoquer ses accès en cas d'utilisation abusive.
+The managed [Secret Manager](/docs/managed-services/secret-manager/concepts/) service includes mechanisms to limit failed connection attempts and block compromised accounts. This guide explains how to configure automatic lockout, delete an account and revoke its access in the event of abusive use.
 
-## Prérequis
+## Prerequisites
 
 :::note
-- Une [instance Secret Manager](/docs/managed-services/secret-manager/concepts/) à l'état `RUNNING` ;
-- Le token admin de l'instance ;
-- Le CLI `bao` installé, ou `curl` pour les appels API directs.
+- A [Secret Manager instance](/docs/managed-services/secret-manager/concepts/) in the `RUNNING` state;
+- The instance admin token;
+- The `bao` CLI installed, or `curl` for direct API calls.
 :::
 
-Configurez l'accès à l'instance :
+Configure access to the instance:
 
 ```bash
-export BAO_ADDR="https://{host-de-l-instance}"
-export BAO_TOKEN="{token-admin}"
+export BAO_ADDR="https://{instance-host}"
+export BAO_TOKEN="{admin-token}"
 ```
 
-## Verrouillage automatique après échecs répétés
+## Automatic lockout after repeated failures
 
-OpenBao active par défaut le verrouillage des utilisateurs (user lockout) pour les méthodes d'authentification **userpass**, **LDAP** et **AppRole**. Après plusieurs échecs de connexion en succession rapide, le compte est temporairement bloqué et OpenBao renvoie immédiatement une erreur `permission denied` sans valider le mot de passe.
+OpenBao enables user lockout by default for the **userpass**, **LDAP** and **AppRole** authentication methods. After several failed connection attempts in quick succession, the account is temporarily blocked and OpenBao immediately returns a `permission denied` error without validating the password.
 
-### Comportement par défaut
+### Default behavior
 
-| Paramètre | Valeur par défaut | Description |
+| Parameter | Default value | Description |
 | --- | --- | --- |
-| Seuil de verrouillage | 5 tentatives | Nombre d'échecs avant blocage ; |
-| Durée de verrouillage | 15 minutes | Temps pendant lequel le compte reste bloqué ; |
-| Réinitialisation du compteur | 15 minutes | Délai sans tentative après lequel le compteur d'échecs revient à zéro.
+| Lockout threshold | 5 attempts | Number of failures before blocking; |
+| Lockout duration | 15 minutes | Length of time the account stays blocked; |
+| Counter reset | 15 minutes | Period without an attempt after which the failure counter returns to zero.
 
-Le compteur d'échecs revient aussi à zéro après une connexion réussie.
+The failure counter also returns to zero after a successful connection.
 
-### Vérifier la configuration
+### Check the configuration
 
-Remplacez `userpass/` par le chemin de la méthode d'authentification concernée.
+Replace `userpass/` with the path of the relevant authentication method.
 
-Via le CLI :
+Via the CLI:
 
 ```bash
 bao read sys/auth/userpass/tune
 ```
 
-Via l'API :
+Via the API:
 
 ```bash
 curl \
@@ -57,18 +57,18 @@ curl \
   $BAO_ADDR/v1/sys/auth/userpass/tune
 ```
 
-Les champs suivants indiquent l'état du verrouillage :
+The following fields indicate the lockout state:
 
-- `user_lockout_threshold` : seuil de verrouillage ;
-- `user_lockout_duration` : durée de verrouillage ;
-- `user_lockout_counter_reset_duration` : délai de réinitialisation du compteur ;
-- `user_lockout_disable` : `true` si le verrouillage est désactivé.
+- `user_lockout_threshold`: lockout threshold;
+- `user_lockout_duration`: lockout duration;
+- `user_lockout_counter_reset_duration`: counter reset period;
+- `user_lockout_disable`: `true` if lockout is disabled.
 
-### Modifier les seuils de verrouillage
+### Change the lockout thresholds
 
-Pour verrouiller un compte après 10 échecs en 10 minutes et réinitialiser le compteur après 10 minutes d'inactivité :
+To lock an account after 10 failures in 10 minutes and reset the counter after 10 minutes of inactivity:
 
-Via le CLI :
+Via the CLI:
 
 ```bash
 bao auth tune \
@@ -78,7 +78,7 @@ bao auth tune \
   userpass/
 ```
 
-Via l'API :
+Via the API:
 
 ```bash
 curl \
@@ -93,20 +93,20 @@ curl \
 ```
 
 :::warning
-Ces paramètres s'appliquent à l'ensemble de la méthode d'authentification activée au chemin indiqué. Réduisez la durée de verrouillage avec précaution pour ne pas affaiblir la protection contre les attaques par force brute.
+These settings apply to the entire authentication method enabled at the given path. Reduce the lockout duration with care so as not to weaken protection against brute-force attacks.
 :::
 
-### Désactiver le verrouillage
+### Disable lockout
 
-Vous pouvez désactiver le verrouillage au niveau d'une méthode d'authentification sans impacter le reste de l'instance.
+You can disable lockout at the level of an authentication method without affecting the rest of the instance.
 
-Via le CLI :
+Via the CLI:
 
 ```bash
 bao auth tune -user-lockout-disable=true userpass/
 ```
 
-Via l'API :
+Via the API:
 
 ```bash
 curl \
@@ -116,50 +116,50 @@ curl \
   $BAO_ADDR/v1/sys/auth/userpass/tune
 ```
 
-## Bloquer ou supprimer un compte
+## Block or delete an account
 
-Lorsqu'un compte est compromis ou utilisé de manière abusive, vous pouvez le supprimer et révoquer immédiatement ses tokens actifs.
+When an account is compromised or used abusively, you can delete it and immediately revoke its active tokens.
 
-### Supprimer un utilisateur
+### Delete a user
 
-Remplacez `{nom_utilisateur}` par le nom de l'utilisateur concerné.
+Replace `{username}` with the name of the relevant user.
 
-Via le CLI :
+Via the CLI:
 
 ```bash
-bao delete auth/userpass/users/{nom_utilisateur}
+bao delete auth/userpass/users/{username}
 ```
 
-Via l'API :
+Via the API:
 
 ```bash
 curl \
   --header "X-Vault-Token: $BAO_TOKEN" \
   --request DELETE \
-  $BAO_ADDR/v1/auth/userpass/users/{nom_utilisateur}
+  $BAO_ADDR/v1/auth/userpass/users/{username}
 ```
 
 :::danger
-La suppression d'un utilisateur est irréversible. Les tokens déjà émis restent valides jusqu'à leur expiration.
+Deleting a user is irreversible. Tokens already issued remain valid until they expire.
 :::
 
-### Révoquer les tokens actifs
+### Revoke active tokens
 
-Après la suppression d'un utilisateur, révoquez ses tokens pour invalider immédiatement ses accès.
+After deleting a user, revoke their tokens to immediately invalidate their access.
 
-Listez les accessoires (accessors) des tokens :
+List the token accessors:
 
 ```bash
 bao list auth/token/accessors
 ```
 
-Révoquez un token spécifique :
+Revoke a specific token:
 
 ```bash
 bao token revoke -accessor {accessor}
 ```
 
-Via l'API :
+Via the API:
 
 ```bash
 curl \
@@ -169,36 +169,36 @@ curl \
   $BAO_ADDR/v1/auth/token/revoke-accessor
 ```
 
-### Désactiver une méthode d'authentification
+### Disable an authentication method
 
-En cas d'attaque généralisée contre une méthode d'authentification, vous pouvez la désactiver complètement.
+In the event of a widespread attack against an authentication method, you can disable it completely.
 
-Via le CLI :
+Via the CLI:
 
 ```bash
 bao auth disable userpass
 ```
 
 :::danger
-La désactivation d'une méthode d'authentification bloque tous les utilisateurs qui l'utilisent. Cette opération est irréversible : vous devrez recréer la méthode et reconfigurer les utilisateurs.
+Disabling an authentication method blocks all users that use it. This operation is irreversible: you will have to recreate the method and reconfigure the users.
 :::
 
-## Détecter une utilisation abusive
+## Detect abusive use
 
-Surveillez les événements suivants dans les logs d'audit de l'instance :
+Monitor the following events in the instance audit logs:
 
-- multiples échecs de connexion consécutifs pour un même utilisateur ;
-- codes de réponse `403` ou `permission denied` répétés ;
-- connexions depuis des adresses IP inhabituelles ;
-- récupération de secrets en dehors des plages horaires habituelles.
+- multiple consecutive failed connection attempts for the same user;
+- repeated `403` or `permission denied` response codes;
+- connections from unusual IP addresses;
+- secret retrieval outside the usual time ranges.
 
-Configurez une alerte ou un traitement automatique sur ces motifs pour réagir rapidement. Pour les environnements sensibles, combinez ces surveillances avec une restriction des IP et un accès via VPN avec MFA.
+Configure an alert or automatic handling on these patterns to react quickly. For sensitive environments, combine this monitoring with IP restriction and access via VPN with MFA.
 
-## Résumé des bonnes pratiques
+## Summary of best practices
 
-| Situation | Action recommandée |
+| Situation | Recommended action |
 | --- | --- |
-| Attaque par force brute | Conservez le verrouillage automatique avec des seuils adaptés à votre usage ; |
-| Compte compromis | Supprimez l'utilisateur et révoquez ses tokens ; |
-| Méthode d'auth ciblée | Ajustez les seuils de verrouillage ou désactivez temporairement la méthode ; |
-| Surveillance | Auditez régulièrement les logs d'accès et les échecs de connexion. |
+| Brute-force attack | Keep automatic lockout with thresholds suited to your usage; |
+| Compromised account | Delete the user and revoke their tokens; |
+| Targeted auth method | Adjust the lockout thresholds or temporarily disable the method; |
+| Monitoring | Regularly audit access logs and failed connection attempts. |

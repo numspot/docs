@@ -1,59 +1,59 @@
 ---
-title: Versions et cycle de vie - Container Registry managé
-sidebar_label: Versions et cycle de vie
+title: Versions and lifecycle - Managed Container Registry
+sidebar_label: Versions and lifecycle
 sidebar_position: 5
 draft: false
 ---
 
-# Versions et cycle de vie
+# Versions and lifecycle
 
-Numspot opère ses instances Container Registry avec des versions stables de Harbor bénéficiant d'un suivi actif des correctifs de sécurité, en conformité avec les exigences de sécurité appliquées au service.
+Numspot operates its Container Registry instances with stable versions of Harbor that benefit from active monitoring of security patches, in compliance with the security requirements applied to the service.
 
-## Versions supportées
+## Supported versions
 
-Les versions mineures suivantes sont supportées :
+The following minor versions are supported:
 
 - **Harbor 2.13**
 - **Harbor 2.14**
 
-Ce périmètre couvre les versions stables et activement maintenues par le projet Harbor, avec un suivi continu des bulletins de sécurité.
+This scope covers the stable versions actively maintained by the Harbor project, with continuous monitoring of security advisories.
 
 :::note
-Lors de la création d'une instance Container Registry, la version la plus récente est sélectionnée par défaut. Pour plus d'informations, consultez [Créer un Container Registry](/docs/managed-services/registry/actions/create/).
+When you create a Container Registry instance, the most recent version is selected by default. For more information, see [Create a Container Registry](/docs/managed-services/registry/actions/create/).
 :::
 
-## Suivi des patches de sécurité
+## Security patch monitoring
 
-Les images utilisées pour les instances Container Registry intègrent :
+The images used for Container Registry instances include:
 
-- Des mises à jour de correctifs (patch) appliquées régulièrement pour corriger les bugs et les failles de sécurité.
-- Un suivi actif des vulnérabilités critiques et hautes.
+- patch updates applied regularly to fix bugs and security flaws;
+- active monitoring of critical and high vulnerabilities.
 
-Les mises à jour de correctifs sont appliquées automatiquement par Numspot et ne nécessitent aucune action de la part du client. Elles ne concernent que les versions patch (par exemple, `2.14.0` vers `2.14.1`), sans modification de la compatibilité des données.
+Patch updates are applied automatically by Numspot and require no action from the customer. They concern only patch versions (for example, `2.14.0` to `2.14.1`), without any change to data compatibility.
 
 :::info
-Pour obtenir des informations sur les versions appliquées ou les correctifs récents, contactez le support Numspot.
+To obtain information about the applied versions or recent patches, contact Numspot support.
 :::
 
-## Cycle de vie des versions (lifecycle)
+## Version lifecycle
 
-### Politique de support
+### Support policy
 
-| Version | Statut du support | Fin de support Numspot estimée |
-|---------|-------------------|--------------------------------|
-| **2.13** | Active | Octobre 2026 |
-| **2.14** | Active | Février 2027 |
+| Version | Support status | Estimated Numspot end of support |
+|---------|----------------|----------------------------------|
+| **2.13** | Active | October 2026 |
+| **2.14** | Active | February 2027 |
 
-Le statut de support est aligné sur les annonces du projet Harbor. Numspot suit la politique Harbor concernant le support des versions mineures.
+The support status is aligned with the Harbor project announcements. Numspot follows the Harbor policy for the support of minor versions.
 
-### Notification de fin de support
+### End-of-support notification
 
-Numspot notifie ses clients **plusieurs mois avant la fin de support** d'une version mineure. Cette notification permet aux clients de planifier la mise à jour vers une version plus récente.
+Numspot notifies its customers **several months before the end of support** of a minor version. This notification allows customers to plan the update to a more recent version.
 
-## Mises à jour mineures
+## Minor updates
 
-Les mises à jour mineures (par exemple, de Harbor 2.13 vers Harbor 2.14) entraînent une mise à jour de l'instance Container Registry. Numspot recommande de tester la compatibilité de vos workflows avant de procéder à une mise à jour mineure.
+Minor updates (for example, from Harbor 2.13 to Harbor 2.14) trigger an update of the Container Registry instance. Numspot recommends that you test the compatibility of your workflows before proceeding with a minor update.
 
 :::warning
-La mise à jour de version peut entraîner une indisponibilité temporaire de l'instance Container Registry (état `UPGRADING`). Il est de la responsabilité du client de vérifier que ses workflows sont compatibles avec la nouvelle version avant toute migration.
+The version update may cause a temporary unavailability of the Container Registry instance (`UPGRADING` state). It is the customer's responsibility to verify that their workflows are compatible with the new version before any migration.
 :::

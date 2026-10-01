@@ -1,0 +1,111 @@
+---
+title: Initialiser un volume
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Initialiser un volume depuis une VM
+
+Après avoir attaché un `volume` à une [VM (Virtual Machine)](/docs/compute/concept/), vous devez l'initialiser pour le rendre utilisable.
+
+<Tabs>
+<TabItem value="Linux" default>
+
+## Linux {#tabhead-linux}
+
+
+### Créer le système de fichiers du volume (nouveau volume vide uniquement)  
+
+1. Connectez-vous à votre VM.  
+2. (optionnel) Pour obtenir le nom de périphérique du `volume` que vous voulez monter, exécutez la commande suivante pour afficher la liste des périphériques attachés à la VM : 
+    ```bash 
+    $ lsblk 
+    ``` 
+    :::warning 
+    À l'intérieur de la VM, un périphérique que vous avez nommé xvdX ou xvdXX dans votre compte est typiquement renommé sdY ou sdYY. 
+    ::: 
+3. (optionnel) Pour vérifier que le `volume` est vide, exécutez la commande suivante : 
+    ```bash 
+    $ sudo file -s /dev/DEVICE_NAME 
+    ``` 
+    Si la commande renvoie uniquement data, le `volume` n'a pas de système de fichiers et vous devez en créer un. 
+
+    Si la commande renvoie autre chose, le `volume` a déjà un système de fichiers. 
+
+4. Pour créer et formater un système de fichiers xfs sur l'ensemble du `volume`, exécutez la commande suivante : 
+    ```bash 
+    sudo mkfs -t xfs /dev/DEVICE_NAME 
+    ``` 
+    :::warning 
+    Nous recommandons de ne pas partitionner les `volumes` ni d'utiliser LVM sur le cloud Numspot, car ces pratiques peuvent dégrader les performances des `volumes`. Il est préférable d'utiliser directement les `volumes` tels quels. 
+    ::: 
+
+### Monter le volume 
+
+1. Pour créer un répertoire qui servira de point de montage pour le `volume`, exécutez la commande suivante : 
+    ```bash 
+    $ sudo mkdir /MOUNT_POINT 
+    ``` 
+2. Pour monter le `volume` sur le point de montage, exécutez la commande suivante : 
+    ```bash 
+    $ sudo mount /dev/DEVICE_NAME /MOUNT_POINT 
+    ``` 
+    :::info 
+    Pour confirmer la réussite du montage, vous pouvez exécuter la commande df -hT pour afficher la liste de tous les `volumes` montés sur la VM. 
+    ::: 
+    Le `volume` est initialisé depuis votre VM et prêt à être utilisé. 
+
+### Rendre le montage permanent 
+
+:::danger  
+Pour que le montage du `volume` persiste lors de redémarrages, vous devez modifier le fichier /etc/fstab, qui configure et monte les `volumes` de la VM. Afin d'éviter toute potentielle perte d'accès à vos données, il est recommandé de créer une sauvegarde de ce fichier avant de le modifier, en utilisant la commande suivante : 
+```bash 
+$ sudo cp /etc/fstab /etc/fstab.orig 
+``` 
+:::
+
+1. Ouvrez le fichier /etc/fstab en utilisant la commande suivante : 
+    ```bash 
+    $ sudo vim /etc/fstab 
+    ``` 
+2. Appuyez sur i pour activer le mode d'insertion, puis ajoutez la ligne suivante à la fin du fichier : 
+    ```bash 
+    /dev/DEVICE_NAME    /MOUNT_POINT    xfs defaults,nofail 0   2 
+    ``` 
+    Pour en savoir plus sur les options de configuration possibles, voir par exemple la page fstab dans la documentation d'Ubuntu. 
+
+3. Appuyez sur **Échap**, puis tapez **:wq** pour enregistrer le fichier. 
+
+4. (optionnel) Pour vérifier la validité du fichier, exécutez la commande suivante pour le relancer : 
+    ```bash 
+    $ sudo mount -a 
+    ``` 
+    Si la commande renvoie un message d'erreur, les options contenues dans le fichier ne sont pas valides. Vous devez alors restaurer le fichier original et le reconfigurer. 
+    :::info 
+    Pour restaurer le fichier /etc/fstab original, exécutez la commande suivante : 
+    ```bash 
+    $ sudo mv /etc/fstab.orig /etc/fstab 
+    ``` 
+    ::: 
+
+</TabItem>
+<TabItem value="Windows">
+
+## Windows {#tabhead-windows}
+
+
+1. Connectez-vous à votre VM.
+2. Cliquez sur le menu **Démarrer**, tapez "diskmgmt.msc" et cliquez sur le programme qui apparaît.
+3. Dans le panneau en bas à gauche, faites un clic droit sur le disque correspondant au `volume` que vous voulez monter, puis cliquez sur "En ligne".
+4. (nouveau disque vide uniquement) Si vous montez le disque pour la première fois, effectuez les actions suivantes :
+  - Faites un clic droit sur le disque, puis cliquez sur "Initialiser le disque" ;
+  - Cliquez sur **OK** pour valider ;
+  - Faites un clic droit sur l'espace non alloué du disque, puis cliquez sur "Nouveau volume simple…" et suivez les instructions à l'écran.
+
+    Le `volume` est initialisé et prêt à être utilisé.
+
+</TabItem>
+</Tabs>

@@ -1,16 +1,16 @@
 ---
-title: Créer une VM et y accéder
+title: Creating a VM and accessing it
 sidebar_position: 2
 ---
 
-# Créer une VM et y accéder
+# Creating a VM and accessing it
 
-Vous pouvez créer une [VM (Virtual Machine)](/docs/compute/concept/) et y accéder via SSH (Secure Shell) en utilisant Terraform.
+You can create a [VM (Virtual Machine)](/docs/compute/concept/) and access it via SSH (Secure Shell) using Terraform.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.vpc.create**
 - **compute.subnet.create**
@@ -23,31 +23,31 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 :::
 
-## Avant de commencer
+## Before you begin
 
 :::info
-## Prérequis
-- [Disposer d'un compte Numspot ↗](https://docs.numspot.com)
-- [Installer Terraform ↗](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform)
-- [Disposer d'un client SSH ↗](https://www.openssh.com/)
+**Prerequisites**
+- [Have a Numspot account ↗](https://docs.numspot.com)
+- [Install Terraform ↗](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform)
+- [Have an SSH client ↗](https://www.openssh.com/)
 :::
 
-## Créer et déployer des ressources Numspot
+## Creating and deploying Numspot resources
 
-Pour démarrer, commencez par créer [le fichier de configuration ↗](/docs/terraform/quickstart/#création-du-fichier-de-configuration-terraform).
+To get started, first create [the configuration file ↗](/docs/terraform/quickstart/#creating-the-terraform-configuration-file).
 
-Vous devez ensuite créer les ressources suivantes :
+You must then create the following resources:
 
-- [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) ;
-- subnet (sous-réseau) ;
-- [key pair (paire de clés)](/docs/compute/keypairs/concept/) ;
-- VM ;
-- IP (Internet Protocol) publique ;
-- [internet gateway (passerelle Internet)](/docs/network/internet-gateway/concepts/) ;
-- [route table (table de routage)](/docs/network/route-table/concepts/) ;
-- [security group (groupe de sécurité)](/docs/compute/security-groups/concepts/concept-sg/).
+- [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/);
+- subnet;
+- [key pair](/docs/compute/keypairs/concept/);
+- VM;
+- public IP (Internet Protocol);
+- [internet gateway](/docs/network/internet-gateway/concepts/);
+- [route table](/docs/network/route-table/concepts/);
+- [security group](/docs/compute/security-groups/concepts/concept-sg/).
 
-Ajoutez les blocs suivants :
+Add the following blocks:
 
 ```tf
 resource "numspot_vpc" "vpc" {
@@ -105,9 +105,9 @@ resource "numspot_security_group" "security-group" {
 }
 ```
 
-Votre configuration est maintenant prête à être [déployée sur l'infrastructure de Numspot ↗](/docs/terraform/quickstart/#déployer-votre-configuration-à-laide-de-terraform).
+Your configuration is now ready to be [deployed on the Numspot infrastructure ↗](/docs/terraform/quickstart/#deploying-your-configuration-using-terraform).
 
-## Liens utiles
+## Useful links
 
-- [Documentation du provider Numspot sur le registre d'HashiCorp ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs)
-- [Repository GitHub du provider Numspot ↗](https://github.com/numspot/terraform-provider-numspot)
+- [Numspot provider documentation on the HashiCorp registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs)
+- [Numspot provider GitHub repository ↗](https://github.com/numspot/terraform-provider-numspot)

@@ -1,5 +1,5 @@
 ---
-title: Créer ou modifier un ou plusieurs tags
+title: Create or update one or more tags
 sidebar_position: 1
 draft: false
 ---
@@ -8,119 +8,103 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Créer ou modifier un ou plusieurs tags
+# Create or update one or more tags
 
-Pour créer ou modifier un tag, vous devez définir une clé et une valeur. La clé est le nom du tag et la valeur est la valeur du tag. Par exemple, vous pouvez créer un tag avec la clé "environnement" et la valeur "production".
+To create or update a tag, you must define a key and a value. The key is the name of the tag and the value is the value of the tag. For example, you can create a tag with the key "environment" and the value "production".
 
-À la création d'une ressource, la Console Numspot permet de définir son tag **Name** (le nom de la ressource). Une fois la ressource créée, vous pouvez ajouter des tags supplémentaires via la Console Numspot ou l'API Numspot.
+When you create a resource, the Numspot Console lets you define its **Name** tag (the name of the resource). Once the resource is created, you can add more tags via the Numspot Console or the Numspot API.
 
 ## Permissions
 
 :::info
-L'ajout ou la modification de tags est une opération de mise à jour de la ressource concernée. Cette action nécessite la permission **IAM** (Identity and Access Management) de mise à jour de chaque ressource ciblée. Par exemple :
+Adding or updating tags is an update operation on the relevant resource. This action requires the **IAM** (Identity and Access Management) update permission for each targeted resource. For example:
 
-- **compute.vm.update** pour une [VM (virtual machine)](/docs/compute/concept/) ;
-- **compute.blockStorage.update** pour un [volume (block storage)](/docs/storage/block-storage/concepts/) ;
-- **compute.loadBalancer.update** pour un [load balancer](/docs/network/load-balancer/concepts/) ;
-- **compute.vpc.update** pour un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+- **compute.vm.update** for a [VM (virtual machine)](/docs/compute/concept/);
+- **compute.blockStorage.update** for a [volume (block storage)](/docs/storage/block-storage/concepts/);
+- **compute.loadBalancer.update** for a [load balancer](/docs/network/load-balancer/concepts/);
+- **compute.vpc.update** for a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
 
-Cette liste est donnée à titre d'exemple et n'est pas exhaustive : pour chaque ressource, reportez-vous à sa page d'action.
+This list is given as an example and is not exhaustive: for each resource, refer to its action page.
 
 :::
 
-## Ajouter des tags à vos ressources
+## Adding tags to your resources
 
 <Tabs>
 <TabItem value="Console" label="Console" default>
 
-## Console {#tabhead-Console}
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/load-balancer/lb-02-actions.png", text: "Depuis la liste de la ressource concernée, ouvrez le menu « Actions » de sa ligne, puis cliquez sur « Gérer les tags ».", hotspot: { x: 0.875, y: 0.4358, w: 0.0884, h: 0.0457 } },
-    { img: "/img/walkthrough/load-balancer/lb-tags-panel.png", text: "Dans le panneau « Gérer les tags », cliquez sur « Créer un tag ».", hotspot: { x: 0.8915, y: 0.2795, w: 0.0974, h: 0.0494 } },
-    { img: "/img/walkthrough/load-balancer/lb-tags-form.png", text: "Renseignez la clé et la valeur du tag, puis cliquez sur « Ajouter le tag ».", hotspot: { x: 0.9104, y: 0.5914, w: 0.0785, h: 0.0444 } },
-    { img: "/img/walkthrough/load-balancer/lb-tags-form.png", text: "Cliquez sur « Valider » pour enregistrer le tag sur la ressource.", hotspot: { x: 0.8708, y: 0.9322, w: 0.1181, h: 0.0494 } },
+    { img: "/img/walkthrough/en/load-balancer/lb-02-actions.png", text: "From the list of the relevant resource, open its row “Actions” menu, then click “Manage tags”.", hotspot: { x: 0.8819, y: 0.4358, w: 0.0809, h: 0.0457 } },
+    { img: "/img/walkthrough/en/load-balancer/lb-tags-panel.png", text: "In the “Manage Tags” panel, click “Create a tag”.", hotspot: { x: 0.8922, y: 0.2795, w: 0.0966, h: 0.0494 } },
+    { img: "/img/walkthrough/en/load-balancer/lb-tags-form.png", text: "Enter the tag key and value, then click “Add tag”.", hotspot: { x: 0.937, y: 0.5881, w: 0.0518, h: 0.0494 } },
+    { img: "/img/walkthrough/en/load-balancer/lb-tags-form.png", text: "Click “Confirm” to save the tag on the resource.", hotspot: { x: 0.8889, y: 0.9333, w: 0.0819, h: 0.0457 } },
   ]}
 />
 
-1. Depuis le menu latéral gauche, accédez à la liste de la ressource à laquelle vous souhaitez ajouter un tag ;
-2. Sur la ligne de la ressource, ouvrez le menu **Actions**, puis cliquez sur **Gérer les tags** ;
-3. Dans le panneau **Gérer les tags**, cliquez sur **Créer un tag** ;
-4. Renseignez la **clé** et la **valeur** du tag, puis cliquez sur **Ajouter le tag** ;
-5. Cliquez sur **Valider** pour enregistrer.
+1. From the left-hand side menu, go to the list of the resource to which you want to add a tag;
+2. On the resource row, open the **Actions** menu, then click **Manage tags**;
+3. In the **Manage Tags** panel, click **Create a tag**;
+4. Enter the tag **key** and **value**, then click **Add tag**;
+5. Click **Confirm** to save.
 
 :::info
-Le parcours est identique pour toutes les ressources qui supportent les tags (VM, volume, load balancer, VPC…). L'exemple ci-dessus est pris sur un load balancer.
+The process is identical for all resources that support tags (VM, volume, load balancer, VPC…). The example above is taken from a load balancer.
 :::
 
 </TabItem>
 <TabItem value="API" label="API">
 
-## API {#tabhead-API}
+The `PATCH /compute/spaces/{spaceId}/bulk/tags` command creates one or more tags on your resources.
 
-
-La commande `PATCH /compute/spaces/{spaceId}/bulk/tags` crée un ou plusieurs tag sur vos ressources.
-
-[Exemple de requête : Créer un tag ↗](/openapi/#tag/compute/PATCH/compute/spaces/{spaceId}/bulk/tags)
+[Example request: Create a tag ↗](/openapi/#tag/compute/PATCH/compute/spaces/{spaceId}/bulk/tags)
 
 </TabItem>
 <TabItem value="Terraform" label="Terraform">
 
-## Terraform {#tabhead-Terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
 
 </TabItem>
 </Tabs>
 
-## Modifier les valeurs de vos tags
+## Updating the values of your tags
 
 <Tabs>
 <TabItem value="Console" label="Console" default>
 
-## Console {#tabhead-Console}
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/load-balancer/lb-02-actions.png", text: "Depuis la liste de la ressource concernée, ouvrez le menu « Actions » de sa ligne, puis cliquez sur « Gérer les tags ».", hotspot: { x: 0.875, y: 0.4358, w: 0.0884, h: 0.0457 } },
-    { img: "/img/walkthrough/load-balancer/lb-tags-panel.png", text: "Les tags s'affichent en pastilles non modifiables : supprimez le tag concerné en cliquant sur sa croix.", hotspot: { x: 0.7125, y: 0.3531, w: 0.0153, h: 0.0272 } },
-    { img: "/img/walkthrough/load-balancer/lb-tags-panel.png", text: "Recréez-le ensuite avec la même clé et la nouvelle valeur via « Créer un tag », puis cliquez sur « Valider ».", hotspot: { x: 0.8915, y: 0.2795, w: 0.0974, h: 0.0494 } },
+    { img: "/img/walkthrough/en/load-balancer/lb-02-actions.png", text: "From the list of the relevant resource, open its row “Actions” menu, then click “Manage tags”.", hotspot: { x: 0.8819, y: 0.4358, w: 0.0809, h: 0.0457 } },
+    { img: "/img/walkthrough/en/load-balancer/lb-tags-panel.png", text: "Tags are shown as non-editable chips: remove the relevant tag by clicking its cross.", hotspot: { x: 0.72, y: 0.3531, w: 0.0153, h: 0.0272 } },
+    { img: "/img/walkthrough/en/load-balancer/lb-tags-panel.png", text: "Then recreate it with the same key and the new value via “Create a tag”, then click “Confirm”.", hotspot: { x: 0.8922, y: 0.2795, w: 0.0966, h: 0.0494 } },
   ]}
 />
 
 :::info
-La console Numspot ne permet pas de modifier un tag existant : les tags s'affichent en pastilles non éditables. Pour changer une valeur, supprimez le tag puis recréez-le avec la même clé. L'**API** et **Terraform** permettent en revanche une modification directe (voir les onglets correspondants).
+The Numspot Console does not allow you to update an existing tag: tags are displayed as non-editable chips. To change a value, delete the tag and recreate it with the same key. The **API** and **Terraform** however allow a direct update (see the corresponding tabs).
 :::
 
-1. Depuis le menu latéral gauche, accédez à la liste de la ressource dont vous souhaitez modifier un tag ;
-2. Sur la ligne de la ressource, ouvrez le menu **Actions**, puis cliquez sur **Gérer les tags** ;
-3. Cliquez sur la **croix** du tag à modifier pour le supprimer ;
-4. Cliquez sur **Créer un tag**, saisissez la même **clé** et la nouvelle **valeur**, puis cliquez sur **Ajouter le tag** ;
-5. Cliquez sur **Valider** pour enregistrer.
+1. From the left-hand side menu, go to the list of the resource whose tag you want to update;
+2. On the resource row, open the **Actions** menu, then click **Manage tags**;
+3. Click the **cross** of the tag to update to delete it;
+4. Click **Create a tag**, enter the same **key** and the new **value**, then click **Add tag**;
+5. Click **Confirm** to save.
 
 :::info
-Le parcours est identique pour toutes les ressources qui supportent les tags (VM, volume, load balancer, VPC…). L'exemple ci-dessus est pris sur un load balancer.
+The process is identical for all resources that support tags (VM, volume, load balancer, VPC…). The example above is taken from a load balancer.
 :::
 
 </TabItem>
 <TabItem value="API" label="API">
 
-## API {#tabhead-API}
+The `PATCH /compute/spaces/{spaceId}/bulk/tags` command updates one or more tags on your resources.
 
-
-La commande `PATCH /compute/spaces/{spaceId}/bulk/tags` modifie un ou plusieurs tag sur vos ressources.
-
-[Exemple de requête : Modifier un tag ↗](/openapi/#tag/compute/PATCH/compute/spaces/{spaceId}/bulk/tags)
+[Example request: Update a tag ↗](/openapi/#tag/compute/PATCH/compute/spaces/{spaceId}/bulk/tags)
 
 </TabItem>
 <TabItem value="Terraform" label="Terraform">
 
-## Terraform {#tabhead-Terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
 
 </TabItem>
 </Tabs>

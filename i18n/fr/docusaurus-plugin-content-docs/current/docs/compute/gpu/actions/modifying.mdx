@@ -1,0 +1,53 @@
+---
+title: Modifier le comportement d'un GPU
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Modifier le comportement d'un GPU
+
+Vous pouvez spécifier si un [GPU (Graphics Processing Unit)](/docs/compute/gpu/concept/) est automatiquement libéré de votre compte lorsque la [VM (Virtual Machine)](/docs/compute/concept/) sur laquelle il est attaché est terminée.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.gpu.update**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+  1. Connectez-vous à la console Numspot.
+  2. Depuis le menu latéral gauche, cliquez sur **Compute** → **GPU**.
+  3. Dans le tableau de bord GPU, choisissez dans la liste le GPU dont vous souhaitez modifier le comportement.
+  4. Cliquez sur le bouton **Modifier**. Une boîte de dialogue apparaît.
+  5. Sélectionnez le **Comportement à la suppression de la VM** :
+     * **Libération du GPU** : le GPU sera automatiquement libéré de votre compte lorsque la VM à laquelle il est lié est terminée.
+     * **Maintien de l'allocation** : le GPU sera détaché et restera alloué à votre compte lorsque la VM à laquelle il est lié est terminée.
+  6. Cliquez sur **Modifier**. Le comportement du GPU est modifié.
+  </TabItem>
+
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+    La commande `PUT /compute/spaces/{spaceId}/flexibleGpus/{id}` modifie le comportement d'un GPU flexible (fGPU). Le paramètre `DeleteOnVmDeletion` contrôle si le GPU et sa VRAM (Video Random Access Memory) sont automatiquement libérés.
+
+[Exemple de requête : Modification d'un fGPU](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/flexibleGpus/{id})
+  </TabItem>
+
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/flexible_gpu).
+  </TabItem>
+
+</Tabs>

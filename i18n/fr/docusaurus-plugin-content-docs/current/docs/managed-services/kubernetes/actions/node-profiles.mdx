@@ -1,0 +1,41 @@
+---
+title: Lister les profils de nœuds disponibles - Kubernetes managé
+sidebar_label: Lister les profils de nœuds disponibles
+sidebar_position: 1.5
+draft: false
+last_update:
+  date: 2026-09-30
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Lister les profils de nœuds disponibles
+
+Vous pouvez lister les profils de nœuds disponibles pour créer votre [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/).
+
+Lors de la création, spécifiez le profil souhaité pour dimensionner les nœuds du cluster.
+
+## Permissions
+
+Aucune permission **IAM** (Identity and Access Management) n'est requise pour effectuer cette action.
+
+<Tabs>
+
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+    La requête `GET /kubernetes/nodeProfiles` permet de lister les profils de nœuds proposés par Numspot.
+
+### Exemple de réponse
+
+    ```json
+    {
+      "profiles": ["small", "medium", "large"]
+    }
+    ```
+
+    [Voir la spécification complète](/openapi/#tag/kubernetes/GET/kubernetes/nodeProfiles)
+</TabItem>
+</Tabs>

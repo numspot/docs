@@ -1,5 +1,5 @@
 ---
-title: Attacher ou détacher un GPU
+title: Attach or detach a GPU
 sidebar_position: 3
 draft: false
 ---
@@ -7,83 +7,74 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Attacher ou détacher un GPU
+# Attach or detach a GPU
 
-Vous pouvez attacher un [GPU (Graphics Processing Unit)](/docs/compute/gpu/concept/) à une [VM (Virtual Machine)](/docs/compute/concept/), ou le détacher à tout moment. Pour attacher un GPU, vous devez d'abord l'allouer à votre compte. Pour en savoir plus, voir [Allouer ou libérer un GPU](/docs/compute/gpu/actions/allocating-releasing/).
+You can attach a [GPU](/docs/compute/gpu/concept/) (Graphics Processing Unit) to a [VM](/docs/compute/concept/) (Virtual Machine), or detach it at any time. To attach a GPU, you must first allocate it to your account. For more information, see [Allocate or release a GPU](/docs/compute/gpu/actions/allocating-releasing/).
 
 ## Permissions
 
 :::info
-Ces actions nécessitent les permissions IAM (Identity and Access Management) suivantes :
+These actions require the following IAM (Identity and Access Management) permissions:
 
 - **compute.gpu.update**
 
 :::
 
 :::warning
-Vous ne pouvez attacher des GPU qu'à des VM avec l'indicateur de performance highest (1). Pour en savoir plus, voir [À propos des GPU](/docs/compute/gpu/concept/) et [Types de VM](/docs/compute/vms/types/).
+You can only attach GPU to VM with the highest performance flag (1). For more information, see [About GPU](/docs/compute/gpu/concept/) and [VM types](/docs/compute/vms/types/).
 :::
 
-## Attacher un GPU
+## Attach a GPU
 <Tabs>
    <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
-
-1. Depuis le menu latéral gauche, cliquez sur **Compute** → **GPU**.
+1. From the left-hand side menu, click **Compute** → **GPU**.
 
          ![GPU: Image](/img/console/general/sidebar/sidebar-compute-gpu.png)
 
-2. Dans le tableau de bord GPU, choisissez dans la liste le GPU que vous voulez associer à une VM.
-3. Choisissez l'action **Associer à une VM**.
+2. In the GPU dashboard, choose from the list the GPU you want to attach to a VM.
+3. Choose the **Attach to a VM** action.
 
          ![GPU: Image](/img/console/compute/gpus/dropdown-gpu.png)
 
-   Un volet "Association à une VM" apparaît.
-4. Dans la liste "Choisir une VM", sélectionnez la VM à laquelle vous voulez associer le GPU.
-5. Cliquez sur **Associer à la VM**.
+   An "Attachment to a VM" panel appears.
+4. In the "Choose a VM" list, select the VM to which you want to attach the GPU.
+5. Click **Attach to the VM**.
 
          ![GPU: Image](/img/console/compute/gpus/button-associate-gpu.png)
 
-6. Un message de confirmation s'affiche en bas de la page indiquant que le GPU est bien associé à la VM.
+6. A confirmation message appears at the bottom of the page indicating that the GPU is successfully attached to the VM.
 
 :::warning
-Pour finaliser l'attachement du GPU, vous devez réaliser un arrêt puis un démarrage de la VM.
-Un simple redémarrage n'est pas suffisant, car l'attachement du GPU se fait lorsque la VM passe par l'état `stopped`.
+To finalize the attachment of the GPU, you must perform a stop and then a start of the VM.
+A simple restart is not sufficient, because the attachment of the GPU takes place when the VM passes through the `stopped` state.
 
-Pour la différence entre arrêt/démarrage et redémarrage, voir [Cycle de vie d'une VM](/docs/compute/vms/lifecycle/).
+For the difference between stop/start and restart, see [VM lifecycle](/docs/compute/vms/lifecycle/).
 :::
 
   </TabItem>
 
   <TabItem value="api" label="API">
-
-## API {#tabhead-api}
-
-La commande `PUT /compute/spaces/{spaceId}/flexibleGpus/{id}/vms/link` attache l'un de vos GPU flexibles (fGPU) alloués à l'une de vos VM.
-Le fGPU est dans un état d'attachement jusqu'à ce que la VM soit arrêtée, après quoi il devient attaché.
+The `PUT /compute/spaces/{spaceId}/flexibleGpus/{id}/vms/link` command attaches one of your allocated flexible GPU (fGPU) to one of your VM.
+The fGPU is in an attaching state until the VM is stopped, after which it becomes attached.
 
 :::note info
-Vous ne pouvez attacher des fGPU qu'à des VM avec l'indicateur de performance le plus élevé : "highest" (1).
+You can only attach fGPUs to VM with the highest performance flag: "highest" (1).
 :::
 
-[Exemple de requête : Attacher un fGPU à une VM](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/flexibleGpus/{id}/vms/link)
+[Example request: Attaching an fGPU to a VM](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/flexibleGpus/{id}/vms/link)
   </TabItem>
 
   <TabItem value="terraform" label="Terraform">
-
-## Terraform {#tabhead-terraform}
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/flexible_gpu).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/flexible_gpu).
   </TabItem>
 
 </Tabs>
 
-## Détacher un GPU
+## Detach a GPU
 
 :::info
-Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.gpu.update**
 
@@ -92,46 +83,37 @@ Cette action nécessite les permissions IAM (Identity and Access Management) sui
 <Tabs>
   <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
-
-1. Depuis le menu latéral gauche, cliquez sur **Compute** → **GPU**.
+1. From the left-hand side menu, click **Compute** → **GPU**.
 
          ![GPU: Image](/img/console/general/sidebar/sidebar-compute-gpu.png)
 
-2. Sélectionnez le GPU que vous souhaitez détacher et choisissez l'action **Détacher de la VM**.
-   La boîte de dialogue "Dissocier de la VM" apparaît.
+2. Select the GPU you want to detach and choose the **Detach from the VM** action.
+   The "Detach from the VM" dialog box appears.
 
             ![GPU: Image](/img/console/compute/gpus/dropdown-gpu-2.png)
 
-3. Cliquez sur **Dissocier de la VM**.
+3. Click **Detach from the VM**.
 
-4. Un message de confirmation s'affiche en bas de la page indiquant que le GPU est bien dissocié de la VM.
+4. A confirmation message appears at the bottom of the page indicating that the GPU is successfully detached from the VM.
 
 :::warning
-Pour finaliser le détachement du GPU, vous devez réaliser un arrêt puis un démarrage de la VM.
-Un simple redémarrage n'est pas suffisant, car le détachement du GPU se fait lorsque la VM passe par l'état `stopped`.
+To finalize the detachment of the GPU, you must perform a stop and then a start of the VM.
+A simple restart is not sufficient, because the detachment of the GPU takes place when the VM passes through the `stopped` state.
 
-Pour la différence entre arrêt/démarrage et redémarrage, voir [Cycle de vie d'une VM](/docs/compute/vms/lifecycle/).
+For the difference between stop/start and restart, see [VM lifecycle](/docs/compute/vms/lifecycle/).
 :::
 
   </TabItem>
 
   <TabItem value="api" label="API">
+The `PUT /compute/spaces/{spaceId}/flexibleGpus/{id}/vms/unlink` command detaches a flexible GPU (fGPU) from a VM.
+The fGPU is in a detaching state until the VM is stopped, after which it becomes allocated again. It is then available again to be attached to another VM.
 
-## API {#tabhead-api}
-
-La commande `PUT /compute/spaces/{spaceId}/flexibleGpus/{id}/vms/unlink` détache un GPU flexible (fGPU) d'une VM.
-Le fGPU est dans un état de détachement jusqu'à ce que la VM soit arrêtée, après quoi il redevient alloué. Il est alors à nouveau disponible pour être attaché à une autre VM.
-
-[Exemple de requête : Détacher un fGPU d'une VM](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/flexibleGpus/{id}/vms/unlink)
+[Example request: Detaching an fGPU from a VM](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/flexibleGpus/{id}/vms/unlink)
   </TabItem>
 
   <TabItem value="terraform" label="Terraform">
-
-## Terraform {#tabhead-terraform}
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/flexible_gpu).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/flexible_gpu).
   </TabItem>
 
 </Tabs>

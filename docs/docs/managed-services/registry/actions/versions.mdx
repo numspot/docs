@@ -1,33 +1,30 @@
 ---
-title: Obtenir les versions disponibles de Harbor
-sidebar_label: Versions disponibles de Harbor
+title: Get the available Harbor versions
+sidebar_label: Available Harbor versions
 sidebar_position: 1
 draft: false
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Versions disponibles de Harbor
+# Available Harbor versions
 
-Vous avez la possibilité d'obtenir la liste des versions mineures disponibles de Harbor pour créer votre Registry.
+You can get the list of available minor versions of Harbor to create your Registry.
 
-Lors de la création, vous aurez besoin de spécifier la version \<majeure\>.\<mineure\> de Harbor que vous souhaitez utiliser.
-Numspot se charge de gérer les versions des correctifs afin de toujours vous offrir une version la plus à jour.
+During creation, you will need to specify the \<major\>.\<minor\> version of Harbor that you want to use.
+Numspot manages the patch versions so as to always provide you with the most up-to-date version.
 
 ## Permissions
 
-Aucune permission **IAM** (Identity and Access Management) n'est requise pour effectuer cette action.
+No **IAM** (Identity and Access Management) permission is required to perform this action.
 
 <Tabs>
     
     {/* </TabItem> */}
     <TabItem value="api" label="API" default>
+        The `GET /registry/versions` request returns the list of minor versions of Harbor offered by Numspot.
 
-## API {#tabhead-api}
-
-        La requête `GET /registry/versions` permet d'obtenir la liste des versions mineures de Harbor proposées par Numspot.
-
-        ### Exemple de réponse
+        ### Example response
 
         ```json
         {
@@ -35,6 +32,6 @@ Aucune permission **IAM** (Identity and Access Management) n'est requise pour ef
         }
         ```
 
-        [Voir la spécification complète](/openapi/#tag/registry/GET/registry/versions)
+        [See the full specification](/openapi/#tag/registry/GET/registry/versions)
     </TabItem>
 </Tabs>

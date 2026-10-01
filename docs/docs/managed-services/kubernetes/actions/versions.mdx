@@ -1,32 +1,29 @@
 ---
-title: Lister les versions disponibles de Kubernetes - Kubernetes managé
-sidebar_label: Lister les versions disponibles de Kubernetes
+title: List the available Kubernetes versions - Managed Kubernetes
+sidebar_label: List the available Kubernetes versions
 sidebar_position: 1
 draft: false
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Lister les versions disponibles de Kubernetes
+# List the available Kubernetes versions
 
-Vous pouvez lister les versions mineures disponibles pour créer votre [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/).
+You can list the minor versions available to create your [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/).
 
-Lors de la création, spécifiez la version `<majeure>.<mineure>` souhaitée.
-Numspot gère automatiquement les versions des correctifs pour vous offrir la version la plus à jour.
+When creating it, specify the desired `<major>.<minor>` version.
+Numspot automatically manages patch versions to provide you with the most up-to-date version.
 
 ## Permissions
 
-Aucune permission **IAM** (Identity and Access Management) n'est requise pour effectuer cette action.
+No **IAM** (Identity and Access Management) permission is required to perform this action.
 
 <Tabs>
 
 <TabItem value="api" label="API" default>
+    The `GET /kubernetes/versions` request returns the list of minor Kubernetes versions offered by Numspot.
 
-## API {#tabhead-api}
-
-    La requête `GET /kubernetes/versions` permet d'obtenir la liste des versions mineures de Kubernetes proposées par Numspot.
-
-### Exemple de réponse
+    **Example response**
 
     ```json
     {
@@ -34,6 +31,6 @@ Aucune permission **IAM** (Identity and Access Management) n'est requise pour ef
     }
     ```
 
-    [Voir la spécification complète](/openapi/#tag/kubernetes/GET/kubernetes/versions)
+    [View the full specification](/openapi/#tag/kubernetes/GET/kubernetes/versions)
 </TabItem>
 </Tabs>

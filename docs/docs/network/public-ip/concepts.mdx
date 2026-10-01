@@ -1,5 +1,5 @@
 ---
-title: À propos des IP publiques
+title: About public IP
 sidebar_position: 1
 draft: false
 last_update:
@@ -8,65 +8,65 @@ last_update:
 
 import ActionsSummary from '@site/src/components/ActionsSummary';
 
-# À propos des IP publiques
+# About public IP
 
 <ActionsSummary />
 
-Une IP publique (Public IP) est une adresse IPv4 que vous pouvez allouer à votre compte, pour ensuite l'associer à l'une de vos ressources.
+A public IP is an IPv4 address that you can allocate to your account, in order to then associate it with one of your resources.
 
-Vous pouvez dissocier une IP publique de sa ressource à n'importe quel moment, puis la ré-associer à une autre.
+You can dissociate a public IP from its resource at any time, then re-associate it with another one.
 
-## Informations générales
+## General information
 
-Les IP publiques sont des adresses IPv4 publiques que vous pouvez allouer à votre compte. Vous pouvez ensuite les associer aux ressources suivantes :
+Public IP are public IPv4 addresses that you can allocate to your account. You can then associate them with the following resources:
 
-- [VM (Virtual Machine)](/docs/compute/concept/)
-- Interfaces réseaux
-- [load balancers (équilibreurs de charge)](/docs/network/load-balancer/concepts/) reliés à Internet
-- [nat gateways (passerelles NAT)](/docs/network/nat/concepts/)
+- [VM](/docs/compute/concept/) (Virtual Machine)
+- network interfaces
+- [load balancers](/docs/network/load-balancer/concepts/) connected to the Internet
+- [nat gateways](/docs/network/nat/concepts/)
 
-Les IP publiques permettent de communiquer avec Internet.
+Public IP allow you to communicate with the Internet.
 
 :::info
-Pour associer une IP publique dans un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/), celui-ci doit avoir une [internet gateway (passerelle Internet)](/docs/network/internet-gateway/concepts/) attachée.
+To associate a public IP within a [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud), the VPC must have an [internet gateway](/docs/network/internet-gateway/concepts/) attached.
 :::
 
 
-Vous pouvez dissocier et réassocier une IP publique à n'importe quel moment. Par exemple, en cas de panne d'une VM, vous pouvez ainsi transférer l'IP publique vers une autre VM. La nouvelle VM a donc la même IP publique, ce qui signifie que les scripts et les applications qui utilisent cette IP publique ne rencontrent aucun problème.
+You can dissociate and re-associate a public IP at any time. For example, if a VM fails, you can transfer the public IP to another VM. The new VM therefore has the same public IP, which means that the scripts and applications using this public IP do not encounter any problem.
 
-Une IP publique dissociée reste allouée à votre compte. Si vous n'utilisez plus une IP publique, vous pouvez la libérer afin de la rendre disponible pour d'autres comptes.
+A dissociated public IP remains allocated to your account. If you no longer use a public IP, you can release it to make it available for other accounts.
 
 :::warning
 
-Assurez-vous qu'aucune application ou qu'aucun script n'utilise l'IP publique que vous voulez libérer.
+Make sure that no application and no script is using the public IP that you want to release.
 :::
 
-## Association des IP publiques
+## Associating public IP
 
-Vous ne pouvez associer une IP publique qu'à une seule ressource à la fois.
+You can associate a public IP with only one resource at a time.
 
-Si vous associez une IP publique à une VM ou à une interface réseau, avec la Console Numspot vous devez toujours dissocier l'IP publique avant de pouvoir la ré-associer à une autre ressource. Avec les API, vous pouvez configurer un comportement de ré-association : soit empêcher celle-ci, soit dissocier automatiquement l'IP publique et la ré-associer à la nouvelle VM ou interface réseau que vous spécifiez.
+If you associate a public IP with a VM or a network interface, with the Numspot Console you must always dissociate the public IP before you can re-associate it with another resource. With the API, you can configure a re-association behavior: either prevent it, or automatically dissociate the public IP and re-associate it with the new VM or network interface that you specify.
 
-Si vous créez une NAT gateway, vous devez spécifier une IP publique. Pour modifier son IP publique, vous devez supprimer la NAT gateway puis la recréer avec la nouvelle IP publique.
+If you create a NAT gateway, you must specify a public IP. To modify its public IP, you must delete the NAT gateway and then recreate it with the new public IP.
 
-Vous pouvez également associer une IP publique avec un load balancer relié à internet lorsque vous le gérez.
+You can also associate a public IP with a load balancer connected to the Internet when you manage it.
 
-### Dans un VPC
+### Within a VPC
 
-L'IP publique s'attache à l'interface réseau principale de la VM. Si vous travaillez avec plusieurs interfaces réseau, vous pouvez choisir à laquelle des NIC (Network Interface Cards) vous souhaitez associer l'IP publique via l'API Numspot.
+The public IP attaches to the primary network interface of the VM. If you work with several network interfaces, you can choose which of the NIC (Network Interface Cards) you want to associate the public IP with, through the Numspot API.
 
-### Attribution automatique à la création d'une VM
+### Automatic assignment when creating a VM
 
-Chaque subnet possède un attribut `mapPublicIpOnLaunch` qui détermine si une IP publique est attribuée automatiquement aux NIC créées dans le subnet, y compris la NIC principale créée au lancement d'une VM. Cet attribut est désactivé par défaut. Pour l'activer ou le désactiver, consultez [Modifier un attribut d'un subnet](/docs/network/subnets/actions/update/).
+Each subnet has a `mapPublicIpOnLaunch` attribute that determines whether a public IP is automatically assigned to the NICs created in the subnet, including the primary NIC created when you launch a VM. This attribute is disabled by default. To enable or disable it, see [Edit an attribute of a subnet](/docs/network/subnets/actions/update/).
 
-L'IP publique attribuée automatiquement présente les caractéristiques suivantes :
+The public IP assigned automatically has the following characteristics:
 
-- elle est choisie de façon **aléatoire** : vous ne pouvez pas sélectionner l'adresse. Pour utiliser une IP publique précise, effectuez une [association manuelle](/docs/network/public-ip/actions/attach/) ;
-- le lien entre l'IP publique et la VM persiste lors des arrêts et des redémarrages de la VM ;
-- l'IP publique est **supprimée avec la VM** : elle est retournée au pool d'IP publiques et ne peut pas être dissociée individuellement ;
-- elle **n'apparaît pas dans la section « IP publiques »** : elle n'est visible que dans les détails de la VM et de la NIC, et ne peut être ni dissociée, ni libérée, ni suivie depuis cette section ;
-- elle est comptabilisée dans le quota d'IP publiques de votre compte.
+- it is chosen **randomly**: you cannot select the address. To use a specific public IP, perform a [manual association](/docs/network/public-ip/actions/attach/);
+- the link between the public IP and the VM persists when the VM is stopped and started;
+- the public IP is **deleted with the VM**: it is returned to the public IP pool and cannot be dissociated individually;
+- it does **not appear in the "Public IP" section**: it is only visible in the VM and NIC details, and cannot be dissociated, released or tracked from this section;
+- it is counted in the public IP quota of your account.
 
 :::info
-Pour que les VM d'un subnet accèdent à Internet, le VPC doit avoir une [internet gateway](/docs/network/internet-gateway/concepts/) attachée, avec une route correspondante dans la [route table](/docs/network/route-table/concepts/) du subnet et des règles de [security group](/docs/compute/security-groups/concepts/concept-sg/) adaptées.
+For the VM of a subnet to access the Internet, the VPC must have an [internet gateway](/docs/network/internet-gateway/concepts/) attached, with a matching route in the subnet [route table](/docs/network/route-table/concepts/) and appropriate [security group](/docs/compute/security-groups/concepts/concept-sg/) rules.
 :::

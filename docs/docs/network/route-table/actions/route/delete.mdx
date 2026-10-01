@@ -1,5 +1,5 @@
 ---
-title: Supprimer une route
+title: Delete a route
 sidebar_position: 3
 draft: false
 ---
@@ -8,16 +8,16 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Supprimer une route
+# Delete a route
 
-Vous pouvez supprimer une route que vous avez créée dans une [route table (table de routage)](/docs/network/route-table/concepts/) afin de supprimer l'option de routage correspondante pour les [VM (Virtual Machines)](/docs/compute/concept/) placées dans les subnets (sous-réseaux) associés.
+You can delete a route that you have created in a [route table](/docs/network/route-table/concepts/) in order to remove the corresponding routing option for the [VM (Virtual Machines)](/docs/compute/concept/) placed in the associated subnets.
 
-Vous ne pouvez pas supprimer la route `local`.
+You cannot delete the `local` route.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.routeTable.update**
 
@@ -25,37 +25,35 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
    <TabItem value="Console" default> 
 
-## Console {#tabhead-console}
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/route-table/route-del-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC → Route Tables.", hotspot: { x: 0, y: 0.579, w: 0.194, h: 0.0568 } },
-    { img: "/img/walkthrough/route-table/route-del-01-list.png", text: "Identifiez la route table concernée, puis cliquez sur le lien de la colonne « Routes » de sa ligne.", hotspot: { x: 0.7456, y: 0.4953, w: 0.0343, h: 0.0247 } },
-    { img: "/img/walkthrough/route-table/route-del-02-panel.png", text: "Dans le panneau « Routes », repérez la route à supprimer (la route « local » ne peut pas être supprimée), puis cliquez sur « Supprimer ».", hotspot: { x: 0.9138, y: 0.4033, w: 0.0695, h: 0.0259 } },
-    { img: "/img/walkthrough/route-table/route-del-03-confirm.png", text: "Une confirmation forte est requise : saisissez « Supprimer » dans le champ, puis cliquez sur « Supprimer » pour supprimer définitivement la route.", hotspot: { x: 0.6221, y: 0.7021, w: 0.064, h: 0.0494 } },
+    { img: "/img/walkthrough/en/route-table/list.png", text: "From the left-hand side menu, click Network → VPC → Route Tables.", hotspot: { x: 0, y: 0.579, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/route-table/list.png", text: "Identify the relevant route table, then click the “Routes” column link of its row.", hotspot: { x: 0.7456, y: 0.4953, w: 0.0343, h: 0.0247 } },
+    { img: "/img/walkthrough/en/route-table/route-panel.png", text: "In the “Routes” panel, find the route to delete (the “local” route cannot be deleted), then click “Delete”.", hotspot: { x: 0.9319, y: 0.4033, w: 0.0514, h: 0.0259 } },
+    { img: "/img/walkthrough/en/route-table/route-del-confirm.png", text: "Strong confirmation is required: enter “Delete” in the field, then click “Delete” to permanently remove the route.", hotspot: { x: 0.6403, y: 0.7021, w: 0.0458, h: 0.0494 } },
   ]}
 />
 
-1.  Depuis le menu latéral gauche, cliquez sur **Réseau** → **[VPC](/docs/network/vpc/concepts/)** → **Route Table**.
-2.  Identifiez la route table à laquelle vous souhaitez créer une nouvelle route.
-3.  Cliquez dans la ligne concernée sur le lien de la colonne "Routes".
-4.  Une nouvelle boîte de dialogue s'affichera.
-5.  Cliquer sur **Supprimer**.
-6.  Une boîte de dialogue de suppression apparaît.
-7.  Pour continuer, une confirmation forte est nécessaire. Saisissez "Supprimer" dans le champ correspondant.
-8.  Cliquez sur **Supprimer**.  
-    La route est supprimée et un message de confirmation apparaîtra temporairement.
+
+ ## Delete a route from the Numspot console 
+
+ 1.  From the left-hand side menu, click **Network** → **[VPC](/docs/network/vpc/concepts/)** → **Route Table**.
+ 2.  Identify the route table for which you want to create a new route.
+ 3.  In the relevant row, click the link in the "Routes" column.
+ 4.  A new dialog box is displayed.
+ 5.  Click **Delete**.
+ 6.  A deletion dialog box appears.
+ 7.  To continue, a strong confirmation is required. Enter "Delete" in the corresponding field.
+ 8.  Click **Delete**.  
+     The route is deleted and the following message appears temporarily:
 
    </TabItem> 
    <TabItem value="API">
-   La commande `DELETE /compute/spaces/{spaceId}/routeTables/{id}/routes` supprime une route d'une route table spécifiée.
+   The `DELETE /compute/spaces/{spaceId}/routeTables/{id}/routes` command deletes a route from a specified route table.
 
-   [Exemple de requête : Suppression d'une route](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/routeTables/{id}/routes)
+   [Request example: Deleting a route](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/routeTables/{id}/routes)
    </TabItem>
    <TabItem value="terraform" label="Terraform">
-
-## Terraform {#tabhead-terraform}
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
    </TabItem>
 </Tabs>

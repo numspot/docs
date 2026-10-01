@@ -1,5 +1,5 @@
 ---
-title: Modifier un attribut d'un subnet
+title: Edit an attribute of a subnet
 sidebar_position: 3
 draft: false
 last_update:
@@ -10,18 +10,18 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Modifier un attribut d'un subnet
+# Edit an attribute of a subnet
 
-Vous pouvez modifier un attribut d'un subnet (sous-réseau) : l'attribut `mapPublicIpOnLaunch`.
+You can edit one attribute of a subnet: the `mapPublicIpOnLaunch` attribute.
 
-Cet attribut détermine si une IP (Internet Protocol) publique est attribuée automatiquement aux interfaces réseau créées dans le subnet, y compris les interfaces réseau créées lorsque vous lancez une [VM (virtual machine)](/docs/compute/concept/) dans un subnet. Il est désactivé par défaut.
+This attribute determines whether a public IP (Internet Protocol) is automatically assigned to the network interfaces created in the subnet, including the network interfaces created when you launch a [VM](/docs/compute/concept/) (Virtual Machine) in a subnet. It is disabled by default.
 
-Pour connaître le comportement de l'IP publique ainsi attribuée, consultez [À propos des IP publiques](/docs/network/public-ip/concepts/).
+To learn about the behaviour of the public IP assigned this way, see [About public IP](/docs/network/public-ip/concepts/).
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.subnet.update**
 
@@ -31,37 +31,36 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/subnet/update-01-vpclist.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC.", hotspot: { x: 0, y: 0.5222, w: 0.1931, h: 0.0568 } },
-    { img: "/img/walkthrough/subnet/update-01-vpclist.png", text: "Dans la liste des VPC, cliquez sur l'ID du VPC concerné.", hotspot: { x: 0.2687, y: 0.4928, w: 0.0689, h: 0.0247 } },
-    { img: "/img/walkthrough/subnet/update-02-section.png", text: "Sur la page « Détails VPC », dans la section « Subnets », cliquez sur « Modifier » pour le subnet concerné.", hotspot: { x: 0.8126, y: 0.8019, w: 0.054, h: 0.0494 } },
-    { img: "/img/walkthrough/subnet/update-03-dialog.png", text: "Cochez « Attribuer une IP publique au lancement » si souhaité, puis cliquez sur « Enregistrer ».", hotspot: { x: 0.619, y: 0.5623, w: 0.0671, h: 0.0494 } },
+    { img: "/img/walkthrough/en/vpc/list.png", text: "From the left-hand side menu, click Network → VPC.", hotspot: { x: 0, y: 0.5222, w: 0.1931, h: 0.0568 } },
+    { img: "/img/walkthrough/en/vpc/list.png", text: "In the VPC list, click the ID of the relevant VPC.", hotspot: { x: 0.2687, y: 0.4928, w: 0.0689, h: 0.0247 } },
+    { img: "/img/walkthrough/en/subnet/vpc-detail.png", text: "On the “VPC details” page, in the “Subnets” section, click “Update” for the relevant subnet.", hotspot: { x: 0.8337, y: 0.6377, w: 0.051, h: 0.0494 } },
+    { img: "/img/walkthrough/en/subnet/update-dialog.png", text: "Tick “Map public IP on launch” if wanted, then click “Save”.", hotspot: { x: 0.6475, y: 0.5623, w: 0.0386, h: 0.0494 } },
   ]}
 />
 
- 1. Connectez-vous sur la console Numspot.
- 2. Depuis le menu latéral gauche, cliquez sur **Réseau** → **[VPC](/docs/network/vpc/concepts/)** → **VPC**.
- 3. La liste des VPC apparaît. Cliquez sur l'ID du VPC concerné.
- 4. La page "Détails VPC" apparaît.
- 5. En dessous des détails du VPC apparaît la section "Subnets" dans laquelle se trouve la liste des subnets associés au VPC.
- 6. Sur la page détaillée du VPC, identifiez le subnet depuis la section "Subnets". Dans cette section, vous avez la possibilité de :  
-     \- gérer les `tags`  
-     \- ajouter et modifier la [Route Table](/docs/network/route-table/concepts/) associée
+
+ 1. Log in to the Numspot console.
+ 2. From the left-hand side menu, click **Network** → **[VPC](/docs/network/vpc/concepts/)** → **VPC**.
+ 3. The list of VPC appears. Click the ID of the relevant VPC.
+ 4. The "VPC details" page appears.
+ 5. Below the VPC details, the "Subnets" section appears, containing the list of subnets associated with the VPC.
+ 6. On the VPC detailed page, identify the subnet from the "Subnets" section. In this section, you can:  
+     \- manage the `tags`  
+     \- add and edit the associated [Route Table](/docs/network/route-table/concepts/)
 
  :::info
- En cliquant sur le bouton **Modifier**, vous pouvez activer ou désactiver l'attribut `mapPublicIpOnLaunch` du subnet, qui attribue automatiquement une IP publique aux interfaces réseau créées dans celui-ci, y compris lorsque vous lancez une VM dans le subnet.
+ By clicking the **Edit** button, you can enable or disable the `mapPublicIpOnLaunch` attribute of the subnet, which automatically assigns a public IP to the network interfaces created in it, including when you launch a VM in the subnet.
+
  :::
 
   </TabItem> 
   <TabItem value="API">
 
-La commande `PUT /compute/spaces/{spaceId}/subnets/{id}` modifie l'attribut `mapPublicIpOnLaunch` d'un subnet.
+The `PUT /compute/spaces/{spaceId}/subnets/{id}` command edits the `mapPublicIpOnLaunch` attribute of a subnet.
 
-[Exemple de requête : Modification d'un subnet](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/subnets/{id})
+[Example request: Editing a subnet](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/subnets/{id})
   </TabItem>
   <TabItem value="Terraform" label="Terraform">
-
-## Terraform {#tabhead-Terraform}
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/subnet).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/subnet).
   </TabItem>
 </Tabs>

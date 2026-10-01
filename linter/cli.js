@@ -9,7 +9,7 @@ const DEFAULT_GLOSSARY = path.resolve(__dirname, '..', 'consigns', 'glossary.jso
 
 // Roots scanned for empty categories, mirroring the two documentation trees
 // the CLI lints (FR source + EN translation).
-const DOC_ROOTS = ['docs/docs', 'i18n/en/docusaurus-plugin-content-docs/current/docs'];
+const DOC_ROOTS = ['docs/docs', 'i18n/fr/docusaurus-plugin-content-docs/current/docs'];
 
 // A directory holding a _category_.json but no doc page at all (no direct
 // .md/.mdx page, no subdirectory) renders as an empty section in the docs
@@ -134,9 +134,9 @@ function lintFiles(files, glossaryPath, options = {}) {
     const relPath = path.relative(process.cwd(), file);
     const pageType = options.pageType || findPageType(relPath);
     // Language: CLI override (--lang), otherwise auto-detected from the path
-    // (translations live under i18n/en/…). Determines which language-specific
+    // (translations live under i18n/fr/…). Determines which language-specific
     // rules apply (see rule.langs in index.js).
-    const lang = options.lang || (relPath.startsWith('i18n/en/') ? 'en' : 'fr');
+    const lang = options.lang || (relPath.startsWith('i18n/fr/') ? 'fr' : 'en');
     const result = lintPage(file, pageType, glossaryPath, lang);
 
     totalFiles++;
@@ -195,7 +195,7 @@ function getChangedFiles(diffRef) {
       .filter(
         f =>
           (f.startsWith('docs/docs/') ||
-            f.startsWith('i18n/en/docusaurus-plugin-content-docs/current/docs/')) &&
+            f.startsWith('i18n/fr/docusaurus-plugin-content-docs/current/docs/')) &&
           (f.endsWith('.md') || f.endsWith('.mdx'))
       )
       .filter(f => !isPartial(f))
@@ -250,12 +250,12 @@ Arguments:
 
 Options:
   --diff <ref>            Lint only changed files (markdown in docs/docs/ and
-                          i18n/en/.../current/docs/) vs <ref>
+                          i18n/fr/.../current/docs/) vs <ref>
                           <ref> can be a branch, tag, or commit SHA
                           In CI, use $CI_MERGE_REQUEST_DIFF_BASE_SHA
   --type <action|concept> Override page type detection (default: auto-detect from path)
   --lang <fr|en>          Force the language ruleset (default: auto — files under
-                          i18n/en/ are linted as 'en', which skips FR-only rules
+                          i18n/fr/ are linted as 'fr', which skips EN-only rules
                           like glossary terminology and acronym pluralization)
   --glossary <path>       Path to glossary.json (default: consigns/glossary.json)
   --json                  Output results as JSON

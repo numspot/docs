@@ -1,41 +1,41 @@
 ---
-title: Authentification
+title: Authentication
 sidebar_position: 2
 ---
 
-# Méthodes d'authentification
+# Authentication methods
 
-Pour utiliser notre provider, vous devez vous authentifier avec une des méthodes listées ci-dessous.
+To use our provider, you must authenticate with one of the methods listed below.
 
 :::info
-**Région standard** :
-- API (Application Programming Interface) : https://api.eu-west-2.numspot.com
-- Object Storage : https://objectstorage.eu-west-2.numspot.com
+**Standard region**:
+- API (Application Programming Interface): https://api.eu-west-2.numspot.com
+- Object Storage: https://objectstorage.eu-west-2.numspot.com
 
 :::
 
-## Méthode 1 - Variables d'environnement
+## Method 1 - Environment variables
 
-Définissez ces variables dans votre environnement qui seront récupérées par le provider lors des différentes commandes Terraform :
+Set these variables in your environment so that the provider retrieves them during the various Terraform commands:
 
 ```bash
-NUMSPOT_HOST=<API Numspot de la région souhaitée>
-NUMSPOT_HOST_OS=<API Object storage Numspot de la région souhaitée>
-NUMSPOT_CLIENT_ID=<votre ID client>
-NUMSPOT_CLIENT_SECRET=<votre secret>
-NUMSPOT_SPACE_ID=<l'ID du space que vous souhaitez utiliser>
+NUMSPOT_HOST=<Numspot API of the desired region>
+NUMSPOT_HOST_OS=<Numspot Object Storage API of the desired region>
+NUMSPOT_CLIENT_ID=<your client ID>
+NUMSPOT_CLIENT_SECRET=<your secret>
+NUMSPOT_SPACE_ID=<the ID of the space you want to use>
 ```
 
-## Méthode 2 - Configuration Terraform
+## Method 2 - Terraform configuration
 
-Définissez le bloc suivant et remplissez-le avec les informations correspondantes :
+Define the following block and fill it in with the corresponding information:
 
 ```hcl
 provider "numspot" {
-  numspot_host      = "API Numspot de la région souhaitée"
-  numspot_host_os   = "API Object storage Numspot de la région souhaitée"
-  client_id         = "votre ID client"
-  client_secret     = "votre secret"
-  space_id          = "l'ID du space que vous souhaitez utiliser"
+  numspot_host      = "Numspot API of the desired region"
+  numspot_host_os   = "Numspot Object Storage API of the desired region"
+  client_id         = "your client ID"
+  client_secret     = "your secret"
+  space_id          = "the ID of the space you want to use"
 }
 ```

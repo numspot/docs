@@ -1,5 +1,5 @@
 ---
-title: Créer un Compute Bridge
+title: Create a Compute Bridge
 sidebar_position: 1
 draft: false
 ---
@@ -7,72 +7,66 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Créer un Compute Bridge
+# Create a Compute Bridge
 
-Vous pouvez créer un bridge entre l'un de vos [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) et un autre VPC pour que ceux-ci puissent communiquer entre eux.
+You can create a bridge between one of your [VPC](/docs/network/vpc/concepts) (Virtual Private Cloud) and another VPC so that they can communicate with each other.
 
-Cette action envoie une requête depuis l'un de vos VPC pour se connecter à un autre VPC.
+This action sends a request from one of your VPC to connect to another VPC.
 
 :::warning
-Chacun des VPC doit contenir au moins une [VM (Virtual Machine)](/docs/compute/concept/) avant la création du bridge.
+Each VPC must contain at least one [VM](/docs/compute/concept) (Virtual Machine) before the bridge is created.
 :::
 
-* Si les deux VPC appartiennent à votre compte, la requête est automatiquement acceptée.
-* Les blocs CIDR des VPC pairs ne doivent pas se chevaucher. Sinon, la connexion échoue automatiquement et passe à l'état `failed`.
-* La connexion entre deux VPC se fait dans les deux sens. Ainsi, une connexion de B vers A n'est pas nécessaire si une connexion de A vers B a déjà été établie.
+* If both VPC belong to your account, the request is automatically accepted.
+* The CIDR blocks of the peer VPC must not overlap. Otherwise, the connection automatically fails and moves to the `failed` state.
+* The connection between two VPC works in both directions. Therefore, a connection from B to A is not required if a connection from A to B has already been established.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **connectivity.bridge.create**
 
 :::
 
-## Configuration nécessaire au fonctionnement du Compute Bridge
+## Configuration required for the Compute Bridge to work
 
-Vous devez configurer votre VPC pour autoriser le trafic depuis et vers son bridge.
-Cela inclut la configuration de la [route table (table de routage)](/docs/network/route-table/concepts/), et la mise à jour des règles des [security group (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/).
+You must configure your VPC to allow traffic to and from its bridge.
+This includes configuring the [route table](/docs/network/route-table/concepts), and updating the rules of the [security groups](/docs/compute/security-groups/concepts/concept-sg).
 
-### Configuration Route Table
+### Route Table configuration
 
-Dans les route table associées aux subnet (sous-réseaux) de chacun des VPC, créez une route avec le bloc CIDR (Classless Inter-Domain Routing) du bridge en destination, et l'ID du bridge en target.
+In the route tables associated with the subnets of each VPC, create a route with the bridge CIDR (Classless Inter-Domain Routing) block as the destination, and the bridge ID as the target.
 
 :::warning
-Nous vous recommandons d'attendre que le bridge devienne `active` avant de créer une route.
+We recommend that you wait for the bridge to become `active` before creating a route.
 :::
 
-### Configuration Security Group associé aux VM de votre VPC
+### Security Group configuration associated with the VM of your VPC
 
-Dans chacun des VPC connectés par un bridge, ajoutez les règles suivantes :
+In each VPC connected by a bridge, add the following rules:
 
-* Une ou plusieurs règles autorisant les flux entrants depuis un ou plusieurs security group du deuxième VPC connecté grâce au bridge.
-* Une ou plusieurs règles autorisant les flux sortants vers un ou plusieurs security group du deuxième VPC connecté grâce au bridge.
+* One or more rules allowing inbound traffic from one or more security groups of the second VPC connected through the bridge.
+* One or more rules allowing outbound traffic to one or more security groups of the second VPC connected through the bridge.
 
-Votre bridge est configuré, et les VPC peuvent communiquer par une connexion privée.
+Your bridge is configured, and the VPC can communicate over a private connection.
 
 <Tabs>
 <TabItem value="api" label="API" default>
 
-## API {#tabhead-api}
-
-
 :::info
-Avant de commencer, assurez-vous d'avoir l'ID des VPC entre lesquels vous souhaitez établir un bridge.
+Before you start, make sure you have the ID of the VPC between which you want to establish a bridge.
 :::
 
-La commande `POST /connectivity/spaces/{spaceId}/computeBridges` demande un bridge entre un VPC source et un VPC destination.
+The `POST /connectivity/spaces/{spaceId}/computeBridges` command requests a bridge between a source VPC and a destination VPC.
 
-[Exemple de requête : Création d'un Compute Bridge](/openapi/#tag/connectivity/POST/connectivity/spaces/{spaceId}/computeBridges)
+[Example request: Creating a Compute Bridge](/openapi/#tag/connectivity/POST/connectivity/spaces/{spaceId}/computeBridges)
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
 
-## Terraform {#tabhead-terraform}
-
-
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/compute_bridge).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/compute_bridge).
 
 </TabItem>
 </Tabs>

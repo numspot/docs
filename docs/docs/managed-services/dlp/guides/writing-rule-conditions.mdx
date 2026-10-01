@@ -1,117 +1,117 @@
 ---
-title: Écrire des conditions de règles DLP - DLP managé
-sidebar_label: Écrire des conditions de règles DLP
-description: "Guide de référence pour le langage DSL des conditions DLP : syntaxe, opérateurs, détecteurs et exemples."
+title: Writing DLP rule conditions - Managed DLP
+sidebar_label: Writing DLP rule conditions
+description: "Reference guide for the DLP condition DSL: syntax, operators, detectors and examples."
 sidebar_position: 3
 draft: false
 ---
 
-# Écrire des conditions de règles DLP
+# Writing DLP rule conditions
 
 ## Introduction
 
-Les conditions des [règles DLP](/docs/managed-services/dlp/concepts) sont exprimées dans un DSL (Domain Specific Language) dédié. Ce guide décrit la syntaxe, les opérateurs disponibles et les bonnes pratiques pour écrire des conditions efficaces.
+The conditions of [DLP rules](/docs/managed-services/dlp/concepts) are expressed in a dedicated DSL (Domain Specific Language). This guide describes the syntax, available operators and best practices for writing effective conditions.
 
-## Syntaxe
+## Syntax
 
-### Structure de base
+### Basic structure
 
-Une condition se compose d'un champ, d'un opérateur et d'une valeur :
+A condition consists of a field, an operator and a value:
 
 ```text
-<champ> <opérateur> <valeur>
+<field> <operator> <value>
 ```
 
-### Champ
+### Field
 
-Le champ correspond à un élément du schéma de la plateforme. Utilisez la notation pointée pour les champs imbriqués. Le champ générique `*` désigne tous les champs de la requête.
+The field corresponds to an element of the platform schema. Use dot notation for nested fields. The generic `*` field designates all fields in the request.
 
-Pour la plateforme Mistral, les champs disponibles sont `tool_arguments`, `tool_called` et `request_time`.
+For the Mistral platform, the available fields are `tool_arguments`, `tool_called` and `request_time`.
 
-### Opérateurs
+### Operators
 
-| Opérateur | Description |
-|-----------|-------------|
-| `matches_detector` | Vrai si le détecteur trouve une correspondance dans le champ |
-| `not_matches_detector` | Vrai si le détecteur ne trouve aucune correspondance dans le champ |
+| Operator | Description |
+|----------|-------------|
+| `matches_detector` | True if the detector finds a match in the field |
+| `not_matches_detector` | True if the detector finds no match in the field |
 
-### Références de détecteurs
+### Detector references
 
-| Syntaxe | Description |
-|---------|-------------|
-| `@preset:<id>` | Référence un détecteur prédéfini |
-| `@custom:<id>` | Référence un détecteur personnalisé |
+| Syntax | Description |
+|--------|-------------|
+| `@preset:<id>` | References a predefined detector |
+| `@custom:<id>` | References a custom detector |
 
-Exemples :
+Examples:
 
-- `@preset:aws_access_key_id` : détecteur prédéfini pour les clés d'accès AWS ;
-- `@preset:github_token` : détecteur prédéfini pour les tokens GitHub ;
-- `@preset:openai_api_key` : détecteur prédéfini pour les clés API OpenAI ;
-- `@custom:project_codename` : détecteur personnalisé pour les noms de code projet.
+- `@preset:aws_access_key_id`: predefined detector for AWS access keys;
+- `@preset:github_token`: predefined detector for GitHub tokens;
+- `@preset:openai_api_key`: predefined detector for OpenAI API keys;
+- `@custom:project_codename`: custom detector for project code names.
 
-### Combinaison de conditions
+### Combining conditions
 
-Utilisez les opérateurs logiques pour combiner des conditions :
+Use logical operators to combine conditions:
 
-- `AND` : les deux conditions doivent être vraies ;
-- `OR` : au moins une des conditions doit être vraie ;
-- Parenthèses : pour grouper des conditions et définir la priorité d'évaluation.
+- `AND`: both conditions must be true;
+- `OR`: at least one of the conditions must be true;
+- Parentheses: to group conditions and define evaluation priority.
 
-Il n'y a pas de limite de profondeur d'imbrication.
+There is no limit on nesting depth.
 
-## Exemples
+## Examples
 
-### Détecter une clé AWS dans les arguments d'outil
+### Detect an AWS key in tool arguments
 
 ```text
 tool_arguments matches_detector @preset:aws_access_key_id
 ```
 
-### Détecter une clé AWS ou un token GitHub
+### Detect an AWS key or a GitHub token
 
 ```text
 (tool_arguments matches_detector @preset:aws_access_key_id OR tool_arguments matches_detector @preset:github_token)
 ```
 
-### Détecter des données sensibles dans tous les champs
+### Detect sensitive data in all fields
 
 ```text
 * matches_detector @preset:aws_access_key_id
 ```
 
-### Combiner détection et exclusion
+### Combine detection and exclusion
 
 ```text
 tool_arguments matches_detector @preset:aws_access_key_id AND tool_arguments not_matches_detector @custom:whitelist_domain
 ```
 
-### Exclure un détecteur
+### Exclude a detector
 
 ```text
 tool_arguments not_matches_detector @custom:whitelist_domain
 ```
 
-## Normalisation du texte
+## Text normalisation
 
-Avant l'évaluation, les chaînes de caractères sont normalisées :
+Before evaluation, character strings are normalised:
 
-- normalisation NFC ;
-- suppression des caractères invisibles (U+00AD, U+180E, U+2064, U+FFF9-FFFB, etc.).
+- NFC normalisation;
+- removal of invisible characters (U+00AD, U+180E, U+2064, U+FFF9-FFFB, etc.).
 
-Cette normalisation empêche les tentatives de contournement par insertion de caractères invisibles dans les données sensibles.
+This normalisation prevents bypass attempts by inserting invisible characters into sensitive data.
 
-## Politique de champ absent
+## Missing field policy
 
-Lorsqu'une règle référence un champ absent de la requête, le comportement dépend de la configuration de la plateforme consommatrice :
+When a rule references a field absent from the request, the behaviour depends on the configuration of the consuming platform:
 
-- `fail_open` : la règle ne se déclenche pas — comportement par défaut ;
-- `fail_closed` : la règle se déclenche comme si la condition était remplie.
+- `fail_open`: the rule does not trigger — default behaviour;
+- `fail_closed`: the rule triggers as if the condition were met.
 
-Configurez la politique de champ absent au niveau de l'instance de plateforme selon le niveau de sécurité requis.
+Configure the missing field policy at the platform instance level according to the required security level.
 
-## Bonnes pratiques
+## Best practices
 
-- Privilégiez les champs spécifiques plutôt que le champ générique `*` pour limiter les faux positifs et améliorer les performances ;
-- Testez chaque règle avec des données représentatives avant de publier un [ruleset](/docs/managed-services/dlp/concepts) (ensemble de règles) ;
-- Utilisez `not_matches_detector` combiné avec `AND` pour créer des exceptions — par exemple, autoriser un domaine tout en bloquant les autres ;
-- Groupez les conditions avec des parenthèses pour rendre les règles lisibles et éviter les ambiguïtés d'évaluation.
+- Prefer specific fields over the generic `*` field to limit false positives and improve performance;
+- Test each rule with representative data before publishing a [ruleset](/docs/managed-services/dlp/concepts);
+- Use `not_matches_detector` combined with `AND` to create exceptions — for example, allowing one domain whilst blocking others;
+- Group conditions with parentheses to make rules readable and avoid evaluation ambiguities.

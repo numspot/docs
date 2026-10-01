@@ -1,0 +1,62 @@
+---
+title: Configurer des sessions persistantes pour vos load balancers - Numspot
+sidebar_label: Configurer des sessions persistantes pour vos load balancers
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Configurer des sessions persistantes pour vos load balancers
+
+Vous pouvez configurer des sessions persistantes — stickiness (persistance de session) — pour vos [load balancer (équilibreurs de charge)](/docs/network/load-balancer/concepts/) afin d'assurer que toutes les requêtes d'un même client soient dirigées vers la même [VM (Virtual Machine)](/docs/compute/concept/) de backend pendant la durée de la session.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.loadBalancer.update**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+La configuration des policies (sessions persistantes) n'est pas disponible depuis la console Numspot.
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+:::info
+**Avant de commencer :** Assurez-vous que votre load balancer dispose d'un listener (écouteur) pour les protocoles HTTP ou HTTPS, car les sessions persistantes ne peuvent être configurées que pour ces protocoles.
+:::
+
+La commande `POST /compute/spaces/{spaceId}/loadBalancers/{id}/policies` crée une policy de persistance (stickiness) avec des sessions persistantes dont la durée de vie est définie par celle du navigateur.
+
+La policy créée peut être utilisée uniquement avec des listener HTTP ou HTTPS. Si cette policy est mise en place par un load balancer, ce dernier utilise ce cookie pour toutes les requêtes entrantes afin de les rediriger vers la VM de backend spécifiée. Si le cookie n'est pas présent, le load balancer envoie la requête à un autre serveur selon son algorithme d'équilibrage de charge.
+
+Vous pouvez également créer une policy de persistance avec une durée de vie des sessions persistantes correspondant à celle d'un cookie généré par l'application. Contrairement à l'autre type de policy, la durée de vie du cookie spécial Load Balancer Unit (LBU) suit celle du cookie généré par l'application spécifiée dans la configuration de la policy. Le load balancer insère un nouveau cookie de persistance uniquement lorsque la réponse de l'application contient un nouveau cookie de l'application.
+
+La session cesse d'être persistante si le cookie de l'application est supprimé ou expire, jusqu'à ce qu'un nouveau cookie de l'application soit émis.
+
+[Exemple de requête : Configurer des sessions persistantes d'un load balancer](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/loadBalancers/{id}/policies)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
+
+  </TabItem>
+</Tabs>

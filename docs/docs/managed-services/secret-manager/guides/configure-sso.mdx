@@ -1,76 +1,76 @@
 ---
-title: Configurer le SSO et l'authentification externe - Secret Manager managé
-sidebar_label: Configurer le SSO et l'authentification externe
-description: Guide de configuration du SSO, LDAP et OIDC sur une instance Secret Manager managée
+title: Configure SSO and external authentication - Managed Secret Manager
+sidebar_label: Configure SSO and external authentication
+description: Guide to configuring SSO, LDAP and OIDC on a managed Secret Manager instance
 sidebar_position: 2
 draft: false
 ---
 
-# Configurer le SSO et l'authentification externe
+# Configure SSO and external authentication
 
-Par défaut, l'accès à votre [instance Secret Manager](/docs/managed-services/secret-manager/concepts/) s'effectue via un token admin. Pour renforcer la sécurité et centraliser la gestion des identités, vous pouvez configurer des méthodes d'authentification externes sur votre instance OpenBao : **LDAP**, **OIDC** ou **JWT**.
+By default, access to your [Secret Manager instance](/docs/managed-services/secret-manager/concepts/) is via an admin token. To strengthen security and centralize identity management, you can configure external authentication methods on your OpenBao instance: **LDAP**, **OIDC** or **JWT**.
 
-Ce guide explique comment activer et configurer ces méthodes d'authentification pour mettre en place un SSO (Single Sign-On).
+This guide explains how to enable and configure these authentication methods to set up SSO (Single Sign-On).
 
 :::info
-Les commandes de ce guide utilisent le CLI OpenBao (`bao`). Vous pouvez aussi effectuer ces opérations via l'API HTTP d'OpenBao ou l'interface web de l'instance.
+The commands in this guide use the OpenBao CLI (`bao`). You can also perform these operations via the OpenBao HTTP API or the instance's web interface.
 :::
 
-## Prérequis
+## Prerequisites
 
-- Une instance Secret Manager à l'état `RUNNING` ;
-- Le token admin de l'instance ;
-- Le CLI `bao` installé et configuré :
+- A Secret Manager instance in the `RUNNING` state;
+- The instance's admin token;
+- The `bao` CLI installed and configured:
   ```bash
-  export BAO_ADDR="https://{host-de-l-instance}"
-  export BAO_TOKEN="{token-admin}"
+  export BAO_ADDR="https://{instance-host}"
+  export BAO_TOKEN="{admin-token}"
   ```
 
 ---
 
-## Activer une méthode d'authentification
+## Enable an authentication method
 
-Avant de configurer une méthode d'authentification, vous devez l'activer sur l'instance :
+Before configuring an authentication method, you must enable it on the instance:
 
 ```bash
 bao auth enable ldap
 ```
 
-ou :
+or:
 
 ```bash
 bao auth enable oidc
 ```
 
-ou :
+or:
 
 ```bash
 bao auth enable jwt
 ```
 
-Pour vérifier les méthodes d'authentification activées :
+To check which authentication methods are enabled:
 
 ```bash
 bao auth list
 ```
 
 :::tip
-Vous pouvez activer plusieurs méthodes d'authentification simultanément sur une même instance.
+You can enable several authentication methods simultaneously on the same instance.
 :::
 
 ---
 
-## Configurer l'authentification LDAP
+## Configure LDAP authentication
 
-La méthode LDAP permet d'authentifier les utilisateurs via un annuaire LDAP (Active Directory, OpenLDAP, etc.).
+The LDAP method authenticates users via an LDAP directory (Active Directory, OpenLDAP, etc.).
 
-### Configuration de la connexion LDAP
+### Configuring the LDAP connection
 
 ```bash
 bao write auth/ldap/config \
   url="ldaps://ldap.example.com:636" \
   binddn="cn=openbao,ou=ServiceAccounts,dc=example,dc=com" \
-  bindpass="{mot-de-passe-bind}" \
+  bindpass="{bind-password}" \
   userdn="ou=Users,dc=example,dc=com" \
   userattr="uid" \
   groupdn="ou=Groups,dc=example,dc=com" \
@@ -82,30 +82,30 @@ bao write auth/ldap/config \
   tls_max_version="tls12"
 ```
 
-### Paramètres principaux
+### Main parameters
 
-| Paramètre | Description |
+| Parameter | Description |
 | --- | --- |
-| `url` | URL du serveur LDAP (utilisez `ldaps://` pour TLS) |
-| `binddn` | DN du compte de service utilisé pour les requêtes LDAP |
-| `bindpass` | Mot de passe du compte de service |
-| `userdn` | DN de base pour la recherche des utilisateurs |
-| `userattr` | Attribut LDAP utilisé comme identifiant (par ex. `uid`, `sAMAccountName`) |
-| `groupdn` | DN de base pour la recherche des groupes |
-| `groupattr` | Attribut LDAP représentant le nom du groupe |
-| `groupfilter` | Filtre LDAP pour la recherche des groupes d'un utilisateur |
-| `insecure_tls` | Mettre à `true` uniquement pour les tests (désactive la vérification du certificat) |
-| `starttls` | Activer StartTLS pour une connexion LDAP non chiffrée mise à niveau en TLS |
-| `tls_min_version` | Version TLS minimale acceptée |
-| `tls_max_version` | Version TLS maximale acceptée |
+| `url` | LDAP server URL (use `ldaps://` for TLS) |
+| `binddn` | DN of the service account used for LDAP queries |
+| `bindpass` | Service account password |
+| `userdn` | Base DN for user search |
+| `userattr` | LDAP attribute used as the identifier (e.g. `uid`, `sAMAccountName`) |
+| `groupdn` | Base DN for group search |
+| `groupattr` | LDAP attribute representing the group name |
+| `groupfilter` | LDAP filter for searching a user's groups |
+| `insecure_tls` | Set to `true` only for testing (disables certificate verification) |
+| `starttls` | Enable StartTLS for an unencrypted LDAP connection upgraded to TLS |
+| `tls_min_version` | Minimum accepted TLS version |
+| `tls_max_version` | Maximum accepted TLS version |
 
 :::warning
-En production, utilisez toujours `ldaps://` ou `starttls=true` pour chiffrer les communications avec le serveur LDAP. Ne mettez jamais `insecure_tls=true` en production.
+In production, always use `ldaps://` or `starttls=true` to encrypt communications with the LDAP server. Never set `insecure_tls=true` in production.
 :::
 
-### Créer une politique et un groupe LDAP
+### Create an LDAP policy and group
 
-Après avoir configuré la connexion, mappez les groupes LDAP aux politiques OpenBao :
+After configuring the connection, map the LDAP groups to OpenBao policies:
 
 ```bash
 bao policy write admin-policy - <<EOF
@@ -119,7 +119,7 @@ EOF
 bao write auth/ldap/groups/admin policies="admin-policy"
 ```
 
-### Tester la connexion LDAP
+### Test the LDAP connection
 
 ```bash
 bao login -method=ldap username=jdupont
@@ -127,11 +127,11 @@ bao login -method=ldap username=jdupont
 
 ---
 
-## Configurer l'authentification OIDC
+## Configure OIDC authentication
 
-La méthode OIDC permet d'authentifier les utilisateurs via un fournisseur d'identité compatible OpenID Connect (Keycloak, Azure AD, Okta, etc.).
+The OIDC method authenticates users via an OpenID Connect-compatible identity provider (Keycloak, Azure AD, Okta, etc.).
 
-### Configuration du fournisseur OIDC
+### Configuring the OIDC provider
 
 ```bash
 bao write auth/oidc/config \
@@ -141,53 +141,53 @@ bao write auth/oidc/config \
   default_role="default"
 ```
 
-### Paramètres principaux
+### Main parameters
 
-| Paramètre | Description |
+| Parameter | Description |
 | --- | --- |
-| `oidc_discovery_url` | URL de découverte OIDC du fournisseur d'identité (sans `.well-known/openid-configuration`) |
-| `oidc_client_id` | Identifiant du client OAuth enregistré auprès du fournisseur |
-| `oidc_client_secret` | Secret du client OAuth |
-| `default_role` | Rôle par défaut utilisé lors de l'authentification |
+| `oidc_discovery_url` | OIDC discovery URL of the identity provider (without `.well-known/openid-configuration`) |
+| `oidc_client_id` | Identifier of the OAuth client registered with the provider |
+| `oidc_client_secret` | OAuth client secret |
+| `default_role` | Default role used during authentication |
 
 :::info
-L'URL de redirection à configurer auprès du fournisseur OIDC est : `https://{host-de-l-instance}/ui/vault/auth/oidc/oidc/callback`
+The redirect URL to configure with the OIDC provider is: `https://{instance-host}/ui/vault/auth/oidc/oidc/callback`
 :::
 
-### Créer un rôle OIDC
+### Create an OIDC role
 
-Un rôle définit les conditions d'authentification et les politiques associées :
+A role defines the authentication conditions and the associated policies:
 
 ```bash
 bao write auth/oidc/role/default \
   bound_audiences="openbao" \
-  allowed_redirect_uris="https://{host-de-l-instance}/ui/vault/auth/oidc/oidc/callback" \
+  allowed_redirect_uris="https://{instance-host}/ui/vault/auth/oidc/oidc/callback" \
   user_claim="sub" \
   groups_claim="groups" \
   policies="default-policy" \
   ttl="1h"
 ```
 
-### Paramètres du rôle
+### Role parameters
 
-| Paramètre | Description |
+| Parameter | Description |
 | --- | --- |
-| `bound_audiences` | Identifiant client OAuth que le JWT doit contenir |
-| `allowed_redirect_uris` | URIs de redirection autorisées après authentification |
-| `user_claim` | Claim JWT utilisé comme identifiant utilisateur |
-| `groups_claim` | Claim JWT contenant les groupes de l'utilisateur |
-| `policies` | Politiques OpenBao assignées à l'utilisateur |
-| `ttl` | Durée de validité du token émis par OpenBao |
+| `bound_audiences` | OAuth client identifier that the JWT must contain |
+| `allowed_redirect_uris` | Redirect URIs allowed after authentication |
+| `user_claim` | JWT claim used as the user identifier |
+| `groups_claim` | JWT claim containing the user's groups |
+| `policies` | OpenBao policies assigned to the user |
+| `ttl` | Validity period of the token issued by OpenBao |
 
-### Mapper les groupes OIDC aux politiques
+### Map OIDC groups to policies
 
 ```bash
 bao write auth/oidc/groups/admin policies="admin-policy"
 ```
 
-### Tester la connexion OIDC
+### Test the OIDC connection
 
-Via l'interface web, accédez à l'URL de l'instance et sélectionnez la méthode OIDC. Ou via le CLI :
+Via the web interface, go to the instance URL and select the OIDC method. Or via the CLI:
 
 ```bash
 bao login -method=oidc
@@ -195,11 +195,11 @@ bao login -method=oidc
 
 ---
 
-## Configurer l'authentification JWT
+## Configure JWT authentication
 
-La méthode JWT est similaire à OIDC mais adaptée aux flux machine-to-machine (pas de redirection navigateur). Elle convient aux pipelines CI/CD et aux comptes de service.
+The JWT method is similar to OIDC but suited to machine-to-machine flows (no browser redirect). It is suitable for CI/CD pipelines and service accounts.
 
-### Configuration avec clés JWKS
+### Configuration with JWKS keys
 
 ```bash
 bao write auth/jwt/config \
@@ -207,7 +207,7 @@ bao write auth/jwt/config \
   bound_issuer="https://keycloak.example.com/realms/myrealm"
 ```
 
-### Configuration avec découverte OIDC
+### Configuration with OIDC discovery
 
 ```bash
 bao write auth/jwt/config \
@@ -215,7 +215,7 @@ bao write auth/jwt/config \
   bound_issuer="https://keycloak.example.com/realms"
 ```
 
-### Créer un rôle JWT
+### Create a JWT role
 
 ```bash
 bao write auth/jwt/role/ci-pipeline \
@@ -226,7 +226,7 @@ bao write auth/jwt/role/ci-pipeline \
   ttl="30m"
 ```
 
-### Tester l'authentification JWT
+### Test JWT authentication
 
 ```bash
 bao write auth/jwt/login jwt="{jwt-token}"
@@ -234,55 +234,55 @@ bao write auth/jwt/login jwt="{jwt-token}"
 
 ---
 
-## Comparatif des méthodes d'authentification
+## Comparison of authentication methods
 
-| Méthode | Cas d'usage | SSO navigateur | Flux machine-to-machine |
+| Method | Use case | Browser SSO | Machine-to-machine flow |
 | --- | --- | --- | --- |
-| LDAP | Annuaire d'entreprise existant | Non | Oui (bind) |
-| OIDC | Fournisseur d'identité SSO (Keycloak, Azure AD) | Oui | Oui (client credentials) |
-| JWT | CI/CD, comptes de service | Non | Oui |
+| LDAP | Existing enterprise directory | No | Yes (bind) |
+| OIDC | SSO identity provider (Keycloak, Azure AD) | Yes | Yes (client credentials) |
+| JWT | CI/CD, service accounts | No | Yes |
 
 ---
 
-## Bonnes pratiques
+## Best practices
 
-### Sécurité
+### Security
 
-- Utilisez toujours TLS (`ldaps://` ou `starttls`) pour les connexions LDAP ;
-- Limitez les permissions des comptes de service LDAP au strict minimum (lecture seule sur l'annuaire) ;
-- Configurez des TTL courts pour les tokens émis par OpenBao ;
-- Effectuez une rotation régulière des client secrets OIDC.
+- Always use TLS (`ldaps://` or `starttls`) for LDAP connections;
+- limit the permissions of LDAP service accounts to the strict minimum (read-only on the directory);
+- configure short TTLs for the tokens issued by OpenBao;
+- rotate the OIDC client secrets regularly.
 
-### Haute disponibilité
+### High availability
 
-- Configurez plusieurs serveurs LDAP en amont via un [load balancer](/docs/network/load-balancer/concepts) pour éviter un point de défaillance unique ;
-- Surveillez la disponibilité du fournisseur OIDC — une indisponibilité bloque les nouvelles authentifications (les tokens existants restent valides jusqu'à expiration).
+- Configure several upstream LDAP servers via a [load balancer](/docs/network/load-balancer/concepts) to avoid a single point of failure;
+- monitor the availability of the OIDC provider — an outage blocks new authentications (existing tokens remain valid until they expire).
 
-### Principe du moindre privilège
+### Principle of least privilege
 
-- Créez des politiques spécifiques pour chaque rôle ou groupe ;
-- N'accordez les politiques `admin` qu'aux seuls administrateurs ;
-- Utilisez des politiques en lecture seule pour les comptes de service CI/CD.
+- Create specific policies for each role or group;
+- grant the `admin` policies only to administrators;
+- use read-only policies for CI/CD service accounts.
 
 ---
 
-## Dépannage
+## Troubleshooting
 
-### L'authentification LDAP échoue
+### LDAP authentication fails
 
-1. Vérifiez la connectivité réseau entre l'instance et le serveur LDAP ;
-2. Vérifiez le DN de bind et le mot de passe ;
-3. Testez avec `insecure_tls=true` temporairement pour exclure un problème de certificat ;
-4. Consultez les logs de l'instance pour les détails de l'erreur.
+1. Check the network connectivity between the instance and the LDAP server;
+2. check the bind DN and password;
+3. test with `insecure_tls=true` temporarily to rule out a certificate issue;
+4. consult the instance logs for the error details.
 
-### L'authentification OIDC renvoie une erreur de redirection
+### OIDC authentication returns a redirect error
 
-1. Vérifiez que l'URI de redirection est exactement celle configurée dans le fournisseur OIDC ;
-2. Vérifiez que le client secret est correct ;
-3. Vérifiez que l'URL de découverte OIDC est accessible depuis l'instance.
+1. Check that the redirect URI is exactly the one configured in the OIDC provider;
+2. check that the client secret is correct;
+3. check that the OIDC discovery URL is reachable from the instance.
 
-### Les groupes ne sont pas mappés correctement
+### Groups are not mapped correctly
 
-1. Vérifiez le `groupfilter` LDAP ou le `groups_claim` OIDC ;
-2. Utilisez la commande `bao read auth/{method}/groups` pour lister les groupes configurés ;
-3. Vérifiez que les noms de groupes correspondent entre le fournisseur et la configuration OpenBao.
+1. Check the LDAP `groupfilter` or the OIDC `groups_claim`;
+2. use the `bao read auth/{method}/groups` command to list the configured groups;
+3. check that the group names match between the provider and the OpenBao configuration.

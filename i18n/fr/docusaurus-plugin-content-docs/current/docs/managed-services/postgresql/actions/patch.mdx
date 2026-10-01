@@ -1,0 +1,116 @@
+---
+title: Modifier la configuration des nœuds d'un cluster PostgreSQL - PostgreSQL managé
+sidebar_label: Modifier la configuration des nœuds d'un cluster PostgreSQL
+sidebar_position: 4.5
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Modifier la configuration des nœuds d'un cluster PostgreSQL
+
+Vous pouvez modifier le type des nœuds, la taille des volumes, le nombre de réplicas et la visibilité réseau d'un [cluster PostgreSQL](/docs/managed-services/postgresql/concepts/) au sein de votre espace.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **postgresql.cluster.update**
+
+:::
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/postgresql/list.png", text: "Depuis le menu latéral gauche, cliquez sur Services Managés → PostgreSQL → Clusters.", hotspot: { x: 0, y: 0.5136, w: 0.1931, h: 0.0568 } },
+    { img: "/img/walkthrough/postgresql/actions-menu.png", text: "Sur la ligne du cluster à modifier, ouvrez le menu « Actions », puis cliquez sur « Modifier ».", hotspot: { x: 0.875, y: 0.4235, w: 0.0884, h: 0.0457 } },
+    { img: "/img/walkthrough/postgresql/edit-top.png", text: "Ajustez la quantité de RAM (1 à 12 Gio) et de vCPU (1 à 7), ainsi que la taille de stockage (qui ne peut être qu'augmentée).", hotspot: { x: 0.21, y: 0.14, w: 0.45, h: 0.82 } },
+    { img: "/img/walkthrough/postgresql/edit-bottom.png", text: "Réglez le nombre de réplicas (haute disponibilité) et le type de réseau, vérifiez le récapitulatif à droite, puis cliquez sur « Modifier ».", hotspot: { x: 0.7224, y: 0.9012, w: 0.0526, h: 0.0494 } },
+  ]}
+/>
+
+    1. Depuis le menu latéral gauche, cliquez sur **Services Managés** → **PostgreSQL** → **Clusters** pour accéder à la liste des clusters PostgreSQL.
+
+    2. Sur la ligne du cluster à modifier, cliquez sur le bouton **Actions**, puis sur **Modifier** pour ouvrir le formulaire de modification.
+
+### Configuration du cluster
+
+    Ajustez la quantité de RAM (entre 1 et 12 Gio) et le nombre de vCPU (entre 1 et 7). La version de PostgreSQL n'est pas modifiable depuis ce formulaire.
+
+### Dimensionnement du stockage
+
+    Renseignez la nouvelle taille de stockage (entre 1 et 14 901 Gio). La taille ne peut qu'être augmentée et le type de stockage n'est pas modifiable.
+
+### Haute disponibilité
+
+    Renseignez le nombre de réplicas synchrones (entre 0 et 2). Les réplicas sont répartis sur plusieurs zones de disponibilité pour améliorer la disponibilité et la fiabilité des données.
+
+### Réseau
+
+    Sélectionnez le type d'accès au cluster :
+
+    - "Privé" : le cluster est accessible uniquement depuis le réseau interne ;
+    - "Public" : le cluster est accessible depuis Internet via une adresse IP publique.
+
+### Application des modifications
+
+    Vérifiez le "Récapitulatif" affiché à droite, puis cliquez sur **Modifier** pour appliquer les changements. Le cluster passe en état de mise à jour le temps de la modification.
+</TabItem>
+
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+    La requête `PATCH /postgresql/spaces/{spaceId}/clusters/{clusterId}` permet de changer le type des nœuds — quantité de RAM et nombre de vCPU (virtual CPU) —, la taille des volumes et le nombre de réplicas d'un cluster PostgreSQL.
+
+    ### Exemple de requête
+
+    ```json
+    {
+      "nodeConfiguration": {
+        "vcpuCount": 4,
+        "memorySizeGiB": 8
+      },
+      "volumeSizeGiB": 200,
+      "replicaCount": 2
+    }
+    ```
+
+    ### Exemple de réponse
+
+    ```json
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440001",
+      "name": "mon-cluster-postgresql",
+      "databaseName": "appdb",
+      "user": "admin",
+      "majorVersion": "17",
+      "fullVersion": "17.2",
+      "status": {
+        "state": "UPGRADING",
+        "message": "cluster is being upgraded"
+      },
+      "nodeConfiguration": {
+        "vcpuCount": 4,
+        "memorySizeGiB": 8
+      },
+      "volume": {
+        "type": "GP2",
+        "sizeGiB": 200
+      },
+      "visibility": "EXTERNAL",
+      "replicaCount": 2,
+      "host": "mon-cluster-postgresql.postgres.eu-west-2.numspot.com",
+      "port": 5432,
+      "createdOn": "2026-04-05T10:30:00Z"
+    }
+    ```
+
+    [Voir la spécification complète](/openapi/#tag/postgresql/PATCH/postgresql/spaces/{spaceId}/clusters/{clusterId})
+</TabItem>
+</Tabs>

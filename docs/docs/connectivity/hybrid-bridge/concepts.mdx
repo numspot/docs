@@ -1,74 +1,74 @@
 ---
 title: "Hybrid Bridge - Concepts"
 sidebar_label: "Concepts"
-description: Découvrez les Hybrid Bridges, des connexions privées entre un VPC et les services managés.
+description: Discover Hybrid Bridges, private connections between a VPC and managed services.
 sidebar_position: 1
 draft: false
 ---
 
 import ActionsSummary from '@site/src/components/ActionsSummary';
 
-# À propos des Hybrid Bridges
+# About Hybrid Bridges
 
 <ActionsSummary />
 
-Un bridge permet à un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) de communiquer avec des services managés par une connexion privée. Les [VM (Virtual Machine)](/docs/compute/concept/) du VPC connecté grâce à un bridge peuvent accéder aux services managés.
+A bridge allows a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) to communicate with managed services through a private connection. The [VM (Virtual Machine)](/docs/compute/concept/) of the VPC connected through a bridge can access the managed services.
 
-## Informations générales
+## General information
 
-Les services managés disponibles sont :
-* PostgreSQL ;
-* Kubernetes ;
-* registre de conteneurs (Container Registry).
+The available managed services are:
+* PostgreSQL;
+* Kubernetes;
+* container registry (Container Registry).
 
-Une fois un bridge établi entre un VPC et un service managé, ce même VPC aura accès à tous les services managés de l'espace.
+Once a bridge is established between a VPC and a managed service, that same VPC will have access to all the managed services of the space.
 
 :::warning
-Un bridge entre un VPC et un service managé dont les plages IP se recouvrent ne pourra pas être créé.
+A bridge between a VPC and a managed service whose IP ranges overlap cannot be created.
 :::
 
 :::warning
-Le service managé doit être exposé de manière privée (uniquement sur le réseau interne) pour pouvoir communiquer avec un VPC via un bridge.
+The managed service must be exposed privately (only on the internal network) in order to communicate with a VPC through a bridge.
 :::
 
-Un bridge est une connexion privée utilisant des IP privées.
+A bridge is a private connection that uses private IP.
 
-Le VPC et les services managés doivent appartenir au même espace.
+The VPC and the managed services must belong to the same space.
 
-Une fois le bridge créé, le trafic réseau entre le VPC et les services managés est possible. Vous devez mettre à jour les [route table (tables de routage)](/docs/network/route-table/concepts/) en ajoutant une route, et les [security group (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) pour autoriser le trafic.
+Once the bridge is created, network traffic between the VPC and the managed services becomes possible. You must update the [route tables](/docs/network/route-table/concepts/) by adding a route, and the [security groups](/docs/compute/security-groups/concepts/concept-sg/) to allow the traffic.
 
-### Bidirectionnalité
+### Bidirectionality
 
-Le trafic est bidirectionnel entre le VPC et les services managés, à l'exception de Kubernetes : les conteneurs des worker nodes d'un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) managé peuvent accéder au VPC, mais une VM du VPC ne peut pas contacter un conteneur du cluster Kubernetes via le bridge.
+Traffic is bidirectional between the VPC and the managed services, except for Kubernetes: the containers of the worker nodes of a managed [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) can access the VPC, but a VM of the VPC cannot reach a container of the cluster Kubernetes through the bridge.
 
-## Configuration réseau
+## Network configuration
 
 ### Route tables
 
-Pour autoriser le trafic entre le VPC et les services managés, vous devez mettre à jour les route table associées aux subnet (sous-réseaux) du VPC.
+To allow traffic between the VPC and the managed services, you must update the route tables associated with the subnets of the VPC.
 
-Une fois le bridge créé, vous pouvez le consulter en lecture via l'API pour connaître les routes qui lui sont associées.
-Ces routes sont à configurer dans votre route table comme suit :
-* l'`ipRange` en destination ;
-* le `gatewayId` en target.
+Once the bridge is created, you can view it in read-only mode through the API to find out the routes associated with it.
+These routes must be configured in your route table as follows:
+* the `ipRange` as the destination;
+* the `gatewayId` as the target.
 
-Cela permet aux VM de diriger le trafic vers les services managés.
+This allows the VM to direct traffic to the managed services.
 
 ### Security Groups
 
 :::warning
-Pour autoriser le trafic entre les VM du VPC et les services managés, vous devez mettre à jour les security group associés à vos VM.
+To allow traffic between the VM of the VPC and the managed services, you must update the security groups associated with your VM.
 :::
 
-Ajoutez les règles appropriées autorisant les flux sortants vers les services managés, et les flux entrants depuis les services managés si nécessaire.
+Add the appropriate rules allowing outbound flows to the managed services, and inbound flows from the managed services if necessary.
 
-### Connexion aux services managés depuis un VPC
+### Connecting to managed services from a VPC
 
-Une fois la connexion bridge établie, les VM du VPC IaaS peuvent contacter le ou les services managés connectés grâce à l'`host` du service managé.
+Once the bridge connection is established, the VM of the IaaS VPC can reach the connected managed service or services through the `host` of the managed service.
 
-Pour récupérer l'`host` d'un service managé :
-* [Récupérer le statut d'un cluster PostgreSQL](/docs/managed-services/postgresql/actions/status/) ;
-* [Récupérer le statut d'un cluster Kubernetes](/docs/managed-services/kubernetes/actions/status/) ;
-* [Récupérer le statut d'un Container Registry](/docs/managed-services/registry/actions/status/).
+To retrieve the `host` of a managed service:
+* [Retrieve the status of a PostgreSQL cluster](/docs/managed-services/postgresql/actions/status/);
+* [Retrieve the status of a cluster Kubernetes](/docs/managed-services/kubernetes/actions/status/);
+* [Retrieve the status of a Container Registry](/docs/managed-services/registry/actions/status/).
 
-Pour un exemple complet de connexion d'une VM à un cluster Kubernetes managé, consultez le guide [Connecter une VM à un cluster Kubernetes managé](/docs/managed-services/kubernetes/guides/connect-vm-to-cluster/).
+For a complete example of connecting a VM to a managed Kubernetes cluster, see the guide [Connect a VM to a managed Kubernetes cluster](/docs/managed-services/kubernetes/guides/connect-vm-to-cluster/).

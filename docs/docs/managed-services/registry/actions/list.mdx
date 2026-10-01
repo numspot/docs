@@ -1,6 +1,6 @@
 ---
-title: Lister les registries Harbor
-sidebar_label: Lister les registries
+title: List Harbor registries
+sidebar_label: List registries
 sidebar_position: 3.5
 draft: false
 last_update:
@@ -10,14 +10,14 @@ last_update:
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Lister les registries
+# List registries
 
-Vous pouvez lister l'ensemble des registries Harbor de votre Container Registry au sein de votre espace.
+You can list all the Harbor registries of your Container Registry within your space.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **registry.instance.get**
 
@@ -28,22 +28,22 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 ## API {#tabhead-api}
 
-    La requête `GET /registry/spaces/{spaceId}/registries` permet de lister les registries Harbor d'un espace.
+    The request `GET /registry/spaces/{spaceId}/registries` lists the Harbor registries of a space.
 
-### Paramètres
+### Parameters
 
-| Paramètre | Type   | Requis | Description                      |
-| --------- | ------ | ------ | -------------------------------- |
-| spaceId   | string | Oui    | Identifiant de l'espace Numspot. |
+| Parameter | Type   | Required | Description              |
+| --------- | ------ | -------- | ------------------------ |
+| spaceId   | string | Yes      | The Numspot space ID.    |
 
-### Exemple de réponse
+### Example response
 
     ```json
     {
       "items": [
         {
           "id": "550e8400-e29b-41d4-a716-446655440002",
-          "name": "mon-container-registry",
+          "name": "my-container-registry",
           "status": {
             "state": "RUNNING",
             "message": "instance is healthy"
@@ -57,6 +57,6 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
     }
     ```
 
-    [Voir la spécification complète](/openapi/#tag/registry/GET/registry/spaces/{spaceId}/registries)
+    [View the full specification](/openapi/#tag/registry/GET/registry/spaces/{spaceId}/registries)
 </TabItem>
 </Tabs>

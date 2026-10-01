@@ -1,0 +1,64 @@
+---
+title: Créer une route table
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Créer une route table
+
+Vous pouvez créer une [route table (table de routage)](/docs/network/route-table/concepts/) que vous pouvez associer à un ou plusieurs subnet (sous-réseau) pour contrôler la façon dont leur trafic est routé. Une fois votre route table créée, vous pouvez y créer des routes pour personnaliser le routage des subnet auxquels elle est associée.
+
+Chaque route table contient la route `local` qui route le trafic ciblant une IP du bloc CIDR du [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) localement. Cette route ne peut être ni modifiée ni supprimée.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.routeTable.create**
+
+:::
+<Tabs>
+   <TabItem value="console" default> 
+
+## console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/route-table/01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC → Route Tables.", hotspot: { x: 0, y: 0.579, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/route-table/01-list.png", text: "Depuis la liste des route tables (Réseau → VPC → Route Tables), cliquez sur « Créer une Route Table ».", hotspot: { x: 0.8022, y: 0.2206, w: 0.1548, h: 0.0741 } },
+    { img: "/img/walkthrough/route-table/02-form.png", text: "Donnez un nom à la route table et sélectionnez le VPC pour lequel la créer.", hotspot: { x: 0.2083, y: 0.4025, w: 0.5556, h: 0.1296 } },
+    { img: "/img/walkthrough/route-table/02-form.png", text: "Cliquez sur « Créer ».", hotspot: { x: 0.6378, y: 0.621, w: 0.055, h: 0.055 } },
+  ]}
+/>
+
+1. Connectez-vous sur la console Numspot.   
+2. Depuis le menu latéral gauche, cliquez sur **Réseau** → **VPC** → **VPC**. 
+3.  Cliquez sur le bouton **Créer une Route Table** situé en haut à droite de l'écran pour ouvrir la pop-up.
+4.  La pop-up s'ouvre et vous demande de rentrer un nom de route table, ainsi que de sélectionner l'ID du VPC (liste déroulante contenant tous les IDs des VPC dont vous avez l'accès) pour lequel vous créez cette route.
+5.  Cliquez sur **Créer**.
+
+   </TabItem>
+   <TabItem value="api">
+
+## api {#tabhead-api}
+
+   :::info
+Avant de commencer : créez un VPC.
+:::
+
+La commande `POST /compute/spaces/{spaceId}/routeTables` crée une route table pour un VPC spécifié. Vous pouvez ensuite ajouter des routes et associer la route table à un subnet.
+
+[Exemple de requête : Création d'une Route Table](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/routeTables)
+   </TabItem>
+   <TabItem value="terraform">
+
+## terraform {#tabhead-terraform}
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
+   </TabItem>
+</Tabs>

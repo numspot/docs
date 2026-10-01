@@ -1,21 +1,21 @@
 ---
-title: Arrêter et démarrer une VM
+title: Stop and start a VM
 sidebar_position: 6
 draft: false
 ---
 
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
-import Walkthrough from "@site/src/components/Walkthrough";
+import Walkthrough from '@site/src/components/Walkthrough';
 
-# Arrêter et démarrer une VM
+# Stop and start a VM
 
-Vous pouvez arrêter une [VM (Virtual Machine)](/docs/compute/concept/) en fonctionnement à tout moment, puis la démarrer à nouveau. Arrêter une VM vous permet, par exemple, d'assurer sa maintenance ou de traiter son volume système.
+You can stop a running [VM (Virtual Machine)](/docs/compute/concept/) at any time, then start it again. Stopping a VM lets you, for example, carry out its maintenance or process its system volume.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.vm.update**
 
@@ -24,71 +24,71 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
   <TabItem value="Console" label="Console" default>
 
-## Console {#tabhead-Console}
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/vm/list.png", text: "Depuis le menu latéral gauche, cliquez sur Compute → VM pour accéder à la liste des VM.", hotspot: { x: 0, y: 0.4123, w: 0.1944, h: 0.0457 } },
-    { img: "/img/walkthrough/vm/selected.png", text: "Pour arrêter une VM : cochez-la (multi-sélection possible), puis cliquez sur « Arrêter » dans la barre d'actions.", hotspot: { x: 0.5432, y: 0.3304, w: 0.0738, h: 0.0494 } },
-    { img: "/img/walkthrough/vm/stop-confirm.png", text: "Confirmez en cliquant sur « Arrêter la VM ». L'état passe à « stopping » puis « stopped ».", hotspot: { x: 0.6112, y: 0.6292, w: 0.0749, h: 0.0494 } },
-    { img: "/img/walkthrough/vm/selected.png", text: "Pour démarrer une VM arrêtée : cochez-la, puis cliquez sur « Démarrer » et confirmez de la même manière. L'état passe à « pending » puis « running ».", hotspot: { x: 0.3583, y: 0.3304, w: 0.0843, h: 0.0494 } },
+    { img: "/img/walkthrough/en/vm/list.png", text: "From the left-hand side menu, click Compute → VMs to open the list of VMs.", hotspot: { x: 0, y: 0.4123, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/en/vm/selected.png", text: "To stop a VM: tick it (multi-selection is available), then click “Stop” in the action bar.", hotspot: { x: 0.472, y: 0.3304, w: 0.0629, h: 0.0494 } },
+    { img: "/img/walkthrough/en/vm/stop-confirm.png", text: "Confirm by clicking “Stop VM”. The state changes to “stopping” then “stopped”.", hotspot: { x: 0.632, y: 0.6292, w: 0.0541, h: 0.0494 } },
+    { img: "/img/walkthrough/en/vm/selected.png", text: "To start a stopped VM: tick it, then click “Start” and confirm the same way. The state changes to “pending” then “running”.", hotspot: { x: 0.327, y: 0.3304, w: 0.0644, h: 0.0494 } },
   ]}
 />
 
-    ### Arrêter une VM
+    ### Stop a VM
 
-    1. Depuis le menu latéral gauche, cliquez sur **Compute** → **VM** pour accéder à la liste des VM.
+    1. From the left-hand side menu, click **Compute** → **VM** to access the list of VM.
 
-    2. Sélectionnez la VM que vous souhaitez arrêter.
 
-       :::info
-       La multi-sélection est disponible.
-       :::
+    2. Select the VM you want to stop.
 
-    3. Cliquez sur le bouton **Arrêter**.
-
-    4. Lorsque vous êtes invité à confirmer l'opération, sélectionnez **Arrêter**.
-
-       La VM sélectionnée est arrêtée.
-
-    5. L'état de la VM sélectionnée passe à "stopping", puis à "stopped" une fois l'opération terminée.
-
-    ### Démarrer une VM
-
-    1. Depuis le menu latéral gauche, cliquez sur **Compute** → **VM** pour accéder à la liste des VM.
-
-    2. Sélectionnez la VM que vous souhaitez démarrer.
 
        :::info
-       La multi-sélection est disponible.
+       Multi-selection is available.
        :::
 
-    3. Cliquez sur le bouton **Démarrer**.
+    3. Click the **Stop** button.
 
-    4. Lorsque vous êtes invité à confirmer l'opération, sélectionnez **Démarrer**.
 
-       La VM sélectionnée est démarrée.
+    4. When prompted to confirm the operation, select **Stop**.
 
-    5. L'état de la VM sélectionnée passe à "pending", puis à "running" une fois l'opération terminée.
+
+       The selected VM is stopped.
+
+    5. The state of the selected VM moves to "stopping", then to "stopped" once the operation is complete.
+
+    ### Start a VM
+
+    1. From the left-hand side menu, click **Compute** → **VM** to access the list of VM.
+
+
+    2. Select the VM you want to start.
+
+
+       :::info
+       Multi-selection is available.
+       :::
+
+    3. Click the **Start** button.
+
+
+    4. When prompted to confirm the operation, select **Start**.
+
+
+       The selected VM is started.
+
+    5. The state of the selected VM moves to "pending", then to "running" once the operation is complete.
   </TabItem>
 
   <TabItem value="API" label="API">
+    The `PUT /compute/spaces/{spaceId}/vms/{id}/stop` command stops a running VM. The data stored in the RAM (Random Access Memory) of the VM is lost.
 
-## API {#tabhead-API}
+    [Example request: Stop a VM](/openapi/#tag/compute/PUT/compute/spaces/%7BspaceId%7D/vms/%7Bid%7D/stop)
 
-    La commande `PUT /compute/spaces/{spaceId}/vms/{id}/stop` arrête une VM en cours d'exécution. Les données stockées dans la RAM (Random Access Memory) de la VM sont perdues.
+    The `PUT /compute/spaces/{spaceId}/vms/{id}/start` command starts a VM.
 
-    [Exemple de requête : Arrêter une VM](/openapi/#tag/compute/PUT/compute/spaces/%7BspaceId%7D/vms/%7Bid%7D/stop)
-
-    La commande `PUT /compute/spaces/{spaceId}/vms/{id}/start` démarre une VM.
-
-    [Exemple de requête : Lancer une VM](/openapi/#tag/compute/PUT/compute/spaces/%7BspaceId%7D/vms/%7Bid%7D/start)
+    [Example request: Launch a VM](/openapi/#tag/compute/PUT/compute/spaces/%7BspaceId%7D/vms/%7Bid%7D/start)
   </TabItem>
 
   <TabItem value="Terraform" label="Terraform">
-
-## Terraform {#tabhead-Terraform}
-
-    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
+    The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
   </TabItem>
 </Tabs>

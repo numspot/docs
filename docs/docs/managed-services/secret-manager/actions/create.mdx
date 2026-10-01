@@ -1,78 +1,75 @@
 ---
-title: Créer une instance Secret Manager
+title: Create a Secret Manager instance
 sidebar_position: 2
 draft: false
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Créer une instance Secret Manager
+# Create a Secret Manager instance
 
-Vous pouvez créer une [instance Secret Manager](/docs/managed-services/secret-manager/concepts/) au sein de votre espace.
+You can create a [Secret Manager instance](/docs/managed-services/secret-manager/concepts/) within your space.
 
-Lors de la création, vous devez définir le nom de l'instance et choisir sa visibilité réseau.
+During creation, you must define the instance name and choose its network visibility.
 
-Une fois l'instance Secret Manager créée, vous pouvez vous y connecter pour y stocker et gérer vos secrets.
+Once the Secret Manager instance has been created, you can connect to it to store and manage your secrets.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **secrets.instance.create**
 
 :::
 
-:::warning Choix du type de réseau
-Le choix entre réseau **Privé** et **Public** détermine qui peut accéder à votre instance Secret Manager :
+:::warning Choosing the network type
+The choice between a **Private** and a **Public** network determines who can access your Secret Manager instance:
 
-- **Privé** (`INTERNAL`) : votre instance n'est accessible qu'au sein du réseau interne Numspot. Seules vos autres ressources présentes dans le même réseau peuvent s'y connecter. Cette option est recommandée pour les environnements de production, notamment les environnements SecNumCloud. Pour y accéder de façon sécurisée, vous pouvez utiliser une [VM](/docs/compute/concept/) de rebond et un VPN (Virtual Private Network) Numspot.
+- **Private** (`INTERNAL`): your instance is only accessible within the internal Numspot network. Only your other resources present in the same network can connect to it. This option is recommended for production environments, in particular SecNumCloud environments. To access it securely, you can use a bastion [VM](/docs/compute/concept/) (Virtual Machine) and a Numspot VPN (Virtual Private Network).
 
-- **Public** (`EXTERNAL`) : votre instance est accessible depuis Internet. Toute personne disposant du jeton d'administration peut s'y connecter, où qu'elle se trouve. Cette option convient aux développements, tests ou environnements où la sécurité réseau n'est pas critique.
+- **Public** (`EXTERNAL`): your instance is accessible from the Internet. Anyone with the administration token can connect to it, wherever they are. This option is suitable for development, testing or environments where network security is not critical.
 
-**Recommandation** : Pour garantir la sécurité de vos secrets en production, privilégiez toujours le réseau **Privé**.
+**Recommendation**: To guarantee the security of your secrets in production, always favor the **Private** network.
 :::
 
 <Tabs>
     
     <TabItem value="api" label="API" default>
+        The `POST /secrets/spaces/{spaceId}/instances` request lets you create and launch a Secret Manager instance.
+        The instance is in the `CREATING` and then `PENDING` state until it is created, then moves to the `RUNNING` state.
 
-## API {#tabhead-api}
+        **Choosing the network type**:
 
-        La requête `POST /secrets/spaces/{spaceId}/instances` permet de créer et lancer une instance Secret Manager.
-        L'instance est dans un état `CREATING` puis `PENDING` jusqu'à sa création, puis passe à l'état `RUNNING`.
+        - **Public**: specify `"visibility": "EXTERNAL"`
+        - **Private**: specify `"visibility": "INTERNAL"`
 
-        **Choix du type de réseau** :
-
-        - **Public** : spécifiez `"visibility": "EXTERNAL"`
-        - **Privé** : spécifiez `"visibility": "INTERNAL"`
-
-        ### Exemple de requête
+        ### Example request
 
         ```json
         {
-          "name": "mon-secret-manager",
+          "name": "my-secret-manager",
           "visibility": "EXTERNAL"
         }
         ```
 
-        ### Exemple de réponse
+        ### Example response
 
         ```json
         {
           "id": "550e8400-e29b-41d4-a716-446655440002",
-          "name": "mon-secret-manager",
+          "name": "my-secret-manager",
           "status": {
             "state": "RUNNING",
             "message": "instance is healthy"
           },
           "version": "1.0.0",
-          "host": "mon-secret-manager.secrets.eu-west-2.numspot.com",
+          "host": "my-secret-manager.secrets.eu-west-2.numspot.com",
           "visibility": "EXTERNAL"
         }
         ```
 
-        [Voir la spécification complète](/openapi/#tag/Secret/POST/secrets/spaces/{spaceId}/instances)
+        [View the full specification](/openapi/#tag/Secret/POST/secrets/spaces/{spaceId}/instances)
 
     </TabItem>
     

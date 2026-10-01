@@ -1,6 +1,5 @@
 ---
-title: Créer une key pair
-description: "Créez une key pair SSH sur Numspot pour vous connecter en toute sécurité à vos machines virtuelles, via la console, l'API ou Terraform."
+title: Create a key pair
 sidebar_position: 2
 draft: false
 ---
@@ -9,83 +8,78 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Créer une key pair
+# Create a key pair
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **compute.keypair.create**
 
 :::
 
-Vous pouvez créer une [key pair (paire de clés)](/docs/compute/keypairs/concept/) à l'aide de l'API (Application Programming Interface), de la console ou d'un outil tiers et l'utiliser pour accéder à vos [VM (Virtual Machine)](/docs/compute/concept/).
+You can create a [key pair](/docs/compute/keypairs/concept/) using the API (Application Programming Interface), the console or a third-party tool, and use it to access your [VM](/docs/compute/concept/) (Virtual Machine).
 
 :::info
-Vous pouvez aussi directement créer une key pair lorsque vous créez une VM sur la Console Numspot.
+You can also create a key pair directly when you create a VM in the Numspot console.
 :::
 
-Avec l'API ou avec la Console, vous pouvez créer une key pair au format RSA 2048 bits. La clé publique est conservée par Numspot. La clé privée doit être téléchargée et sauvegardée, et n'est jamais transmise à Numspot. Une nouvelle key pair est valable uniquement pour la région dans laquelle vous la créez.
+With the API or the console, you can create a key pair in 2048-bit RSA format. The public key is kept by Numspot. The private key must be downloaded and saved, and is never transmitted to Numspot. A new key pair is valid only for the region in which you create it.
 
-Avec un outil tiers, comme ssh-keygen par exemple, vous pouvez créer une key pair dans l'un des types suivants : RSA (2048 bits ou de préférence 4096 bits), Ed25519, et ECDSA (256 bits, 384 bits, ou 521 bits). Les formats suivants peuvent être utilisés : PEM, PKCS8, RFC4716, et OpenSSH. Vous devez ensuite importer sa clé publique dans votre compte Numspot.
+With a third-party tool, such as ssh-keygen for example, you can create a key pair in one of the following types: RSA (2048 bits or preferably 4096 bits), Ed25519, and ECDSA (256 bits, 384 bits, or 521 bits). The following formats can be used: PEM, PKCS8, RFC4716, and OpenSSH. You must then import its public key into your Numspot account.
 
 :::warning
-Seules les key pairs RSA peuvent déchiffrer le mot de passe d'une VM Windows.
+Only RSA key pairs can decrypt the password of a Windows VM.
 :::
 
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-## Console {#tabhead-console}
-
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/keypair/01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Compute → Key Pairs.", hotspot: { x: 0, y: 0.5086, w: 0.194, h: 0.0457 } },
-    { img: "/img/walkthrough/keypair/01-list.png", text: "Depuis la liste des key pairs, cliquez sur « Créer une key pair ».", hotspot: { x: 0.8302, y: 0.2206, w: 0.1378, h: 0.0741 } },
-    { img: "/img/walkthrough/keypair/02-nom.png", text: "Donnez un nom à votre key pair (unique dans votre compte, 1 à 255 caractères ASCII).", hotspot: { x: 0.2083, y: 0.3794, w: 0.5556, h: 0.1086 } },
-    { img: "/img/walkthrough/keypair/03-creer.png", text: "Cliquez sur « Créer » : la clé privée est téléchargée automatiquement. Conservez-la, elle n'est fournie qu'une seule fois.", hotspot: { x: 0.6996, y: 0.9086, w: 0.0566, h: 0.0741 } },
+    { img: "/img/walkthrough/en/keypair/list.png", text: "From the left-hand side menu, click Compute → Key Pairs.", hotspot: { x: 0, y: 0.5086, w: 0.194, h: 0.0457 } },
+    { img: "/img/walkthrough/en/keypair/list.png", text: "From the key pairs list, click “Create Key Pair”.", hotspot: { x: 0.8511, y: 0.2329, w: 0.11, h: 0.0494 } },
+    { img: "/img/walkthrough/en/keypair/create.png", text: "Give your key pair a name (unique in your account, 1 to 255 ASCII characters).", hotspot: { x: 0.2083, y: 0.3794, w: 0.5556, h: 0.1086 } },
+    { img: "/img/walkthrough/en/keypair/create.png", text: "Click “Create”: the private key is downloaded automatically. Keep it safe — it is provided only once.", hotspot: { x: 0.7012, y: 0.921, w: 0.0481, h: 0.0494 } },
   ]}
 />
 
-1. Connectez-vous sur la console Numspot.
+1. Log in to the Numspot console.
 
-2. Depuis le menu latéral gauche, cliquez sur **Compute → Key pairs**.
-
-
-3. Cliquez sur **Créer une key pair**. La page "Création d'une key pair" apparaît.
+2. From the left-hand side menu, click **Compute → Key pairs**.
 
 
-4. La fenêtre de création d'une key pair apparaît. Dans le champ "Nom", tapez un nom pour la key pair.
+3. Click **Create a key pair**. The "Creating a key pair" page appears.
+
+
+4. The key pair creation window appears. In the "Name" field, type a name for the key pair.
 
 
     :::note
-    Ce nom doit être unique dans votre compte, et contenir entre 1 et 255 caractères ASCII (hors caractères de contrôle). Les caractères accentués ne sont pas autorisés.
+    This name must be unique within your account, and contain between 1 and 255 ASCII characters (excluding control characters). Accented characters are not allowed.
     :::
 
-5. Cliquez sur **Créer**.
+5. Click **Create**.
 
 
-  La key pair est créée et un message de confirmation s'affiche en bas de la page.
-  Un fichier contenant la clé privée de la key pair est automatiquement téléchargé sur votre ordinateur.
+  The key pair is created and a confirmation message appears at the bottom of the page.
+  A file containing the private key of the key pair is automatically downloaded to your computer.
     
 
     :::warning
-    Sauvegardez ce document avec précaution, car vous aurez besoin de son contenu à chaque connexion à vos ressources. Il ne peut pas être récupéré auprès de Numspot en cas de perte.
+    Save this document carefully, as you will need its contents every time you connect to your resources. It cannot be recovered from Numspot if lost.
     :::
 
 </TabItem>
   <TabItem value="api" label="API">
 
-## API {#tabhead-api}
+The `POST /compute/spaces/{spaceId}/keypairs` command creates a key pair to use with your VM. You can use this method in two different ways:
 
+1. **Create a key pair**: In this case, Numspot creates a 2048-bit RSA key pair, stores the public key in your account and returns the private key in the call response, so that you can save it to a file. When you save the returned private key, make sure to replace the `\n` escape sequences with actual line breaks.
 
-La commande `POST /compute/spaces/{spaceId}/keypairs` crée une key pair à utiliser avec vos VM. Vous pouvez utiliser cette méthode de deux manières différentes :
+2. **Import a key pair created locally**: If you already have a key pair that you created locally with a third-party tool, you can import its public key into your account. The following key types can be imported: RSA (2048 bits or preferably 4096 bits), Ed25519, and ECDSA (256 bits, 384 bits or 521 bits). The following formats can be used: PEM, PKCS8, RFC4716 and OpenSSH.
 
-1. **Créer une key pair** : Dans ce cas, Numspot crée une key pair RSA de 2048 bits, stocke la clé publique dans votre compte et renvoie la clé privée dans la réponse de l'appel, afin que vous puissiez la sauvegarder dans un fichier. Lorsque vous enregistrez la clé privée renvoyée, assurez-vous de remplacer les séquences d'échappement `\n` par de véritables sauts de ligne.
-
-2. **Importer une key pair créée localement** : Si vous avez déjà une key pair que vous avez créée localement avec un outil tiers, vous pouvez importer sa clé publique dans votre compte. Les types de clés suivants peuvent être importés : RSA (2048 bits ou de préférence 4096 bits), Ed25519, et ECDSA (256 bits, 384 bits ou 521 bits). Les formats suivants peuvent être utilisés : PEM, PKCS8, RFC4716 et OpenSSH.
-
-[Exemple de requête : Création d'une key pair](/openapi/#tag/compute/post/compute/spaces/{spaceId}/keypairs)
+[Example request: Creating a key pair](/openapi/#tag/compute/post/compute/spaces/{spaceId}/keypairs)
   </TabItem>
 </Tabs>

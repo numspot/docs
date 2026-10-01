@@ -1,5 +1,5 @@
 ---
-title: Modifier la key pair d'une VM
+title: Modify the key pair of a VM
 sidebar_position: 5
 draft: false
 ---
@@ -7,16 +7,16 @@ draft: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Modifier la key pair d'une VM
+# Modify the key pair of a VM
 
-Vous pouvez remplacer la [key pair (paire de clés)](/docs/compute/keypairs/concept/) attribuée à une [VM (Virtual Machine)](/docs/compute/concept/).
+You can replace the [key pair](/docs/compute/keypairs/concept/) assigned to a [VM](/docs/compute/concept/) (Virtual Machine).
 
-Lorsque vous modifiez une key pair avec la Console ou avec l'API (Application Programming Interface), les métadonnées de la VM sont modifiées pour refléter la nouvelle clé publique, mais le remplacement n'est pas encore pris en compte par le système d'exploitation de la VM. Pour finaliser le changement et appliquer concrètement la nouvelle key pair, vous devez effectuer d'autres actions à l'intérieur de la VM.
+When you modify a key pair with the console or the API (Application Programming Interface), the metadata of the VM is modified to reflect the new public key, but the replacement is not yet taken into account by the operating system of the VM. To finalize the change and concretely apply the new key pair, you must perform further actions inside the VM.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following **IAM** (Identity and Access Management) permissions:
 
 - **compute.vm.update**
 
@@ -24,73 +24,63 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 <Tabs>
   <TabItem value="console" label="Console" default>
-
-## Console {#tabhead-console}
-
-:::info
-La modification de la key pair d'une VM n'est pas disponible depuis la console Numspot : la page « Modification d'une VM » affiche la key pair en lecture seule.
-
-Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
-:::
-
+    1. From the left-hand side menu, click **Compute** → **VM**;
+    2. Select the VM whose key pair you want to modify;
+    3. Click the **Modify the key pair** action;
+    4. Select the new key pair from the drop-down list;
+    5. Click **Confirm**.
   </TabItem>
   <TabItem value="api" label="API">
+To modify the public key associated with the metadata of the VM, use the `PUT /compute/spaces/{spaceId}/vms/{id}` command.
 
-## API {#tabhead-api}
+[Example request: Modifying a VM](/openapi/#tag/compute/put/compute/spaces/{spaceId}/vms/{id})
 
-Pour modifier la clé publique associée aux métadonnées de la VM, utilisez la commande `PUT /compute/spaces/{spaceId}/vms/{id}`.
+## Apply the new key pair with scripts-per-boot
 
-[Exemple de requête : Modification d'une VM](/openapi/#tag/compute/put/compute/spaces/{spaceId}/vms/{id})
+To apply the new key pair using cloud-init start-up scripts (`scripts-per-boot`), follow these steps:
 
-### Appliquer la nouvelle key pair avec scripts-per-boot
+1. **Access the VM**
 
-Pour appliquer la nouvelle key pair en utilisant les scripts de démarrage (`scripts-per-boot`) de cloud-init, suivez ces étapes :
+2. **Create a file in `/var/lib/cloud/scripts/per-boot/`**
 
-1. **Accédez à la VM**
-
-2. **Créez un fichier dans `/var/lib/cloud/scripts/per-boot/`**
-
-   Nommez ce fichier, par exemple, `update-keypair.sh`, et ajoutez le contenu suivant :
+   Name this file, for example, `update-keypair.sh`, and add the following content:
 
    ```bash
    #!/bin/bash
    curl http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key/ > /home/numspot/.ssh/authorized_keys
    ```
 
-3. **Rendez le fichier exécutable**
+3. **Make the file executable**
 
    ```bash
    sudo chmod +x /var/lib/cloud/scripts/per-boot/update-keypair.sh
    ```
 
-4. **Redémarrez la VM**
+4. **Restart the VM**
 
-   La nouvelle key pair sera appliquée après le redémarrage de la VM. Ce script télécharge la clé publique à partir des métadonnées de la VM et la place dans le fichier `authorized_keys` de l'utilisateur spécifié. Assurez-vous que le chemin `/home/numspot/.ssh/authorized_keys` correspond bien à celui de l'utilisateur pour lequel vous souhaitez ajouter la clé.
+   The new key pair will be applied after the VM restarts. This script downloads the public key from the metadata of the VM and places it in the `authorized_keys` file of the specified user. Make sure that the path `/home/numspot/.ssh/authorized_keys` corresponds to that of the user for whom you want to add the key.
 
-### Appliquer la nouvelle key pair avec cloud_init_modules
+## Apply the new key pair with cloud_init_modules
 
-Pour appliquer la nouvelle key pair en utilisant les modules `cloud_init_modules` de cloud-init, suivez ces étapes :
+To apply the new key pair using the `cloud_init_modules` modules of cloud-init, follow these steps:
 
-1. **Accédez à la VM**
+1. **Access the VM**
 
-2. **Modifiez le fichier `/etc/cloud/cloud.cfg`**
+2. **Modify the `/etc/cloud/cloud.cfg` file**
 
-   Remplacez l'entrée `- ssh` sous `cloud_init_modules:` par :
+   Replace the `- ssh` entry under `cloud_init_modules:` with:
 
    ```yaml
    - [ssh, always]
    ```
 
-   Cela indique à cloud-init de toujours reconfigurer SSH (Secure Shell) à chaque démarrage de la VM.
+   This tells cloud-init to always reconfigure SSH (Secure Shell) at each start-up of the VM.
 
-3. **Redémarrez la VM**
+3. **Restart the VM**
 
-   Cette méthode régénère la signature SSH de la VM, ce qui change son empreinte (fingerprint). Vous recevrez donc un avertissement lorsque vous vous reconnecterez à la VM, car l'empreinte de la clé SSH aura changé. Assurez-vous que vous êtes prêt à accepter ce changement lors de votre prochaine connexion.
+   This method regenerates the SSH signature of the VM, which changes its fingerprint. You will therefore receive a warning when you reconnect to the VM, because the fingerprint of the SSH key will have changed. Make sure that you are ready to accept this change on your next connection.
   </TabItem>
   <TabItem value="terraform" label="Terraform">
-
-## Terraform {#tabhead-terraform}
-
-    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
+    The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
   </TabItem>
 </Tabs>

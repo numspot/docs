@@ -1,7 +1,7 @@
 {
-    "label": "Ressources",
-    "position": 0.5,
-    "collapsed": true,
-    "collapsible": true,
-    "className": "section-title resource"
+  "label": "Resources",
+  "position": 0.5,
+  "collapsed": true,
+  "collapsible": true,
+  "className": "section-title resource"
 }

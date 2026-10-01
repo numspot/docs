@@ -30,7 +30,7 @@ const REDIRECTS_FILE = path.join(ROOT, 'src', 'plugins', 'slug-redirects.js');
 const FR_CHANGELOG = path.join(ROOT, 'docs', 'docs', 'changelog.json');
 const EN_CHANGELOG = path.join(
   ROOT,
-  'i18n/en/docusaurus-plugin-content-docs/current/docs/changelog.json'
+  'i18n/fr/docusaurus-plugin-content-docs/current/docs/changelog.json'
 );
 
 function git(args) {

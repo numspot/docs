@@ -1,7 +1,7 @@
 ---
-title: Lister les espaces assignés à un compte de service - IAM
-description: "Listez les espaces auxquels un compte de service IAM est assigné sur Numspot pour auditer ses accès, via la console ou l'API."
-sidebar_label: Lister les espaces assignés à un compte de service
+title: List the spaces assigned to a service account - IAM
+description: "List the spaces a service account is assigned to on Numspot to audit its access, via the console or the API."
+sidebar_label: List the spaces assigned to a service account
 sidebar_position: 8
 draft: false
 last_update:
@@ -12,14 +12,14 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
 
-# Lister les espaces assignés à un compte de service
+# List the spaces assigned to a service account
 
-Consultez les espaces auxquels un compte de service a accès.
+View the spaces a service account has access to.
 
 ## Permissions
 
 :::info
-Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+This action requires the following IAM (Identity and Access Management) permissions:
 
 - **iam.serviceAccount.get**
 
@@ -32,18 +32,18 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/service-account/list-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Comptes de Service.", hotspot: { x: 0, y: 0.8, w: 0.1944, h: 0.0494 } },
-    { img: "/img/walkthrough/service-account/list-01-list.png", text: "Dans le tableau « Comptes de Service », cliquez sur la clé d'accès du compte de service concerné.", hotspot: { x: 0.2687, y: 0.45, w: 0.11, h: 0.035 } },
-    { img: "/img/walkthrough/service-account/detail.png", text: "Sur la page « Détails Compte de Service », la section « Espaces assignés » liste les espaces auxquels le compte de service a accès.", hotspot: { x: 0.223, y: 0.5362, w: 0.76, h: 0.35 } },
+    { img: "/img/walkthrough/en/service-account/list-01-list.png", text: "From the left-hand side menu, click IAM → Service Accounts.", hotspot: { x: 0, y: 0.8, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/service-account/list-01-list.png", text: "In the “Service Accounts” table, click the access key of the relevant service account.", hotspot: { x: 0.2687, y: 0.45, w: 0.11, h: 0.035 } },
+    { img: "/img/walkthrough/en/service-account/detail.png", text: "On the “Service Account details” page, the “Assigned spaces” section lists the spaces the service account has access to.", hotspot: { x: 0.223, y: 0.5362, w: 0.76, h: 0.35 } },
   ]}
 />
 
-1. Dans le tableau **Comptes de Service**, cliquez sur la clé d'accès du compte de service dont vous souhaitez connaître les espaces assignés.
+1. In the **Service Accounts** table, click the access key of the service account whose assigned spaces you want to view.
 :::tip
-Vous avez la possibilité de rechercher un compte de service en particulier en utilisant le champ **Rechercher**.
+You can search for a specific service account using the **Search** field.
 :::
 
-2. Sur la page "Détails Compte de Service", la section "Espaces assignés" liste les espaces auxquels le compte de service peut accéder, avec les rôles et permissions associés à chaque espace.
+2. On the "Service Account details" page, the "Assigned spaces" section lists the spaces the service account can access, with the roles and permissions associated with each space.
 
 </TabItem>
 <TabItem value="api" label="API">
@@ -53,13 +53,13 @@ Vous avez la possibilité de rechercher un compte de service en particulier en u
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/spaces
 
-### Exemple avec curl
+### curl example
 
 ```bash
 curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/spaces'
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -74,7 +74,7 @@ curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/servic
 ```
 
 :::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+See the [API usage page](/docs/iam/concepts/api/) for details.
 :::
 
 </TabItem>
@@ -83,7 +83,7 @@ Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la m
 ## Terraform {#tabhead-terraform}
 
 
-La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/service_account).
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/service_account).
 
 </TabItem>
 </Tabs>
