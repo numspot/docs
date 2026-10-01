@@ -1,0 +1,63 @@
+---
+title: Restart a VM
+sidebar_position: 7
+draft: false
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Restart a VM
+
+You can restart a running [VM (Virtual Machine)](/docs/compute/concept/) if needed, which corresponds to restarting the operating system. During this operation, the VM restarts without following the stop and start process.
+
+## Permissions
+
+:::info
+This action requires the following **IAM** (Identity and Access Management) permissions:
+
+- **compute.vm.update**
+
+:::
+
+<Tabs>
+  <TabItem value="Console" label="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/vm/list.png", text: "From the left-hand side menu, click Compute → VMs to open the list of VMs.", hotspot: { x: 0, y: 0.4123, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/en/vm/selected.png", text: "Tick the VM to restart (multi-selection is available), then click “Restart” in the action bar.", hotspot: { x: 0.3941, y: 0.3304, w: 0.075, h: 0.0494 } },
+    { img: "/img/walkthrough/en/vm/reboot-confirm.png", text: "In the confirmation dialog, click “Restart VM”. The allocated resources are kept.", hotspot: { x: 0.6199, y: 0.6407, w: 0.0662, h: 0.0494 } },
+  ]}
+/>
+
+    1. From the left-hand side menu, click **Compute** → **VM** to access the list of VM.
+
+
+    2. Select the VM you want to restart.
+
+
+       :::info
+       Multi-selection is available.
+       :::
+
+    3. Click the **Restart** button.
+
+
+    4. When prompted to confirm the operation, select **Restart**.
+
+
+       The selected VM is restarted.
+  </TabItem>
+
+  <TabItem value="API" label="API">
+    The `PUT /compute/spaces/{spaceId}/vms/{id}/reboot` command restarts a VM. This operation sends a restart request to a specified VM. It is an asynchronous action that queues this restart request.
+
+    [Example request: Restart the VM](/openapi/#tag/compute/PUT/compute/spaces/%7BspaceId%7D/vms/%7Bid%7D/reboot)
+  </TabItem>
+
+  <TabItem value="Terraform" label="Terraform">
+    The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
+  </TabItem>
+</Tabs>

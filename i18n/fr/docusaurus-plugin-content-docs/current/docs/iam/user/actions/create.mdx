@@ -1,0 +1,209 @@
+---
+title: Créer un utilisateur - IAM
+description: "Créez un utilisateur IAM dans votre organisation Numspot, avec ou sans rôles et permissions, ou à partir du profil d'un utilisateur existant, via la console ou l'API."
+sidebar_label: Créer un utilisateur
+sidebar_position: 2
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Créer un utilisateur
+
+Créez un utilisateur au sein de votre organisation Numspot. L'utilisateur accède ensuite à la console et à l'API pour gérer les ressources des espaces qui lui sont assignés.
+
+Lors de la création, vous choisissez d'attribuer immédiatement des rôles et des permissions à l'utilisateur, ou de créer son compte sans droits. Vous pouvez également créer un utilisateur à partir du profil d'un utilisateur existant : le nouvel utilisateur hérite alors des mêmes espaces, rôles et permissions.
+
+Pour l'API, il faut préalablement créer un compte de service.
+
+Après la création, [générez un lien d'activation](/docs/iam/user/actions/generate/) afin que l'utilisateur définisse son mot de passe et configure son authentification à deux facteurs.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **iam.user.create**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/user/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Utilisateurs.", hotspot: { x: 0, y: 0.7481, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/user/create-01-list.png", text: "Dans le menu IAM → Utilisateurs, cliquez sur « Créer un utilisateur ».", hotspot: { x: 0.8336, y: 0.2296, w: 0.1275, h: 0.0494 } },
+    { img: "/img/walkthrough/user/create-02-form.png", text: "Saisissez le prénom, le nom et l'adresse e-mail, puis cliquez sur « Créer et attribuer des rôles et permissions » ou sur « Créer l'utilisateur sans rôles et permissions ».", hotspot: { x: 0.5417, y: 0.921, w: 0.2076, h: 0.0494 } },
+    { img: "/img/walkthrough/user/create-03-spaces.png", text: "Étape « Espaces » : cochez les espaces à associer à l'utilisateur, puis cliquez sur « Assigner les espaces et continuer ».", hotspot: { x: 0.5812, y: 0.9204, w: 0.1681, h: 0.0494 } },
+    { img: "/img/walkthrough/user/create-03-roles.png", text: "Étape « Rôles » : sélectionnez l'onglet « Organisation » ou l'espace concerné, cochez les rôles, puis cliquez sur « Enregistrer et continuer ».", hotspot: { x: 0.8442, y: 0.921, w: 0.1224, h: 0.0494 } },
+    { img: "/img/walkthrough/user/create-03-permissions.png", text: "Étape « Permissions » : cochez les permissions à attribuer, puis cliquez sur « Enregistrer et quitter ».", hotspot: { x: 0.8571, y: 0.9754, w: 0.1096, h: 0.0494 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, cliquez sur **IAM** → **Utilisateurs**.
+2. Cliquez sur le bouton **Créer un utilisateur**.
+3. Renseignez le prénom, le nom et l'adresse e-mail de l'utilisateur, puis cliquez sur **Créer et attribuer des rôles et permissions**, ou sur **Créer l'utilisateur sans rôles et permissions** :
+   - **Créer l'utilisateur sans rôles et permissions** crée immédiatement le compte et vous redirige vers la page "Détails utilisateur" ; vous pourrez attribuer des droits ultérieurement ;
+   - **Créer et attribuer des rôles et permissions** ouvre l'assistant de gestion des droits, composé de trois étapes : "Espaces", "Rôles" et "Permissions".
+4. Étape "Espaces" : cochez les espaces à associer à l'utilisateur, puis cliquez sur **Assigner les espaces et continuer**. Vous pouvez aussi cliquer sur **Passer l'étape**.
+5. Étape "Rôles" : sélectionnez l'onglet "Organisation" ou l'espace concerné, cochez les rôles à attribuer, puis cliquez sur **Enregistrer et continuer**. Vous pouvez aussi cliquer sur **Ne pas attribuer de rôles** ou sur **Passer l'étape**.
+6. Étape "Permissions" : sélectionnez l'onglet "Organisation" ou l'espace concerné, cochez les permissions à attribuer, puis cliquez sur **Enregistrer et quitter**. Vous pouvez aussi cliquer sur **Ne pas attribuer de permissions** ou sur **Passer l'étape**.
+7. Un message de confirmation s'affiche et vous êtes redirigé vers la page "Détails utilisateur".
+
+Vous pouvez créer un utilisateur à partir du profil d'un utilisateur existant :
+
+1. Depuis la page "Détails utilisateur", cliquez sur **Créer un utilisateur à partir de ce profil**.
+2. Renseignez le prénom, le nom et l'adresse e-mail du nouvel utilisateur.
+3. Le nouvel utilisateur hérite des mêmes espaces, rôles et permissions que l'utilisateur initial.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+### Créer un utilisateur dans une organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/POST/iam/organisations/{organisationId}/users
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/users' \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "email": "john.smith@acme.org",
+  "firstname": "",
+  "lastname": ""
+}'
+```
+
+### Réponse
+
+```json
+{
+  "email": "john.smith@acme.org",
+  "firstname": "…",
+  "lastname": "…",
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "active": true,
+  "createdOn": "2018-11-13T20:20:39+00:00"
+}
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+### Créer un utilisateur dans un espace
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/POST/iam/spaces/{spaceId}/users
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/users' \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "email": "john.smith@acme.org",
+  "firstname": "",
+  "lastname": ""
+}'
+```
+
+### Réponse
+
+```json
+{
+  "email": "john.smith@acme.org",
+  "firstname": "…",
+  "lastname": "…",
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "active": true,
+  "createdOn": "2018-11-13T20:20:39+00:00"
+}
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+### Attribuer des rôles et des permissions à un utilisateur dans une organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PATCH/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}' \
+  --request PATCH \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "add": {
+    "roles": [
+      ""
+    ],
+    "permissions": [
+      ""
+    ]
+  },
+  "delete": {
+    "roles": [
+      ""
+    ],
+    "permissions": [
+      ""
+    ]
+  }
+}'
+```
+
+### Attribuer des rôles et des permissions à un utilisateur dans un espace
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PATCH/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}' \
+  --request PATCH \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "add": {
+    "roles": [
+      ""
+    ],
+    "permissions": [
+      ""
+    ]
+  },
+  "delete": {
+    "roles": [
+      ""
+    ],
+    "permissions": [
+      ""
+    ]
+  }
+}'
+```
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/user).
+
+</TabItem>
+</Tabs>

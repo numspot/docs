@@ -1,0 +1,101 @@
+---
+title: Consulter la piste d'audit DLP - DLP managé
+sidebar_label: Consulter la piste d'audit DLP
+sidebar_position: 15
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Consulter la piste d'audit DLP
+
+Consultez la piste d'audit pour suivre toutes les actions d'administration effectuées sur le service [DLP](/docs/managed-services/dlp/concepts). Chaque action — création, modification, suppression de [règles DLP](/docs/managed-services/dlp/concepts), [policies DLP](/docs/managed-services/dlp/concepts), [détecteurs DLP](/docs/managed-services/dlp/concepts), publication de [ruleset](/docs/managed-services/dlp/concepts) et gestion des utilisateurs — est enregistrée avec l'utilisateur, l'horodatage et les détails de l'action.
+
+## Permissions
+
+:::info
+Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+
+- **viewer**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Dans la console DLP, cliquez sur Audit Logs dans le menu latéral.", hotspot: { x: 0.006, y: 0.530, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/audit-logs.png", text: "Utilisez le filtre pour affiner la recherche par type d'action.", hotspot: { x: 0.201, y: 0.159, w: 0.122, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/audit-logs.png", text: "Consultez la liste des événements d'audit.", hotspot: { x: 0.201, y: 0.349, w: 0.786, h: 0.300 } },
+  ]}
+/>
+
+1. Dans la console [DLP](/docs/managed-services/dlp/concepts), cliquez sur **Audit Logs** dans le menu latéral.
+
+### Filtrer les événements
+
+Utilisez les filtres disponibles pour affiner la recherche :
+
+- **Action** : filtrer par type d'action — `rule_create`, `rule_update`, `rule_delete`, `ruleset_publish`, `ruleset_rollback`, `detector_create`, `detector_update`, `detector_delete`, `policy_create`, `policy_update`, `policy_delete`, `user_create`, `user_update`, `user_delete`, `user_password_reset` ;
+- **Time range** : filtrer par période.
+
+### Détails d'un événement
+
+Chaque événement affiche :
+
+- l'utilisateur ayant effectué l'action ;
+- le type d'action ;
+- la cible de l'action (règle, détecteur, policy, utilisateur, ruleset) ;
+- le nom de la cible ;
+- les détails de l'action ;
+- l'horodatage.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+La requête `GET /api/v1/audit` permet de consulter la piste d'audit.
+
+### Paramètres de requête
+
+| Paramètre | Description |
+|-----------|-------------|
+| `action` | Filtrer par type d'action |
+| `time_start` | Date de début de la période (ISO 8601) |
+| `time_end` | Date de fin de la période (ISO 8601) |
+
+### Exemple de réponse
+
+```json
+{
+  "entries": [
+    {
+      "id": "audit-001",
+      "user_name": "admin",
+      "action": "rule_create",
+      "event": "Created rule block-aws-keys",
+      "target_type": "rule",
+      "target_name": "block-aws-keys",
+      "details": "Platform: mistral-platform, Action: block",
+      "created_at": "2026-08-27T10:00:00Z"
+    },
+    {
+      "id": "audit-002",
+      "user_name": "admin",
+      "action": "ruleset_publish",
+      "event": "Published ruleset v3",
+      "target_type": "ruleset",
+      "target_name": "v3",
+      "details": "Description: Ajout de la règle de blocage des clés AWS",
+      "created_at": "2026-08-27T10:30:00Z"
+    }
+  ],
+  "total": 2
+}
+```
+
+</TabItem>
+</Tabs>

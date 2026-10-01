@@ -1,0 +1,62 @@
+---
+title: Consulter les informations de vos client gateways
+description: Obtenez des informations sur une ou plusieurs de vos client gateways.
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Consulter les informations de vos client gateways
+
+Vous pouvez obtenir des informations sur une ou plusieurs de vos [client gateway (passerelles client)](/docs/connectivity/vpn/client-gateway/concepts/).
+
+Par défaut, cette action décrit toutes vos client gateways.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **connectivity.bridge.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+
+1. Dans la console, naviguez vers **Réseau** → **VPC** → **Client Gateways**.
+2. La liste de toutes vos client gateways s'affiche avec leurs informations principales :
+   - ID
+   - Adresse IP (Internet Protocol) publique
+   - ASN (Autonomous System Number)
+   - État
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `GET /connectivity/spaces/{spaceId}/clientGateways` permet de lister les client gateways.
+
+[Exemple de requête : Lister toutes les Client Gateways](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/clientGateways)
+
+La commande `GET /connectivity/spaces/{spaceId}/clientGateways/{id}` permet de récupérer des informations concernant une client gateway.
+
+[Exemple de requête : Récupérer les informations d'une Client Gateway](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/clientGateways/{id})
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/client_gateway).
+
+</TabItem>
+</Tabs>

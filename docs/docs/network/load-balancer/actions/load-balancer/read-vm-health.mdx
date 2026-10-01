@@ -1,0 +1,42 @@
+---
+title: View the status of the VM of a load balancer - Numspot
+sidebar_label: View the status of the VM of a load balancer
+sidebar_position: 7
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# View the status of the VM of a load balancer
+
+You can view the health status of the backend [VM (Virtual Machine)](/docs/compute/concept/) registered with a [load balancer](/docs/network/load-balancer/concepts/) to check their availability to receive traffic.
+
+## Permissions
+
+:::info
+This action requires the following **IAM** (Identity and Access Management) permissions:
+
+- **compute.loadBalancer.get**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
+2. Click the name of the load balancer for which you want to view the status of the VM.
+3. In the "Backend VM" tab, the status of each VM is displayed in the "Health Status" column.
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+The `GET /compute/spaces/{spaceId}/loadBalancers/{id}/vmsHealth` command lists the status of one or more backend VM registered with a specified load balancer.
+
+[Example request: List the status of a VM of a load balancer](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/loadBalancers/{id}/vmsHealth)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
+
+  </TabItem>
+</Tabs>

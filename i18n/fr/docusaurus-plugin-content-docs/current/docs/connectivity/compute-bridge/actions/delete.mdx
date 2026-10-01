@@ -1,0 +1,49 @@
+---
+title: Supprimer un Compute Bridge
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer un Compute Bridge
+
+Vous pouvez supprimer un bridge pour mettre fin à la communication entre deux [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) connectés.
+
+La possibilité de supprimer un bridge dépend de son état :
+
+* Si la connexion est à l'état `active`, il peut être supprimé.
+* Si elle est dans l'état `failed`, il ne peut pas être supprimé.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **connectivity.bridge.delete**
+
+:::
+
+<Tabs>
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+
+La commande `DELETE /connectivity/spaces/{spaceId}/computeBridges/{id}` supprime le bridge. <br/>
+Si le bridge est dans l'état "Actif", il peut être supprimé.<br/>
+S'il est dans l'état "Échoué", il ne peut pas être supprimé.
+
+[Exemple de requête : Suppression d'un Compute Bridge](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/computeBridges/{id})
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/compute_bridge).
+
+</TabItem>
+</Tabs>

@@ -1,0 +1,62 @@
+---
+title: Create a route for a VPN connection
+description: Add a static route to a VPN connection to route traffic between the virtual gateway and the client gateway.
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Create a route for a VPN connection
+
+You can create a static route for a VPN (Virtual Private Network) connection.
+
+This allows you to route traffic between the [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/) and the [client gateway](/docs/connectivity/vpn/client-gateway/concepts/). You must then add the new route to the [route table](/docs/network/route-table/concepts/).
+
+:::warning
+This action applies to static routing only. If your VPN connection uses dynamic routing, you do not need to create new routes.
+:::
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **connectivity.vpnconnection.update**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+:::warning
+**Before you begin:** Create a VPN connection.
+:::
+
+1. In the **VPN Connections** dashboard, click the ID of the VPN connection for which you want to create a route.
+   The VPN connections pane appears.
+2. In the "Route VPN" tab, click **Create a route for VPN**.
+   The "Create a route for a VPN Connection" dialog box appears.
+3. In the "Destination IP range" field, enter the IP (Internet Protocol) range of your corporate network, in CIDR (Classless Inter-Domain Routing) notation.
+4. Click **Create**.
+   A static route is created for the selected VPN connection.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+:::info
+Before you begin: Create a VPN connection.
+:::
+
+The `POST /connectivity/spaces/{spaceId}/vpnConnections/{id}/routes` command creates a static route to a VPN connection. This allows you to select the network flows sent by the virtual gateway to the target VPN connection.
+
+[Example request: Creating a route to a VPN connection](/openapi/#tag/connectivity/POST/connectivity/spaces/{spaceId}/vpnConnections/{id}/routes)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection_route).
+
+</TabItem>
+</Tabs>

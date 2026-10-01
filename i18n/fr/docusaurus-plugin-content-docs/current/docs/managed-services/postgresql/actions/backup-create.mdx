@@ -1,0 +1,91 @@
+---
+title: Créer un backup PostgreSQL - PostgreSQL managé
+sidebar_label: Créer un backup PostgreSQL
+sidebar_position: 8
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Créer un backup PostgreSQL
+
+Vous pouvez créer un backup manuel (on-demand) de votre [cluster PostgreSQL](/docs/managed-services/postgresql/concepts/) à tout moment.
+
+:::warning Prérequis
+L'archivage WAL (Write-Ahead Logging) doit être activé sur le cluster pour pouvoir créer des backups on-demand.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+
+- `postgresql.cluster.create`
+
+:::
+<Tabs>
+
+{/* </TabItem> */}
+
+{/* </TabItem> */}
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+    La requête `POST /postgresql/spaces/{spaceId}/clusters/{clusterId}/backups` permet de déclencher un backup on-demand d'un cluster PostgreSQL.
+
+### Paramètres
+
+    | Paramètre | Type | Requis | Description |
+    |-----------|------|--------|-------------|
+    | `spaceId` | UUID (Universally Unique Identifier) | Oui | Identifiant de l'espace |
+    | `clusterId` | UUID | Oui | Identifiant unique du cluster |
+
+### Corps de la requête
+
+    ```json
+    {
+      "name": "mon-backup",
+      "target": "PREFER_STANDBY"
+    }
+    ```
+
+    | Champ | Type | Requis | Description |
+    |-------|------|--------|-------------|
+    | `name` | string | Non | Nom du backup (max 63 caractères, format slug strict) |
+    | `target` | string | Non | Nœud cible pour l'exécution du backup. Valeurs possibles : `PREFER_STANDBY` (par défaut), `STANDBY`, `PRIMARY` |
+
+### Valeurs du champ target
+
+    | Valeur | Description |
+    |--------|-------------|
+    | `PREFER_STANDBY` | Exécute le backup depuis un nœud standby s'il est disponible, sinon depuis le primary (comportement par défaut) |
+    | `STANDBY` | Exécute le backup uniquement depuis un nœud standby. Échoue si aucun standby n'est disponible |
+    | `PRIMARY` | Exécute le backup uniquement depuis le nœud primary |
+
+### Exemple de réponse
+
+    ```json
+    {
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "clusterId": "e592a4f6-2e49-46e7-b6d0-248a7711197a",
+      "name": "mon-backup",
+      "type": "ON_DEMAND",
+      "status": {
+        "state": "CREATING",
+        "message": "Backup request submitted"
+      },
+      "startedAt": null,
+      "completedAt": null
+    }
+    ```
+
+    Le backup passe par les états suivants :
+    1. `CREATING` — demande soumise
+    2. `RUNNING` — backup en cours
+    3. `SUCCEEDED` — backup terminé avec succès
+    4. `FAILED` — backup terminé en erreur
+
+    [Voir la spécification complète](/openapi/#tag/postgresql/POST/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups)
+</TabItem>
+</Tabs>

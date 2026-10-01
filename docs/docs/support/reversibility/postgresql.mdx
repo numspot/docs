@@ -1,0 +1,57 @@
+---
+title: Reversibility - managed PostgreSQL
+sidebar_label: Reversibility of managed PostgreSQL
+description: Information about the reversibility of the managed PostgreSQL service
+sidebar_position: 3
+draft: false
+---
+
+# Reversibility of managed PostgreSQL
+
+The managed PostgreSQL service is designed to guarantee reversibility, that is, the ability for the customer to retrieve their data and migrate to another solution without lock-in.
+
+## Exportable data
+
+All data stored in a [PostgreSQL cluster](/docs/managed-services/postgresql/concepts/) can be exported using the standard tools of the PostgreSQL ecosystem.
+
+## Reversibility tools
+
+### Logical export with pg_dump
+
+Use `pg_dump` to export a database in SQL format:
+
+```bash
+pg_dump -h <host> -U <user> -d <database> -F c -f backup.dump
+```
+
+To export all databases:
+
+```bash
+pg_dumpall -h <host> -U <user> -f full_backup.sql
+```
+
+### Restore
+
+Restore the data to an external PostgreSQL server:
+
+```bash
+pg_restore -h <new_host> -U <user> -d <database> backup.dump
+```
+
+### Numspot backup
+
+The [backups](/docs/managed-services/postgresql/actions/backup-create/) created through the managed service are compatible with standard PostgreSQL versions.
+
+## Open formats
+
+- The data is in the native PostgreSQL format, compatible with any PostgreSQL distribution.
+- The backups are in the standard PostgreSQL format (`pg_dump` / `pg_restore`).
+- The connection protocols are standard (PostgreSQL wire protocol).
+
+## Exit procedure
+
+1. Export the data using `pg_dump` or `pg_dumpall`.
+2. Deploy a PostgreSQL server on the new platform.
+3. Restore the data using `pg_restore` or `psql`.
+4. Update the connection strings of the applications.
+5. Check the consistency of the restored data.

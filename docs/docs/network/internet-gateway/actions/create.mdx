@@ -1,0 +1,76 @@
+---
+title: Create an internet gateway - Numspot
+sidebar_label: Create an internet gateway
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Create an internet gateway
+
+You can create an [internet gateway](/docs/network/internet-gateway/concepts/) that you can then attach to a [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud) to connect [VM](/docs/compute/concept/) (Virtual Machine) of one or more subnets directly to the Internet.
+
+To do so, you must also add a route to the [route table](/docs/network/route-table/concepts/) of these subnets directing Internet traffic to the internet gateway, and update your [security groups](/docs/compute/security-groups/concepts/concept-sg/). For more information, see the [Tutorial: Set up a direct connection between the VM of a VPC and the Internet ↗](/docs/network/internet-gateway/actions/administration/tutorial).
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.internetGateway.create**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/internet-gateway/list.png", text: "From the left-hand side menu, click Network → VPC → Internet Gateways.", hotspot: { x: 0, y: 0.6358, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/internet-gateway/list.png", text: "From the internet gateways list, click “Create an Internet Gateway”.", hotspot: { x: 0.7951, y: 0.2329, w: 0.166, h: 0.0494 } },
+    { img: "/img/walkthrough/en/internet-gateway/create.png", text: "Give your internet gateway a name. You can also attach it to a VPC right away.", hotspot: { x: 0.2083, y: 0.4049, w: 0.5556, h: 0.084 } },
+    { img: "/img/walkthrough/en/internet-gateway/create.png", text: "Click “Create”.", hotspot: { x: 0.6394, y: 0.6309, w: 0.0468, h: 0.0494 } },
+  ]}
+/>
+
+
+1. Log in to the Numspot console.
+2. From the left-hand side menu, click **Network** → **VPC** → **Internet Gateways**.
+
+
+3. Click the **Create an Internet Gateway** button.
+
+
+A new "Create an Internet Gateway" window appears.
+
+
+4. In the "Name" field, enter a name for the internet gateway.
+
+:::warning
+This action adds a Name tag of up to 255 characters. You can use any characters, including accented letters.
+:::
+
+5. Click **Create the internet gateway**.
+
+A confirmation message appears at the bottom of the page indicating that the internet gateway has been created.
+
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `POST /compute/spaces/{spaceId}/internetGateways` command creates an internet gateway that you can use with a VPC.
+
+An internet gateway allows VM launched in a network to connect to the Internet. It enables the routing of inbound and outbound Internet traffic as well as the management of public IP.
+
+[Example request: Creating an internet gateway ↗](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/internetGateways)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/internet_gateway).
+
+</TabItem>
+</Tabs>

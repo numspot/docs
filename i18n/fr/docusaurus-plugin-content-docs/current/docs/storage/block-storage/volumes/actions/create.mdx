@@ -1,0 +1,88 @@
+---
+title: Créer un volume
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Créer un volume
+
+Vous pouvez créer des `volumes` que vous pouvez attacher à des [VM (Virtual Machine)](/docs/compute/concept/) créées au sein de la même Sous-région. Les `volumes` vous permettent d'ajouter de la capacité de stockage à une VM si le `volume` système a atteint sa capacité de stockage maximum, ou de séparer le stockage de vos données des fichiers du système d'exploitation de la VM.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.blockStorage.create**
+
+:::
+
+<Tabs>
+<TabItem value="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/volume/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Stockage → Block Storage → Volumes.", hotspot: { x: 0, y: 0.579, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/volume/create-01-list.png", text: "Depuis Stockage → Block Storage → Volumes, cliquez sur « Créer un Volume ».", hotspot: { x: 0.845, y: 0.2329, w: 0.1161, h: 0.0494 } },
+    { img: "/img/walkthrough/volume/create-02-form.png", text: "Choisissez la sous-région, saisissez un nom, la taille et le type de volume, puis cliquez sur « Créer le Volume ».", hotspot: { x: 0.24, y: 0.09, w: 0.36, h: 0.85 } },
+  ]}
+/>
+
+1. Connectez-vous sur la console Numspot. 
+2. Depuis le menu latéral gauche, cliquez sur **Storage** → **[Block Storage](/docs/storage/block-storage/concepts/)** → **Volumes**. 
+3. Cliquez sur **Créer un volume**. La page "Création d'un volume" apparaît. 
+4. Dans la liste "Sous-région (Availability zone)", sélectionnez la Sous-région dans laquelle vous souhaitez créer le `volume`. 
+5. Dans le champ "Nom", tapez un nom pour le `volume`. 
+   :::info 
+   Cette action ajoute un tag Name de 255 caractères maximum. Vous pouvez utiliser tous les caractères, y compris les lettres accentuées. 
+   ::: 
+6. Dans le champ "Taille", tapez la taille du `volume`. 
+   :::warning 
+   La taille minimale autorisée pour un `volume` est de : 
+   - 1 Gio pour 'standard' ; 
+   - 1 Gio pour 'gp2' ; 
+   - 4 Gio pour 'io1'.
+   
+   La taille maximale autorisée pour un `volume` est 14901 Gio. 
+   ::: 
+7. Dans la liste "Type", sélectionnez un type de `volume` :
+     - `standard` pour un `volume` Magnetic ; 
+     - `io1` pour un `volume` Enterprise ; 
+     - `gp2` pour un `volume` Performance. 
+8. (Volumes 'io1' uniquement) Dans le champ "IOPS", tapez le nombre d'IOPS (Input/Output Operations Per Second) pour le `volume` ou sélectionnez-le en utilisant les flèches. 
+   :::warning 
+   Le nombre maximal d'IOPS autorisé pour les `volumes` io1 est de 13 000, avec un ratio de performance maximum de 300 IOPS par gibioctet. 
+   ::: 
+9. Dans le champ "Nombre", tapez le nombre de `volumes` que vous souhaitez créer. 
+10. Dans la liste "Snapshot", laissez "Aucun" sélectionné. 
+11. Cliquez sur **Créer un volume**.  
+    Le `volume` est créé. 
+
+</TabItem>
+<TabItem value="API">
+
+## API {#tabhead-api}
+
+
+La commande `POST /compute/spaces/{spaceId}/volumes` permet de créer un `volume` de type block storage dans une région spécifiée. Les `volumes` de type block storage peuvent être attachés à une VM dans la même sous-région. Vous pouvez créer un `volume` vide ou restaurer un `volume` à partir d'un snapshot existant.
+
+Vous pouvez créer les types de `volumes` suivants : Enterprise (`io1`) pour les `volumes` SSD à IOPS provisionnés, Performance (`gp2`) pour les `volumes` SSD à usage général, ou Magnetic (`standard`) pour les `volumes` magnétiques.
+
+[Exemple de requête : Création d'un Volume ↗](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/volumes)
+
+</TabItem>
+<TabItem value="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/volume).
+
+</TabItem>
+</Tabs>

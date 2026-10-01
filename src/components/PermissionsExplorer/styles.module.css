@@ -1,0 +1,327 @@
+/* Permissions <-> APIs explorer: search + accordion cards, matching the
+   docs site look (light theme, method badges like the OpenAPI pages). */
+
+.explorer {
+  --pex-blue: #1c6ef2;
+  --pex-border: #e3e8ee;
+  margin: 1.5rem 0;
+}
+
+/* ——— Search + autocomplete ——— */
+
+.searchBox {
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.searchBox input {
+  width: 100%;
+  font-size: 1rem;
+  padding: 0.65rem 2.4rem 0.65rem 2.5rem;
+  border: 1.5px solid #cdd6de;
+  border-radius: 10px;
+  outline: none;
+  background: var(--ifm-background-color, #fbfcfe);
+  color: inherit;
+}
+
+.searchBox input:focus {
+  border-color: var(--pex-blue);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(28, 110, 242, 0.12);
+}
+
+.searchIcon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #7b8a97;
+  pointer-events: none;
+}
+
+.clearButton {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: #eef2f6;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  color: #5b6b7a;
+  font-size: 0.8rem;
+  line-height: 1;
+  padding: 0;
+}
+
+.suggest {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #d7dee6;
+  border-radius: 10px;
+  box-shadow: 0 12px 28px rgba(4, 19, 29, 0.12);
+  z-index: 200;
+  max-height: 380px;
+  overflow: auto;
+}
+
+.suggestGroup {
+  padding: 8px 14px 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #7b8a97;
+}
+
+.suggestItem {
+  padding: 8px 14px;
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.suggestItemActive,
+.suggestItem:hover {
+  background: #f0f6ff;
+}
+
+.suggestLabel {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.86rem;
+}
+
+.suggestSub {
+  color: #7b8a97;
+  font-size: 0.8rem;
+  margin-left: auto;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ——— Stats + empty state ——— */
+
+.stats {
+  color: #7b8a97;
+  font-size: 0.88rem;
+  margin: 0.25rem 0 1rem;
+}
+
+.empty {
+  color: #b3453e;
+  background: #fdf0ef;
+  border: 1px solid #f3cfcb;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+}
+
+/* ——— Domain heading ——— */
+
+.domain {
+  margin: 1.8rem 0 0.8rem;
+  font-size: 1.2rem;
+  border-bottom: 2px solid #e8edf2;
+  padding-bottom: 0.4rem;
+}
+
+/* ——— Permission cards ——— */
+
+.card {
+  border: 1px solid var(--pex-border);
+  border-radius: 10px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+
+.summary {
+  cursor: pointer;
+  padding: 0.85rem 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fbfcfe;
+  font-weight: 600;
+  list-style: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary::after {
+  content: '▸';
+  margin-left: auto;
+  color: #7b8a97;
+  transition: transform 0.15s;
+}
+
+.card[open] .summary::after {
+  transform: rotate(90deg);
+}
+
+.permLabel {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.95em;
+  background: #eef2f6;
+  border: 1px solid #e0e6ec;
+  border-radius: 6px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+.count {
+  color: #7b8a97;
+  font-weight: 400;
+  font-size: 0.85rem;
+  margin-left: 0.35rem;
+}
+
+.cardBody {
+  padding: 0.2rem 1.1rem 1rem;
+}
+
+.cardDesc {
+  color: #5b6b7a;
+  margin: 0.2rem 0 0.75rem;
+  font-weight: 400;
+  font-size: 0.92rem;
+}
+
+.endpointList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.endpoint {
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
+  padding: 0.45rem 0;
+  border-bottom: 1px dashed #edf1f5;
+  flex-wrap: wrap;
+}
+
+.endpoint:last-child {
+  border-bottom: 0;
+}
+
+.method {
+  display: inline-block;
+  min-width: 52px;
+  text-align: center;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fff;
+  border-radius: 5px;
+  padding: 3px 0;
+}
+
+.methodGET {
+  background: #15803d;
+}
+
+.methodPOST {
+  background: #1d4ed8;
+}
+
+.methodPUT {
+  background: #b45309;
+}
+
+.methodDELETE {
+  background: #b91c1c;
+}
+
+.methodPATCH {
+  background: #6d28d9;
+}
+
+.path {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.85rem;
+  word-break: break-all;
+}
+
+.endpointSummary {
+  color: #5b6b7a;
+  font-size: 0.88rem;
+}
+
+mark {
+  background: #fff3bf;
+  border-radius: 3px;
+  padding: 0 1px;
+}
+
+/* ——— Dark mode ——— */
+
+[data-theme='dark'] .searchBox input {
+  background: var(--ifm-background-color);
+  border-color: #3a4650;
+}
+
+[data-theme='dark'] .searchBox input:focus {
+  background: #10151a;
+}
+
+[data-theme='dark'] .suggest {
+  background: #1b2027;
+  border-color: #3a4650;
+}
+
+[data-theme='dark'] .suggestItem:hover,
+[data-theme='dark'] .suggestItemActive {
+  background: #24303c;
+}
+
+[data-theme='dark'] .permLabel {
+  background: #262e36;
+  border-color: #35404a;
+}
+
+[data-theme='dark'] .summary {
+  background: #171d23;
+}
+
+[data-theme='dark'] .cardBody {
+  background: inherit;
+}
+
+[data-theme='dark'] .endpoint {
+  border-bottom-color: #262e36;
+}
+
+[data-theme='dark'] .searchIcon,
+[data-theme='dark'] .count,
+[data-theme='dark'] .suggestGroup {
+  color: #8a97a3;
+}
+
+[data-theme='dark'] .endpointSummary,
+[data-theme='dark'] .cardDesc {
+  color: #9aa7b2;
+}
+
+[data-theme='dark'] .searchIcon,
+[data-theme='dark'] .clearButton {
+  color: #8a97a3;
+}
+
+[data-theme='dark'] .clearButton {
+  background: #2a323a;
+}
+
+[data-theme='dark'] mark {
+  background: #6b5b12;
+  color: inherit;
+}

@@ -1,0 +1,62 @@
+---
+title: Lister les registries Harbor
+sidebar_label: Lister les registries
+sidebar_position: 3.5
+draft: false
+last_update:
+  date: 2026-09-30
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Lister les registries
+
+Vous pouvez lister l'ensemble des registries Harbor de votre Container Registry au sein de votre espace.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **registry.instance.get**
+
+:::
+<Tabs>
+
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+    La requête `GET /registry/spaces/{spaceId}/registries` permet de lister les registries Harbor d'un espace.
+
+### Paramètres
+
+| Paramètre | Type   | Requis | Description                      |
+| --------- | ------ | ------ | -------------------------------- |
+| spaceId   | string | Oui    | Identifiant de l'espace Numspot. |
+
+### Exemple de réponse
+
+    ```json
+    {
+      "items": [
+        {
+          "id": "550e8400-e29b-41d4-a716-446655440002",
+          "name": "mon-container-registry",
+          "status": {
+            "state": "RUNNING",
+            "message": "instance is healthy"
+          },
+          "version": "2.14",
+          "host": "reg-123e4567.space-123e4567.hcp.cloudgouv-eu-west-1.numspot.com",
+          "visibility": "EXTERNAL"
+        }
+      ],
+      "totalSize": 1
+    }
+    ```
+
+    [Voir la spécification complète](/openapi/#tag/registry/GET/registry/spaces/{spaceId}/registries)
+</TabItem>
+</Tabs>

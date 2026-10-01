@@ -1,0 +1,80 @@
+---
+title: Supprimer une nat gateway - Numspot
+sidebar_label: Supprimer une nat gateway
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer une nat gateway
+
+Vous pouvez supprimer une [nat gateway (passerelle NAT)](/docs/network/nat/concepts/) dont vous n'avez plus besoin.
+
+Cette action dissocie l'IP publique de la nat gateway, mais ne libère pas cette IP publique de votre compte. Les routes liées à cette nat gateway ne sont pas supprimées de vos [route tables (tables de routage)](/docs/network/route-table/concepts/).
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.natGateway.delete**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+
+Vous pouvez supprimer une nat gateway de façon unitaire ou en supprimer plusieurs en une seule action.
+
+### Supprimer une nat gateway
+
+1.  Dans le menu de gauche, cliquez sur **Réseau** → **[VPC](/docs/network/vpc/concepts/)** → **NAT Gateways**.
+    ![menu_vpc.png](/img/console/network/vpc/menu_vpc.png)
+2.  Identifiez la nat gateway que vous souhaitez supprimer, puis depuis la liste des actions, cliquez sur **Supprimer**.
+    ![actions_nat.png](/img/console/network/vpc/nat/actions_nat.png)  
+    Une nouvelle boîte de dialogue **Suppression d'une NAT Gateway** apparaît.
+    ![delete_one_nat_form.png](/img/console/network/vpc/nat/delete_one_nat_form.png)
+3.  Pour continuer, une confirmation forte est nécessaire. Saisissez le nom de la ressource à supprimer dans le champ correspondant.
+4.  Cliquez sur **Supprimer**. La nat gateway est supprimée.  
+    Un message de confirmation "La NAT Gateway a été supprimée" apparaît.
+    ![delete_one_nat_success.png](/img/console/network/vpc/nat/delete_one_nat_success.png)  
+    
+
+### Supprimer plusieurs nat gateways
+
+1.  Dans le menu de gauche, cliquez sur **Réseau** → **VPC** → **NAT Gateways**.
+    ![menu_vpc.png](/img/console/network/vpc/menu_vpc.png)
+2.  Sélectionnez les nat gateways que vous souhaitez supprimer, puis cliquez sur **Supprimer**.
+    ![NAT_selection.png](/img/console/network/vpc/nat/NAT_selection.png)  
+    Une nouvelle boîte de dialogue **Suppression de NAT Gateways** apparaît.
+    ![delete_multiple_nat_form.png](/img/console/network/vpc/nat/delete_multiple_nat_form.png)
+3.  Pour continuer, une confirmation forte est nécessaire. Saisissez le terme **Supprimer** dans le champ correspondant.
+4.  Cliquez sur **Supprimer**. Les nat gateways sont supprimées.  
+    Un message de confirmation "Les NAT Gateways ont été supprimées" apparaît.
+    ![delete_multiple_nat_success.png](/img/console/network/vpc/nat/delete_multiple_nat_success.png)
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `DELETE /compute/spaces/{spaceId}/natGateways/{id}` supprime une nat gateway spécifiée.
+Cette action dissocie l'IP publique de la nat gateway, mais ne libère pas cette adresse IP publique de votre compte.
+Toutefois, elle ne supprime pas les routes de la nat gateway dans vos tables de routage.
+
+[Exemple de requête : Suppression d'une nat gateway](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/natGateways/{id})
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/nat_gateway).
+
+  </TabItem>
+</Tabs>

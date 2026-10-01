@@ -1,0 +1,72 @@
+---
+title: Exporter un snapshot
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Exporter un snapshot
+
+Numspot permet l'export de snapshot à des fins de sauvegarde.
+Les formats d'export permis sont `raw` ou `qcow2`.
+
+:::info
+## Prérequis
+
+Vous devez avoir un bucket object storage créé et accessible dans votre espace (cf. [Créer un bucket](/docs/storage/object-storage/quickstart/))
+:::
+
+Afin de réaliser l'export d'un snapshot, vous devez utiliser l'API (https://api.{region}.numspot.com) et fournir les informations suivantes :
+- L'identifiant de l'espace ;
+- L'identifiant du snapshot à exporter ;
+- Le nom du bucket object storage dans lequel l'export devra être mis à disposition ;
+- Le format d'export désiré (`raw` ou `qcow2`).
+
+L'opération d'export est alors acceptée et un identifiant d'export vous est fourni.
+
+Le fichier d'export sera disponible dans le bucket indiqué lors de la requête.
+
+Selon la taille du snapshot à exporter, l'export peut nécessiter quelques minutes pour se compléter.
+Vous pouvez vérifier l'état de l'export en cours grâce à l'API (cf. API ci-dessous) en fournissant l'identifiant d'export.
+
+:::warning
+Avant d'exporter une `image` ou un snapshot vers une autre région, assurez-vous que cette action est autorisée par toutes les licences tierces applicables.
+Si l'export est autorisé, seul l'export d'`image` garantit l'application des licences tierces dans la région cible, alors que l'export de snapshot ne garantit pas leur application.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.snapshot.get**
+
+:::
+<Tabs>
+<TabItem value="Console" default>
+
+## Console {#tabhead-console}
+
+  L'export de snapshot n'est pas disponible via la console. Utilisez l'API ou Terraform.
+</TabItem>
+<TabItem value="API">
+
+## API {#tabhead-api}
+
+La commande `POST /compute/spaces/{spaceId}/snapshotExportTasks` permet de créer un export d'un snapshot.
+
+[Exemple de requête : Créer un export de snapshot](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/snapshotExportTasks)
+
+La commande `GET /compute/spaces/{spaceId}/snapshotExportTasks/{id}` permet de récupérer les informations d'un export de snapshot.
+
+[Exemple de requête : Récupérer les informations d'un export](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/snapshotExportTasks/{id})
+</TabItem>
+<TabItem value="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+  La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/snapshot_export_task).
+</TabItem>
+</Tabs>

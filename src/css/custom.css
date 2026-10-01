@@ -1,0 +1,314 @@
+/**
+ * custom.css — entry point of the "Brand Book 2026" theme (Azure direction).
+ *
+ * Architecture:
+ *   tokens/      → brand variables (base + direction)
+ *   components/  → per-component styles
+ *   custom.css   → this file: imports + bridge to Infima variables (--ifm-*)
+ *                  + a few global rules.
+ *
+ * Principle: the --ifm-* variables point at the tokens (theme-aware), so most
+ * built-in components inherit the palette automatically. Only the
+ * --ifm-color-primary* scale (literal values) is redefined in dark mode.
+ */
+
+@import "./tokens/base.css";
+@import "./tokens/azure.css";
+
+@import "./components/navbar.css";
+@import "./components/sidebar.css";
+@import "./components/content.css";
+@import "./components/homepage.css";
+@import "./components/cards.css";
+@import "./components/badges.css";
+@import "./components/footer.css";
+@import "./components/code.css";
+@import "./components/admonitions.css";
+@import "./components/scalar.css";
+@import "./components/search.css";
+@import "./components/last-updated.css";
+
+/* ---------------------------------------------------------------------
+ * Self-hosted brand font (Rethink Sans, variable 400-800, from Google
+ * Fonts v7). Loaded same-origin instead of fonts.googleapis.com: no
+ * third-party DNS/TLS handshake before first render, no visitor IP leak
+ * to a third party, no font-display change (swap kept). Served from
+ * static/fonts/. Upgrade = download both woff2 from the Google Fonts
+ * CSS API and bump the v7 suffix in the file names and URLs below.
+ * ------------------------------------------------------------------- */
+@font-face {
+  font-family: "Rethink Sans";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("/fonts/rethink-sans-latin-v7.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Rethink Sans";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("/fonts/rethink-sans-latin-ext-v7.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* =====================================================================
+   Infima bridge — light (default)
+   ===================================================================== */
+:root {
+  /* Primary scale = Navy */
+  --ifm-color-primary: #00478e;
+  --ifm-color-primary-dark: #00407f;
+  --ifm-color-primary-darker: #003c78;
+  --ifm-color-primary-darkest: #003263;
+  --ifm-color-primary-light: #0a52a0;
+  --ifm-color-primary-lighter: #1259ad;
+  --ifm-color-primary-lightest: #1e69c0;
+
+  /* Typography */
+  --ifm-font-family-base: var(--ns-font-family);
+  --ifm-font-size-base: 100%;
+  --ifm-code-font-size: 95%;
+  --ifm-heading-font-family: var(--ns-font-family);
+  letter-spacing: -0.01em;
+
+  /* Backgrounds & text (→ theme-aware tokens) */
+  --ifm-background-color: var(--bg-primary);
+  --ifm-background-surface-color: var(--bg-secondary);
+  --ifm-color-content: var(--text-primary);
+  --ifm-font-color-base: var(--text-primary);
+  --ifm-font-color-secondary: var(--text-secondary);
+  --ifm-heading-color: var(--text-heading);
+
+  /* Links */
+  --ifm-link-color: var(--text-link);
+  --ifm-link-hover-color: var(--text-link);
+
+  /* Menu / sidebar */
+  --ifm-menu-color: var(--text-secondary);
+  --ifm-menu-color-active: var(--accent-primary);
+  --ifm-menu-color-background-active: var(--bg-active);
+  --ifm-menu-color-background-hover: var(--bg-hover);
+  --ifm-menu-link-padding-horizontal: 1rem;
+  --ifm-menu-link-padding-vertical: 0.5rem;
+  --doc-sidebar-width: 350px;
+
+  /* Navbar */
+  --ifm-navbar-height: 64px;
+  --ifm-navbar-background-color: var(--bg-navbar);
+  --ifm-navbar-link-color: var(--text-secondary);
+  --ifm-navbar-link-hover-color: var(--text-link);
+
+  /* Footer */
+  --ifm-footer-background-color: var(--ns-obsidienne);
+
+  /* TOC / tables / code */
+  --ifm-toc-border-color: var(--border-secondary);
+  --ifm-toc-link-color: var(--text-muted);
+  --ifm-table-border-color: var(--border-primary);
+  --ifm-code-background: var(--bg-code);
+
+  --docusaurus-highlighted-code-line-bg: rgba(0, 71, 142, 0.1);
+}
+
+/* =====================================================================
+   Infima bridge — dark.
+   Selector html[data-theme="dark"] (specificity 0,1,1) to BEAT the
+   overrides Infima sets on [data-theme=dark] (0,1,0) — notably
+   --ifm-background-color:#1b1b1d, which would otherwise win and freeze
+   the background.
+   ===================================================================== */
+html[data-theme="dark"] {
+  --ifm-color-primary: #8bbdff;
+  --ifm-color-primary-dark: #6ba8ff;
+  --ifm-color-primary-darker: #5b9eff;
+  --ifm-color-primary-darkest: #2a7dff;
+  --ifm-color-primary-light: #a5ccff;
+  --ifm-color-primary-lighter: #b3d4ff;
+  --ifm-color-primary-lightest: #d6e8ff;
+
+  /* The page background follows our tokens (otherwise Infima forces #1b1b1d). */
+  --ifm-background-color: var(--bg-primary);
+  --ifm-background-surface-color: var(--bg-secondary);
+
+  --docusaurus-highlighted-code-line-bg: rgba(139, 189, 255, 0.12);
+}
+
+/* =====================================================================
+   Globaux
+   ===================================================================== */
+label {
+  user-select: none;
+}
+
+/* Doc content: centered, airy reading column (Scaleway style).
+   Navbar and footer use `.container-fluid` → they stay full-width; only the
+   content container (`.container` without `-fluid`) is bounded and centered. */
+.container:not(.container-fluid) {
+  max-width: var(--ns-content-width);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+@media (max-width: 996px) {
+  .container:not(.container-fluid) {
+    padding: 0 1.25rem;
+  }
+}
+
+/* Images & screenshots */
+img {
+  display: flex;
+  align-self: center;
+  margin: auto;
+  max-height: 650px;
+  width: auto;
+}
+
+.screenshot,
+.image-narrow {
+  -webkit-filter: drop-shadow(3px 3px 3px #888);
+  filter: drop-shadow(3px 3px 3px #888);
+  margin-bottom: 24px;
+}
+
+/* Horizontal overflow guard: any full-bleed layer (100vw) overflows by the
+   classic scrollbar width on Windows. Clip horizontally without creating a
+   scroll container, so sticky sidebar/TOC keep working. */
+body {
+  overflow-x: clip;
+}
+
+/* Hiding */
+.hidden {
+  display: none !important;
+}
+
+/* Accessible visually-hidden (SEO + screen readers) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* YouTube oEmbed — fluid: takes the available width (capped at 600px) and
+   keeps the 16/9 ratio at every size. Avoids the overflow on 551–599px
+   viewports caused by the old fixed 600px width. */
+iframe[src*="youtube.com"] {
+  width: 100% !important;
+  max-width: 600px;
+  aspect-ratio: 16 / 9;
+  height: auto !important;
+  margin-bottom: 2rem;
+}
+
+/* Blog/tutorial heading sizes */
+.blog-list-page h2[class*="title"] {
+  font-size: 1.7rem;
+}
+.blog-post-page h1[class*="title"] {
+  font-size: 1.7rem;
+}
+
+/* Swagger / OpenAPI */
+.swagger-ui .info .title small pre {
+  color: #cf6d6d;
+}
+
+/* Honor the system setting (RGAA 13.8 / WCAG 2.3.3) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ----- Global arrows / chevrons — Figma "Arrows" set ----- */
+/* Breadcrumb separator: brand chevron (instead of the Infima arrow) */
+:root {
+  --ifm-breadcrumb-separator: url(../../static/img/ui/chevron-right.svg);
+  --ifm-breadcrumb-separator-size: 0.7rem;
+}
+/* "Back to top" button: up chevron (the Infima rule uses
+   --ifm-menu-link-sublist-icon without rotation; we impose our own icon). */
+[class*="backToTopButton"]::after {
+  -webkit-mask: url(../../static/img/ui/chevron-up.svg) 50% / 1.4rem 1.4rem
+    no-repeat;
+  mask: url(../../static/img/ui/chevron-up.svg) 50% / 1.4rem 1.4rem no-repeat;
+}
+
+/* =====================================================================
+   Doc pages — sticky title.
+   The H1 stays visible under the navbar for the whole page scroll.
+   Desktop only: below 997px the column takes the full width and a frozen
+   title would eat too much of an already short screen.
+   ===================================================================== */
+@media (min-width: 997px) {
+  /* Two possible renderings of the title: "synthetic" from the frontmatter
+     (wrapped in a <header>) or an H1 written in the markdown. Both cases are
+     mutually exclusive — Docusaurus only emits the <header> when the markdown
+     has no H1 of its own. */
+  .theme-doc-markdown > header,
+  .theme-doc-markdown > h1:first-of-type {
+    position: sticky;
+    top: var(--ifm-navbar-height);
+    z-index: 2;
+    margin-bottom: 1.5rem;
+    /* Breathing room under the navbar. No padding-bottom nor border-bottom
+       here: the H1 already carries its own (components/content.css) — adding
+       more would duplicate the separator line. */
+    padding-top: 0.75rem;
+    /* Opaque background is mandatory: content scrolls BEHIND the title. */
+    background: var(--ifm-background-color);
+  }
+
+  /* The spacing must be carried by the sticky block itself: a margin on the
+     H1 would sit outside its box, and content would scroll through a
+     transparent gap between the title and the navbar. */
+  .theme-doc-markdown > header > h1 {
+    margin-bottom: 0;
+  }
+
+  /* Anchor stop: clicking a TOC entry (or a URL with #anchor) must place the
+     target heading BELOW the sticky H1. --ns-doc-title-height is measured at
+     runtime by src/client/sticky-doc-title.ts. Two-class selector (0,2,0) to
+     beat the scroll-margin-top theme-common sets on .anchor (0,1,0) without
+     depending on stylesheet injection order. */
+  .theme-doc-markdown .anchor {
+    scroll-margin-top: calc(
+      var(--ifm-navbar-height) + var(--ns-doc-title-height, 0px) + 0.5rem
+    );
+  }
+}
+
+/* Tab headings (Console / API / Terraform) in action pages.
+   Kept as real H2 headings so the TOC groups sub-headings (H3) per tab, but
+   hidden in the content: they duplicate the tab button. The anchor stays in
+   the flow (zero height) so TOC links land in the right place. */
+.markdown h2[id^="tabhead-"] {
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  font-size: 0;
+  line-height: 0;
+  color: transparent;
+  pointer-events: none;
+}

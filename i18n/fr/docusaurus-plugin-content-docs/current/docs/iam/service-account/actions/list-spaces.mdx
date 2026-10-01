@@ -1,0 +1,89 @@
+---
+title: Lister les espaces assignés à un compte de service - IAM
+description: "Listez les espaces auxquels un compte de service IAM est assigné sur Numspot pour auditer ses accès, via la console ou l'API."
+sidebar_label: Lister les espaces assignés à un compte de service
+sidebar_position: 8
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Lister les espaces assignés à un compte de service
+
+Consultez les espaces auxquels un compte de service a accès.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **iam.serviceAccount.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/service-account/list-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Comptes de Service.", hotspot: { x: 0, y: 0.8, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/service-account/list-01-list.png", text: "Dans le tableau « Comptes de Service », cliquez sur la clé d'accès du compte de service concerné.", hotspot: { x: 0.2687, y: 0.45, w: 0.11, h: 0.035 } },
+    { img: "/img/walkthrough/service-account/detail.png", text: "Sur la page « Détails Compte de Service », la section « Espaces assignés » liste les espaces auxquels le compte de service a accès.", hotspot: { x: 0.223, y: 0.5362, w: 0.76, h: 0.35 } },
+  ]}
+/>
+
+1. Dans le tableau **Comptes de Service**, cliquez sur la clé d'accès du compte de service dont vous souhaitez connaître les espaces assignés.
+:::tip
+Vous avez la possibilité de rechercher un compte de service en particulier en utilisant le champ **Rechercher**.
+:::
+
+2. Sur la page "Détails Compte de Service", la section "Espaces assignés" liste les espaces auxquels le compte de service peut accéder, avec les rôles et permissions associés à chaque espace.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/spaces
+
+### Exemple avec curl
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/spaces'
+```
+
+### Réponse
+
+```json
+{
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "totalSize": 150,
+  "items": [
+    {
+      "id": "123e4567-e89b-12d3-a456-426614174000"
+    }
+  ]
+}
+```
+
+:::info
+Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/service_account).
+
+</TabItem>
+</Tabs>

@@ -1,0 +1,58 @@
+---
+title: Concepts liés à la gestion des accès - IAM
+sidebar_label: Concepts liés à la gestion des accès
+sidebar_position: 3
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+# Concepts liés à la gestion des accès
+
+Lorsqu'un utilisateur authentifié tente d'accéder à une ressource, l'**IAM** (Identity and Access Management) vérifie la politique d'autorisation pour déterminer si l'action est permise.
+
+## Les ressources
+
+Une ressource informatique désigne tout composant physique ou virtuel du système. Dans un contexte de Cloud Computing, seules des ressources virtuelles sont manipulées, comme les machines virtuelles, les applications, les bases de données ou les orchestrateurs de conteneurs. Ces ressources ont un cycle de vie allant de la création à la suppression en passant par la modification.
+
+## La hiérarchie des ressources
+
+Une organisation, ses espaces et ses ressources s'inscrivent dans un graphe. Le système est composé d'utilisateurs et de ressources. Les utilisateurs sont en relation avec ces ressources par l'intermédiaire des permissions. Une action est autorisée si une relation directe ou indirecte est trouvée entre l'utilisateur et la ressource.
+
+## Les permissions
+
+Les permissions déterminent les actions autorisées pour un utilisateur ou un compte de service sur une ressource ou une catégorie de ressource. Pour une ressource gérée suivant le modèle CRUD (création, lecture, modification, suppression), les permissions correspondent à chaque action. Les actions sont parfois spécifiques à une catégorie de ressources. Par exemple, pour une [VM](/docs/compute/concept/), on pourra avoir les actions de démarrage ou d'arrêt. Les droits sont le résultat de permissions associées à des rôles, qui sont eux-mêmes assignés à un utilisateur ou à un compte de service. À ce mécanisme se superpose éventuellement une personnalisation via les permissions et les **ACL** (liste de contrôle d'accès).
+
+## Les rôles
+
+L'**IAM** Numspot permet d'assigner un ou plusieurs rôles prédéfinis à des utilisateurs ou à des comptes de service. Chaque rôle détient un ensemble de permissions, adaptées en fonction de son domaine organisationnel ou fonctionnel. Lorsque vous attribuez un rôle à un utilisateur, vous lui accordez toutes les permissions que compte le rôle.
+
+### Rôles au niveau d'une organisation ou de ses espaces
+
+Les utilisateurs auxquels sont affectés des rôles au niveau de l'organisation ou d'un espace auront un périmètre de permissions correspondant à ces entités. Par exemple, un utilisateur avec un rôle d'administrateur de l'organisation pourra se désigner ou désigner un autre utilisateur comme administrateur d'un espace. Un utilisateur peut être à la fois administrateur sur un espace et utilisateur sans privilège sur un autre.
+
+### Rôles fonctionnels
+
+Vous pouvez attribuer des rôles pour des catégories de ressources. Par exemple : confier la gestion des VM à un utilisateur et la gestion des composants réseaux à un autre. Au sein d'une catégorie de ressources, en plus du rôle d'administration, vous pouvez restreindre les droits à des actions précises : création, modification, suppression et accès à une ressource.
+
+### Hiérarchie des rôles
+
+On peut établir une échelle dans les rôles : en haut, les rôles d'administrateurs qui auront toute latitude pour effectuer des opérations dans leur périmètre, puis les créateurs de ressources, et enfin les utilisateurs de base qui n'auront que le droit en lecture seule. L'utilisateur ou le compte de service qui crée une ressource aura tous les droits sur celle-ci.
+
+### Portée des permissions d'un utilisateur ou d'un compte de service
+
+Les permissions sont cloisonnées au périmètre de l'espace. Un utilisateur ayant des droits sur un espace ne pourra pas intervenir sur les ressources d'un autre espace, sauf s'il appartient également à cet espace. Pour qu'un utilisateur puisse acquérir des droits sur un espace, il faut soit qu'il ait déjà les droits pour s'accorder de nouvelles permissions, soit que ces permissions soient accordées par l'administrateur de l'espace.
+
+### Les permissions granulaires ou ACL
+
+Les rôles ont une portée générique sur les ressources d'une organisation ou de ses espaces. Si vous souhaitez attribuer à un utilisateur une permission sur une ressource précise, vous pouvez lui ajouter une permission limitée à cette ressource. Ainsi, un utilisateur peut cumuler des permissions attachées à un rôle et des permissions spécifiques sous forme d'ACL. Vous pouvez ajouter plusieurs ACL en même temps.
+
+## La stratégie d'autorisation
+
+L'**IAM** met en œuvre un dispositif de gestion des permissions qui permet de cloisonner les permissions de chaque organisation.
+
+La stratégie par défaut est de ne rien autoriser. Les permissions sont obtenues par l'assignation de rôle ou par la déclaration de permissions spécifiques sur une ressource.
+
+Vous pouvez attribuer des rôles aux utilisateurs. Ces rôles déterminent un bouquet de permissions. C'est un ensemble de règles qui définissent qui a quel type d'accès. Une stratégie d'autorisation est associée à une ressource et permet d'en contrôler tous les accès.
+
+Quand un utilisateur souhaite réaliser une action sur une ressource, le système applique les trois stratégies d'autorisation — RBAC (Role-Based Access Control), permission unitaire et ACL — afin d'établir si l'utilisateur peut réaliser l'action. Pour rappel, le créateur d'une ressource possède tous les droits sur celle-ci.

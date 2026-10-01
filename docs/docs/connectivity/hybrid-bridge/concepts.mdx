@@ -1,0 +1,74 @@
+---
+title: "Hybrid Bridge - Concepts"
+sidebar_label: "Concepts"
+description: Discover Hybrid Bridges, private connections between a VPC and managed services.
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# About Hybrid Bridges
+
+<ActionsSummary />
+
+A bridge allows a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) to communicate with managed services through a private connection. The [VM (Virtual Machine)](/docs/compute/concept/) of the VPC connected through a bridge can access the managed services.
+
+## General information
+
+The available managed services are:
+* PostgreSQL;
+* Kubernetes;
+* container registry (Container Registry).
+
+Once a bridge is established between a VPC and a managed service, that same VPC will have access to all the managed services of the space.
+
+:::warning
+A bridge between a VPC and a managed service whose IP ranges overlap cannot be created.
+:::
+
+:::warning
+The managed service must be exposed privately (only on the internal network) in order to communicate with a VPC through a bridge.
+:::
+
+A bridge is a private connection that uses private IP.
+
+The VPC and the managed services must belong to the same space.
+
+Once the bridge is created, network traffic between the VPC and the managed services becomes possible. You must update the [route tables](/docs/network/route-table/concepts/) by adding a route, and the [security groups](/docs/compute/security-groups/concepts/concept-sg/) to allow the traffic.
+
+### Bidirectionality
+
+Traffic is bidirectional between the VPC and the managed services, except for Kubernetes: the containers of the worker nodes of a managed [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) can access the VPC, but a VM of the VPC cannot reach a container of the cluster Kubernetes through the bridge.
+
+## Network configuration
+
+### Route tables
+
+To allow traffic between the VPC and the managed services, you must update the route tables associated with the subnets of the VPC.
+
+Once the bridge is created, you can view it in read-only mode through the API to find out the routes associated with it.
+These routes must be configured in your route table as follows:
+* the `ipRange` as the destination;
+* the `gatewayId` as the target.
+
+This allows the VM to direct traffic to the managed services.
+
+### Security Groups
+
+:::warning
+To allow traffic between the VM of the VPC and the managed services, you must update the security groups associated with your VM.
+:::
+
+Add the appropriate rules allowing outbound flows to the managed services, and inbound flows from the managed services if necessary.
+
+### Connecting to managed services from a VPC
+
+Once the bridge connection is established, the VM of the IaaS VPC can reach the connected managed service or services through the `host` of the managed service.
+
+To retrieve the `host` of a managed service:
+* [Retrieve the status of a PostgreSQL cluster](/docs/managed-services/postgresql/actions/status/);
+* [Retrieve the status of a cluster Kubernetes](/docs/managed-services/kubernetes/actions/status/);
+* [Retrieve the status of a Container Registry](/docs/managed-services/registry/actions/status/).
+
+For a complete example of connecting a VM to a managed Kubernetes cluster, see the guide [Connect a VM to a managed Kubernetes cluster](/docs/managed-services/kubernetes/guides/connect-vm-to-cluster/).

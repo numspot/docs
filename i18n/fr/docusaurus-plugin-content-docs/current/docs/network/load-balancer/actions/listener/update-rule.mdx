@@ -1,0 +1,43 @@
+---
+title: Modifier une règle d'un listener de load balancer
+sidebar_position: 5
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Modifier une règle d'un listener de load balancer
+
+Vous pouvez modifier une règle de redirection de trafic d'un listener (écouteur) de [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) pour ajuster les conditions ou les actions de redirection.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.loadBalancer.update**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+La modification d'une règle de listener n'est pas disponible depuis la console Numspot.
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `PUT /compute/spaces/{spaceId}/listenerRules/{id}` met à jour le modèle de la règle de listener. Cet appel met à jour l'algorithme de correspondance des modèles pour le trafic entrant.
+
+[Exemple de requête : Modification d'une règle pour un Listener](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/listenerRules/{id})
+  </TabItem>
+</Tabs>

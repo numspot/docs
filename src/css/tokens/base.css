@@ -1,0 +1,62 @@
+/**
+ * Base tokens — Brand Book 2026 (shared by every direction)
+ * Source: artifacts/ux-ui-designer/design-system.md §1
+ * Contains NO brand colors (Navy/Azure/Bloom) — see azure.css.
+ */
+
+:root {
+  /* ----- Background colors / gray scale ----- */
+  --ns-polar: #ffffff; /* Main light-mode background */
+  --ns-obsidienne: #04131d; /* Main dark-mode background */
+  --ns-midnight: #1a2936; /* Dark surface, elevated cards */
+  --ns-pearl: #fafafb; /* Secondary background, light sidebar */
+  --ns-fog: #eeeff2; /* Tertiary background, code blocks, subtle hover */
+  --ns-iron: #d0d3db; /* Borders, separators */
+  --ns-silver: #a3a9bb; /* Muted text, placeholders */
+  --ns-graphite: #4c5664; /* Secondary text, descriptions */
+  --ns-carbon: #25394a; /* Light-alt text, dark borders */
+
+  /* ----- Semantic colors ----- */
+  --ns-success: #10b981;
+  --ns-warning: #f59e0b;
+  --ns-error: #ef4444;
+  --ns-info: #3b82f6;
+
+  /* ----- Typography ----- */
+  --ns-font-family: "Rethink Sans", Arial, sans-serif;
+  --ns-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --ns-font-weight-regular: 400;
+  --ns-font-weight-medium: 500;
+  --ns-font-weight-semibold: 600;
+  --ns-font-weight-bold: 700;
+  --ns-font-weight-extrabold: 800;
+
+  /* ----- Spacing (4/8px grid) ----- */
+  --ns-space-1: 4px;
+  --ns-space-2: 8px;
+  --ns-space-3: 12px;
+  --ns-space-4: 16px;
+  --ns-space-5: 20px;
+  --ns-space-6: 24px;
+  --ns-space-8: 32px;
+  --ns-space-10: 40px;
+  --ns-space-12: 48px;
+  --ns-space-16: 64px;
+  --ns-space-20: 80px;
+
+  /* ----- Reading width (centered doc content, Scaleway style) ----- */
+  --ns-content-width: 1100px;
+
+  /* ----- Border radius ----- */
+  --ns-radius-sm: 6px;
+  --ns-radius-md: 10px;
+  --ns-radius-lg: 14px;
+  --ns-radius-xl: 20px;
+  --ns-radius-full: 9999px;
+
+  /* ----- Transitions ----- */
+  --ns-transition-color: 200ms ease;
+  --ns-transition-hover: 200ms ease;
+  --ns-transition-theme: 300ms ease;
+  --ns-transition-lift: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}

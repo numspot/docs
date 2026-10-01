@@ -1,0 +1,82 @@
+---
+title: Créer un Container Registry
+sidebar_label: Créer une instance Container Registry
+sidebar_position: 2
+draft: false
+last_update:
+  date: 2026-09-30
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Créer une instance Container Registry
+
+Vous avez la possibilité de créer un Container Registry sur mesure au sein de votre espace.
+
+Lors de la création, vous pouvez définir les caractéristiques, telles que le nom, la version, et la visibilité.
+
+Une fois l'instance Container Registry créée, vous avez la possibilité de récupérer le mot de passe administrateur vous permettant de vous connecter à Harbor.
+
+:::warning Choix du type de réseau
+Le choix entre réseau **Privé** et **Public** détermine qui peut accéder à votre registry :
+
+- **Privé** : votre Container Registry n'est accessible qu'au sein du réseau interne Numspot. Seules vos autres ressources présentes dans le même réseau peuvent s'y connecter. Cette option est recommandée pour les environnements de production, notamment les environnements SecNumCloud. Pour y accéder de façon sécurisée, vous pouvez utiliser une [VM](/docs/compute/concept/) de rebond et un VPN Numspot.
+
+- **Public** : votre Container Registry est accessible depuis Internet. Toute personne disposant des identifiants de connexion peut s'y connecter, où qu'elle se trouve. Cette option convient aux développements, tests ou environnements où la sécurité réseau n'est pas critique.
+
+**Recommandation** : Pour garantir la sécurité de vos données en production, privilégiez toujours le réseau **Privé**.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **registry.instance.create**
+
+:::
+<Tabs>
+    <TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+        La requête `POST /registry/spaces/{spaceId}/registries` permet de créer et lancer une registry Harbor.
+        Le Container Registry est dans un état `PENDING` jusqu'à sa création, puis passe à l'état `RUNNING`.
+
+        **Choix du type de réseau** :
+
+        - **Public** : spécifiez `"visibility": "EXTERNAL"`
+        - **Privé** : spécifiez `"visibility": "INTERNAL"`
+
+        ### Exemple de requête
+
+        ```json
+        {
+          "name": "mon-container-registry",
+          "version": "2.14",
+          "visibility": "EXTERNAL"
+        }
+        ```
+
+        ### Exemple de réponse
+
+        ```json
+        {
+          "id": "550e8400-e29b-41d4-a716-446655440002",
+          "name": "mon-container-registry",
+          "status": {
+            "state": "RUNNING",
+            "message": "instance is healthy"
+          },
+          "version": "2.14",
+          "host": "reg-123e4567.space-123e4567.hcp.cloudgouv-eu-west-1.numspot.com",
+          "visibility": "EXTERNAL"
+        }
+        ```
+
+        [Voir la spécification complète](/openapi/#tag/registry/POST/registry/spaces/{spaceId}/registries)
+
+    </TabItem>
+    
+    {/* </TabItem> */}
+</Tabs>

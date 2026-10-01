@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /assets/
+Disallow: /markdown-page
+
+Sitemap: https://docs.numspot.com/sitemap.xml

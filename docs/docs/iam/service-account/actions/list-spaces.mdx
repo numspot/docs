@@ -1,0 +1,89 @@
+---
+title: List the spaces assigned to a service account - IAM
+description: "List the spaces a service account is assigned to on Numspot to audit its access, via the console or the API."
+sidebar_label: List the spaces assigned to a service account
+sidebar_position: 8
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# List the spaces assigned to a service account
+
+View the spaces a service account has access to.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **iam.serviceAccount.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/service-account/list-01-list.png", text: "From the left-hand side menu, click IAM → Service Accounts.", hotspot: { x: 0, y: 0.8, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/service-account/list-01-list.png", text: "In the “Service Accounts” table, click the access key of the relevant service account.", hotspot: { x: 0.2687, y: 0.45, w: 0.11, h: 0.035 } },
+    { img: "/img/walkthrough/en/service-account/detail.png", text: "On the “Service Account details” page, the “Assigned spaces” section lists the spaces the service account has access to.", hotspot: { x: 0.223, y: 0.5362, w: 0.76, h: 0.35 } },
+  ]}
+/>
+
+1. In the **Service Accounts** table, click the access key of the service account whose assigned spaces you want to view.
+:::tip
+You can search for a specific service account using the **Search** field.
+:::
+
+2. On the "Service Account details" page, the "Assigned spaces" section lists the spaces the service account can access, with the roles and permissions associated with each space.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/spaces
+
+### curl example
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/spaces'
+```
+
+### Response
+
+```json
+{
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "totalSize": 150,
+  "items": [
+    {
+      "id": "123e4567-e89b-12d3-a456-426614174000"
+    }
+  ]
+}
+```
+
+:::info
+See the [API usage page](/docs/iam/concepts/api/) for details.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/service_account).
+
+</TabItem>
+</Tabs>

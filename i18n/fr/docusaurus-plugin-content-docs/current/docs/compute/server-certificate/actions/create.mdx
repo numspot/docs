@@ -1,0 +1,58 @@
+---
+title: Créer un server certificate
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Créer un server certificate
+
+Vous pouvez créer un server certificate en important un certificat X509 au format PEM ainsi que sa clé privée correspondante, pour sécuriser vos connexions avec SSL (Secure Sockets Layer).
+
+Ces certificats peuvent être utilisés avec d'autres services, par exemple pour configurer la terminaison SSL sur des [load balancers](/docs/network/load-balancer/concepts/).
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.serverCertificate.create**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+La création d'un certificat serveur n'est pas disponible depuis la console Numspot.
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+La commande `POST /compute/spaces/{spaceId}/serverCertificates` crée un server certificate ainsi que sa clé privée correspondante.
+
+Vous pouvez également spécifier la chaîne d'autorités de certification intermédiaires si votre certificat n'est pas directement signé par une autorité racine. Vous pouvez indiquer plusieurs autorités de certification intermédiaires dans le paramètre **certificateChain**. Pour cela, concaténez tous les certificats dans l'ordre correct (le premier certificat doit être celui de l'autorité de votre certificat, le second celui de l'autorité du premier, et ainsi de suite).
+
+La clé privée doit être une clé **RSA** au format **PKCS1**. Pour vérifier cela, ouvrez le fichier **PEM** et assurez-vous que son en-tête indique : **BEGIN RSA PRIVATE KEY**.
+
+:::warning
+Cette clé privée ne doit pas être protégée par un mot de passe ou une phrase secrète.
+:::
+
+[Exemple de requête : Création d'un server certificate](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/serverCertificates)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/server_certificate).
+  </TabItem>
+</Tabs>

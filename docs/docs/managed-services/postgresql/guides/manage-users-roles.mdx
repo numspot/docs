@@ -1,0 +1,246 @@
+---
+title: Manage PostgreSQL users and roles - Managed PostgreSQL
+sidebar_label: Manage PostgreSQL users and roles
+description: Create and manage users and roles on a Numspot managed PostgreSQL cluster
+sidebar_position: 8.5
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Manage PostgreSQL users and roles
+
+The managed PostgreSQL service provides a primary user when the [PostgreSQL cluster](/docs/managed-services/postgresql/concepts/) is created. To add additional users or manage permissions, you must connect directly to the database.
+
+:::note
+The Numspot API only allows you to manage the cluster's primary user. The creation of additional users and roles is performed through SQL commands.
+:::
+
+## Connect to the PostgreSQL cluster
+
+Before creating users or roles, connect to your cluster with the primary user:
+
+```bash
+psql "host=<host> port=5432 dbname=<database> user=<primary_user> sslmode=require"
+```
+
+To reset the primary user password, see [Reset the password](/docs/managed-services/postgresql/actions/password-reset/).
+
+## Create a user
+
+To create a user with a password:
+
+```sql
+CREATE USER <username> WITH PASSWORD '<password>';
+```
+
+### Creation options
+
+| Option | Description |
+| --- | --- |
+| `CREATEDB` | Allows the user to create databases |
+| `NOCREATEDB` | Prevents the creation of databases (default) |
+| `CREATEROLE` | Allows the creation of other roles |
+| `NOCREATEROLE` | Prevents the creation of roles (default) |
+| `LOGIN` | Authorizes connection (for users) |
+| `NOLOGIN` | Prevents connection (for system roles) |
+
+### Example
+
+Create an application user with limited rights:
+
+```sql
+CREATE USER app_user WITH PASSWORD '<secure_password>' NOCREATEDB NOCREATEROLE;
+```
+
+## Create a role
+
+Roles allow you to group permissions and assign them to several users.
+
+```sql
+CREATE ROLE <role_name>;
+```
+
+### Example of structuring by roles
+
+```sql
+-- Read-only role
+CREATE ROLE readonly;
+GRANT CONNECT ON DATABASE <database> TO readonly;
+GRANT USAGE ON SCHEMA public TO readonly;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO readonly;
+
+-- Read-write role
+CREATE ROLE readwrite;
+GRANT CONNECT ON DATABASE <database> TO readwrite;
+GRANT USAGE ON SCHEMA public TO readwrite;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO readwrite;
+
+-- Administrator role
+CREATE ROLE db_admin;
+GRANT CONNECT ON DATABASE <database> TO db_admin;
+GRANT ALL PRIVILEGES ON DATABASE <database> TO db_admin;
+GRANT ALL PRIVILEGES ON SCHEMA public TO db_admin;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO db_admin;
+```
+
+## Assign a role to a user
+
+Associate a role with an existing user:
+
+```sql
+GRANT <role_name> TO <username>;
+```
+
+### Example
+
+```sql
+GRANT readonly TO app_user_read;
+GRANT readwrite TO app_user_write;
+```
+
+## Modify a user
+
+### Change the password
+
+```sql
+ALTER USER <username> WITH PASSWORD '<new_password>';
+```
+
+### Set an expiry date
+
+```sql
+ALTER USER <username> WITH VALID UNTIL '<expiration_date>';
+```
+
+Example with an expiry date:
+
+```sql
+ALTER USER temp_user WITH VALID UNTIL '2026-12-31 23:59:59';
+```
+
+## Manage permissions
+
+### Grant permissions on a table
+
+```sql
+GRANT SELECT ON <table> TO <username>;
+GRANT SELECT, INSERT, UPDATE ON <table> TO <username>;
+GRANT ALL PRIVILEGES ON <table> TO <username>;
+```
+
+### Grant permissions on a schema
+
+```sql
+GRANT USAGE ON SCHEMA <schema> TO <username>;
+GRANT CREATE ON SCHEMA <schema> TO <username>;
+```
+
+### Revoke permissions
+
+```sql
+REVOKE SELECT ON <table> FROM <username>;
+REVOKE ALL PRIVILEGES ON SCHEMA <schema> FROM <username>;
+```
+
+## Delete a user or a role
+
+### Delete a user
+
+```sql
+DROP USER <username>;
+```
+
+### Delete a role
+
+```sql
+DROP ROLE <role_name>;
+```
+
+:::warning
+Deleting a user or a role is irreversible. Check that no object depends on this user before deletion.
+:::
+
+## Configure SSO authentication
+
+Single sign-on authentication (SSO, Single Sign-On) can be enabled or modified on an already instantiated PostgreSQL cluster. It allows you to centralize the management of users and roles within your enterprise infrastructure.
+
+Support for the LDAP (Lightweight Directory Access Protocol) and OAuth 2.0 / OpenID Connect protocols is available.
+
+### Configure authentication via LDAP
+
+To synchronize PostgreSQL users and roles with your LDAP directory, the `ldap2pg` tool must be installed on the cluster.
+
+:::warning
+You do not have access to the cluster terminal to install components. To enable LDAP authentication and install `ldap2pg`, you must submit a request to the support team.
+:::
+
+The support team performs the installation and configuration of `ldap2pg` on the cluster following your request. You must provide the connection parameters of your LDAP directory (URI, base DN, search filters, etc.) as well as the desired mapping between LDAP groups and PostgreSQL roles.
+
+Once the configuration is applied, the users present in the LDAP directory can connect to the cluster and be automatically assigned the corresponding roles.
+
+### Configure authentication via OAuth 2.0 / OpenID Connect
+
+Authentication through OAuth 2.0 and OpenID Connect (OIDC) allows users to connect to the PostgreSQL cluster using their external identity provider (IdP) (for example: Keycloak, Okta, Microsoft Entra ID, etc.).
+
+:::warning
+You do not have access to the cluster terminal to install components. To enable OAuth/OIDC authentication, you must submit a request to the support team.
+:::
+
+The support team configures the OAuth/OIDC identity provider on the cluster. You must provide the following information:
+
+- **Issuer URL**: the issuer URL of your IdP (for example: `https://keycloak.example.com/realms/monrealm`);
+- **Client ID**: the OAuth client identifier;
+- **Client Secret**: the client secret (transmitted securely);
+- **Scopes**: the requested scopes, by default `openid`, `profile` and `email`;
+- **User attribute**: the claim used to identify the user (for example: `sub`, `email`, `preferred_username`);
+- **Role mapping**: the mapping between the roles or groups returned by the IdP and the PostgreSQL roles.
+
+Once the provider is configured, the users authenticated through the IdP can access the cluster with the permissions associated with their identity.
+
+## Best practices
+
+### Principle of least privilege
+
+Grant only the permissions required for the application to operate:
+
+- use roles to group permissions;
+- assign roles to users according to their needs;
+- prefer `SELECT` to `ALL PRIVILEGES` for read-only users.
+
+### Password rotation
+
+Change the passwords of application users regularly:
+
+```sql
+ALTER USER <username> WITH PASSWORD '<new_password>';
+```
+
+### Access audit
+
+Use the system views to check the existing permissions:
+
+```sql
+-- List the roles
+SELECT rolname, rolsuper, rolcreatedb, rolcreaterole FROM pg_roles;
+
+-- List the permissions on the tables
+SELECT grantee, table_schema, table_name, privilege_type 
+FROM information_schema.role_table_grants 
+WHERE table_schema = 'public';
+```
+
+## Limitations
+
+| Action | Support |
+| --- | --- |
+| Create a primary user | Through the API or the console, at cluster creation only |
+| Reset the primary password | Through the API (see [Reset the password](/docs/managed-services/postgresql/actions/password-reset/)) |
+| Create additional users | Through SQL only |
+| Manage roles | Through SQL only |
+| Configure permissions | Through SQL only |
+
+:::tip
+Automate user management with SQL scripts versioned in your source control system. This facilitates the traceability and reproduction of configurations.
+:::

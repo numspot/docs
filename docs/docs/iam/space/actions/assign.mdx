@@ -1,0 +1,113 @@
+---
+title: Assign an identity to a space - IAM
+sidebar_label: Assign an identity to a space
+sidebar_position: 3
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Assign an identity to a space
+
+Assign users or service accounts to a space to give them access to the resources of that space.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **iam.role.create**
+
+:::
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/user/list.png", text: "From the left-hand side menu, click IAM → Users.", hotspot: { x: 0, y: 0.7444, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/en/user/detail.png", text: "Open the identity's details, then click “Assign spaces”.", hotspot: { x: 0.845, y: 0.5461, w: 0.1064, h: 0.0494 } },
+    { img: "/img/walkthrough/en/space/assign-wizard.png", text: "In the “Spaces assignment” wizard, tick the space(s) to assign, then continue with the Roles and Permissions steps.", hotspot: { x: 0.222, y: 0.63, w: 0.42, h: 0.28 } },
+  ]}
+/>
+
+
+You access the **Spaces** table, where you can view all the spaces of your organization.
+
+
+By clicking **Actions** for a given space, you can edit it and assign users or service accounts to it.
+
+
+Click the **Actions** button of the relevant space, then click **Assign users** or **Assign service accounts**.
+
+
+:::info
+The screens are displayed in a similar way for managing users and service accounts.
+:::
+
+
+Select the users or service accounts you want to assign to this space, then click the **Assign** button.
+
+
+:::info
+You can also assign users or service accounts from the details page of a space.
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+To assign a user account to a space with the API, you need to know the UUID (Universally Unique Identifier) of the space. A variant in the URL lets you act on a user or on a service account.
+
+At the end of this operation, the account is assigned to the space but without a role or permission.
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/POST/iam/spaces/{spaceId}/users/{userId}
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/users/{userId}' \
+  --request POST
+```
+
+The request returns no response.
+
+:::info
+See the [page on using the API](/docs/iam/concepts/api/) for the implementation.
+:::
+
+To remove (unassign) a user account from a space with the API:
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/DELETE/iam/spaces/{spaceId}/users/{userId}
+
+At the end of this operation, the user account is no longer assigned to the space but remains present in the organization or assigned to other spaces.
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/users/{userId}' \
+  --request DELETE
+```
+
+To assign a service account to a space with the API:
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/POST/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}' \
+  --request POST
+```
+
+To remove (unassign) a service account from a space with the API:
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/DELETE/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}
+
+At the end of this operation, the service account is no longer assigned to the space but remains present in the organization or assigned to other spaces.
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}' \
+  --request DELETE
+```
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/space).
+
+</TabItem>
+</Tabs>

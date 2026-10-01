@@ -1,0 +1,73 @@
+---
+title: Surveiller les événements DLP - DLP managé
+sidebar_label: Surveiller les événements DLP
+description: "Consultez et analysez les événements générés par les règles DLP en mode monitor : journaux, charges utiles et cas d'usage."
+sidebar_position: 2
+draft: false
+---
+
+# Surveiller les événements DLP
+
+## Introduction
+
+Les [règles DLP](/docs/managed-services/dlp/concepts) configurées avec l'action `monitor` autorisent les requêtes mais journalisent les événements et stockent les charges utiles dans un stockage objet compatible S3. Ce guide décrit comment consulter et analyser ces événements.
+
+## Consulter les événements monitorés
+
+1. Connectez-vous à la console DLP.
+2. Cliquez sur **Monitored Rules** pour accéder à la page des événements monitorés.
+
+### Filtrer les événements
+
+Utilisez les filtres disponibles :
+
+- **Platform instance** : filtrer par instance de plateforme ;
+- **Rule** : filtrer par règle ;
+- **Time range** : filtrer par période.
+
+### Détails d'un événement
+
+Chaque événement affiche :
+
+- l'identifiant de la requête ;
+- la règle déclenchée ;
+- les détecteurs ayant matché ;
+- la décision finale de l'évaluation ;
+- les champs de la requête ayant déclenché la règle ;
+- l'horodatage.
+
+## Télécharger les charges utiles
+
+Les charges utiles des événements monitorés sont stockées dans un stockage objet compatible S3. Deux versions sont disponibles :
+
+- **Version complète** : charge utile originale sans modification ;
+- **Version caviardée** : charge utile avec les données sensibles masquées.
+
+1. Cliquez sur un événement monitoré ;
+2. Cliquez sur **Download payload** pour la version complète ou **Download redacted payload** pour la version caviardée.
+
+:::warning
+Le téléchargement de la charge utile complète est enregistré dans la piste d'audit. Seuls les utilisateurs disposant du rôle `viewer` ou supérieur peuvent accéder aux charges utiles.
+:::
+
+## Cas d'usage
+
+### Mode surveillance avant blocage
+
+Avant de bloquer des requêtes en production, configurez les règles en mode `monitor` pour mesurer leur impact :
+
+1. Créez des règles avec l'action `monitor` ;
+2. Publiez le [ruleset](/docs/managed-services/dlp/concepts) (ensemble de règles) ;
+3. Sur une période donnée (24h ou 7d), consultez les événements monitorés ;
+4. Analysez les faux positifs ;
+5. Ajustez les conditions des règles ;
+6. Basculez les règles de `monitor` vers `block` ;
+7. Publiez une nouvelle version du ruleset.
+
+### Audit de conformité
+
+Utilisez le mode `monitor` pour constituer une trace d'audit sans interrompre les flux :
+
+1. Créez des règles ciblant les données soumises à des exigences de conformité ;
+2. Les événements monitorés fournissent un historique des requêtes contenant ces données ;
+3. Exportez les charges utiles caviardées pour les rapports de conformité.

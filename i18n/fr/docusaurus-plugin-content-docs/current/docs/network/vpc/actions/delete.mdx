@@ -1,0 +1,73 @@
+---
+title: Supprimer un VPC
+sidebar_position: 4
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Supprimer un VPC
+
+Vous pouvez supprimer un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) vide dont vous n'avez plus besoin. 
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.vpc.delete**
+
+:::
+<Tabs>
+   <TabItem value="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/vpc/del-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC.", hotspot: { x: 0, y: 0.5222, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/vpc/del-01-list.png", text: "Cochez le VPC à supprimer, puis cliquez sur « Supprimer » (ou via le menu « Actions » de la ligne → « Supprimer le VPC »).", hotspot: { x: 0.3513, y: 0.3181, w: 0.1001, h: 0.0741 } },
+    { img: "/img/walkthrough/vpc/del-02-modal.png", text: "Confirmation forte : saisissez le nom exact du VPC, puis cliquez sur « Supprimer ». La suppression est définitive.", hotspot: { x: 0.2847, y: 0.1924, w: 0.4306, h: 0.6153 } },
+  ]}
+/>
+
+ :::info
+ Avant de commencer, assurez-vous de supprimer ou détacher toutes les ressources liées au VPC, telles que : 
+ * [VM (Virtual Machines)](/docs/compute/concept/)
+ * subnets (sous-réseaux)
+ * IP (Internet Protocol) publique (Public IP)
+ ::: 
+
+ 1. Connectez-vous sur la console Numspot.  
+
+ 2. Depuis le menu latéral gauche, cliquez sur **Réseau** → **VPC** → **VPC**. 
+
+ 3. La liste des VPC apparaît.
+
+ 4. Identifiez le VPC à supprimer puis cliquez sur **Actions**. Une boîte de dialogue d'options apparaîtra.
+
+ 5. Cliquez sur **Supprimer le VPC**. Le VPC est supprimé. 
+    :::warning 
+    Si le VPC a encore des dépendances avec d'autres objets, la suppression sera impossible. Avant de continuer, assurez-vous de supprimer ou détacher toutes les dépendances et supprimez ensuite le VPC.  
+    ::: 
+
+   </TabItem> 
+   <TabItem value="API">
+
+:::info
+Avant de commencer, assurez-vous de supprimer ou détacher toutes les ressources liées au VPC, telles que :
+* VM
+* subnets (sous-réseaux)
+* IP publique (Public IP)
+:::
+
+La commande `DELETE /compute/spaces/{spaceId}/vpcs/{id}` permet de supprimer un cloud privé virtuel (VPC).
+
+[Exemple de requête : Suppression d'un VPC](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/vpcs/{id})
+  </TabItem>
+  <TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-Terraform}
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpc).
+  </TabItem>
+</Tabs>

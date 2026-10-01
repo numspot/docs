@@ -1,0 +1,38 @@
+/* Search — @easyops-cn/docusaurus-search-local.
+   The plugin ships its own CSS modules: we only override what falls outside
+   the brand. The navbar field already inherits `.navbar__search-input`
+   (see navbar.css), so there is nothing to do on that side.
+   Selectors target CSS-module classes through `class*=` — their suffix is a
+   hash regenerated on every build and cannot be hardcoded. */
+
+/* /search page: the field otherwise takes the plugin's default rectangle;
+   align it on the navbar pill. */
+input[class*="searchQueryInput"],
+input[class*="searchContextInput"] {
+  border-radius: var(--ns-radius-full);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  color: var(--text-primary);
+  transition: border-color var(--ns-transition-hover),
+    box-shadow var(--ns-transition-hover);
+}
+
+input[class*="searchQueryInput"]:focus,
+input[class*="searchContextInput"]:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--bg-active);
+  outline: none;
+}
+
+/* Matched-term highlighting (mark.js and the suggestions both emit a bare
+   <mark>, with no class). The browser default yellow is unreadable in dark
+   mode and off-brand: translucent brand accent instead, text colour untouched,
+   so it stays legible in both themes. */
+[class*="searchResultItem"] mark,
+[class*="suggestion"] mark,
+article mark {
+  background-color: color-mix(in srgb, var(--accent-primary) 24%, transparent);
+  color: inherit;
+  padding: 0 0.1em;
+  border-radius: var(--ns-radius-sm);
+}

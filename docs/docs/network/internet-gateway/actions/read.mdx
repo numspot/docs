@@ -1,0 +1,66 @@
+---
+title: Get information about your internet gateways - Numspot
+sidebar_label: Get information about your internet gateways
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Get information about your internet gateways
+
+You can get information about one or more of your [internet gateways](/docs/network/internet-gateway/concepts/), such as their attachment state or the [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) to which they are attached.
+
+## Permissions
+
+:::info
+This action requires the following **IAM** (Identity and Access Management) permissions:
+
+- **compute.internetGateway.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/internet-gateway/list.png", text: "From the left-hand side menu, click Network → VPC → Internet Gateways.", hotspot: { x: 0, y: 0.6358, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/en/internet-gateway/list.png", text: "From Network → VPC → Internet Gateways, your internet gateways are listed.", hotspot: { x: 0.2083, y: 0.3872, w: 0.5556, h: 0.337 } },
+  ]}
+/>
+
+
+You can view the information of your internet gateways from the **VPC** dashboard.
+
+1. From the left-hand side menu, click **Network** → **VPC** → **Internet Gateways**.
+
+
+2. The list of internet gateways is displayed with their information:
+   - "Name": name of the internet gateway
+   - "ID": unique identifier
+   - "State": attached or detached
+   - "VPC": VPC to which it is attached (where applicable)
+
+3. Click an internet gateway to view its details.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `GET /compute/spaces/{spaceId}/internetGateways` command lists the internet gateways.
+
+[Example request: List all internet gateways ↗](/openapi/#tag/compute/GET/compute/spaces/%7BspaceId%7D/internetGateways)
+
+The `GET /compute/spaces/{spaceId}/internetGateways/{id}` command retrieves information about an internet gateway.
+
+[Example request: Retrieve the information of an internet gateway ↗](/openapi/#tag/compute/GET/compute/spaces/%7BspaceId%7D/internetGateways/%7Bid%7D)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/internet_gateway).
+
+</TabItem>
+</Tabs>

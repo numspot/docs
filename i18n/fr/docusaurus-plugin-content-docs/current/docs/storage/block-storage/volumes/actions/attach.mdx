@@ -1,0 +1,64 @@
+---
+title: Attacher un volume
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Attacher un volume
+
+Vous pouvez attacher un `volume` à une [VM (Virtual Machine)](/docs/compute/concept/) au sein de la même Sous-région afin d'y ajouter de la capacité de stockage. Vous pouvez attacher plusieurs `volumes` à une VM (jusqu'à 40), par exemple pour séparer différents types de données.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.blockStorage.update**
+
+:::
+
+<Tabs>
+<TabItem value="Console" default>
+
+## Console {#tabhead-console}
+
+
+1. Connectez-vous sur la console Numspot. 
+2. Depuis le menu latéral gauche, cliquez sur **Storage** → **[Block Storage](/docs/storage/block-storage/concepts/)** → **Volumes**. La liste des `volumes` apparaît. 
+3. Sélectionnez le `volume` que vous souhaitez lier. 
+   :::info 
+   Vous pouvez également sélectionner une VM dans le dashboard "VM" et cliquer sur **Lier un volume**. 
+   ::: 
+4. Sous le menu d'actions du `volume`, cliquez sur **Associer une VM**. 
+   La boîte de dialogue **Association à une VM** apparaît. 
+5. Dans la liste "VM", sélectionnez la VM à laquelle vous voulez lier le `volume`. 
+6. Dans la liste "Périphériques", sélectionnez le nom du périphérique auquel vous souhaitez attribuer le `volume`. 
+7. Cliquez sur **Associer à la VM**. 
+   Le `volume` est lié à la VM sélectionnée. 
+   :::warning 
+   Une fois le `volume` attaché, vous devez le monter au niveau du système d'exploitation pour le rendre utilisable. 
+   :::    
+
+</TabItem>
+<TabItem value="API">
+
+## API {#tabhead-api}
+
+
+La commande `PUT /compute/spaces/{spaceId}/volumes/{id}/vms/link` attache un `volume` de type block storage à une VM. Le `volume` et la VM doivent se trouver dans la même sous-région. La VM peut être en cours d'exécution ou arrêtée. Le `volume` est attaché au périphérique spécifié de la VM.
+
+[Exemple de requête : Attacher un Volume à une VM ↗](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/volumes/{id}/vms/link)
+
+</TabItem>
+<TabItem value="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/volume).
+
+</TabItem>
+</Tabs>

@@ -1,0 +1,204 @@
+---
+title: Bloquer les accès abusifs - Secret Manager managé
+sidebar_label: Bloquer les accès abusifs
+description: Guide de blocage des accès abusifs sur une instance Secret Manager managée
+sidebar_position: 3
+draft: false
+---
+
+# Bloquer les accès abusifs
+
+Le service managé [Secret Manager](/docs/managed-services/secret-manager/concepts/) intègre des mécanismes pour limiter les tentatives de connexion en échec et bloquer les comptes compromis. Ce guide explique comment configurer le verrouillage automatique, supprimer un compte et révoquer ses accès en cas d'utilisation abusive.
+
+## Prérequis
+
+:::note
+- Une [instance Secret Manager](/docs/managed-services/secret-manager/concepts/) à l'état `RUNNING` ;
+- Le token admin de l'instance ;
+- Le CLI `bao` installé, ou `curl` pour les appels API directs.
+:::
+
+Configurez l'accès à l'instance :
+
+```bash
+export BAO_ADDR="https://{host-de-l-instance}"
+export BAO_TOKEN="{token-admin}"
+```
+
+## Verrouillage automatique après échecs répétés
+
+OpenBao active par défaut le verrouillage des utilisateurs (user lockout) pour les méthodes d'authentification **userpass**, **LDAP** et **AppRole**. Après plusieurs échecs de connexion en succession rapide, le compte est temporairement bloqué et OpenBao renvoie immédiatement une erreur `permission denied` sans valider le mot de passe.
+
+### Comportement par défaut
+
+| Paramètre | Valeur par défaut | Description |
+| --- | --- | --- |
+| Seuil de verrouillage | 5 tentatives | Nombre d'échecs avant blocage ; |
+| Durée de verrouillage | 15 minutes | Temps pendant lequel le compte reste bloqué ; |
+| Réinitialisation du compteur | 15 minutes | Délai sans tentative après lequel le compteur d'échecs revient à zéro.
+
+Le compteur d'échecs revient aussi à zéro après une connexion réussie.
+
+### Vérifier la configuration
+
+Remplacez `userpass/` par le chemin de la méthode d'authentification concernée.
+
+Via le CLI :
+
+```bash
+bao read sys/auth/userpass/tune
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  $BAO_ADDR/v1/sys/auth/userpass/tune
+```
+
+Les champs suivants indiquent l'état du verrouillage :
+
+- `user_lockout_threshold` : seuil de verrouillage ;
+- `user_lockout_duration` : durée de verrouillage ;
+- `user_lockout_counter_reset_duration` : délai de réinitialisation du compteur ;
+- `user_lockout_disable` : `true` si le verrouillage est désactivé.
+
+### Modifier les seuils de verrouillage
+
+Pour verrouiller un compte après 10 échecs en 10 minutes et réinitialiser le compteur après 10 minutes d'inactivité :
+
+Via le CLI :
+
+```bash
+bao auth tune \
+  -user-lockout-threshold=10 \
+  -user-lockout-duration=10m \
+  -user-lockout-counter-reset-duration=10m \
+  userpass/
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request POST \
+  --data '{
+    "user_lockout_threshold": "10",
+    "user_lockout_duration": "10m",
+    "user_lockout_counter_reset_duration": "10m"
+  }' \
+  $BAO_ADDR/v1/sys/auth/userpass/tune
+```
+
+:::warning
+Ces paramètres s'appliquent à l'ensemble de la méthode d'authentification activée au chemin indiqué. Réduisez la durée de verrouillage avec précaution pour ne pas affaiblir la protection contre les attaques par force brute.
+:::
+
+### Désactiver le verrouillage
+
+Vous pouvez désactiver le verrouillage au niveau d'une méthode d'authentification sans impacter le reste de l'instance.
+
+Via le CLI :
+
+```bash
+bao auth tune -user-lockout-disable=true userpass/
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request POST \
+  --data '{"user_lockout_disable": true}' \
+  $BAO_ADDR/v1/sys/auth/userpass/tune
+```
+
+## Bloquer ou supprimer un compte
+
+Lorsqu'un compte est compromis ou utilisé de manière abusive, vous pouvez le supprimer et révoquer immédiatement ses tokens actifs.
+
+### Supprimer un utilisateur
+
+Remplacez `{nom_utilisateur}` par le nom de l'utilisateur concerné.
+
+Via le CLI :
+
+```bash
+bao delete auth/userpass/users/{nom_utilisateur}
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request DELETE \
+  $BAO_ADDR/v1/auth/userpass/users/{nom_utilisateur}
+```
+
+:::danger
+La suppression d'un utilisateur est irréversible. Les tokens déjà émis restent valides jusqu'à leur expiration.
+:::
+
+### Révoquer les tokens actifs
+
+Après la suppression d'un utilisateur, révoquez ses tokens pour invalider immédiatement ses accès.
+
+Listez les accessoires (accessors) des tokens :
+
+```bash
+bao list auth/token/accessors
+```
+
+Révoquez un token spécifique :
+
+```bash
+bao token revoke -accessor {accessor}
+```
+
+Via l'API :
+
+```bash
+curl \
+  --header "X-Vault-Token: $BAO_TOKEN" \
+  --request POST \
+  --data '{"accessor": "{accessor}"}' \
+  $BAO_ADDR/v1/auth/token/revoke-accessor
+```
+
+### Désactiver une méthode d'authentification
+
+En cas d'attaque généralisée contre une méthode d'authentification, vous pouvez la désactiver complètement.
+
+Via le CLI :
+
+```bash
+bao auth disable userpass
+```
+
+:::danger
+La désactivation d'une méthode d'authentification bloque tous les utilisateurs qui l'utilisent. Cette opération est irréversible : vous devrez recréer la méthode et reconfigurer les utilisateurs.
+:::
+
+## Détecter une utilisation abusive
+
+Surveillez les événements suivants dans les logs d'audit de l'instance :
+
+- multiples échecs de connexion consécutifs pour un même utilisateur ;
+- codes de réponse `403` ou `permission denied` répétés ;
+- connexions depuis des adresses IP inhabituelles ;
+- récupération de secrets en dehors des plages horaires habituelles.
+
+Configurez une alerte ou un traitement automatique sur ces motifs pour réagir rapidement. Pour les environnements sensibles, combinez ces surveillances avec une restriction des IP et un accès via VPN avec MFA.
+
+## Résumé des bonnes pratiques
+
+| Situation | Action recommandée |
+| --- | --- |
+| Attaque par force brute | Conservez le verrouillage automatique avec des seuils adaptés à votre usage ; |
+| Compte compromis | Supprimez l'utilisateur et révoquez ses tokens ; |
+| Méthode d'auth ciblée | Ajustez les seuils de verrouillage ou désactivez temporairement la méthode ; |
+| Surveillance | Auditez régulièrement les logs d'accès et les échecs de connexion. |

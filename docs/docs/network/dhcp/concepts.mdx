@@ -1,0 +1,76 @@
+---
+title: DHCP options
+sidebar_label: About DHCP options
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# About DHCP options
+
+<ActionsSummary />
+
+DHCP (Dynamic Host Configuration Protocol) is a network protocol used to automatically assign network configuration parameters, such as IP (Internet Protocol) addresses, DNS or NTP (Network Time Protocol) servers.
+
+In Numspot, each [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) is associated with a set of DHCP options that defines these parameters for the [VM](/docs/compute/concept/) it contains.
+
+You can use the default set of DHCP options (created automatically when the VPC is created), or create your own custom set of options and associate it with the VPC to replace the default one.
+
+## VPC and DHCP options
+
+The VM that you create in a VPC receive a private domain name (DNS) for their private IP address, and a public domain name if a public IP address is associated with them. These domain names are configured from the DNS server specified in the set of DHCP options associated with the VPC.
+
+When you create a set of DHCP options, you can specify the following information:
+
+- **The DNS server and the domain name** to use for the VM created in the VPC.
+  In the `domain-name-servers` option, you can specify the IP addresses of one or more DNS servers.
+  In the `domain-name` option, you can define the domain name to use for your VM.
+
+- **The NTP servers** to use to synchronize the clocks of the VM with other network systems.
+  In the `ntp-servers` option, you can specify the IP addresses of one or more NTP servers.
+
+- **The log servers** to use to centralize system logs.
+  In the `log-servers` option, you can specify the IP addresses of one or more log servers.
+
+:::info
+To use the default Numspot DNS domain (inherited from Outscale), specify the following values:
+- `domain-name-servers`: `OutscaleProvidedDNS`
+- `domain-name`: `<region_name>.compute.internal`
+:::
+
+:::note
+If you do not specify an NTP server, the official Numspot Images already include an NTP server configured by default. You therefore do not need to add a specific route.
+:::
+
+:::warning
+If the NTP or log servers that you specify are located in another network — for example through a peering, a VPN connection or [DirectLink](/docs/connectivity/direct-link/concepts/) —, you must add a corresponding route in the [route table](/docs/network/route-table/concepts/) of your VPC.
+:::
+
+The sets of DHCP options that you create are available for your account and can be associated with one or more VPC. However, a VPC can have only one set of DHCP options associated at a time.
+
+You cannot modify a set of DHCP options after its creation. However, you can replace the set of options associated with a VPC with another one (default or custom).
+
+When you modify the set of DHCP options associated with a VPC, the new options are automatically applied to the existing VM and to the VM launched later. The existing VM apply these changes when their DHCP lease is renewed, without needing to restart them. You can force this renewal with:
+
+- `dhclient` on Linux
+- `ipconfig /renew` on Windows
+
+You can delete a set of DHCP options that you have created at any time, but you cannot delete the default one.
+
+## Default set of DHCP options
+
+The default set of DHCP options contains the following parameters:
+
+- `domain-name-servers`: `OutscaleProvidedDNS` (DNS server built into the Numspot network).
+- `domain-name`: the domain name of your region, in the format `<region_name>.compute.internal`.
+  For example, a VM with the private IP address `10.0.1.5` in the `eu-west-2` region has the following host name:
+  `ip-10-0-1-5.eu-west-2.compute.internal`.
+
+:::warning
+The default set of DHCP options does not contain any NTP server, but an NTP server is already configured in the official Numspot Images. To use another NTP server, create a custom set of DHCP options containing `ntp-servers` and add a route to its IP address if necessary.
+:::
+
+> The `OutscaleProvidedDNS` domain name server belongs to 3DS OUTSCALE.
+> The first IP address of the CIDR block of your VPC is reserved for this server.
+> For example, in a VPC with the CIDR block `10.0.0.0/16`, the IP address of the DNS server is `10.0.0.1`.

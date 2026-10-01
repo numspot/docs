@@ -1,0 +1,410 @@
+---
+title: Gérer les utilisateurs et les rôles PostgreSQL - PostgreSQL managé
+sidebar_label: Gérer les utilisateurs et les rôles PostgreSQL
+description: Créer et gérer les utilisateurs et rôles sur un cluster PostgreSQL managé Numspot
+sidebar_position: 8.5
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Gérer les utilisateurs et les rôles PostgreSQL
+
+Le service managé PostgreSQL fournit un utilisateur principal lors de la création du [cluster PostgreSQL](/docs/managed-services/postgresql/concepts/). Pour ajouter des utilisateurs supplémentaires ou gérer les permissions, vous devez vous connecter directement à la base de données.
+
+:::note
+L'API Numspot permet uniquement de gérer l'utilisateur principal du cluster. La création d'utilisateurs et de rôles supplémentaires s'effectue via des commandes SQL.
+:::
+
+## Se connecter au cluster PostgreSQL
+
+Avant de créer des utilisateurs ou des rôles, connectez-vous à votre cluster avec l'utilisateur principal :
+
+```bash
+psql "host=<hôte> port=5432 dbname=<base_de_données> user=<utilisateur_principal> sslmode=require"
+```
+
+Pour réinitialiser le mot de passe de l'utilisateur principal, consultez [Réinitialiser le mot de passe](/docs/managed-services/postgresql/actions/password-reset/).
+
+## Créer un utilisateur {#creer-un-utilisateur}
+
+Pour créer un utilisateur avec un mot de passe :
+
+```sql
+CREATE USER <nom_utilisateur> WITH PASSWORD '<mot_de_passe>';
+```
+
+### Options de création {#options-de-creation}
+
+| Option | Description |
+| --- | --- |
+| `CREATEDB` | Permet à l'utilisateur de créer des bases de données |
+| `NOCREATEDB` | Empêche la création de bases de données (par défaut) |
+| `CREATEROLE` | Permet de créer d'autres rôles |
+| `NOCREATEROLE` | Empêche la création de rôles (par défaut) |
+| `LOGIN` | Autorise la connexion (pour les utilisateurs) |
+| `NOLOGIN` | Empêche la connexion (pour les rôles système) |
+
+### Exemple
+
+Créer un utilisateur applicatif avec des droits limités :
+
+```sql
+CREATE USER app_user WITH PASSWORD '<mot_de_passe_sécurisé>' NOCREATEDB NOCREATEROLE;
+```
+
+## Créer un rôle {#creer-un-role}
+
+Les rôles permettent de grouper des permissions et de les attribuer à plusieurs utilisateurs.
+
+```sql
+CREATE ROLE <nom_rôle>;
+```
+
+### Exemple de structuration par rôles
+
+```sql
+-- Rôle lecture seule
+CREATE ROLE readonly;
+GRANT CONNECT ON DATABASE <base_de_données> TO readonly;
+GRANT USAGE ON SCHEMA public TO readonly;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO readonly;
+
+-- Rôle lecture-écriture
+CREATE ROLE readwrite;
+GRANT CONNECT ON DATABASE <base_de_données> TO readwrite;
+GRANT USAGE ON SCHEMA public TO readwrite;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO readwrite;
+
+-- Rôle administrateur
+CREATE ROLE db_admin;
+GRANT CONNECT ON DATABASE <base_de_données> TO db_admin;
+GRANT ALL PRIVILEGES ON DATABASE <base_de_données> TO db_admin;
+GRANT ALL PRIVILEGES ON SCHEMA public TO db_admin;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO db_admin;
+```
+
+## Attribuer un rôle à un utilisateur
+
+Associez un rôle à un utilisateur existant :
+
+```sql
+GRANT <nom_rôle> TO <nom_utilisateur>;
+```
+
+### Exemple
+
+```sql
+GRANT readonly TO app_user_read;
+GRANT readwrite TO app_user_write;
+```
+
+## Modifier un utilisateur
+
+### Changer le mot de passe
+
+```sql
+ALTER USER <nom_utilisateur> WITH PASSWORD '<nouveau_mot_de_passe>';
+```
+
+### Définir une date d'expiration {#definir-une-date-dexpiration}
+
+```sql
+ALTER USER <nom_utilisateur> WITH VALID UNTIL '<date_expiration>';
+```
+
+Exemple avec une date d'expiration :
+
+```sql
+ALTER USER temp_user WITH VALID UNTIL '2026-12-31 23:59:59';
+```
+
+## Gérer les permissions
+
+### Accorder des permissions sur une table
+
+```sql
+GRANT SELECT ON <table> TO <nom_utilisateur>;
+GRANT SELECT, INSERT, UPDATE ON <table> TO <nom_utilisateur>;
+GRANT ALL PRIVILEGES ON <table> TO <nom_utilisateur>;
+```
+
+### Accorder des permissions sur un schéma
+
+```sql
+GRANT USAGE ON SCHEMA <schéma> TO <nom_utilisateur>;
+GRANT CREATE ON SCHEMA <schéma> TO <nom_utilisateur>;
+```
+
+### Révoquer des permissions {#revoquer-des-permissions}
+
+```sql
+REVOKE SELECT ON <table> FROM <nom_utilisateur>;
+REVOKE ALL PRIVILEGES ON SCHEMA <schéma> FROM <nom_utilisateur>;
+```
+
+## Supprimer un utilisateur ou un rôle
+
+### Supprimer un utilisateur
+
+```sql
+DROP USER <nom_utilisateur>;
+```
+
+### Supprimer un rôle
+
+```sql
+DROP ROLE <nom_rôle>;
+```
+
+:::warning
+La suppression d'un utilisateur ou d'un rôle est irréversible. Vérifiez qu'aucun objet ne dépend de cet utilisateur avant la suppression.
+:::
+
+## Configurer l'authentification SSO
+
+L'authentification unique (SSO, Single Sign-On) peut être activée ou modifiée sur un cluster PostgreSQL déjà instancié. Elle permet de centraliser la gestion des utilisateurs et des rôles au sein de votre infrastructure d'entreprise.
+
+Le support des protocoles LDAP (Lightweight Directory Access Protocol) et OAuth 2.0 / OpenID Connect est disponible.
+
+### Configurer l'authentification via LDAP
+
+Pour synchroniser les utilisateurs et les rôles PostgreSQL avec votre annuaire LDAP, l'outil `ldap2pg` doit être installé sur le cluster.
+
+:::warning
+Vous n'avez pas accès au terminal du cluster pour installer des composants. Pour activer l'authentification LDAP et installer `ldap2pg`, vous devez adresser une demande à l'équipe support.
+:::
+
+L'équipe support réalise l'installation et la configuration de `ldap2pg` sur le cluster suite à votre demande. Vous devez fournir les paramètres de connexion à votre annuaire LDAP (URI, base DN, filtres de recherche, etc.) ainsi que la correspondance souhaitée entre les groupes LDAP et les rôles PostgreSQL.
+
+Une fois la configuration appliquée, les utilisateurs présents dans l'annuaire LDAP peuvent se connecter au cluster et se voir attribuer automatiquement les rôles correspondants.
+
+### Configurer l'authentification via OAuth 2.0 / OpenID Connect
+
+L'authentification par OAuth 2.0 et OpenID Connect (OIDC) permet aux utilisateurs de se connecter au cluster PostgreSQL en utilisant leur fournisseur d'identité (IdP) externe (par exemple : Keycloak, Okta, Microsoft Entra ID, etc.).
+
+:::warning
+Vous n'avez pas accès au terminal du cluster pour installer des composants. Pour activer l'authentification OAuth/OIDC, vous devez adresser une demande à l'équipe support.
+:::
+
+L'équipe support configure le fournisseur d'identité OAuth/OIDC sur le cluster. Vous devez fournir les informations suivantes :
+
+- **Issuer URL** : l'URL de l'émetteur de votre IdP (par exemple : `https://keycloak.example.com/realms/monrealm`) ;
+- **Client ID** : l'identifiant client OAuth ;
+- **Client Secret** : le secret client (transmis de manière sécurisée) ;
+- **Scopes** : les scopes demandés, par défaut `openid`, `profile` et `email` ;
+- **Attribut utilisateur** : le claim utilisé pour identifier l'utilisateur (par exemple : `sub`, `email`, `preferred_username`) ;
+- **Mappage des rôles** : la correspondance entre les rôles ou groupes retournés par l'IdP et les rôles PostgreSQL.
+
+Une fois le fournisseur configuré, les utilisateurs authentifiés via l'IdP peuvent accéder au cluster avec les permissions associées à leur identité.
+
+## Bonnes pratiques
+
+### Principe du moindre privilège
+
+Accordez uniquement les permissions nécessaires au fonctionnement de l'application :
+
+- Utilisez des rôles pour regrouper les permissions ;
+- Attribuez les rôles aux utilisateurs selon leurs besoins ;
+- Préférez `SELECT` à `ALL PRIVILEGES` pour les utilisateurs en lecture seule.
+
+### Rotation des mots de passe
+
+Changez régulièrement les mots de passe des utilisateurs applicatifs :
+
+```sql
+ALTER USER <nom_utilisateur> WITH PASSWORD '<nouveau_mot_de_passe>';
+```
+
+### Audit des accès {#audit-des-acces}
+
+PostgreSQL expose les catalogues système `pg_roles`, `pg_auth_members`, `pg_database`, `pg_namespace`, `pg_class`, `pg_proc`, `pg_default_acl`, `pg_policies` et `pg_stat_activity`. Les requêtes suivantes couvrent les éléments essentiels d'un audit des rôles, des permissions et des connexions.
+
+**Lister les rôles et leurs attributs**
+
+```sql
+SELECT
+  rolname AS role,
+  rolsuper AS superuser,
+  rolcreatedb AS create_db,
+  rolcreaterole AS create_role,
+  rolinherit AS inherit,
+  rolcanlogin AS can_login,
+  rolconnlimit AS conn_limit,
+  rolvaliduntil AS valid_until
+FROM pg_roles
+WHERE rolname NOT LIKE 'pg_%'
+ORDER BY rolname;
+```
+
+**Lister les membres de rôles**
+
+```sql
+SELECT
+  parent.rolname AS role,
+  member.rolname AS member,
+  grantor.rolname AS granted_by,
+  am.admin_option
+FROM pg_auth_members am
+JOIN pg_roles parent ON parent.oid = am.roleid
+JOIN pg_roles member ON member.oid = am.member
+LEFT JOIN pg_roles grantor ON grantor.oid = am.grantor
+ORDER BY parent.rolname, member.rolname;
+```
+
+**Lister les permissions sur les bases de données**
+
+```sql
+SELECT
+  d.datname AS database,
+  grantee.rolname AS grantee,
+  acl.privilege_type
+FROM pg_database d
+LEFT JOIN LATERAL aclexplode(d.datacl) acl ON true
+LEFT JOIN pg_roles grantee ON grantee.oid = acl.grantee
+WHERE d.datallowconn
+ORDER BY d.datname, grantee.rolname, acl.privilege_type;
+```
+
+**Lister les permissions sur les schémas**
+
+```sql
+SELECT
+  n.nspname AS schema,
+  grantee.rolname AS grantee,
+  acl.privilege_type
+FROM pg_namespace n
+LEFT JOIN LATERAL aclexplode(n.nspacl) acl ON true
+LEFT JOIN pg_roles grantee ON grantee.oid = acl.grantee
+WHERE n.nspname NOT IN ('pg_catalog', 'information_schema')
+ORDER BY n.nspname, grantee.rolname, acl.privilege_type;
+```
+
+**Lister les permissions sur les tables et vues**
+
+```sql
+SELECT
+  table_schema,
+  table_name,
+  grantee,
+  privilege_type
+FROM information_schema.role_table_grants
+WHERE table_schema NOT IN ('pg_catalog', 'information_schema')
+ORDER BY table_schema, table_name, grantee, privilege_type;
+```
+
+**Lister les permissions sur les séquences**
+
+```sql
+SELECT
+  object_schema AS sequence_schema,
+  object_name AS sequence_name,
+  grantee,
+  privilege_type
+FROM information_schema.role_usage_grants
+WHERE object_type = 'SEQUENCE'
+  AND object_schema NOT IN ('pg_catalog', 'information_schema')
+ORDER BY object_schema, object_name, grantee, privilege_type;
+```
+
+**Lister les permissions sur les fonctions**
+
+```sql
+SELECT
+  n.nspname AS schema,
+  p.proname AS function,
+  grantee.rolname AS grantee,
+  acl.privilege_type
+FROM pg_proc p
+JOIN pg_namespace n ON n.oid = p.pronamespace
+LEFT JOIN LATERAL aclexplode(p.proacl) acl ON true
+LEFT JOIN pg_roles grantee ON grantee.oid = acl.grantee
+WHERE n.nspname NOT IN ('pg_catalog', 'information_schema')
+ORDER BY n.nspname, p.proname, grantee.rolname, acl.privilege_type;
+```
+
+**Lister les privilèges par défaut**
+
+```sql
+SELECT
+  pg_get_userbyid(defaclrole) AS role,
+  n.nspname AS schema,
+  CASE defaclobjtype
+    WHEN 'r' THEN 'table'
+    WHEN 'S' THEN 'sequence'
+    WHEN 'f' THEN 'function'
+    WHEN 'T' THEN 'type'
+  END AS object_type,
+  grantee.rolname AS grantee,
+  acl.privilege_type
+FROM pg_default_acl d
+LEFT JOIN pg_namespace n ON n.oid = d.defaclnamespace
+LEFT JOIN LATERAL aclexplode(d.defaclacl) acl ON true
+LEFT JOIN pg_roles grantee ON grantee.oid = acl.grantee
+ORDER BY role, n.nspname, object_type, grantee.rolname, acl.privilege_type;
+```
+
+**Lister les propriétaires d'objets**
+
+```sql
+SELECT
+  n.nspname AS schema,
+  c.relname AS object_name,
+  CASE c.relkind
+    WHEN 'r' THEN 'table'
+    WHEN 'v' THEN 'view'
+    WHEN 'm' THEN 'materialized view'
+    WHEN 'S' THEN 'sequence'
+  END AS object_type,
+  pg_get_userbyid(c.relowner) AS owner
+FROM pg_class c
+JOIN pg_namespace n ON n.oid = c.relnamespace
+WHERE n.nspname NOT IN ('pg_catalog', 'information_schema')
+ORDER BY n.nspname, c.relname;
+```
+
+**Lister les politiques de sécurité au niveau des lignes**
+
+```sql
+SELECT
+  schemaname,
+  tablename,
+  policyname,
+  permissive,
+  roles,
+  cmd,
+  qual,
+  with_check
+FROM pg_policies
+ORDER BY schemaname, tablename, policyname;
+```
+
+**Lister les sessions et connexions actives**
+
+```sql
+SELECT
+  pid,
+  usename AS username,
+  datname AS database,
+  client_addr,
+  state,
+  query
+FROM pg_stat_activity
+WHERE usename IS NOT NULL
+ORDER BY usename, datname;
+```
+
+## Limitations
+
+| Action | Support |
+| --- | --- |
+| Créer un utilisateur principal | Via l'API ou la console à la création du cluster uniquement |
+| Réinitialiser le mot de passe principal | Via l'API (voir [Réinitialiser le mot de passe](/docs/managed-services/postgresql/actions/password-reset/)) |
+| Créer des utilisateurs supplémentaires | Via SQL uniquement |
+| Gérer les rôles | Via SQL uniquement |
+| Configurer les permissions | Via SQL uniquement |
+
+:::tip
+Automatisez la gestion des utilisateurs avec des scripts SQL versionnés dans votre système de contrôle de source. Cela facilite la traçabilité et la reproduction des configurations.
+:::

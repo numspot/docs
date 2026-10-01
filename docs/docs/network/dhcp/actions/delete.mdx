@@ -1,0 +1,62 @@
+---
+title: Delete a DHCP options group - Numspot
+sidebar_label: Delete a DHCP options group
+sidebar_position: 5
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Delete a DHCP options group
+
+You can delete a [DHCP (Dynamic Host Configuration Protocol)](/docs/network/dhcp/concepts/) options group that you no longer need. It must not be associated with any [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+
+You cannot delete the default DHCP options group.
+
+## Permissions
+
+:::info
+This action requires the following **IAM** (Identity and Access Management) permissions:
+
+- **compute.dhcpOptions.delete**
+
+:::
+
+## Prerequisites
+
+:::info
+**Before you begin**
+
+Dissociate the DHCP options group from all the VPC it is associated with. To do so, perform one of the following actions for each VPC:
+
+- associate the VPC with another DHCP options group. For more information, see the [Modify the DHCP options group associated with a VPC ↗](./update.mdx) section;
+- delete the VPC and its associated resources.
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+1. From the left-hand side menu, click **Network** → **DHCP Options** to access the list of DHCP options groups.
+2. Tick the checkbox of the DHCP options group you want to delete.
+3. Click the **Delete** button.
+4. In the confirmation dialog box, click **Delete**.
+
+A confirmation message appears at the bottom of the page indicating that the DHCP options group has been deleted.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `DELETE /compute/spaces/{spaceId}/dhcpOptions/{id}` command deletes a specified DHCP options set.
+
+Before deleting a DHCP options set, you must dissociate it from the networks it is associated with. To do so, associate each network with a new DHCP options set or with the default set.
+
+[Request example: Deleting a DHCP options set ↗](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/dhcpOptions/{id})
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/dhcp_options).
+
+</TabItem>
+</Tabs>

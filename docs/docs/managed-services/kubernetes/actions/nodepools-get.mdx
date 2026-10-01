@@ -1,0 +1,70 @@
+---
+title: Get the details of a node pool of a Kubernetes cluster - Managed Kubernetes
+sidebar_label: Get the details of a node pool of a Kubernetes cluster
+sidebar_position: 7
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Get the details of a node pool of a Kubernetes cluster
+
+Retrieve the details of a node pool of a [Kubernetes cluster](/docs/managed-services/kubernetes/concepts/) within your space.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **kubernetes.cluster.get**
+
+:::
+<Tabs>
+<TabItem value="console" label="Console" default>
+    1. From the left-hand side menu, click **Managed Services** → **Kubernetes** to access the list of Kubernetes clusters.
+
+    ![Managed Services menu](/img/console/managed-services/en-menu-managed-services.png)
+
+    2. Click the ID of the cluster containing the node pool whose details you want to view.
+
+    3. The information for each node pool appears in the **Node pools** section of the cluster details page.
+
+    ![Node pool details](/img/managed-services/kubernetes/fr/kubernetes_get_cluster_details_1.png)
+
+    You will find the following information there for each node pool:
+
+    - **ID**: unique identifier of the node pool;
+    - **Status**: current state of the node pool;
+    - **Availability Zone**: zone in which the node pool is deployed;
+    - **Node type**: profile of the nodes of the node pool;
+    - **System volume**: type and size of the system volume;
+    - **Number of nodes**: number of active nodes in the node pool.
+</TabItem>
+
+<TabItem value="api" label="API">
+    Use the `GET /kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools/{nodePoolId}` route to get the information of a node pool of a managed Kubernetes cluster.
+
+    **Example response**
+
+    ```json
+    {
+      "id": "nodepool-001-e29b-41d4-a716",
+      "name": "worker-nodepool-1",
+      "availabilityZone": "eu-west-2a",
+      "nodeProfile": "medium",
+      "replicas": 3,
+      "rootDisk": {
+        "size": 50,
+        "iops": 3000,
+        "type": "enterprise"
+      },
+      "status": {
+        "state": "RUNNING",
+        "message": "NodePool is healthy"
+      }
+    }
+    ```
+
+    [See the full specification](/openapi/#tag/kubernetes/GET/kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools/{nodePoolId})
+</TabItem>
+</Tabs>

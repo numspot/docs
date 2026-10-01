@@ -1,0 +1,58 @@
+---
+title: Versions and lifecycle - Managed Kubernetes
+sidebar_label: Versions and lifecycle
+sidebar_position: 5
+draft: false
+---
+
+# Versions and lifecycle
+
+Numspot operates its [clusters Kubernetes](/docs/managed-services/kubernetes/concepts/) with stable versions that benefit from active monitoring of security fixes, in compliance with the security requirements applied to the service.
+
+## Supported versions
+
+The following minor version is supported:
+
+- **Kubernetes 1.34**
+
+This scope covers the stable versions actively maintained by the Kubernetes community, with continuous monitoring of security bulletins.
+
+:::note
+When you create a cluster, the most recent version is selected by default. For more information, see [Create a cluster Kubernetes](/docs/managed-services/kubernetes/actions/create/).
+:::
+
+## Security patch monitoring
+
+The images used for the clusters Kubernetes include:
+
+- patch updates applied regularly to fix bugs and security flaws;
+- active monitoring of critical and high vulnerabilities;
+- a hardened system image following the ANSSI recommendations.
+
+Patch updates are applied automatically by Numspot and require no action from the customer. They concern only patch versions (for example, `1.34.0` to `1.34.1`), without any change to data compatibility.
+
+:::info
+To obtain information about the applied versions or recent fixes, contact Numspot support.
+:::
+
+## Version lifecycle
+
+### Support policy
+
+| Version | Support status | Community end-of-support date | Estimated Numspot end of support |
+|---------|----------------|-------------------------------|----------------------------------|
+| **1.34** | Active | February 2027 | February 2027 |
+
+The support status is aligned with the dates announced by the Kubernetes project. Numspot follows the Kubernetes policy regarding the support of minor versions.
+
+### End-of-support notification
+
+Numspot notifies its customers **several months before the end of support** of a minor version. This notification enables customers to plan the migration to a more recent version.
+
+## Minor updates
+
+Minor updates (for example, from Kubernetes 1.33 to Kubernetes 1.34) require the update of the cluster. Numspot recommends testing the compatibility of your applications before performing a minor update.
+
+:::warning
+Numspot cannot guarantee backward compatibility between minor versions. It is the customer's responsibility to verify that their applications are compatible with the new version before any migration.
+:::

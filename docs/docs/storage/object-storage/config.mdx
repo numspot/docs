@@ -1,0 +1,81 @@
+---
+title: Configuring the AWS CLI
+sidebar_position: 2
+draft: false
+---
+
+# Configuring the AWS CLI with Numspot
+
+This guide helps you configure the AWS CLI (Amazon Web Services Command Line Interface) to access Numspot services using access credentials.
+
+The full reference of the Object Storage API is available in the [OpenAPI Scalar documentation](/openapi-object-storage).
+
+## Configuration steps
+
+1. Install the AWS CLI
+
+   Download and install the AWS CLI by following the [official AWS CLI documentation](https://docs.aws.amazon.com/fr_fr/cli/latest/userguide/cli-chap-getting-started.html).
+
+2. Run the configuration command
+
+   Open a terminal and run:
+
+   ```bash
+   aws configure
+   ```
+3. Enter the following information:
+- `AWS Access Key ID`: Your Numspot access key.
+- `AWS Secret Access Key`: Your Numspot secret key. For more information, see [Obtaining a key pair](/docs/storage/object-storage/quickstart/#1-obtaining-a-key-pair-access-and-secret).
+- `Default region name`: The region you want to use.
+- `Default output format`: json
+
+    :::tip
+    This command configures the default profile (default). To configure a named profile, use the following command:
+    ```bash
+    aws configure --profile YOUR_PROFILE
+    ```
+    :::
+
+## Generated files
+
+`~/.aws/credentials`:
+
+```ini
+[default]
+aws_access_key_id = YOUR_ACCESS_KEY_ID
+aws_secret_access_key = YOUR_SECRET_ACCESS_KEY
+
+[YOUR_PROFILE]
+aws_access_key_id = OTHER_ACCESS_KEY
+aws_secret_access_key = OTHER_SECRET_KEY
+```
+
+`~/.aws/config`:
+
+```ini
+[default]
+region = eu-west-2
+output = json
+
+[profile YOUR_PROFILE]
+region = eu-west-2
+output = json
+```
+
+## Use a specific profile
+
+To use a named profile in your AWS CLI commands:
+```bash
+aws s3 ls --profile YOUR_PROFILE
+```
+
+## Check the configuration
+
+You can display the configuration of a profile using the following command:
+```bash
+aws configure list --profile YOUR_PROFILE
+```
+
+## Manual configuration
+
+If you prefer, you can manually create or edit the `~/.aws/credentials` and `~/.aws/config` files following the formats shown above.

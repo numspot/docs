@@ -1,0 +1,751 @@
+{
+  "changelog.empty": {
+    "message": "Aucune entrée ne correspond aux filtres sélectionnés."
+  },
+  "changelog.filters.aria": {
+    "message": "Filtres du changelog"
+  },
+  "changelog.filters.reset": {
+    "message": "Réinitialiser les filtres"
+  },
+  "changelog.filters.service": {
+    "message": "Service"
+  },
+  "changelog.filters.status": {
+    "message": "Statut"
+  },
+  "changelog.filters.title": {
+    "message": "Filtres"
+  },
+  "changelog.intro": {
+    "message": "Découvrez les dernières évolutions des produits et fonctionnalités Numspot."
+  },
+  "changelog.lastUpdate": {
+    "message": "Dernière mise à jour le {day} {monthYear}"
+  },
+  "changelog.month.1": {
+    "message": "Janvier"
+  },
+  "changelog.month.10": {
+    "message": "Octobre"
+  },
+  "changelog.month.11": {
+    "message": "Novembre"
+  },
+  "changelog.month.12": {
+    "message": "Décembre"
+  },
+  "changelog.month.2": {
+    "message": "Février"
+  },
+  "changelog.month.3": {
+    "message": "Mars"
+  },
+  "changelog.month.4": {
+    "message": "Avril"
+  },
+  "changelog.month.5": {
+    "message": "Mai"
+  },
+  "changelog.month.6": {
+    "message": "Juin"
+  },
+  "changelog.month.7": {
+    "message": "Juillet"
+  },
+  "changelog.month.8": {
+    "message": "Août"
+  },
+  "changelog.month.9": {
+    "message": "Septembre"
+  },
+  "changelog.service.connectivity": {
+    "message": "Connectivité"
+  },
+  "changelog.service.inventory": {
+    "message": "Inventaire"
+  },
+  "changelog.service.managed-services": {
+    "message": "Services Managés"
+  },
+  "changelog.service.mistral-ai-platform": {
+    "message": "Plateforme IA Mistral",
+    "description": "Changelog service label"
+  },
+  "changelog.status.added": {
+    "message": "Ajout"
+  },
+  "changelog.status.changed": {
+    "message": "Modification"
+  },
+  "changelog.status.deprecated": {
+    "message": "Dépréciation"
+  },
+  "changelog.status.fixed": {
+    "message": "Correction"
+  },
+  "changelog.status.removed": {
+    "message": "Suppression"
+  },
+  "changelog.status.security": {
+    "message": "Sécurité"
+  },
+  "feedback.modal.back": {
+    "message": "Passer",
+    "description": "Button to send the no vote without leaving a comment"
+  },
+  "feedback.modal.close": {
+    "message": "Fermer",
+    "description": "Accessible label of the modal close button"
+  },
+  "feedback.modal.placeholder": {
+    "message": "Dites-nous ce que nous pourrions améliorer… (optionnel)",
+    "description": "Placeholder of the comment field"
+  },
+  "feedback.modal.submit": {
+    "message": "Envoyer",
+    "description": "Button to submit the comment"
+  },
+  "feedback.modal.subtitle": {
+    "message": "Votre commentaire est optionnel, mais précieux pour nous.",
+    "description": "Modal subtitle stating that the comment is optional"
+  },
+  "feedback.modal.title": {
+    "message": "Comment pourrions-nous améliorer cette page ?",
+    "description": "Title of the negative feedback comment modal"
+  },
+  "feedback.no": {
+    "message": "Non",
+    "description": "Feedback no button label"
+  },
+  "feedback.question": {
+    "message": "Cette page vous a-t-elle été utile ?",
+    "description": "Question asked in the doc page footer"
+  },
+  "feedback.thanks": {
+    "message": "Merci pour votre retour !",
+    "description": "Thank you message after a feedback vote"
+  },
+  "feedback.yes": {
+    "message": "Oui",
+    "description": "Feedback yes button label"
+  },
+  "home.card.read-more": {
+    "message": "En savoir plus",
+    "description": "Home page card call to action"
+  },
+  "home.carousel.next": {
+    "message": "Cartes suivantes"
+  },
+  "home.carousel.prev": {
+    "message": "Cartes précédentes"
+  },
+  "home.entry.create-vm.description": {
+    "message": "Créez et configurez une VM personnalisée dans votre VPC.",
+    "description": "Home page zone"
+  },
+  "home.entry.create-vm.title": {
+    "message": "Créer une VM",
+    "description": "Home page zone"
+  },
+  "home.entry.first-connection.description": {
+    "message": "Connectez-vous à la console et familiarisez-vous avec l'interface.",
+    "description": "Home page zone"
+  },
+  "home.entry.first-connection.title": {
+    "message": "Première connexion à la console Numspot",
+    "description": "Home page zone"
+  },
+  "home.entry.getting-started.description": {
+    "message": "Connectez-vous et construisez votre organisation : premier espace, utilisateurs, droits et premières ressources.",
+    "description": "Home page zone"
+  },
+  "home.entry.getting-started.title": {
+    "message": "Premiers pas avec Numspot",
+    "description": "Home page zone"
+  },
+  "home.entry.kubernetes-concepts.description": {
+    "message": "Fonctionnement du Kubernetes managé sur Numspot : architecture et objets.",
+    "description": "Home page zone"
+  },
+  "home.entry.kubernetes-concepts.title": {
+    "message": "Concepts du Kubernetes managé",
+    "description": "Home page zone"
+  },
+  "home.entry.labs-container-app.description": {
+    "message": "Du build de l'image à l'exposition du service sur le cloud souverain.",
+    "description": "Home page zone"
+  },
+  "home.entry.labs-container-app.title": {
+    "message": "Déployez une application conteneurisée de bout en bout",
+    "description": "Home page zone"
+  },
+  "home.entry.labs-terraform.description": {
+    "message": "Structurez, versionnez et automatisez vos infrastructures.",
+    "description": "Home page zone"
+  },
+  "home.entry.labs-terraform.title": {
+    "message": "Automatisez vos déploiements avec Terraform",
+    "description": "Home page zone"
+  },
+  "home.entry.labs-vpn.description": {
+    "message": "Mettez en place une connectivité privée entre votre SI et Numspot.",
+    "description": "Home page zone"
+  },
+  "home.entry.labs-vpn.title": {
+    "message": "Connectez votre réseau d'entreprise à Numspot",
+    "description": "Home page zone"
+  },
+  "home.entry.managed-concepts.description": {
+    "message": "Ce que couvrent les services managés : Kubernetes, PostgreSQL et Container Registry.",
+    "description": "Home page zone"
+  },
+  "home.entry.managed-concepts.title": {
+    "message": "Concepts des services managés",
+    "description": "Home page zone"
+  },
+  "home.entry.postgresql-concepts.description": {
+    "message": "Architecture, réplicas et sauvegardes du PostgreSQL managé.",
+    "description": "Home page zone"
+  },
+  "home.entry.postgresql-concepts.title": {
+    "message": "Concepts du PostgreSQL managé",
+    "description": "Home page zone"
+  },
+  "home.entry.terraform-quickstart.description": {
+    "message": "Provisionnez vos ressources Numspot sous forme de code.",
+    "description": "Home page zone"
+  },
+  "home.entry.terraform-quickstart.title": {
+    "message": "Démarrage rapide : Terraform",
+    "description": "Home page zone"
+  },
+  "home.entry.vm-quickstart.description": {
+    "message": "Déployez votre première VM en quelques minutes.",
+    "description": "Home page zone"
+  },
+  "home.entry.vm-quickstart.title": {
+    "message": "Démarrage rapide : créer une VM",
+    "description": "Home page zone"
+  },
+  "home.section.catalog.desc": {
+    "message": "Parcourez le catalogue des ressources disponibles avec leurs domaines, types et tarifs."
+  },
+  "home.section.changelog.desc": {
+    "message": "Suivez les évolutions, nouveautés et corrections de la plateforme Numspot."
+  },
+  "home.section.compute.desc": {
+    "message": "Créez et gérez des instances de calcul dans le cloud."
+  },
+  "home.section.connectivity.desc": {
+    "message": "Explorez les options de connectivité avancées pour optimiser votre infrastructure réseau."
+  },
+  "home.section.faq.desc": {
+    "message": "Réponses aux questions générales et techniques les plus fréquentes."
+  },
+  "home.section.glossary.desc": {
+    "message": "Définitions des termes et concepts clés de la plateforme Numspot."
+  },
+  "home.section.governance": {
+    "message": "Management & gouvernance",
+    "description": "Home page section title for management & governance"
+  },
+  "home.section.iam.desc": {
+    "message": "Service centralisé d'authentification et de gestion des accès pour l'ensemble des services Numspot."
+  },
+  "home.section.inventory.desc": {
+    "message": "Consultez l'ensemble des ressources déployées dans un espace Numspot."
+  },
+  "home.section.managed-services.desc": {
+    "message": "Créez et gérez des conteneurs et des bases de données dans le cloud."
+  },
+  "home.section.network.desc": {
+    "message": "Explorez les options réseau avancées pour optimiser votre infrastructure."
+  },
+  "home.section.openapi.desc": {
+    "message": "Explorez et testez les API Numspot depuis leur spécification OpenAPI interactive."
+  },
+  "home.section.services": {
+    "message": "Nos services",
+    "description": "Home page section title for services"
+  },
+  "home.section.storage.desc": {
+    "message": "Découvrez et configurez des solutions de stockage pour sécuriser et organiser vos données."
+  },
+  "home.section.support.desc": {
+    "message": "Explorez les options de support pour assurer la continuité de vos services."
+  },
+  "home.section.terraform.desc": {
+    "message": "Outil d'infrastructure as code (IaC) pour définir et gérer les ressources cloud de façon automatisée."
+  },
+  "home.section.tools": {
+    "message": "Ressources & outils",
+    "description": "Home page section title for tools & resources"
+  },
+  "home.zones.get-started.title": {
+    "message": "Pour commencer",
+    "description": "Home page zone"
+  },
+  "home.zones.labs.title": {
+    "message": "Labs — Apprendre & construire",
+    "description": "Home page zone"
+  },
+  "home.zones.popular.title": {
+    "message": "Pages les plus consultées",
+    "description": "Home page zone"
+  },
+  "navbar.baseline": {
+    "message": "Plateforme de services cloud hybride, souveraine et portable",
+    "description": "Baseline displayed next to the logo in the navbar"
+  },
+  "permexplorer.clear": {
+    "message": "Effacer la recherche",
+    "description": "Clear the permissions search field"
+  },
+  "permexplorer.count.apis": {
+    "message": "{n} API",
+    "description": "API count shown on a permission card"
+  },
+  "permexplorer.empty": {
+    "message": "Aucune permission ni API ne correspond à cette recherche.",
+    "description": "Empty state of the permissions search"
+  },
+  "permexplorer.group.apis": {
+    "message": "API",
+    "description": "Suggestions group heading: APIs"
+  },
+  "permexplorer.group.permissions": {
+    "message": "Permissions",
+    "description": "Suggestions group heading: permissions"
+  },
+  "permexplorer.search.aria": {
+    "message": "Rechercher une permission ou une API",
+    "description": "Search field accessible name of the IAM permissions page"
+  },
+  "permexplorer.search.placeholder": {
+    "message": "Rechercher une permission (iam.space.create) ou une API (POST /iam/spaces…)…",
+    "description": "Search placeholder of the IAM permissions page"
+  },
+  "permexplorer.stats": {
+    "message": "{count} permissions shown · {apis} APIs",
+    "description": "Visible permissions and APIs count"
+  },
+  "theme.AnnouncementBar.closeButtonAriaLabel": {
+    "message": "Fermer",
+    "description": "The ARIA label for close button of announcement bar"
+  },
+  "theme.BackToTopButton.buttonAriaLabel": {
+    "message": "Retour au début de la page",
+    "description": "The ARIA label for the back to top button"
+  },
+  "theme.CodeBlock.copied": {
+    "message": "Copié",
+    "description": "The copied button label on code blocks"
+  },
+  "theme.CodeBlock.copy": {
+    "message": "Copier",
+    "description": "The copy button label on code blocks"
+  },
+  "theme.CodeBlock.copyButtonAriaLabel": {
+    "message": "Copier le code",
+    "description": "The ARIA label for copy code blocks button"
+  },
+  "theme.CodeBlock.wordWrapToggle": {
+    "message": "Activer/désactiver le retour à la ligne",
+    "description": "The title attribute for toggle word wrapping button of code block lines"
+  },
+  "theme.DocSidebarItem.collapseCategoryAriaLabel": {
+    "message": "Réduire la catégorie '{label}' de la barre latérale",
+    "description": "The ARIA label to collapse the sidebar category"
+  },
+  "theme.DocSidebarItem.expandCategoryAriaLabel": {
+    "message": "Développer la catégorie '{label}' de la barre latérale",
+    "description": "The ARIA label to expand the sidebar category"
+  },
+  "theme.ErrorPageContent.title": {
+    "message": "Cette page a planté.",
+    "description": "The title of the fallback page when the page crashed"
+  },
+  "theme.ErrorPageContent.tryAgain": {
+    "message": "Réessayer",
+    "description": "The label of the button to try again rendering when the React error boundary captures an error"
+  },
+  "theme.IconExternalLink.ariaLabel": {
+    "message": "(ouvre un nouvel onglet)",
+    "description": "The ARIA label for the external link icon"
+  },
+  "theme.NavBar.navAriaLabel": {
+    "message": "Navigation principale",
+    "description": "The ARIA label for the main navigation"
+  },
+  "theme.NotFound.back": {
+    "message": "Retour à l'accueil"
+  },
+  "theme.NotFound.p1": {
+    "message": "Nous n'avons pas trouvé ce que vous recherchez.",
+    "description": "The first paragraph of the 404 page"
+  },
+  "theme.NotFound.p2": {
+    "message": "Veuillez contacter le propriétaire du site qui vous a lié à l'URL d'origine et leur faire savoir que leur lien est cassé.",
+    "description": "The 2nd paragraph of the 404 page"
+  },
+  "theme.NotFound.title": {
+    "message": "Page introuvable",
+    "description": "The title of the 404 page"
+  },
+  "theme.SearchBar.label": {
+    "message": "Rechercher",
+    "description": "Search UI strings — @easyops-cn/docusaurus-search-local (third-party plugin: Docusaurus ships no built-in translation for these keys)"
+  },
+  "theme.SearchBar.noResultsText": {
+    "message": "Aucun résultat",
+    "description": "Search UI strings — @easyops-cn/docusaurus-search-local (third-party plugin: Docusaurus ships no built-in translation for these keys)"
+  },
+  "theme.SearchBar.searchInContext": {
+    "message": "Voir tous les résultats dans « {context} »",
+    "description": "Search UI strings — @easyops-cn/docusaurus-search-local (third-party plugin: Docusaurus ships no built-in translation for these keys)"
+  },
+  "theme.SearchBar.seeAll": {
+    "message": "Voir les {count} résultats",
+    "description": "Search UI strings — @easyops-cn/docusaurus-search-local (third-party plugin: Docusaurus ships no built-in translation for these keys)"
+  },
+  "theme.SearchBar.seeAllOutsideContext": {
+    "message": "Voir tous les résultats hors « {context} »",
+    "description": "Search UI strings — @easyops-cn/docusaurus-search-local (third-party plugin: Docusaurus ships no built-in translation for these keys)"
+  },
+  "theme.SearchPage.documentsFound.plurals": {
+    "message": "Un document trouvé|{count} documents trouvés",
+    "description": "Search UI strings — @easyops-cn/docusaurus-search-local (third-party plugin: Docusaurus ships no built-in translation for these keys)"
+  },
+  "theme.SearchPage.emptyResultsTitle": {
+    "message": "Rechercher dans la documentation",
+    "description": "Search UI strings — @easyops-cn/docusaurus-search-local (third-party plugin: Docusaurus ships no built-in translation for these keys)"
+  },
+  "theme.SearchPage.existingResultsTitle": {
+    "message": "Résultats de recherche pour « {query} »",
+    "description": "Search UI strings — @easyops-cn/docusaurus-search-local (third-party plugin: Docusaurus ships no built-in translation for these keys)"
+  },
+  "theme.SearchPage.noResultsText": {
+    "message": "Aucun résultat trouvé",
+    "description": "Search UI strings — @easyops-cn/docusaurus-search-local (third-party plugin: Docusaurus ships no built-in translation for these keys)"
+  },
+  "theme.SearchPage.searchContext.everywhere": {
+    "message": "Partout",
+    "description": "Search UI strings — @easyops-cn/docusaurus-search-local (third-party plugin: Docusaurus ships no built-in translation for these keys)"
+  },
+  "theme.TOCCollapsible.toggleButtonLabel": {
+    "message": "Sur cette page",
+    "description": "The label used by the button on the collapsible TOC component"
+  },
+  "theme.admonition.caution": {
+    "message": "attention",
+    "description": "The default label used for the Caution admonition (:::caution)"
+  },
+  "theme.admonition.danger": {
+    "message": "danger",
+    "description": "The default label used for the Danger admonition (:::danger)"
+  },
+  "theme.admonition.info": {
+    "message": "info",
+    "description": "The default label used for the Info admonition (:::info)"
+  },
+  "theme.admonition.note": {
+    "message": "remarque",
+    "description": "The default label used for the Note admonition (:::note)"
+  },
+  "theme.admonition.tip": {
+    "message": "astuce",
+    "description": "The default label used for the Tip admonition (:::tip)"
+  },
+  "theme.admonition.warning": {
+    "message": "attention",
+    "description": "The default label used for the Warning admonition (:::warning)"
+  },
+  "theme.blog.archive.description": {
+    "message": "Archive",
+    "description": "The page & hero description of the blog archive page"
+  },
+  "theme.blog.archive.title": {
+    "message": "Archive",
+    "description": "The page & hero title of the blog archive page"
+  },
+  "theme.blog.author.noPosts": {
+    "message": "Cet auteur n'a pas encore écrit d'articles.",
+    "description": "The text for authors with 0 blog post"
+  },
+  "theme.blog.author.pageTitle": {
+    "message": "{authorName} - {nPosts}",
+    "description": "The title of the page for a blog author"
+  },
+  "theme.blog.authorsList.pageTitle": {
+    "message": "Auteurs",
+    "description": "The title of the authors page"
+  },
+  "theme.blog.authorsList.viewAll": {
+    "message": "Voir tous les auteurs",
+    "description": "The label of the link targeting the blog authors page"
+  },
+  "theme.blog.paginator.navAriaLabel": {
+    "message": "Pagination de la liste des articles du blog",
+    "description": "The ARIA label for the blog pagination"
+  },
+  "theme.blog.paginator.newerEntries": {
+    "message": "Nouvelles entrées",
+    "description": "The label used to navigate to the newer blog posts page (previous page)"
+  },
+  "theme.blog.paginator.olderEntries": {
+    "message": "Anciennes entrées",
+    "description": "The label used to navigate to the older blog posts page (next page)"
+  },
+  "theme.blog.post.paginator.navAriaLabel": {
+    "message": "Pagination des articles du blog",
+    "description": "The ARIA label for the blog posts pagination"
+  },
+  "theme.blog.post.paginator.newerPost": {
+    "message": "Article plus récent",
+    "description": "The blog post button label to navigate to the newer/previous post"
+  },
+  "theme.blog.post.paginator.olderPost": {
+    "message": "Article plus ancien",
+    "description": "The blog post button label to navigate to the older/next post"
+  },
+  "theme.blog.post.plurals": {
+    "message": "Un article|{count} articles",
+    "description": "Pluralized label for \"{count} posts\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.blog.post.readMore": {
+    "message": "Lire plus",
+    "description": "The label used in blog post item excerpts to link to full blog posts"
+  },
+  "theme.blog.post.readMoreLabel": {
+    "message": "En savoir plus sur {title}",
+    "description": "The ARIA label for the link to full blog posts from excerpts"
+  },
+  "theme.blog.post.readingTime.plurals": {
+    "message": "Une minute de lecture|{readingTime} minutes de lecture",
+    "description": "Pluralized label for \"{readingTime} min read\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.blog.sidebar.navAriaLabel": {
+    "message": "Navigation article de blog récent",
+    "description": "The ARIA label for recent posts in the blog sidebar"
+  },
+  "theme.blog.tagTitle": {
+    "message": "{nPosts} tagués avec « {tagName} »",
+    "description": "The title of the page for a blog tag"
+  },
+  "theme.colorToggle.ariaLabel": {
+    "message": "Basculer entre le mode sombre et clair (actuellement {mode})",
+    "description": "The ARIA label for the color mode toggle"
+  },
+  "theme.colorToggle.ariaLabel.mode.dark": {
+    "message": "mode sombre",
+    "description": "The name for the dark color mode"
+  },
+  "theme.colorToggle.ariaLabel.mode.light": {
+    "message": "mode clair",
+    "description": "The name for the light color mode"
+  },
+  "theme.colorToggle.ariaLabel.mode.system": {
+    "message": "mode système",
+    "description": "The name for the system color mode"
+  },
+  "theme.common.editThisPage": {
+    "message": "Éditer cette page",
+    "description": "The link label to edit the current page"
+  },
+  "theme.common.headingLinkTitle": {
+    "message": "Lien direct vers {heading}",
+    "description": "Title for link to heading"
+  },
+  "theme.common.skipToMainContent": {
+    "message": "Aller au contenu principal",
+    "description": "The skip to content label used for accessibility, allowing to rapidly navigate to main content with keyboard tab/enter navigation"
+  },
+  "theme.contentVisibility.draftBanner.message": {
+    "message": "Cette page est un brouillon. Elle n'est visible qu'en développement et est exclue du build de production.",
+    "description": "The draft content banner message"
+  },
+  "theme.contentVisibility.draftBanner.title": {
+    "message": "Page brouillon",
+    "description": "The draft content banner title"
+  },
+  "theme.contentVisibility.unlistedBanner.message": {
+    "message": "Cette page n'est pas répertoriée. Les moteurs de recherche ne l'indexeront pas, et seuls les utilisateurs ayant un lien direct peuvent y accéder.",
+    "description": "The unlisted content banner message"
+  },
+  "theme.contentVisibility.unlistedBanner.title": {
+    "message": "Page non répertoriée",
+    "description": "The unlisted content banner title"
+  },
+  "theme.docs.DocCard.categoryDescription.plurals": {
+    "message": "1 élément|{count} éléments",
+    "description": "The default description for a category card in the generated index about how many items this category includes"
+  },
+  "theme.docs.breadcrumbs.home": {
+    "message": "Page d'accueil",
+    "description": "The ARIA label for the home page in the breadcrumbs"
+  },
+  "theme.docs.breadcrumbs.navAriaLabel": {
+    "message": "Fil d'Ariane",
+    "description": "The ARIA label for the breadcrumbs"
+  },
+  "theme.docs.paginator.navAriaLabel": {
+    "message": "Pages de documentation",
+    "description": "The ARIA label for the docs pagination"
+  },
+  "theme.docs.paginator.next": {
+    "message": "Suivant",
+    "description": "The label used to navigate to the next doc"
+  },
+  "theme.docs.paginator.previous": {
+    "message": "Précédent",
+    "description": "The label used to navigate to the previous doc"
+  },
+  "theme.docs.reviewedOn": {
+    "message": "Mise à jour le {date}",
+    "description": "Review date displayed under the page title — src/components/LastUpdatedDate"
+  },
+  "theme.docs.sidebar.closeSidebarButtonAriaLabel": {
+    "message": "Fermer la barre de navigation",
+    "description": "The ARIA label for close button of mobile sidebar"
+  },
+  "theme.docs.sidebar.collapseButtonAriaLabel": {
+    "message": "Réduire le menu latéral",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.sidebar.collapseButtonTitle": {
+    "message": "Réduire le menu latéral",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.sidebar.expandButtonAriaLabel": {
+    "message": "Déplier le menu latéral",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.docs.sidebar.expandButtonTitle": {
+    "message": "Déplier le menu latéral",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.docs.sidebar.navAriaLabel": {
+    "message": "Barre latérale de la documentation",
+    "description": "The ARIA label for the sidebar navigation"
+  },
+  "theme.docs.sidebar.toggleSidebarButtonAriaLabel": {
+    "message": "Ouvrir/fermer la barre de navigation",
+    "description": "The ARIA label for hamburger menu button of mobile navigation"
+  },
+  "theme.docs.tagDocListPageTitle": {
+    "message": "{nDocsTagged} avec \"{tagName}\"",
+    "description": "The title of the page for a docs tag"
+  },
+  "theme.docs.tagDocListPageTitle.nDocsTagged": {
+    "message": "Un document tagué|{count} documents tagués",
+    "description": "Pluralized label for \"{count} docs tagged\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.docs.versionBadge.label": {
+    "message": "Version: {versionLabel}"
+  },
+  "theme.docs.versions.latestVersionLinkLabel": {
+    "message": "dernière version",
+    "description": "The label used for the latest version suggestion link label"
+  },
+  "theme.docs.versions.latestVersionSuggestionLabel": {
+    "message": "Pour une documentation à jour, consultez la {latestVersionLink} ({versionLabel}).",
+    "description": "The label used to tell the user to check the latest version"
+  },
+  "theme.docs.versions.unmaintainedVersionLabel": {
+    "message": "Ceci est la documentation de {siteTitle} {versionLabel}, qui n'est plus activement maintenue.",
+    "description": "The label used to tell the user that he's browsing an unmaintained doc version"
+  },
+  "theme.docs.versions.unreleasedVersionLabel": {
+    "message": "Ceci est la documentation de la prochaine version {versionLabel} de {siteTitle}.",
+    "description": "The label used to tell the user that he's browsing an unreleased doc version"
+  },
+  "theme.lastUpdated.atDate": {
+    "message": " le {date}",
+    "description": "The words used to describe on which date a page has been last updated"
+  },
+  "theme.lastUpdated.byUser": {
+    "message": " par {user}",
+    "description": "The words used to describe by who the page has been last updated"
+  },
+  "theme.lastUpdated.lastUpdatedAtBy": {
+    "message": "Dernière mise à jour{atDate}{byUser}",
+    "description": "The sentence used to display when a page has been last updated, and by who"
+  },
+  "theme.navbar.mobileDropdown.collapseButton.collapseAriaLabel": {
+    "message": "Réduire le menu déroulant",
+    "description": "The ARIA label of the button to collapse the mobile dropdown navbar item"
+  },
+  "theme.navbar.mobileDropdown.collapseButton.expandAriaLabel": {
+    "message": "Déployer le menu déroulant",
+    "description": "The ARIA label of the button to expand the mobile dropdown navbar item"
+  },
+  "theme.navbar.mobileLanguageDropdown.label": {
+    "message": "Langues",
+    "description": "The label for the mobile language switcher dropdown"
+  },
+  "theme.navbar.mobileSidebarSecondaryMenu.backButtonLabel": {
+    "message": "← Retour au menu principal",
+    "description": "The label of the back button to return to main menu, inside the mobile navbar sidebar secondary menu (notably used to display the docs sidebar)"
+  },
+  "theme.navbar.mobileVersionsDropdown.label": {
+    "message": "Versions",
+    "description": "The label for the navbar versions dropdown on mobile view"
+  },
+  "theme.tags.tagsListLabel": {
+    "message": "Tags :",
+    "description": "The label alongside a tag list"
+  },
+  "theme.tags.tagsPageLink": {
+    "message": "Voir tous les tags",
+    "description": "The label of the link targeting the tag list page"
+  },
+  "theme.tags.tagsPageTitle": {
+    "message": "Tags",
+    "description": "The title of the tag list page"
+  },
+  "theme.unlistedContent.message": {
+    "message": "Cette page n'est pas listée. Les moteurs de recherche ne l'indexeront pas, et seuls les utilisateurs disposant d'un lien direct pourront y accéder.",
+    "description": "The unlisted content banner message"
+  },
+  "theme.unlistedContent.title": {
+    "message": "Page non listée",
+    "description": "The unlisted content banner title"
+  },
+  "walkthrough.enterFullscreen": {
+    "message": "Afficher en plein écran",
+    "description": "Walkthrough component control"
+  },
+  "walkthrough.exitFullscreen": {
+    "message": "Quitter le plein écran",
+    "description": "Walkthrough component control"
+  },
+  "walkthrough.fullscreen": {
+    "message": "Plein écran",
+    "description": "Walkthrough component control"
+  },
+  "walkthrough.goToStep": {
+    "message": "Aller à l",
+    "description": "Walkthrough component control"
+  },
+  "walkthrough.next": {
+    "message": "Étape suivante",
+    "description": "Walkthrough component control"
+  },
+  "walkthrough.prev": {
+    "message": "Étape précédente",
+    "description": "Walkthrough component control"
+  },
+  "walkthrough.reduce": {
+    "message": "Réduire",
+    "description": "Walkthrough component control"
+  },
+  "walkthrough.restart": {
+    "message": "Recommencer depuis le début",
+    "description": "Walkthrough component control"
+  },
+  "walkthrough.steps": {
+    "message": "Étapes",
+    "description": "Walkthrough component control"
+  }
+}

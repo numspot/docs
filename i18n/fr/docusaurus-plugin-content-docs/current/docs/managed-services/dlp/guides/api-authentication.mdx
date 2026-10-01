@@ -1,0 +1,90 @@
+---
+title: S'authentifier par token API - DLP managé
+sidebar_label: S'authentifier par token API
+description: "Créez un token API pour vous authentifier à l'API du DLP via l'en-tête Authorization: Bearer, en complément de la connexion par session de la console."
+sidebar_position: 2
+draft: false
+---
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# S'authentifier par token API
+
+## Introduction
+
+L'API du service [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) accepte deux méthodes d'authentification :
+
+- **Session (cookie)** : créée lors de la connexion à la console DLP avec un nom d'utilisateur et un mot de passe (voir [Accéder à la console DLP](/docs/managed-services/dlp/guides/access-console)). Adaptée à un usage interactif dans la console.
+- **Token API (Bearer)** : un token généré par le plan de contrôle (préfixé `num_dlp_...`), passé dans l'en-tête `Authorization: Bearer`. Adapté à un usage **programmatique** (scripts, pipelines CI/CD, intégrations).
+
+Cette page décrit la création, l'utilisation et la révocation des **tokens API**.
+
+## Créer un token API
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/token-list.png", text: "Dans le menu latéral de la console DLP, cliquez sur API Tokens.", hotspot: { x: 0.006, y: 0.381, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/token-list.png", text: "Cliquez sur « Create Token » en haut à droite.", hotspot: { x: 0.905, y: 0.040, w: 0.099, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/token-create-form.png", text: "Donnez un nom au token et sélectionnez un ou plusieurs rôles. Cochez éventuellement « Set expiration date » pour définir une date d'expiration.", hotspot: { x: 0.195, y: 0.150, w: 0.340, h: 0.491 } },
+    { img: "/img/walkthrough/dlp/token-create-form.png", text: "Cliquez sur « Create Token » pour générer le token.", hotspot: { x: 0.588, y: 0.662, w: 0.083, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/token-created.png", text: "Copiez immédiatement le token affiché (num_dlp_...) : pour des raisons de sécurité, il n'est montré qu'une seule fois. Cliquez ensuite sur « Done ».", hotspot: { x: 0.625, y: 0.598, w: 0.046, h: 0.044 } },
+  ]}
+/>
+
+1. Dans le menu latéral, cliquez sur **API Tokens** ;
+2. Cliquez sur **Create Token** ;
+3. Renseignez un **nom** (par exemple `ci-pipeline`) qui vous permettra d'identifier le token ;
+4. Sélectionnez un ou plusieurs **rôles** (voir ci-dessous) ;
+5. Optionnellement, cochez **Set expiration date** pour définir une date d'expiration. Sans expiration, le token reste valide jusqu'à sa révocation ;
+6. Cliquez sur **Create Token**.
+
+:::warning Le token n'est affiché qu'une seule fois
+La valeur du token (`num_dlp_...`) est générée par le backend et **affichée une seule fois**, au moment de la création. Copiez-la et stockez-la dans un coffre-fort de secrets avant de fermer la fenêtre. Si vous la perdez, révoquez le token et créez-en un nouveau.
+:::
+
+## Rôles disponibles
+
+Un token porte un ou plusieurs rôles qui déterminent ses permissions sur l'API :
+
+| Rôle | Permissions |
+| --- | --- |
+| **Viewer** | Lecture seule (dashboard, logs, règles, détecteurs, policies). |
+| **Rule Editor** | Créer et modifier des règles. |
+| **Detector Editor** | Créer et modifier des détecteurs personnalisés. |
+| **Rule Publisher** | Publier des ruleset. |
+| **Admin** | Toutes les permissions, y compris la gestion des utilisateurs et des tokens. |
+
+:::tip Moindre privilège
+Attribuez au token le **rôle minimal** nécessaire à son usage. Par exemple, un pipeline qui ne fait que consulter des logs n'a besoin que du rôle **Viewer**.
+:::
+
+## Utiliser le token
+
+Passez le token dans l'en-tête HTTP `Authorization: Bearer` de vos requêtes vers l'API DLP :
+
+```bash
+curl -H "Authorization: Bearer num_dlp_xxxxxxxxxxxx" \
+  https://<url-console-dlp>/api/v1/rules
+```
+
+Remplacez `<url-console-dlp>` par l'URL de votre console DLP (voir [Accéder à la console DLP](/docs/managed-services/dlp/guides/access-console)) et `num_dlp_xxxxxxxxxxxx` par la valeur de votre token.
+
+La liste complète des endpoints est disponible dans la [référence OpenAPI Data Loss Prevention](/openapi-dlp/).
+
+## Révoquer un token
+
+Un token compromis ou devenu inutile doit être **révoqué**. Une fois révoqué, toute requête l'utilisant est immédiatement rejetée. Cette action est **irréversible**.
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/token-list.png", text: "Sur la ligne du token à révoquer, cliquez sur l'icône de révocation (à droite).", hotspot: { x: 0.942, y: 0.220, w: 0.025, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/token-revoke.png", text: "Dans la fenêtre de confirmation, cliquez sur « Revoke » pour révoquer définitivement le token.", hotspot: { x: 0.618, y: 0.552, w: 0.045, h: 0.041 } },
+  ]}
+/>
+
+## Bonnes pratiques
+
+- **Ne partagez jamais** un token ; traitez-le comme un mot de passe ;
+- Stockez-le dans un **coffre-fort de secrets** (variable de CI/CD, gestionnaire de secrets) et jamais en clair dans un dépôt ;
+- Préférez des tokens **à durée de vie limitée** (date d'expiration) ;
+- Appliquez le principe de **moindre privilège** (rôle minimal) ;
+- **Révoquez** immédiatement tout token suspecté d'être compromis, et faites tourner régulièrement vos tokens.

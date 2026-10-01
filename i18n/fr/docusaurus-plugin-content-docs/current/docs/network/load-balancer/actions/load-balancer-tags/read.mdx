@@ -1,0 +1,59 @@
+---
+title: Obtenir des informations sur les tags (étiquettes) associés à vos load balancers - Numspot
+sidebar_label: Obtenir des informations sur les tags (étiquettes) associés à vos load balancers
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Obtenir des informations sur les tags (étiquettes) associés à vos load balancers
+
+Vous pouvez consulter les tag (étiquettes) associés à vos [load balancer (équilibreurs de charge)](/docs/network/load-balancer/concepts/) pour identifier et organiser vos ressources.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.loadBalancer.get**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/load-balancer/lb-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → Load Balancers.", hotspot: { x: 0, y: 0.6136, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/load-balancer/lb-02-actions.png", text: "Sur la ligne du load balancer, ouvrez le menu « Actions », puis cliquez sur « Gérer les tags ».", hotspot: { x: 0.875, y: 0.4358, w: 0.0884, h: 0.0457 } },
+    { img: "/img/walkthrough/load-balancer/lb-tags-panel.png", text: "Le panneau « Gérer les tags » affiche les tags (clé/valeur) associés au load balancer.", hotspot: { x: 0.6083, y: 0.28, w: 0.35, h: 0.1 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, cliquez sur **Réseau** → **Load Balancers** pour accéder à la liste des load balancers.
+2. Sur la ligne du load balancer, ouvrez le menu **Actions**, puis cliquez sur **Gérer les tags**.
+3. Le panneau **Gérer les tags** affiche la liste des tag associés au load balancer.
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `GET /compute/spaces/{spaceId}/loadBalancersTags` répertorie les tags associés à un load balancer spécifié.
+
+[Exemple de requête : Lister les tags associés à un load balancer](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/loadBalancersTags)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
+
+  </TabItem>
+</Tabs>

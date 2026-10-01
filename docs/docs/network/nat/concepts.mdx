@@ -1,0 +1,46 @@
+---
+title: NAT gateways
+sidebar_label: About NAT Gateways
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# About NAT Gateways
+
+<ActionsSummary />
+
+NAT gateways allow [VM (Virtual Machines)](/docs/compute/concept/) located in a network to connect to the Internet using a single public IP address. They thereby provide network address translation and outbound connectivity for VM instances in a private subnet.
+
+## General information
+
+A nat gateway handles sending and receiving Internet traffic for one or more VM of a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/). To do so, the nat gateway performs network address translation by converting the private IP addresses of the VM into a single public IP address when these VM communicate with the Internet. This translation allows the VM to connect to the Internet while remaining hidden behind the public IP address of the nat gateway.
+
+:::warning
+Since you have a limited quota of public IP addresses for your account, nat gateways allow you to connect your VPC VM to the Internet using a single public IP address. This lets you maximize the use of your public IP addresses while allowing the VM to connect to the Internet securely and efficiently.
+:::
+
+A nat gateway can have the following states:
+
+- "pending": the nat gateway is being created.
+- "available": the nat gateway is ready to forward traffic.
+- "deleting": the nat gateway is being deleted.
+- "deleted": the nat gateway is deleted.
+
+## Architecture
+
+A nat gateway is created in a subnet but can be used by all the subnets of the VPC.
+
+To route traffic from your VM to the Internet through the nat gateway, you must add the following routes:
+
+- In the [route table](/docs/network/route-table/concepts/) of the subnet where the nat gateway is located, a route directing the nat gateway traffic to the Internet with the [internet gateway](/docs/network/internet-gateway/concepts/) as the target.
+- In the route tables of the subnets where your VM are located, routes directing the traffic of these VM to the Internet with the nat gateway as the target.
+
+<img src="/img/console/network/nat/sch-General-NATGateway_v2.png" alt="Diagram showing how a NAT Gateway works in a Numspot network" />
+
+*Architecture of a nat gateway*
+
+:::warning
+In this architecture, make sure that the [security groups](/docs/compute/security-groups/concepts/concept-sg/) of the VM include a rule allowing outbound flows to the Internet (0.0.0.0/0 or a more restricted IP address range).
+:::

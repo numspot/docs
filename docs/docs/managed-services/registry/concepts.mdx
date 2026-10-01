@@ -1,0 +1,80 @@
+---
+title: "Container Registry - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# Container Registry concepts
+
+<ActionsSummary />
+
+## Introduction
+
+The Container Registry is a solution managed by Numspot to store, manage and secure software artifacts, in particular:
+- container images (Docker, OCI);
+- Helm charts;
+- various artifacts (npm, packages, configuration files, etc.).
+
+Based on Harbor, a CNCF-certified open-source solution, the Numspot Container Registry offers seamless integration with the services managed by Numspot, while guaranteeing data sovereignty and license compliance.
+
+### Benefits of the Container Registry managed service
+
+- **High availability**: Container Registry are designed to minimize downtime.
+- **Simplified management**: There is no need to manage the Harbor infrastructure.
+- **Scalability**: Increase storage resources according to your needs.
+- **Security**: Security updates and patches are managed by Numspot.
+
+## Key features
+
+### 1. Creating a highly available Container Registry
+
+A **highly available Container Registry** is designed to provide high availability.
+This means that the instance is replicated by design across several nodes, thereby guaranteeing service continuity even if a component fails.
+
+**Steps to create a Container Registry via the Numspot Console**:
+
+1. Log in to the Numspot Console.
+2. Select the option to create a managed Container Registry.
+3. Specify the name and the version.
+4. Confirm the creation of the instance.
+
+### 2. Retrieving the administrator password
+
+To connect to the Container Registry instance, you must retrieve the administrator password.
+
+**Steps to retrieve the administrator password via the Numspot Console**:
+
+1. Access the Numspot Console.
+2. Navigate to the section dedicated to the Container Registry instance.
+3. Retrieve the host name of the instance.
+4. Retrieve the administrator password from the Numspot Console.
+5. Use this information to connect to Harbor.
+
+## Use cases
+
+### 1. Securing the software supply chain
+
+- The Container Registry acts as an automated barrier by scanning for vulnerabilities and blocking the deployment of any non-compliant or critical image.
+
+### 2. Proxy cache
+
+- It acts as a local relay to store public images, making it possible to bypass Docker Hub quotas and drastically speed up downloads.
+
+### 3. OCI source of truth
+
+- It centralizes the management of container images and Helm Charts within a single, secure and auditable inventory.
+
+## Best practices
+
+- **Secure the pipeline**:
+  - Enable "Scan on push" so that vulnerability scanning is triggered automatically as soon as an image is pushed.
+  - Block vulnerable images, for example to prohibit images with "Critical" or "High" flaws.
+  - Sign artifacts so that clusters only accept images whose signature is verified.
+- **Access management**: Use robot accounts so that personal credentials are never used in the CI/CD chain.
+- **Artifact lifecycle**:
+  - Do not keep the full history and use automatic cleanup rules.
+  - Enable tag immutability to prevent a maliciously modified or buggy image from replacing a stable image under the same name.
+  - Avoid the `latest` tag because you can never know exactly which version is deployed.

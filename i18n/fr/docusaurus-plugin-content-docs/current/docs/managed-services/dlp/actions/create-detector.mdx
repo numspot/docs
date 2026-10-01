@@ -1,0 +1,140 @@
+---
+title: Créer un détecteur personnalisé DLP - DLP managé
+sidebar_label: Créer un détecteur personnalisé DLP
+sidebar_position: 7
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Créer un détecteur personnalisé DLP
+
+Créez un [détecteur DLP](/docs/managed-services/dlp/concepts) personnalisé pour identifier des données sensibles propres à votre organisation à l'aide d'expressions régulières.
+
+Les détecteurs personnalisés complètent les détecteurs prédéfinis fournis par Numspot. Ils sont référencés dans les conditions des règles via la syntaxe `@custom:<id>`.
+
+## Permissions
+
+:::info
+Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+
+- **detector_editor**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Dans la console DLP, cliquez sur Detectors dans le menu latéral.", hotspot: { x: 0.006, y: 0.283, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/detectors-list.png", text: "Depuis la liste des détecteurs, cliquez sur « New Custom Detector » en haut à droite.", hotspot: { x: 0.843, y: 0.030, w: 0.140, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/detector-create-form.png", text: "Renseignez le nom, la description, les motifs RE2 (un par ligne) et les tags du détecteur.", hotspot: { x: 0.195, y: 0.204, w: 0.332, h: 0.569 } },
+    { img: "/img/walkthrough/dlp/detector-create-form.png", text: "Cliquez sur « Create » pour créer le détecteur personnalisé.", hotspot: { x: 0.608, y: 0.793, w: 0.053, h: 0.044 } },
+  ]}
+/>
+
+1. Dans la console [DLP](/docs/managed-services/dlp/concepts), cliquez sur **Detectors** dans le menu latéral.
+2. Cliquez sur l'onglet **Custom** pour afficher les détecteurs personnalisés.
+3. Cliquez sur le bouton **Create custom detector**.
+
+### Configuration du détecteur
+
+Renseignez les informations du détecteur :
+
+| Champ | Valeur d'exemple | Description |
+|-------|-----------------|-------------|
+| Name | `project-codename` | Nom du détecteur |
+| Description | Détecte les noms de code projet | Description du détecteur |
+| Category | `custom` | Catégorie du détecteur |
+
+### Ajout de motifs
+
+Ajoutez une ou plusieurs expressions régulières pour identifier les données sensibles :
+
+1. Cliquez sur **Add pattern** ;
+2. Saisissez l'expression régulière compatible RE2 ;
+3. Ajoutez des tags pour faciliter le filtrage et la recherche.
+
+Exemples de motifs :
+
+- `PROJECT-[A-Z]{3}-\d{4}` : noms de code projet au format `PROJECT-ABC-1234` ;
+- `internal-[a-z]+-\d+` : identifiants internes au format `internal-service-42`.
+
+### Test du détecteur
+
+Avant d'enregistrer le détecteur, testez-le par rapport à un texte d'exemple :
+
+1. Cliquez sur **Test detector** ;
+2. Saisissez le texte d'exemple dans le champ de test ;
+3. Cliquez sur **Run test** pour voir les correspondances détectées.
+
+La limite est de 50 motifs maximum par détecteur et 10 Ko de texte d'exemple.
+
+### Enregistrement
+
+Cliquez sur **Save** pour enregistrer le détecteur personnalisé. Il est immédiatement disponible pour être référencé dans les conditions des règles via `@custom:project-codename`.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+La requête `POST /api/v1/detectors/custom` permet de créer un [détecteur DLP](/docs/managed-services/dlp/concepts) personnalisé.
+
+### Exemple de requête
+
+```json
+{
+  "name": "project-codename",
+  "description": "Détecte les noms de code projet",
+  "category": "custom",
+  "patterns": [
+    "PROJECT-[A-Z]{3}-\\d{4}",
+    "internal-[a-z]+-\\d+"
+  ],
+  "tags": [
+    "internal",
+    "project"
+  ]
+}
+```
+
+### Exemple de réponse
+
+```json
+{
+  "id": "detector-a1b2c3d4",
+  "name": "project-codename",
+  "type": "custom",
+  "description": "Détecte les noms de code projet",
+  "category": "custom",
+  "patterns": [
+    "PROJECT-[A-Z]{3}-\\d{4}",
+    "internal-[a-z]+-\\d+"
+  ],
+  "tags": [
+    "internal",
+    "project"
+  ],
+  "created_at": "2026-08-27T10:00:00Z",
+  "updated_at": "2026-08-27T10:00:00Z"
+}
+```
+
+### Test du détecteur via l'API
+
+La requête `POST /api/v1/detectors/test` permet de tester un détecteur.
+
+```json
+{
+  "patterns": [
+    "PROJECT-[A-Z]{3}-\\d{4}"
+  ],
+  "sample": "Le projet PROJECT-ABC-1234 est en cours"
+}
+```
+
+</TabItem>
+</Tabs>

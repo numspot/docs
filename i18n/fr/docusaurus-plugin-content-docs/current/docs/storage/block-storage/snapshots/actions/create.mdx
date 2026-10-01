@@ -1,0 +1,56 @@
+---
+title: Créer un snapshot
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Créer un snapshot
+
+Vous pouvez créer une copie instantanée d'un `volume` en créant un snapshot, ce qui vous permet de capturer l'état des données stockées sur le `volume` à un moment donné. À partir de ce snapshot, vous pouvez créer un nouveau `volume`, copier le snapshot dans une autre région ou le partager avec d'autres comptes.
+
+:::info
+La création d'un snapshot est disponible uniquement via l'API.
+:::
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.snapshot.create**
+
+:::
+<Tabs>
+<TabItem value="Console" default>
+
+## Console {#tabhead-console}
+
+  La création de snapshot n'est pas disponible via la console. Utilisez l'API ou Terraform.
+</TabItem>
+<TabItem value="API">
+
+## API {#tabhead-api}
+
+    La commande `POST /compute/spaces/{spaceId}/snapshots` crée un snapshot. Les snapshots sont des images à un moment donné d'un `volume` que vous pouvez utiliser pour sauvegarder vos données ou créer des répliques de ce `volume`.
+Vous pouvez utiliser cette méthode de trois façons différentes :
+
+1. **Création à partir d'un volume** : Vous créez un snapshot à partir de l'un de vos `volumes`.
+
+2. **Copie d'un snapshot** : Vous copiez un snapshot existant. Le snapshot source doit être l'un de vos propres instantanés.
+
+:::info
+En cas d'utilisation excessive de la fonctionnalité de création d'instantanés sur un même `volume` sur une courte période, Numspot se réserve le droit de bloquer temporairement cette fonctionnalité.
+:::
+
+[Exemple de requête : Création d'un snapshot](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/snapshots)
+</TabItem>
+<TabItem value="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+  La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/snapshot).
+</TabItem>
+</Tabs>

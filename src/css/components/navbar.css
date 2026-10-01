@@ -1,0 +1,162 @@
+/**
+ * Navbar — Brand Book 2026
+ * The wordmark + baseline are rendered by the swizzle src/theme/Logo/index.tsx.
+ * No more .navbar__logo::before/::after pseudo-elements.
+ */
+
+.navbar {
+  background: var(--bg-navbar);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border-secondary);
+  box-shadow: none;
+  transition: background var(--ns-transition-theme),
+    border-color var(--ns-transition-theme);
+}
+
+/* Mobile (≤ 996px): the `.navbar-sidebar` drawer is a fixed child of
+   `.navbar`. But `backdrop-filter` makes `.navbar` the containing block of
+   its `position: fixed` descendants: the full-height drawer ends up confined
+   to the navbar box (~60px) → it no longer opens / no longer scrolls.
+   So we drop the blur at this breakpoint (the drawer only exists here;
+   above 997px it is the inline sidebar, no hamburger → desktop untouched). */
+@media (max-width: 996px) {
+  .navbar {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Wordmark (svg rendered by the Logo swizzle) */
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  height: 28px;
+}
+
+.navbar__logo svg,
+.navbar__logo img {
+  height: 26px;
+  width: auto;
+  display: block;
+}
+
+/* Baseline (tagline) next to the logo */
+.navbar__baseline {
+  font-size: 14px;
+  font-weight: var(--ns-font-weight-medium);
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  padding-left: 12px;
+  border-left: 1px solid var(--border-primary);
+  white-space: nowrap;
+  transition: color var(--ns-transition-theme),
+    border-color var(--ns-transition-theme);
+}
+
+/* Hidden below 1200px: too long to coexist with the navbar links. */
+@media (max-width: 1200px) {
+  .navbar__baseline {
+    display: none;
+  }
+}
+
+/* Navigation links */
+.navbar__link {
+  font-size: 14px;
+  font-weight: var(--ns-font-weight-semibold);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  margin-inline: 3px;
+  border-radius: var(--ns-radius-md);
+  transition: color var(--ns-transition-hover),
+    background var(--ns-transition-hover);
+}
+
+.navbar__link:hover {
+  color: var(--text-link);
+  background: var(--bg-hover);
+}
+
+.navbar__link--active,
+.navbar__item.navbar__link.navbar__link--active {
+  color: var(--accent-primary);
+  background: var(--bg-active);
+}
+
+/* Search magnifier: "search" icon from the brand kit (Figma). The Infima
+   variable backs the desktop field AND the mobile .search-icon icon.
+   Color = the field placeholder color (#bec3c9, same in light/dark). */
+:root {
+  --ifm-navbar-search-input-icon: url(../../../static/img/ui/search.svg);
+}
+
+/* lunr search field → pill */
+.navbar .navbar__search-input,
+.navbar input.navbar__search-input {
+  border-radius: var(--ns-radius-full);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  font-size: 14px;
+  transition: border-color var(--ns-transition-hover),
+    box-shadow var(--ns-transition-hover);
+}
+
+/* Minimum width while the field is displayed expanded (≥ 577px): below
+   ~163px the ⌘K shortcut pill (42px, right-anchored) overlaps the
+   "Rechercher" placeholder and truncates it. 11rem keeps ~14px between the
+   word and the pill. Below 577px the plugin collapses the field to an icon
+   pill (2rem): that mode is intentional, we leave it alone — on focus it
+   reopens without the pill and the word fits whole. */
+@media (min-width: 577px) {
+  .navbar .navbar__search-input,
+  .navbar input.navbar__search-input {
+    min-width: 11rem;
+  }
+}
+
+.navbar .navbar__search-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--bg-active);
+  outline: none;
+}
+
+/* Light/dark toggle + search button (magnifier).
+   No distinct hover background (Infima gray circle): we align with the rest
+   of the menu — only the icon color changes on hover. */
+.navbar button[class*="toggleButton"] svg path {
+  fill: var(--icon-color);
+}
+
+.navbar button[class*="toggleButton"]:hover,
+.navbar button[class*="toggleButton"]:focus-visible {
+  background: transparent;
+}
+
+.navbar button[class*="toggleButton"]:hover svg path {
+  fill: var(--text-primary);
+}
+
+/* Caret of navbar dropdowns (e.g. "Français ▼"): replaces the Infima CSS
+   triangle with the brand chevron (Figma "Arrows" set). */
+.navbar .dropdown > .navbar__link::after {
+  content: "";
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-left: 0.15em;
+  vertical-align: middle;
+  border: 0; /* cancels the Infima triangle */
+  top: 0;
+  transform: none; /* cancels the Infima translateY */
+  background-color: currentColor;
+  -webkit-mask: url(../../../static/img/ui/chevron-down.svg) center / contain
+    no-repeat;
+  mask: url(../../../static/img/ui/chevron-down.svg) center / contain no-repeat;
+}

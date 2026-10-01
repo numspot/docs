@@ -1,0 +1,135 @@
+---
+title: "Catalogue - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# Catalogue
+
+<ActionsSummary />
+
+Le catalogue est le référentiel des produits et tarifs disponibles sur la plateforme Numspot. Il fournit les caractéristiques techniques, certifications et conditions tarifaires nécessaires à l'approvisionnement des ressources.
+
+## Domaines et types de produits
+
+Le catalogue organise les produits par domaine (`domain`) et par type (`kind`).
+
+### Domaine compute
+
+| Type (`kind`) | Description |
+| --- | --- |
+| `virtual-machine` | [VM (Virtual Machine)](/docs/compute/concept/) avec vCPU (virtual Central Processing Unit) et mémoire |
+| [gpu](/docs/compute/gpu/concept/) | GPU (Graphics Processing Unit) attaché ou standalone |
+| `block-storage` | Volumes de stockage bloc |
+| `snapshot:usage` | Instantanés de volumes |
+| `internet-gateway` | Passerelle Internet |
+| `nat-gateway` | Passerelle NAT (Network Address Translation) |
+| `load-balancer` | Équilibreur de charge |
+| `public-ip` | Adresses IP (Internet Protocol) publiques |
+
+### Domaine connectivity
+
+| Type (`kind`) | Description |
+| --- | --- |
+| [directlink](/docs/connectivity/direct-link/concepts/) | Connexion privée DirectLink |
+| `vpn-connection` | Connexion VPN (Virtual Private Network) |
+
+### Domaine kubernetes
+
+| Type (`kind`) | Description |
+| --- | --- |
+| cluster | cluster (groupe de machines) Kubernetes managé |
+| node | nodes (nœuds) de calcul du cluster |
+| `persistent-volume` | Volumes persistants |
+| `root-disk` | Disque système des nodes |
+| `public-ip` | Adresses IP publiques du cluster |
+| `load-balancer` | Équilibreur de charge du cluster |
+
+### Domaine objectstorage
+
+| Type (`kind`) | Description |
+| --- | --- |
+| `object-storage` | Stockage objet (buckets) |
+
+### Domaine postgresql
+
+| Type (`kind`) | Description |
+| --- | --- |
+| node | Instances de base de données PostgreSQL |
+| `persistent-volume` | Volumes de données |
+| backup | Sauvegardes de base de données |
+| `public-ip` | Adresses IP publiques |
+
+### Domaine registry
+
+| Type (`kind`) | Description |
+| --- | --- |
+| `instance` | Instance de registre de conteneurs |
+| `storage` | Stockage des images de conteneurs |
+| `public-ip` | Adresses IP publiques |
+
+### Domaine secrets
+
+| Type (`kind`) | Description |
+| --- | --- |
+| `instance` | Instance de gestion de secrets |
+| `public-ip` | Adresses IP publiques |
+
+## Structure d'un produit
+
+Chaque produit du catalogue comprend :
+
+### Identifiants
+
+- **UUID** : identifiant unique du produit ;
+- **productCode** : code produit stable attribué par l'équipe domaine (ex: `ns-eco7-2c1r`) ;
+- **SKU** (Stock Keeping Unit) : identifiant de facturation construit à partir du `productCode`, de l'unité, de la fréquence, de la devise et du code région (ex: `NS-INF7-126C1024R/VM/HOURLY/EUR/EU-WEST-2`).
+
+### Attributs techniques
+
+- **domain** : domaine de service du produit ;
+- **kind** : type spécifique de produit au sein du domaine ;
+- **label** : libellé lisible du produit ;
+- **currentGeneration** : indique si le produit fait partie de la génération actuelle ;
+- **licenseModel** : modèle de licence applicable ;
+- **deploymentOption** : option de déploiement ;
+- **certifications** : liste des certifications ;
+- **releaseStage** : stade de release (`generalAvailability`, `preview`, `deprecated`).
+
+### Spécifications de ressources
+
+Pour les `virtual-machine` :
+- famille et génération ;
+- nombre de vCPU (1 à 78) ;
+- mémoire en GiB (1 à 1039) ;
+- type, quantité et mémoire totale des GPU attachés (optionnel).
+
+Pour les gpu :
+- modèle ;
+- VRAM (Video Random Access Memory) en Go (1 à 256).
+
+### Tarification
+
+Les conditions tarifaires (`terms`) incluent :
+- **effectiveDate** : date de début et de fin de validité du tarif ;
+- **consumptionPrice** : prix de consommation avec :
+  - fréquence de facturation (ex: `HOURLY`) ;
+  - devise (ex: `EUR`) ;
+  - montant unitaire ;
+  - unité de consommation.
+
+### Région
+
+Chaque produit est associé à un code région où il est disponible (ex: `eu-west-2`, `cloudgouv-eu-west-1`).
+
+## Utilisation du catalogue
+
+Le catalogue est consulté automatiquement lors de la création de ressources. La console affiche les produits disponibles filtrés par région et type de ressource.
+
+## Export du catalogue
+
+Le catalogue peut être consulté et exporté via l'API ou la console. L'export CSV permet de récupérer l'ensemble des produits avec leurs tarifs pour analyse hors ligne.
+Vous pouvez retrouver le catalogue [ici](https://numspot.com/tarification/).

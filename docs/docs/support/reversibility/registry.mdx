@@ -1,0 +1,53 @@
+---
+title: Reversibility - managed Container Registry
+sidebar_label: Reversibility of the managed Container Registry
+description: Information about the reversibility of the managed Container Registry service
+sidebar_position: 4
+draft: false
+---
+
+# Reversibility of the managed Container Registry
+
+The managed Container Registry service is designed to guarantee reversibility, that is, the ability for the customer to retrieve their data and migrate to another solution without lock-in.
+
+## Exportable data
+
+All container images and artifacts stored in the Container Registry can be exported using the standard tools of the OCI (Open Container Initiative) ecosystem.
+
+## Reversibility tools
+
+### Push to an external registry
+
+Use the standard Docker commands to copy the images to an external registry:
+
+```bash
+docker pull <registry-url>/<project>/<image>:<tag>
+docker tag <registry-url>/<project>/<image>:<tag> <new-registry>/<project>/<image>:<tag>
+docker push <new-registry>/<project>/<image>:<tag>
+```
+
+### Harbor replication
+
+[Harbor replication](/docs/managed-services/registry/guides/harbor-replication/) automatically replicates the images to an external registry.
+
+### Export via the Harbor API
+
+The Harbor API (Application Programming Interface) lists the projects and the images to automate the export:
+
+```bash
+curl -u "admin:password" "https://<registry-url>/api/v2.0/projects"
+```
+
+## Open formats
+
+- container images use the OCI (Open Container Initiative) format, compatible with any compliant registry (Docker Registry, Quay, etc.);
+- Helm charts use the standard Helm format, compatible with any Helm repository;
+- the registry protocol is the Docker Registry HTTP API V2, an industry standard.
+
+## Exit procedure
+
+1. Identify all the projects and images to migrate.
+2. Configure the replication to the target registry or perform a manual push.
+3. Verify the integrity of the images copied to the target registry.
+4. Update the deployment configurations (registry URL).
+5. Delete the Numspot Container Registry instance after validation.

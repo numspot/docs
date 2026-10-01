@@ -1,0 +1,68 @@
+---
+title: Lister les clusters Kubernetes - Kubernetes managé
+sidebar_label: Lister les clusters Kubernetes
+sidebar_position: 3.5
+draft: false
+last_update:
+  date: 2026-09-30
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Lister les clusters Kubernetes
+
+Vous pouvez lister l'ensemble des [clusters Kubernetes](/docs/managed-services/kubernetes/concepts/) au sein de votre espace.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **kubernetes.cluster.get**
+
+:::
+<Tabs>
+
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+    La requête `GET /kubernetes/spaces/{spaceId}/clusters` permet de lister les clusters Kubernetes d'un espace.
+
+### Paramètres
+
+| Paramètre | Type   | Requis | Description                      |
+| --------- | ------ | ------ | -------------------------------- |
+| spaceId   | string | Oui    | Identifiant de l'espace Numspot. |
+
+### Exemple de réponse
+
+    ```json
+    {
+      "items": [
+        {
+          "id": "123e4567-e89b-42d3-a456-426614174000",
+          "name": "my-kubernetes-cluster",
+          "version": "1.31",
+          "fullVersion": "1.31.1",
+          "cidr": "10.0.0.0/16",
+          "profile": "small",
+          "dedicatedEtcd": false,
+          "visibility": "EXTERNAL",
+          "createdOn": "2026-08-15T12:41:00Z",
+          "status": {
+            "state": "RUNNING",
+            "message": "Cluster is healthy"
+          }
+        }
+      ],
+      "nextToken": "eyJwYWdlIjoxfQ"
+    }
+    ```
+
+Si d'autres résultats sont disponibles, la réponse contient un champ `nextToken` qui permet de récupérer la page suivante.
+
+    [Voir la spécification complète](/openapi/#tag/kubernetes/GET/kubernetes/spaces/{spaceId}/clusters)
+</TabItem>
+</Tabs>

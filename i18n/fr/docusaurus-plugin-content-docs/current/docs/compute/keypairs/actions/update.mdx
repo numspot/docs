@@ -1,0 +1,96 @@
+---
+title: Modifier la key pair d'une VM
+sidebar_position: 5
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Modifier la key pair d'une VM
+
+Vous pouvez remplacer la [key pair (paire de clés)](/docs/compute/keypairs/concept/) attribuée à une [VM (Virtual Machine)](/docs/compute/concept/).
+
+Lorsque vous modifiez une key pair avec la Console ou avec l'API (Application Programming Interface), les métadonnées de la VM sont modifiées pour refléter la nouvelle clé publique, mais le remplacement n'est pas encore pris en compte par le système d'exploitation de la VM. Pour finaliser le changement et appliquer concrètement la nouvelle key pair, vous devez effectuer d'autres actions à l'intérieur de la VM.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.vm.update**
+
+:::
+
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+La modification de la key pair d'une VM n'est pas disponible depuis la console Numspot : la page « Modification d'une VM » affiche la key pair en lecture seule.
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+Pour modifier la clé publique associée aux métadonnées de la VM, utilisez la commande `PUT /compute/spaces/{spaceId}/vms/{id}`.
+
+[Exemple de requête : Modification d'une VM](/openapi/#tag/compute/put/compute/spaces/{spaceId}/vms/{id})
+
+### Appliquer la nouvelle key pair avec scripts-per-boot
+
+Pour appliquer la nouvelle key pair en utilisant les scripts de démarrage (`scripts-per-boot`) de cloud-init, suivez ces étapes :
+
+1. **Accédez à la VM**
+
+2. **Créez un fichier dans `/var/lib/cloud/scripts/per-boot/`**
+
+   Nommez ce fichier, par exemple, `update-keypair.sh`, et ajoutez le contenu suivant :
+
+   ```bash
+   #!/bin/bash
+   curl http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key/ > /home/numspot/.ssh/authorized_keys
+   ```
+
+3. **Rendez le fichier exécutable**
+
+   ```bash
+   sudo chmod +x /var/lib/cloud/scripts/per-boot/update-keypair.sh
+   ```
+
+4. **Redémarrez la VM**
+
+   La nouvelle key pair sera appliquée après le redémarrage de la VM. Ce script télécharge la clé publique à partir des métadonnées de la VM et la place dans le fichier `authorized_keys` de l'utilisateur spécifié. Assurez-vous que le chemin `/home/numspot/.ssh/authorized_keys` correspond bien à celui de l'utilisateur pour lequel vous souhaitez ajouter la clé.
+
+### Appliquer la nouvelle key pair avec cloud_init_modules
+
+Pour appliquer la nouvelle key pair en utilisant les modules `cloud_init_modules` de cloud-init, suivez ces étapes :
+
+1. **Accédez à la VM**
+
+2. **Modifiez le fichier `/etc/cloud/cloud.cfg`**
+
+   Remplacez l'entrée `- ssh` sous `cloud_init_modules:` par :
+
+   ```yaml
+   - [ssh, always]
+   ```
+
+   Cela indique à cloud-init de toujours reconfigurer SSH (Secure Shell) à chaque démarrage de la VM.
+
+3. **Redémarrez la VM**
+
+   Cette méthode régénère la signature SSH de la VM, ce qui change son empreinte (fingerprint). Vous recevrez donc un avertissement lorsque vous vous reconnecterez à la VM, car l'empreinte de la clé SSH aura changé. Assurez-vous que vous êtes prêt à accepter ce changement lors de votre prochaine connexion.
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
+  </TabItem>
+</Tabs>

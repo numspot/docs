@@ -1,0 +1,48 @@
+---
+title: Create a load balancer listener - Numspot
+sidebar_label: Create a load balancer listener
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Create a load balancer listener
+
+You can create a listener for a [load balancer](/docs/network/load-balancer/concepts/) to check connection requests and forward them to the backend [VM](/docs/compute/concept/) (Virtual Machine).
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.loadBalancer.create**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
+2. Click the name of the load balancer for which you want to create a listener.
+3. In the "Listeners" tab, click **Create a listener**.
+4. Configure the listener settings (protocol, port, etc.).
+5. Click **Create**.
+
+   The listener is created and associated with the load balancer.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `POST /compute/spaces/{spaceId}/loadBalancers/{id}/listeners` command creates one or more listeners for a specified load balancer.
+
+[Example request: Creating a listener](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/loadBalancers/{id}/listeners)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/listener).
+
+</TabItem>
+</Tabs>

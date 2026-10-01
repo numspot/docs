@@ -1,0 +1,131 @@
+{
+  "document_title": "Numspot user tone of voice",
+  "introduction": [
+    "You do not speak to a banker the way you speak to a child; our tone adapts to the situation.",
+    "The goal is a uniform, clear and professional experience, suited to a large-account B2B context."
+  ],
+  "numspot_tone_of_voice_criteria": {
+    "closeness": {
+      "principles": [
+        "Present, without being distant. Empathetic.",
+        "Accessible but not familiar (no informal address)",
+        "No emojis, no \u201cfun\u201d tone, no puns, avoid humour",
+        "Suited to a professional audience"
+      ],
+      "we_use": [
+        "the formal \u201cyou\u201d (in the French copy: \u201cvous\u201d, never \u201ctu\u201d)",
+        "a direct tone, without emphasis."
+      ],
+      "do_examples": {
+        "fr": [
+          "Suivez les étapes ci-dessous",
+          "Définit les règles d’accès",
+          "Cette action entraîne une interruption",
+          "Action irréversible"
+        ],
+        "en": [
+          "Follow the steps below",
+          "Defines the access rules",
+          "This action causes an interruption",
+          "This action is irreversible"
+        ]
+      },
+      "dont_examples": {
+        "fr": [
+          "Nous allons vous guider pas à pas",
+          "Cette option vous permet de gérer facilement vos accès",
+          "Cette action peut entraîner des impacts",
+          "Attention, cette action est irréversible"
+        ],
+        "en": [
+          "We will guide you step by step",
+          "This option makes managing your access easy",
+          "This action may cause impacts",
+          "Careful, this action is irreversible"
+        ]
+      }
+    },
+    "clarity": {
+      "principles": [
+        "Simple terms, direct sentences",
+        "Avoid marketing phrasing",
+        "Prefer factual, action-oriented sentences",
+        "Consistent vocabulary between the console, the documentation and the internal teams",
+        "Acronyms when they are industry standards, no jargon. In the public documentation, spell the acronym out.",
+        "Define our own lexicon/glossary.",
+        "Careful: AK/SK is not a standard. \u201csponsor\u201d means \u201ccommanditaire\u201d (regulatory jargon is best avoided)."
+      ],
+      "do_examples": {
+        "fr": [
+          "Échec de la configuration",
+          "La création d’un projet nécessite les informations suivantes : nom, description et clé d’accès.",
+          "La mise à jour nécessite un redémarrage de l’application.",
+          "Action requise"
+        ],
+        "en": [
+          "Configuration failed",
+          "Creating a project requires the following information: name, description and access key.",
+          "The update requires an application restart.",
+          "Action required"
+        ]
+      },
+      "dont_examples": {
+        "fr": [
+          "L’opération n’a pas pu aboutir",
+          "Vous devez entrer votre nom, votre description et votre clé d’accès pour créer un projet.",
+          "Vous allez devoir redémarrer l’application.",
+          "Que souhaitez-vous faire ?"
+        ],
+        "en": [
+          "The operation could not be completed",
+          "You must enter your name, your description and your access key to create a project.",
+          "You will have to restart the application.",
+          "What would you like to do?"
+        ]
+      }
+    },
+    "energy": {
+      "principles": [
+        "Dynamic but controlled style. Not austere. No embellishment, stay factual and action-oriented.",
+        "Short sentences",
+        "Positive and direct feedback (e.g. \u201cAction confirmed\u201d rather than \u201cCongratulations…\u201d)",
+        "No artificial tension."
+      ],
+      "do_examples": {
+        "fr": [
+          "Action validée",
+          "Cluster en cours de création",
+          "Configuration enregistrée",
+          "Paramètres modifiables"
+        ],
+        "en": [
+          "Action validated",
+          "Cluster is being created",
+          "Configuration saved",
+          "Editable settings"
+        ]
+      },
+      "dont_examples": {
+        "fr": [
+          "Félicitations ! Votre action a été exécutée avec succès 🎉",
+          "Votre cluster est en train d'être créé, merci de patienter",
+          "Les modifications ont été enregistrées avec succès",
+          "N’hésitez pas à modifier ces paramètres"
+        ],
+        "en": [
+          "Congratulations! Your action was executed successfully 🎉",
+          "Your cluster is being created, please wait",
+          "The changes have been saved successfully",
+          "Feel free to change these settings"
+        ]
+      }
+    }
+  },
+  "anglicisms_and_acronyms": [
+    "Anglicisms and acronyms are accepted once they have become industry standards (e.g. VM, VPC, Public IP). CAREFUL: in the public documentation, remember to give the French translations.",
+    "Vendor-specific or ambiguous terms must be avoided (e.g. \u201csponsor\u201d).",
+    "Acronyms take no plural s",
+    "Shared glossary",
+    "Spelling and agreement of anglicisms follow the same rules as for French words"
+  ]
+}

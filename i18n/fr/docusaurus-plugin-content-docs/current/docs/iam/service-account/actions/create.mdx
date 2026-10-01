@@ -1,0 +1,212 @@
+---
+title: Créer un compte de service - IAM
+description: "Créez un compte de service IAM pour l'API Numspot, avec sa clé d'accès, son code secret, sa date d'expiration et ses droits, via la console, l'API ou Terraform."
+sidebar_label: Créer un compte de service
+sidebar_position: 2
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Créer un compte de service
+
+Un compte de service permet d'automatiser des tâches ou de réaliser des opérations à la place d'un utilisateur. Il est caractérisé par un nom, une clé d'accès et un code secret.
+
+Pour la création, un nom est à fournir par l'utilisateur et la commande retournera la clé d'accès et le code secret associés à ce compte.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **iam.serviceAccount.create**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/service-account/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Comptes de Service.", hotspot: { x: 0, y: 0.8, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/service-account/create-01-list.png", text: "Dans le menu IAM → Comptes de Service, cliquez sur « Créer un Compte de Service ».", hotspot: { x: 0.7916, y: 0.2296, w: 0.1695, h: 0.0494 } },
+    { img: "/img/walkthrough/service-account/create-02-form.png", text: "Saisissez le nom du compte de service, sa date d'expiration et la durée de vie du token, puis cliquez sur « Créer un Compte de Service ».", hotspot: { x: 0.6048, y: 0.921, w: 0.1445, h: 0.0494 } },
+  ]}
+/>
+
+1. Dans le menu **IAM**, cliquez sur **Comptes de Service**. Vous accédez au dashboard dédié aux comptes de service.
+
+2. Dans ce dashboard, cliquez sur le bouton **Créer un Compte de Service**.
+
+3. Renseignez les informations du nouveau compte de service :
+
+   - "Nom du Compte de Service" : le nom du propriétaire du compte ou du service technique associé. Les caractères autorisés sont a-z, A-Z, 0-9 et _ ;
+   - "Date d'expiration" : la date à laquelle ce compte de service ne pourra plus demander de nouveau jeton d'accès (token) et se verra refuser toute connexion à Numspot ;
+   - "Durée de vie du token" : la durée de validité du jeton d'accès, entre 1 seconde et 48 heures (24 heures par défaut). À chaque nouvelle session, le compte de service devra redemander un nouveau jeton.
+
+   Cliquez sur le bouton **Créer un Compte de Service**.
+
+4. Enregistrez les informations du nouveau compte de service de manière sécurisée.
+
+   :::warning
+   Veuillez copier ces informations de sécurité, elles ne seront pas reproduites. La clé d'accès et le code secret peuvent aussi porter d'autres noms comme "access key/secret key" ou "client id/client secret".
+   :::
+
+   ![FR_access-key_secrect-key](/img/console/iam/comptes-de-service/create/FR_access-key_secrect-key.png)
+
+   Cliquez alors sur le bouton **Assigner des rôles et permissions**.
+
+5. Étape "Espaces" : choisissez les espaces à associer au compte de service, puis cliquez sur **Sauvegarder les espaces**. Vous pouvez aussi cliquer sur **Passer l'étape**.
+
+6. Étape "Rôles" : sélectionnez l'onglet "Organisation" ou l'espace concerné, cochez les rôles à attribuer, puis cliquez sur **Sauvegarder les rôles**. Vous pouvez aussi cliquer sur **Ne pas attribuer de rôles** ou sur **Passer l'étape**.
+
+7. Étape "Permissions" : sélectionnez l'onglet "Organisation" ou l'espace concerné, cochez les permissions à attribuer, puis cliquez sur **Sauvegarder les permissions** pour terminer le paramétrage du compte de service. Vous pouvez aussi cliquer sur **Ne pas attribuer de permissions** ou sur **Passer l'étape**.
+
+8. Un message de confirmation s'affiche en bas indiquant que les permissions du compte de service ont bien été sauvegardées.
+
+Vous pouvez créer un compte de service à partir du profil d'un compte de service existant : depuis la liste ou la page de détails, cliquez sur **Créer un Compte de Service à partir de ce profil**. Le nouveau compte hérite des mêmes espaces, rôles et permissions que le compte initial.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La création d'un compte de service et l'attribution de rôles ou de permissions se font par étapes séparées.
+
+La création peut se faire au niveau de l'organisation ou au niveau d'un espace de l'organisation. La portée des droits des comptes sera cantonnée à leur périmètre. Le principe est le même, seules les URL de l'API changent.
+
+### Création du compte de service au niveau de l'organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/POST/iam/organisations/{organisationId}/serviceAccounts
+
+### Exemple avec un curl
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/serviceAccounts' \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "",
+  "tokenDuration": "PT24H",
+  "expirationDate": "2025-12-31"
+}'
+```
+
+Retour de la commande :
+
+```json
+{
+  "name": "…",
+  "id": "…",
+  "tokenDuration": "…",
+  "secret": "…",
+  "expirationDate": "…"
+}
+```
+
+### Création du compte de service au niveau de l'espace
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/POST/iam/spaces/{spaceId}/serviceAccounts
+
+### Exemple avec un curl
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/serviceAccounts' \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "le nom du service-account",
+  "tokenDuration": "PT24H",
+  "expirationDate": "2025-12-31"
+}'
+```
+
+Retour de la commande :
+
+```json
+{
+  "name": "…",
+  "id": "…",
+  "tokenDuration": "…",
+  "secret": "…",
+  "expirationDate": "…"
+}
+```
+
+### Attribuer des rôles et des permissions à un compte de service dans une organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PATCH/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}
+
+### Exemple avec un curl
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}' \
+  --request PATCH \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "add": {
+    "roles": [
+      ""
+    ],
+    "permissions": [
+      ""
+    ]
+  },
+  "delete": {
+    "roles": [
+      ""
+    ],
+    "permissions": [
+      ""
+    ]
+  }
+}'
+```
+
+### Attribuer des rôles et des permissions à un compte de service dans un espace
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PATCH/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}
+
+### Exemple avec un curl
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}' \
+  --request PATCH \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "add": {
+    "roles": [
+      ""
+    ],
+    "permissions": [
+      ""
+    ]
+  },
+  "delete": {
+    "roles": [
+      ""
+    ],
+    "permissions": [
+      ""
+    ]
+  }
+}'
+```
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/service_account).
+
+</TabItem>
+</Tabs>

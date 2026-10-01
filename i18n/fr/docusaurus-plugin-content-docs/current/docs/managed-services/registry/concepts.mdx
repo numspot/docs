@@ -1,0 +1,81 @@
+---
+title: "Container Registry - Concepts"
+sidebar_label: "Concepts"
+description: "Découvrez le Container Registry managé de Numspot pour stocker et sécuriser vos images de conteneurs (Docker, OCI) et vos charts Helm."
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# Concepts du Container Registry
+
+<ActionsSummary />
+
+## Introduction
+
+Le Container Registry est une solution gérée par Numspot pour stocker, gérer et sécuriser les artefacts logiciels, notamment :
+- des images de conteneurs (Docker, OCI),
+- des charts Helm,
+- des artéfacts divers (npm, packages, fichiers de configuration, etc.).
+
+Basé sur Harbor, une solution open-source certifiée CNCF, le Container Registry Numspot offre une intégration transparente avec les services gérés par Numspot, tout en garantissant la souveraineté des données et la conformité aux licences.
+
+### Avantages du service managé Container Registry
+
+- **Haute disponibilité** : Les Container Registry sont conçus pour minimiser les temps d'arrêt.
+- **Gestion simplifiée** : Pas besoin de gérer l'infrastructure Harbor.
+- **Évolutivité** : Augmentation des ressources de stockage en fonction des besoins.
+- **Sécurité** : Mises à jour et correctifs de sécurité gérés par Numspot.
+
+## Fonctionnalités clés
+
+### 1. Création d'un Container Registry hautement disponible
+
+Un **Container Registry hautement disponible** est conçu pour offrir une haute disponibilité.
+Cela signifie que l'instance est répliquée par construction sur plusieurs nœuds, garantissant ainsi la continuité du service même en cas de défaillance d'un composant.
+
+**Étapes pour créer un Container Registry via la Console Numspot** :
+
+1. Se connecter à la Console Numspot.
+2. Sélectionner l'option de création d'un Container Registry managé.
+3. Spécifier le nom et la version.
+4. Valider la création de l'instance.
+
+### 2. Récupération du mot de passe administrateur
+
+Pour pouvoir vous connecter à l'instance Container Registry, vous devez récupérer le mot de passe administrateur.
+
+**Étapes pour récupérer le mot de passe administrateur via la Console Numspot** :
+
+1. Accéder à la Console Numspot.
+2. Naviguer vers la section dédiée à l'instance Container Registry.
+3. Récupérer le nom de l'hôte de l'instance.
+4. Récupérer le mot de passe administrateur depuis la Console Numspot.
+5. Utiliser ces informations pour vous connecter à Harbor.
+
+## Cas d'utilisation
+
+### 1. Sécurisation de la supply chain logicielle
+
+- Le Container Registry agit comme une barrière automatisée en scannant les vulnérabilités et en bloquant le déploiement de toute image non conforme ou critique.
+
+### 2. Proxy cache
+
+- Il sert de relais local pour stocker les images publiques, permettant de contourner les quotas de Docker Hub et d'accélérer drastiquement les téléchargements.
+
+### 3. Source de vérité OCI
+
+- Il centralise la gestion des images de conteneurs et des Helm Charts au sein d'un inventaire unique, sécurisé et auditable.
+
+## Bonnes pratiques
+
+- **Sécuriser le pipeline** :
+  - Activer le "Scan on push" pour que le scan des vulnérabilités soit lancé automatiquement dès qu'une image est envoyée.
+  - Bloquer les images vulnérables, par exemple pour interdire les images ayant des failles "Critical" ou "High".
+  - Signer les artefacts pour que les clusters n'acceptent que des images dont la signature est vérifiée.
+- **Gestion des accès** : Utiliser des comptes robots pour ne jamais utiliser des identifiants personnels dans la chaîne de CI/CD.
+- **Cycle de vie des artefacts** :
+  - Ne pas garder l'historique complet et utiliser des règles de nettoyage automatique.
+  - Activer l'immutabilité des tags pour éviter qu'une image modifiée malveillante ou buggée ne remplace une image stable sous le même nom.
+  - Éviter le tag `latest` car on ne sait jamais exactement quelle version est déployée.

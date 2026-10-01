@@ -1,0 +1,34 @@
+---
+title: Concepts liés à l'identité - IAM
+sidebar_label: Concepts liés à l'identité
+sidebar_position: 2
+draft: false
+last_update:
+  date: 2026-09-18
+---
+
+# Concepts liés à l'identité
+
+## Principe général
+
+Chaque utilisateur doit avoir une identité propre (ID), conformément aux recommandations du référentiel SecNumCloud. Il est strictement déconseillé de partager les identités ou d'utiliser des identités génériques. De la même manière, il faut éviter l'utilisation de compte de service générique qui pourrait biaiser les informations de traçabilité ou d'audit.
+
+## Les différents types de comptes
+
+L'infrastructure et les technologies de l'**IAM** (Identity and Access Management) implémentent un cloisonnement strict des informations de chaque client. On distingue :
+
+- les comptes utilisateurs, rattachés à une personne physique ;
+- les comptes de service, rattachés à une machine ou à un type de service.
+
+### Compte utilisateur
+
+Un compte utilisateur se compose d'une adresse électronique (identifiant) et d'un dispositif d'authentification supplémentaire. La chaîne de connexion repose sur :
+
+- un facteur de connaissance (le mot de passe) ;
+- un facteur de possession (application enrôlée sur le téléphone mobile) permettant de valider un mot de passe unique à expiration courte, appelé **TOTP** (Time-based One-Time Password).
+
+Ce dispositif à deux facteurs répond aux recommandations d'authentification **MFA** (Multi-Factor Authentication) du référentiel SecNumCloud.
+
+### Compte de service ou compte système
+
+Le commanditaire peut définir et gérer des comptes de service afin d'automatiser ou de piloter par programme son infrastructure. Un compte de service permet aussi de relier des ressources entre elles (machine à machine), comme un portail qui sollicite des composants métiers.

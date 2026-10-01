@@ -1,0 +1,47 @@
+---
+title: Reversibility - managed Kubernetes
+sidebar_label: Reversibility of managed Kubernetes
+description: Information about the reversibility of the managed Kubernetes service
+sidebar_position: 2
+draft: false
+---
+
+# Reversibility of managed Kubernetes
+
+The managed Kubernetes service is designed to guarantee reversibility, that is, the ability for the customer to retrieve their data and migrate to another solution without lock-in.
+
+## Exportable data
+
+All Kubernetes resources (deployments, services, configurations, secrets, persistent volumes) can be exported using the standard tools of the Kubernetes ecosystem.
+
+## Reversibility tools
+
+### Exporting Kubernetes resources
+
+Use `kubectl` to export resource definitions:
+
+```bash
+kubectl get all --export -o yaml > export.yaml
+```
+
+### Backup and restore with Velero
+
+[Velero](/docs/managed-services/kubernetes/guides/backup-restore/) lets you back up and restore all the resources and persistent volumes of a [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/).
+
+### Migrating the kubeconfig
+
+The `kubeconfig` file is in the standard Kubernetes format and can be used with any compatible cluster, regardless of the provider.
+
+## Open formats
+
+- Container images are in the OCI (Open Container Initiative) format, compatible with any compliant registry.
+- Kubernetes manifests are in the YAML format, the standard of the ecosystem.
+- Persistent volumes use the CSI (Container Storage Interface) driver, the market standard.
+
+## Exit procedure
+
+1. Export the Kubernetes resources using `kubectl` or Velero.
+2. Export the container images to an external registry.
+3. Recreate the cluster on the new platform.
+4. Apply the exported manifests on the new cluster.
+5. Restore the persistent volumes from the backups.

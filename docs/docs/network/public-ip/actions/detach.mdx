@@ -1,0 +1,48 @@
+---
+title: Dissociate a public IP from a resource
+sidebar_position: 4
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Dissociate a public IP from a resource
+
+You can dissociate a public IP that you have associated with a [VM](/docs/compute/concept/) (Virtual Machine) or with a network interface.
+
+To dissociate a public IP from a [NAT gateway](/docs/network/nat/concepts/), you must delete the NAT gateway.
+
+:::info
+Once detached, the public IP is still allocated to your account and can be associated again. If you no longer need this public IP, you can release it.
+:::
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.publicIp.update**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+    1.  From the left-hand side menu, click **Network** → **Public IP**.
+        ![network_menu.png](/img/console/network/en-network_menu.png)
+    2.  Identify the public IP you want to dissociate, then from the list of actions, click **Dissociate**.  
+        ![actions_public_ip2.png](/img/console/network/public-ips/en-actions_public_ip2.png)  
+        A new "Dissociation of the public IP" dialog box appears.
+        ![unlink_public_ip_confirmation.png](/img/console/network/public-ips/en-unlink_public_ip_confirmation.png)
+    3.  Click **Dissociate the public IP**. The public IP is dissociated.  
+        A confirmation message "The dissociation of the public IP has been completed" appears.
+        ![unlink_public_ip_success.png](/img/console/network/public-ips/unlink_public_ip_success.png)
+  </TabItem>
+  <TabItem value="api" label="API">
+  The `PUT /compute/spaces/{spaceId}/publicIps/{id}/unlink` command dissociates a public IP from the associated resource.
+
+  [Example request: Dissociation of a public IP](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/publicIps/{id}/unlink)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/public_ip).
+  </TabItem>
+</Tabs>

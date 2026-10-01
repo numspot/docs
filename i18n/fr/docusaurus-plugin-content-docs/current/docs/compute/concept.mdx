@@ -1,0 +1,115 @@
+---
+title: "Compute - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+---
+
+# Concepts
+
+Les machines virtuelles (VM) sont des environnements informatiques virtuels qui émulent des ordinateurs physiques. Elles permettent d'exécuter des systèmes d'exploitation et des applications de manière isolée, tout en partageant les ressources matérielles (processeur, mémoire, stockage) d'un serveur hôte. La virtualisation, qui est à la base des VM, joue un rôle central dans les environnements informatiques modernes, notamment pour la consolidation des serveurs, le cloud computing, le développement et les tests logiciels, ainsi que la gestion des systèmes hérités.
+
+Une VM peut être déployée au sein d'un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/). Elle inclut des ressources de calcul, de stockage et de mémoire. Un système d'exploitation (OS) y est installé permettant l'hébergement d'applications métier. Vous pouvez choisir parmi différents types de configurations matérielles (types de VM) pour vous adapter aux besoins spécifiques de vos charges de travail. De plus, vous avez la possibilité de sélectionner des images préconfigurées contenant un OS et des applications spécifiques comme modèles pour créer vos VM.
+
+Les VM sont utilisées dans une variété de cas d'usage :
+- Développement et tests : Création d'environnements isolés pour tester des logiciels ou applications sans impacter le système hôte ;
+- Hébergement web : Mise en place de serveurs web scalables et fiables pour gérer les pics de trafic ;
+- Virtualisation de postes de travail : Fourniture d'environnements de bureau virtuels pour les utilisateurs distants ou mobiles ;
+- Gestion des systèmes hérités : Exécution d'applications anciennes sur des infrastructures modernes sans nécessiter de modifications majeures ;
+- Récupération après sinistre : Sauvegarde et reprise rapide des systèmes en cas de panne grâce à la portabilité et à la réplication des VM.
+
+Le schéma ci-dessous représente l'architecture de base d'une VM Numspot déployée dans un VPC. Dans cet exemple, la VM est hébergée dans une zone de disponibilité spécifique au sein d'une région donnée. La sécurité de la VM est assurée par un [security group (groupe de sécurité)](/docs/compute/security-groups/concepts/concept-sg/), qui agit comme un pare-feu virtuel en contrôlant le trafic réseau entrant et sortant. Pour l'authentification, une [key pair (paire de clés)](/docs/compute/keypairs/concept/) est utilisée : une clé privée, conservée sur l'ordinateur local de l'utilisateur, et une clé publique, stockée sur la VM. Cette association garantit l'identité de l'utilisateur et permet des connexions sécurisées. Par ailleurs, la VM repose sur un volume de [block storage (stockage bloc)](/docs/storage/block-storage/concepts/) pour le stockage des données. Enfin, le VPC est connecté à Internet via une [internet gateway (passerelle Internet)](/docs/network/internet-gateway/concepts/), permettant à la VM d'accéder aux ressources en ligne tout en restant isolée dans un environnement privé.
+
+<img src="/img/console/compute/general/quickstart_vm.png" alt="Étapes de création rapide d'une machine virtuelle depuis la console Numspot" />
+
+## Informations générales sur les VM
+
+Une VM est créée dans le Cloud à l'aide d'une Image comme modèle et d'un type de VM comme configuration matérielle. Une Image sert de modèle pour créer la VM en fournissant au moins un OS, et possiblement d'autres applications logicielles.
+
+Les VM sont constituées de cœurs virtualisés vCPU (virtual Central Processing Unit), de mémoire et de stockage. Ce stockage comprend des volumes de block storage permanents. Le volume système de la VM est un volume de block storage utilisé pour stocker l'ensemble des fichiers de l'OS ainsi que d'autres données si nécessaire.
+
+Numspot propose deux types de VM parmi lesquels vous pouvez choisir en fonction de vos besoins en termes de performance de calcul et de mémoire :
+- **VM personnalisées** (bientôt disponible), qui vous permettent de définir la quantité de vCPU et de mémoire selon vos besoins spécifiques ;
+- **VM préconfigurées**, conçues pour des usages dédiés tels que la Big Data ou le calcul haute performance avec un nombre prédéfini de vCPU et de mémoire.
+
+## Les attributs des VM
+
+Les VM ont des attributs qui définissent leurs caractéristiques, telles que le nombre de processeurs virtuels, la quantité de mémoire vive, la taille du disque dur virtuel, etc.
+
+Une VM possède les attributs suivants :
+- **Des block device mappings**, qui définissent les volumes attachés et si ces volumes sont supprimés une fois la VM terminée ;
+- **Un type de VM**, qui détermine les capacités de calcul, de mémoire et de stockage ;
+- La possibilité de désactiver la suppression afin d'empêcher la suppression accidentelle de la VM ;
+- **Une key pair** de chiffrement SSH (Secure Shell), composée d'une clé privée et d'une clé publique, grâce à laquelle vous pouvez vous connecter à votre VM ;
+- **Des security groups**, qui vous permettent de contrôler les flux entrants et sortants ;
+- Le comportement de la VM à sa coupure (arrêtée, terminée ou redémarrée) lorsque vous amorcez sa coupure ;
+- Si la vérification source/destination du trafic réseau est activée pour la VM ;
+- **Des user data**, qui permettent d'autres configurations de la VM.
+
+## Les VM et les security groups
+
+Les security groups sont des ensembles de règles de sécurité qui contrôlent le trafic réseau entrant et sortant pour une ou plusieurs VM. Les security groups sont associés à des VM lors de leur création et peuvent être modifiés selon vos besoins. Ils contrôlent l'accès aux VM, par exemple en autorisant uniquement le trafic provenant de certaines adresses IP (Internet Protocol) ou ports. Les VM peuvent être associées à un ou plusieurs security groups pour contrôler leur accès réseau.
+
+Par défaut, un security group n'autorise aucun flux entrant vers vos VM. Vous devez spécifier des règles pour les security groups selon vos besoins et votre architecture. Vous pouvez ajouter ou supprimer des règles de security group et modifier les security groups associés à une VM existante selon votre configuration.
+
+:::info
+Un security group par défaut est disponible pour votre compte. Ce security group n'autorise que les interactions entre les VM associées à ce même security group. Vous pouvez cependant en modifier les règles si besoin. Dans un VPC, les security groups filtrent à la fois les flux entrants et les flux sortants.
+:::
+
+Une règle de security group est composée des éléments suivants :
+
+- Flow : Entrant ou sortant ;
+- Protocol : TCP (Transmission Control Protocol), UDP (User Datagram Protocol) ou ICMP (Internet Control Message Protocol) ;
+- From port : Le port d'entrée ;
+- To port : Le port de destination ;
+- Source CIDR (Classless Inter Domain Routing) : L'adresse réseau sur laquelle filtrer, en notation CIDR ;
+- Source security group : Un autre security group sur lequel filtrer.
+
+## Allocation des VM et VM dédiées
+
+Les VM peuvent être allouées de manière dynamique ou dédiée. Les VM allouées de manière dynamique sont créées sur un hôte physique en fonction des besoins, tandis que les VM dédiées sont créées sur un hôte physique spécifique réservé à cet effet. Les VM dédiées offrent des performances plus prévisibles et une isolation accrue par rapport aux VM allouées de manière dynamique. Elles peuvent être utiles pour les charges de travail nécessitant des performances élevées et constantes, telles que les bases de données ou les applications critiques.
+
+Par défaut, les VM sont placées sur des serveurs partagés entre différents comptes. Cependant, vous pouvez spécifier que vous souhaitez placer vos VM sur des serveurs dédiés lors de leur création. Les VM dédiées ne partagent pas de matériel avec d'autres comptes, mais elles le partagent avec les VM non dédiées qui appartiennent à un même compte. L'utilisation des VM dédiées vous permet de bénéficier de la capacité maximum du serveur. Ainsi, quand vous créez une VM dans un VPC ou que vous créez un VPC, les options d'allocation disponibles sont les suivantes :
+- `default` : Votre VM est placée sur un serveur partagé ;
+- `dedicated` : Votre VM est placée sur un serveur dédié.
+
+Il est aussi possible de paramétrer un VPC afin que toutes les VM qui y sont créées soient automatiquement configurées en tant que `dedicated`. Le paramètre à modifier est appelé "tenancy", celui-ci peut être configuré en `dedicated` ou `default`.
+
+:::info
+La création de VM dédiées pourrait nécessiter une augmentation de quotas différents de ceux alloués à votre compte par défaut. Pour augmenter le quota correspondant, veuillez contacter l'équipe Support à support@numspot.com, solliciter votre Technical Account Manager ou sales-eu@numspot.com.
+:::
+
+## Virtualisation imbriquée
+
+La virtualisation imbriquée permet d'exécuter une VM à l'intérieur d'une autre VM. Cette fonctionnalité peut être utile pour tester des configurations de VM, créer des environnements de développement isolés, etc. La virtualisation imbriquée est prise en charge par certains types de VM chez Numspot.
+
+- La virtualisation imbriquée peut être activée uniquement via l'API (Application Programming Interface). Elle nécessite également de spécifier le paramètre d'allocation comme dedicated ;
+- Les VM imbriquées partagent la capacité de la VM hôte. Assurez-vous que votre VM hôte dispose de suffisamment de mémoire, de cœurs, et d'espace de stockage pour créer des VM imbriquées ;
+- Les VM imbriquées peuvent être basées uniquement sur des images extérieures (fichiers .iso), et non sur des images Numspot.
+
+## Cycle de vie des VM
+
+Les VM ont un cycle de vie qui comprend les étapes suivantes : création, démarrage, arrêt, redémarrage et suppression. Les VM peuvent être créées à partir d'un modèle de VM, d'un snapshot (instantané) ou d'une copie d'une autre VM. Les VM peuvent être arrêtées et redémarrées selon leur état et leur configuration, et peuvent être supprimées lorsqu'elles ne sont plus nécessaires. Vous pouvez surveiller l'état de vos VM à l'aide de la console de gestion Numspot.
+
+## Types de VM (gabarits)
+
+Les types de VM (ou gabarits de VM) définissent les caractéristiques de base d'une VM, telles que le nombre de processeurs virtuels, la quantité de mémoire vive, etc. Numspot propose une variété de types de VM pour répondre aux besoins de différents types de charges de travail. Vous pouvez choisir le type de VM qui convient le mieux à vos besoins en fonction des caractéristiques de la charge de travail, tels que la puissance de calcul, la mémoire et le stockage. Les types de VM peuvent être personnalisés en fonction des besoins spécifiques.
+
+## Facturation du compute
+
+La facturation des VM est calculée en fonction de trois critères principaux : le type de VM sélectionné, la région de déploiement et la durée d'utilisation. La facturation est effectuée à la seconde, avec un minimum d'une heure de facturation à partir du moment où la VM est démarrée. Cette granularité de facturation permet une optimisation des coûts en fonction de l'utilisation réelle des ressources.
+
+## Les VM et les volumes
+
+Les volumes de block storage sont des dispositifs de stockage bloc qui peuvent être attachés à des VM pour fournir un stockage persistant. Ces volumes offrent une solution de stockage élastique et performante, permettant de stocker des données critiques comme des bases de données ou des fichiers utilisateur. Les volumes de block storage peuvent être gérés indépendamment des VM : ils peuvent être créés, attachés, détachés et supprimés selon les besoins. Vous pouvez également créer des snapshots pour réaliser des sauvegardes ponctuelles ou des copies de données.
+
+## Les VM et les adresses IP
+
+Chaque VM dispose d'une adresse IP privée par défaut. Vous pouvez associer d'autres adresses IP privées supplémentaires à une VM ainsi qu'une ou plusieurs adresses IP publiques. Les adresses IP privées sont utilisées pour la communication entre les VM au sein du même VPC, tandis que les adresses IP publiques sont utilisées pour la communication avec Internet. Vous pouvez associer des IP publiques à vos VM pour garantir une adresse IP statique. Vous pouvez également configurer des security groups pour contrôler l'accès réseau aux VM en fonction de leur adresse IP.
+
+## Les VM et les key pairs
+
+Les key pairs sont des paires de clés SSH utilisées pour authentifier l'accès aux VM. Vous pouvez créer des paires de clés SSH et les associer à vos VM lors de leur création. Vous pouvez également ajouter ou supprimer des clés SSH de vos VM selon votre besoin. Seules les clés publiques sont stockées chez Numspot, la clé privée est immédiatement supprimée après création de la key pair une fois que vous l'avez téléchargée sur votre machine locale. La sauvegarde et la conservation sécurisée des clés privées et des mots de passe associés relèvent de votre responsabilité.
+
+## Les VM et les métadonnées
+
+Les métadonnées sont des informations supplémentaires qui peuvent être associées à des VM. Les métadonnées peuvent être utilisées pour stocker des informations telles que le nom de la VM, l'utilisateur propriétaire, les balises, etc. Vous pouvez créer et modifier des métadonnées pour vos VM à l'aide de l'API Numspot. Les métadonnées peuvent être utilisées pour faciliter la gestion et l'automatisation des VM.

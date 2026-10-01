@@ -1,0 +1,52 @@
+---
+title: Enregistrer une VM auprès d'un load balancer - Numspot
+sidebar_label: Enregistrer une VM auprès d'un load balancer
+sidebar_position: 5
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Enregistrer une VM auprès d'un load balancer
+
+Vous pouvez attacher une ou plusieurs [VM (Virtual Machine)](/docs/compute/concept/) à un [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) spécifié. Vous devez spécifier au moins le paramètre BackendIps ou BackendVMIds. Les VM peuvent se trouver dans différents subnet (sous-réseaux) et différentes Subregions par rapport au load balancer, tant que les VM et les load balancers sont soit tous dans le Cloud public, soit tous dans le même [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/). L'enregistrement d'une VM avec le load balancer peut prendre un certain temps. Une fois enregistrée, la VM reçoit le trafic et les requêtes provenant de ce load balancer et est alors appelée une VM de backend (serveur dorsal).
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.loadBalancer.update**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+L'enregistrement d'une VM backend n'est pas disponible depuis la console Numspot.
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `PUT /compute/spaces/{spaceId}/loadBalancers/{id}/backendMachines/link` attache une VM à un load balancer.
+
+[Exemple de requête : Attacher une VM à un load balancer](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/loadBalancers/{id}/backendMachines/link)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
+
+  </TabItem>
+</Tabs>

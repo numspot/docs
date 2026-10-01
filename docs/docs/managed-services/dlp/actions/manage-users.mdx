@@ -1,0 +1,147 @@
+---
+title: Manage DLP users - Managed DLP
+sidebar_label: Manage DLP users
+sidebar_position: 12
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Manage DLP users
+
+Manage [DLP](/docs/managed-services/dlp/concepts) service users: creation, role modification, password reset and deletion.
+
+## Permissions
+
+:::info
+This action requires the following [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) role:
+
+- **admin**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "In the DLP console, click Users in the side menu.", hotspot: { x: 0.006, y: 0.332, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/users-list.png", text: "Click “Create User” in the top right.", hotspot: { x: 0.890, y: 0.030, w: 0.094, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/user-create-form.png", text: "Enter the username, password and type, then select one or more roles. Optionally tick “Require password change at next login”.", hotspot: { x: 0.335, y: 0.300, w: 0.330, h: 0.430 } },
+    { img: "/img/walkthrough/dlp/user-create-form.png", text: "Click “Create” to create the user.", hotspot: { x: 0.608, y: 0.740, w: 0.053, h: 0.044 } },
+  ]}
+/>
+
+1. In the [DLP](/docs/managed-services/dlp/concepts) console, click **Users** in the sidebar.
+
+### Create a user
+
+1. Click the **Create user** button;
+2. Fill in the new user's information:
+
+| Field | Example value | Description |
+|-------|---------------|-------------|
+| Username | `jdupont` | Username |
+| Password | `********` | Password (8 characters minimum) |
+| Role | `rule_editor` | Assigned role |
+
+3. Click **Save** to create the user.
+
+### Modify a user's roles
+
+1. In the user list, click the name of the user to modify;
+2. Modify the assigned roles;
+3. Click **Save**.
+
+Role changes take effect immediately on existing sessions.
+
+### Reset password
+
+1. In the user list, click the **Actions** button for the relevant user;
+2. Click **Reset password**;
+3. Enter the new password (8 characters minimum);
+4. Click **Confirm**.
+
+The user will need to change their password at the next login.
+
+### Delete a user
+
+1. In the user list, click the **Actions** button for the relevant user;
+2. Click **Delete**;
+3. Confirm the deletion.
+
+:::warning
+The primary admin account cannot be deleted.
+:::
+
+</TabItem>
+<TabItem value="api" label="API">
+
+### Create a user
+
+The `POST /api/v1/users` request creates a user.
+
+#### Request example
+
+```json
+{
+  "username": "jdupont",
+  "password": "SecurePassword123!",
+  "roles": ["rule_editor"]
+}
+```
+
+#### Response example
+
+```json
+{
+  "id": "user-123456",
+  "username": "jdupont",
+  "roles": ["rule_editor"],
+  "capabilities": ["read", "rule:write"],
+  "must_change_password": true,
+  "type": "local",
+  "created_at": "2026-08-27T10:00:00Z",
+  "updated_at": "2026-08-27T10:00:00Z"
+}
+```
+
+### Modify roles
+
+The `PUT /api/v1/users/{id}` request modifies a user's roles.
+
+#### Request example
+
+```json
+{
+  "roles": ["rule_editor", "rule_publisher"]
+}
+```
+
+### Reset password
+
+The `PUT /api/v1/users/{id}/password` request resets a user's password.
+
+#### Request example
+
+```json
+{
+  "password": "NewPassword456!"
+}
+```
+
+### Delete a user
+
+The `DELETE /api/v1/users/{id}` request deletes a user.
+
+#### Response example
+
+```text
+HTTP/1.1 204 No Content
+```
+
+</TabItem>
+</Tabs>

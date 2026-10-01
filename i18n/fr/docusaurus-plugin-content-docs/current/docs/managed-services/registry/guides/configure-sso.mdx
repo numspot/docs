@@ -1,0 +1,255 @@
+---
+title: Configurer l'authentification unique (SSO) Harbor
+description: Configurer l'authentification unique OIDC ou SSO entreprise pour Harbor
+sidebar_position: 6
+draft: false
+---
+
+# Configurer l'authentification unique (SSO) Harbor
+
+Le service managé Container Registry (Harbor) prend en charge l'authentification unique (Single Sign-On, SSO) via les protocoles **OIDC** et **SAML 2.0**. Vous pouvez connecter Harbor à votre fournisseur d'identité (Identity Provider, IdP) pour centraliser la gestion des accès, renforcer la sécurité et simplifier l'expérience utilisateur.
+
+:::note
+La configuration du SSO s'effectue via l'interface d'administration Harbor. L'API Numspot ne prend pas en charge la gestion directe des paramètres d'authentification SSO.
+:::
+
+## Prérequis
+
+:::note
+Avant de configurer le SSO, assurez-vous que :
+
+1. Vous disposez des droits **administrateur système** sur votre instance Harbor ;
+2. Vous avez accès à la console d'administration de votre fournisseur d'identité (Keycloak, Azure AD, Okta, etc.) ;
+3. Votre Container Registry est en état "RUNNING" ;
+4. Le réseau autorise les flux HTTPS entre Harbor et votre IdP ;
+5. Vous avez récupéré le mot de passe administrateur (voir [Récupérer le mot de passe](/docs/managed-services/registry/actions/password/)).
+:::
+
+## Choisir le type de protocole
+
+| Protocole | Cas d'usage | Exemples d'IdP |
+| --- | --- | --- |
+| OIDC | Applications modernes, flux OAuth 2.0, tokens JWT | Keycloak, Azure AD, Okta, Google |
+| SAML 2.0 | Intégration legacy, fédération d'identité | ADFS, Shibboleth, OneLogin |
+
+:::tip
+En cas de doute, privilégiez **OIDC**. Il offre une meilleure compatibilité avec Harbor et un mappage des groupes natif.
+:::
+
+## Configurer un fournisseur OIDC
+
+### Étape 1 : créer l'application dans votre IdP
+
+1. Connectez-vous à la console d'administration de votre IdP ;
+2. Créez une nouvelle application (ou client) nommée `Harbor Registry` ;
+3. Définissez le type de client sur **Web application** ou **Confidential** ;
+4. Configurez l'URL de redirection (Redirect URI) :
+   `https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/c/oidc/callback` ;
+5. Activez les flux d'autorisation suivants :
+   - **Authorization Code** (obligatoire)
+   - **Refresh Token** (recommandé pour la déconnexion proactive)
+6. Notez les identifiants suivants :
+   - **Client ID**
+   - **Client Secret**
+   - **Issuer URL** (URL de découverte OpenID, généralement `https://<idp>/.well-known/openid-configuration`).
+
+### Étape 2 : configurer Harbor pour OIDC
+
+1. Connectez-vous à l'interface Harbor en tant qu'administrateur ;
+2. Accédez à **Administration** → **Configuration** → **Authentication** ;
+3. Dans la liste **Auth Mode**, sélectionnez **OIDC** ;
+4. Renseignez les champs :
+
+| Champ | Description |
+| --- | --- |
+| **OIDC Provider Name** | Nom affiché sur l'écran de connexion (`Keycloak`, `Azure AD`, etc.) |
+| **OIDC Endpoint** | L'URL de l'Issuer (ex : `https://keycloak.example.com/realms/master`) |
+| **OIDC Client ID** | Identifiant du client généré par l'IdP |
+| **OIDC Client Secret** | Secret du client |
+| **Group Claim Name** | Nom de la claim contenant les groupes (`groups`, `realm_access.roles`, etc.) |
+| **OIDC Scope** | Scopes demandés (`openid,email,profile,offline_access,groups`) |
+| **Verify Certificate** | Activé en production |
+
+5. Cliquez sur **Test OIDC Server** pour vérifier la connectivité ;
+6. Cliquez sur **Save** pour activer le SSO OIDC.
+
+### Étape 3 : mapper les groupes et les rôles
+
+Pour attribuer automatiquement des rôles Harbor aux utilisateurs selon leur appartenance à un groupe :
+
+1. Dans **Administration** → **Configuration** → **Authentication**, définissez le **Group Claim Name** ;
+2. Créez les groupes correspondants dans Harbor : **Administration** → **Groups** → **+ New Group** ;
+3. Associez ces groupes aux projets avec le rôle souhaité.
+
+:::info
+Si le groupe n'existe pas encore dans Harbor, l'utilisateur SSO pourra se connecter mais n'aura aucun accès aux projets tant que vous ne l'aurez pas ajouté à un groupe Harbor existant.
+:::
+
+### Flux de connexion OIDC
+
+Voici le déroulement d'une connexion utilisateur après activation du SSO OIDC :
+
+1. L'utilisateur accède à l'interface Harbor ;
+2. Il clique sur **Sign in with OIDC** ;
+3. Harbor redirige l'utilisateur vers l'IdP avec une requête d'autorisation ;
+4. L'utilisateur s'authentifie auprès de son IdP ;
+5. L'IdP renvoie un code d'autorisation à Harbor via l'URL de callback ;
+6. Harbor échange ce code contre un token JWT auprès de l'IdP ;
+7. Harbor crée ou met à jour le compte utilisateur local à partir des claims du token ;
+8. L'utilisateur est connecté à Harbor avec les permissions correspondant à son profil.
+
+## Configurer un fournisseur SAML 2.0
+
+### Créer l'application dans votre IdP
+
+1. Créez une application SAML dans votre IdP ;
+2. Définissez l'**Assertion Consumer Service (ACS) URL** :
+   `https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/c/saml/acs` ;
+3. Définissez l'**Entity ID** :
+   `https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com` ;
+4. Exportez le **certificat X.509** et les **métadonnées SAML** de votre IdP.
+
+### Configurer Harbor pour SAML
+
+1. Accédez à **Administration** → **Configuration** → **Authentication** ;
+2. Sélectionnez **Auth Mode** → **SAML** ;
+3. Renseignez les champs :
+
+| Champ | Description |
+| --- | --- |
+| **Name** | Nom du fournisseur (`ADFS`, `Shibboleth`) |
+| **Endpoint** | URL du service SAML (URL de connexion) |
+| **Certificate** | Contenu du certificat X.509 de l'IdP (format PEM) |
+| **Private Key** | Votre clé privée pour signer les requêtes (facultatif) |
+| **Token Signing Algorithm** | Algorithme de signature (`RSA-SHA256`) |
+
+4. Téléchargez les métadonnées SAML de Harbor pour les importer dans votre IdP ;
+5. Cliquez sur **Save**.
+
+## Configurer UAA ou LDAP
+
+Harbor prend également en charge l'authentification via **UAA** (Cloud Foundry) et **LDAP**.
+
+### Configurer UAA
+
+1. Connectez-vous à l'interface Harbor en tant qu'administrateur ;
+2. Accédez à **Administration** → **Configuration** → **Authentication** ;
+3. Sélectionnez **Auth Mode** → **UAA** ;
+4. Renseignez les champs :
+
+| Champ | Description |
+| --- | --- |
+| **UAA Endpoint** | URL de votre serveur UAA (ex : `https://uaa.example.com`) |
+| **Client ID** | Identifiant du client UAA |
+| **Client Secret** | Secret du client UAA |
+| **Verify Certificate** | Activé en production |
+
+5. Cliquez sur **Test UAA Server**, puis sur **Save**.
+
+### Configurer LDAP
+
+1. Dans **Administration** → **Configuration** → **Authentication**, sélectionnez **Auth Mode** → **LDAP** ;
+2. Renseignez les champs de connexion :
+
+| Champ | Description |
+| --- | --- |
+| **LDAP URL** | URL du serveur LDAP (ex : `ldaps://ldap.example.com:636`) |
+| **LDAP Base DN** | Distinguished Name de base pour la recherche (ex : `dc=example,dc=com`) |
+| **LDAP Filter** | Filtre de recherche utilisateur (ex : `(objectClass=person)`) |
+| **LDAP UID** | Attribut identifiant l'utilisateur (`uid`, `sAMAccountName`, `mail`) |
+| **LDAP Search DN** | DN du compte de service pour la recherche LDAP |
+| **LDAP Search Password** | Mot de passe du compte de service |
+| **Verify Certificate** | Activé pour les connexions LDAPS |
+
+3. Cliquez sur **Test LDAP Server**, puis sur **Save**.
+
+:::tip
+Pour Active Directory, utilisez `sAMAccountName` comme **LDAP UID** et préfixez le **LDAP Search DN** avec le format `DOMAIN\utilisateur`.
+:::
+
+## Associer les utilisateurs SSO aux projets
+
+Les utilisateurs se connectant via SSO ne sont pas automatiquement membres des projets. Vous devez les ajouter manuellement ou via le mappage de groupes.
+
+### Via l'interface Harbor
+
+1. Accédez au projet ;
+2. Cliquez sur **Members** ;
+3. Cliquez sur **+ Add Member** ;
+4. Pour les utilisateurs OIDC, saisissez le nom d'utilisateur ou l'email ;
+5. Pour les groupes, saisissez le nom exact du groupe ;
+6. Sélectionnez le rôle souhaité (**Guest**, **Developer**, **Master** ou **Admin**) ;
+7. Cliquez sur **OK**.
+
+### Via API
+
+```bash
+curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/projects/{project_id}/members" \
+  -u "admin:{password}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "role_id": 3,
+    "member_user": {
+      "username": "user@example.com"
+    }
+  }'
+```
+
+## Dépannage
+
+| Symptôme | Cause probable | Résolution |
+| --- | --- | --- |
+| **Invalid client** ou **Unauthorized** sur la page de connexion | Mauvais **Client ID** ou **Client Secret** dans Harbor | Vérifiez la correspondance exacte des identifiants avec ceux de l'IdP ;
+
+Si le problème persiste, régénérez le secret côté IdP et mettez à jour la configuration Harbor. |
+| **Forbidden** après connexion | L'utilisateur n'est membre d'aucun projet et aucun groupe mappé | Ajoutez l'utilisateur ou son groupe au projet avec le rôle adéquat. |
+| **Docker login** retourne une erreur **401** | Le compte utilisé est un compte SSO sans mot de passe local | Utilisez un **compte robot** pour les opérations Docker CLI (push/pull). |
+| **Certificate verify failed** lors du test de connexion | Certificat TLS de l'IdP auto-signé ou non reconnu | Importez l'autorité de certification dans le truststore de Harbor, ou désactivez **Verify Certificate** uniquement en environnement de test. |
+| **Group claim not found** | Nom de la claim incorrect ou scope insuffisant | Vérifiez le **Group Claim Name** et assurez-vous que le scope `groups` est inclus dans la requête OIDC. |
+| L'utilisateur est déconnecté rapidement | Le token d'accès a une durée de vie très courte | Vérifiez la durée de vie des tokens côté IdP et activez le **Refresh Token** si possible. |
+
+:::warning
+Ne désactivez **Verify Certificate** en production. Cela expose Harbor à des attaques de type man-in-the-middle sur le canal d'authentification.
+:::
+
+## Considérations de sécurité
+
+### Ségrégation des privilèges
+
+Séparez les groupes d'administration système Harbor des groupes de développement. Mappez uniquement les groupes nécessaires et appliquez le principe du moindre privilège.
+
+### Compte administrateur local de secours
+
+Conservez au moins un compte administrateur local actif. En cas de défaillance du fournisseur d'identité, ce compte vous permettra de restaurer l'accès à Harbor sans intervention externe.
+
+```bash
+curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/users" \
+  -u "admin:{password}" | jq '.[] | select(.username == "admin")'
+```
+
+### Rotation des secrets
+
+Renouvelez régulièrement les credentials IdP (client secret, certificats SAML) pour limiter l'impact d'une fuite. Planifiez une rotation trimestrielle minimum.
+
+### Audit des connexions SSO
+
+Harbor journalise les événements d'authentification. Surveillez les connexions et les échecs :
+
+```bash
+curl -X GET "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv-eu-west-1.numspot.com/api/v2.0/logs?operation=login" \
+  -u "admin:{password}"
+```
+
+### Restreindre l'administration système
+
+Limitez le nombre d'utilisateurs avec le rôle administrateur système. Préférez l'attribution par groupe pour centraliser la révocation en cas de départ.
+
+## Bonnes pratiques
+
+| Recommandation | Justification |
+| --- | --- |
+| Utiliser OIDC plutôt que SAML | Meilleure prise en charge native et mappage de groupes simplifié |
+| Activer le mappage de groupes | Gestion centralisée des permissions via l'IdP |
+| Conserver un compte admin local | Accès de secours en cas d'indisponibilité du fournisseur d'identité |
+| Renouveler les secrets régulièrement | Réduction du risque en cas de fuite de credentials IdP |
+| Restreindre les groupes admin Harbor | Limiter le nombre d'administrateurs système au strict nécessaire |

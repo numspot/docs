@@ -1,0 +1,94 @@
+/**
+ * Admonitions / Callouts — Brand Book 2026
+ * 4px border-left + tinted background, square corners. Default note = Bloom accent.
+ */
+
+.theme-admonition {
+  border: 1px solid var(--border-secondary);
+  border-left: 4px solid var(--ns-bloom);
+  border-radius: 0;
+  background: var(--callout-bg-default);
+  color: var(--text-primary);
+}
+
+.theme-admonition .admonitionHeading,
+.theme-admonition [class*="admonitionHeading"] {
+  color: var(--text-heading);
+}
+
+/* note / info / tip / caution / danger → semantic colors */
+.theme-admonition-info,
+.alert--info {
+  border-left-color: var(--ns-info);
+  background: var(--callout-bg-info);
+}
+
+.theme-admonition-tip,
+.alert--success {
+  border-left-color: var(--ns-success);
+  background: var(--callout-bg-success);
+}
+
+.theme-admonition-warning,
+.alert--warning {
+  border-left-color: var(--ns-warning);
+  background: var(--callout-bg-warning);
+}
+
+.theme-admonition-danger,
+.alert--danger {
+  border-left-color: var(--ns-error);
+  background: var(--callout-bg-danger);
+}
+
+/* ----- Icons from the Figma "Iconography" set -----
+ * Hide Docusaurus's default SVG icon and apply the brand icon as a
+ * mask-image (recolorable by token, like the sidebar icons).
+ * Files live in static/img/ui/callouts/.
+ */
+.theme-admonition [class*="admonitionIcon"] svg {
+  display: none;
+}
+
+.theme-admonition [class*="admonitionIcon"] {
+  display: inline-block;
+  width: 1.6rem;
+  height: 1.6rem;
+  background-color: var(--ns-bloom); /* note (default) */
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-image: url(../../../static/img/ui/callouts/note.svg);
+  mask-image: url(../../../static/img/ui/callouts/note.svg);
+}
+
+.theme-admonition-info [class*="admonitionIcon"],
+.alert--info [class*="admonitionIcon"] {
+  background-color: var(--ns-info);
+  -webkit-mask-image: url(../../../static/img/ui/callouts/info.svg);
+  mask-image: url(../../../static/img/ui/callouts/info.svg);
+}
+
+.theme-admonition-tip [class*="admonitionIcon"],
+.alert--success [class*="admonitionIcon"] {
+  background-color: var(--ns-success);
+  -webkit-mask-image: url(../../../static/img/ui/callouts/tip.svg);
+  mask-image: url(../../../static/img/ui/callouts/tip.svg);
+}
+
+.theme-admonition-warning [class*="admonitionIcon"],
+.alert--warning [class*="admonitionIcon"] {
+  background-color: var(--ns-warning);
+  -webkit-mask-image: url(../../../static/img/ui/callouts/warning.svg);
+  mask-image: url(../../../static/img/ui/callouts/warning.svg);
+}
+
+.theme-admonition-danger [class*="admonitionIcon"],
+.alert--danger [class*="admonitionIcon"] {
+  background-color: var(--ns-error);
+  -webkit-mask-image: url(../../../static/img/ui/callouts/danger.svg);
+  mask-image: url(../../../static/img/ui/callouts/danger.svg);
+}

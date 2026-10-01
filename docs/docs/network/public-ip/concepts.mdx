@@ -1,0 +1,72 @@
+---
+title: About public IP
+sidebar_position: 1
+draft: false
+last_update:
+  date: 2026-09-28
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# About public IP
+
+<ActionsSummary />
+
+A public IP is an IPv4 address that you can allocate to your account, in order to then associate it with one of your resources.
+
+You can dissociate a public IP from its resource at any time, then re-associate it with another one.
+
+## General information
+
+Public IP are public IPv4 addresses that you can allocate to your account. You can then associate them with the following resources:
+
+- [VM](/docs/compute/concept/) (Virtual Machine)
+- network interfaces
+- [load balancers](/docs/network/load-balancer/concepts/) connected to the Internet
+- [nat gateways](/docs/network/nat/concepts/)
+
+Public IP allow you to communicate with the Internet.
+
+:::info
+To associate a public IP within a [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud), the VPC must have an [internet gateway](/docs/network/internet-gateway/concepts/) attached.
+:::
+
+
+You can dissociate and re-associate a public IP at any time. For example, if a VM fails, you can transfer the public IP to another VM. The new VM therefore has the same public IP, which means that the scripts and applications using this public IP do not encounter any problem.
+
+A dissociated public IP remains allocated to your account. If you no longer use a public IP, you can release it to make it available for other accounts.
+
+:::warning
+
+Make sure that no application and no script is using the public IP that you want to release.
+:::
+
+## Associating public IP
+
+You can associate a public IP with only one resource at a time.
+
+If you associate a public IP with a VM or a network interface, with the Numspot Console you must always dissociate the public IP before you can re-associate it with another resource. With the API, you can configure a re-association behavior: either prevent it, or automatically dissociate the public IP and re-associate it with the new VM or network interface that you specify.
+
+If you create a NAT gateway, you must specify a public IP. To modify its public IP, you must delete the NAT gateway and then recreate it with the new public IP.
+
+You can also associate a public IP with a load balancer connected to the Internet when you manage it.
+
+### Within a VPC
+
+The public IP attaches to the primary network interface of the VM. If you work with several network interfaces, you can choose which of the NIC (Network Interface Cards) you want to associate the public IP with, through the Numspot API.
+
+### Automatic assignment when creating a VM
+
+Each subnet has a `mapPublicIpOnLaunch` attribute that determines whether a public IP is automatically assigned to the NICs created in the subnet, including the primary NIC created when you launch a VM. This attribute is disabled by default. To enable or disable it, see [Edit an attribute of a subnet](/docs/network/subnets/actions/update/).
+
+The public IP assigned automatically has the following characteristics:
+
+- it is chosen **randomly**: you cannot select the address. To use a specific public IP, perform a [manual association](/docs/network/public-ip/actions/attach/);
+- the link between the public IP and the VM persists when the VM is stopped and started;
+- the public IP is **deleted with the VM**: it is returned to the public IP pool and cannot be dissociated individually;
+- it does **not appear in the "Public IP" section**: it is only visible in the VM and NIC details, and cannot be dissociated, released or tracked from this section;
+- it is counted in the public IP quota of your account.
+
+:::info
+For the VM of a subnet to access the Internet, the VPC must have an [internet gateway](/docs/network/internet-gateway/concepts/) attached, with a matching route in the subnet [route table](/docs/network/route-table/concepts/) and appropriate [security group](/docs/compute/security-groups/concepts/concept-sg/) rules.
+:::

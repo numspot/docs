@@ -1,0 +1,50 @@
+---
+title: Obtenir des informations sur vos server certificates
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Obtenir des informations sur vos server certificates
+
+Vous pouvez consulter les informations détaillées de vos server certificates.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.serverCertificate.get**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+:::info
+La consultation des certificats serveur n'est pas disponible depuis la console Numspot.
+
+Utilisez l'**API** ou **Terraform** (voir les onglets correspondants).
+:::
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+### Obtenir des informations sur vos server certificates avec l'API Numspot
+
+La commande `GET /compute/spaces/{spaceId}/serverCertificates` permet de lister vos server certificates.
+
+[Exemple de requête : Lister tous vos server certificates](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/serverCertificates)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/server_certificate).
+  </TabItem>
+</Tabs>

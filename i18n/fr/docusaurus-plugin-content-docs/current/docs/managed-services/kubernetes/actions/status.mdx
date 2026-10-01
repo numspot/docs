@@ -1,0 +1,94 @@
+---
+title: Obtenir le statut d'un cluster Kubernetes - Kubernetes managé
+sidebar_label: Obtenir le statut d'un cluster Kubernetes
+sidebar_position: 3
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Obtenir le statut d'un cluster Kubernetes
+
+Obtenez le statut de vos [clusters Kubernetes](/docs/managed-services/kubernetes/concepts/).
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+
+- **kubernetes.cluster.get**
+
+:::
+<Tabs>
+
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/k8s/cluster-list.png", text: "Depuis le menu latéral gauche, cliquez sur Services Managés → Kubernetes.", hotspot: { x: 0, y: 0.3556, w: 0.194, h: 0.0543 } },
+    { img: "/img/walkthrough/k8s/cluster-list.png", text: "Dans la liste des clusters Kubernetes, le statut de chaque cluster s'affiche dans la colonne « Statut ».", hotspot: { x: 0.6295, y: 0.2971, w: 0.2587, h: 0.0877 } },
+    { img: "/img/walkthrough/k8s/cluster-details.png", text: "Cliquez sur un cluster pour ouvrir sa page de détails : son statut est affiché dans l'en-tête, à côté de son nom.", hotspot: { x: 0.208, y: 0.2206, w: 0.74, h: 0.0724 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, cliquez sur **Services managés** → **Kubernetes** pour accéder à la liste des clusters Kubernetes.
+
+2. La liste des clusters s'affiche avec leur statut dans la colonne "Statut".
+
+3. Cliquez sur le nom d'un cluster pour accéder à sa page de détails.
+4. Le statut du cluster est affiché dans l'en-tête de la page, à côté de son nom.
+
+Le statut peut prendre les valeurs suivantes :
+
+| Statut | Description |
+|--------|-------------|
+| En cours | Le cluster fonctionne normalement |
+| Actif | Le cluster est opérationnel |
+| Création en cours | Le cluster est en cours de création |
+| Suppression en cours | Le cluster est en cours de suppression |
+| Échec | Une erreur est survenue |
+| En attente | Le cluster est en attente |
+| Réparation en cours | Le cluster est en cours de réparation |
+
+Dans la section **Général**, vous trouverez des informations complémentaires :
+
+- **Date de création** : date et heure de création du cluster
+- **Version de Kubernetes** : version complète du cluster
+- **Message** : message d'état détaillé
+- **Plage IP** : plage CIDR du cluster
+- **Taille du control plane** : profil du control plane
+
+</TabItem>
+
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La requête `GET /kubernetes/spaces/{spaceId}/clusters/{clusterId}` permet d'obtenir le statut actuel d'un cluster Kubernetes.
+
+### Exemple de réponse
+
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "name": "mon-cluster-kubernetes",
+  "version": "1.34",
+  "fullVersion": "1.34.0",
+  "cidr": "10.0.0.0/16",
+  "profile": "small",
+  "visibility": "EXTERNAL",
+  "createdOn": "2026-04-05T10:30:00Z",
+  "status": {
+    "state": "RUNNING",
+    "message": "Cluster is healthy and operational"
+  }
+}
+```
+
+[Voir la spécification complète](/openapi/#tag/kubernetes/GET/kubernetes/spaces/{spaceId}/clusters/{clusterId})
+</TabItem>
+</Tabs>

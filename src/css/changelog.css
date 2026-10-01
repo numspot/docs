@@ -1,0 +1,369 @@
+.body-lg {
+    font-family: var(--ns-font-family);
+    font-size: var(--fs-md, 18px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28px;
+}
+
+.body-sm {
+    font-family: var(--ns-font-family);
+    font-size: var(--fs-xs, 14px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+.title-lg {
+    font-family: var(--ns-font-family);
+    font-size: var(--fs-lg, 24px);
+    font-style: normal;
+    font-weight: 600;
+    line-height: 32px;
+}
+
+.title-md {
+    font-family: var(--ns-font-family);
+    font-size: var(--fs-md, 18px);
+    font-style: normal;
+    font-weight: 600;
+    line-height: 28px;
+}
+
+.title-sm {
+    font-family: var(--ns-font-family);
+    font-size: var(--fs-sm, 16px);
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+}
+
+.subtitle-xs {
+    font-family: var(--ns-font-family);
+    font-size: var(--fs-xs2, 14px);
+    font-style: normal;
+    font-weight: 600;
+}
+
+.subtitle-sm {
+    font-family: var(--ns-font-family);
+    font-size: var(--fs-xs, 14px);
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+}
+
+.caption-sm {
+    font-family: var(--ns-font-family);
+    font-size: var(--fs-xs3, 12px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: 14px;
+}
+
+.changelog-title {
+    /*color: var(--color-text-body, #101828);*/
+}
+
+.changelog-last-update {
+    color: var(--color-text-bodyvariant, #6A7282);
+    margin-top: 4px;
+}
+
+.changelog-month-entries {
+    margin-top: 32px;
+}
+
+.changelog-month {
+    /*color: var(--color-text-body, #101828);*/
+}
+
+.changelog-service-entries {
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.changelog-service {
+    /*color: var(--color-text-body, #101828);*/
+}
+
+.changelog-entry {
+    margin-top: 16px;
+}
+
+.changelog-entry-title {
+    /*color: var(--color-text-body, #101828);*/
+    margin-left: 16px;
+}
+
+.changelog-entry-description {
+    color: var(--color-neutral-text, #4A5565);
+    margin-top: 8px;
+}
+
+[data-theme="dark"] .changelog-entry-description {
+    color: var(--color-text-bodyvariant, #6A7282);
+}
+
+.tag {
+    display: inline-block;
+    border-radius: var(--br-lg, 16px);
+    padding: 0 var(--sp-xs, 8px);
+}
+
+.tag-added,
+.tag-fixed {
+    background: var(--color-success-surface, rgba(40, 157, 21, 0.10));
+    color: var(--color-success-text, #238015);
+}
+
+.tag-changed {
+    background: var(--color-info-surface, rgba(60, 97, 255, 0.10));
+    color: var(--color-info-text, #3C61FF);
+}
+
+.tag-deprecated,
+.tag-security {
+    background: var(--color-warning-surface, rgba(238, 131, 7, 0.10));
+    color: var(--color-warning-text, #C0430E);
+}
+
+.tag-removed {
+    background: var(--color-error-surface, rgba(247, 71, 60, 0.10));
+    color: var(--color-error-text, #F7473C);
+}
+
+/* In dark theme, the mockup's translucent background (≈10% opacity)
+   disappears on the dark surface. We therefore reproduce the Figma rendering
+   exactly with a SOLID background: the translucent tint flattened on white
+   (the color actually displayed in Figma), with the status text unchanged.
+   Computed hex values: 0.1·color + 0.9·#FFFFFF. */
+[data-theme="dark"] .tag-added,
+[data-theme="dark"] .tag-fixed {
+    background: #EAF5E8;
+    color: #238015;
+}
+
+[data-theme="dark"] .tag-changed {
+    background: #ECEFFF;
+    color: #3C61FF;
+}
+
+[data-theme="dark"] .tag-deprecated,
+[data-theme="dark"] .tag-security {
+    background: #FDF3E6;
+    color: #C0430E;
+}
+
+[data-theme="dark"] .tag-removed {
+    background: #FEEDEC;
+    color: #F7473C;
+}
+
+/* ------------------------------------------------------------------ */
+/* Layout: content + filter panel on the right                        */
+/* ------------------------------------------------------------------ */
+
+/* The changelog page has no TOC: lift the max-width: 75% cap Docusaurus
+   applies to the content column so the filter panel aligns to the far
+   right of the layout. Scoped via :has(). */
+.col:has(.changelog-layout) {
+    max-width: 100% !important;
+}
+
+.changelog-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 64px;
+}
+
+.changelog {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.changelog-empty {
+    margin-top: 32px;
+    color: var(--color-text-bodyvariant, #6A7282);
+}
+
+/* ------------------------------------------------------------------ */
+/* Filter panel                                                        */
+/* ------------------------------------------------------------------ */
+
+.changelog-filters {
+    flex: 0 0 248px;
+    width: 248px;
+    align-self: stretch;
+    position: sticky;
+    top: 80px;
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px;
+    border-radius: var(--br-lg, 16px);
+    background: var(--color-surface-variant, #F9FAFB);
+}
+
+[data-theme="dark"] .changelog-filters {
+    background: var(--ifm-background-surface-color, #1b1b1d);
+}
+
+.changelog-filters-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.changelog-filters-title {
+    color: var(--color-text-strong, #364153);
+}
+
+[data-theme="dark"] .changelog-filters-title {
+    color: var(--ifm-heading-color);
+}
+
+.changelog-filter-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 22px;
+    padding: 4px 8px;
+    border: 1px solid var(--color-border, #D1D5DC);
+    border-radius: 1000px;
+    background: var(--ns-white, #FFFFFF);
+    color: var(--color-text-body, #101828);
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.changelog-filter-count:hover:not(:disabled) {
+    border-color: var(--color-primary, #092ECC);
+    color: var(--color-primary, #092ECC);
+}
+
+.changelog-filter-count:disabled {
+    cursor: default;
+    opacity: 0.6;
+}
+
+[data-theme="dark"] .changelog-filter-count {
+    background: transparent;
+    color: var(--ifm-font-color-base);
+}
+
+.changelog-filter-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.changelog-filter-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    color: var(--color-text-strong, #364153);
+}
+
+[data-theme="dark"] .changelog-filter-section-header {
+    color: var(--ifm-font-color-base);
+}
+
+.changelog-filter-chevron {
+    flex-shrink: 0;
+    color: var(--color-text-bodyvariant, #6A7282);
+    transition: transform 0.2s ease;
+}
+
+.changelog-filter-chevron.is-collapsed {
+    transform: rotate(-90deg);
+}
+
+.changelog-filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-left: 16px;
+}
+
+.changelog-filter-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.changelog-filter-checkbox-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.changelog-filter-checkbox {
+    flex-shrink: 0;
+    box-sizing: border-box;
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--color-text-bodyvariant, #6A7282);
+    border-radius: 4px;
+    background: var(--ns-white, #FFFFFF);
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+[data-theme="dark"] .changelog-filter-checkbox {
+    background: transparent;
+}
+
+.changelog-filter-checkbox-input:checked + .changelog-filter-checkbox {
+    border-color: var(--color-primary, #092ECC);
+    background: var(--color-primary, #092ECC);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.changelog-filter-checkbox-input:focus-visible + .changelog-filter-checkbox {
+    outline: 2px solid var(--color-primary, #092ECC);
+    outline-offset: 2px;
+}
+
+.changelog-filter-label {
+    color: var(--color-text-body, #101828);
+}
+
+[data-theme="dark"] .changelog-filter-label {
+    color: var(--ifm-font-color-base);
+}
+
+/* Stack filters and content on narrow screens */
+@media (max-width: 996px) {
+    .changelog-layout {
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .changelog-filters {
+        position: static;
+        max-height: none;
+        width: 100%;
+        flex-basis: auto;
+        order: -1;
+    }
+}

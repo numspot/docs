@@ -1,0 +1,42 @@
+---
+title: "Inventaire - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# Inventaire
+
+<ActionsSummary />
+
+L'inventaire est une fonctionnalité qui permet de visualiser l'ensemble des ressources déployées dans un espace Numspot. Il offre une vue consolidée et unifiée de toutes les ressources, quel que soit leur service d'origine (compute, connectivity, Kubernetes, postgresql, objectstorage, registry, secrets).
+
+L'inventaire facilite la gestion et le suivi des ressources en fournissant une liste centralisée avec des informations essentielles : identifiant, référence, nom, type, source, état et relations de parenté.
+
+## Accès à l'inventaire
+
+L'inventaire est accessible via l'API avec l'endpoint (point d'accès) `GET /inventory/spaces/{spaceId}/resources`.
+
+## Structure d'une ressource
+
+Chaque ressource dans l'inventaire comprend les attributs suivants :
+
+- **ID** : Identifiant unique de la ressource (par exemple `vm-622ef57d`, `vpc-12b7fdbc`) ;
+- **Référence** : NRN (Numspot Resource Name), identifiant unique sous forme d'un UUID (Universally Unique Identifier) ;
+- **Nom** : Nom attribué à la ressource lors de sa création ;
+- **Type** : Type de ressource, par exemple [VM (Virtual Machine)](/docs/compute/concept/), [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/), subnet (sous-réseau), [load balancer (équilibreur de charge)](/docs/network/load-balancer/concepts/) ;
+- **Source** : Service d'origine de la ressource ;
+- **État** : État actuel de la ressource ;
+- **Parent** : Ressource parente si applicable (relation hiérarchique).
+
+## Sources et types de ressources
+
+Les ressources de l'inventaire sont classées par source et par type. Pour consulter la liste exhaustive des domaines et kinds disponibles, reportez-vous à la documentation du [catalogue](/docs/catalog/concepts/#domaines-et-types-de-produits).
+
+## Relations entre ressources
+
+L'inventaire affiche les relations de parenté entre ressources. Par exemple, un node a pour parent un cluster.
+
+Cette hiérarchie permet de comprendre la structure de votre infrastructure et les dépendances entre ressources.

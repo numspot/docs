@@ -1,0 +1,68 @@
+---
+title: Retirer des règles d'un security group
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Retirer des règles d'un security group
+
+Vous pouvez retirer des règles pour les flux entrants ou sortants à tout moment, même les règles initiales contenues dans les [security groups (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) par défaut ou que vous créez. Une fois la règle retirée, vos modifications sont automatiquement appliquées et les flux correspondants ne sont plus autorisés.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.securityGroup.update**
+
+:::
+
+<Tabs>
+   <TabItem value="console" label="Console" default> 
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/security-group/list.png", text: "Depuis le menu latéral gauche, cliquez sur Compute → Security Groups.", hotspot: { x: 0, y: 0.5568, w: 0.1944, h: 0.0457 } },
+    { img: "/img/walkthrough/security-group/list.png", text: "Cliquez sur l'ID du security group auquel retirer une règle.", hotspot: { x: 0.2687, y: 0.4946, w: 0.0624, h: 0.0204 } },
+    { img: "/img/walkthrough/security-group/rule-actions.png", text: "Dans l'onglet « Règles entrantes » (ou « Règles sortantes »), ouvrez le menu « Actions » de la règle à retirer, puis cliquez sur « Supprimer ».", hotspot: { x: 0.875, y: 0.8025, w: 0.0884, h: 0.0457 } },
+    { img: "/img/walkthrough/security-group/rule-delete-modal.png", text: "Confirmez en cliquant sur « Supprimer ». La règle est retirée immédiatement.", hotspot: { x: 0.6221, y: 0.5856, w: 0.064, h: 0.0494 } },
+  ]}
+/>
+
+   1. Connectez-vous sur la console Numspot. 
+   2. Depuis le menu latéral gauche, cliquez sur **Compute** → **Security Groups**.
+
+   3. Cliquez sur l'ID du security group auquel vous voulez retirer une règle. 
+     La page "Détails Security Group" apparaît. 
+   4. Choisissez la règle que vous voulez retirer. Dans le menu déroulant d'actions cliquez sur **Supprimer**. Une boîte de dialogue de confirmation apparaît.
+   5. Cliquez sur le bouton "Supprimer".
+
+   6. La règle sélectionnée est supprimée et la boîte de dialogue se ferme. 
+   </TabItem> 
+  <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+La commande `DELETE /compute/spaces/{spaceId}/securityGroups/{id}/rules` supprime une ou plusieurs règles entrantes ou sortantes d'un security group. Pour que la règle soit supprimée, les valeurs spécifiées dans la demande de suppression doivent correspondre exactement à celles de la règle existante.
+
+Dans le cas des protocoles TCP (Transmission Control Protocol) et UDP (User Datagram Protocol), il est nécessaire d'indiquer le port de destination ou la plage de ports. Dans le cas du protocole ICMP (Internet Control Message Protocol), vous devez spécifier les numéros de type et de code ICMP.
+
+Les règles, ou autorisations IP (Internet Protocol), se composent du protocole, de la plage IP ou du security group source.
+
+Pour supprimer l'accès sortant à un security group de destination, il est recommandé d'utiliser un ensemble d'autorisations IP. Il est également recommandé de spécifier le protocole dans cet ensemble d'autorisations IP.
+
+[Exemple de requête : Suppression d'une règle d'un Security Group](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/securityGroups/{id}/rules)
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+    La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/security_group_rule).
+  </TabItem>
+</Tabs>

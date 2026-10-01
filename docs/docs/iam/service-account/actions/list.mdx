@@ -1,0 +1,117 @@
+---
+title: List service accounts - IAM
+sidebar_label: List service accounts
+sidebar_position: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# List service accounts
+
+You can obtain the list of service accounts at the organization level or at the space level.
+
+The presence of the words **spaces** or **organization** in the URL distinguishes the two requests.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **iam.serviceAccount.get**
+
+:::
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/service-account/list.png", text: "From the left-hand side menu, click IAM → Service Accounts.", hotspot: { x: 0, y: 0.7926, w: 0.194, h: 0.0457 } },
+    { img: "/img/walkthrough/en/service-account/list.png", text: "From IAM → Service Accounts, the table lists all the service accounts in your organization.", hotspot: { x: 0.22, y: 0.42, w: 0.68, h: 0.35 } },
+    { img: "/img/walkthrough/en/service-account/actions.png", text: "A service account's “Actions” menu gives access to its operations: create a service account from this profile, manage its spaces, roles and permissions, or delete it.", hotspot: { x: 0.769, y: 0.42, w: 0.19, h: 0.23 } },
+  ]}
+/>
+
+
+1.  Log in to the Numspot console
+2.  From the left-hand side menu, click **IAM → Service accounts**
+
+
+3.  You are redirected to the list of **Service accounts**
+
+
+</TabItem>
+<TabItem value="api" label="API">
+
+**List service accounts in an organization**
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/{organisationId}/serviceAccounts
+
+**Example request**
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/serviceAccounts'
+```
+
+**Example response with curl**
+
+```json
+{
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "totalSize": 150,
+  "items": [
+    {
+      "name": "…",
+      "id": "…",
+      "tokenDuration": "…",
+      "expirationDate": "…"
+    }
+  ]
+}
+```
+
+:::info
+See the [page on using the API](/docs/iam/concepts/api/) for the implementation.
+:::
+
+**List service accounts in a space**
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/serviceAccounts
+
+**Example request**
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/serviceAccounts'
+```
+
+Response
+
+**Example with curl**
+
+```json
+{
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "totalSize": 150,
+  "items": [
+    {
+      "name": "…",
+      "id": "…",
+      "tokenDuration": "…",
+      "expirationDate": "…"
+    }
+  ]
+}
+```
+
+:::info
+See the [page on using the API](/docs/iam/concepts/api/) for the implementation.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/service_account).
+
+</TabItem>
+</Tabs>

@@ -1,0 +1,413 @@
+---
+title: Manage Kubernetes users and roles - Managed Kubernetes
+sidebar_label: Manage Kubernetes users and roles
+description: Manage Kubernetes users and roles with RBAC
+sidebar_position: 1
+draft: false
+---
+
+# Manage Kubernetes users and roles
+
+The managed Kubernetes service uses RBAC (Role-Based Access Control) to manage the permissions of a [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/). This page explains how to create and manage users, roles and permissions.
+
+:::note
+The Numspot API provides a `kubeconfig` with administrator rights. Fine-grained permission management is performed through Kubernetes manifests.
+:::
+
+## Connect to the Kubernetes cluster
+
+Before creating users or roles, connect to your cluster:
+
+```bash
+export KUBECONFIG=~/chemin/vers/kubeconfig
+kubectl get nodes
+```
+
+To download the `kubeconfig`, see [Download the kubeconfig](/docs/managed-services/kubernetes/actions/kubeconfig/).
+
+## RBAC concepts
+
+### RBAC components
+
+| Component | Scope | Description |
+| --- | --- | --- |
+| Role | Namespace | Permissions within a namespace |
+| ClusterRole | Cluster | Permissions across the whole cluster |
+| RoleBinding | Namespace | Binds a Role to a user/group |
+| ClusterRoleBinding | Cluster | Binds a ClusterRole to a user/group |
+
+### Users and groups
+
+Kubernetes distinguishes:
+
+- **Users**: human accounts (external management);
+- **ServiceAccounts**: accounts for applications;
+- **Groups**: collections of users.
+
+## Create a Role
+
+A Role defines permissions within a namespace.
+
+### Basic syntax
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: <role_name>
+  namespace: <namespace>
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+```
+
+### Role examples
+
+**Read-only Role**
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: readonly
+  namespace: production
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets", "statefulsets"]
+  verbs: ["get", "list", "watch"]
+```
+
+**Developer Role**
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: developer
+  namespace: production
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "secrets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: [""]
+  resources: ["pods/log", "pods/exec"]
+  verbs: ["get"]
+```
+
+**Namespace administrator Role**
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: namespace-admin
+  namespace: production
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
+```
+
+## Create a ClusterRole
+
+A ClusterRole defines permissions at cluster scope.
+
+### ClusterRole examples
+
+**Cluster read-only ClusterRole**
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cluster-readonly
+rules:
+- apiGroups: [""]
+  resources: ["nodes", "namespaces", "persistentvolumes"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses"]
+  verbs: ["get", "list", "watch"]
+```
+
+**Viewer ClusterRole**
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: view
+rules:
+- apiGroups: [""]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["batch"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+```
+
+## Create a ServiceAccount
+
+ServiceAccounts are used by applications to authenticate.
+
+### Create a ServiceAccount
+
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: app-sa
+  namespace: production
+```
+
+```bash
+kubectl apply -f serviceaccount.yaml
+```
+
+### Create a ServiceAccount via the CLI
+
+```bash
+kubectl create serviceaccount <name> -n <namespace>
+```
+
+## Assign a role
+
+### RoleBinding (namespace)
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: readonly-binding
+  namespace: production
+subjects:
+- kind: User
+  name: <user>
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: readonly
+  apiGroup: rbac.authorization.k8s.io
+```
+
+### ClusterRoleBinding (cluster)
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: cluster-view-binding
+subjects:
+- kind: User
+  name: <user>
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: view
+  apiGroup: rbac.authorization.k8s.io
+```
+
+### Assign to a ServiceAccount
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: app-sa-binding
+  namespace: production
+subjects:
+- kind: ServiceAccount
+  name: app-sa
+  namespace: production
+roleRef:
+  kind: Role
+  name: developer
+  apiGroup: rbac.authorization.k8s.io
+```
+
+## Modify a user or a role
+
+### Modify a Role
+
+```bash
+kubectl edit role <role_name> -n <namespace>
+```
+
+### Modify a ClusterRole
+
+```bash
+kubectl edit clusterrole <clusterrole_name>
+```
+
+### Modify a RoleBinding
+
+```bash
+kubectl edit rolebinding <rolebinding_name> -n <namespace>
+```
+
+## Manage permissions
+
+### Check permissions
+
+```bash
+#Check if a user can perform an action
+kubectl auth can-i <verb> <resource> --as=<user> -n <namespace>
+
+#Exemples
+kubectl auth can-i create pods --as=dev-user -n production
+kubectl auth can-i delete secrets --as=dev-user -n production
+kubectl auth can-i list nodes --as=dev-user
+```
+
+### List a user's permissions
+
+```bash
+kubectl auth can-i --list --as=<user> -n <namespace>
+```
+
+### Revoke permissions
+
+Delete the RoleBinding to revoke the permissions:
+
+```bash
+kubectl delete rolebinding <rolebinding_name> -n <namespace>
+```
+
+## Delete a user or a role
+
+### Delete a ServiceAccount
+
+```bash
+kubectl delete serviceaccount <name> -n <namespace>
+```
+
+### Delete a Role
+
+```bash
+kubectl delete role <role_name> -n <namespace>
+```
+
+### Delete a ClusterRole
+
+```bash
+kubectl delete clusterrole <clusterrole_name>
+```
+
+### Delete a RoleBinding
+
+```bash
+kubectl delete rolebinding <rolebinding_name> -n <namespace>
+```
+
+:::warning
+Deleting a Role or ClusterRole is irreversible. Check that no RoleBinding depends on the role before deletion.
+:::
+
+## Best practices
+
+### Principle of least privilege
+
+Grant only the permissions that are required:
+
+- use namespace Roles rather than ClusterRoles;
+- limit the verbs (`get`, `list` rather than `*`);
+- avoid `*` permissions on all resources.
+
+### Role organization
+
+| User type | Recommended Role |
+| --- | --- |
+| Developer | Role within a namespace with pods/deployments |
+| Ops | ClusterRole with read access to nodes/pvs |
+| Namespace admin | Role with extended permissions |
+
+### Credential rotation
+
+For ServiceAccounts:
+
+```bash
+#Delete and recreate the token
+kubectl delete secret <secret_name> -n <namespace>
+kubectl get serviceaccount <sa_name> -n <namespace> -o jsonpath='{.secrets[0].name}'
+```
+
+### Access audit
+
+```bash
+#List the roles
+kubectl get roles --all-namespaces
+
+#List the clusterroles
+kubectl get clusterroles
+
+#List the rolebindings
+kubectl get rolebindings --all-namespaces
+
+#List the clusterrolebindings
+kubectl get clusterrolebindings
+```
+
+## Audit and extraction of rights
+
+### Export all RBAC rules
+
+```bash
+kubectl get roles,rolebindings,clusterroles,clusterrolebindings --all-namespaces -o yaml > rbac-backup.yaml
+```
+
+### List access by user
+
+```bash
+kubectl get rolebindings,clusterrolebindings --all-namespaces -o json | jq '.items[] | select(.subjects[]?.name != null) | {name: .metadata.name, namespace: .metadata.namespace, subjects: .subjects, roleRef: .roleRef}'
+```
+
+### Check sensitive access
+
+```bash
+#Who can create pods
+kubectl auth can-i create pods --all-namespaces
+
+#Who can read secrets
+kubectl auth can-i get secrets --all-namespaces
+
+#Who can access the nodes
+kubectl auth can-i list nodes
+```
+
+## Use with external systems
+
+### OIDC integration
+
+For critical deployments, configure an external OIDC (OpenID Connect) identity provider to authenticate users.
+
+### Bastion and proxy
+
+For sensitive architectures, use an SSH bastion or an access proxy:
+
+- centralize the connections;
+- enforce audit logs;
+- implement MFA authentication.
+
+## Limitations
+
+| Action | Support |
+| --- | --- |
+| Download the kubeconfig | Through the API or the console |
+| Create Roles | Through kubectl only |
+| Create ServiceAccounts | Through kubectl only |
+| Manage ClusterRoles | Through kubectl only |
+| Configure permissions | Through YAML manifests |
+
+:::tip
+Automate RBAC management with manifests versioned in your source control system. Use tools such as `kustomize` or `helm` to manage the RBAC configurations per environment.
+:::

@@ -1,0 +1,48 @@
+---
+title: Get information about your virtual gateways
+description: View the information and status of your virtual gateways.
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Get information about your virtual gateways
+
+You can get information about one or more of your [virtual gateways](/docs/connectivity/vpn/virtual-gateway/concepts/).
+
+By default, this action describes all your virtual gateways.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **connectivity.bridge.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+View the **Virtual Gateways** dashboard to see the list of your virtual gateways and their information.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `GET /connectivity/spaces/{spaceId}/virtualGateways` command lists the virtual gateways.
+
+[Example request: List all virtual gateways](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/virtualGateways)
+
+The `GET /connectivity/spaces/{spaceId}/virtualGateways/{id}` command retrieves information about a virtual gateway.
+
+[Example request: Retrieve information about a virtual gateway](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/virtualGateways/{id})
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/virtual_gateway).
+
+</TabItem>
+</Tabs>

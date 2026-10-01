@@ -1,0 +1,85 @@
+---
+title: Créer un Hybrid Bridge
+description: Créez un bridge entre un VPC et les services managés de votre espace
+sidebar_position: 1
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Créer un Hybrid Bridge
+
+Vous pouvez créer un bridge dans un espace entre l'un de vos [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) et les services managés pour que ceux-ci puissent communiquer entre eux.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions IAM (Identity and Access Management) suivantes :
+
+- **connectivity.bridge.create**
+
+Avant de commencer, assurez-vous d'avoir :
+* l'ID du VPC que vous souhaitez connecter ;
+* l'ID de l'espace (le bridge donnera accès à tous les services managés de l'espace) ;
+* le service managé doit être exposé de manière privée (`visibility: INTERNAL`).
+:::
+
+## Configuration nécessaire au fonctionnement du Hybrid Bridge
+
+Vous devez configurer votre VPC pour autoriser le trafic depuis et vers son bridge.
+Cela inclut la configuration de la [route table (table de routage)](/docs/network/route-table/concepts/), et la mise à jour des règles des [security group (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/).
+
+### Configuration Route Table
+
+Dans les route table associées aux subnet (sous-réseaux) de votre VPC, créez une route pour chaque élément du tableau `routes` du bridge :
+* l'`ipRange` en destination ;
+* le `gatewayId` en target.
+
+### Configuration Security Group associé aux VM de votre VPC
+
+Ajoutez les règles suivantes :
+* une ou plusieurs règles autorisant les flux sortants vers les services managés ;
+* une ou plusieurs règles autorisant les flux entrants depuis les services managés si nécessaire.
+
+Votre bridge est configuré, et le VPC peut communiquer avec les services managés par une connexion privée.
+
+<Tabs>
+  <TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+La commande `POST /connectivity/spaces/{spaceId}/bridges` permet de créer un bridge entre un VPC et les services managés de l'espace.
+
+**Corps de la requête** :
+
+```json
+{
+  "left": {
+    "id": "vpc-12345678",
+    "type": "compute"
+  },
+  "right": {
+    "id": "0194f0c4-8452-77d1-aaaf-516a9731ce9e",
+    "type": "managedservice"
+  }
+}
+```
+
+[Exemple de requête : Création d'un Bridge](/openapi/#tag/connectivity/POST/connectivity/spaces/{spaceId}/bridges)
+
+:::tip
+La création d'un bridge est asynchrone. L'API retourne un code **202 Accepted** et l'objet créé est partiel (le tableau `routes` n'est pas renseigné).
+
+Pour obtenir les routes du bridge, utilisez l'endpoint de lecture après la création.
+:::
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/hybrid_bridge).
+
+  </TabItem>
+</Tabs>

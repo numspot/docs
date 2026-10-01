@@ -1,0 +1,137 @@
+---
+title: Tables de routage
+sidebar_label: À propos des route tables
+sidebar_position: 1
+draft: false
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# À propos des route tables
+
+<ActionsSummary />
+
+Les tables de routage (route tables) vous offrent la possibilité de gérer le cheminement du trafic d'un sous-réseau (subnet) en créant des routes au sein de celles-ci. Chaque [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) est initialement doté d'une table de routage par défaut que vous pouvez ajuster, mais vous avez aussi la possibilité de générer une table de routage personnalisée pour chaque sous-réseau.
+
+Vous pouvez orienter le trafic vers divers éléments tels qu'une passerelle Internet ([internet gateway](/docs/network/internet-gateway/concepts/)) ou un point d'accès VPC (VPC endpoint). Il est important de noter que le trafic destiné à une adresse IP (Internet Protocol) du bloc CIDR (Classless Inter-Domain Routing) du VPC est systématiquement acheminé localement.
+
+## Tables de routage et sous-réseaux
+
+Les tables de routage régissent le cheminement du trafic réseau en utilisant des règles désignées sous le nom de routes, qui déterminent la direction du trafic réseau. Elles sont établies pour un réseau spécifique et sont utilisées par son routeur, qui est automatiquement généré au sein de votre réseau, afin de définir le routage du trafic.
+
+Chaque sous-réseau d'un réseau doit être lié à une table de routage, qui gère le routage pour l'ensemble des VM ([Virtual Machines](/docs/compute/concept/)) situées dans ce sous-réseau. Une même table de routage peut être associée à plusieurs sous-réseaux, cependant, un sous-réseau ne peut être associé qu'à une seule table de routage.
+
+:::warning
+De la même façon qu'il est conseillé d'attribuer un sous-réseau à une unique application, il est également recommandé d'utiliser une table de routage et un groupe de sécurité ([security group](/docs/compute/security-groups/concepts/concept-sg/)) par sous-réseau.
+:::
+
+Dans le schéma suivant, chaque sous-réseau est associé à une table de routage distincte. Les VM du sous-réseau 1 ont la possibilité d'accéder à Internet via la passerelle Internet, tandis que les VM du sous-réseau 2 peuvent accéder à un service de stockage d'objets en utilisant le point d'accès VPC.
+
+<img src="/img/console/network/route-table/sch-General-RouteTables-v2.png" alt="Schéma de routage réseau avec tables de routage et sous-réseaux Numspot" />
+
+*Sous-réseaux, tables de routage et routes*
+
+## Table de routage principale et autres tables de routage
+
+### Table de routage principale
+
+Lorsque vous créez un VPC, une table de routage est également automatiquement créée et considérée comme la table de routage principale. La table de routage principale agit comme un routeur implicite au sein de votre VPC : elle gère le routage du trafic pour tous les sous-réseaux qui ne sont pas explicitement associés avec une table de routage. Elle est donc implicitement associée à tous les sous-réseaux que vous créez dans le VPC jusqu'à ce que vous les associez explicitement à une table de routage.
+
+La table de routage principale créée avec le VPC ne contient que la route `locale` à sa création, qui oriente tout le trafic destiné à une cible dans le bloc CIDR du VPC vers le VPC lui-même. Cette route ne peut être ni modifiée, ni supprimée. Vous pouvez ajouter ou supprimer des routes dans la table de routage principale, et modifier ces routes. Cependant, vous ne pouvez pas supprimer la table de routage principale.
+
+Vous pouvez également définir quelle table de routage est la principale pour le VPC, ce qui modifie ainsi la table de routage utilisée pour tout nouveau sous-réseau ou tout sous-réseau qui n'est pas explicitement associé à une table de routage. Pour plus de clarté, vous pouvez sélectionner une table de routage spécifique pour être la table de routage principale, ce qui aura pour effet de changer la table de routage utilisée par défaut pour tous les sous-réseaux nouvellement créés ou ceux qui ne sont pas explicitement associés à une table de routage.
+
+:::note
+Pour éviter toute confusion, associez explicitement un sous-réseau avec la table de routage principale pour maintenir une configuration de routage stable, même si vous changez la table de routage principale utilisée par les autres sous-réseaux. Cette association garantit que la table de routage utilisée par le sous-réseau reste inchangée.
+:::
+
+### Autres tables de routage
+
+En plus de la table de routage principale, vous pouvez créer des tables de routage supplémentaires pour votre VPC. Ces tables de routage peuvent être associées à un ou plusieurs sous-réseaux, ce qui vous permet de personnaliser le routage du trafic pour chaque sous-réseau en fonction de vos besoins.
+
+Lorsque vous créez une nouvelle table de routage, celle-ci contient automatiquement la route `locale` qui ne peut être ni supprimée ni modifiée. Cette route permet de diriger le trafic vers les VM au sein du VPC. Pour renforcer la sécurité de votre VPC, vous pouvez conserver la table de routage principale avec uniquement la route `locale` et associer chaque nouveau sous-réseau à une table de routage personnalisée que vous avez créée. Ainsi, le trafic sortant de chaque sous-réseau sera dirigé uniquement vers les VM au sein du VPC jusqu'à ce que vous ajoutiez des routes supplémentaires à sa table de routage. Cela vous permet de contrôler précisément le routage du trafic sortant pour chaque sous-réseau de votre VPC.
+
+:::info
+En résumé, les tables de routage supplémentaires vous offrent une plus grande flexibilité pour personnaliser le routage du trafic pour chaque sous-réseau de votre VPC, tout en renforçant la sécurité en limitant le trafic sortant aux VM au sein du VPC jusqu'à ce que vous autorisiez explicitement un accès externe.
+:::
+
+## Routes et options de routage
+
+Une route spécifie :
+
+- La destination du trafic, en notation CIDR. Cela peut être une plage d'adresses IP ou une adresse IP unique (en utilisant un préfixe en /32).
+- La cible (target), qui correspond à l'élément réseau utilisé pour atteindre la destination du trafic.
+
+Vous pouvez router le trafic en utilisant les cibles suivantes :
+
+- **Local** : une route `local` est automatiquement ajoutée à toute table de routage créée dans un VPC, avec le bloc CIDR du VPC en destination et `local` en cible. Le trafic venant des VM et allant vers une adresse IP appartenant au bloc CIDR du VPC reste ainsi au sein du réseau local du VPC.
+
+  :::warning
+  Vous ne pouvez ni modifier ni supprimer la route `local`.
+  :::
+
+- **Passerelle Internet** : permet aux VM du sous-réseau qui ont une adresse IP publique associée d'être directement connectées à Internet à travers la passerelle Internet du VPC. Pour cela, vous devez ajouter une route avec le bloc CIDR 0.0.0.0/0 en destination et l'ID de la passerelle Internet en cible.
+
+  Par exemple, la table de routage d'un sous-réseau avec des VM directement connectées à Internet dans un VPC ayant le bloc CIDR 10.0.0.0/16 et la passerelle Internet `igw-12345678` attachée à celui-ci contient les routes suivantes :
+
+  | Destination | Cible |
+  | --- | --- |
+  | 10.0.0.0/16 | `local` |
+  | 0.0.0.0/0 | `igw-12345678` |
+
+- **Passerelle nat** : permet aux VM du sous-réseau d'être indirectement connectées à Internet à travers une [passerelle nat](/docs/network/nat/concepts/). Pour cela, vous devez ajouter une route avec le bloc CIDR 0.0.0.0/0 en destination et l'ID de la passerelle nat en cible.
+
+  Par exemple, la table de routage d'un sous-réseau avec des VM indirectement connectées à Internet dans un VPC ayant le bloc CIDR 10.0.0.0/16 et utilisant la passerelle nat `nat-12345678` pour diriger le trafic vers Internet contient les routes suivantes :
+
+  | Destination | Cible |
+  | --- | --- |
+  | 10.0.0.0/16 | `local` |
+  | 0.0.0.0/0 | `nat-12345678` |
+
+- **VM ou interface réseau** : permet aux VM dans un sous-réseau d'envoyer du trafic vers une VM ou une interface réseau en particulier. Vous pouvez router le trafic vers une VM lorsque celle-ci n'a qu'une interface réseau. Si la VM a des NIC (Network Interface Cards) attachées, vous devez router le trafic vers une de ses interfaces réseau. Pour cela, vous devez ajouter une route avec le bloc CIDR approprié en destination et l'ID de la VM ou de l'interface réseau en cible.
+
+  Par exemple, dans le même VPC ayant le bloc CIDR 10.0.0.0/16, si une VM d'administration a une interface réseau `eni-11111111` dans un sous-réseau A avec pour adresse IP 10.10.0.10 et une autre interface réseau dans un sous-réseau B, la table de routage d'un sous-réseau avec des VM ayant besoin de se connecter à cette VM d'administration depuis le sous-réseau A contient les routes suivantes :
+
+  | Destination | Cible |
+  | --- | --- |
+  | 10.0.0.0/16 | `local` |
+  | 10.10.0.10/32 | `eni-11111111` |
+
+- **Passerelle virtuelle** : permet aux VM du sous-réseau de diriger le trafic vers un réseau distant par une connexion VPN (Virtual Private Network) ou [DirectLink](/docs/connectivity/direct-link/concepts/). Pour cela, vous devez ajouter une route avec le bloc CIDR du réseau distant en destination et l'ID de la [passerelle virtuelle](/docs/connectivity/vpn/virtual-gateway/concepts/) attachée à votre VPC en cible, et créer une connexion VPN ou DirectLink en utilisant cette passerelle virtuelle.
+
+  Par exemple, la table de routage d'un sous-réseau dans un VPC ayant le bloc CIDR 10.0.0.0/16 dirigeant le trafic vers votre réseau interne ayant le bloc CIDR 192.168.1.0/24 à travers une connexion VPN utilisant la passerelle virtuelle `vgw-12345678` contient les routes suivantes :
+
+  | Destination | Cible |
+  | --- | --- |
+  | 10.0.0.0/16 | `local` |
+  | 192.168.1.0/24 | `vgw-12345678` |
+
+- **Point d'accès VPC** : permet de créer une connexion privée entre votre VPC et un service Numspot. La route appropriée avec l'ID de la prefix list du service (`pl-xxxxxxxx`) en destination et l'ID du point d'accès VPC (`vpce-xxxxxxxx`) en cible est automatiquement ajoutée aux tables de routage que vous spécifiez pour le point d'accès VPC.
+
+  :::warning
+  Vous ne pouvez ni modifier ni supprimer cette route, mais vous pouvez modifier les tables de routage utilisées par le point d'accès VPC.
+  :::
+
+- **VPC peering** : permet de diriger le trafic vers un VPC pair. Pour cela, vous devez ajouter une route avec tout ou partie du bloc CIDR du VPC pair en destination et l'ID du VPC peering en cible.
+
+  :::warning
+  Le propriétaire du VPC pair doit ajouter une route dans les tables de routage de son VPC pour router le trafic vers votre VPC.
+  :::
+
+  Par exemple, la table de routage d'un sous-réseau dans un VPC A ayant le bloc CIDR 10.0.0.0/16, dirigeant le trafic vers un VPC pair B ayant le bloc CIDR 192.168.1.0/24 et utilisant le VPC peering `pcx-12345678` contient les routes suivantes :
+
+  | Destination | Cible |
+  | --- | --- |
+  | 10.0.0.0/16 | `local` |
+  | 192.168.1.0/24 | `pcx-12345678` |
+
+  Les tables de routage du VPC pair B doivent contenir les routes suivantes :
+
+  | Destination | Cible |
+  | --- | --- |
+  | 192.168.1.0/24 | `local` |
+  | 10.0.0.0/16 | `pcx-12345678` |
+
+Si la destination du trafic correspond à plusieurs routes dans la table de routage associée, la route la plus spécifique avec le bloc CIDR le plus restreint correspondant à cette destination est toujours celle utilisée pour router le trafic.
+
+Une route est toujours dans l'état "Active", ce qui implique que la route est active et est utilisée pour router le trafic.

@@ -1,0 +1,67 @@
+---
+title: Consulter les informations de vos options DHCP - Numspot
+sidebar_label: Consulter les informations de vos options DHCP
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Consulter les informations de vos options DHCP
+
+Vous pouvez obtenir des informations sur un ou plusieurs de vos groupes d'options [DHCP (Dynamic Host Configuration Protocol)](/docs/network/dhcp/concepts/), comme leur ID et les options qu'ils contiennent.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.dhcpOptions.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dhcp/read-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC → DHCP Options.", hotspot: { x: 0, y: 0.7494, w: 0.1931, h: 0.0568 } },
+    { img: "/img/walkthrough/dhcp/read-list.png", text: "La liste affiche vos groupes d'options DHCP avec, pour chacun, son ID, son nom, le nom de domaine et les serveurs (DNS, NTP, logs).", hotspot: { x: 0.22, y: 0.33, w: 0.75, h: 0.15 } },
+  ]}
+/>
+
+1. Depuis le menu latéral gauche, cliquez sur **Réseau** → **DHCP Options** pour accéder à la liste des groupes d'options DHCP.
+2. La liste affiche les groupes d'options DHCP disponibles avec leurs informations :
+   - le nom du groupe d'options ;
+   - l'identifiant du groupe d'options ;
+   - le [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) associé.
+3. Cliquez sur un groupe d'options DHCP pour afficher ses détails.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `GET /compute/spaces/{spaceId}/dhcpOptions` permet de lister les options DHCP.
+
+[Exemple de requête : Lister tous les ensembles d'options DHCP ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/dhcpOptions)
+
+La commande `GET /compute/spaces/{spaceId}/dhcpOptions/{id}` permet de récupérer les informations d'une option DHCP.
+
+[Exemple de requête : Récupérer les informations d'un ensemble d'options DHCP ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/dhcpOptions/{id})
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/dhcp_options).
+
+</TabItem>
+</Tabs>

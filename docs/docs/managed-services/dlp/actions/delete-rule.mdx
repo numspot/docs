@@ -1,0 +1,57 @@
+---
+title: Delete a DLP rule - Managed DLP
+sidebar_label: Delete a DLP rule
+sidebar_position: 3
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Delete a DLP rule
+
+Permanently delete a [DLP rule](/docs/managed-services/dlp/concepts). This action is irreversible. If the rule is included in a published policy, you must first update the policy to remove it.
+
+## Permissions
+
+:::info
+This action requires the following [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) role:
+
+- **rule_editor**
+
+:::
+
+:::warning
+Deletion is permanent. Rules already published in a ruleset are not affected — only draft rules are deleted.
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "In the DLP console, click Rules in the side menu.", hotspot: { x: 0.006, y: 0.233, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/rules-list.png", text: "On the row of the rule to delete, click the trash (red) icon.", hotspot: { x: 0.930, y: 0.335, w: 0.030, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/rule-delete.png", text: "In the confirmation window, click “Delete” to permanently delete the rule.", hotspot: { x: 0.609, y: 0.532, w: 0.052, h: 0.044 } },
+  ]}
+/>
+
+1. In the [DLP](/docs/managed-services/dlp/concepts) console, click **Rules** in the sidebar.
+2. Click the delete icon (trash) on the row of the rule to delete.
+3. Confirm the deletion in the dialog box.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `DELETE /api/v1/rules/{id}` request deletes a [DLP rule](/docs/managed-services/dlp/concepts).
+
+### Response example
+
+```text
+HTTP/1.1 204 No Content
+```
+
+</TabItem>
+</Tabs>

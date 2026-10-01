@@ -1,0 +1,106 @@
+---
+title: Modifier une règle DLP - DLP managé
+sidebar_label: Modifier une règle DLP
+sidebar_position: 2
+draft: false
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Modifier une règle DLP
+
+Modifiez une [règle DLP](/docs/managed-services/dlp/concepts) existante pour ajuster sa condition, son action ou ses métadonnées. La modification crée une nouvelle version de la règle en tant que brouillon. Pour l'activer, publiez-la dans un [ruleset](/docs/managed-services/dlp/concepts) (ensemble de règles).
+
+## Permissions
+
+:::info
+Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Data Loss Prevention) suivant :
+
+- **rule_editor**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/dlp/01-dashboard.png", text: "Dans la console DLP, cliquez sur Rules dans le menu latéral.", hotspot: { x: 0.006, y: 0.233, w: 0.155, h: 0.044 } },
+    { img: "/img/walkthrough/dlp/rules-list.png", text: "Cliquez sur le nom de la règle à modifier dans la liste.", hotspot: { x: 0.201, y: 0.320, w: 0.207, h: 0.075 } },
+    { img: "/img/walkthrough/dlp/rule-edit-top.png", text: "Modifiez les champs de la règle : Basic Information, Condition (Detectors) et Action. Le bouton « History » en haut à droite permet de consulter l'historique des versions.", hotspot: { x: 0.201, y: 0.190, w: 0.765, h: 0.300 } },
+    { img: "/img/walkthrough/dlp/rule-edit-save.png", text: "En bas du formulaire, cliquez sur « Save as Draft » pour enregistrer vos modifications en brouillon.", hotspot: { x: 0.900, y: 0.926, w: 0.083, h: 0.044 } },
+  ]}
+/>
+
+1. Dans la console [DLP](/docs/managed-services/dlp/concepts), cliquez sur **Rules** dans le menu latéral.
+2. Cliquez sur le nom de la règle à modifier dans la liste.
+
+### Champs modifiables
+
+Vous pouvez modifier les éléments suivants :
+
+| Champ | Description |
+|-------|-------------|
+| Name | Nom de la règle |
+| Description | Description de la règle |
+| Condition | Expression DSL de la condition |
+| Action | Type d'action (`pass`, `block`, `modify`, `monitor`) et configuration associée |
+
+### Historique des versions
+
+Cliquez sur **History** pour consulter l'historique des versions de la règle. Chaque version affiche :
+
+- le numéro de version ;
+- l'auteur de la modification ;
+- la date de modification ;
+- le statut (Draft ou Published).
+
+### Enregistrement
+
+Cliquez sur **Save as Draft** pour enregistrer les modifications en tant que brouillon. La règle apparaît dans la liste avec le statut "Draft". Pour activer la règle modifiée, publiez-la dans un [ruleset](/docs/managed-services/dlp/concepts).
+
+</TabItem>
+<TabItem value="api" label="API">
+
+La requête `PUT /api/v1/rules/{id}` permet de modifier une [règle DLP](/docs/managed-services/dlp/concepts) existante. Le corps de la requête est identique à celui de la création.
+
+### Exemple de requête
+
+```json
+{
+  "name": "block-aws-keys",
+  "description": "Bloquer les clés d'accès AWS (mise à jour)",
+  "platform_type": "mistral-platform",
+  "condition": "tool_arguments matches_detector @preset:aws_access_key_id",
+  "action": {
+    "type": "block",
+    "message": "La requête contient une clé d'accès AWS — action bloquée"
+  }
+}
+```
+
+### Exemple de réponse
+
+```json
+{
+  "id": "rule-550e8400",
+  "name": "block-aws-keys",
+  "description": "Bloquer les clés d'accès AWS (mise à jour)",
+  "platform_type": "mistral-platform",
+  "condition": "tool_arguments matches_detector @preset:aws_access_key_id",
+  "action": {
+    "type": "block",
+    "message": "La requête contient une clé d'accès AWS — action bloquée"
+  },
+  "draft": true,
+  "version": 2,
+  "created_at": "2026-08-27T10:00:00Z",
+  "updated_at": "2026-08-27T11:00:00Z"
+}
+```
+
+</TabItem>
+</Tabs>

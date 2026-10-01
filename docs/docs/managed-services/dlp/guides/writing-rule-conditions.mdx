@@ -1,0 +1,117 @@
+---
+title: Writing DLP rule conditions - Managed DLP
+sidebar_label: Writing DLP rule conditions
+description: "Reference guide for the DLP condition DSL: syntax, operators, detectors and examples."
+sidebar_position: 3
+draft: false
+---
+
+# Writing DLP rule conditions
+
+## Introduction
+
+The conditions of [DLP rules](/docs/managed-services/dlp/concepts) are expressed in a dedicated DSL (Domain Specific Language). This guide describes the syntax, available operators and best practices for writing effective conditions.
+
+## Syntax
+
+### Basic structure
+
+A condition consists of a field, an operator and a value:
+
+```text
+<field> <operator> <value>
+```
+
+### Field
+
+The field corresponds to an element of the platform schema. Use dot notation for nested fields. The generic `*` field designates all fields in the request.
+
+For the Mistral platform, the available fields are `tool_arguments`, `tool_called` and `request_time`.
+
+### Operators
+
+| Operator | Description |
+|----------|-------------|
+| `matches_detector` | True if the detector finds a match in the field |
+| `not_matches_detector` | True if the detector finds no match in the field |
+
+### Detector references
+
+| Syntax | Description |
+|--------|-------------|
+| `@preset:<id>` | References a predefined detector |
+| `@custom:<id>` | References a custom detector |
+
+Examples:
+
+- `@preset:aws_access_key_id`: predefined detector for AWS access keys;
+- `@preset:github_token`: predefined detector for GitHub tokens;
+- `@preset:openai_api_key`: predefined detector for OpenAI API keys;
+- `@custom:project_codename`: custom detector for project code names.
+
+### Combining conditions
+
+Use logical operators to combine conditions:
+
+- `AND`: both conditions must be true;
+- `OR`: at least one of the conditions must be true;
+- Parentheses: to group conditions and define evaluation priority.
+
+There is no limit on nesting depth.
+
+## Examples
+
+### Detect an AWS key in tool arguments
+
+```text
+tool_arguments matches_detector @preset:aws_access_key_id
+```
+
+### Detect an AWS key or a GitHub token
+
+```text
+(tool_arguments matches_detector @preset:aws_access_key_id OR tool_arguments matches_detector @preset:github_token)
+```
+
+### Detect sensitive data in all fields
+
+```text
+* matches_detector @preset:aws_access_key_id
+```
+
+### Combine detection and exclusion
+
+```text
+tool_arguments matches_detector @preset:aws_access_key_id AND tool_arguments not_matches_detector @custom:whitelist_domain
+```
+
+### Exclude a detector
+
+```text
+tool_arguments not_matches_detector @custom:whitelist_domain
+```
+
+## Text normalisation
+
+Before evaluation, character strings are normalised:
+
+- NFC normalisation;
+- removal of invisible characters (U+00AD, U+180E, U+2064, U+FFF9-FFFB, etc.).
+
+This normalisation prevents bypass attempts by inserting invisible characters into sensitive data.
+
+## Missing field policy
+
+When a rule references a field absent from the request, the behaviour depends on the configuration of the consuming platform:
+
+- `fail_open`: the rule does not trigger — default behaviour;
+- `fail_closed`: the rule triggers as if the condition were met.
+
+Configure the missing field policy at the platform instance level according to the required security level.
+
+## Best practices
+
+- Prefer specific fields over the generic `*` field to limit false positives and improve performance;
+- Test each rule with representative data before publishing a [ruleset](/docs/managed-services/dlp/concepts);
+- Use `not_matches_detector` combined with `AND` to create exceptions — for example, allowing one domain whilst blocking others;
+- Group conditions with parentheses to make rules readable and avoid evaluation ambiguities.

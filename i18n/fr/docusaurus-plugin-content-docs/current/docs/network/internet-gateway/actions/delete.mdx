@@ -1,0 +1,105 @@
+---
+title: Supprimer une internet gateway - Numspot
+sidebar_label: Supprimer une internet gateway
+sidebar_position: 5
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Supprimer une internet gateway
+
+Vous pouvez supprimer une [internet gateway (passerelle Internet)](/docs/network/internet-gateway/concepts/) dont vous n'avez plus besoin.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.internetGateway.delete**
+
+:::
+
+## Prérequis
+
+:::info
+**Avant de commencer :** Détachez l'internet gateway du [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/internet-gateway/del-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC → Internet Gateways.", hotspot: { x: 0, y: 0.6358, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/internet-gateway/del-01-list.png", text: "Cochez l'internet gateway à supprimer, puis cliquez sur « Supprimer » (vous pouvez aussi passer par le menu « Actions » de la ligne).", hotspot: { x: 0.3513, y: 0.3181, w: 0.1001, h: 0.0741 } },
+    { img: "/img/walkthrough/internet-gateway/del-02-modal.png", text: "Confirmation forte : saisissez le nom exact de la ressource, puis cliquez sur « Supprimer ». La suppression est définitive.", hotspot: { x: 0.2847, y: 0.1924, w: 0.4306, h: 0.6153 } },
+  ]}
+/>
+
+Vous pouvez supprimer une internet gateway de façon unitaire ou en supprimer plusieurs en une seule action.
+
+### Supprimer une internet gateway
+
+1. Connectez-vous sur la console Numspot.
+
+2. Dans le menu de gauche, cliquez sur **Réseau** → **VPC** → **Internet Gateways**.
+
+
+3. Identifiez l'internet gateway que vous souhaitez supprimer, puis depuis la liste des actions, cliquez sur **Supprimer**.
+
+
+    Une nouvelle boîte de dialogue **Suppression de l'Internet Gateway** apparaît.
+
+
+4. Pour continuer, une confirmation forte est nécessaire. Saisissez le nom de la ressource à supprimer dans le champ correspondant.
+
+5. Cliquez sur **Supprimer**. L'internet gateway est supprimée.
+
+    Un message de confirmation "L'Internet Gateway a bien été supprimée" apparaît.
+
+
+### Supprimer plusieurs internet gateways
+
+1. Connectez-vous sur la console Numspot.
+
+2. Depuis le menu latéral gauche, cliquez sur **Réseau** → **VPC** → **Internet Gateways**.
+
+
+3. Sélectionnez les internet gateways que vous souhaitez supprimer, puis cliquez sur **Supprimer**.
+
+
+    Une nouvelle boîte de dialogue **Suppression d'Internet Gateways** apparaît.
+
+
+4. Pour continuer, une confirmation forte est nécessaire. Saisissez le terme **Supprimer** dans le champ correspondant.
+
+5. Cliquez sur **Supprimer**. Les internet gateways sont supprimées.
+
+    Un message de confirmation "Les Internet Gateways ont bien été supprimées" apparaît.
+
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+La commande `DELETE /compute/spaces/{spaceId}/internetGateways/{id}` supprime une internet gateway spécifiée. Avant de supprimer un service Internet, vous devez le détacher de tout VPC auquel il est attaché.
+
+[Exemple de requête : Suppression d'une internet gateway ↗](/openapi/#tag/compute/DELETE/compute/spaces/%7BspaceId%7D/internetGateways/%7Bid%7D)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/internet_gateway).
+
+</TabItem>
+</Tabs>

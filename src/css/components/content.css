@@ -1,0 +1,155 @@
+/**
+ * Doc content — headings, links, tables, TOC, breadcrumb, pagination.
+ */
+
+/* ----- Headings ----- */
+h1,
+.markdown h1:first-child {
+  letter-spacing: 0;
+  font-size: 2rem;
+  text-align: left;
+  font-weight: var(--ns-font-weight-extrabold);
+  color: var(--text-heading);
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-secondary);
+}
+
+/* H1 in Navy (#00478e) in light theme only; in dark we keep --text-heading
+   (Polar) to stay readable on the Obsidian background. */
+[data-theme="light"] h1,
+[data-theme="light"] .markdown h1:first-child {
+  color: var(--ns-navy);
+}
+
+h2,
+.markdown h2:first-child {
+  font-size: 1.5rem;
+  font-weight: var(--ns-font-weight-bold);
+  color: var(--text-heading);
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-secondary);
+}
+
+h3 {
+  color: var(--text-heading);
+  font-weight: var(--ns-font-weight-bold);
+}
+
+@media (min-width: 997px) {
+  h1 {
+    font-size: 28px !important;
+  }
+  h2 {
+    font-size: 24px !important;
+  }
+  h3 {
+    font-size: 22px !important;
+  }
+}
+
+@media (max-width: 996px) {
+  h1 {
+    font-size: 26px !important;
+  }
+  h2 {
+    font-size: 22px !important;
+  }
+  h3 {
+    font-size: 20px !important;
+  }
+}
+
+/* ----- Links ----- */
+/* Prose links → always underlined, per the style guide.
+   N.B. internal Docusaurus links render class="" (attribute present), so we
+   underline .markdown a broadly, then explicitly exclude the navigation/
+   card/button elements below. */
+.markdown a {
+  color: var(--text-link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.markdown a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Exceptions: no underline for navigation, cards and buttons */
+.markdown a.svc-card__main,
+.markdown a.svc-card__link,
+.markdown a.home-hero__cta,
+.markdown a.hash-link,
+.markdown a.menu__link,
+.markdown a.pagination-nav__link,
+.markdown .actions-summary a {
+  text-decoration: none;
+}
+
+/* Actions summary (ActionsSummary): not underlined by default, underlined
+   on hover (affordance). */
+.markdown .actions-summary a {
+  font-weight: var(--ns-font-weight-medium);
+}
+.markdown .actions-summary a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: var(--accent-primary);
+}
+
+/* ----- TOC (on this page) ----- */
+.table-of-contents__link {
+  color: var(--text-muted);
+}
+.table-of-contents__link:hover,
+.table-of-contents__link--active {
+  color: var(--accent-primary);
+}
+.table-of-contents__link--active {
+  font-weight: var(--ns-font-weight-semibold);
+}
+
+/* ----- Breadcrumb ----- */
+.breadcrumbs__link {
+  color: var(--text-muted);
+}
+.breadcrumbs__item--active .breadcrumbs__link {
+  color: var(--accent-primary);
+  background: var(--bg-active);
+}
+
+/* ----- Previous/next pagination ----- */
+.pagination-nav__link {
+  border: 1px solid var(--card-border);
+  border-radius: var(--ns-radius-md);
+  transition: border-color var(--ns-transition-hover),
+    background var(--ns-transition-hover);
+}
+.pagination-nav__link:hover {
+  border-color: var(--card-border-hover);
+  background: var(--bg-hover);
+}
+.pagination-nav__sublabel {
+  color: var(--text-muted);
+}
+.pagination-nav__label {
+  color: var(--text-link);
+}
+
+/* ----- Tables ----- */
+.markdown table thead tr {
+  background: var(--bg-secondary);
+}
+.markdown table th {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+/* ----- Homepage intro text (reused outside the hero) ----- */
+.intro-visual-text {
+  font-size: 1rem !important;
+  font-weight: var(--ns-font-weight-regular);
+  color: var(--text-secondary);
+  border-bottom: none;
+}

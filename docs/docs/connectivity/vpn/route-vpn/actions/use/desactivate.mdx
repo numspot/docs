@@ -1,0 +1,50 @@
+---
+title: Disable route propagation
+description: Disable the propagation of routes from a virtual gateway to a route table.
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Disable route propagation
+
+You can disable route propagation to a [route table](/docs/network/route-table/concepts/) from a [virtual gateway](/docs/connectivity/vpn/virtual-gateway/concepts/).
+
+This action removes the routes of the VPN (Virtual Private Network) connection from the route table. For the VPN connection to remain available, you must then manually add each route to the route table.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **connectivity.vpnconnection.update**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+1. Click in the **Route Tables** dashboard to display the checkboxes.
+2. Tick the checkbox of the route table towards which you want to disable route propagation.
+   The route table is selected and an actions menu appears.
+3. Click **Disable route propagation**.
+   The "Disable route propagation" dialog box appears.
+4. Click **Disable**.
+   Route propagation is disabled.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+The `PUT /compute/spaces/{spaceId}/routeTables/{id}/routePropagation` command configures route propagation by a virtual gateway towards a specified route table of a [VPC](/docs/network/vpc/concepts/) (Virtual Private Cloud).
+
+[Example request: Disabling route propagation](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/routeTables/{id}/routePropagation)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
+
+</TabItem>
+</Tabs>

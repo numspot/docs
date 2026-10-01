@@ -1,0 +1,119 @@
+---
+title: Créer une nat gateway - Numspot
+sidebar_label: Créer une nat gateway
+sidebar_position: 2
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Créer une nat gateway
+
+Vous pouvez créer une [nat gateway](/docs/network/nat/concepts/) dans un subnet (sous-réseau) d'un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) pour permettre aux [VM (Virtual Machine)](/docs/compute/concept/) de ce subnet de se connecter à Internet de manière indirecte. Vous pouvez créer une nat gateway pour chaque subnet public du VPC.
+
+## Permissions
+
+:::info
+Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
+
+- **compute.natGateway.create**
+
+:::
+
+## Prérequis
+
+:::info
+Pour cela, vous devez également :
+- Ajouter une règle autorisant les flux sortants vers Internet aux [security groups (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/) utilisés pour les VM que vous souhaitez connecter à Internet ;
+- Ajouter une route avec le bloc CIDR (Classless Inter Domain Routing) 0.0.0.0/0 (ou une plage d'IP plus petite) en destination et l'ID de la nat gateway nouvellement créée en cible à la [route table (table de routage)](/docs/network/route-table/concepts/) de ce subnet contenant vos VM.
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/nat/01-list.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC → NAT Gateways.", hotspot: { x: 0, y: 0.6926, w: 0.194, h: 0.0568 } },
+    { img: "/img/walkthrough/nat/01-list.png", text: "Depuis la liste des NAT gateways, cliquez sur « Créer une NAT Gateway ».", hotspot: { x: 0.8065, y: 0.2206, w: 0.1616, h: 0.0741 } },
+    { img: "/img/walkthrough/nat/02-form.png", text: "Nommez la NAT gateway, puis sélectionnez le VPC, le subnet et l'IP publique à lui associer.", hotspot: { x: 0.2083, y: 0.2132, w: 0.5556, h: 0.6584 } },
+    { img: "/img/walkthrough/nat/02-form.png", text: "Cliquez sur « Créer une NAT Gateway ».", hotspot: { x: 0.625, y: 0.94, w: 0.13, h: 0.055 } },
+  ]}
+/>
+
+:::info
+### Prérequis
+- [Allouer une IP publique ↗](../../public-ip/actions/allocate.mdx)
+- [Attacher une internet gateway à un VPC ↗](../../internet-gateway/actions/administration/attach.mdx)
+- [Lier une route table à un subnet ↗](../../route-table/actions/administration/link.mdx)
+- [Créer une route table ↗](../../route-table/actions/create.mdx)
+:::
+
+1. Depuis le menu latéral gauche, cliquez sur **Réseau** → **VPC** → **NAT Gateways**.
+
+
+2. Depuis la liste des nat gateways, cliquez sur **Créer une NAT Gateway**.
+
+
+Une page "Création d'une NAT Gateway" apparaît.
+
+
+3. Dans le champ "Nom", saisissez un nom pour la nat gateway.
+
+:::info
+Cette action ajoute un tag Name de 255 caractères maximum. Vous pouvez utiliser tous les caractères, y compris les lettres accentuées.
+:::
+
+4. Dans la liste "VPC", sélectionnez le VPC dans lequel vous souhaitez créer une nat gateway.
+5. Dans la liste "Subnet", sélectionnez le subnet dans lequel vous souhaitez créer une nat gateway.
+
+:::info
+Seuls les subnets ayant une route pointant vers une [internet gateway](/docs/network/internet-gateway/concepts/) sur la plage d'IP 0.0.0.0/0 sont affichés.
+:::
+
+6. Dans la liste "Public IP", sélectionnez l'IP publique que vous souhaitez associer à la nat gateway.
+7. Cliquez sur **Créer la NAT Gateway**.
+
+Un message de confirmation s'affiche en bas de page indiquant que la nat gateway est bien créée.
+
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+
+:::info
+### Prérequis
+- Allouez une IP publique à votre compte.
+:::
+
+La commande `POST /compute/spaces/{spaceId}/natGateways` crée une nat gateway dans le subnet public spécifié d'un VPC.
+
+Une nat gateway permet aux VM placées dans le subnet privé de ce VPC de se connecter à Internet, sans être accessibles depuis Internet.
+
+Lors de la création d'une nat gateway, vous spécifiez l'ID d'allocation de l'IP publique que vous souhaitez utiliser comme IP publique pour la nat gateway.
+
+Une fois la nat gateway créée, vous devez créer une route dans la route table du subnet privé, avec 0.0.0.0/0 comme destination et l'ID de la nat gateway comme cible.
+
+Cette action vous permet également de créer plusieurs nat gateways dans le même VPC (une par subnet public).
+
+:::warning
+Vous ne pouvez pas modifier l'IP publique associée à une nat gateway après sa création. Pour ce faire, vous devez supprimer la nat gateway et en créer une nouvelle avec une autre IP publique.
+:::
+
+[Exemple de requête : Création d'une nat gateway ↗](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/natGateways)
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+
+La documentation Terraform est disponible sur le [registry Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/nat_gateway).
+
+</TabItem>
+</Tabs>

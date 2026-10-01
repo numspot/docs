@@ -1,0 +1,49 @@
+---
+title: Modify an attribute of a load balancer - Numspot
+sidebar_label: Modify an attribute of a load balancer
+sidebar_position: 3
+draft: false
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Modify an attribute of a load balancer
+
+You can modify the attributes of a [load balancer](/docs/network/load-balancer/concepts/), such as its name, its SSL (Secure Sockets Layer) certificate or its persistence policy.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **compute.loadBalancer.update**
+
+:::
+<Tabs>
+  <TabItem value="console" label="Console" default>
+
+1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
+2. Click the name of the load balancer that you want to modify.
+3. Click **Modify** at the top right of the screen.
+4. Modify the desired attributes.
+5. Click **Save**.
+   The changes are applied to the load balancer.
+
+  </TabItem>
+  <TabItem value="api" label="API">
+
+The `PUT /compute/spaces/{spaceId}/loadBalancers/{id}` command modifies the specified attribute of a load balancer. You can specify only one attribute at a time.
+
+You can set a new SSL certificate for an SSL or HTTPS listener of a load balancer. This certificate replaces any certificate used on the same load balancer and port.
+
+You can also replace the policy currently enabled for the load balancer with another one. If the `policyNames` parameter is empty, the policy currently enabled is disabled.
+
+[Request example: Modifying a load balancer](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/loadBalancers/{id})
+  </TabItem>
+  <TabItem value="terraform" label="Terraform">
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
+
+  </TabItem>
+</Tabs>
