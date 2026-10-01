@@ -1,0 +1,50 @@
+name: PR conventions
+
+# PR titles follow Conventional Commits (same convention as commit
+# messages, see AGENTS.md) and must carry a description. Squash merges
+# turn the PR title into the commit message, so validating it here is
+# what enforces the repository's commit convention in practice.
+# Titles must also be written in US English (AGENTS.md, "Merge Request /
+# Pull Request Language") — that part is not reliably checkable by regex,
+# so it is stated in the failure message for reviewers to catch.
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  title:
+    name: Conventional Commits title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR title format
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          pattern='^(feat|fix|docs|chore|ci|refactor|style|test|perf|build|revert)(\([a-z0-9._/-]+\))?!?: .+'
+
+          if [[ ! "$TITLE" =~ $pattern ]]; then
+            echo "PR title does not follow Conventional Commits:"
+            echo "  \"$TITLE\""
+            echo ""
+            echo "Expected format: <type>(<optional scope>): <description>"
+            echo "  types: feat fix docs chore ci refactor style test perf build revert"
+            echo "  examples: feat(compute): add GPU instance documentation"
+            echo "            fix(connectivity): correct VPN endpoint URL"
+            echo ""
+            echo "Also: write the title (and description) in US English."
+            exit 1
+          fi
+
+      - name: Check PR description
+        env:
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          trimmed="$(echo "$BODY" | tr -d '[:space:]')"
+          if [[ -z "$trimmed" ]]; then
+            echo "The PR description is empty: describe what the change does and why."
+            exit 1
+          fi
