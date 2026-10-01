@@ -22,6 +22,16 @@
       ]
     },
     {
+      "service": "PostgreSQL",
+      "status": "added",
+      "date": "2026-10-01",
+      "title": "Restauration de clusters PostgreSQL",
+      "description": "Ajout d'une page documentant la restauration d'un cluster PostgreSQL à partir d'un backup ou de l'archive WAL d'un cluster source, avec récupération à un instant précis (PITR) via le paramètre pointInTime. La restauration crée un nouveau cluster ; le cluster source n'est pas modifié.",
+      "components": [
+        "api"
+      ]
+    },
+    {
       "service": "IAM",
       "status": "added",
       "date": "2026-09-30",

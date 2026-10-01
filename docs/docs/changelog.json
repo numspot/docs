@@ -22,6 +22,16 @@
       ]
     },
     {
+      "service": "PostgreSQL",
+      "status": "added",
+      "date": "2026-10-01",
+      "title": "PostgreSQL cluster restore",
+      "description": "Added a page documenting how to restore a PostgreSQL cluster from a backup or from the WAL archive of a source cluster, with point-in-time recovery (PITR) through the pointInTime parameter. The restore creates a new cluster; the source cluster is not modified.",
+      "components": [
+        "api"
+      ]
+    },
+    {
       "service": "IAM",
       "status": "added",
       "date": "2026-09-30",
