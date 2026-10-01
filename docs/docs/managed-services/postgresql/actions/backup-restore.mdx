@@ -1,0 +1,121 @@
+---
+title: Restore a PostgreSQL backup - Managed PostgreSQL
+description: Restore a PostgreSQL cluster from a backup or from the WAL archive of a source cluster, with point-in-time recovery (PITR) via the Numspot API.
+sidebar_label: Restore a PostgreSQL backup
+sidebar_position: 11
+draft: false
+last_update:
+  date: 2026-10-01
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Restore a PostgreSQL backup
+
+Restoration lets you recreate a [PostgreSQL cluster](/docs/managed-services/postgresql/concepts/) from an existing backup or from the WAL (Write-Ahead Logging) archive of a source cluster.
+
+Restoration never happens in place: it always creates a new cluster. The source cluster is not modified. If data is corrupted, restoring a recent backup is therefore the recommended recovery method.
+
+To identify the backup to restore, see [List the backups of a PostgreSQL cluster](/docs/managed-services/postgresql/actions/backups-list) ↗.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permissions:
+
+- **postgresql.cluster.create**
+
+:::
+<Tabs>
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+    The `POST /postgresql/spaces/{spaceId}/clusters` request restores a PostgreSQL cluster by creating a new cluster from a backup or from the WAL archive of a source cluster.
+
+### Parameters
+
+    | Parameter | Type | Required | Description |
+    |-----------|------|----------|-------------|
+    | `spaceId` | UUID (Universally Unique Identifier) | Yes | Identifier of the space |
+
+### Request body
+
+    ```json
+    {
+      "name": "my-restored-cluster",
+      "nodeConfiguration": {
+        "vcpuCount": 2,
+        "memorySizeGiB": 4
+      },
+      "volume": {
+        "type": "PERFORMANCE",
+        "sizeGiB": 20
+      },
+      "visibility": "INTERNAL",
+      "restoreConfiguration": {
+        "sourceType": "BACKUP",
+        "clusterId": "e592a4f6-2e49-46e7-b6d0-248a7711197a",
+        "backupId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+      }
+    }
+    ```
+
+    The `name`, `nodeConfiguration`, `volume` and `visibility` fields remain required and apply to the new cluster. They can differ from those of the source cluster.
+
+### Restore configuration
+
+    The restore configuration is set through the `restoreConfiguration` field of the request body, which takes one of the two following modes.
+
+#### Restore from a backup
+
+    | Field | Type | Required | Description |
+    |-------|------|----------|-------------|
+    | `sourceType` | string | Yes | Restore source type. Value: BACKUP |
+    | `clusterId` | UUID | Yes | Identifier of the source cluster |
+    | `backupId` | UUID | Yes | Identifier of the backup to restore |
+
+#### Restore from a cluster
+
+    | Field | Type | Required | Description |
+    |-------|------|----------|-------------|
+    | `sourceType` | string | Yes | Restore source type. Value: CLUSTER |
+    | `clusterId` | UUID | Yes | Identifier of the source cluster |
+    | `pointInTime` | date-time | No | Timestamp of the point-in-time recovery (PITR, Point-In-Time Recovery). If omitted, the restoration is performed to the latest available state |
+
+    Example of a restore with point-in-time recovery:
+
+    ```json
+    {
+      "restoreConfiguration": {
+        "sourceType": "CLUSTER",
+        "clusterId": "e592a4f6-2e49-46e7-b6d0-248a7711197a",
+        "pointInTime": "2026-09-30T14:30:00Z"
+      }
+    }
+    ```
+
+### Restore behavior
+
+    - the restoration creates a new cluster; the source cluster is not modified;
+    - the `databaseName`, `user` and `extensions` fields of the request body are ignored and replaced with the values from the source cluster;
+    - the new cluster is created with the `CREATING` state, then moves to the `RUNNING` state once ready.
+
+### Response example
+
+    ```json
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440001",
+      "name": "my-restored-cluster",
+      "status": {
+        "state": "CREATING",
+        "message": "cluster is being created"
+      }
+    }
+    ```
+
+    The response corresponds to the created cluster: its complete structure is identical to a cluster creation.
+
+    [See the full specification](/openapi/#tag/postgresql/POST/postgresql/spaces/{spaceId}/clusters)
+</TabItem>
+</Tabs>
