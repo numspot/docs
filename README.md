@@ -2,8 +2,8 @@
 
 Source code of [docs.numspot.com](https://docs.numspot.com/), the public
 documentation for Numspot, the sovereign French cloud platform. The site is
-built with [Docusaurus](https://docusaurus.io/) and served in French, with an
-English translation generated from the `i18n/` directory.
+built with [Docusaurus](https://docusaurus.io/) and served in English
+(en-GB), with a French translation generated from the `i18n/` directory.
 
 ## Quick start
 
@@ -22,20 +22,19 @@ The site is up in under two minutes. All changes are hot-reloaded.
 | Command            | Description                                              |
 | ------------------ | -------------------------------------------------------- |
 | `yarn start`       | Development server with live reload                      |
-| `yarn build`       | Production build (French at `/`, English at `/en/`)      |
+| `yarn build`       | Production build (English at `/`, French at `/fr/`)      |
 | `yarn serve`       | Serve the production build locally                       |
 | `yarn typecheck`   | TypeScript type checking                                 |
 | `yarn clear`       | Clear the Docusaurus cache                               |
 | `yarn lint:docs`   | Lint the documentation pages changed against `main`      |
 | `yarn lint:docs:all` | Lint every documentation page                          |
-| `make spec-update` | Refresh the OpenAPI specification used by the API pages  |
 
 ## Project structure
 
 ```
 /
-├── docs/docs/       # Documentation content (.mdx), French, source of truth
-├── i18n/            # English translation
+├── docs/docs/       # Documentation content (.mdx), English, source of truth
+├── i18n/            # French translation
 ├── linter/          # Documentation compliance linter (zero dependency)
 ├── static/          # Static assets
 ├── docusaurus.config.ts
