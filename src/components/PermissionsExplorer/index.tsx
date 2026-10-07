@@ -4,6 +4,9 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import type { ReactNode } from 'react';
 import styles from './styles.module.css';
 import data from './permissions.json';
+import rolesData from './roles.json';
+
+type TenantType = 'organisation' | 'space';
 
 type Endpoint = {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
@@ -15,7 +18,19 @@ type Permission = {
   name: string;
   domain: string;
   description: string;
+  uuid?: string;
+  /** Tenant levels the permission is exercised at; a permission available at
+      both levels lists both and is rendered under each umbrella section. */
+  tenant?: TenantType[];
   endpoints: Endpoint[];
+};
+
+type Role = {
+  uuid: string;
+  name: string;
+  description: string;
+  tenantType: TenantType[];
+  permissions: string[];
 };
 
 type DomainMeta = {
@@ -41,7 +56,10 @@ const DOMAIN_META: Record<string, DomainMeta> = {
   },
 };
 
+const TENANT_ORDER: TenantType[] = ['organisation', 'space'];
+
 const permissions = data.permissions as Permission[];
+const roles = (rolesData.roles ?? []) as Role[];
 
 function endpointMatches(endpoint: Endpoint, query: string): boolean {
   return (
@@ -78,7 +96,24 @@ export default function PermissionsExplorer(): ReactNode {
   const [query, setQuery] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selected, setSelected] = useState(-1);
+  const [tenantFilter, setTenantFilter] = useState<'all' | TenantType>('all');
+  const [roleFilters, setRoleFilters] = useState<string[]>([]);
+  const [roleMenuOpen, setRoleMenuOpen] = useState(false);
+  const [copiedUuid, setCopiedUuid] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const roleMenuRef = useRef<HTMLDivElement>(null);
+
+  // Closes the role dropdown on any click outside of it.
+  React.useEffect(() => {
+    if (!roleMenuOpen) return;
+    function onMouseDown(event: MouseEvent) {
+      if (roleMenuRef.current && !roleMenuRef.current.contains(event.target as Node)) {
+        setRoleMenuOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', onMouseDown);
+    return () => document.removeEventListener('mousedown', onMouseDown);
+  }, [roleMenuOpen]);
 
   const q = query.trim().toLowerCase();
 
@@ -93,10 +128,92 @@ export default function PermissionsExplorer(): ReactNode {
     return DOMAIN_META[domain]?.tag ?? domain;
   }
 
+  function tenantLabel(tenant: TenantType): string {
+    return tenant === 'organisation'
+      ? translate({
+          id: 'permexplorer.tenant.organisation',
+          message: 'Organisation',
+          description: 'Tenant level: organisation',
+        })
+      : translate({
+          id: 'permexplorer.tenant.space',
+          message: 'Espace',
+          description: 'Tenant level: space',
+        });
+  }
+
+  function tenantNameSuffix(tenantType: TenantType[]): string {
+    // Distinguishes same-named roles defined for both tenant levels.
+    return tenantType.length === 1
+      ? ` — ${tenantLabel(tenantType[0] as TenantType)}`
+      : '';
+  }
+
+  function copyUuid(uuid: string) {
+    navigator.clipboard?.writeText(uuid).then(
+      () => {
+        setCopiedUuid(uuid);
+        window.setTimeout(() => setCopiedUuid(null), 1500);
+      },
+      () => undefined,
+    );
+  }
+
+  // Role lookup: permission name -> standard roles granting it.
+  const rolesByPermission = useMemo(() => {
+    const map = new Map<string, Role[]>();
+    for (const role of roles) {
+      for (const name of role.permissions) {
+        const list = map.get(name) ?? [];
+        list.push(role);
+        map.set(name, list);
+      }
+    }
+    return map;
+  }, []);
+
+  // Roles selected in the multi-select: a permission matches when at least one
+  // of them grants it.
+  const selectedRoles = useMemo(
+    () =>
+      roleFilters
+        .map((uuid) => roles.find((role) => role.uuid === uuid))
+        .filter((role): role is Role => Boolean(role)),
+    [roles, roleFilters],
+  );
+
+  function toggleRoleFilter(uuid: string) {
+    setRoleFilters((uuids) =>
+      uuids.includes(uuid) ? uuids.filter((id) => id !== uuid) : [...uuids, uuid],
+    );
+  }
+
+  // Dropdown groups: one section per tenant level.
+  const roleGroups = useMemo(
+    () =>
+      (['organisation', 'space'] as TenantType[]).map((tenant) => ({
+        tenant,
+        roles: roles.filter((role) => role.tenantType.includes(tenant)),
+      })),
+    [],
+  );
+
   const { matches, apiTotal } = useMemo(() => {
     const result: { permission: Permission; endpoints: Endpoint[]; nameHit: boolean }[] = [];
     let apiTotal = 0;
     for (const permission of permissions) {
+      if (
+        tenantFilter !== 'all' &&
+        !(permission.tenant ?? TENANT_ORDER).includes(tenantFilter)
+      ) {
+        continue;
+      }
+      if (
+        roleFilters.length > 0 &&
+        !rolesByPermission.get(permission.name)?.some((role) => roleFilters.includes(role.uuid))
+      ) {
+        continue;
+      }
       const nameHit =
         !q ||
         permission.name.toLowerCase().includes(q) ||
@@ -110,7 +227,7 @@ export default function PermissionsExplorer(): ReactNode {
       }
     }
     return { matches: result, apiTotal };
-  }, [q]);
+  }, [q, tenantFilter, roleFilters, rolesByPermission]);
 
   const domainGroups = useMemo(() => {
     const groups = new Map<string, { permission: Permission; endpoints: Endpoint[]; nameHit: boolean }[]>();
@@ -123,6 +240,23 @@ export default function PermissionsExplorer(): ReactNode {
       domainLabel(a[0]).localeCompare(domainLabel(b[0]), locale),
     );
   }, [matches, locale]);
+
+  // Umbrella sections per tenant level: each permission appears under every
+  // tenant it covers.
+  const tenantSections = useMemo(
+    () =>
+      TENANT_ORDER.filter(
+        (tenant) => tenantFilter === 'all' || tenantFilter === tenant,
+      ).map((tenant) => ({
+        tenant,
+        domains: domainGroups.filter(([, groupMatches]) =>
+          groupMatches.some((match) =>
+            (match.permission.tenant ?? TENANT_ORDER).includes(tenant),
+          ),
+        ),
+      })),
+    [domainGroups, tenantFilter],
+  );
 
   const suggestions = useMemo(() => {
     const permPart: Permission[] = [];
@@ -328,6 +462,161 @@ export default function PermissionsExplorer(): ReactNode {
         )}
       </div>
 
+      <div className={styles.filters} role="group">
+        <div className={styles.filterRow}>
+          <span className={styles.filterLabel}>
+            {translate({
+              id: 'permexplorer.filters.tenant',
+              message: 'Tenant:',
+              description: 'Tenant filter label',
+            })}
+          </span>
+          {(['all', ...TENANT_ORDER] as const).map((tenant) => (
+            <button
+              key={tenant}
+              type="button"
+              className={
+                tenantFilter === tenant
+                  ? `${styles.filterChip} ${styles.filterChipActive}`
+                  : styles.filterChip
+              }
+              onClick={() => setTenantFilter(tenant)}>
+              {tenant === 'all'
+                ? translate({
+                    id: 'permexplorer.filters.all',
+                    message: 'All',
+                    description: 'Filter chip: no tenant filter',
+                  })
+                : tenantLabel(tenant)}
+            </button>
+          ))}
+          {roles.length > 0 && (
+            <div className={styles.dropdown} ref={roleMenuRef}>
+              <button
+                type="button"
+                className={
+                  roleFilters.length > 0
+                    ? `${styles.dropdownButton} ${styles.dropdownButtonActive}`
+                    : styles.dropdownButton
+                }
+                aria-haspopup="listbox"
+                aria-expanded={roleMenuOpen}
+                onClick={() => setRoleMenuOpen((open) => !open)}>
+                <span className={styles.dropdownLabel}>
+                  {translate({
+                    id: 'permexplorer.filters.role',
+                    message: 'Standard role:',
+                    description: 'Standard role filter label',
+                  })}
+                </span>
+                <span className={styles.dropdownValue}>
+                  {selectedRoles.length === 0
+                    ? translate({
+                        id: 'permexplorer.filters.all',
+                        message: 'All',
+                        description: 'Filter chip: no tenant filter',
+                      })
+                    : selectedRoles.length === 1
+                      ? `${selectedRoles[0].name}${tenantNameSuffix(selectedRoles[0].tenantType)}`
+                      : translate(
+                          {
+                            id: 'permexplorer.filters.rolesCount',
+                            message: '{n} roles selected',
+                            description: 'Dropdown label when several standard roles are selected',
+                          },
+                          { n: String(selectedRoles.length) },
+                        )}
+                </span>
+                <span className={styles.dropdownCaret} aria-hidden="true">
+                  ▾
+                </span>
+              </button>
+              {roleMenuOpen && (
+                <div className={styles.menu} role="listbox" aria-multiselectable="true">
+                  {roleGroups.map(({ tenant, roles: groupRoles }) =>
+                    groupRoles.length === 0 ? null : (
+                      <React.Fragment key={tenant}>
+                        <div className={styles.menuGroup}>{tenantLabel(tenant)}</div>
+                        {groupRoles.map((role) => {
+                          const checked = roleFilters.includes(role.uuid);
+                          return (
+                            <button
+                              key={role.uuid}
+                              type="button"
+                              role="option"
+                              aria-selected={checked}
+                              title={role.description}
+                              className={
+                                checked
+                                  ? `${styles.menuItem} ${styles.menuItemActive}`
+                                  : styles.menuItem
+                              }
+                              onClick={() => toggleRoleFilter(role.uuid)}>
+                              <span className={styles.menuItemCheck} aria-hidden="true">
+                                {checked ? '✓' : ''}
+                              </span>
+                              <span className={styles.menuItemName}>{role.name}</span>
+                              <span className={styles.menuItemCount}>
+                                {translate(
+                                  {
+                                    id: 'permexplorer.count.permissions',
+                                    message: '{n} permissions',
+                                    description: 'Permission count shown on a role menu entry',
+                                  },
+                                  { n: String(role.permissions.length) },
+                                )}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </React.Fragment>
+                    ),
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {selectedRoles.length > 0 && (
+        <div className={styles.activeFilter}>
+          <span className={styles.filterLabel}>
+            {translate({
+              id: 'permexplorer.filters.role',
+              message: 'Standard role:',
+              description: 'Active standard role filter label',
+            })}
+          </span>
+          {selectedRoles.map((role) => (
+            <span
+              key={role.uuid}
+              className={`${styles.activeFilterPill} ${
+                role.tenantType.includes('organisation') && role.tenantType.length === 1
+                  ? styles.roleTagOrganisation
+                  : styles.roleTagSpace
+              }`}>
+              {role.name}
+              {tenantNameSuffix(role.tenantType)}
+              <button
+                type="button"
+                className={styles.pillClear}
+                aria-label={translate(
+                  {
+                    id: 'permexplorer.filters.clearRole',
+                    message: 'Remove {role} from the filter',
+                    description: 'Remove a standard role from the active filter',
+                  },
+                  { role: role.name },
+                )}
+                onClick={() => toggleRoleFilter(role.uuid)}>
+                ✕
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+
       <p className={styles.stats}>
         {translate(
           {
@@ -349,56 +638,135 @@ export default function PermissionsExplorer(): ReactNode {
         </div>
       )}
 
-      {domainGroups.map(([domain, groupMatches]) => (
-        <section key={domain}>
-          <h2 className={styles.domain}>{domainLabel(domain)}</h2>
-          {groupMatches.map(({ permission, endpoints, nameHit }) => (
-            <details key={permission.name} className={styles.card} open={q ? true : undefined}>
-              <summary className={styles.summary}>
-                <code className={styles.permLabel}>
-                  <Highlighted text={permission.name} query={q} />
-                </code>
-                <span className={styles.count}>
-                  {translate(
-                    {
-                      id: 'permexplorer.count.apis',
-                      message: '{n} API',
-                      description: 'API count shown on a permission card',
-                    },
-                    { n: String(endpoints.length) },
-                  )}
-                </span>
-              </summary>
-              <div className={styles.cardBody}>
-                {permission.description && (
-                  <p className={styles.cardDesc}>{permission.description}</p>
-                )}
-                <ul className={styles.endpointList}>
-                  {endpoints.map((endpoint) => (
-                    <li
-                      key={`${permission.name}-${endpoint.method}-${endpoint.path}`}
-                      className={styles.endpoint}>
-                      <span className={`${styles.method} ${styles[`method${endpoint.method}`]}`}>
-                        {endpoint.method}
-                      </span>
-                      <a
-                        className={styles.path}
-                        href={`https://docs.numspot.com/openapi/#tag/${domainTag(permission.domain)}/${endpoint.method}/${endpoint.path}`}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        <Highlighted text={endpoint.path} query={nameHit ? '' : q} />
-                      </a>
-                      {endpoint.summary && (
-                        <span className={styles.endpointSummary}>— {endpoint.summary}</span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </details>
-          ))}
-        </section>
-      ))}
+      {tenantSections.map(({ tenant, domains }) =>
+        domains.length === 0 ? null : (
+          <section key={tenant} className={styles.tenantSection}>
+            <h2 className={styles.tenantHeading}>
+              {tenantLabel(tenant)}
+              <span className={styles.tenantHint}>
+                {tenant === 'organisation'
+                  ? translate({
+                      id: 'permexplorer.tenant.organisation.hint',
+                      message: 'permissions exercised at the organisation level',
+                      description: 'Hint under the organisation umbrella section',
+                    })
+                  : translate({
+                      id: 'permexplorer.tenant.space.hint',
+                      message: 'permissions exercised within a space',
+                      description: 'Hint under the space umbrella section',
+                    })}
+              </span>
+            </h2>
+            {domains.map(([domain, groupMatches]) => (
+              <section key={`${tenant}-${domain}`}>
+                <h3 className={styles.domain}>{domainLabel(domain)}</h3>
+                {groupMatches
+                  .filter((match) => (match.permission.tenant ?? TENANT_ORDER).includes(tenant))
+                  .map(({ permission, endpoints, nameHit }) => {
+                    const permissionRoles = rolesByPermission.get(permission.name) ?? [];
+                    return (
+                      <details key={permission.name} className={styles.card} open={q ? true : undefined}>
+                        <summary className={styles.summary}>
+                          <code className={styles.permLabel}>
+                            <Highlighted text={permission.name} query={q} />
+                          </code>
+                          <span className={styles.count}>
+                            {translate(
+                              {
+                                id: 'permexplorer.count.apis',
+                                message: '{n} API',
+                                description: 'API count shown on a permission card',
+                              },
+                              { n: String(endpoints.length) },
+                            )}
+                          </span>
+                          {permissionRoles.map((role) => (
+                            <button
+                              key={role.uuid}
+                              type="button"
+                              title={translate({
+                                id: 'permexplorer.role.filterHint',
+                                message: 'Filter by this role',
+                                description: 'Hint on a clickable standard role tag',
+                              })}
+                              aria-pressed={roleFilters.includes(role.uuid)}
+                              className={`${styles.roleTag} ${
+                                role.tenantType.includes('organisation') && role.tenantType.length === 1
+                                  ? styles.roleTagOrganisation
+                                  : styles.roleTagSpace
+                              }${roleFilters.includes(role.uuid) ? ` ${styles.roleTagActive}` : ''}`}
+                              onClick={() => toggleRoleFilter(role.uuid)}>
+                              {role.name}
+                            </button>
+                          ))}
+                        </summary>
+                        <div className={styles.cardBody}>
+                          {permission.uuid && (
+                            <p className={styles.uuidLine}>
+                              <span className={styles.uuidLabel}>UUID</span>
+                              <code className={styles.uuidValue}>{permission.uuid}</code>
+                              <button
+                                type="button"
+                                className={styles.uuidCopy}
+                                onClick={() => copyUuid(permission.uuid as string)}>
+                                {copiedUuid === permission.uuid
+                                  ? translate({
+                                      id: 'permexplorer.uuid.copied',
+                                      message: 'copied',
+                                      description: 'Feedback after copying a permission UUID',
+                                    })
+                                  : translate({
+                                      id: 'permexplorer.uuid.copy',
+                                      message: 'copy',
+                                      description: 'Copy a permission UUID',
+                                    })}
+                              </button>
+                            </p>
+                          )}
+                          {permission.description && (
+                            <p className={styles.cardDesc}>{permission.description}</p>
+                          )}
+                          {endpoints.length === 0 ? (
+                            <p className={styles.consoleNote}>
+                              {translate({
+                                id: 'permexplorer.console',
+                                message:
+                                  'No public API for this permission: the action is performed from the Numspot console.',
+                                description: 'Note shown on permissions without a public endpoint',
+                              })}
+                            </p>
+                          ) : (
+                            <ul className={styles.endpointList}>
+                              {endpoints.map((endpoint) => (
+                                <li
+                                  key={`${permission.name}-${endpoint.method}-${endpoint.path}`}
+                                  className={styles.endpoint}>
+                                  <span className={`${styles.method} ${styles[`method${endpoint.method}`]}`}>
+                                    {endpoint.method}
+                                  </span>
+                                  <a
+                                    className={styles.path}
+                                    href={`https://docs.numspot.com/openapi/#tag/${domainTag(permission.domain)}/${endpoint.method}/${endpoint.path}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    <Highlighted text={endpoint.path} query={nameHit ? '' : q} />
+                                  </a>
+                                  {endpoint.summary && (
+                                    <span className={styles.endpointSummary}>— {endpoint.summary}</span>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      </details>
+                    );
+                  })}
+              </section>
+            ))}
+          </section>
+        ),
+      )}
     </div>
   );
 }

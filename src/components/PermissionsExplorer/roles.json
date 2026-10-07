@@ -1,0 +1,141 @@
+{
+  "updatedAt": "2026-10-07",
+  "roles": [
+    {
+      "uuid": "0194db65-9f2f-7c4a-8524-2e19fc742b68",
+      "name": "IAM Identity Admin",
+      "description": "",
+      "tenantType": [
+        "space"
+      ],
+      "permissions": [
+        "iam.serviceAccount.create",
+        "iam.serviceAccount.delete",
+        "iam.serviceAccount.get",
+        "iam.serviceAccount.owner",
+        "iam.user.create",
+        "iam.user.delete",
+        "iam.user.get",
+        "iam.user.recover",
+        "iam.user.update"
+      ]
+    },
+    {
+      "uuid": "0194db67-25cf-7c4a-852a-3cf6d7514d10",
+      "name": "IAM Security Admin",
+      "description": "",
+      "tenantType": [
+        "space"
+      ],
+      "permissions": [
+        "iam.createPolicy",
+        "iam.deletePolicy",
+        "iam.getPolicy",
+        "iam.permission.get",
+        "iam.role.create",
+        "iam.role.delete",
+        "iam.role.get",
+        "iam.role.update"
+      ]
+    },
+    {
+      "uuid": "0194db68-ac6f-7c4a-8526-8c365eaeebb4",
+      "name": "OCP Admin",
+      "description": "",
+      "tenantType": [
+        "space"
+      ],
+      "permissions": [
+        "openshift.cluster.create",
+        "openshift.cluster.delete",
+        "openshift.cluster.get",
+        "openshift.cluster.update"
+      ]
+    },
+    {
+      "uuid": "0194db6a-330f-7c4a-852c-d346d7d5679a",
+      "name": "OCP Viewer",
+      "description": "",
+      "tenantType": [
+        "space"
+      ],
+      "permissions": [
+        "openshift.cluster.get"
+      ]
+    },
+    {
+      "uuid": "0194db6b-b9af-7c4a-852b-8a7bb8c7d852",
+      "name": "PostgreSQL Admin",
+      "description": "",
+      "tenantType": [
+        "space"
+      ],
+      "permissions": [
+        "postgresql.backup.delete",
+        "postgresql.backup.get",
+        "postgresql.cluster.create",
+        "postgresql.cluster.delete",
+        "postgresql.cluster.get",
+        "postgresql.cluster.resetPassword",
+        "postgresql.cluster.update"
+      ]
+    },
+    {
+      "uuid": "0194db6d-404f-7c4a-8522-c8b0f8cf5683",
+      "name": "PostgreSQL Viewer",
+      "description": "",
+      "tenantType": [
+        "space"
+      ],
+      "permissions": [
+        "postgresql.backup.get",
+        "postgresql.cluster.get"
+      ]
+    },
+    {
+      "uuid": "0194db6e-c6ef-7c4a-8522-8e1a5ef89505",
+      "name": "Kubernetes Admin",
+      "description": "",
+      "tenantType": [
+        "space"
+      ],
+      "permissions": [
+        "kubernetes.cluster.create",
+        "kubernetes.cluster.delete",
+        "kubernetes.cluster.get",
+        "kubernetes.cluster.update"
+      ]
+    },
+    {
+      "uuid": "0194db70-4d8f-7c4a-852b-e3a57ec1d803",
+      "name": "Kubernetes Viewer",
+      "description": "",
+      "tenantType": [
+        "space"
+      ],
+      "permissions": [
+        "kubernetes.cluster.get"
+      ]
+    },
+    {
+      "uuid": "01958566-e530-720a-a2e6-9b174b6ac5eb",
+      "name": "Connectivity Admin",
+      "description": "",
+      "tenantType": [
+        "space"
+      ],
+      "permissions": [
+        "connectivity.bridge.create",
+        "connectivity.bridge.delete",
+        "connectivity.bridge.get",
+        "connectivity.directlink.create",
+        "connectivity.directlink.delete",
+        "connectivity.directlink.get",
+        "connectivity.vpnconnection.create",
+        "connectivity.vpnconnection.delete",
+        "connectivity.vpnconnection.get",
+        "connectivity.vpnconnection.update"
+      ]
+    }
+  ]
+}

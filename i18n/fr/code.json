@@ -747,5 +747,61 @@
   "walkthrough.steps": {
     "message": "Étapes",
     "description": "Walkthrough component control"
+  },
+  "permexplorer.tenant.organisation": {
+    "message": "Organisation",
+    "description": "Tenant level: organisation"
+  },
+  "permexplorer.tenant.space": {
+    "message": "Espace",
+    "description": "Tenant level: space"
+  },
+  "permexplorer.tenant.organisation.hint": {
+    "message": "permissions exercées au niveau de l'organisation",
+    "description": "Hint under the organisation umbrella section"
+  },
+  "permexplorer.tenant.space.hint": {
+    "message": "permissions exercées au sein d'un espace",
+    "description": "Hint under the space umbrella section"
+  },
+  "permexplorer.filters.tenant": {
+    "message": "Tenant :",
+    "description": "Tenant filter label"
+  },
+  "permexplorer.filters.all": {
+    "message": "Tout",
+    "description": "Filter chip: no tenant filter"
+  },
+  "permexplorer.filters.role": {
+    "message": "Rôle standard :",
+    "description": "Active standard role filter label"
+  },
+  "permexplorer.uuid.copy": {
+    "message": "copier",
+    "description": "Copy a permission UUID"
+  },
+  "permexplorer.uuid.copied": {
+    "message": "copié",
+    "description": "Feedback after copying a permission UUID"
+  },
+  "permexplorer.console": {
+    "message": "Aucune API publique pour cette permission : l'action est réalisée depuis la console Numspot.",
+    "description": "Note shown on permissions without a public endpoint"
+  },
+  "permexplorer.role.filterHint": {
+    "message": "Filtrer par ce rôle",
+    "description": "Hint on a clickable standard role tag"
+  },
+  "permexplorer.count.permissions": {
+    "message": "{n} permissions",
+    "description": "Permission count shown on a role menu entry"
+  },
+  "permexplorer.filters.rolesCount": {
+    "message": "{n} rôles sélectionnés",
+    "description": "Dropdown label when several standard roles are selected"
+  },
+  "permexplorer.filters.clearRole": {
+    "message": "Retirer {role} du filtre",
+    "description": "Remove a standard role from the active filter"
   }
 }

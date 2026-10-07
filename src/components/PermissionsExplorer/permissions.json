@@ -1,1851 +1,2602 @@
 {
- "updatedAt": "2026-09-30",
- "permissions": [
-  {
-   "name": "compute.blockStorage.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/volumes",
-     "summary": "Create Volume"
-    }
-   ]
-  },
-  {
-   "name": "compute.blockStorage.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/volumes/{id}",
-     "summary": "Delete Volume"
-    }
-   ]
-  },
-  {
-   "name": "compute.blockStorage.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/volumes/{id}",
-     "summary": "Get information about a Volume"
-    }
-   ]
-  },
-  {
-   "name": "compute.blockStorage.update",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/volumes/{id}",
-     "summary": "Update Volume"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/volumes/{id}/vms/link",
-     "summary": "Link Volume to a Virtual Machine"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/volumes/{id}/vms/unlink",
-     "summary": "Unlink Volume from a Virtual Machine"
-    }
-   ]
-  },
-  {
-   "name": "compute.dhcpOptions.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/dhcpOptions",
-     "summary": "Create DHCP options"
-    }
-   ]
-  },
-  {
-   "name": "compute.dhcpOptions.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/dhcpOptions/{id}",
-     "summary": "Delete DHCP options"
-    }
-   ]
-  },
-  {
-   "name": "compute.dhcpOptions.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/dhcpOptions/{id}",
-     "summary": "Get information about DHCP options"
-    }
-   ]
-  },
-  {
-   "name": "compute.gpu.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/flexibleGpus",
-     "summary": "Create Flexible GPU"
-    }
-   ]
-  },
-  {
-   "name": "compute.gpu.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/flexibleGpus/{id}",
-     "summary": "Delete Flexible GPU"
-    }
-   ]
-  },
-  {
-   "name": "compute.gpu.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/flexibleGpus/{id}",
-     "summary": "Get information about a Flexible GPU"
-    }
-   ]
-  },
-  {
-   "name": "compute.gpu.update",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/flexibleGpus/{id}",
-     "summary": "Update Flexible GPU"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/flexibleGpus/{id}/vms/link",
-     "summary": "Link Flexible GPU to a VM"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/flexibleGpus/{id}/vms/unlink",
-     "summary": "Unlink Flexible GPU from a VM"
-    }
-   ]
-  },
-  {
-   "name": "compute.image.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/images",
-     "summary": "Create Image"
-    }
-   ]
-  },
-  {
-   "name": "compute.image.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/images/{id}",
-     "summary": "Delete Image"
-    }
-   ]
-  },
-  {
-   "name": "compute.image.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/images/{id}",
-     "summary": "Get information about an Image"
-    }
-   ]
-  },
-  {
-   "name": "compute.internetGateway.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/internetGateways",
-     "summary": "Create Internet Gateway"
-    }
-   ]
-  },
-  {
-   "name": "compute.internetGateway.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/internetGateways/{id}",
-     "summary": "Delete Internet Gateway"
-    }
-   ]
-  },
-  {
-   "name": "compute.internetGateway.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/internetGateways/{id}",
-     "summary": "Get information about an Internet Gateway"
-    }
-   ]
-  },
-  {
-   "name": "compute.internetGateway.update",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/internetGateways/{id}/vpcs/link",
-     "summary": "Link an Internet Gateway to a VPC"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/internetGateways/{id}/vpcs/unlink",
-     "summary": "Unlink an Internet Gateway from a VPC"
-    }
-   ]
-  },
-  {
-   "name": "compute.keypair.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/keypairs",
-     "summary": "Create Keypair"
-    }
-   ]
-  },
-  {
-   "name": "compute.keypair.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/keypairs/{id}",
-     "summary": "Delete Keypair"
-    }
-   ]
-  },
-  {
-   "name": "compute.keypair.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/keypairs/{id}",
-     "summary": "Get information about a Keypair"
-    }
-   ]
-  },
-  {
-   "name": "compute.loadBalancer.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/listenerRules",
-     "summary": "Create Listener Rule"
-    },
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/loadBalancers",
-     "summary": "Create Load Balancer"
-    }
-   ]
-  },
-  {
-   "name": "compute.loadBalancer.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/listenerRules/{id}",
-     "summary": "Delete Listener Rule"
-    },
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/loadBalancers/{id}",
-     "summary": "Delete Load Balancer"
-    }
-   ]
-  },
-  {
-   "name": "compute.loadBalancer.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/listenerRules/{id}",
-     "summary": "Get information about a Listener Rule"
-    },
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/loadBalancers/{id}",
-     "summary": "Get information about a Load Balancer"
-    },
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/loadBalancers/{id}/vmsHealth",
-     "summary": "Read VMs health"
-    }
-   ]
-  },
-  {
-   "name": "compute.loadBalancer.update",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/listenerRules/{id}",
-     "summary": "Update Listener Rule"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/loadBalancers/{id}",
-     "summary": "Update Load Balancer"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/loadBalancers/{id}/backendMachines/link",
-     "summary": "Link Load Balancer to a VM"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/loadBalancers/{id}/backendMachines/unlink",
-     "summary": "Unlink Load Balancer from a VM"
-    },
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/loadBalancers/{id}/listeners",
-     "summary": "Delete Load Balancer Listener"
-    },
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/loadBalancers/{id}/listeners",
-     "summary": "Create Load Balancer Listener"
-    },
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/loadBalancers/{id}/policies",
-     "summary": "Delete Load Balancer Policy"
-    },
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/loadBalancers/{id}/policies",
-     "summary": "Create Load Balancer Policy"
-    }
-   ]
-  },
-  {
-   "name": "compute.natGateway.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/natGateways",
-     "summary": "Create NAT Gateway"
-    }
-   ]
-  },
-  {
-   "name": "compute.natGateway.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/natGateways/{id}",
-     "summary": "Delete NAT Gateway"
-    }
-   ]
-  },
-  {
-   "name": "compute.natGateway.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/natGateways/{id}",
-     "summary": "Get information about a NAT Gateway"
-    }
-   ]
-  },
-  {
-   "name": "compute.nic.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/nics",
-     "summary": "Create NIC"
-    }
-   ]
-  },
-  {
-   "name": "compute.nic.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/nics/{id}",
-     "summary": "Delete NIC"
-    }
-   ]
-  },
-  {
-   "name": "compute.nic.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/nics/{id}",
-     "summary": "Get information about a NIC"
-    }
-   ]
-  },
-  {
-   "name": "compute.nic.update",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/nics/{id}",
-     "summary": "Update NIC"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/nics/{id}/privateIps/link",
-     "summary": "Link a NIC to Private IP(s)"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/nics/{id}/privateIps/unlink",
-     "summary": "Unlink NIC from Private IP(s)"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/nics/{id}/vms/link",
-     "summary": "Link a NIC to a VM"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/nics/{id}/vms/unlink",
-     "summary": "Unlink a NIC from a VM"
-    }
-   ]
-  },
-  {
-   "name": "compute.publicIp.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/publicIps",
-     "summary": "Create Public IP"
-    }
-   ]
-  },
-  {
-   "name": "compute.publicIp.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/publicIps/{id}",
-     "summary": "Delete Public IP"
-    }
-   ]
-  },
-  {
-   "name": "compute.publicIp.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/publicIps/{id}",
-     "summary": "Get Information of a Public IP"
-    }
-   ]
-  },
-  {
-   "name": "compute.publicIp.update",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/publicIps/{id}/link",
-     "summary": "Link Public IP to a VM or a NIC"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/publicIps/{id}/unlink",
-     "summary": "Unlink a Public IP from a NIC or a VM"
-    }
-   ]
-  },
-  {
-   "name": "compute.routeTable.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/routeTables",
-     "summary": "Create Route Table"
-    }
-   ]
-  },
-  {
-   "name": "compute.routeTable.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/routeTables/{id}",
-     "summary": "Delete Route Table"
-    }
-   ]
-  },
-  {
-   "name": "compute.routeTable.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/routeTables/{id}",
-     "summary": "Get information of a Route Table"
-    }
-   ]
-  },
-  {
-   "name": "compute.routeTable.update",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/routeTables/{id}/routePropagation",
-     "summary": "Activate or Deactivate a Route Table propagation"
-    },
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/routeTables/{id}/routes",
-     "summary": "Delete Route from a Route Table"
-    },
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/routeTables/{id}/routes",
-     "summary": "Create route in a Route Table"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/routeTables/{id}/routes",
-     "summary": "Update Route in a Route Table"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/routeTables/{id}/subnets/link",
-     "summary": "Link a Route Table to a Subnet"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/routeTables/{id}/subnets/unlink",
-     "summary": "Unlink a Route Table from a Subnet"
-    }
-   ]
-  },
-  {
-   "name": "compute.securityGroup.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/securityGroups",
-     "summary": "Create Security Group"
-    }
-   ]
-  },
-  {
-   "name": "compute.securityGroup.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/securityGroups/{id}",
-     "summary": "Delete Security Group"
-    }
-   ]
-  },
-  {
-   "name": "compute.securityGroup.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/securityGroups/{id}",
-     "summary": "Get information about a Security Group"
-    }
-   ]
-  },
-  {
-   "name": "compute.securityGroup.update",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/securityGroups/{id}/rules",
-     "summary": "Delete Security Group Rule(s)"
-    },
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/securityGroups/{id}/rules",
-     "summary": "Create Security Group Rule(s)"
-    }
-   ]
-  },
-  {
-   "name": "compute.serverCertificate.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/serverCertificates",
-     "summary": "Create Server Certificate"
-    }
-   ]
-  },
-  {
-   "name": "compute.serverCertificate.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/serverCertificates/{id}",
-     "summary": "Delete Server Certificate"
-    }
-   ]
-  },
-  {
-   "name": "compute.serverCertificate.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/serverCertificates",
-     "summary": "List Server Certificate(s)"
-    }
-   ]
-  },
-  {
-   "name": "compute.serverCertificate.update",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/serverCertificates/{id}",
-     "summary": "Update Server Certificate"
-    }
-   ]
-  },
-  {
-   "name": "compute.snapshot.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/snapshots",
-     "summary": "Create Snapshot"
-    }
-   ]
-  },
-  {
-   "name": "compute.snapshot.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/snapshots/{id}",
-     "summary": "Delete Snapshot"
-    }
-   ]
-  },
-  {
-   "name": "compute.snapshot.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/snapshots/{id}",
-     "summary": "Get information about a Snapshot"
-    }
-   ]
-  },
-  {
-   "name": "compute.subnet.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/subnets",
-     "summary": "Create Subnet"
-    }
-   ]
-  },
-  {
-   "name": "compute.subnet.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/subnets/{id}",
-     "summary": "Delete Subnet"
-    }
-   ]
-  },
-  {
-   "name": "compute.subnet.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/subnets/{id}",
-     "summary": "Get information about a Subnet"
-    }
-   ]
-  },
-  {
-   "name": "compute.subnet.update",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/subnets/{id}",
-     "summary": "Update Subnet"
-    }
-   ]
-  },
-  {
-   "name": "compute.vm.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/vms",
-     "summary": "Create Virtual Machine"
-    }
-   ]
-  },
-  {
-   "name": "compute.vm.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/vms/{id}",
-     "summary": "Delete Virtual Machine"
-    }
-   ]
-  },
-  {
-   "name": "compute.vm.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/vms/{id}",
-     "summary": "Get information about a Virtual Machine"
-    },
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/vms/{id}/adminPasswords",
-     "summary": "Get the admin password of a Virtual Machine"
-    },
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/vms/{id}/consoleOutputs",
-     "summary": "Get console output of a Virtual Machine"
-    }
-   ]
-  },
-  {
-   "name": "compute.vm.update",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/vms/{id}",
-     "summary": "Update Virtual Machine"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/vms/{id}/reboot",
-     "summary": "Reboot a Virtual Machine"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/vms/{id}/start",
-     "summary": "Start a Virtual Machine"
-    },
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/vms/{id}/stop",
-     "summary": "Stop a Virtual Machine"
-    }
-   ]
-  },
-  {
-   "name": "compute.vpc.create",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/compute/spaces/{spaceId}/vpcs",
-     "summary": "Create VPC(s)"
-    }
-   ]
-  },
-  {
-   "name": "compute.vpc.delete",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/compute/spaces/{spaceId}/vpcs/{id}",
-     "summary": "Delete VPC"
-    }
-   ]
-  },
-  {
-   "name": "compute.vpc.get",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/compute/spaces/{spaceId}/vpcs/{id}",
-     "summary": "Get information about a VPC"
-    }
-   ]
-  },
-  {
-   "name": "compute.vpc.update",
-   "domain": "compute",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PUT",
-     "path": "/compute/spaces/{spaceId}/vpcs/{id}",
-     "summary": "Update VPC"
-    }
-   ]
-  },
-  {
-   "name": "connectivity.bridge.create",
-   "domain": "connectivity",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/connectivity/spaces/{spaceId}/bridges",
-     "summary": "Create a bridge"
-    },
-    {
-     "method": "POST",
-     "path": "/connectivity/spaces/{spaceId}/computeBridges",
-     "summary": "Create a compute bridge"
-    },
-    {
-     "method": "POST",
-     "path": "/connectivity/spaces/{spaceId}/hybridBridges",
-     "summary": "Create a hybrid bridge"
-    }
-   ]
-  },
-  {
-   "name": "connectivity.bridge.delete",
-   "domain": "connectivity",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/connectivity/spaces/{spaceId}/bridges/{id}",
-     "summary": "Delete a bridge"
-    },
-    {
-     "method": "DELETE",
-     "path": "/connectivity/spaces/{spaceId}/computeBridges/{id}",
-     "summary": "Delete a compute bridge"
-    },
-    {
-     "method": "DELETE",
-     "path": "/connectivity/spaces/{spaceId}/hybridBridges/{id}",
-     "summary": "Delete a hybrid bridge"
-    }
-   ]
-  },
-  {
-   "name": "connectivity.bridge.get",
-   "domain": "connectivity",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/connectivity/spaces/{spaceId}/bridges/{id}",
-     "summary": "Read a bridge"
-    },
-    {
-     "method": "GET",
-     "path": "/connectivity/spaces/{spaceId}/computeBridges/{id}",
-     "summary": "Read a compute bridge"
-    },
-    {
-     "method": "GET",
-     "path": "/connectivity/spaces/{spaceId}/hybridBridges/{id}",
-     "summary": "Read a hybrid bridge"
-    }
-   ]
-  },
-  {
-   "name": "connectivity.directlink.create",
-   "domain": "connectivity",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/connectivity/spaces/{spaceId}/directLinkInterfaces",
-     "summary": "Create direct link interface"
-    },
-    {
-     "method": "POST",
-     "path": "/connectivity/spaces/{spaceId}/directLinks",
-     "summary": "Create direct link"
-    }
-   ]
-  },
-  {
-   "name": "connectivity.directlink.delete",
-   "domain": "connectivity",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/connectivity/spaces/{spaceId}/directLinkInterfaces/{id}",
-     "summary": "Delete direct link interface"
-    },
-    {
-     "method": "DELETE",
-     "path": "/connectivity/spaces/{spaceId}/directLinks/{id}",
-     "summary": "Delete a direct link"
-    }
-   ]
-  },
-  {
-   "name": "connectivity.directlink.get",
-   "domain": "connectivity",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/connectivity/spaces/{spaceId}/directLinkInterfaces/{id}",
-     "summary": "Read direct link interface"
-    },
-    {
-     "method": "GET",
-     "path": "/connectivity/spaces/{spaceId}/directLinks/{id}",
-     "summary": "Read direct link"
-    },
-    {
-     "method": "GET",
-     "path": "/connectivity/spaces/{spaceId}/readLocations",
-     "summary": "List the locations of an Availability Zones"
-    }
-   ]
-  },
-  {
-   "name": "connectivity.vpnconnection.create",
-   "domain": "connectivity",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/connectivity/spaces/{spaceId}/clientGateways",
-     "summary": "Create a client gateway"
-    },
-    {
-     "method": "POST",
-     "path": "/connectivity/spaces/{spaceId}/virtualGateways",
-     "summary": "Create a virtual gateway"
-    },
-    {
-     "method": "POST",
-     "path": "/connectivity/spaces/{spaceId}/virtualGateways/{id}/link",
-     "summary": "Link virtual gateway"
-    },
-    {
-     "method": "POST",
-     "path": "/connectivity/spaces/{spaceId}/vpnConnections",
-     "summary": "Create a VPN connection"
-    },
-    {
-     "method": "POST",
-     "path": "/connectivity/spaces/{spaceId}/vpnConnections/{id}/routes",
-     "summary": "Create a VPN connection route"
-    }
-   ]
-  },
-  {
-   "name": "connectivity.vpnconnection.delete",
-   "domain": "connectivity",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/connectivity/spaces/{spaceId}/clientGateways/{id}",
-     "summary": "Delete a client gateway"
-    },
-    {
-     "method": "DELETE",
-     "path": "/connectivity/spaces/{spaceId}/virtualGateways/{id}",
-     "summary": "Delete a virtual gateway"
-    },
-    {
-     "method": "DELETE",
-     "path": "/connectivity/spaces/{spaceId}/virtualGateways/{id}/link",
-     "summary": "Unlink virtual gateway"
-    },
-    {
-     "method": "DELETE",
-     "path": "/connectivity/spaces/{spaceId}/vpnConnections/{id}",
-     "summary": "Delete a VPN connection"
-    },
-    {
-     "method": "DELETE",
-     "path": "/connectivity/spaces/{spaceId}/vpnConnections/{id}/routes",
-     "summary": "Delete a VPN connection route"
-    }
-   ]
-  },
-  {
-   "name": "connectivity.vpnconnection.get",
-   "domain": "connectivity",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/connectivity/spaces/{spaceId}/clientGateways/{id}",
-     "summary": "Read a client gateway"
-    },
-    {
-     "method": "GET",
-     "path": "/connectivity/spaces/{spaceId}/virtualGateways/{id}",
-     "summary": "Read virtual gateway"
-    },
-    {
-     "method": "GET",
-     "path": "/connectivity/spaces/{spaceId}/vpnConnections/{id}",
-     "summary": "Read a VPN connection"
-    }
-   ]
-  },
-  {
-   "name": "connectivity.vpnconnection.update",
-   "domain": "connectivity",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PUT",
-     "path": "/connectivity/spaces/{spaceId}/vpnConnections/{id}",
-     "summary": "Update a VPN connection"
-    }
-   ]
-  },
-  {
-   "name": "iam.accessKey.create",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/aksk",
-     "summary": "Create AK/SK for service account"
-    }
-   ]
-  },
-  {
-   "name": "iam.accessKey.delete",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/aksk/{akskId}",
-     "summary": "Delete AK/SK"
-    }
-   ]
-  },
-  {
-   "name": "iam.accessKey.get",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/aksk",
-     "summary": "List AK/SK for service account"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/aksk/{akskId}",
-     "summary": "Get AK/SK details"
-    }
-   ]
-  },
-  {
-   "name": "iam.createPolicy",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PATCH",
-     "path": "/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}",
-     "summary": "Modify IAM policy for a subject"
-    },
-    {
-     "method": "POST",
-     "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/bulk/acl",
-     "summary": "Create ACLs in bulk for a service account"
-    },
-    {
-     "method": "POST",
-     "path": "/iam/organisations/{organisationId}/users/{userId}/bulk/acl",
-     "summary": "Create ACLs in bulk for a user"
-    },
-    {
-     "method": "PATCH",
-     "path": "/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}",
-     "summary": "Update or create IAM policy for a subject"
-    },
-    {
-     "method": "POST",
-     "path": "/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}/bulk/acl",
-     "summary": "Create access control lists for a service account"
-    },
-    {
-     "method": "POST",
-     "path": "/iam/spaces/{spaceId}/users/{userId}/bulk/acl",
-     "summary": "Create access control lists for a user"
-    }
-   ]
-  },
-  {
-   "name": "iam.getPolicy",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}",
-     "summary": "Retrieve IAM policy for a subject"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/acl",
-     "summary": "Retrieve ACLs assigned to a service account"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/organisations/{organisationId}/users/{userId}/acl",
-     "summary": "Retrieve ACLs assigned to a user"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}",
-     "summary": "Retrieve IAM policy for a subject"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/spaces/{spaceId}/resource/{resourceId}",
-     "summary": "List all identities with their access rights bound to a resource"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}/acl",
-     "summary": "List access control lists for a service account"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/spaces/{spaceId}/users/{userId}/acl",
-     "summary": "List access control lists for a user"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/spaces/{spaceId}/users/{userId}/resources",
-     "summary": "List all resources with their access rights bound to an identity"
-    }
-   ]
-  },
-  {
-   "name": "iam.permission.get",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/iam/organisations/{organisationId}/permissions",
-     "summary": "List all permissions for an organisation"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/organisations/{organisationId}/permissions/{permissionUuid}",
-     "summary": "Retrieve a specific permission for an organisation"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/spaces/{spaceId}/permissions",
-     "summary": "Retrieve all permissions in a space"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/spaces/{spaceId}/permissions/{permissionUuid}",
-     "summary": "Retrieve a specific permission by UUID"
-    }
-   ]
-  },
-  {
-   "name": "iam.role.create",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/iam/organisations/{organisationId}/roles",
-     "summary": "Create a new role for an organisation"
-    },
-    {
-     "method": "POST",
-     "path": "/iam/spaces/{spaceId}/roles",
-     "summary": "Create a new role in a space"
-    }
-   ]
-  },
-  {
-   "name": "iam.role.delete",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/iam/organisations/{organisationId}/roles/{roleUuid}",
-     "summary": "Delete a role from an organisation"
-    },
-    {
-     "method": "DELETE",
-     "path": "/iam/spaces/{spaceId}/roles/{roleUuid}",
-     "summary": "Remove a role from the system"
-    }
-   ]
-  },
-  {
-   "name": "iam.role.get",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/iam/organisations/{organisationId}/roles",
-     "summary": "List all roles for an organisation"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/organisations/{organisationId}/roles/{roleUuid}",
-     "summary": "Retrieve a specific role for an organisation"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/organisations/{organisationId}/roles/{roleUuid}/permissions",
-     "summary": "Retrieve permissions assigned to a specific role"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/spaces/{spaceId}/roles",
-     "summary": "Retrieve all roles in a space"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/spaces/{spaceId}/roles/{roleUuid}",
-     "summary": "Retrieve a specific role by UUID"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/spaces/{spaceId}/roles/{roleUuid}/permissions",
-     "summary": "List all permissions associated with a role"
-    }
-   ]
-  },
-  {
-   "name": "iam.serviceAccount.create",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/iam/organisations/{organisationId}/serviceAccounts",
-     "summary": "Create service account in organisation"
-    },
-    {
-     "method": "POST",
-     "path": "/iam/spaces/{spaceId}/serviceAccounts",
-     "summary": "Create service account in space"
-    },
-    {
-     "method": "POST",
-     "path": "/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}",
-     "summary": "Assign service account to space"
-    }
-   ]
-  },
-  {
-   "name": "iam.serviceAccount.delete",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}",
-     "summary": "Delete service account"
-    },
-    {
-     "method": "DELETE",
-     "path": "/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}",
-     "summary": "Delete service account in space"
-    }
-   ]
-  },
-  {
-   "name": "iam.serviceAccount.get",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}",
-     "summary": "Get service account details"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/spaces",
-     "summary": "List spaces assigned to service account"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}",
-     "summary": "Get service account details in space"
-    }
-   ]
-  },
-  {
-   "name": "iam.serviceAccount.update",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PUT",
-     "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}",
-     "summary": "Update service account"
-    },
-    {
-     "method": "PATCH",
-     "path": "/iam/organisations/{organisationId}/spaces/{spaceId}/iampolicy/serviceAccounts/{subjectId}",
-     "summary": "Modify IAM policy of a service account on a space within an organisation"
-    },
-    {
-     "method": "PUT",
-     "path": "/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}",
-     "summary": "Update service account in space"
-    }
-   ]
-  },
-  {
-   "name": "iam.space.create",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/organisations/{organisationId}/spaces",
-     "summary": "Create a new space within an organisation"
-    }
-   ]
-  },
-  {
-   "name": "iam.space.createAdmin",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/iam/admin/organisations/{organisationId}/spaces/{spaceId}/serviceAccounts",
-     "summary": "Create admin service account"
-    }
-   ]
-  },
-  {
-   "name": "iam.space.get",
-   "domain": "iam",
-   "description": "get space(s)",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/organisations/{organisationId}/spaces/{spaceId}",
-     "summary": "Retrieve details of a specific space"
-    }
-   ]
-  },
-  {
-   "name": "iam.space.update",
-   "domain": "iam",
-   "description": "update space",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/iam/organisations/{organisationId}/spaces/{spaceId}/{subjectType}/{subjectId}",
-     "summary": "Assign a subject to a space within an organisation"
-    },
-    {
-     "method": "PATCH",
-     "path": "/organisations/{organisationId}/spaces/{spaceId}",
-     "summary": "Modify an existing space's details"
-    }
-   ]
-  },
-  {
-   "name": "iam.user.create",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/iam/organisations/{organisationId}/users",
-     "summary": "Create user in organisation."
-    },
-    {
-     "method": "POST",
-     "path": "/iam/spaces/{spaceId}/users",
-     "summary": "Create a new user"
-    },
-    {
-     "method": "POST",
-     "path": "/iam/spaces/{spaceId}/users/{userId}",
-     "summary": "Assign a user to a space within an organisation"
-    },
-    {
-     "method": "POST",
-     "path": "/iam/spaces/{spaceId}/users/{userId}/recover",
-     "summary": "Generate a recovery link to let the user set his password / totp"
-    }
-   ]
-  },
-  {
-   "name": "iam.user.delete",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/iam/organisations/{organisationId}/users/{userId}",
-     "summary": "Delete user"
-    },
-    {
-     "method": "DELETE",
-     "path": "/iam/spaces/{spaceId}/users/{userId}",
-     "summary": "Unassign an existing user"
-    }
-   ]
-  },
-  {
-   "name": "iam.user.get",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/iam/organisations/{organisationId}/users/{userId}",
-     "summary": "Get user details"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/organisations/{organisationId}/users/{userId}/spaces",
-     "summary": "List spaces assigned to user"
-    },
-    {
-     "method": "GET",
-     "path": "/iam/spaces/{spaceId}/users/{userId}",
-     "summary": "Retrieve an existing user"
-    }
-   ]
-  },
-  {
-   "name": "iam.user.recover",
-   "domain": "iam",
-   "description": "trigger a recovery link",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/iam/organisations/{organisationId}/users/{userId}/recover",
-     "summary": "Generate user recovery link"
-    }
-   ]
-  },
-  {
-   "name": "iam.user.update",
-   "domain": "iam",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PATCH",
-     "path": "/iam/organisations/{organisationId}/spaces/{spaceId}/iampolicy/users/{subjectId}",
-     "summary": "Modify IAM policy of a user on a space within an organisation"
-    },
-    {
-     "method": "PUT",
-     "path": "/iam/organisations/{organisationId}/users/{userId}",
-     "summary": "Update user"
-    },
-    {
-     "method": "PUT",
-     "path": "/iam/spaces/{spaceId}/users/{userId}",
-     "summary": "Update an existing user"
-    }
-   ]
-  },
-  {
-   "name": "inventory.resource.get",
-   "domain": "inventory",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/inventory/spaces/{spaceId}/resources",
-     "summary": "List resources by Space Id"
-    }
-   ]
-  },
-  {
-   "name": "kubernetes.cluster.create",
-   "domain": "kubernetes",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/kubernetes/spaces/{spaceId}/clusters",
-     "summary": "Create Kubernetes cluster."
-    },
-    {
-     "method": "POST",
-     "path": "/kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools",
-     "summary": "Create Kubernetes NodePool."
-    }
-   ]
-  },
-  {
-   "name": "kubernetes.cluster.delete",
-   "domain": "kubernetes",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/kubernetes/spaces/{spaceId}/clusters/{clusterId}",
-     "summary": "Delete a Kubernetes cluster."
-    },
-    {
-     "method": "DELETE",
-     "path": "/kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools/{nodePoolId}",
-     "summary": "Delete a Kubernetes NodePool."
-    }
-   ]
-  },
-  {
-   "name": "kubernetes.cluster.get",
-   "domain": "kubernetes",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/kubernetes/nodeProfiles",
-     "summary": "List Available Node Profiles."
-    },
-    {
-     "method": "GET",
-     "path": "/kubernetes/spaces/{spaceId}/clusters",
-     "summary": "List Kubernetes clusters."
-    },
-    {
-     "method": "GET",
-     "path": "/kubernetes/spaces/{spaceId}/clusters/{clusterId}",
-     "summary": "Get Kubernetes cluster informations."
-    },
-    {
-     "method": "GET",
-     "path": "/kubernetes/spaces/{spaceId}/clusters/{clusterId}/kubeConfig",
-     "summary": "Get Kubeconfig"
-    },
-    {
-     "method": "GET",
-     "path": "/kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools",
-     "summary": "List Kubernetes NodePools."
-    },
-    {
-     "method": "GET",
-     "path": "/kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools/{nodePoolId}",
-     "summary": "Get Kubernetes NodePool informations."
-    },
-    {
-     "method": "GET",
-     "path": "/kubernetes/versions",
-     "summary": "List Available Kubernetes Versions."
-    }
-   ]
-  },
-  {
-   "name": "postgresql.cluster.create",
-   "domain": "postgresql",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/postgresql/spaces/{spaceId}/clusters",
-     "summary": "Create PostgreSQL cluster"
-    }
-   ]
-  },
-  {
-   "name": "postgresql.cluster.delete",
-   "domain": "postgresql",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/postgresql/spaces/{spaceId}/clusters/{clusterId}",
-     "summary": "Delete PostgreSQL cluster"
-    }
-   ]
-  },
-  {
-   "name": "postgresql.cluster.get",
-   "domain": "postgresql",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/postgresql/spaces/{spaceId}/backups",
-     "summary": "List space backups"
-    },
-    {
-     "method": "GET",
-     "path": "/postgresql/spaces/{spaceId}/clusters",
-     "summary": "List PostgreSQL clusters"
-    },
-    {
-     "method": "GET",
-     "path": "/postgresql/spaces/{spaceId}/clusters/{clusterId}",
-     "summary": "Read PostgreSQL cluster"
-    },
-    {
-     "method": "GET",
-     "path": "/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups",
-     "summary": "List backups"
-    },
-    {
-     "method": "GET",
-     "path": "/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId}",
-     "summary": "Get backup"
-    },
-    {
-     "method": "GET",
-     "path": "/postgresql/versions",
-     "summary": "List supported PostgreSQL versions"
-    }
-   ]
-  },
-  {
-   "name": "postgresql.cluster.resetPassword",
-   "domain": "postgresql",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PUT",
-     "path": "/postgresql/spaces/{spaceId}/clusters/{clusterId}/password/reset",
-     "summary": "Reset PostgreSQL cluster password"
-    }
-   ]
-  },
-  {
-   "name": "postgresql.cluster.update",
-   "domain": "postgresql",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PATCH",
-     "path": "/postgresql/spaces/{spaceId}/clusters/{clusterId}",
-     "summary": "Modify PostgreSQL cluster"
-    },
-    {
-     "method": "POST",
-     "path": "/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups",
-     "summary": "Create backup"
-    },
-    {
-     "method": "DELETE",
-     "path": "/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId}",
-     "summary": "Delete backup"
-    }
-   ]
-  },
-  {
-   "name": "registry.instance.create",
-   "domain": "registry",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "POST",
-     "path": "/registry/spaces/{spaceId}/registries",
-     "summary": "Create a Registry"
-    }
-   ]
-  },
-  {
-   "name": "registry.instance.delete",
-   "domain": "registry",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "DELETE",
-     "path": "/registry/spaces/{spaceId}/registries/{registryId}",
-     "summary": "Delete a Registry."
-    }
-   ]
-  },
-  {
-   "name": "registry.instance.get",
-   "domain": "registry",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "GET",
-     "path": "/registry/spaces/{spaceId}/registries",
-     "summary": "List Registries"
-    },
-    {
-     "method": "GET",
-     "path": "/registry/spaces/{spaceId}/registries/{registryId}",
-     "summary": "Read a Registry By Id and SpaceId"
-    },
-    {
-     "method": "GET",
-     "path": "/registry/spaces/{spaceId}/registries/{registryId}/password",
-     "summary": "Get admin password"
-    },
-    {
-     "method": "GET",
-     "path": "/registry/versions",
-     "summary": "List registry versions"
-    }
-   ]
-  },
-  {
-   "name": "registry.instance.update",
-   "domain": "registry",
-   "description": "",
-   "endpoints": [
-    {
-     "method": "PUT",
-     "path": "/registry/spaces/{spaceId}/registries/{registryId}",
-     "summary": "Update a Registry"
-    },
-    {
-     "method": "PUT",
-     "path": "/registry/spaces/{spaceId}/registries/{registryId}/password/reset",
-     "summary": "Reset admin password"
-    }
-   ]
-  }
- ]
+  "updatedAt": "2026-10-07",
+  "permissions": [
+    {
+      "name": "compute.blockStorage.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7890-2dac-99c4da75416f",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/volumes",
+          "summary": "Create Volume"
+        }
+      ]
+    },
+    {
+      "name": "compute.blockStorage.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7bd2-c8e5-10a941b6426f",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/volumes/{id}",
+          "summary": "Delete Volume"
+        }
+      ]
+    },
+    {
+      "name": "compute.blockStorage.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7b93-cd0f-5f1d9335484f",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/volumes/{id}",
+          "summary": "Get information about a Volume"
+        }
+      ]
+    },
+    {
+      "name": "compute.blockStorage.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7893-2ee9-177837534ac2",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/volumes/{id}",
+          "summary": "Update Volume"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/volumes/{id}/vms/link",
+          "summary": "Link Volume to a Virtual Machine"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/volumes/{id}/vms/unlink",
+          "summary": "Unlink Volume from a Virtual Machine"
+        }
+      ]
+    },
+    {
+      "name": "compute.dhcpOptions.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7853-cd18-4442dd3d43ca",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/dhcpOptions",
+          "summary": "Create DHCP options"
+        }
+      ]
+    },
+    {
+      "name": "compute.dhcpOptions.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7ad2-a2db-86b125994efc",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/dhcpOptions/{id}",
+          "summary": "Delete DHCP options"
+        }
+      ]
+    },
+    {
+      "name": "compute.dhcpOptions.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7851-f958-abdde6044294",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/dhcpOptions/{id}",
+          "summary": "Get information about DHCP options"
+        }
+      ]
+    },
+    {
+      "name": "compute.gpu.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7892-7a03-eb58609a4611",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/flexibleGpus",
+          "summary": "Create Flexible GPU"
+        }
+      ]
+    },
+    {
+      "name": "compute.gpu.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7951-0a8a-9dafa668480d",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/flexibleGpus/{id}",
+          "summary": "Delete Flexible GPU"
+        }
+      ]
+    },
+    {
+      "name": "compute.gpu.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7a52-d5f2-c50c6f344f58",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/flexibleGpus/{id}",
+          "summary": "Get information about a Flexible GPU"
+        }
+      ]
+    },
+    {
+      "name": "compute.gpu.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7b13-58ce-0cccb6ba47ea",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/flexibleGpus/{id}",
+          "summary": "Update Flexible GPU"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/flexibleGpus/{id}/vms/link",
+          "summary": "Link Flexible GPU to a VM"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/flexibleGpus/{id}/vms/unlink",
+          "summary": "Unlink Flexible GPU from a VM"
+        }
+      ]
+    },
+    {
+      "name": "compute.image.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7a11-9aff-52646cc94707",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/images",
+          "summary": "Create Image"
+        }
+      ]
+    },
+    {
+      "name": "compute.image.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7b13-ab38-5ae8af2c4d15",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/images/{id}",
+          "summary": "Delete Image"
+        }
+      ]
+    },
+    {
+      "name": "compute.image.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7bd1-539d-304f34104d5b",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/images/{id}",
+          "summary": "Get information about an Image"
+        }
+      ]
+    },
+    {
+      "name": "compute.internetGateway.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7b12-2bb5-f8781ab94a33",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/internetGateways",
+          "summary": "Create Internet Gateway"
+        }
+      ]
+    },
+    {
+      "name": "compute.internetGateway.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-78d0-1680-c042be674005",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/internetGateways/{id}",
+          "summary": "Delete Internet Gateway"
+        }
+      ]
+    },
+    {
+      "name": "compute.internetGateway.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7b10-2fbb-b6e65d6c48cb",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/internetGateways/{id}",
+          "summary": "Get information about an Internet Gateway"
+        }
+      ]
+    },
+    {
+      "name": "compute.internetGateway.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-78d0-65cb-3eb5ce154ce7",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/internetGateways/{id}/vpcs/link",
+          "summary": "Link an Internet Gateway to a VPC"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/internetGateways/{id}/vpcs/unlink",
+          "summary": "Unlink an Internet Gateway from a VPC"
+        }
+      ]
+    },
+    {
+      "name": "compute.keypair.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-78d0-bfd9-cf347e5d4db0",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/keypairs",
+          "summary": "Create Keypair"
+        }
+      ]
+    },
+    {
+      "name": "compute.keypair.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7b10-e5d1-bd00bf1c456b",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/keypairs/{id}",
+          "summary": "Delete Keypair"
+        }
+      ]
+    },
+    {
+      "name": "compute.keypair.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7950-afb1-cf56369d4c96",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/keypairs/{id}",
+          "summary": "Get information about a Keypair"
+        }
+      ]
+    },
+    {
+      "name": "compute.loadBalancer.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7992-7e4a-7d5c0a454956",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/listenerRules",
+          "summary": "Create Listener Rule"
+        },
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/loadBalancers",
+          "summary": "Create Load Balancer"
+        }
+      ]
+    },
+    {
+      "name": "compute.loadBalancer.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7953-dbac-24fa9d5e4bfe",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/listenerRules/{id}",
+          "summary": "Delete Listener Rule"
+        },
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/loadBalancers/{id}",
+          "summary": "Delete Load Balancer"
+        }
+      ]
+    },
+    {
+      "name": "compute.loadBalancer.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7851-fbc8-c6d41ef041a4",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/listenerRules/{id}",
+          "summary": "Get information about a Listener Rule"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/loadBalancers/{id}",
+          "summary": "Get information about a Load Balancer"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/loadBalancers/{id}/vmsHealth",
+          "summary": "Read VMs health"
+        }
+      ]
+    },
+    {
+      "name": "compute.loadBalancer.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7a12-c157-9fa168294270",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/listenerRules/{id}",
+          "summary": "Update Listener Rule"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/loadBalancers/{id}",
+          "summary": "Update Load Balancer"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/loadBalancers/{id}/backendMachines/link",
+          "summary": "Link Load Balancer to a VM"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/loadBalancers/{id}/backendMachines/unlink",
+          "summary": "Unlink Load Balancer from a VM"
+        },
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/loadBalancers/{id}/listeners",
+          "summary": "Delete Load Balancer Listener"
+        },
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/loadBalancers/{id}/listeners",
+          "summary": "Create Load Balancer Listener"
+        },
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/loadBalancers/{id}/policies",
+          "summary": "Delete Load Balancer Policy"
+        },
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/loadBalancers/{id}/policies",
+          "summary": "Create Load Balancer Policy"
+        }
+      ]
+    },
+    {
+      "name": "compute.natGateway.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7952-60aa-d042c2864acd",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/natGateways",
+          "summary": "Create NAT Gateway"
+        }
+      ]
+    },
+    {
+      "name": "compute.natGateway.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7b53-1ea3-8e125d4047b3",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/natGateways/{id}",
+          "summary": "Delete NAT Gateway"
+        }
+      ]
+    },
+    {
+      "name": "compute.natGateway.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7ad2-5004-95d68b3e4911",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/natGateways/{id}",
+          "summary": "Get information about a NAT Gateway"
+        }
+      ]
+    },
+    {
+      "name": "compute.nic.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7a51-71a1-a7f371e94780",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/nics",
+          "summary": "Create NIC"
+        }
+      ]
+    },
+    {
+      "name": "compute.nic.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7a50-bea1-58cfa8154dd2",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/nics/{id}",
+          "summary": "Delete NIC"
+        }
+      ]
+    },
+    {
+      "name": "compute.nic.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7992-5365-3c6e5ce64eda",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/nics/{id}",
+          "summary": "Get information about a NIC"
+        }
+      ]
+    },
+    {
+      "name": "compute.nic.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7853-323e-a774dd084d39",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/nics/{id}",
+          "summary": "Update NIC"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/nics/{id}/privateIps/link",
+          "summary": "Link a NIC to Private IP(s)"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/nics/{id}/privateIps/unlink",
+          "summary": "Unlink NIC from Private IP(s)"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/nics/{id}/vms/link",
+          "summary": "Link a NIC to a VM"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/nics/{id}/vms/unlink",
+          "summary": "Unlink a NIC from a VM"
+        }
+      ]
+    },
+    {
+      "name": "compute.publicIp.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7952-b3d3-accd551b4eeb",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/publicIps",
+          "summary": "Create Public IP"
+        }
+      ]
+    },
+    {
+      "name": "compute.publicIp.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7bd0-796d-0362f59e48f0",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/publicIps/{id}",
+          "summary": "Delete Public IP"
+        }
+      ]
+    },
+    {
+      "name": "compute.publicIp.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7ad1-8cef-667cfb0f4d7c",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/publicIps/{id}",
+          "summary": "Get Information of a Public IP"
+        }
+      ]
+    },
+    {
+      "name": "compute.publicIp.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7952-feca-e5867fa54349",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/publicIps/{id}/link",
+          "summary": "Link Public IP to a VM or a NIC"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/publicIps/{id}/unlink",
+          "summary": "Unlink a Public IP from a NIC or a VM"
+        }
+      ]
+    },
+    {
+      "name": "compute.routeTable.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7812-fd67-6ce6d81c49f9",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/routeTables",
+          "summary": "Create Route Table"
+        }
+      ]
+    },
+    {
+      "name": "compute.routeTable.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7b92-411f-caad3e714c27",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/routeTables/{id}",
+          "summary": "Delete Route Table"
+        }
+      ]
+    },
+    {
+      "name": "compute.routeTable.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7b90-933c-13b65e534a8b",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/routeTables/{id}",
+          "summary": "Get information of a Route Table"
+        }
+      ]
+    },
+    {
+      "name": "compute.routeTable.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7892-9b63-b683031743d9",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/routeTables/{id}/routePropagation",
+          "summary": "Activate or Deactivate a Route Table propagation"
+        },
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/routeTables/{id}/routes",
+          "summary": "Delete Route from a Route Table"
+        },
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/routeTables/{id}/routes",
+          "summary": "Create route in a Route Table"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/routeTables/{id}/routes",
+          "summary": "Update Route in a Route Table"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/routeTables/{id}/subnets/link",
+          "summary": "Link a Route Table to a Subnet"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/routeTables/{id}/subnets/unlink",
+          "summary": "Unlink a Route Table from a Subnet"
+        }
+      ]
+    },
+    {
+      "name": "compute.securityGroup.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-78d3-114f-136731fb4dcd",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/securityGroups",
+          "summary": "Create Security Group"
+        }
+      ]
+    },
+    {
+      "name": "compute.securityGroup.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7953-b555-f2b4746d4520",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/securityGroups/{id}",
+          "summary": "Delete Security Group"
+        }
+      ]
+    },
+    {
+      "name": "compute.securityGroup.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7a50-ce4e-2c94057d482b",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/securityGroups/{id}",
+          "summary": "Get information about a Security Group"
+        }
+      ]
+    },
+    {
+      "name": "compute.securityGroup.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7bd1-5440-8ea593564642",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/securityGroups/{id}/rules",
+          "summary": "Delete Security Group Rule(s)"
+        },
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/securityGroups/{id}/rules",
+          "summary": "Create Security Group Rule(s)"
+        }
+      ]
+    },
+    {
+      "name": "compute.serverCertificate.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7953-8b66-4794ab0a4aa6",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/serverCertificates",
+          "summary": "Create Server Certificate"
+        }
+      ]
+    },
+    {
+      "name": "compute.serverCertificate.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7953-f1a5-02df2a4745cd",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/serverCertificates/{id}",
+          "summary": "Delete Server Certificate"
+        }
+      ]
+    },
+    {
+      "name": "compute.serverCertificate.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7a52-8f92-bb926cce41e7",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/serverCertificates",
+          "summary": "List Server Certificate(s)"
+        }
+      ]
+    },
+    {
+      "name": "compute.serverCertificate.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7b91-c318-d5df4f8b4d01",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/serverCertificates/{id}",
+          "summary": "Update Server Certificate"
+        }
+      ]
+    },
+    {
+      "name": "compute.snapshot.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7993-9355-cfdfb155439e",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/snapshots",
+          "summary": "Create Snapshot"
+        }
+      ]
+    },
+    {
+      "name": "compute.snapshot.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7bd3-6111-092ebe594060",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/snapshots/{id}",
+          "summary": "Delete Snapshot"
+        }
+      ]
+    },
+    {
+      "name": "compute.snapshot.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7b10-b0c1-e3b0357d457b",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/snapshots/{id}",
+          "summary": "Get information about a Snapshot"
+        }
+      ]
+    },
+    {
+      "name": "compute.subnet.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7850-8a15-e7ff56f04f51",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/subnets",
+          "summary": "Create Subnet"
+        }
+      ]
+    },
+    {
+      "name": "compute.subnet.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-79d1-25d6-4fbed2d44607",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/subnets/{id}",
+          "summary": "Delete Subnet"
+        }
+      ]
+    },
+    {
+      "name": "compute.subnet.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-78d3-fa58-e7c1f2984c6b",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/subnets/{id}",
+          "summary": "Get information about a Subnet"
+        }
+      ]
+    },
+    {
+      "name": "compute.subnet.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7990-6d07-61230fc64752",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/subnets/{id}",
+          "summary": "Update Subnet"
+        }
+      ]
+    },
+    {
+      "name": "compute.vm.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7812-0a9f-63481b8f47eb",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/vms",
+          "summary": "Create Virtual Machine"
+        }
+      ]
+    },
+    {
+      "name": "compute.vm.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7a13-e357-d9b4133d4798",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/vms/{id}",
+          "summary": "Delete Virtual Machine"
+        }
+      ]
+    },
+    {
+      "name": "compute.vm.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-78d1-9ca0-bf005ed24fb5",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/vms/{id}",
+          "summary": "Get information about a Virtual Machine"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/vms/{id}/adminPasswords",
+          "summary": "Get the admin password of a Virtual Machine"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/vms/{id}/consoleOutputs",
+          "summary": "Get console output of a Virtual Machine"
+        }
+      ]
+    },
+    {
+      "name": "compute.vm.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7b11-852f-381e5f444e6f",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/vms/{id}",
+          "summary": "Update Virtual Machine"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/vms/{id}/reboot",
+          "summary": "Reboot a Virtual Machine"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/vms/{id}/start",
+          "summary": "Start a Virtual Machine"
+        },
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/vms/{id}/stop",
+          "summary": "Stop a Virtual Machine"
+        }
+      ]
+    },
+    {
+      "name": "compute.vpc.create",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7a53-8735-915f09534b90",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/vpcs",
+          "summary": "Create VPC(s)"
+        }
+      ]
+    },
+    {
+      "name": "compute.vpc.delete",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7a51-e681-57268cbb4272",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/vpcs/{id}",
+          "summary": "Delete VPC"
+        }
+      ]
+    },
+    {
+      "name": "compute.vpc.get",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7991-bbd7-3c9c53f94e59",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/vpcs/{id}",
+          "summary": "Get information about a VPC"
+        }
+      ]
+    },
+    {
+      "name": "compute.vpc.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7a91-3962-ed02609445ae",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PUT",
+          "path": "/compute/spaces/{spaceId}/vpcs/{id}",
+          "summary": "Update VPC"
+        }
+      ]
+    },
+    {
+      "name": "connectivity.bridge.create",
+      "domain": "connectivity",
+      "description": "",
+      "uuid": "01956aba-f9e8-7ee2-85d1-c826541d9dc7",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/connectivity/spaces/{spaceId}/bridges",
+          "summary": "Create a bridge"
+        },
+        {
+          "method": "POST",
+          "path": "/connectivity/spaces/{spaceId}/computeBridges",
+          "summary": "Create a compute bridge"
+        },
+        {
+          "method": "POST",
+          "path": "/connectivity/spaces/{spaceId}/hybridBridges",
+          "summary": "Create a hybrid bridge"
+        }
+      ]
+    },
+    {
+      "name": "connectivity.bridge.delete",
+      "domain": "connectivity",
+      "description": "",
+      "uuid": "01956aba-f9e8-7036-8716-8b6ec47ea6ee",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/connectivity/spaces/{spaceId}/bridges/{id}",
+          "summary": "Delete a bridge"
+        },
+        {
+          "method": "DELETE",
+          "path": "/connectivity/spaces/{spaceId}/computeBridges/{id}",
+          "summary": "Delete a compute bridge"
+        },
+        {
+          "method": "DELETE",
+          "path": "/connectivity/spaces/{spaceId}/hybridBridges/{id}",
+          "summary": "Delete a hybrid bridge"
+        }
+      ]
+    },
+    {
+      "name": "connectivity.bridge.get",
+      "domain": "connectivity",
+      "description": "",
+      "uuid": "01956aba-f9e8-79b6-afee-19e2beae52bc",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/connectivity/spaces/{spaceId}/bridges/{id}",
+          "summary": "Read a bridge"
+        },
+        {
+          "method": "GET",
+          "path": "/connectivity/spaces/{spaceId}/computeBridges/{id}",
+          "summary": "Read a compute bridge"
+        },
+        {
+          "method": "GET",
+          "path": "/connectivity/spaces/{spaceId}/hybridBridges/{id}",
+          "summary": "Read a hybrid bridge"
+        }
+      ]
+    },
+    {
+      "name": "connectivity.directlink.create",
+      "domain": "connectivity",
+      "description": "",
+      "uuid": "01956adb-3ace-757a-8382-69ffbcdb8ac2",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/connectivity/spaces/{spaceId}/directLinkInterfaces",
+          "summary": "Create direct link interface"
+        },
+        {
+          "method": "POST",
+          "path": "/connectivity/spaces/{spaceId}/directLinks",
+          "summary": "Create direct link"
+        }
+      ]
+    },
+    {
+      "name": "connectivity.directlink.delete",
+      "domain": "connectivity",
+      "description": "",
+      "uuid": "01956adb-3ace-7063-998f-b941df98e891",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/connectivity/spaces/{spaceId}/directLinkInterfaces/{id}",
+          "summary": "Delete direct link interface"
+        },
+        {
+          "method": "DELETE",
+          "path": "/connectivity/spaces/{spaceId}/directLinks/{id}",
+          "summary": "Delete a direct link"
+        }
+      ]
+    },
+    {
+      "name": "connectivity.directlink.get",
+      "domain": "connectivity",
+      "description": "",
+      "uuid": "01956adb-3ace-75c4-8d2f-d972ad21aa7b",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/connectivity/spaces/{spaceId}/directLinkInterfaces/{id}",
+          "summary": "Read direct link interface"
+        },
+        {
+          "method": "GET",
+          "path": "/connectivity/spaces/{spaceId}/directLinks/{id}",
+          "summary": "Read direct link"
+        },
+        {
+          "method": "GET",
+          "path": "/connectivity/spaces/{spaceId}/readLocations",
+          "summary": "List the locations of an Availability Zones"
+        }
+      ]
+    },
+    {
+      "name": "connectivity.vpnconnection.create",
+      "domain": "connectivity",
+      "description": "",
+      "uuid": "01956adb-3acf-73e2-87e1-6ea52038e0b1",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/connectivity/spaces/{spaceId}/clientGateways",
+          "summary": "Create a client gateway"
+        },
+        {
+          "method": "POST",
+          "path": "/connectivity/spaces/{spaceId}/virtualGateways",
+          "summary": "Create a virtual gateway"
+        },
+        {
+          "method": "POST",
+          "path": "/connectivity/spaces/{spaceId}/virtualGateways/{id}/link",
+          "summary": "Link virtual gateway"
+        },
+        {
+          "method": "POST",
+          "path": "/connectivity/spaces/{spaceId}/vpnConnections",
+          "summary": "Create a VPN connection"
+        },
+        {
+          "method": "POST",
+          "path": "/connectivity/spaces/{spaceId}/vpnConnections/{id}/routes",
+          "summary": "Create a VPN connection route"
+        }
+      ]
+    },
+    {
+      "name": "connectivity.vpnconnection.delete",
+      "domain": "connectivity",
+      "description": "",
+      "uuid": "01956adb-3acf-7ea7-a4c3-238faaa5eb50",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/connectivity/spaces/{spaceId}/clientGateways/{id}",
+          "summary": "Delete a client gateway"
+        },
+        {
+          "method": "DELETE",
+          "path": "/connectivity/spaces/{spaceId}/virtualGateways/{id}",
+          "summary": "Delete a virtual gateway"
+        },
+        {
+          "method": "DELETE",
+          "path": "/connectivity/spaces/{spaceId}/virtualGateways/{id}/link",
+          "summary": "Unlink virtual gateway"
+        },
+        {
+          "method": "DELETE",
+          "path": "/connectivity/spaces/{spaceId}/vpnConnections/{id}",
+          "summary": "Delete a VPN connection"
+        },
+        {
+          "method": "DELETE",
+          "path": "/connectivity/spaces/{spaceId}/vpnConnections/{id}/routes",
+          "summary": "Delete a VPN connection route"
+        }
+      ]
+    },
+    {
+      "name": "connectivity.vpnconnection.get",
+      "domain": "connectivity",
+      "description": "",
+      "uuid": "01956adb-3acf-7c65-9d77-195132a46af3",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/connectivity/spaces/{spaceId}/clientGateways/{id}",
+          "summary": "Read a client gateway"
+        },
+        {
+          "method": "GET",
+          "path": "/connectivity/spaces/{spaceId}/virtualGateways/{id}",
+          "summary": "Read virtual gateway"
+        },
+        {
+          "method": "GET",
+          "path": "/connectivity/spaces/{spaceId}/vpnConnections/{id}",
+          "summary": "Read a VPN connection"
+        }
+      ]
+    },
+    {
+      "name": "connectivity.vpnconnection.update",
+      "domain": "connectivity",
+      "description": "",
+      "uuid": "019685b8-573c-7ce5-b1bd-ee2e9afdb250",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PUT",
+          "path": "/connectivity/spaces/{spaceId}/vpnConnections/{id}",
+          "summary": "Update a VPN connection"
+        }
+      ]
+    },
+    {
+      "name": "iam.accessKey.create",
+      "domain": "iam",
+      "description": "",
+      "tenant": [
+        "organisation"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/aksk",
+          "summary": "Create AK/SK for service account"
+        }
+      ]
+    },
+    {
+      "name": "iam.accessKey.delete",
+      "domain": "iam",
+      "description": "",
+      "tenant": [
+        "organisation"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/aksk/{akskId}",
+          "summary": "Delete AK/SK"
+        }
+      ]
+    },
+    {
+      "name": "iam.accessKey.get",
+      "domain": "iam",
+      "description": "",
+      "tenant": [
+        "organisation"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/aksk",
+          "summary": "List AK/SK for service account"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/aksk/{akskId}",
+          "summary": "Get AK/SK details"
+        }
+      ]
+    },
+    {
+      "name": "iam.createPolicy",
+      "domain": "iam",
+      "description": "",
+      "uuid": "0194db08-8b0f-7c4a-852a-9c70ea628570",
+      "tenant": [
+        "organisation",
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PATCH",
+          "path": "/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}",
+          "summary": "Modify IAM policy for a subject"
+        },
+        {
+          "method": "POST",
+          "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/bulk/acl",
+          "summary": "Create ACLs in bulk for a service account"
+        },
+        {
+          "method": "POST",
+          "path": "/iam/organisations/{organisationId}/users/{userId}/bulk/acl",
+          "summary": "Create ACLs in bulk for a user"
+        },
+        {
+          "method": "PATCH",
+          "path": "/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}",
+          "summary": "Update or create IAM policy for a subject"
+        },
+        {
+          "method": "POST",
+          "path": "/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}/bulk/acl",
+          "summary": "Create access control lists for a service account"
+        },
+        {
+          "method": "POST",
+          "path": "/iam/spaces/{spaceId}/users/{userId}/bulk/acl",
+          "summary": "Create access control lists for a user"
+        }
+      ]
+    },
+    {
+      "name": "iam.getPolicy",
+      "domain": "iam",
+      "description": "",
+      "uuid": "0194db07-046f-7c4a-8521-287af49b1dbf",
+      "tenant": [
+        "organisation",
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/iam/organisations/{organisationId}/iampolicy/{subjectType}/{subjectId}",
+          "summary": "Retrieve IAM policy for a subject"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/acl",
+          "summary": "Retrieve ACLs assigned to a service account"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/organisations/{organisationId}/users/{userId}/acl",
+          "summary": "Retrieve ACLs assigned to a user"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId}",
+          "summary": "Retrieve IAM policy for a subject"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/spaces/{spaceId}/resource/{resourceId}",
+          "summary": "List all identities with their access rights bound to a resource"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}/acl",
+          "summary": "List access control lists for a service account"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/spaces/{spaceId}/users/{userId}/acl",
+          "summary": "List access control lists for a user"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/spaces/{spaceId}/users/{userId}/resources",
+          "summary": "List all resources with their access rights bound to an identity"
+        }
+      ]
+    },
+    {
+      "name": "iam.permission.get",
+      "domain": "iam",
+      "description": "",
+      "uuid": "0194db5a-f0cf-7c4a-8528-76d36adb0615",
+      "tenant": [
+        "organisation",
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/iam/organisations/{organisationId}/permissions",
+          "summary": "List all permissions for an organisation"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/organisations/{organisationId}/permissions/{permissionUuid}",
+          "summary": "Retrieve a specific permission for an organisation"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/spaces/{spaceId}/permissions",
+          "summary": "Retrieve all permissions in a space"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/spaces/{spaceId}/permissions/{permissionUuid}",
+          "summary": "Retrieve a specific permission by UUID"
+        }
+      ]
+    },
+    {
+      "name": "iam.role.create",
+      "domain": "iam",
+      "description": "",
+      "uuid": "0194db5d-fe0f-7c4a-8523-a74baaf4a279",
+      "tenant": [
+        "organisation",
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/iam/organisations/{organisationId}/roles",
+          "summary": "Create a new role for an organisation"
+        },
+        {
+          "method": "POST",
+          "path": "/iam/spaces/{spaceId}/roles",
+          "summary": "Create a new role in a space"
+        }
+      ]
+    },
+    {
+      "name": "iam.role.delete",
+      "domain": "iam",
+      "description": "",
+      "uuid": "0194db5f-84af-7c4a-852a-785d5e14f035",
+      "tenant": [
+        "organisation",
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/iam/organisations/{organisationId}/roles/{roleUuid}",
+          "summary": "Delete a role from an organisation"
+        },
+        {
+          "method": "DELETE",
+          "path": "/iam/spaces/{spaceId}/roles/{roleUuid}",
+          "summary": "Remove a role from the system"
+        }
+      ]
+    },
+    {
+      "name": "iam.role.get",
+      "domain": "iam",
+      "description": "",
+      "uuid": "0194db61-0b4f-7c4a-8521-e322deb31150",
+      "tenant": [
+        "organisation",
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/iam/organisations/{organisationId}/roles",
+          "summary": "List all roles for an organisation"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/organisations/{organisationId}/roles/{roleUuid}",
+          "summary": "Retrieve a specific role for an organisation"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/organisations/{organisationId}/roles/{roleUuid}/permissions",
+          "summary": "Retrieve permissions assigned to a specific role"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/spaces/{spaceId}/roles",
+          "summary": "Retrieve all roles in a space"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/spaces/{spaceId}/roles/{roleUuid}",
+          "summary": "Retrieve a specific role by UUID"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/spaces/{spaceId}/roles/{roleUuid}/permissions",
+          "summary": "List all permissions associated with a role"
+        }
+      ]
+    },
+    {
+      "name": "iam.serviceAccount.create",
+      "domain": "iam",
+      "description": "",
+      "uuid": "0194db4b-ae8f-7c4a-8522-4642d4956699",
+      "tenant": [
+        "organisation",
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/iam/organisations/{organisationId}/serviceAccounts",
+          "summary": "Create service account in organisation"
+        },
+        {
+          "method": "POST",
+          "path": "/iam/spaces/{spaceId}/serviceAccounts",
+          "summary": "Create service account in space"
+        },
+        {
+          "method": "POST",
+          "path": "/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}",
+          "summary": "Assign service account to space"
+        }
+      ]
+    },
+    {
+      "name": "iam.serviceAccount.delete",
+      "domain": "iam",
+      "description": "",
+      "uuid": "0194db4d-352f-7c4a-8529-72d657e3a648",
+      "tenant": [
+        "organisation",
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}",
+          "summary": "Delete service account"
+        },
+        {
+          "method": "DELETE",
+          "path": "/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}",
+          "summary": "Delete service account in space"
+        }
+      ]
+    },
+    {
+      "name": "iam.serviceAccount.get",
+      "domain": "iam",
+      "description": "",
+      "uuid": "0194db4e-bbcf-7c4a-8526-3cd4ce848a15",
+      "tenant": [
+        "organisation",
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}",
+          "summary": "Get service account details"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/spaces",
+          "summary": "List spaces assigned to service account"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}",
+          "summary": "Get service account details in space"
+        }
+      ]
+    },
+    {
+      "name": "iam.serviceAccount.update",
+      "domain": "iam",
+      "description": "",
+      "uuid": "0194db50-426f-7c4a-852d-f5c906a509a9",
+      "tenant": [
+        "organisation",
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PUT",
+          "path": "/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}",
+          "summary": "Update service account"
+        },
+        {
+          "method": "PATCH",
+          "path": "/iam/organisations/{organisationId}/spaces/{spaceId}/iampolicy/serviceAccounts/{subjectId}",
+          "summary": "Modify IAM policy of a service account on a space within an organisation"
+        },
+        {
+          "method": "PUT",
+          "path": "/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}",
+          "summary": "Update service account in space"
+        }
+      ]
+    },
+    {
+      "name": "iam.space.create",
+      "domain": "iam",
+      "description": "",
+      "tenant": [
+        "organisation"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/organisations/{organisationId}/spaces",
+          "summary": "Create a new space within an organisation"
+        }
+      ]
+    },
+    {
+      "name": "iam.space.createAdmin",
+      "domain": "iam",
+      "description": "",
+      "tenant": [
+        "organisation",
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/iam/admin/organisations/{organisationId}/spaces/{spaceId}/serviceAccounts",
+          "summary": "Create admin service account"
+        }
+      ]
+    },
+    {
+      "name": "iam.space.get",
+      "domain": "iam",
+      "description": "get space(s)",
+      "tenant": [
+        "organisation"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/organisations/{organisationId}/spaces/{spaceId}",
+          "summary": "Retrieve details of a specific space"
+        }
+      ]
+    },
+    {
+      "name": "iam.space.update",
+      "domain": "iam",
+      "description": "update space",
+      "tenant": [
+        "organisation",
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/iam/organisations/{organisationId}/spaces/{spaceId}/{subjectType}/{subjectId}",
+          "summary": "Assign a subject to a space within an organisation"
+        },
+        {
+          "method": "PATCH",
+          "path": "/organisations/{organisationId}/spaces/{spaceId}",
+          "summary": "Modify an existing space's details"
+        }
+      ]
+    },
+    {
+      "name": "iam.user.create",
+      "domain": "iam",
+      "description": "",
+      "uuid": "0194db42-86cf-7c4a-8522-00b07c25837a",
+      "tenant": [
+        "organisation",
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/iam/organisations/{organisationId}/users",
+          "summary": "Create user in organisation."
+        },
+        {
+          "method": "POST",
+          "path": "/iam/spaces/{spaceId}/users",
+          "summary": "Create a new user"
+        },
+        {
+          "method": "POST",
+          "path": "/iam/spaces/{spaceId}/users/{userId}",
+          "summary": "Assign a user to a space within an organisation"
+        },
+        {
+          "method": "POST",
+          "path": "/iam/spaces/{spaceId}/users/{userId}/recover",
+          "summary": "Generate a recovery link to let the user set his password / totp"
+        }
+      ]
+    },
+    {
+      "name": "iam.user.delete",
+      "domain": "iam",
+      "description": "",
+      "uuid": "0194db44-0d6f-7c4a-852e-85bb0c84d1ec",
+      "tenant": [
+        "organisation",
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/iam/organisations/{organisationId}/users/{userId}",
+          "summary": "Delete user"
+        },
+        {
+          "method": "DELETE",
+          "path": "/iam/spaces/{spaceId}/users/{userId}",
+          "summary": "Unassign an existing user"
+        }
+      ]
+    },
+    {
+      "name": "iam.user.get",
+      "domain": "iam",
+      "description": "",
+      "uuid": "0194db45-940f-7c4a-852a-dbd9e105e82a",
+      "tenant": [
+        "organisation",
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/iam/organisations/{organisationId}/users/{userId}",
+          "summary": "Get user details"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/organisations/{organisationId}/users/{userId}/spaces",
+          "summary": "List spaces assigned to user"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/spaces/{spaceId}/users/{userId}",
+          "summary": "Retrieve an existing user"
+        }
+      ]
+    },
+    {
+      "name": "iam.user.recover",
+      "domain": "iam",
+      "description": "trigger a recovery link",
+      "uuid": "0194db47-1aaf-7c4a-852c-fe6fcba99117",
+      "tenant": [
+        "organisation"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/iam/organisations/{organisationId}/users/{userId}/recover",
+          "summary": "Generate user recovery link"
+        }
+      ]
+    },
+    {
+      "name": "iam.user.update",
+      "domain": "iam",
+      "description": "",
+      "uuid": "0194db48-a14f-7c4a-8528-f10c1bd2b925",
+      "tenant": [
+        "organisation",
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PATCH",
+          "path": "/iam/organisations/{organisationId}/spaces/{spaceId}/iampolicy/users/{subjectId}",
+          "summary": "Modify IAM policy of a user on a space within an organisation"
+        },
+        {
+          "method": "PUT",
+          "path": "/iam/organisations/{organisationId}/users/{userId}",
+          "summary": "Update user"
+        },
+        {
+          "method": "PUT",
+          "path": "/iam/spaces/{spaceId}/users/{userId}",
+          "summary": "Update an existing user"
+        }
+      ]
+    },
+    {
+      "name": "inventory.resource.get",
+      "domain": "inventory",
+      "description": "",
+      "uuid": "0199b8bf-abb2-78d2-887e-06172da8ee4c",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/inventory/spaces/{spaceId}/resources",
+          "summary": "List resources by Space Id"
+        }
+      ]
+    },
+    {
+      "name": "kubernetes.cluster.create",
+      "domain": "kubernetes",
+      "description": "",
+      "uuid": "0194db33-448f-7c4a-852c-5eaacf845f47",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/kubernetes/spaces/{spaceId}/clusters",
+          "summary": "Create Kubernetes cluster."
+        },
+        {
+          "method": "POST",
+          "path": "/kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools",
+          "summary": "Create Kubernetes NodePool."
+        }
+      ]
+    },
+    {
+      "name": "kubernetes.cluster.delete",
+      "domain": "kubernetes",
+      "description": "",
+      "uuid": "0194db34-cb2f-7c4a-8522-370552128e98",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/kubernetes/spaces/{spaceId}/clusters/{clusterId}",
+          "summary": "Delete a Kubernetes cluster."
+        },
+        {
+          "method": "DELETE",
+          "path": "/kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools/{nodePoolId}",
+          "summary": "Delete a Kubernetes NodePool."
+        }
+      ]
+    },
+    {
+      "name": "kubernetes.cluster.get",
+      "domain": "kubernetes",
+      "description": "",
+      "uuid": "0194db36-51cf-7c4a-852a-ab7efcc666a6",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/kubernetes/nodeProfiles",
+          "summary": "List Available Node Profiles."
+        },
+        {
+          "method": "GET",
+          "path": "/kubernetes/spaces/{spaceId}/clusters",
+          "summary": "List Kubernetes clusters."
+        },
+        {
+          "method": "GET",
+          "path": "/kubernetes/spaces/{spaceId}/clusters/{clusterId}",
+          "summary": "Get Kubernetes cluster informations."
+        },
+        {
+          "method": "GET",
+          "path": "/kubernetes/spaces/{spaceId}/clusters/{clusterId}/kubeConfig",
+          "summary": "Get Kubeconfig"
+        },
+        {
+          "method": "GET",
+          "path": "/kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools",
+          "summary": "List Kubernetes NodePools."
+        },
+        {
+          "method": "GET",
+          "path": "/kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools/{nodePoolId}",
+          "summary": "Get Kubernetes NodePool informations."
+        },
+        {
+          "method": "GET",
+          "path": "/kubernetes/versions",
+          "summary": "List Available Kubernetes Versions."
+        }
+      ]
+    },
+    {
+      "name": "postgresql.cluster.create",
+      "domain": "postgresql",
+      "description": "",
+      "uuid": "0194db2a-1ccf-7c4a-8522-0b8923d1afb8",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/postgresql/spaces/{spaceId}/clusters",
+          "summary": "Create PostgreSQL cluster"
+        }
+      ]
+    },
+    {
+      "name": "postgresql.cluster.delete",
+      "domain": "postgresql",
+      "description": "",
+      "uuid": "0194db2b-a36f-7c4a-8528-894e4ee34a78",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/postgresql/spaces/{spaceId}/clusters/{clusterId}",
+          "summary": "Delete PostgreSQL cluster"
+        }
+      ]
+    },
+    {
+      "name": "postgresql.cluster.get",
+      "domain": "postgresql",
+      "description": "",
+      "uuid": "0194db2d-2a0f-7c4a-8527-8ab80247de01",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/postgresql/spaces/{spaceId}/backups",
+          "summary": "List space backups"
+        },
+        {
+          "method": "GET",
+          "path": "/postgresql/spaces/{spaceId}/clusters",
+          "summary": "List PostgreSQL clusters"
+        },
+        {
+          "method": "GET",
+          "path": "/postgresql/spaces/{spaceId}/clusters/{clusterId}",
+          "summary": "Read PostgreSQL cluster"
+        },
+        {
+          "method": "GET",
+          "path": "/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups",
+          "summary": "List backups"
+        },
+        {
+          "method": "GET",
+          "path": "/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId}",
+          "summary": "Get backup"
+        },
+        {
+          "method": "GET",
+          "path": "/postgresql/versions",
+          "summary": "List supported PostgreSQL versions"
+        }
+      ]
+    },
+    {
+      "name": "postgresql.cluster.resetPassword",
+      "domain": "postgresql",
+      "description": "",
+      "uuid": "0194db30-374f-7c4a-8529-804d922030b6",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PUT",
+          "path": "/postgresql/spaces/{spaceId}/clusters/{clusterId}/password/reset",
+          "summary": "Reset PostgreSQL cluster password"
+        }
+      ]
+    },
+    {
+      "name": "postgresql.cluster.update",
+      "domain": "postgresql",
+      "description": "",
+      "uuid": "0194db2e-b0af-7c4a-852c-8ae321720d50",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PATCH",
+          "path": "/postgresql/spaces/{spaceId}/clusters/{clusterId}",
+          "summary": "Modify PostgreSQL cluster"
+        },
+        {
+          "method": "POST",
+          "path": "/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups",
+          "summary": "Create backup"
+        },
+        {
+          "method": "DELETE",
+          "path": "/postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId}",
+          "summary": "Delete backup"
+        }
+      ]
+    },
+    {
+      "name": "registry.instance.create",
+      "domain": "registry",
+      "description": "",
+      "uuid": "261c141c-b909-42d4-9f9a-00c8b4108332",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/registry/spaces/{spaceId}/registries",
+          "summary": "Create a Registry"
+        }
+      ]
+    },
+    {
+      "name": "registry.instance.delete",
+      "domain": "registry",
+      "description": "",
+      "uuid": "ac8a66fe-bc92-44e0-96ff-125bc7c2e05e",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/registry/spaces/{spaceId}/registries/{registryId}",
+          "summary": "Delete a Registry."
+        }
+      ]
+    },
+    {
+      "name": "registry.instance.get",
+      "domain": "registry",
+      "description": "",
+      "uuid": "1c182344-39ee-4013-92d2-0efcae421758",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/registry/spaces/{spaceId}/registries",
+          "summary": "List Registries"
+        },
+        {
+          "method": "GET",
+          "path": "/registry/spaces/{spaceId}/registries/{registryId}",
+          "summary": "Read a Registry By Id and SpaceId"
+        },
+        {
+          "method": "GET",
+          "path": "/registry/spaces/{spaceId}/registries/{registryId}/password",
+          "summary": "Get admin password"
+        },
+        {
+          "method": "GET",
+          "path": "/registry/versions",
+          "summary": "List registry versions"
+        }
+      ]
+    },
+    {
+      "name": "registry.instance.update",
+      "domain": "registry",
+      "description": "",
+      "uuid": "af444a3e-b604-4a85-9291-722f12e18ed2",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": [
+        {
+          "method": "PUT",
+          "path": "/registry/spaces/{spaceId}/registries/{registryId}",
+          "summary": "Update a Registry"
+        },
+        {
+          "method": "PUT",
+          "path": "/registry/spaces/{spaceId}/registries/{registryId}/password/reset",
+          "summary": "Reset admin password"
+        }
+      ]
+    },
+    {
+      "name": "ai.mistralPlatform.create",
+      "domain": "ai",
+      "description": "",
+      "uuid": "01a0af86-0d50-75fd-903a-01f674b624ce",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "ai.mistralPlatform.delete",
+      "domain": "ai",
+      "description": "",
+      "uuid": "01a0af87-a466-708f-a877-2a8f4396a91a",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "ai.mistralPlatform.get",
+      "domain": "ai",
+      "description": "",
+      "uuid": "01a0af87-b9f3-74a4-adcd-708f433fe0c9",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "ai.mistralPlatform.update",
+      "domain": "ai",
+      "description": "",
+      "uuid": "01a0af86-2a81-7761-b609-156591c68379",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "compute.dhcpOptions.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7990-0907-5630ecc14328",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "compute.image.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7ad2-614e-b58499ac41f1",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "compute.keypair.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-79d0-cd26-001adc994c91",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "compute.natGateway.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af46-7813-515e-0ad79ba44fea",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "compute.snapshot.update",
+      "domain": "compute",
+      "description": "",
+      "uuid": "019e69ed-af47-7811-c838-59a199b14d42",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "iam.deletePolicy",
+      "domain": "iam",
+      "description": "",
+      "uuid": "0194db0a-11af-7c4a-8526-e79f47081a55",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "iam.role.update",
+      "domain": "iam",
+      "description": "",
+      "uuid": "0194db62-91ef-7c4a-852c-917c26511000",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "kubernetes.cluster.update",
+      "domain": "kubernetes",
+      "description": "",
+      "uuid": "0194db37-d86f-7c4a-8525-f08e38ee93c0",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "objectstorage.bucket.create",
+      "domain": "objectstorage",
+      "description": "",
+      "uuid": "0194db1d-e7cf-7c4a-852a-56a6eae7cced",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "objectstorage.bucket.delete",
+      "domain": "objectstorage",
+      "description": "",
+      "uuid": "0194db1f-6e6f-7c4a-8523-9232625fab6d",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "objectstorage.bucket.get",
+      "domain": "objectstorage",
+      "description": "",
+      "uuid": "0194db20-f50f-7c4a-8520-19b061d0504d",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "objectstorage.bucket.update",
+      "domain": "objectstorage",
+      "description": "",
+      "uuid": "0194db22-7baf-7c4a-8525-6b80dff131b8",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "openshift.cluster.create",
+      "domain": "openshift",
+      "description": "",
+      "uuid": "0194db3a-e5af-7c4a-8523-92a809277482",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "openshift.cluster.delete",
+      "domain": "openshift",
+      "description": "",
+      "uuid": "0194db3c-6c4f-7c4a-852c-bd7def4f2e9a",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "openshift.cluster.get",
+      "domain": "openshift",
+      "description": "",
+      "uuid": "0194db3d-f2ef-7c4a-8521-0494b43e7309",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "openshift.cluster.update",
+      "domain": "openshift",
+      "description": "",
+      "uuid": "0194db3f-798f-7c4a-8523-4da8f267ada2",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "postgresql.backup.delete",
+      "domain": "postgresql",
+      "description": "",
+      "uuid": "0194db25-88ef-7c4a-8523-7bea749c9468",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "postgresql.backup.get",
+      "domain": "postgresql",
+      "description": "",
+      "uuid": "0194db27-0f8f-7c4a-852c-b7e23804c3d4",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "postgresql.password.get",
+      "domain": "postgresql",
+      "description": "",
+      "uuid": "019d6db7-20c9-7aee-8c2d-5a8d7ae5696e",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "postgresql.password.reset",
+      "domain": "postgresql",
+      "description": "",
+      "uuid": "019d6db7-20c9-7b97-8be6-4b2e5211f301",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "registry.password.get",
+      "domain": "registry",
+      "description": "",
+      "uuid": "019d6db7-20c9-72e3-b49e-eac60915545a",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "registry.password.reset",
+      "domain": "registry",
+      "description": "",
+      "uuid": "019d6db7-20c9-7e50-baf1-01b5f9acfbaf",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "secrets.instance.create",
+      "domain": "secrets",
+      "description": "",
+      "uuid": "019d6db7-20c9-7be9-a99f-c8865cefe92b",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "secrets.instance.delete",
+      "domain": "secrets",
+      "description": "",
+      "uuid": "019d6db7-20c9-7d0b-85df-87b4c278c614",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "secrets.instance.get",
+      "domain": "secrets",
+      "description": "",
+      "uuid": "019d6db7-20c9-7f81-a8d6-e03302530247",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "secrets.password.get",
+      "domain": "secrets",
+      "description": "",
+      "uuid": "019d6db7-20c9-72ed-99cc-8037f8407dbb",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    },
+    {
+      "name": "secrets.password.reset",
+      "domain": "secrets",
+      "description": "",
+      "uuid": "019d6db7-20c9-7ed8-8518-f5c26a445117",
+      "tenant": [
+        "space"
+      ],
+      "endpoints": []
+    }
+  ]
 }

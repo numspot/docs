@@ -2,20 +2,26 @@
 title: Permissions et API associées - Documentation
 sidebar_label: Permissions et API
 sidebar_position: 6
-description: "Pour chaque permission de la plateforme, la liste des API Numspot qui l'utilisent, avec recherche par permission ou par API."
+description: "Pour chaque permission de la plateforme, les API qui l'utilisent, son UUID et les rôles standard qui l'accordent, avec recherche et filtres par tenant et par rôle."
 last_update:
-  date: 2026-09-30
+  date: 2026-10-07
 ---
 
 import PermissionsExplorer from '@site/src/components/PermissionsExplorer';
 
 # Permissions et API associées
 
-Pour chaque permission de la plateforme, cette page liste les API qui l'utilisent : utilisez la recherche pour filtrer la liste par permission ou par API, et cliquez sur un endpoint pour consulter sa définition dans la référence OpenAPI.
+Pour chaque permission de la plateforme, cette page liste les API qui l'utilisent, son UUID et les rôles standard qui l'accordent.
 
-<PermissionsExplorer />
+Les permissions sont regroupées par niveau de tenant :
+
+- **Organisation** : permissions exercées au niveau de l'organisation ;
+- **Espace** : permissions exercées au sein d'un espace — une permission disponible aux deux niveaux apparaît dans chaque groupe.
 
 :::note
-La plateforme applique le moindre privilège : une action peut nécessiter plusieurs permissions. Chaque page d'action de cette documentation précise, dans sa section Permissions, les permissions requises pour l'action correspondante.
+La plateforme applique le moindre privilège : une action peut nécessiter plusieurs permissions. Chaque page d'action de cette documentation précise, dans sa section Permissions, les permissions requises pour l'action correspondante. Certaines permissions n'ont pas d'endpoint public : l'action correspondante est réalisée depuis la console Numspot.
 :::
 
+Utilisez la recherche pour filtrer la liste par permission ou par API, les pastilles de tenant pour ne conserver qu'un seul niveau, et le menu déroulant des rôles standard pour afficher les permissions accordées par un rôle par défaut. Cliquez sur un endpoint pour consulter sa définition dans la référence OpenAPI.
+
+<PermissionsExplorer />
