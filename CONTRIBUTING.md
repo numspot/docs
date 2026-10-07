@@ -93,17 +93,6 @@ page scores below 90%. The quality target for the open-source release is
 ## Review process
 
 Every merge request is approved by a member of the support team, who checks
-compliance with the rules above. Merges to the default branch trigger an
-automatic production deployment.
+compliance with the rules above. Once merged, production deployment is
+triggered manually from the internal CI (GitLab "Run pipeline").
 
-## Yearly maintenance
-
-Update the copyright year once a year, in January:
-
-- `LICENSES/README.md` carries the only hand-maintained copyright statement
-  in the repository (`Copyright (c) 20XX Numspot and contributors.`) — bump
-  the year there.
-- The site footer in `docusaurus.config.ts` computes the year at build time
-  (`new Date().getFullYear()`) and needs no manual update.
-- The root `LICENSE` file is the verbatim CC BY 4.0 text and intentionally
-  carries no copyright line — do not edit it.

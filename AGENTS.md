@@ -214,7 +214,7 @@ A convention earns its own file there only when it is referenced by code/tools, 
 2. Make changes following the documentation rules
 3. Open a Pull Request
 4. CI runs GitHub Actions: documentation lint, linter regression tests, typecheck and build
-5. After review approval, merge to `main` → the site is deployed
+5. After review approval, merge to `main` — production deployment is then triggered manually from the internal CI (GitLab)
 
 One commit per Pull Request — squash as you go: see `PROBLEMS.md`.
 
@@ -443,7 +443,7 @@ Support
 
 - **Do not force fix package issues** - can break Docusaurus features
 - `yarn build` creates production content; use `--dev` flag to include draft docs
-- Production deployment on each merge to `main`
+- Production deployment is triggered manually from the internal CI (GitLab "Run pipeline") — merging does not deploy by itself
 
 ## Common Issues
 
