@@ -1,6 +1,17 @@
 {
   "entries": [
     {
+      "service": "IAM",
+      "status": "added",
+      "date": "2026-10-07",
+      "title": "Service account access keys (AK/SK)",
+      "description": "New pages documenting the management of durable AK/SK access key pairs attached to a service account: creation (at most two active pairs per account, lifetime from 1 hour to 1 year, secret key displayed only once), list and details with the access key masked, and deletion which also revokes the sessions opened with the deleted key. These credentials authenticate programmatic access to the Object Storage.",
+      "components": [
+        "api",
+        "docs"
+      ]
+    },
+    {
       "service": "Compute",
       "status": "changed",
       "date": "2026-10-02",

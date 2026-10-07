@@ -4,7 +4,7 @@ sidebar_label: "Concepts"
 sidebar_position: 1
 draft: false
 last_update:
-  date: 2026-09-18
+  date: 2026-10-08
 ---
 
 import ActionsSummary from '@site/src/components/ActionsSummary';
@@ -31,6 +31,17 @@ Un compte de service est caractérisé par :
 À la création d'un compte de service, Numspot retourne sa clé d'accès **et** son code secret. Le code secret n'est jamais réaffiché par la suite — il faut le conserver dans un emplacement sécurisé dès la création.
 
 La clé d'accès et le code secret sont utilisés conjointement pour authentifier le compte auprès de l'API.
+
+## Clés d'accès (AK/SK)
+
+En complément du code secret généré à la création, un compte de service peut détenir jusqu'à deux paires de clés d'accès durables (AK/SK — Access Key/Secret Key). Elles authentifient un accès programmatique au stockage objet avec une signature compatible avec les outils AWS, sans échanger de token à chaque session.
+
+- La clé d'accès identifie le secret ; la clé secrète n'est affichée qu'une seule fois, lors de la création.
+- Chaque paire possède une durée de vie paramétrable, d'une heure à un an (un an par défaut), et un statut (ACTIVE, INACTIVE ou EXPIRED).
+- La clé d'accès identifie la paire de clés ;
+- La suppression d'une paire révoque immédiatement les sessions ouvertes avec celle-ci.
+
+Pour créer, lister, consulter ou supprimer ces paires, voir les actions sur les clés d'accès : [créer](/docs/iam/service-account/actions/create-aksk), [lister](/docs/iam/service-account/actions/list-aksk), [consulter](/docs/iam/service-account/actions/get-aksk) et [supprimer](/docs/iam/service-account/actions/delete-aksk). Pour une paire de clés temporaire obtenue à partir d'un token, voir le [démarrage rapide Object Storage](/docs/storage/object-storage/quickstart/).
 
 ## Espaces et permissions
 
