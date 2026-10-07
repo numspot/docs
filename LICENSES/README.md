@@ -2,10 +2,6 @@
 
 Copyright (c) 2026 Numspot and contributors.
 
-The year of the copyright line above is updated annually — see the
-[yearly maintenance](../CONTRIBUTING.md#yearly-maintenance) section of
-`CONTRIBUTING.md`.
-
 This repository contains the public documentation of the Numspot cloud
 platform. It is distributed under two licenses, depending on the type of
 material.
