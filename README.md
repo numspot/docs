@@ -58,5 +58,8 @@ not open public issues for security reports.
 ## License
 
 The documentation content is licensed under
-[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — see
-[LICENSE](LICENSE).
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — see the verbatim
+text in [LICENSE](LICENSE). Code is licensed under the
+[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) — see
+[LICENSES/Apache-2.0.txt](LICENSES/Apache-2.0.txt). The full dual-licensing
+terms are described in [LICENSES/README.md](LICENSES/README.md).
