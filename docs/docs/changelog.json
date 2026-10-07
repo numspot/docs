@@ -1,6 +1,17 @@
 {
   "entries": [
     {
+      "service": "IAM",
+      "status": "changed",
+      "date": "2026-10-16",
+      "title": "Permissions explorer: tenants, UUIDs and standard roles",
+      "description": "The IAM permissions reference now covers the full permission catalog (142 permissions), each with its tenant (organisation, space or both) and its UUID. It also adds the standard roles catalog (organisation and space levels) with the permissions each role grants, filterable by role; permissions with no public API, performed from the Numspot console, are listed and flagged.",
+      "components": [
+        "api",
+        "console"
+      ]
+    },
+    {
       "service": "Container Registry",
       "status": "changed",
       "date": "2026-10-15",

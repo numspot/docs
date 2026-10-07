@@ -2,19 +2,26 @@
 title: Permissions and related APIs - Documentation
 sidebar_label: Permissions and APIs
 sidebar_position: 6
-description: "For each platform permission, the list of APIs using it, with search by permission or by API."
+description: "For each platform permission, the APIs using it, its UUID and the standard roles granting it, with search and filters by tenant and by role."
 last_update:
-  date: 2026-09-30
+  date: 2026-10-07
 ---
 
 import PermissionsExplorer from '@site/src/components/PermissionsExplorer';
 
 # Permissions and related APIs
 
-For each platform permission, this page lists the APIs that use it: use the search field to filter the list by permission or by API, and follow an endpoint to its definition in the OpenAPI reference.
+For each platform permission, this page lists the APIs that use it, its UUID and the standard roles granting it.
 
-<PermissionsExplorer />
+The permissions are grouped by tenant level:
+
+- **Organisation**: permissions exercised at the organisation level;
+- **Espace**: permissions exercised within a space — a permission available at both levels appears under each group.
 
 :::note
-The platform follows the principle of least privilege: an action may require several permissions. Every action page of this documentation states, in its Permissions section, the permissions required for the corresponding action.
+The platform follows the principle of least privilege: an action may require several permissions. Every action page of this documentation states, in its Permissions section, the permissions required for the corresponding action. Some permissions have no public endpoint: the corresponding action is performed from the Numspot console.
 :::
+
+Use the search field to filter the list by permission or by API, the tenant chips to keep one level only, and the standard role dropdown to display the permissions granted by a default role. Follow an endpoint to its definition in the OpenAPI reference.
+
+<PermissionsExplorer />

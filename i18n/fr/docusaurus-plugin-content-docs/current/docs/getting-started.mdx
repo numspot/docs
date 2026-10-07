@@ -3,7 +3,7 @@ title: Premiers pas chez Numspot - Documentation
 sidebar_label: Premiers pas
 description: "Parcours du premier utilisateur sur la console Numspot : vérification des droits, création du premier espace, des utilisateurs, attribution des droits et des espaces, premières VM et services managés."
 last_update:
-  date: 2026-09-30
+  date: 2026-10-07
 ---
 
 # Premiers pas chez Numspot
@@ -25,6 +25,7 @@ La plateforme Numspot applique le moindre privilège : chaque action de la conso
 Avant de réaliser une action, vérifiez les permissions qui lui sont nécessaires :
 
 - chaque page d'action de cette documentation indique, dans sa section Permissions, les permissions requises, au format **Domaine.Permission**, par exemple **iam.space.create** ;
+- pour parcourir l'ensemble des permissions de la plateforme, avec les API qui les utilisent, leur UUID et les rôles standard qui les accordent, voir la page [Permissions et API](/docs/iam/permissions/) ;
 - pour consulter les rôles et permissions associés à votre compte, suivez le [Démarrage rapide de la gestion des accès](/docs/iam/access/quickstart/).
 
 Le premier utilisateur est le super admin de l'organisation : il dispose des droits nécessaires pour s'attribuer l'ensemble des droits, mais n'en n'a aucun par défaut. Avant chaque action de ce guide, vérifiez les permissions requises et attribuez-vous-les via la page [Ajouter ou supprimer des rôles, permissions et ACL](/docs/iam/access/actions/attribute/).
