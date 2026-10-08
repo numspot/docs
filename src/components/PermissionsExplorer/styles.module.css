@@ -123,6 +123,341 @@
   margin: 1rem 0;
 }
 
+/* ——— Tenant filters + standard role filters ——— */
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin: 0.75rem 0 0.25rem;
+}
+
+.filterRow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.filterLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #7b8a97;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  min-width: 110px;
+}
+
+.filterChip {
+  border: 1.5px solid #cdd6de;
+  background: #fbfcfe;
+  color: #3c4a57;
+  border-radius: 999px;
+  padding: 3px 12px;
+  font-size: 0.84rem;
+  cursor: pointer;
+}
+
+.filterChip:hover {
+  border-color: var(--pex-blue);
+}
+
+.filterChipActive {
+  background: var(--pex-blue);
+  border-color: var(--pex-blue);
+  color: #fff;
+  font-weight: 600;
+}
+
+.filterReset {
+  border: 0;
+  background: none;
+  color: var(--pex-blue);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0 3px;
+  text-decoration: underline;
+}
+
+/* ——— Standard role dropdown ——— */
+
+.dropdown {
+  position: relative;
+  margin-left: auto;
+}
+
+.dropdownButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1.5px solid #cdd6de;
+  background: #fbfcfe;
+  color: #3c4a57;
+  border-radius: 999px;
+  padding: 3px 12px;
+  font-size: 0.84rem;
+  cursor: pointer;
+}
+
+.dropdownButton:hover,
+.dropdownButtonActive {
+  border-color: var(--pex-blue);
+}
+
+.dropdownButtonActive {
+  background: #f0f6ff;
+  font-weight: 600;
+}
+
+.dropdownLabel {
+  color: #7b8a97;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.dropdownValue {
+  font-weight: 600;
+}
+
+.dropdownCaret {
+  color: #7b8a97;
+  font-size: 0.75rem;
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 320px;
+  background: #fff;
+  border: 1px solid #d7dee6;
+  border-radius: 10px;
+  box-shadow: 0 12px 28px rgba(4, 19, 29, 0.12);
+  z-index: 200;
+  max-height: 420px;
+  overflow: auto;
+  padding: 4px 0;
+}
+
+.menuGroup {
+  padding: 8px 14px 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #7b8a97;
+}
+
+.menuItem {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  width: 100%;
+  border: 0;
+  background: none;
+  text-align: left;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: inherit;
+}
+
+.menuItem:hover {
+  background: #f0f6ff;
+}
+
+.menuItemActive {
+  background: #f0f6ff;
+  font-weight: 600;
+}
+
+.menuItemName {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.84rem;
+}
+
+.menuItemCount {
+  margin-left: auto;
+  color: #7b8a97;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+/* ——— Active role filter pill ——— */
+
+.activeFilter {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0.5rem 0 0.25rem;
+}
+
+.activeFilterPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.pillClear {
+  border: 0;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  color: inherit;
+  font-size: 0.68rem;
+  line-height: 1;
+  padding: 0;
+}
+
+.pillClear:hover {
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.menuItemCheck {
+  display: inline-block;
+  min-width: 14px;
+  color: var(--pex-blue);
+  font-weight: 700;
+}
+
+.activeFilterClear {
+  border: 0;
+  background: #eef2f6;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  color: #5b6b7a;
+  font-size: 0.75rem;
+  line-height: 1;
+  padding: 0;
+}
+
+.activeFilterClear:hover {
+  background: #e0e6ec;
+}
+
+[data-theme='dark'] .pillClear {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+[data-theme='dark'] .pillClear:hover {
+  background: rgba(255, 255, 255, 0.26);
+}
+
+/* ——— Tenant umbrella sections ——— */
+
+.tenantSection {
+  margin-top: 2rem;
+}
+
+.tenantHeading {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin: 0 0 0.2rem;
+  font-size: 1.45rem;
+  border-bottom: 3px solid var(--pex-blue);
+  padding-bottom: 0.3rem;
+}
+
+.tenantHint {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #7b8a97;
+}
+
+.tenantSection .domain {
+  font-size: 1.05rem;
+  margin-top: 1.3rem;
+}
+
+/* ——— UUID + role tags on permission cards ——— */
+
+.uuidLine {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0.35rem 0 0.55rem;
+  font-size: 0.82rem;
+}
+
+.uuidLabel {
+  font-weight: 700;
+  color: #7b8a97;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+}
+
+.uuidValue {
+  font-family: var(--ifm-font-family-monospace);
+  background: #eef2f6;
+  border: 1px solid #e0e6ec;
+  border-radius: 6px;
+  padding: 1px 6px;
+}
+
+.uuidCopy {
+  border: 0;
+  background: none;
+  color: var(--pex-blue);
+  cursor: pointer;
+  font-size: 0.78rem;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.roleTag {
+  display: inline-block;
+  font-family: inherit;
+  font-size: 0.74rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 2px 9px;
+  margin-left: 0.25rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.roleTag:hover {
+  box-shadow: 0 0 0 2px rgba(28, 110, 242, 0.25);
+}
+
+.roleTagActive {
+  box-shadow: 0 0 0 2px var(--pex-blue);
+}
+
+.roleTagOrganisation {
+  background: #f4ecff;
+  color: #6d28d9;
+  border: 1px solid #ddc9fb;
+}
+
+.roleTagSpace {
+  background: #e5f5ec;
+  color: #15803d;
+  border: 1px solid #bfe8cf;
+}
+
+.consoleNote {
+  color: #8a6d1d;
+  background: #fff8e1;
+  border: 1px solid #f2e3a4;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.88rem;
+  margin: 0.3rem 0 0.5rem;
+}
+
 /* ——— Domain heading ——— */
 
 .domain {
@@ -324,4 +659,68 @@ mark {
 [data-theme='dark'] mark {
   background: #6b5b12;
   color: inherit;
+}
+
+[data-theme='dark'] .filterChip {
+  background: #1b2027;
+  border-color: #3a4650;
+  color: #c6d0d9;
+}
+
+[data-theme='dark'] .filterChipActive {
+  background: var(--pex-blue);
+  border-color: var(--pex-blue);
+  color: #fff;
+}
+
+[data-theme='dark'] .tenantSection .domain,
+[data-theme='dark'] .domain {
+  border-bottom-color: #2c3640;
+}
+
+[data-theme='dark'] .uuidValue {
+  background: #262e36;
+  border-color: #35404a;
+}
+
+[data-theme='dark'] .roleTagOrganisation {
+  background: #33254d;
+  color: #c4a5f5;
+  border-color: #4d3a73;
+}
+
+[data-theme='dark'] .roleTagSpace {
+  background: #16311f;
+  color: #6fdc94;
+  border-color: #245136;
+}
+
+[data-theme='dark'] .consoleNote {
+  background: #2d2510;
+  border-color: #5a4a1a;
+  color: #e5c96a;
+}
+
+[data-theme='dark'] .activeFilterClear {
+  background: #2a323a;
+  color: #8a97a3;
+}
+
+[data-theme='dark'] .dropdownButton {
+  background: #1b2027;
+  border-color: #3a4650;
+}
+
+[data-theme='dark'] .dropdownButtonActive {
+  background: #24303c;
+}
+
+[data-theme='dark'] .menu {
+  background: #1b2027;
+  border-color: #3a4650;
+}
+
+[data-theme='dark'] .menuItem:hover,
+[data-theme='dark'] .menuItemActive {
+  background: #24303c;
 }
