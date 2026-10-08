@@ -1,0 +1,39 @@
+---
+title: Container Registry - Limites
+description: "Limitations connues, contraintes et aide au dépannage du Container Registry Numspot : timeouts du proxy d'ingress, débit d'envoi observé et tailles de blob (couche) recommandées."
+sidebar_label: Limites
+sidebar_position: 10
+draft: false
+last_update:
+  date: 2026-10-08
+---
+
+# Limites du Container Registry
+
+## Limites techniques
+
+### Débit d'envoi et timeouts
+
+| Limite                            | Valeur    | Raison                                                                                                                                                |
+| --------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Timeout de lecture du proxy ingress | 3600 s   | Annotations NGINX ingress `proxy-read-timeout` et `proxy-send-timeout` relevées depuis la valeur par défaut de 60 s (réf. : `registry.expose.ingress.annotations`) |
+| Timeout d'envoi du proxy ingress  | 3600 s    | Identique au précédent                                                                                                                                |
+| Débit d'envoi observé             | ~4–5 Mo/s | Mesuré lors des tests blackbox en préproduction (envoi d'un blob de 2 Go réalisé en ~489 s)                                                           |
+| Taille de blob (couche) recommandée | < ~300 Mo | Permet à l'envoi d'un blob unique de tenir confortablement dans la fenêtre de 3600 s, même avec un débit dégradé                                     |
+| Plafond théorique par blob        | ~16 Go    | 3600 s à ~4,5 Mo/s ; les envois qui approchent cette taille sont à risque et doivent être fractionnés                                                 |
+
+:::info Modes d'envoi de blob
+Le registre prend en charge l'[envoi de blob par morceaux (chunked)](https://github.com/opencontainers/distribution-spec/blob/main/spec.md#pushing-blobs) de la spécification de distribution OCI (POST → PATCH → PUT) ainsi que l'envoi monolithique en un seul PUT. Les clients standards (Docker, Podman, Buildah, skopeo, BuildKit) utilisent des envois par morceaux ou en flux continu. Seuls les clients écrits à la main qui poussent un blob entier en un seul PUT sont exposés à la fenêtre de timeout complète d'un coup.
+:::
+
+## Problèmes connus
+
+| Problème                                            | Impact                                                                                                                              | Contournement                                                                                                                                           | Statut                                    |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| Erreur `unexpected EOF` lors de l'envoi d'une image volumineuse | L'envoi échoue en cours de transfert sur des blobs monolithiques de plusieurs gigaoctets (PUT unique dépassant le timeout du proxy ingress, auparavant 60 s) | Utiliser des clients standard qui envoient les blobs en flux continu ou par morceaux (Docker, Podman, BuildKit, skopeo) ; garder des couches petites grâce aux builds multi-étapes et à `.dockerignore` | Résolu — timeout du proxy relevé à 3600 s |
+
+### Contexte
+
+Avant l'augmentation du timeout, le contrôleur d'ingress partagé ne définissait `use-proxy-protocol: true` que pour le virtual host du registre. Les timeouts proxy NGINX appliquaient donc leurs valeurs par défaut de 60 s, et tout envoi de blob dont une requête unique dépassait 60 s était coupé par le proxy (`unexpected EOF`). Les annotations propres au service dans `registry.expose.ingress.annotations` relèvent désormais `proxy-read-timeout` et `proxy-send-timeout` à 3600 s.
+
+Même avec le timeout relevé, le fractionnement des images en couches plus petites reste la pratique recommandée : il améliore la résilience des envois (une couche en échec est réessayée seule), l'efficacité du cache et les performances de téléchargement.

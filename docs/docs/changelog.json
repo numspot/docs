@@ -1,6 +1,17 @@
 {
   "entries": [
     {
+      "service": "Container Registry",
+      "status": "added",
+      "date": "2026-10-08",
+      "title": "Large image push limits and troubleshooting",
+      "description": "New guides documenting the limits for pushing large images to the Container Registry: ingress proxy read/send timeouts raised to 3600 s, observed push throughput of ~4–5 MB/s, recommended blob (layer) size below ~300 MB, plus best practices for pushing large images (standard streaming clients, small layers, .dockerignore) and troubleshooting for the \"unexpected EOF\" error.",
+      "components": [
+        "api",
+        "docs"
+      ]
+    },
+    {
       "service": "IAM",
       "status": "added",
       "date": "2026-10-07",

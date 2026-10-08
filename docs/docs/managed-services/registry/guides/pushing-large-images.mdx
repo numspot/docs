@@ -1,0 +1,30 @@
+---
+title: Push large images - Container Registry
+description: "Best practices for pushing large images to the Numspot Container Registry: standard streaming clients, small layers, .dockerignore, and troubleshooting for the unexpected EOF error."
+sidebar_label: Push large images
+sidebar_position: 9
+draft: false
+last_update:
+  date: 2026-10-08
+---
+
+# Push large images
+
+Keep layer sizes small to stay well within the service limits (see [Container Registry limits](/docs/managed-services/registry/guides/limits/)).
+
+## Best practices
+
+- **Use standard clients** — Docker, Podman, Buildah, BuildKit, and skopeo stream or chunk blob uploads. Avoid raw single-PUT uploads of entire blobs.
+- **Split layers** — use multi-stage builds and BuildKit so each layer stays small.
+- **Exclude build artifacts** — add a `.dockerignore` to avoid copying caches and temporary files into layers.
+- **Keep default compression** — gzip layer compression reduces transfer size.
+
+## Example
+
+```bash
+docker login <registry-host> -u <user> -p <password>
+docker build --builder <buildkit-builder> -t <registry-host>/<project>/<image>:<tag> .
+docker push <registry-host>/<project>/<image>:<tag>
+```
+
+If a push fails with `unexpected EOF`, see the [Known issues](/docs/managed-services/registry/guides/limits#known-issues) section.

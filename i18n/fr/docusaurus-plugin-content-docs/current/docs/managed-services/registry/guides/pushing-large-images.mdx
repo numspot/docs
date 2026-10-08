@@ -1,0 +1,30 @@
+---
+title: Pousser des images volumineuses - Container Registry
+description: "Bonnes pratiques pour pousser des images volumineuses vers le Container Registry Numspot : clients en flux continu, couches de petite taille, .dockerignore et dépannage de l'erreur unexpected EOF."
+sidebar_label: Pousser des images volumineuses
+sidebar_position: 9
+draft: false
+last_update:
+  date: 2026-10-08
+---
+
+# Pousser des images volumineuses
+
+Gardez des couches de petite taille pour rester largement dans les limites du service (voir [Limites du Container Registry](/docs/managed-services/registry/guides/limits/)).
+
+## Bonnes pratiques
+
+- **Utiliser des clients standard** — Docker, Podman, Buildah, BuildKit et skopeo envoient les blobs en flux continu ou par morceaux. Évitez les envois bruts d'un blob entier en un seul PUT.
+- **Fractionner les couches** — utilisez des builds multi-étapes et BuildKit pour que chaque couche reste petite.
+- **Exclure les artefacts de build** — ajoutez un `.dockerignore` pour éviter de copier les caches et fichiers temporaires dans les couches.
+- **Conserver la compression par défaut** — la compression gzip des couches réduit la taille transférée.
+
+## Exemple
+
+```bash
+docker login <registry-host> -u <user> -p <password>
+docker build --builder <buildkit-builder> -t <registry-host>/<project>/<image>:<tag> .
+docker push <registry-host>/<project>/<image>:<tag>
+```
+
+Si un envoi échoue avec `unexpected EOF`, consultez la section [Problèmes connus](/docs/managed-services/registry/guides/limits#known-issues).

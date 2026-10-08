@@ -1,0 +1,39 @@
+---
+title: Container Registry - Limits
+description: "Known limitations, constraints and troubleshooting guidance for the Numspot Container Registry: ingress proxy timeouts, observed push throughput and recommended blob (layer) sizes."
+sidebar_label: Limits
+sidebar_position: 10
+draft: false
+last_update:
+  date: 2026-10-08
+---
+
+# Container Registry limits
+
+## Technical limits
+
+### Push throughput and timeouts
+
+| Limit                           | Value     | Reason                                                                                                                                            |
+| ------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Ingress proxy read timeout      | 3600 s    | NGINX ingress `proxy-read-timeout` and `proxy-send-timeout` annotations raised from the 60 s default (ref: `registry.expose.ingress.annotations`) |
+| Ingress proxy send timeout      | 3600 s    | Same as above                                                                                                                                     |
+| Observed push throughput        | ~4–5 MB/s | Measured during preproduction blackbox tests (2 GB blob upload completed in ~489 s)                                                               |
+| Recommended blob (layer) size   | < ~300 MB | Keeps a single-blob upload comfortably within the 3600 s window even with degraded throughput                                                     |
+| Theoretical single-blob ceiling | ~16 GB    | 3600 s at ~4.5 MB/s; uploads approaching this size are at risk and should be split                                                                |
+
+:::info Blob upload modes
+The registry supports the OCI distribution specification [chunked blob upload](https://github.com/opencontainers/distribution-spec/blob/main/spec.md#pushing-blobs) (POST → PATCH → PUT) and the monolithic single-PUT upload. Standard clients (Docker, Podman, Buildah, skopeo, BuildKit) use chunked or streamed uploads. Only raw, hand-written clients that push an entire blob in a single PUT are exposed to the full timeout window at once.
+:::
+
+## Known issues
+
+| Issue                                            | Impact                                                                                                                              | Workaround                                                                                                                                               | Status                                    |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| `unexpected EOF` error during a large image push | Push fails mid-transfer on multi-gigabyte monolithic blob uploads (single PUT exceeding the ingress proxy timeout, previously 60 s) | Use standard clients that stream or chunk blob uploads (Docker, Podman, BuildKit, skopeo); keep layers small with multi-stage builds and `.dockerignore` | Resolved — proxy timeout raised to 3600 s |
+
+### Background
+
+Prior to the timeout increase, the shared ingress controller only set `use-proxy-protocol: true` for the registry virtual host. NGINX proxy timeouts therefore applied their 60 s defaults, and any blob upload whose single request exceeded 60 s was cut off by the proxy (`unexpected EOF`). The per-service annotations in `registry.expose.ingress.annotations` now raise both `proxy-read-timeout` and `proxy-send-timeout` to 3600 s.
+
+Even with the raised timeout, splitting images into smaller layers remains the recommended practice: it improves push resilience (a failed layer is retried alone), cache efficiency, and pull performance.

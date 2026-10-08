@@ -1,6 +1,17 @@
 {
   "entries": [
     {
+      "service": "Container Registry",
+      "status": "added",
+      "date": "2026-10-08",
+      "title": "Limites des envois d'images volumineuses et dépannage",
+      "description": "Nouveaux guides documentant les limites des envois d'images volumineuses vers le Container Registry : timeouts de lecture/envoi du proxy ingress relevés à 3600 s, débit d'envoi observé d'environ 4–5 Mo/s, taille de blob (couche) recommandée inférieure à ~300 Mo, bonnes pratiques pour pousser des images volumineuses (clients en flux continu, petites couches, .dockerignore) et dépannage de l'erreur « unexpected EOF ».",
+      "components": [
+        "api",
+        "docs"
+      ]
+    },
+    {
       "service": "IAM",
       "status": "added",
       "date": "2026-10-07",
