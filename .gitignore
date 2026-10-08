@@ -22,3 +22,6 @@ yarn-error.log*
 # IDE
 .idea/
 .playwright-mcp/
+
+# Local cache of the IAM API responses used by scripts/generate-permissions-data.mjs
+.permissions-cache/
