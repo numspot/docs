@@ -1,6 +1,17 @@
 {
   "entries": [
     {
+      "service": "IAM",
+      "status": "added",
+      "date": "2026-10-07",
+      "title": "Clés d'accès de compte de service (AK/SK)",
+      "description": "Nouvelles pages documentant la gestion des paires de clés d'accès AK/SK durables rattachées à un compte de service : création (deux paires actives au maximum par compte, durée de vie d'une heure à un an, clé secrète affichée une seule fois), liste et consultation avec clé d'accès masquée, et suppression qui révoque également les sessions ouvertes avec la clé supprimée. Ces secrets authentifient un accès programmatique à l'Object Storage.",
+      "components": [
+        "api",
+        "docs"
+      ]
+    },
+    {
       "service": "Compute",
       "status": "changed",
       "date": "2026-10-02",

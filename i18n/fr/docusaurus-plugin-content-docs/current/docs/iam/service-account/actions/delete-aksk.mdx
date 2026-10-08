@@ -1,0 +1,89 @@
+---
+title: "Supprimer une clé d'accès - IAM"
+description: "Supprimez définitivement une paire de clés d'accès AK/SK rattachée à un compte de service IAM et révoquez les sessions ouvertes avec celle-ci, via l'API."
+sidebar_label: "Supprimer une clé d'accès"
+sidebar_position: 12
+draft: false
+last_update:
+  date: 2026-10-08
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer une clé d'accès
+
+Supprime définitivement une paire de clés d'accès (AK/SK) rattachée à un compte de service.
+
+## Permissions
+
+:::info
+Cette action nécessite la permission IAM (Identity and Access Management) suivante :
+
+- **iam.accessKey.delete**
+
+:::
+
+<Tabs>
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+Supprimez définitivement une paire de clés d'accès et révoquez les sessions ouvertes avec celle-ci.
+
+:::info
+**Prérequis** : la paire de clés doit exister — son identifiant est disponible dans la [liste des clés d'accès](/docs/iam/service-account/actions/list-aksk).
+
+Cette opération nécessite un [jeton d'accès](/docs/iam/concepts/api/) et les permissions listées en tête de page.
+:::
+
+`DELETE https://api.eu-west-2.numspot.com/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/aksk/{akskId}`
+
+[Documentation complète de cet endpoint ↗](/openapi/#tag/identity-access-management/DELETE/iam/organisations/%7BorganisationId%7D/serviceAccounts/%7BserviceAccountId%7D/aksk/%7BakskId%7D)
+
+### Paramètres
+
+| Paramètre | Emplacement | Requis | Type | Exemple | Description |
+| --- | --- | --- | --- | --- | --- |
+| `organisationId` | chemin | oui | UUID | `123e4567-e89b-12d3-a456-426614174000` | Organisation à laquelle est rattaché le compte de service |
+| `serviceAccountId` | chemin | oui | UUID | `123e4567-e89b-12d3-a456-426614174000` | Compte de service auquel la paire de clés est rattachée |
+| `akskId` | chemin | oui | UUID | `123e4567-e89b-12d3-a456-426614174000` | Paire de clés à supprimer, issue de la [liste des clés d'accès](/docs/iam/service-account/actions/list-aksk) |
+
+### Exemple
+
+```bash
+export TOKEN="{TOKEN}"
+
+curl 'https://api.eu-west-2.numspot.com/iam/organisations/{ORGANISATION-ID}/serviceAccounts/{SERVICE-ACCOUNT-ID}/aksk/{AKSK-ID}' \
+  --request DELETE \
+  --header "Authorization: Bearer $TOKEN"
+```
+
+| Variable | Représente | Où trouver sa valeur |
+| --- | --- | --- |
+| `{TOKEN}` | Jeton d'accès OAuth 2.0 de la requête | Généré par l'authentification API (voir [Jeton d'accès](/docs/iam/concepts/api/)) |
+| `{ORGANISATION-ID}` | Organisation à laquelle est rattaché le compte de service | Console Numspot (organisation active) |
+| `{SERVICE-ACCOUNT-ID}` | Compte de service auquel la paire de clés est rattachée | Réponse de l'API [Lister les comptes de service ↗](/docs/iam/service-account/actions/list) |
+| `{AKSK-ID}` | Paire de clés à supprimer | Champ `id` de la [liste des clés d'accès](/docs/iam/service-account/actions/list-aksk) |
+
+### Réponse
+
+`204 No Content` — la paire de clés est supprimée ; le corps de la réponse est vide.
+
+:::warning
+Cette action est irréversible. Elle révoque également toutes les sessions ouvertes avec la paire de clés supprimée : tout client qui l'utilise encore perd immédiatement l'accès à l'API. Si l'accès doit être rétabli, une nouvelle paire de clés doit être créée.
+:::
+
+Pour remplacer une clé sans interruption de service, créez d'abord la clé de remplacement ([créer une clé d'accès](/docs/iam/service-account/actions/create-aksk)), puis supprimez l'ancienne.
+
+### Principales erreurs
+
+| Code | Cas |
+| --- | --- |
+| 401 | Jeton d'accès manquant, expiré ou invalide |
+| 403 | Permission `iam.accessKey.delete` manquante |
+| 404 | `organisationId`, `serviceAccountId` ou `akskId` inconnu |
+| 500 | Erreur interne du service — réessayez plus tard |
+
+</TabItem>
+</Tabs>

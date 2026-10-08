@@ -1,0 +1,101 @@
+---
+title: "Lister les clés d'accès - IAM"
+description: "Listez les paires de clés d'accès AK/SK rattachées à un compte de service IAM, avec leur clé d'accès, leur statut et leur durée de validité, via l'API."
+sidebar_label: "Lister les clés d'accès"
+sidebar_position: 10
+draft: false
+last_update:
+  date: 2026-10-08
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Lister les clés d'accès
+
+Retourne toutes les paires de clés d'accès (AK/SK) rattachées à un compte de service, avec leurs métadonnées. La liste ne contient jamais de clé secrète : celle-ci n'est disponible que dans la réponse de création.
+
+## Permissions
+
+:::info
+Cette action nécessite la permission IAM (Identity and Access Management) suivante :
+
+- **iam.accessKey.get**
+
+:::
+
+<Tabs>
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+Listez toutes les paires de clés d'accès rattachées à un compte de service, avec leur statut et leur durée de validité.
+
+:::info
+**Prérequis** : le compte de service doit exister (créer un [compte de service ↗](/docs/iam/service-account/actions/create)).
+
+Cette opération nécessite un [jeton d'accès](/docs/iam/concepts/api/) et les permissions listées en tête de page.
+:::
+
+`GET https://api.eu-west-2.numspot.com/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/aksk`
+
+[Documentation complète de cet endpoint ↗](/openapi/#tag/identity-access-management/GET/iam/organisations/%7BorganisationId%7D/serviceAccounts/%7BserviceAccountId%7D/aksk)
+
+### Paramètres
+
+| Paramètre | Emplacement | Requis | Type | Exemple | Description |
+| --- | --- | --- | --- | --- | --- |
+| `organisationId` | chemin | oui | UUID | `123e4567-e89b-12d3-a456-426614174000` | Organisation à laquelle est rattaché le compte de service |
+| `serviceAccountId` | chemin | oui | UUID | `123e4567-e89b-12d3-a456-426614174000` | Compte de service dont on liste les paires de clés |
+
+### Exemple
+
+```bash
+export TOKEN="{TOKEN}"
+
+curl 'https://api.eu-west-2.numspot.com/iam/organisations/{ORGANISATION-ID}/serviceAccounts/{SERVICE-ACCOUNT-ID}/aksk' \
+  --header "Authorization: Bearer $TOKEN"
+```
+
+| Variable | Représente | Où trouver sa valeur |
+| --- | --- | --- |
+| `{TOKEN}` | Jeton d'accès OAuth 2.0 de la requête | Généré par l'authentification API (voir [Jeton d'accès](/docs/iam/concepts/api/)) |
+| `{ORGANISATION-ID}` | Organisation à laquelle est rattaché le compte de service | Console Numspot (organisation active) |
+| `{SERVICE-ACCOUNT-ID}` | Compte de service dont on liste les paires de clés | Réponse de l'API [Lister les comptes de service ↗](/docs/iam/service-account/actions/list) |
+
+### Réponse
+
+`200 OK` — une liste paginée de paires de clés :
+
+| Champ | Type | Description |
+| --- | --- | --- |
+| `nextPageToken` | string | Curseur de la page suivante, absent sur la dernière page |
+| `totalSize` | integer | Nombre total de paires de clés |
+| `items[].id` | string | Identifiant de la paire de clés |
+| `items[].accessKey` | string | Clé d'accès de la paire de clés |
+| `items[].status` | string | `ACTIVE`, `INACTIVE` ou `EXPIRED` |
+| `items[].createdAt` | string | Date de création |
+| `items[].expiresAt` | string | Date d'expiration |
+| `items[].lastUsedAt` | string | Date de dernière utilisation, si la paire a déjà authentifié une session |
+
+```json
+{
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  "totalSize": 2,
+  "items": [
+    {
+      "id": "019db8c2-1a7b-7de1-8a42-797176d8bbf0",
+      "accessKey": "AKIAIOSF",
+      "status": "ACTIVE",
+      "createdAt": "2026-10-07T10:15:30.485Z",
+      "expiresAt": "2027-10-07T10:15:30.485Z",
+      "lastUsedAt": "2026-10-07T14:02:11.220Z"
+    }
+  ]
+}
+```
+
+La clé secrète n'est jamais retournée dans cette liste : elle n'est disponible que dans la réponse de création. Utilisez l'`id` d'une paire de clés dans les opérations de [consultation](/docs/iam/service-account/actions/get-aksk) et de [suppression](/docs/iam/service-account/actions/delete-aksk).
+
+</TabItem>
+</Tabs>

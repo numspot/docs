@@ -1,0 +1,120 @@
+---
+title: "Créer une clé d'accès - IAM"
+description: "Générez une paire de clés d'accès AK/SK durable rattachée à un compte de service IAM, pour authentifier un accès programmatique au stockage objet, via l'API."
+sidebar_label: "Créer une clé d'accès"
+sidebar_position: 9
+draft: false
+last_update:
+  date: 2026-10-08
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Créer une clé d'accès
+
+Une paire de clés d'accès (AK/SK — Access Key/Secret Key) est un secret durable rattaché à un compte de service. Il authentifie un accès programmatique au stockage objet avec une signature compatible avec les outils AWS, sans échanger de token à chaque session. Pour obtenir une paire de clés temporaire à partir d'un token, voir le [démarrage rapide Object Storage](/docs/storage/object-storage/quickstart/).
+
+## Permissions
+
+:::info
+Cette action nécessite la permission IAM (Identity and Access Management) suivante :
+
+- **iam.accessKey.create**
+
+:::
+
+<Tabs>
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+Générez une nouvelle paire de clés d'accès pour un compte de service, afin d'authentifier un accès programmatique au stockage objet sans intervention manuelle.
+
+:::info
+**Prérequis** : le compte de service doit exister (créer un [compte de service ↗](/docs/iam/service-account/actions/create)).
+
+Cette opération nécessite un [jeton d'accès](/docs/iam/concepts/api/) et les permissions listées en tête de page.
+:::
+
+`POST https://api.eu-west-2.numspot.com/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/aksk`
+
+[Documentation complète de cet endpoint ↗](/openapi/#tag/identity-access-management/POST/iam/organisations/%7BorganisationId%7D/serviceAccounts/%7BserviceAccountId%7D/aksk)
+
+### Paramètres
+
+| Paramètre | Emplacement | Requis | Type | Exemple | Description |
+| --- | --- | --- | --- | --- | --- |
+| `organisationId` | chemin | oui | UUID | `123e4567-e89b-12d3-a456-426614174000` | Organisation à laquelle est rattaché le compte de service |
+| `serviceAccountId` | chemin | oui | UUID | `123e4567-e89b-12d3-a456-426614174000` | Compte de service qui reçoit la paire de clés |
+| `expiresIn` | corps | non | string | `720h` | Durée de validité du secret, comprise entre `1h` et `8760h` (1 an) ; un an par défaut |
+
+### Exemple
+
+```bash
+export TOKEN="{TOKEN}"
+
+curl 'https://api.eu-west-2.numspot.com/iam/organisations/{ORGANISATION-ID}/serviceAccounts/{SERVICE-ACCOUNT-ID}/aksk' \
+  --request POST \
+  --header "Authorization: Bearer $TOKEN" \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "expiresIn": "720h"
+}'
+```
+
+| Variable | Représente | Où trouver sa valeur |
+| --- | --- | --- |
+| `{TOKEN}` | Jeton d'accès OAuth 2.0 de la requête | Généré par l'authentification API (voir [Jeton d'accès](/docs/iam/concepts/api/)) |
+| `{ORGANISATION-ID}` | Organisation à laquelle est rattaché le compte de service | Console Numspot (organisation active) |
+| `{SERVICE-ACCOUNT-ID}` | Compte de service qui reçoit la paire de clés | Réponse de l'API [Lister les comptes de service ↗](/docs/iam/service-account/actions/list) |
+
+### Réponse
+
+`201 Created` — le payload décrit la paire de clés créée :
+
+| Champ | Type | Description |
+| --- | --- | --- |
+| `id` | string | Identifiant de la paire de clés |
+| `clientId` | string | Identifiant client du compte de service |
+| `clientName` | string | Nom du compte de service |
+| `accessKey` | string | Clé d'accès, préfixe `AKIA`, 20 caractères |
+| `secretKey` | string | Clé secrète, 40 caractères — affichée une seule fois, à la création |
+| `status` | string | `ACTIVE` ou `INACTIVE` |
+| `createdBy` | string | Identifiant de l'identité ayant créé la paire de clés |
+| `createdAt` | string | Date de création |
+| `expiresAt` | string | Date d'expiration |
+
+```json
+{
+  "id": "019db8c2-1a7b-7de1-8a42-797176d8bbf0",
+  "clientId": "019db035-7560-7ded-8a42-797176d8bbf0",
+  "clientName": "backup-orchestrator",
+  "accessKey": "AKIAIOSFODNN7EXAMPLE",
+  "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+  "status": "ACTIVE",
+  "createdBy": "019da410-93c2-7cc2-b5f7-2f4e9a1c30d8",
+  "createdAt": "2026-10-07T10:15:30.485Z",
+  "expiresAt": "2027-10-07T10:15:30.485Z"
+}
+```
+
+:::warning
+La clé secrète n'est affichée **qu'une seule fois**, dans la réponse de création. Elle ne peut pas être récupérée ultérieurement — conservez-la dans un emplacement sécurisé. En cas de perte, supprimez la paire de clés et créez-en une nouvelle.
+:::
+
+Un compte de service peut détenir au maximum deux paires de clés actives : au-delà, l'API renvoie une erreur HTTP 409. La création d'une nouvelle paire ne révoque jamais les paires existantes — pour faire tourner un secret, créez d'abord la clé de remplacement, puis [supprimez l'ancienne](/docs/iam/service-account/actions/delete-aksk).
+
+### Principales erreurs
+
+| Code | Cas |
+| --- | --- |
+| 400 | Corps invalide : `expiresIn` hors de la plage `1h` – `8760h` |
+| 401 | Jeton d'accès manquant, expiré ou invalide |
+| 403 | Permission `iam.accessKey.create` manquante |
+| 404 | `organisationId` ou `serviceAccountId` inconnu |
+| 409 | Le compte de service détient déjà deux paires de clés actives |
+| 500 | Erreur interne du service — réessayez plus tard |
+
+</TabItem>
+</Tabs>

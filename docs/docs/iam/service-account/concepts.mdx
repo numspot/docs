@@ -4,7 +4,7 @@ sidebar_label: "Concepts"
 sidebar_position: 1
 draft: false
 last_update:
-  date: 2026-09-18
+  date: 2026-10-08
 ---
 
 import ActionsSummary from '@site/src/components/ActionsSummary';
@@ -31,6 +31,17 @@ A service account is characterized by:
 When a service account is created, Numspot returns its access key **and** its secret code. The secret code is never displayed again afterwards — you must keep it in a secure location from the moment of creation.
 
 The access key and the secret code are used together to authenticate the account against the API.
+
+## Access keys (AK/SK)
+
+In addition to the secret code generated at creation, a service account can hold up to two durable AK/SK credentials (an access key and its secret key). They authenticate access to the Object Storage, with a signature compatible with the AWS tooling, without exchanging a token at each session.
+
+- the access key identifies the credential;
+- the secret key is displayed only once, at creation;
+- each credential has a configurable lifetime, from 1 hour to 1 year (1 year by default), and a status (`ACTIVE`, `INACTIVE` or `EXPIRED`);
+- deleting a credential immediately revokes the sessions opened with it.
+
+To manage these credentials, see the dedicated actions: [create](/docs/iam/service-account/actions/create-aksk), [list](/docs/iam/service-account/actions/list-aksk), [details](/docs/iam/service-account/actions/get-aksk) and [delete](/docs/iam/service-account/actions/delete-aksk). For a temporary credential obtained from a token, see the [Object Storage quickstart](/docs/storage/object-storage/quickstart/).
 
 ## Spaces and permissions
 

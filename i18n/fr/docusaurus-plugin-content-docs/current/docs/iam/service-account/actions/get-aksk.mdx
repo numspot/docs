@@ -1,0 +1,93 @@
+---
+title: "Consulter une clé d'accès - IAM"
+description: "Consultez les détails d'une paire de clés d'accès AK/SK rattachée à un compte de service IAM : clé d'accès, statut et durée de validité, via l'API."
+sidebar_label: "Consulter une clé d'accès"
+sidebar_position: 11
+draft: false
+last_update:
+  date: 2026-10-08
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Consulter une clé d'accès
+
+Retourne les détails d'une paire de clés d'accès (AK/SK) rattachée à un compte de service. La clé secrète n'est jamais retournée : elle n'est disponible que dans la réponse de création.
+
+## Permissions
+
+:::info
+Cette action nécessite la permission IAM (Identity and Access Management) suivante :
+
+- **iam.accessKey.get**
+
+:::
+
+<Tabs>
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+Consultez les détails d'une paire de clés d'accès : clé d'accès, statut et durée de validité.
+
+:::info
+**Prérequis** : la paire de clés doit exister — son identifiant est disponible dans la [liste des clés d'accès](/docs/iam/service-account/actions/list-aksk).
+
+Cette opération nécessite un [jeton d'accès](/docs/iam/concepts/api/) et les permissions listées en tête de page.
+:::
+
+`GET https://api.eu-west-2.numspot.com/iam/organisations/{organisationId}/serviceAccounts/{serviceAccountId}/aksk/{akskId}`
+
+[Documentation complète de cet endpoint ↗](/openapi/#tag/identity-access-management/GET/iam/organisations/%7BorganisationId%7D/serviceAccounts/%7BserviceAccountId%7D/aksk/%7BakskId%7D)
+
+### Paramètres
+
+| Paramètre | Emplacement | Requis | Type | Exemple | Description |
+| --- | --- | --- | --- | --- | --- |
+| `organisationId` | chemin | oui | UUID | `123e4567-e89b-12d3-a456-426614174000` | Organisation à laquelle est rattaché le compte de service |
+| `serviceAccountId` | chemin | oui | UUID | `123e4567-e89b-12d3-a456-426614174000` | Compte de service auquel la paire de clés est rattachée |
+| `akskId` | chemin | oui | UUID | `123e4567-e89b-12d3-a456-426614174000` | Paire de clés à consulter, issue de la [liste des clés d'accès](/docs/iam/service-account/actions/list-aksk) |
+
+### Exemple
+
+```bash
+export TOKEN="{TOKEN}"
+
+curl 'https://api.eu-west-2.numspot.com/iam/organisations/{ORGANISATION-ID}/serviceAccounts/{SERVICE-ACCOUNT-ID}/aksk/{AKSK-ID}' \
+  --header "Authorization: Bearer $TOKEN"
+```
+
+| Variable | Représente | Où trouver sa valeur |
+| --- | --- | --- |
+| `{TOKEN}` | Jeton d'accès OAuth 2.0 de la requête | Généré par l'authentification API (voir [Jeton d'accès](/docs/iam/concepts/api/)) |
+| `{ORGANISATION-ID}` | Organisation à laquelle est rattaché le compte de service | Console Numspot (organisation active) |
+| `{SERVICE-ACCOUNT-ID}` | Compte de service auquel la paire de clés est rattachée | Réponse de l'API [Lister les comptes de service ↗](/docs/iam/service-account/actions/list) |
+| `{AKSK-ID}` | Paire de clés à consulter | Champ `id` de la [liste des clés d'accès](/docs/iam/service-account/actions/list-aksk) |
+
+### Réponse
+
+`200 OK` — les métadonnées de la paire de clés :
+
+| Champ | Type | Description |
+| --- | --- | --- |
+| `id` | string | Identifiant de la paire de clés |
+| `accessKey` | string | Clé d'accès de la paire de clés |
+| `status` | string | `ACTIVE`, `INACTIVE` ou `EXPIRED` |
+| `createdAt` | string | Date de création |
+| `expiresAt` | string | Date d'expiration |
+| `lastUsedAt` | string | Date de dernière utilisation, si la paire a déjà authentifié une session |
+
+```json
+{
+  "id": "019db8c2-1a7b-7de1-8a42-797176d8bbf0",
+  "accessKey": "AKIAIOSF",
+  "status": "ACTIVE",
+  "createdAt": "2026-10-07T10:15:30.485Z",
+  "expiresAt": "2027-10-07T10:15:30.485Z",
+  "lastUsedAt": "2026-10-07T14:02:11.220Z"
+}
+```
+
+</TabItem>
+</Tabs>
