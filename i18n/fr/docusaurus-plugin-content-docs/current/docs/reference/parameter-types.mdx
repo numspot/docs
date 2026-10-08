@@ -1,0 +1,60 @@
+---
+title: Types de paramètres
+description: Définitions et exemples des types utilisés dans les tableaux de paramètres de l'API et du provider Terraform Numspot.
+sidebar_position: 1
+draft: false
+last_update:
+  date: 2026-10-08
+---
+
+# Types de paramètres
+
+Les tableaux de paramètres des pages d'action (onglets API et Terraform) utilisent les types décrits ci-dessous. Un même concept peut porter deux noms selon le contexte : le type du schéma OpenAPI côté API, et le type du schéma du provider Terraform côté Terraform.
+
+## string
+
+Chaîne de caractères, encodée en UTF-8. Utilisée pour les identifiants (`ami-…`, `subnet-…`, `i-…`), les noms, les libellés et les valeurs libres.
+
+Exemples : `ns-eco6-2c4r`, `keypair-example`.
+
+## UUID
+
+Chaîne de caractères au format UUID (identifiant unique universel), composée de 36 caractères au format `8-4-4-4-12` hexadécimal. Utilisée pour les identifiants d'espaces et d'organisations.
+
+Exemple : `123e4567-e89b-12d3-a456-426614174000`.
+
+## integer
+
+Nombre entier, sans partie décimale. Équivalent Terraform : `number`.
+
+Exemples : `10` (taille d'un volume), `100` (nombre d'IOPS).
+
+## boolean
+
+Valeur logique à deux états : `true` ou `false`. Équivalent Terraform : `bool`.
+
+Exemple : `deletionProtection` à `true` empêche la suppression d'une [VM](/docs/compute/concept).
+
+## enum
+
+Chaîne de caractères restreinte à une liste fermée de valeurs autorisées, définie par l'API. Toute autre valeur est rejetée.
+
+Exemple : `performance` accepte uniquement `medium`, `high` ou `highest`.
+
+## array
+
+Liste ordonnée de valeurs, qui peut contenir des doublons. Équivalent Terraform : `list`.
+
+Exemple : `securityGroupIds` contient un ou plusieurs identifiants de [security group](/docs/compute/security-groups/concepts/concept-sg).
+
+## set
+
+Ensemble de valeurs uniques, sans ordre garanti : chaque valeur n'apparaît qu'une fois. Équivalent Terraform : `set`.
+
+Exemple : les tags d'une ressource forment un ensemble de couples key/value.
+
+## object
+
+Structure de données nommée regroupant plusieurs champs imbriqués, chacun avec son propre type. Équivalent Terraform : `object` (ou `single_nested` dans le schéma du provider).
+
+Exemple : `placement` regroupe `tenancy` et `availabilityZoneName`.
