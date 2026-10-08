@@ -747,5 +747,9 @@
   "walkthrough.steps": {
     "message": "Étapes",
     "description": "Walkthrough component control"
+  },
+  "theme.docs.viewOnGithub": {
+    "message": "Voir sur GitHub",
+    "description": "Link to the page source file on GitHub, next to the review date"
   }
 }
