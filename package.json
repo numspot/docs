@@ -84,7 +84,13 @@
     "joi": "^18.2.8",
     "websocket-driver": "^0.7.5",
     "body-parser": "^1.20.6",
-    "image-size": "npm:image-size-next@2.1.1"
+    "image-size": "npm:image-size-next@2.1.1",
+    "proxy-addr": "^2.0.8",
+    "compression": "^1.8.2",
+    "source-map-js": "^1.2.2",
+    "tinypool": "2.2.0",
+    "postcss-selector-parser": "^7.1.6",
+    "katex": "0.18.4"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.10.1",
