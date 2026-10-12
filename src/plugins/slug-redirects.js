@@ -50,8 +50,37 @@ const SLUG_RENAMES = [["plateforme-ia-mistral", "mistral-ai-platform"]];
 const DELETED_PAGES = [
   // Resources page (zones/regions/endpoints) removed: the Catalog concepts
   // page describes the Numspot regions. The "docs/" prefix matches the site
-  // URL scheme (all doc routes live under /docs/).
+  // URL scheme (all doc routes live under /docs/). The pre-swap English URL
+  // /en/docs/resources existed too (the EN tree mirrored the FR one until
+  // the removal) and is covered by LOCALE_PREFIX_REDIRECTS — except the page
+  // no longer exists in the built tree, so register its old EN routes here.
   ["docs/resources", "docs/catalog/concepts"],
+  ["en/docs/resources", "docs/catalog/concepts"],
+  ["docs/en/resources", "docs/catalog/concepts"],
+  // Pre-swap English site homepage (default-locale flip, internal PR #3):
+  // the docs home carries `slug: /`, so /en/ was the English homepage and
+  // now answers at /.
+  ["en", ""],
+];
+
+/**
+ * Locale-prefix moves: whole subtrees whose URL prefix changed while every
+ * page under them kept its slug.
+ *
+ * The default-locale flip (French default → English default, internal PR #3)
+ * moved every English docs page from /en/docs/<slug> (English was the
+ * non-default locale, rendered under the /en/ prefix) to /docs/<slug>. The
+ * /docs/en/<slug> shape seen in the wild is covered too. Mirroring the built
+ * subtree under each old prefix keeps every present AND future page answering
+ * at its old URL — no per-route list to maintain — with the same noindex
+ * redirect stub as SLUG_RENAMES, so the pre-swap URLs indexed by search
+ * engines stop 404-ing.
+ *
+ * Each pair is [old-prefix, new-prefix], relative to a locale build root.
+ */
+const LOCALE_PREFIX_REDIRECTS = [
+  ["en/docs", "docs"], // /en/docs/<slug> → /docs/<slug> (pre-swap English URLs)
+  ["docs/en", "docs"], // /docs/en/<slug> → /docs/<slug> (in-the-wild variant)
 ];
 
 function redirectHtml(targetUrl) {
@@ -119,6 +148,32 @@ module.exports = function slugRedirectsPlugin() {
 
       walk(outDir);
 
+      // Built page routes (relative to outDir, "/"-separated) under `dir`,
+      // materialized in one pass — see LOCALE_PREFIX_REDIRECTS. Collecting
+      // before writing matters: for the "docs/en" rule the old directory
+      // sits inside the mirrored one, so a walk-as-you-write would pick up
+      // the stubs it just created and nest endlessly.
+      const collectIndexRoutes = (dir) => {
+        const routes = [];
+        const visit = (current) => {
+          // nosemgrep: eslint.detect-non-literal-fs-filename -- see "SAST note"
+          for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+            const full = path.join(current, entry.name);
+            if (entry.isDirectory()) visit(full);
+            else if (entry.isFile() && entry.name === "index.html") {
+              routes.push(
+                path
+                  .relative(outDir, path.dirname(full))
+                  .split(path.sep)
+                  .join("/")
+              );
+            }
+          }
+        };
+        visit(dir);
+        return routes;
+      };
+
       // Deleted pages: noindex stub at the old route, per locale build root.
       // Docs-only site (`routeBasePath: "/"`): the default locale renders at
       // the outDir root, other locales at <outDir>/<locale>/. A stub is only
@@ -153,8 +208,42 @@ module.exports = function slugRedirectsPlugin() {
           // nosemgrep: eslint.detect-non-literal-fs-filename -- SAST note above
           fs.mkdirSync(oldDir, { recursive: true });
           // nosemgrep: eslint.detect-non-literal-fs-filename -- SAST note above
-          fs.writeFileSync(oldIndex, redirectHtml(`${baseUrl}${rel}/`));
+          // Collapse doubled slashes: an empty rel (site-root target) with a
+          // "/" baseUrl would otherwise produce "//".
+          fs.writeFileSync(
+            oldIndex,
+            redirectHtml(`${baseUrl}${rel}/`.replace(/\/{2,}/g, "/"))
+          );
           created += 1;
+        }
+      }
+
+      // Locale-prefix moves: mirror every built page under the old prefix.
+      // Only meaningful in the DEFAULT locale build root: the pre-swap URLs
+      // (e.g. /en/docs/<slug>, English being the then-non-default locale)
+      // belonged to the default-locale site of that era, and the postBuild
+      // hook runs once per locale — so gate on the current locale, the other
+      // locale roots never served those URLs.
+      const isDefaultLocaleRun =
+        !i18n || !i18n.currentLocale || i18n.currentLocale === defaultLocale;
+      if (isDefaultLocaleRun) {
+        for (const [oldPrefix, newPrefix] of LOCALE_PREFIX_REDIRECTS) {
+          const newDir = path.join(outDir, newPrefix);
+          if (!fs.existsSync(newDir)) continue;
+          for (const rel of collectIndexRoutes(newDir)) {
+            const oldIndex = path.join(
+              outDir,
+              oldPrefix,
+              rel.slice(newPrefix.length),
+              "index.html"
+            );
+            // nosemgrep: eslint.detect-non-literal-fs-filename -- see "SAST note"
+            if (fs.existsSync(oldIndex)) continue; // never clobber a real page
+            fs.mkdirSync(path.dirname(oldIndex), { recursive: true });
+            // nosemgrep: eslint.detect-non-literal-fs-filename -- see "SAST note"
+            fs.writeFileSync(oldIndex, redirectHtml(`${baseUrl}${rel}/`));
+            created += 1;
+          }
         }
       }
 
@@ -171,3 +260,4 @@ module.exports = function slugRedirectsPlugin() {
 // DELETED_PAGES to validate the PR diff) and for reuse in scripts.
 module.exports.SLUG_RENAMES = SLUG_RENAMES;
 module.exports.DELETED_PAGES = DELETED_PAGES;
+module.exports.LOCALE_PREFIX_REDIRECTS = LOCALE_PREFIX_REDIRECTS;

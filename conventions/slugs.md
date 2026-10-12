@@ -84,6 +84,29 @@ The mapping is done **per slug segment**: it only activates in the locale(s)
 where the new slug actually exists. An English new slug that exists only in EN
 therefore never touches the FR pages (no collision).
 
+### 3. Locale-prefix moves (`LOCALE_PREFIX_REDIRECTS`)
+
+When a **whole subtree** moves under a new URL prefix while every page keeps
+its slug, do **not** register one entry per page: add the prefix pair to
+**`LOCALE_PREFIX_REDIRECTS`** in `src/plugins/slug-redirects.js`:
+
+```js
+const LOCALE_PREFIX_REDIRECTS = [
+  ["en/docs", "docs"], // /en/docs/<slug> → /docs/<slug>
+  // ["old-prefix", "new-prefix"], ← add here
+];
+```
+
+At build time the plugin mirrors every generated page of the default locale
+under the old prefix as a noindex redirect stub — present **and future** pages
+are covered with zero maintenance. Stubs are only emitted in the default-locale
+build root: the old URLs belonged to the default-locale site of their era, and
+other locale roots never served them.
+
+A one-off route that does not follow the subtree (e.g. an old homepage) is
+registered in `DELETED_PAGES` instead, pointing at the still-existing page that
+replaced it.
+
 ## Verify
 
 ```bash
