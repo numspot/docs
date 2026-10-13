@@ -3,7 +3,7 @@
 Source code of [docs.numspot.com](https://docs.numspot.com/), the public
 documentation for Numspot, the sovereign French cloud platform. The site is
 built with [Docusaurus](https://docusaurus.io/) and served in English
-(en-GB), with a French translation generated from the `i18n/` directory.
+(en-US), with a French translation generated from the `i18n/` directory.
 
 ## Quick start
 

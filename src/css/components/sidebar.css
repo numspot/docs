@@ -279,15 +279,15 @@ a.menu__link[href$="/docs/glossary/"]::before {
   padding-top: var(--ns-space-4);
   border-top: 1px solid var(--border-secondary);
 }
-/* EN translation of the group labels (en locale = htmlLang "en-GB").
+/* EN translation of the group labels (en locale = htmlLang "en-US").
    The content is injected via CSS, so it is localized through the <html> lang. */
-html[lang="en-GB"] .theme-doc-sidebar-item-category-level-1.openapi::before {
+html[lang="en-US"] .theme-doc-sidebar-item-category-level-1.openapi::before {
   content: "Resources & tools";
 }
-html[lang="en-GB"] .theme-doc-sidebar-item-category-level-1.group-head-services::before {
+html[lang="en-US"] .theme-doc-sidebar-item-category-level-1.group-head-services::before {
   content: "Our services";
 }
-html[lang="en-GB"] .theme-doc-sidebar-item-category-level-1.group-head-governance::before {
+html[lang="en-US"] .theme-doc-sidebar-item-category-level-1.group-head-governance::before {
   content: "Management & governance";
 }
 

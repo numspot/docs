@@ -4,8 +4,8 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import {useDoc} from '@docusaurus/plugin-content-docs/client';
 import type {ReactNode} from 'react';
 
-// US English formatting ("October 29, 2025") per the review-date convention,
-// even though the published site locale is en-GB.
+// US English formatting ("October 29, 2025"), consistent with the published
+// site locale (en-US).
 const INTL_LOCALES: Record<string, string> = {
   fr: 'fr-FR',
   en: 'en-US',

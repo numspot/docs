@@ -70,8 +70,8 @@ const config: Config = {
       en: {
         label: "English",
         direction: "ltr",
-        // British English (see i18n direction)
-        htmlLang: "en-GB",
+        // US English (see i18n direction)
+        htmlLang: "en-US",
         calendar: "gregory",
         path: "en",
       },

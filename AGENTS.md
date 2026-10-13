@@ -13,7 +13,7 @@ Public documentation website for Numspot, a sovereign cloud provider. Built with
 - **Language**: TypeScript
 - **Node**: >=18.0 (recommended: Node 20+, see `.nvmrc`)
 - **Package Manager**: Yarn 1.22+
-- **Content**: English documentation at the root (published as `en-GB`); French versions under `i18n/fr/`
+- **Content**: English documentation at the root (en-US); French versions under `i18n/fr/`
 
 ## Essential Commands
 
@@ -62,7 +62,7 @@ yarn test
 │       └── changelog.css
 ├── static/                  # Static assets
 │   └── img/
-├── i18n/                    # Internationalization (fr, en-GB)
+├── i18n/                    # Internationalization (fr, en-US)
 ├── patches/                 # patch-package patches
 ├── docusaurus.config.ts     # Main configuration
 └── sidebars.ts              # Sidebar navigation
@@ -253,10 +253,10 @@ This is the review surface: it is what a reviewer sees first, what search and
 notifications carry, and the first artifact an external contributor reads. It
 stays English even when the branch only touches French content.
 
-Note the deliberate contrast with the documentation itself: the published
-English site is **UK English** (`htmlLang: "en-GB"`, see `docusaurus.config.ts`
-and the i18n direction). Project metadata is US English, published content is
-UK English — do not align one on the other.
+The published English site is **US English** too (`htmlLang: "en-US"`, see
+`docusaurus.config.ts` and the i18n direction) — the PR language and the site
+locale are aligned; the rule above is about *where* each lives, not about a
+spelling contrast.
 
 ## Testing
 
