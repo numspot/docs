@@ -1,11 +1,599 @@
+diff --git a/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/SearchPage/SearchPage.jsx b/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/SearchPage/SearchPage.jsx
+index 2efb8b4..8eb142f 100644
+--- a/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/SearchPage/SearchPage.jsx
++++ b/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/SearchPage/SearchPage.jsx
+@@ -17,6 +17,14 @@ import { concatDocumentPath } from "../../utils/concatDocumentPath";
+ import { Mark, searchContextByPaths, useAllContextsWithNoSearchContext, } from "../../utils/proxiedGenerated";
+ import styles from "./SearchPage.module.css";
+ import { normalizeContextByPath } from "../../utils/normalizeContextByPath";
++// NUMSPOT — shared syntax-help button ("?" + query-language
++// popover), site component imported through the @site webpack alias so the
++// navbar swizzle and this page render the exact same help.
++import SearchSyntaxHelp from "@site/src/components/SearchSyntaxHelp";
++// NUMSPOT — result cap for the full results page. When the search
++// reaches the cap the label displays "> N documents found" instead of the
++// truncated exact count, so a capped list is never presented as complete.
++const SEARCH_RESULT_LIMIT = 100;
+ export default function SearchPage() {
+     return (<Layout>
+       <SearchPageContent />
+@@ -46,7 +54,11 @@ function SearchPageContent() {
+         updateSearchPath(searchQuery);
+         if (searchQuery) {
+             (async () => {
+-                const results = await searchByWorker(versionUrl, searchContext, searchQuery, 100);
++                // NUMSPOT — capped at SEARCH_RESULT_LIMIT; at the
++                // cap the documents-found label switches to "> N documents
++                // found" (see below). The search bar dropdown keeps its own
++                // smaller limit.
++                const results = await searchByWorker(versionUrl, searchContext, searchQuery, SEARCH_RESULT_LIMIT);
+                 setSearchResults(results);
+             })();
+         }
+@@ -95,7 +107,12 @@ function SearchPageContent() {
+             "col--9": Array.isArray(searchContextByPaths),
+             "col--12": !Array.isArray(searchContextByPaths),
+         })}>
+-            <input type="search" name="q" className={styles.searchQueryInput} aria-label="Search" onChange={handleSearchInputChange} value={searchQuery} autoComplete="off" autoFocus/>
++            {/* NUMSPOT — the "?" help button rides on the input's
++                line (flex row, see .search-query-row in the site CSS). */}
++            <div className="search-query-row">
++              <input type="search" name="q" className={styles.searchQueryInput} aria-label="Search" onChange={handleSearchInputChange} value={searchQuery} autoComplete="off" autoFocus/>
++              <SearchSyntaxHelp/>
++            </div>
+           </div>
+           {Array.isArray(searchContextByPaths) ? (<div className={clsx("col", "col--3", "padding-left--none", styles.searchContextColumn)}>
+               <select name="search-context" className={styles.searchContextInput} id="context-selector" value={searchContext} onChange={(e) => updateSearchContext(e.target.value)}>
+@@ -125,7 +142,15 @@ function SearchPageContent() {
+                     id: "theme.SearchPage.documentsFound.plurals",
+                     message: "1 document found|{count} documents found",
+                     description: 'Pluralized label for "{count} documents found". Use as much plural forms (separated by "|") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)',
+-                }, { count: searchResults.length }))}
++                }, {
++                    // NUMSPOT — at the result cap the count is
++                    // truncated, so display "> N" rather than pretending the
++                    // list is complete. selectMessage() still receives the
++                    // numeric length for plural-form selection.
++                    count: searchResults.length >= SEARCH_RESULT_LIMIT
++                        ? `> ${searchResults.length}`
++                        : searchResults.length,
++                }))}
+             </p>) : process.env.NODE_ENV === "production" ? (<p>
+               {translate({
+                     id: "theme.SearchPage.noResultsText",
+diff --git a/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/numspotSearch.js b/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/numspotSearch.js
+new file mode 100644
+index 0000000..e993dd3
+--- /dev/null
++++ b/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/numspotSearch.js
+@@ -0,0 +1,514 @@
++"use strict";
++// NUMSPOT — query language + bilingual synonym expansion for the
++// site search. Required by the patched worker.js (same directory).
++//
++// Written in CommonJS on purpose: the client dist of this package is ESM
++// syntax transpiled by webpack, but linter/tests/search.test.js must be able
++// to `require()` this file from plain Node to unit-test the parser.
++//
++// Everything here is query-side only:
++//   - an input carrying an operator runs as deterministic lunr clauses and
++//     bypasses the stock smartQueries combinatorics entirely;
++//   - a plain input keeps the stock behavior (zero regression) and gains at
++//     most a handful of extra synonym union queries.
++// Edit this file, then regenerate the patch (`npx patch-package
++// @easyops-cn/docusaurus-search-local`): the index hash covers it, so the
++// immutable year-long cache busts with the content (see getIndexHash.js).
++const lunr = require("lunr");
++
++/**
++ * Curated FR/EN domain synonyms (nouns only — verbs are too noisy with the
++ * stemmers). Both directions matter: pages are titled with English terms
++ * while FR visitors type French words, and the reverse. A token matches a
++ * group when it equals any word of any member; the other members become
++ * extra union queries ranked below exact matches.
++ */
++const SYNONYM_GROUPS = [
++    ["vm", "virtual machine", "machine virtuelle", "instance"],
++    ["snapshot", "instantané"],
++    ["backup", "sauvegarde"],
++    ["restore", "restauration", "restaurer"],
++    ["network", "réseau"],
++    ["firewall", "pare-feu"],
++    ["gateway", "passerelle"],
++    ["kubernetes", "k8s"],
++    ["registry", "registre", "dépôt"],
++    ["key", "clé"],
++    ["encryption", "chiffrement"],
++    ["password", "mot de passe"],
++    ["storage", "stockage"],
++    ["load balancer", "répartiteur de charge"],
++    ["ip", "adresse ip"],
++    ["region", "région"],
++    ["availability zone", "zone de disponibilité"],
++    ["tag", "étiquette"],
++    ["user", "utilisateur"],
++    ["role", "rôle"],
++    ["database", "base de données"],
++    ["volume", "disque"],
++    ["access", "accès"],
++    ["security group", "groupe de sécurité"],
++];
++
++const fold = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
++
++// ---------------------------------------------------------------------------
++// Stemming helper — mirrors the index pipeline (fold → fr stemmer → en
++// stemmer). lunr DISABLES the search pipeline for wildcard clauses (see the
++// comment in lunr's Index.query), so a user-typed prefix must be stemmed
++// HERE: "template*" has to become "templat*" to match the indexed stem
++// "templat" (the index stores stemmed tokens — "templates" is indexed as
++// "templat").
++// ---------------------------------------------------------------------------
++const stemPipeline = new lunr.Pipeline();
++(function buildStemPipeline() {
++    require("lunr-languages/lunr.stemmer.support.js")(lunr);
++    require("lunr-languages/lunr.fr.js")(lunr);
++    stemPipeline.add(
++        (token) => token.update((s) => fold(s)),
++        lunr.fr.stemmer,
++        lunr.stemmer,
++    );
++})();
++function stemToken(value) {
++    const tokens = stemPipeline.runString(String(value).toLowerCase());
++    return tokens.length ? tokens[0].toString().toLowerCase() : String(value).toLowerCase();
++}
++
++// ---------------------------------------------------------------------------
++// Stopwords and word splitting — the index pipeline removes the stopwords of
++// every configured language (en + fr), and the SEARCH pipeline carries no
++// stopword filter (it is serialized as ["foldAccents","stemmer-fr",
++// "stemmer"]): a REQUIRED clause whose word was removed at index time can
++// never match, and lunr voids the whole query when one REQUIRED clause
++// matches nothing. Phrases — quoted or synonym members — must therefore be
++// split and filtered HERE, exactly like smartQueries.js filters the stock
++// terms (and like tokenize.js splits: /[^-\s]+/ breaks words on spaces AND
++// hyphens, so the indexed "pare-feu" is two tokens).
++// ---------------------------------------------------------------------------
++const STOPWORD_FILTERS = [lunr.stopWordFilter, lunr.fr.stopWordFilter].filter(Boolean);
++function isStopword(word) {
++    const value = String(word).toLowerCase();
++    return STOPWORD_FILTERS.some((filter) => filter(value) == null);
++}
++function phraseWords(phrase) {
++    return (String(phrase).toLowerCase().match(/[^-\s]+/g) || [])
++        .filter((word) => !isStopword(word));
++}
++
++// folded word → group memberships (word-level, so "machine" hits the
++// "machine virtuelle" member without typing the full phrase). Members are
++// normalized through phraseWords(): a stopword or hyphenated compound never
++// becomes a lookup key, so typing "de" (from "mot de passe", "base de
++// données", …) cannot fire unrelated synonym queries.
++const TOKEN_INDEX = new Map();
++SYNONYM_GROUPS.forEach((group, groupIndex) => {
++    group.forEach((member, memberIndex) => {
++        for (const word of phraseWords(member)) {
++            const key = fold(word);
++            const entries = TOKEN_INDEX.get(key);
++            if (entries) {
++                if (!entries.some((e) => e.groupIndex === groupIndex)) {
++                    entries.push({ groupIndex, memberIndex });
++                }
++            }
++            else {
++                TOKEN_INDEX.set(key, [{ groupIndex, memberIndex }]);
++            }
++        }
++    });
++});
++
++/**
++ * Bilingual synonyms of a token: the other members of every group the token
++ * appears in (matched on whole words, accents folded). Capped so the extra
++ * queries stay bounded.
++ */
++function lookupSynonyms(token) {
++    const entries = TOKEN_INDEX.get(fold(String(token).toLowerCase()));
++    if (!entries) {
++        return [];
++    }
++    const phrases = [];
++    for (const { groupIndex, memberIndex } of entries) {
++        const group = SYNONYM_GROUPS[groupIndex];
++        for (let i = 0; i < group.length; i += 1) {
++            if (i !== memberIndex && !phrases.includes(group[i])) {
++                phrases.push(group[i]);
++            }
++        }
++    }
++    return phrases.slice(0, 4);
++}
++
++// ---------------------------------------------------------------------------
++// Query language
++// ---------------------------------------------------------------------------
++// Grammar (units are whitespace-separated; double quotes group strict words):
++//   word          optional match, prefix + edit distance 1 (stock feel)
++//   +word / AND   required, strict (no wildcard, no fuzzy)
++//   -word / NOT   prohibited: matching documents are excluded
++//   a OR b        union — one lunr query per OR group
++//   "a b"         every word required, strict (adjacency NOT guaranteed: the
++//                 index carries no token positions); stopwords are dropped
++//   word*         optional prefix (stemmed — see below)
++//   word~2        optional, edit distance 2
++//   title:word    required; the results are scoped to page-title documents
++//                 (the index splits documents by type, so field scoping
++//                 skips the non-title indexes — see the worker patch)
++//
++// AND binds its two neighbor units; OR splits the units into independent
++// lunr queries; `-`/`NOT` units are global (applied to every OR group). A
++// query with no positive unit (e.g. `-foo` alone) parses as null — lunr
++// would match nothing — and the caller falls back to the stock smart path.
++
++function clauseOf(value, { presence, prefix, editDistance, field }) {
++    const clause = {
++        value,
++        presence:
++            presence === "required"
++                ? lunr.Query.presence.REQUIRED
++                : presence === "prohibited"
++                    ? lunr.Query.presence.PROHIBITED
++                    : lunr.Query.presence.OPTIONAL,
++        wildcard: prefix ? lunr.Query.wildcard.TRAILING : 0,
++    };
++    if (editDistance != null) {
++        clause.editDistance = editDistance;
++    }
++    if (field) {
++        clause.field = field;
++    }
++    return clause;
++}
++
++function unitClauses(unit) {
++    // Quoted phrases are split and stopword-filtered: the index carries no
++    // "de" token, and a REQUIRED "de" clause would void the whole query
++    // ("base de données" must run as base + données, not base + de + données).
++    const words = unit.quoted ? phraseWords(unit.text) : [unit.text];
++    const clauses = [];
++    for (const word of words) {
++        let value = word;
++        let prefix = false;
++        let editDistance = null;
++        if (!unit.quoted) {
++            const fuzzy = value.match(/~(\d+)$/);
++            if (fuzzy) {
++                editDistance = Number(fuzzy[1]);
++                value = value.slice(0, value.length - fuzzy[0].length);
++            }
++            if (value.endsWith("*")) {
++                prefix = true;
++                value = value.slice(0, -1);
++            }
++        }
++        if (!value) {
++            continue;
++        }
++        // A REQUIRED clause on a stopword can never match and voids the
++        // whole query ("+de", a quoted phrase reduced to stopwords): drop
++        // the word, and let the empty-group fallback below return to the
++        // stock path when nothing positive survives. Optional and prohibited
++        // clauses keep their word — a dead optional clause is harmless and a
++        // dead exclusion excludes nothing.
++        if (unit.presence === "required" && isStopword(value)) {
++            continue;
++        }
++        // Stem prefix values: lunr runs no pipeline on wildcard clauses, and
++        // the index stores stems — the typed prefix must be stemmed to match
++        // ("template*" → "templat*"; the raw form can only ever match tokens
++        // LONGER than itself, and indexed stems are shorter). Same length
++        // guard as the plain path: the French stemmer can shrink "ds" to "d"
++        // and a 1–2 character prefix matches half the corpus, so a too-short
++        // stem keeps the raw prefix.
++        const stemmed = prefix ? stemToken(value.toLowerCase()) : null;
++        const queryValue = prefix
++            ? (stemmed.length >= MIN_STEMMED_PREFIX_LENGTH ? stemmed : value.toLowerCase())
++            : value.toLowerCase();
++        clauses.push(clauseOf(queryValue, {
++            presence: unit.presence,
++            prefix,
++            // Bare words keep the stock fuzzy recall; explicit units (+, AND,
++            // quotes, title:) are strict — that is the point of the syntax.
++            // Prefix clauses drop the edit distance: lunr's TokenSet.fromClause
++            // honours one or the other, never both.
++            editDistance: prefix ? null : editDistance,
++            field: unit.field,
++        }));
++    }
++    return clauses;
++}
++
++/**
++ * Parse the raw input into deterministic lunr queries, or return null when
++ * the input carries no operator (the caller then uses the stock smart
++ * queries).
++ *
++ * Returns { queries: [{term: clauses, tokens}], tokens, titleOnly }.
++ */
++function parseQuery(input) {
++    if (typeof input !== "string" || !input.trim()) {
++        return null;
++    }
++    const items = []; // {kind: 'unit'|'or'|'and', unit?}
++    let pendingNot = false;
++    let hasOperator = false;
++    const unitRe = /"([^"]*)"|(\S+)/g;
++    let match;
++    while ((match = unitRe.exec(input)) !== null) {
++        const quoted = match[1] !== undefined;
++        const raw = quoted ? match[1] : match[2];
++        if (!quoted) {
++            if (raw === "OR") {
++                hasOperator = true;
++                items.push({ kind: "or" });
++                continue;
++            }
++            if (raw === "AND") {
++                hasOperator = true;
++                items.push({ kind: "and" });
++                continue;
++            }
++            if (raw === "NOT") {
++                hasOperator = true;
++                items.push({ kind: "and" }); // binds the next unit like AND
++                pendingNot = true; // …but the next unit becomes prohibited
++                continue;
++            }
++        }
++        const unit = { quoted, presence: "optional", field: null };
++        let working = raw;
++        if (quoted) {
++            unit.presence = "required";
++            unit.strict = true;
++        }
++        else {
++            if (working.startsWith("+") && working.length > 1) {
++                unit.presence = "required";
++                unit.strict = true;
++                working = working.slice(1);
++            }
++            else if (working.startsWith("-") && working.length > 1) {
++                unit.presence = "prohibited";
++                unit.strict = true;
++                working = working.slice(1);
++            }
++            const fieldMatch = working.match(/^title:(.+)$/);
++            if (fieldMatch) {
++                unit.field = "title";
++                working = fieldMatch[1];
++                if (unit.presence === "optional") {
++                    unit.presence = "required";
++                    unit.strict = true;
++                }
++            }
++        }
++        if (pendingNot) {
++            // NOT binds the NEXT unit, quoted or not.
++            unit.presence = "prohibited";
++            unit.strict = true;
++            pendingNot = false;
++        }
++        if (!working) {
++            continue;
++        }
++        unit.text = working;
++        if (!quoted) {
++            // Operators still count even on a lone keyword-less input like
++            // `snap*`: presence/wildcard/fuzzy/field shape the query.
++            if (unit.presence !== "optional" || unit.field) {
++                hasOperator = true;
++            }
++        }
++        hasOperator = hasOperator || quoted || working.endsWith("*") || /~\d+$/.test(working);
++        items.push({ kind: "unit", unit });
++    }
++    if (!hasOperator) {
++        return null;
++    }
++    // AND markers: make the direct neighbors required and strict.
++    for (let i = 0; i < items.length; i += 1) {
++        if (items[i].kind !== "and") {
++            continue;
++        }
++        for (let j = i - 1; j >= 0 && items[j].kind === "unit"; j -= 1) {
++            if (items[j].unit.presence === "optional") {
++                items[j].unit.presence = "required";
++                items[j].unit.strict = true;
++            }
++            break;
++        }
++        for (let j = i + 1; j < items.length && items[j].kind === "unit"; j += 1) {
++            if (items[j].unit.presence === "optional") {
++                items[j].unit.presence = "required";
++                items[j].unit.strict = true;
++            }
++            break;
++        }
++    }
++    // OR splits the stream into independent lunr queries (union).
++    const groups = [[]];
++    for (const item of items) {
++        if (item.kind === "or") {
++            groups.push([]);
++        }
++        else if (item.kind === "unit") {
++            groups[groups.length - 1].push(item.unit);
++        }
++    }
++    let titleOnly = false;
++    const tokens = [];
++    const prohibited = [];
++    const positiveGroups = [];
++    for (const groupUnits of groups) {
++        const positive = [];
++        for (const unit of groupUnits) {
++            for (const clause of unitClauses(unit)) {
++                if (clause.field) {
++                    titleOnly = true;
++                }
++                if (clause.presence === lunr.Query.presence.PROHIBITED) {
++                    // Prohibited words are exclusions, not search terms: keep
++                    // them out of the highlight tokens.
++                    if (!prohibited.some((c) => c.value === clause.value)) {
++                        prohibited.push(clause);
++                    }
++                    continue;
++                }
++                tokens.push(clause.value);
++                positive.push(clause);
++            }
++        }
++        if (positive.length > 0) {
++            positiveGroups.push(positive);
++        }
++    }
++    if (positiveGroups.length === 0) {
++        // Prohibitions only: lunr would match nothing — fall back to the
++        // stock smart path instead of running a dead query.
++        return null;
++    }
++    return {
++        queries: positiveGroups.map((positive) => ({
++            term: prohibited.concat(positive),
++            tokens,
++        })),
++        tokens,
++        titleOnly,
++    };
++}
++
++// Semantic proximity: extra union queries adding the bilingual synonyms of
++// the typed tokens. Each synonym phrase becomes its own query (its words
++// REQUIRED, ranked lower with boost) so a phrase still means its words
++// together; the typed tokens ride along as optional context. Bounded: at
++// most MAX_SYNONYM_QUERIES extra queries per search.
++const SYNONYM_BOOST = 0.5;
++const MAX_SYNONYM_QUERIES = 6;
++
++// Below this stemmed length the wildcard is dropped: the French stemmer can
++// shorten aggressively ("ds" → "d") and a 1–2 character prefix matches half
++// the corpus. Short tokens keep the stock smart-path recall (wildcards on
++// the raw token) instead.
++const MIN_STEMMED_PREFIX_LENGTH = 3;
++
++function buildSynonymQueries(tokens) {
++    const queries = [];
++    const seen = new Set();
++    for (const token of tokens) {
++        for (const phrase of lookupSynonyms(token)) {
++            if (seen.has(phrase)) {
++                continue;
++            }
++            seen.add(phrase);
++            // Split and stopword-filter the member like the index does: a
++            // REQUIRED clause on a word the index removed ("de" in "mot de
++            // passe") would void the query, and hyphenated members ("pare-feu")
++            // are indexed as separate tokens.
++            const words = phraseWords(phrase);
++            if (words.length === 0) {
++                continue;
++            }
++            const term = tokens.map((t) => ({
++                value: String(t),
++                presence: lunr.Query.presence.OPTIONAL,
++                wildcard: lunr.Query.wildcard.TRAILING,
++            }));
++            for (const word of words) {
++                term.push({
++                    value: word,
++                    presence: lunr.Query.presence.REQUIRED,
++                    boost: SYNONYM_BOOST,
++                });
++            }
++            queries.push({ term, tokens });
++            if (queries.length >= MAX_SYNONYM_QUERIES) {
++                return queries;
++            }
++        }
++    }
++    return queries;
++}
++
++// ---------------------------------------------------------------------------
++// Stemmed recall for the plain path — extra recall, not a bug fix.
++// ---------------------------------------------------------------------------
++// The stock smart queries wildcard the RAW typed token, and lunr runs NO
++// pipeline on wildcard clauses: a raw wildcard can only match indexed stems
++// at or longer than itself, so the operator prefix "template*" could never
++// reach the shorter indexed stem "templat" (the operator path stems the
++// prefix to fix exactly that). Plain complete words were never broken —
++// their exact/fuzzy REQUIRED clauses run through the query pipeline, which
++// stems them like the index does. The plain path still gains this extra
++// union query: every token stemmed through a replica of the index pipeline,
++// then matched as a trailing-wildcard prefix — harmless by construction and
++// it widens recall for words whose stem the stock wildcards cannot reach.
++// ---------------------------------------------------------------------------
++const MAX_STEM_QUERY_TOKENS = 12;
++
++function buildStemmedQuery(tokens) {
++    if (!Array.isArray(tokens) || tokens.length === 0) {
++        return null;
++    }
++    const kept = tokens.slice(0, MAX_STEM_QUERY_TOKENS);
++    const term = [];
++    for (const token of kept) {
++        const stemmed = stemToken(String(token));
++        if (term.some((c) => c.value === stemmed)) {
++            continue;
++        }
++        term.push({
++            value: stemmed,
++            presence: lunr.Query.presence.OPTIONAL,
++            // A too-short stem would prefix-match half the corpus ("ds" is
++            // stemmed to "d"): keep exact matching for very short stems, the
++            // stock smart path already handles short-token recall.
++            wildcard: stemmed.length >= MIN_STEMMED_PREFIX_LENGTH
++                ? lunr.Query.wildcard.TRAILING
++                : lunr.Query.wildcard.NONE,
++        });
++    }
++    if (term.length === 0) {
++        return null;
++    }
++    return { term, tokens: kept };
++}
++
++// Normalized words of TOKEN_INDEX — exposed for the post-build synonym
++// validator (scripts/validate-search-synonyms.js): no stopword or short
++// trigger word may become a lookup key.
++function synonymIndexWords() {
++    return [...TOKEN_INDEX.keys()];
++}
++
++module.exports = {
++    parseQuery,
++    buildSynonymQueries,
++    buildStemmedQuery,
++    lookupSynonyms,
++    synonymIndexWords,
++    phraseWords,
++    isStopword,
++    SYNONYM_GROUPS,
++};
 diff --git a/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/worker.js b/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/worker.js
-index 4c84cd0..14fa8ed 100644
+index 4c84cd0..dd1d439 100644
 --- a/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/worker.js
 +++ b/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/worker.js
-@@ -6,6 +6,13 @@ import { smartQueries } from "../utils/smartQueries";
+@@ -6,6 +6,18 @@ import { smartQueries } from "../utils/smartQueries";
  import { SearchDocumentType, } from "../../shared/interfaces";
  import { sortSearchResults } from "../utils/sortSearchResults";
  import { processTreeStatusOfSearchResults } from "../utils/processTreeStatusOfSearchResults";
++// NUMSPOT — query language ("+ - AND OR NOT \"…\" * ~ title:") and
++// bilingual synonym expansion, both query-side only (see ./numspotSearch.js
++// and SEARCH.md). Without an operator in the raw input the stock smart
++// queries below are untouched.
++import { parseQuery, buildSynonymQueries, buildStemmedQuery } from "./numspotSearch";
 +// NUMSPOT (DOC-604) — query-side counterpart of the accent folding applied at
 +// indexing time (see dist/server/server/utils/buildIndex.js). The index
 +// serializes the "foldAccents" label in its pipeline; without this
@@ -16,6 +604,68 @@ index 4c84cd0..14fa8ed 100644
  const cache = new Map();
  export class SearchWorker {
      async fetchIndexes(baseUrl, searchContext) {
+@@ -21,15 +33,50 @@ export class SearchWorker {
+         return promise;
+     }
+     async search(baseUrl, searchContext, input, limit) {
+-        const rawTokens = tokenize(input, language);
+-        if (rawTokens.length === 0) {
++        // NUMSPOT: an input carrying operators parses into
++        // deterministic lunr clauses and skips the smart combinatorics; a
++        // plain input keeps the stock path plus the synonym queries.
++        const parsed = parseQuery(input);
++        const rawTokens = tokenize(parsed ? parsed.tokens.join(" ") : input, language);
++        if (rawTokens.length === 0 && !parsed) {
+             return [];
+         }
+         const { wrappedIndexes, zhDictionary } = await this.lowLevelFetchIndexes(baseUrl, searchContext);
+-        const queries = smartQueries(rawTokens, zhDictionary);
++        let queries;
++        let titleOnly = false;
++        if (parsed) {
++            queries = parsed.queries;
++            titleOnly = parsed.titleOnly;
++        }
++        else {
++            queries = smartQueries(rawTokens, zhDictionary);
++            // NUMSPOT — stemmed recall: the stock smart queries wildcard the
++            // RAW token and lunr runs no pipeline on wildcard clauses, so a
++            // raw wildcard can only reach indexed stems at or longer than
++            // itself. Stem the tokens through the index pipeline replica and
++            // prefix-match those as an extra recall query — concatenated
++            // before the synonyms so their matches survive result-cap
++            // truncation first; final ranking is by score either way.
++            const stemmedQuery = buildStemmedQuery(rawTokens);
++            if (stemmedQuery) {
++                queries = queries.concat([stemmedQuery]);
++            }
++            // Semantic proximity: extra union queries surface the bilingual
++            // synonyms of the typed tokens, ranked below exact matches.
++            const synonymQueries = buildSynonymQueries(rawTokens);
++            if (synonymQueries.length > 0) {
++                queries = queries.concat(synonymQueries);
++            }
++        }
+         const results = [];
+         search: for (const { term, tokens } of queries) {
+             for (const { documents, index, type } of wrappedIndexes) {
++                // `title:` scopes the WHOLE query to page-title documents:
++                // the index splits documents by type (title/heading/content),
++                // so field targeting is a skip, not a lunr field.
++                if (titleOnly && type !== SearchDocumentType.Title) {
++                    continue;
++                }
+                 results.push(...index
+                     .query((query) => {
+                     for (const item of term) {
+@@ -39,6 +86,7 @@ export class SearchWorker {
+                             ...(item.editDistance
+                                 ? { editDistance: item.editDistance }
+                                 : null),
++                            ...(item.boost != null ? { boost: item.boost } : null),
+                         });
+                     }
+                 })
 diff --git a/node_modules/@easyops-cn/docusaurus-search-local/dist/server/server/utils/buildIndex.js b/node_modules/@easyops-cn/docusaurus-search-local/dist/server/server/utils/buildIndex.js
 index 821d58f..30e2c3a 100644
 --- a/node_modules/@easyops-cn/docusaurus-search-local/dist/server/server/utils/buildIndex.js
@@ -57,10 +707,10 @@ index 821d58f..30e2c3a 100644
              // since they are almost all programming code.
              for (const lang of language) {
 diff --git a/node_modules/@easyops-cn/docusaurus-search-local/dist/server/server/utils/getIndexHash.js b/node_modules/@easyops-cn/docusaurus-search-local/dist/server/server/utils/getIndexHash.js
-index eb42978..63737c4 100644
+index eb42978..1b011d2 100644
 --- a/node_modules/@easyops-cn/docusaurus-search-local/dist/server/server/utils/getIndexHash.js
 +++ b/node_modules/@easyops-cn/docusaurus-search-local/dist/server/server/utils/getIndexHash.js
-@@ -41,6 +41,13 @@ function getIndexHash(config) {
+@@ -41,6 +41,18 @@ function getIndexHash(config) {
          const pluginVersion = require(path_1.default.resolve(__dirname, "../../../../package.json")).version;
          (0, debug_1.debugInfo)("using @easyops-cn/docusaurus-search-local v%s", pluginVersion);
          md5sum.update(pluginVersion, "utf8");
@@ -71,6 +721,11 @@ index eb42978..63737c4 100644
 +        // hence a stale index served for a year. Add the two missing inputs.
 +        md5sum.update(JSON.stringify(config), "utf8");
 +        md5sum.update(fs_1.default.readFileSync(path_1.default.resolve(__dirname, "buildIndex.js")));
++        // NUMSPOT — the query-side patch files too: the worker query logic
++        // (accent folding registration, query language, synonyms) shapes the
++        // results just like the index builder does.
++        md5sum.update(fs_1.default.readFileSync(path_1.default.resolve(__dirname, "../../../client/client/theme/worker.js")));
++        md5sum.update(fs_1.default.readFileSync(path_1.default.resolve(__dirname, "../../../client/client/theme/numspotSearch.js")));
          for (const item of files) {
              md5sum.update(fs_1.default.readFileSync(item.path));
          }
