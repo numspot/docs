@@ -16,13 +16,23 @@ const EXCLUDED_DATE_DOC_IDS = new Set(['docs/home']);
 
 const GITHUB_BLOB_BASE = 'https://github.com/numspot/docs/blob/main/';
 
+// Review-date fallback for pages with no resolvable date: frontmatter
+// `last_update` absent AND git last-commit date unavailable (shallow CI
+// checkouts have no history to read). 2026-10-02 is the first public commit
+// (the corpus import) — the oldest date the published content can vouch for.
+// Hardcoded on purpose: deriving it from git would fail in the very shallow
+// checkouts this fallback exists for. Pages touched since the D-017 rule
+// carry their own frontmatter date and never hit this path.
+const FALLBACK_REVIEW_DATE = new Date('2026-10-02T00:00:00Z');
+
 /**
  * Review date displayed in small dark-gray text right under the page title
  * ("Reviewed on ..." / "Mise à jour le ..."), rendered through the
  * MDXComponents swizzle (h1 mapping) so it sits directly below the markdown
  * H1. Next to it, a link to the page's source file on GitHub — rendered on
- * every doc page with a resolvable source file, with or without a review
- * date.
+ * every doc page with a resolvable source file. A review date ALWAYS
+ * resolves: frontmatter `last_update` → git last-commit date → first
+ * public commit (see FALLBACK_REVIEW_DATE).
  */
 export default function LastUpdatedDate(): ReactNode {
   const {i18n} = useDocusaurusContext();
@@ -44,30 +54,35 @@ export default function LastUpdatedDate(): ReactNode {
     ? `${GITHUB_BLOB_BASE}${sourcePath}`
     : undefined;
 
-  // The review date and the GitHub link are rendered together, only on pages
-  // with a git date (homepage excluded).
-  const showDate =
-    Boolean(metadata?.lastUpdatedAt) && !EXCLUDED_DATE_DOC_IDS.has(metadata.id);
-  if (!showDate || !githubUrl) {
+  // Render as soon as there is something to show. The GitHub link must stay
+  // visible even when the review date would be absent — but with the
+  // fallback below a date always resolves, so the line is now unconditional
+  // except on the excluded landing pages.
+  const excludeDate = EXCLUDED_DATE_DOC_IDS.has(metadata.id);
+
+  // Date resolution order: frontmatter `last_update` → git last commit →
+  // first-public-commit fallback (see FALLBACK_REVIEW_DATE).
+  const atDate = metadata?.lastUpdatedAt
+    ? new Date(metadata.lastUpdatedAt)
+    : FALLBACK_REVIEW_DATE;
+  const showDate = !excludeDate;
+  if (!showDate && !githubUrl) {
     return null;
   }
 
-  const atDate = metadata?.lastUpdatedAt ? new Date(metadata.lastUpdatedAt) : undefined;
-  const formatted = atDate
-    ? new Intl.DateTimeFormat(
-        INTL_LOCALES[i18n.currentLocale] ?? i18n.currentLocale,
-        {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-          timeZone: 'UTC',
-        },
-      ).format(atDate)
-    : undefined;
+  const formatted = new Intl.DateTimeFormat(
+    INTL_LOCALES[i18n.currentLocale] ?? i18n.currentLocale,
+    {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'UTC',
+    },
+  ).format(atDate);
 
   return (
     <p className="doc-last-updated">
-      {showDate && formatted && atDate && (
+      {showDate && (
         <>
           <Translate
             id="theme.docs.reviewedOn"
