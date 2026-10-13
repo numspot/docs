@@ -298,6 +298,54 @@
     "message": "Plateforme de services cloud hybride, souveraine et portable",
     "description": "Baseline displayed next to the logo in the navbar"
   },
+  "theme.search.syntax.toggleLabel": {
+    "message": "Aide : syntaxe de recherche",
+    "description": "Accessible name of the button opening the search syntax popover"
+  },
+  "theme.search.syntax.popoverTitle": {
+    "message": "Syntaxe de recherche",
+    "description": "Title of the search syntax popover"
+  },
+  "theme.search.syntax.required": {
+    "message": "obligatoire, mot exact (sans approximation)",
+    "description": "One row of the search syntax popover"
+  },
+  "theme.search.syntax.and": {
+    "message": "les deux mots sont requis",
+    "description": "One row of the search syntax popover"
+  },
+  "theme.search.syntax.or": {
+    "message": "l'un ou l'autre",
+    "description": "One row of the search syntax popover"
+  },
+  "theme.search.syntax.excluded": {
+    "message": "exclut les documents qui le contiennent",
+    "description": "One row of the search syntax popover"
+  },
+  "theme.search.syntax.not": {
+    "message": "équivaut à -word",
+    "description": "One row of the search syntax popover"
+  },
+  "theme.search.syntax.phrase": {
+    "message": "tous les mots requis, exacts",
+    "description": "One row of the search syntax popover"
+  },
+  "theme.search.syntax.prefix": {
+    "message": "tout mot commençant par…",
+    "description": "One row of the search syntax popover"
+  },
+  "theme.search.syntax.fuzzy": {
+    "message": "tolère jusqu'à 2 fautes de frappe",
+    "description": "One row of the search syntax popover"
+  },
+  "theme.search.syntax.fieldTitle": {
+    "message": "cherche dans les titres de page uniquement",
+    "description": "One row of the search syntax popover"
+  },
+  "theme.search.syntax.footnote": {
+    "message": "Les accents sont ignorés. Exemple : registry AND password -deprecated",
+    "description": "Footnote of the search syntax popover: accents and example"
+  },
   "permexplorer.clear": {
     "message": "Effacer la recherche",
     "description": "Clear the permissions search field"
