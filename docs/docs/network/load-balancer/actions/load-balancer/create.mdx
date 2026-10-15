@@ -3,6 +3,8 @@ title: Create a load balancer - Numspot
 sidebar_label: Create a load balancer
 sidebar_position: 1
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -71,6 +73,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 From the console, you can create a load balancer and configure its listeners.
 
 1. From the left-hand side menu, click **Network** → **Load Balancers**.
@@ -95,6 +99,8 @@ From the console, you can create a load balancer and configure its listeners.
 
 </TabItem>
 <TabItem value="api" label="API">
+
+## API {#tabhead-api}
 
 :::info
 **Before you begin**:
@@ -123,6 +129,8 @@ You must specify either the **subnets** or **AvailabilityZoneNames** parameters.
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
 

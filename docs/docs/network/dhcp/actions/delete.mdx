@@ -3,6 +3,8 @@ title: Delete a DHCP options group - Numspot
 sidebar_label: Delete a DHCP options group
 sidebar_position: 5
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -37,6 +39,8 @@ Dissociate the DHCP options group from all the VPC it is associated with. To do 
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 1. From the left-hand side menu, click **Network** → **DHCP Options** to access the list of DHCP options groups.
 2. Tick the checkbox of the DHCP options group you want to delete.
 3. Click the **Delete** button.
@@ -47,6 +51,8 @@ A confirmation message appears at the bottom of the page indicating that the DHC
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `DELETE /compute/spaces/{spaceId}/dhcpOptions/{id}` command deletes a specified DHCP options set.
 
 Before deleting a DHCP options set, you must dissociate it from the networks it is associated with. To do so, associate each network with a new DHCP options set or with the default set.
@@ -55,6 +61,8 @@ Before deleting a DHCP options set, you must dissociate it from the networks it 
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/dhcp_options).
 

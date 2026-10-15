@@ -3,6 +3,8 @@ title: Create Kubernetes clusters - Managed Kubernetes
 sidebar_label: Create Kubernetes clusters
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -42,6 +44,8 @@ The choice between a **Private** and a **Public** network determines who can acc
 
 <Tabs>
     <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -160,6 +164,9 @@ The choice between a **Private** and a **Public** network determines who can acc
         You are redirected to the cluster details page. Your cluster is then being created. Its status will update as soon as it is operational, after only a few minutes.
     </TabItem>
     <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
         The `POST /kubernetes/spaces/{spaceId}/clusters` command lets you create and launch a Kubernetes cluster.
         - **States**: The cluster moves from "pending" to "running" once created.
 
@@ -202,6 +209,9 @@ The choice between a **Private** and a **Public** network determines who can acc
         [See the full specification](/openapi/#tag/kubernetes/POST/kubernetes/spaces/{spaceId}/clusters)
     </TabItem>
     <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
         To create a Kubernetes cluster with Terraform, use the following resource block:
 
         ```hcl

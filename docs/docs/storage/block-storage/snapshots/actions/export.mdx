@@ -2,6 +2,8 @@
 title: Export a snapshot
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -46,9 +48,15 @@ This action requires the following **IAM** (Identity and Access Management) perm
 :::
 <Tabs>
 <TabItem value="Console" default>
+
+## Console {#tabhead-console}
+
   Snapshot export is not available through the console. Use the API or Terraform.
 </TabItem>
 <TabItem value="API">
+
+## API {#tabhead-api}
+
 The `POST /compute/spaces/{spaceId}/snapshotExportTasks` command creates a snapshot export.
 
 [Example request: Create a snapshot export](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/snapshotExportTasks)
@@ -58,6 +66,9 @@ The `GET /compute/spaces/{spaceId}/snapshotExportTasks/{id}` command retrieves t
 [Example request: Retrieve the information of an export](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/snapshotExportTasks/{id})
 </TabItem>
 <TabItem value="Terraform">
+
+## Terraform {#tabhead-terraform}
+
   The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/snapshot_export_task).
 </TabItem>
 </Tabs>

@@ -3,6 +3,8 @@ title: Delete a Harbor registry
 sidebar_label: Delete a Harbor instance
 sidebar_position: 9
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -27,6 +29,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 
 {/* </TabItem> */}
 <TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
     The `DELETE /registry/spaces/{spaceId}/registries/{registryId}` request deletes a Container Registry.
     The Container Registry moves to the `deleting` state for the duration of the deletion.
 

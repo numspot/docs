@@ -2,6 +2,8 @@
 title: Attach or detach a GPU
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -27,6 +29,8 @@ You can only attach GPU to VM with the highest performance flag (1). For more in
 ## Attach a GPU
 <Tabs>
    <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 1. From the left-hand side menu, click **Compute** → **GPU**.
 
@@ -55,6 +59,9 @@ For the difference between stop/start and restart, see [VM lifecycle](/docs/comp
   </TabItem>
 
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
 The `PUT /compute/spaces/{spaceId}/flexibleGpus/{id}/vms/link` command attaches one of your allocated flexible GPU (fGPU) to one of your VM.
 The fGPU is in an attaching state until the VM is stopped, after which it becomes attached.
 
@@ -66,6 +73,9 @@ You can only attach fGPUs to VM with the highest performance flag: "highest" (1)
   </TabItem>
 
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/flexible_gpu).
   </TabItem>
 
@@ -82,6 +92,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 
 <Tabs>
   <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 1. From the left-hand side menu, click **Compute** → **GPU**.
 
@@ -106,6 +118,9 @@ For the difference between stop/start and restart, see [VM lifecycle](/docs/comp
   </TabItem>
 
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
 The `PUT /compute/spaces/{spaceId}/flexibleGpus/{id}/vms/unlink` command detaches a flexible GPU (fGPU) from a VM.
 The fGPU is in a detaching state until the VM is stopped, after which it becomes allocated again. It is then available again to be attached to another VM.
 
@@ -113,6 +128,9 @@ The fGPU is in a detaching state until the VM is stopped, after which it becomes
   </TabItem>
 
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/flexible_gpu).
   </TabItem>
 

@@ -2,6 +2,8 @@
 title: Delete a VPC
 sidebar_position: 4
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -21,6 +23,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 :::
 <Tabs>
    <TabItem value="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -54,6 +58,8 @@ This action requires the following IAM (Identity and Access Management) permissi
    </TabItem>
    <TabItem value="API">
 
+## API {#tabhead-api}
+
 :::info
 Before you begin, make sure to delete or detach all resources linked to the VPC, such as:
 * VM
@@ -66,6 +72,9 @@ The `DELETE /compute/spaces/{spaceId}/vpcs/{id}` command lets you delete a VPC.
 [Example request: Deleting a VPC](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/vpcs/{id})
   </TabItem>
   <TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpc).
   </TabItem>
 </Tabs>

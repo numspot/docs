@@ -2,6 +2,8 @@
 title: Detach a route table from a subnet
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -17,6 +19,8 @@ No IAM (Identity and Access Management) permission is required to perform this a
 
 <Tabs>
    <TabItem value="console" default> 
+
+## console {#tabhead-console}
 
 :::info
 **Before you begin:** Create a route table. To find out more, see [Create a route table ↗](/docs/network/route-table/actions/create). A subnet must also be associated for the disassociation action to be available.
@@ -47,12 +51,18 @@ No IAM (Identity and Access Management) permission is required to perform this a
 
   </TabItem> 
   <TabItem value="api">
+
+## api {#tabhead-api}
+
       The `PUT /compute/spaces/{spaceId}/routeTables/{id}/subnets/unlink` command disassociates a subnet from a route table.
 After disassociation, the subnet can no longer use the routes of this route table, but uses those of the main route table of the VPC instead.
 
 [Example request: Detach a route table ↗](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/routeTables/{id}/subnets/unlink)
   </TabItem>
   <TabItem value="terraform">
+
+## terraform {#tabhead-terraform}
+
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
   </TabItem>
 </Tabs>

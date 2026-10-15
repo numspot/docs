@@ -2,6 +2,8 @@
 title: Modify an attribute of a VM
 sidebar_position: 9
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -25,6 +27,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 
 <Tabs>
   <TabItem value="Console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -95,6 +99,9 @@ This action requires the following **IAM** (Identity and Access Management) perm
   </TabItem>
 
   <TabItem value="API" label="API">
+
+## API {#tabhead-api}
+
     The `PUT /compute/spaces/{spaceId}/vms/{id}` command modifies the attributes of a VM.
 
     You must stop the VM before modifying the following attributes:
@@ -107,6 +114,9 @@ This action requires the following **IAM** (Identity and Access Management) perm
   </TabItem>
 
   <TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
     The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
   </TabItem>
 </Tabs>

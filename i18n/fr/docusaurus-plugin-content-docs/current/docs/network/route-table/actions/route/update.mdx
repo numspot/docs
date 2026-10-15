@@ -2,6 +2,8 @@
 title: Modifier une route
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -18,6 +20,8 @@ Aucune permission **IAM** (Identity and Access Management) n'est requise pour ef
 <Tabs>
   <TabItem value="Console" default>
 
+## Console {#tabhead-console}
+
   :::info
   La modification d'une route n'est pas disponible depuis la console Numspot : le panneau **Routes** d'une route table ne propose que la suppression d'une route.
 
@@ -26,6 +30,9 @@ Aucune permission **IAM** (Identity and Access Management) n'est requise pour ef
 
   </TabItem>
   <TabItem value="API">
+
+## API {#tabhead-api}
+
       La commande `PUT /compute/spaces/{spaceId}/routeTables/{id}/routes` remplace une route existante dans une route table d'un VPC (Virtual Private Cloud).
 Vous devez spécifier l'un des éléments suivants comme cible :
 

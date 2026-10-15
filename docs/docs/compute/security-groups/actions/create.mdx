@@ -2,6 +2,8 @@
 title: Create a security group
 sidebar_position: 1
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -26,6 +28,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 :::
 <Tabs>
    <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -75,6 +79,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 
    </TabItem> 
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
 The `POST /compute/spaces/{spaceId}/securityGroups` command creates a security group. This action creates a security group in a specified VPC. By default, a security group is created for use in a VPC.
 
 When launching a VM, if no security group is explicitly specified, the appropriate default security group is assigned to the VM. Security groups include a default rule allowing VM to have network access between each other.
@@ -84,6 +91,9 @@ When creating a security group, you must specify a name. You can have up to 500 
 [Example request: Creating a Security Group](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/securityGroups)
   </TabItem>
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
     The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/security_group).
   </TabItem>
 </Tabs>

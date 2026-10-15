@@ -3,7 +3,7 @@ title: Modifier un attribut d'un subnet
 sidebar_position: 3
 draft: false
 last_update:
-  date: 2026-09-28
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -29,6 +29,8 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 <Tabs>
   <TabItem value="Console" default>
 
+## Console {#tabhead-console}
+
 <Walkthrough
   steps={[
     { img: "/img/walkthrough/subnet/update-01-vpclist.png", text: "Depuis le menu latéral gauche, cliquez sur Réseau → VPC.", hotspot: { x: 0, y: 0.5222, w: 0.1931, h: 0.0568 } },
@@ -53,6 +55,8 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
   </TabItem> 
   <TabItem value="API">
+
+## API {#tabhead-api}
 
 La commande `PUT /compute/spaces/{spaceId}/subnets/{id}` modifie l'attribut `mapPublicIpOnLaunch` d'un subnet.
 

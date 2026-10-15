@@ -3,6 +3,8 @@ title: Get information about your internet gateways - Numspot
 sidebar_label: Get information about your internet gateways
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from "@theme/Tabs";
@@ -24,6 +26,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 
 <Tabs>
 <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -49,6 +53,8 @@ You can view the information of your internet gateways from the **VPC** dashboar
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `GET /compute/spaces/{spaceId}/internetGateways` command lists the internet gateways.
 
 [Example request: List all internet gateways ↗](/openapi/#tag/compute/GET/compute/spaces/%7BspaceId%7D/internetGateways)
@@ -59,6 +65,8 @@ The `GET /compute/spaces/{spaceId}/internetGateways/{id}` command retrieves info
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/internet_gateway).
 

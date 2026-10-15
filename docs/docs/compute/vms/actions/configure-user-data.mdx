@@ -2,6 +2,8 @@
 title: Configure a VM with user data
 sidebar_position: 8
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -36,6 +38,9 @@ This user data can be run on every start of the VM, if the VM contains a suitabl
 
 <Tabs>
   <TabItem value="Console" label="Console" default>
+
+## Console {#tabhead-console}
+
     In the "Create VM" dialog box in the Numspot console:
 
     1. From the left-hand side menu, click **Compute** → **VM** to access the list of VM;
@@ -46,6 +51,9 @@ This user data can be run on every start of the VM, if the VM contains a suitabl
   </TabItem>
 
   <TabItem value="API" label="API">
+
+## API {#tabhead-api}
+
     For Linux VM, you must create a script that retrieves and runs the user data.
 
     For Windows VM, you can type a script in one of the following wrappers to run it on start:
@@ -82,6 +90,9 @@ This user data can be run on every start of the VM, if the VM contains a suitabl
   </TabItem>
 
   <TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
     The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
   </TabItem>
 </Tabs>

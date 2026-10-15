@@ -2,6 +2,8 @@
 title: Dissociate a public IP from a resource
 sidebar_position: 4
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -27,6 +29,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 :::
 <Tabs>
   <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
     1.  From the left-hand side menu, click **Network** → **Public IP**.
         ![network_menu.png](/img/console/network/en-network_menu.png)
     2.  Identify the public IP you want to dissociate, then from the list of actions, click **Dissociate**.  
@@ -38,11 +43,17 @@ This action requires the following IAM (Identity and Access Management) permissi
         ![unlink_public_ip_success.png](/img/console/network/public-ips/unlink_public_ip_success.png)
   </TabItem>
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
   The `PUT /compute/spaces/{spaceId}/publicIps/{id}/unlink` command dissociates a public IP from the associated resource.
 
   [Example request: Dissociation of a public IP](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/publicIps/{id}/unlink)
   </TabItem>
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/public_ip).
   </TabItem>
 </Tabs>

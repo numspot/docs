@@ -2,6 +2,8 @@
 title: Delete a Compute Bridge
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -28,6 +30,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 <TabItem value="api" label="API" default>
 
+## API {#tabhead-api}
+
 The `DELETE /connectivity/spaces/{spaceId}/computeBridges/{id}` command deletes the bridge. <br/>
 If the bridge is in the "Active" state, it can be deleted.<br/>
 If it is in the "Failed" state, it cannot be deleted.
@@ -36,6 +40,8 @@ If it is in the "Failed" state, it cannot be deleted.
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/compute_bridge).
 
