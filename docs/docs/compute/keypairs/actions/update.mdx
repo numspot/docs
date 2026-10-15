@@ -2,6 +2,8 @@
 title: Modify the key pair of a VM
 sidebar_position: 5
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -24,6 +26,9 @@ This action requires the following **IAM** (Identity and Access Management) perm
 
 <Tabs>
   <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
     1. From the left-hand side menu, click **Compute** → **VM**;
     2. Select the VM whose key pair you want to modify;
     3. Click the **Modify the key pair** action;
@@ -31,6 +36,9 @@ This action requires the following **IAM** (Identity and Access Management) perm
     5. Click **Confirm**.
   </TabItem>
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
 To modify the public key associated with the metadata of the VM, use the `PUT /compute/spaces/{spaceId}/vms/{id}` command.
 
 [Example request: Modifying a VM](/openapi/#tag/compute/put/compute/spaces/{spaceId}/vms/{id})
@@ -81,6 +89,9 @@ To apply the new key pair using the `cloud_init_modules` modules of cloud-init, 
    This method regenerates the SSH signature of the VM, which changes its fingerprint. You will therefore receive a warning when you reconnect to the VM, because the fingerprint of the SSH key will have changed. Make sure that you are ready to accept this change on your next connection.
   </TabItem>
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
     The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
   </TabItem>
 </Tabs>

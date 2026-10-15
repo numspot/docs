@@ -3,6 +3,8 @@ title: Delete a PostgreSQL backup - Managed PostgreSQL
 sidebar_label: Delete a PostgreSQL backup
 sidebar_position: 10
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -26,6 +28,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 
 <TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
     The `DELETE /postgresql/spaces/{spaceId}/clusters/{clusterId}/backups/{backupId}` request deletes an on-demand backup of a cluster.
 
     **Parameters**

@@ -2,6 +2,8 @@
 title: Restart a VM
 sidebar_position: 7
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from "@theme/Tabs";
@@ -23,6 +25,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 
 <Tabs>
   <TabItem value="Console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -52,12 +56,18 @@ This action requires the following **IAM** (Identity and Access Management) perm
   </TabItem>
 
   <TabItem value="API" label="API">
+
+## API {#tabhead-api}
+
     The `PUT /compute/spaces/{spaceId}/vms/{id}/reboot` command restarts a VM. This operation sends a restart request to a specified VM. It is an asynchronous action that queues this restart request.
 
     [Example request: Restart the VM](/openapi/#tag/compute/PUT/compute/spaces/%7BspaceId%7D/vms/%7Bid%7D/reboot)
   </TabItem>
 
   <TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
     The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
   </TabItem>
 </Tabs>

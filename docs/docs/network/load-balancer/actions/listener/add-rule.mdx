@@ -3,6 +3,8 @@ title: Add a rule to a load balancer listener - Numspot
 sidebar_label: Add a rule to a load balancer listener
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -24,6 +26,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
 2. Click the name of the load balancer for which you want to add a rule.
 3. In the "Listeners" tab, click the listener to which you want to add a rule.
@@ -36,6 +40,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `POST /compute/spaces/{spaceId}/listenerRules` command creates a traffic redirection rule for the specified listener. Each rule must specify either the "hostNamePattern" or the "pathPattern" parameter. Rules are processed in order of priority, from the highest value to the lowest.
 
 Once the rule is created, you must register backend VM with this rule.
@@ -44,6 +50,8 @@ Once the rule is created, you must register backend VM with this rule.
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/listener_rule).
 

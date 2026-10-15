@@ -2,6 +2,8 @@
 title: Get the status of a PostgreSQL cluster
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-19
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -21,6 +23,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 1. From the left-hand side menu, click **Managed Services** → **PostgreSQL** → **Clusters** to access the list of PostgreSQL clusters.
 
    ![Managed Services menu](/img/console/managed-services/postgresql/en-menu-postgresql.png)
@@ -32,6 +36,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 </TabItem>
 
 <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
     The `GET /postgresql/spaces/{spaceId}/clusters/{clusterId}` request returns the current status of a PostgreSQL cluster.
 
     ### Response example

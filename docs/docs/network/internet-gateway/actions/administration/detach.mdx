@@ -3,6 +3,8 @@ title: Detach an internet gateway from a VPC - Numspot
 sidebar_label: Detach an internet gateway from a VPC
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -33,6 +35,8 @@ The VPC must not contain any [VM](/docs/compute/concept/) (Virtual Machine) usin
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 <Walkthrough
   steps={[
     { img: "/img/walkthrough/en/internet-gateway/list.png", text: "From the left-hand side menu, click Network → VPC → Internet Gateways.", hotspot: { x: 0, y: 0.6358, w: 0.194, h: 0.0568 } },
@@ -59,6 +63,8 @@ A new **Detach the VPC** dialog box appears.
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `PUT /compute/spaces/{spaceId}/internetGateways/{id}/vpcs/unlink` command detaches an internet gateway from a VPC. This action disables and detaches an Internet service from a VPC.
 
 [Example request: Detach an internet gateway from a VPC](/openapi/#tag/compute/PUT/compute/spaces/%7BspaceId%7D/internetGateways/%7Bid%7D/vpcs/unlink)
@@ -67,6 +73,8 @@ The command that detaches an internet gateway from a VPC returns an HTTP 204 NO 
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/internet_gateway).
 

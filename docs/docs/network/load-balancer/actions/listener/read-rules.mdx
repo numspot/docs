@@ -3,6 +3,8 @@ title: Get information about your load balancer listener rules - Numspot
 sidebar_label: Get information about your load balancer listener rules
 sidebar_position: 4
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -23,6 +25,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 <Tabs>
   <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
 2. Click the name of the load balancer for which you want to view the rules.
 3. In the "Listeners" tab, click the listener for which you want to view the rules.
@@ -30,6 +34,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 
   </TabItem>
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
 
 The `GET /compute/spaces/{spaceId}/listenerRules` command lists the rules for your listeners.
 

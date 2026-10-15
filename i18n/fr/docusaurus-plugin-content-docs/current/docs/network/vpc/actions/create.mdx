@@ -2,6 +2,8 @@
 title: Créer un VPC
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -22,6 +24,8 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 :::
 <Tabs>
    <TabItem value="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -57,6 +61,9 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
    </TabItem> 
    <TabItem value="API">
+
+## API {#tabhead-api}
+
 La commande `POST /compute/spaces/{spaceId}/vpcs` permet de créer un VPC (Virtual Private Cloud) avec une plage d'adresses IP (Internet Protocol) spécifiée.
 La plage d'adresses IP (plage réseau) de votre VPC doit être comprise entre un masque de sous-réseau /28 (16 IP) et un masque de sous-réseau /16 (65536 IP).
 

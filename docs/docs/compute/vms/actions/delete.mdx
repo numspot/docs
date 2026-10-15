@@ -3,6 +3,8 @@ title: Delete a VM - compute
 sidebar_label: Delete a VM
 sidebar_position: 11
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -33,6 +35,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
   <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 
 <Walkthrough
   steps={[
@@ -60,6 +64,9 @@ This action requires the following IAM (Identity and Access Management) permissi
   </TabItem>
 
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
     The `DELETE /compute/spaces/{spaceId}/vms/{id}` command lets you terminate a specified VM.
 
     This operation is idempotent, which means that all calls succeed even if you terminate a VM more than once.
@@ -70,6 +77,9 @@ This action requires the following IAM (Identity and Access Management) permissi
   </TabItem>
 
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
     The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
   </TabItem>
 </Tabs>

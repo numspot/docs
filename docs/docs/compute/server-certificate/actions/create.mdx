@@ -2,6 +2,8 @@
 title: Create a server certificate
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -34,6 +36,9 @@ Use the **API** or **Terraform** (see the corresponding tabs).
 
   </TabItem>
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
 The `POST /compute/spaces/{spaceId}/serverCertificates` command creates a server certificate together with its corresponding private key.
 
 You can also specify the chain of intermediate certificate authorities if your certificate is not directly signed by a root authority. You can indicate several intermediate certificate authorities in the **certificateChain** parameter. To do so, concatenate all the certificates in the correct order (the first certificate must be that of your certificate's authority, the second that of the first one's authority, and so on).

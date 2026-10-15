@@ -4,7 +4,7 @@ description: "Audit access to the resources of a space, by resource or by user, 
 sidebar_position: 4
 draft: false
 last_update:
-  date: 2026-09-18
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -25,6 +25,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 ## List the identities with access to a given resource
 
 https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/{spaceId}/resource/{resourceId}
@@ -43,6 +45,8 @@ See the [page on using the API](/docs/iam/concepts/api/) for the implementation.
 
 </TabItem>
 <TabItem value="github" label="GitHub">
+
+## GitHub {#tabhead-github}
 
 With a TUI (Terminal User Interface), the [space-permission-extractor](https://github.com/numspot/space-permission-extractor) tool queries the IAM API to extract and consolidate the access of a Numspot space, in order to make it easier to audit.
 

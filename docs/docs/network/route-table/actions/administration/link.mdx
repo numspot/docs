@@ -2,6 +2,8 @@
 title: Link a route table to a subnet
 sidebar_position: 1
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -23,6 +25,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 
 <Tabs>
 <TabItem value="console" default>
+
+## console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -57,12 +61,16 @@ This action requires the following **IAM** (Identity and Access Management) perm
 </TabItem>
 <TabItem value="api">
 
+## api {#tabhead-api}
+
 The `PUT /compute/spaces/{spaceId}/routeTables/{id}/subnets/link` command associates a subnet with a route table. The subnet and the route table must be in the same VPC. Traffic is routed according to the route table defined in this VPC. You can associate a route table with several subnets.
 
 [Request example: Link a route table ↗](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/routeTables/{id}/subnets/link)
 
 </TabItem>
 <TabItem value="terraform">
+
+## terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
 

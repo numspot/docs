@@ -3,6 +3,8 @@ title: Create an internet gateway - Numspot
 sidebar_label: Create an internet gateway
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -26,6 +28,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 
 <Tabs>
 <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -61,6 +65,8 @@ A confirmation message appears at the bottom of the page indicating that the int
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `POST /compute/spaces/{spaceId}/internetGateways` command creates an internet gateway that you can use with a VPC.
 
 An internet gateway allows VM launched in a network to connect to the Internet. It enables the routing of inbound and outbound Internet traffic as well as the management of public IP.
@@ -69,6 +75,8 @@ An internet gateway allows VM launched in a network to connect to the Internet. 
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/internet_gateway).
 

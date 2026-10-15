@@ -2,6 +2,8 @@
 title: View the console output of a VM
 sidebar_position: 5
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from "@theme/Tabs";
@@ -23,6 +25,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 
 <Tabs>
 <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -52,6 +56,9 @@ This action requires the following **IAM** (Identity and Access Management) perm
 </TabItem>
 
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
 The `GET /compute/spaces/{spaceId}/vms/{id}/consoleOutputs` command lets you obtain the console output for a VM. This console provides the most recent 64 KiB of output.
 
 :::warning
@@ -62,6 +69,9 @@ On Windows VM, the console is handled only on the first start. No output is retu
   </TabItem>
 
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
     The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
   </TabItem>
 </Tabs>

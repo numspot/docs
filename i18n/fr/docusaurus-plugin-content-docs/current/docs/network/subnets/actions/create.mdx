@@ -2,6 +2,8 @@
 title: Créer un subnet dans un VPC
 sidebar_position: 1
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -24,6 +26,8 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 :::
 <Tabs>
    <TabItem value="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -74,6 +78,8 @@ Si vous créez plusieurs subnets dans un VPC, leurs blocs CIDR ne doivent pas se
 
    </TabItem> 
    <TabItem value="API">
+
+## API {#tabhead-api}
 
 La commande `POST /compute/spaces/{spaceId}/subnets` crée un subnet dans un réseau existant.
 Pour créer un subnet dans un réseau, vous devez fournir l'ID du réseau et la plage d'adresses IP pour le subnet (sa plage réseau). Une fois le subnet créé, vous ne pouvez plus modifier sa plage d'adresses IP.

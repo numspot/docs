@@ -3,6 +3,8 @@ title: Attach an internet gateway to a VPC - Numspot
 sidebar_label: Attach an internet gateway to a VPC
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from "@theme/Tabs";
@@ -23,6 +25,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 
 <Tabs>
 <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 1. Log in to the Numspot console.
 
@@ -49,6 +53,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `PUT /compute/spaces/{spaceId}/internetGateways/{id}/vpcs/link` command attaches an internet gateway to a VPC.
 
 To enable the connection between the internet and a VPC, you must attach an internet gateway to that VPC.
@@ -59,6 +65,8 @@ The command that attaches an internet gateway to a VPC returns an HTTP 204 NO CO
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/internet_gateway).
 

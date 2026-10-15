@@ -3,6 +3,8 @@ title: Allocate a public IP - Numspot
 sidebar_label: Allocate a public IP
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -26,6 +28,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 <Tabs>
   <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 <Walkthrough
   steps={[
     { img: "/img/walkthrough/en/public-ip/list.png", text: "From the left-hand side menu, click Network → Public IPs.", hotspot: { x: 0, y: 0.5222, w: 0.194, h: 0.0457 } },
@@ -46,11 +50,17 @@ This action adds a Name tag of up to 255 characters. You can use any character, 
 4.  Click **Reserve**. The public IP is reserved. A confirmation message "The Public IP has been reserved" appears.
   </TabItem>
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
       The `POST /compute/spaces/{spaceId}/publicIps` command allocates a public IP for your account. A public IP is a static IP address designed for dynamic Cloud computing. It can be associated with a VM, a network interface card (NIC), or a NAT service.
 
 [Request example: Creating a public IP](/openapi/#tag/compute/POST/compute/spaces/%7BspaceId%7D/publicIps)
   </TabItem>
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
     The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/public_ip).
   </TabItem>
 </Tabs>
