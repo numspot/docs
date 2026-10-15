@@ -3,6 +3,8 @@ title: View the information of your DHCP options - Numspot
 sidebar_label: View the information of your DHCP options
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -25,6 +27,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 <Walkthrough
   steps={[
     { img: "/img/walkthrough/en/dhcp/list.png", text: "From the left-hand side menu, click Network → VPC → DHCP Options.", hotspot: { x: 0, y: 0.7494, w: 0.1931, h: 0.0568 } },
@@ -43,6 +47,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `GET /compute/spaces/{spaceId}/dhcpOptions` command lets you list the DHCP options.
 
 [Example request: List all DHCP option sets ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/dhcpOptions)
@@ -53,6 +59,8 @@ The `GET /compute/spaces/{spaceId}/dhcpOptions/{id}` command lets you retrieve t
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/dhcp_options).
 

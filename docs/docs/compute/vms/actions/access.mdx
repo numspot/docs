@@ -2,6 +2,8 @@
 title: Connect to a VM
 sidebar_position: 4
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from "@theme/Tabs";
@@ -124,6 +126,9 @@ You can retrieve the password only on the first start of the VM. If you do not, 
 
 <Tabs>
   <TabItem value="Console" label="Console" default>
+
+## Console {#tabhead-console}
+
     1. From the left-hand side menu, click **Compute** → **VM** to access the list of VM;
     2. Select the Windows VM whose password you want to retrieve;
     3. Click the **Retrieve the password** action;
@@ -134,6 +139,9 @@ You can retrieve the password only on the first start of the VM. If you do not, 
   </TabItem>
 
   <TabItem value="API" label="API">
+
+## API {#tabhead-api}
+
     The `GET /compute/spaces/{spaceId}/vms/{id}/adminPasswords` command lets you obtain the administrator password of a running Windows VM. This password is encrypted using the key pair you specified when launching the VM.
 
     :::warning
@@ -144,6 +152,9 @@ You can retrieve the password only on the first start of the VM. If you do not, 
   </TabItem>
 
   <TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
     Retrieving the password via Terraform is not available. Use the console or the API.
   </TabItem>
 </Tabs>

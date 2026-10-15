@@ -3,6 +3,8 @@ title: Get the status of a Kubernetes cluster - Managed Kubernetes
 sidebar_label: Get the status of a Kubernetes cluster
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -22,6 +24,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 
 <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 1. From the left-hand side menu, click **Managed Services** → **Kubernetes** to access the list of Kubernetes clusters.
 
@@ -59,6 +63,8 @@ In the **General** section, you will find additional information:
 </TabItem>
 
 <TabItem value="api" label="API">
+
+## API {#tabhead-api}
 
 The `GET /kubernetes/spaces/{spaceId}/clusters/{clusterId}` request returns the current status of a Kubernetes cluster.
 

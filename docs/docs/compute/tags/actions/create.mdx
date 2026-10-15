@@ -2,6 +2,8 @@
 title: Create or update one or more tags
 sidebar_position: 1
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -33,6 +35,8 @@ This list is given as an example and is not exhaustive: for each resource, refer
 <Tabs>
 <TabItem value="Console" label="Console" default>
 
+## Console {#tabhead-console}
+
 <Walkthrough
   steps={[
     { img: "/img/walkthrough/en/load-balancer/lb-02-actions.png", text: "From the list of the relevant resource, open its row “Actions” menu, then click “Manage tags”.", hotspot: { x: 0.8819, y: 0.4358, w: 0.0809, h: 0.0457 } },
@@ -55,12 +59,16 @@ The process is identical for all resources that support tags (VM, volume, load b
 </TabItem>
 <TabItem value="API" label="API">
 
+## API {#tabhead-api}
+
 The `PATCH /compute/spaces/{spaceId}/bulk/tags` command creates one or more tags on your resources.
 
 [Example request: Create a tag ↗](/openapi/#tag/compute/PATCH/compute/spaces/{spaceId}/bulk/tags)
 
 </TabItem>
 <TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
 
@@ -71,6 +79,8 @@ The Terraform documentation is available on the [Numspot registry ↗](https://r
 
 <Tabs>
 <TabItem value="Console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -97,12 +107,16 @@ The process is identical for all resources that support tags (VM, volume, load b
 </TabItem>
 <TabItem value="API" label="API">
 
+## API {#tabhead-api}
+
 The `PATCH /compute/spaces/{spaceId}/bulk/tags` command updates one or more tags on your resources.
 
 [Example request: Update a tag ↗](/openapi/#tag/compute/PATCH/compute/spaces/{spaceId}/bulk/tags)
 
 </TabItem>
 <TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
 

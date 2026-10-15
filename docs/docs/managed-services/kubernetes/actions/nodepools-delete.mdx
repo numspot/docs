@@ -3,6 +3,8 @@ title: Delete a node pool from a Kubernetes cluster - Managed Kubernetes
 sidebar_label: Delete a node pool from a Kubernetes cluster
 sidebar_position: 8
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -26,6 +28,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 1. From the left-hand side menu, click **Managed Services** → **Kubernetes** to access the list of Kubernetes clusters.
 
    ![Managed Services menu](/img/console/managed-services/en-menu-managed-services.png)
@@ -43,6 +47,9 @@ Once the deletion is confirmed, the node pool and its nodes are deleted: the nod
 </TabItem>
 
 <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
     Use the `DELETE /kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools/{nodePoolId}` route to delete a node pool from a managed Kubernetes cluster.
 
     **Example response**
