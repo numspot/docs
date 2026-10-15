@@ -1,6 +1,16 @@
 {
   "entries": [
     {
+      "service": "Container Registry",
+      "status": "changed",
+      "date": "2026-10-15",
+      "title": "Nom d'utilisateur administrateur par défaut documenté",
+      "description": "Les pages du Container Registry mentionnent désormais le compte administrateur par défaut : le nom d'utilisateur est figé à admin et ne peut pas être modifié, seul le mot de passe est généré et récupérable via l'action dédiée, et la réinitialisation du mot de passe ne change pas le nom d'utilisateur.",
+      "components": [
+        "docs"
+      ]
+    },
+    {
       "service": "PostgreSQL",
       "status": "changed",
       "date": "2026-10-12",

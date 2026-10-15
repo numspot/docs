@@ -1,6 +1,16 @@
 {
   "entries": [
     {
+      "service": "Container Registry",
+      "status": "changed",
+      "date": "2026-10-15",
+      "title": "Default administrator username documented",
+      "description": "The Container Registry pages now surface the default administrator account: the username is fixed to admin and cannot be changed, only the password is generated and retrieved through the dedicated action, and resetting the password does not change the username.",
+      "components": [
+        "docs"
+      ]
+    },
+    {
       "service": "PostgreSQL",
       "status": "changed",
       "date": "2026-10-12",

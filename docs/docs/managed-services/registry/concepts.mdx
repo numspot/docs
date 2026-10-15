@@ -3,6 +3,8 @@ title: "Container Registry - Concepts"
 sidebar_label: "Concepts"
 sidebar_position: 1
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import ActionsSummary from '@site/src/components/ActionsSummary';
@@ -43,7 +45,7 @@ This means that the instance is replicated by design across several nodes, there
 
 ### 2. Retrieving the administrator password
 
-To connect to the Container Registry instance, you must retrieve the administrator password.
+To connect to the Container Registry instance, you must retrieve the administrator password. The connection is made with the default administrator account, whose username is fixed: `admin`.
 
 **Steps to retrieve the administrator password via the Numspot Console**:
 
@@ -51,7 +53,7 @@ To connect to the Container Registry instance, you must retrieve the administrat
 2. Navigate to the section dedicated to the Container Registry instance.
 3. Retrieve the host name of the instance.
 4. Retrieve the administrator password from the Numspot Console.
-5. Use this information to connect to Harbor.
+5. Connect to Harbor with the username `admin` and this password.
 
 ## Use cases
 

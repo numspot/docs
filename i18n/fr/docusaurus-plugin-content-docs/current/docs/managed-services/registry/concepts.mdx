@@ -4,6 +4,8 @@ sidebar_label: "Concepts"
 description: "Découvrez le Container Registry managé de Numspot pour stocker et sécuriser vos images de conteneurs (Docker, OCI) et vos charts Helm."
 sidebar_position: 1
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import ActionsSummary from '@site/src/components/ActionsSummary';
@@ -44,7 +46,7 @@ Cela signifie que l'instance est répliquée par construction sur plusieurs nœu
 
 ### 2. Récupération du mot de passe administrateur
 
-Pour pouvoir vous connecter à l'instance Container Registry, vous devez récupérer le mot de passe administrateur.
+Pour pouvoir vous connecter à l'instance Container Registry, vous devez récupérer le mot de passe administrateur. La connexion s'effectue avec le compte administrateur par défaut, dont le nom d'utilisateur est figé : `admin`.
 
 **Étapes pour récupérer le mot de passe administrateur via la Console Numspot** :
 
@@ -52,7 +54,7 @@ Pour pouvoir vous connecter à l'instance Container Registry, vous devez récup�
 2. Naviguer vers la section dédiée à l'instance Container Registry.
 3. Récupérer le nom de l'hôte de l'instance.
 4. Récupérer le mot de passe administrateur depuis la Console Numspot.
-5. Utiliser ces informations pour vous connecter à Harbor.
+5. Se connecter à Harbor avec le nom d'utilisateur `admin` et ce mot de passe.
 
 ## Cas d'utilisation
 
