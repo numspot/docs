@@ -3,6 +3,8 @@ title: Create a PostgreSQL backup - Managed PostgreSQL
 sidebar_label: Create a PostgreSQL backup
 sidebar_position: 8
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -29,6 +31,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 
 {/* </TabItem> */}
 <TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
     The `POST /postgresql/spaces/{spaceId}/clusters/{clusterId}/backups` request triggers an on-demand backup of a PostgreSQL cluster.
 
     **Parameters**

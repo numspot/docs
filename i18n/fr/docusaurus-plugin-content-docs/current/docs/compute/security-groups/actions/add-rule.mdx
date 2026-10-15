@@ -2,6 +2,8 @@
 title: Ajouter des règles à un security group
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -76,6 +78,9 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
    </TabItem> 
   <TabItem value='api' label='API'>
+
+## API {#tabhead-api}
+
 La commande `POST /compute/spaces/{spaceId}/securityGroups/{id}/rules` ajoute une ou plusieurs règles à un security group. Utilisez le paramètre **flow** pour indiquer si vous voulez une règle entrante ou une règle sortante.
 
 - Une règle entrante permet au security group de recevoir du trafic :

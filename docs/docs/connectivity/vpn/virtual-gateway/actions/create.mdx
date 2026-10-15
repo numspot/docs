@@ -3,6 +3,8 @@ title: Create a virtual gateway
 description: Create a virtual gateway to attach to a VPC to establish VPN connections.
 sidebar_position: 1
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -27,6 +29,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 <Walkthrough
   steps={[
     { img: "/img/walkthrough/en/virtual-gateway/create-01-list.png", text: "From the left-hand side menu, click VPN → Virtual Gateways.", hotspot: { x: 0, y: 0.6309, w: 0.194, h: 0.0457 } },
@@ -45,6 +49,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `POST /connectivity/spaces/{spaceId}/virtualGateways` command creates a virtual gateway.
 A virtual gateway is the access point on the VPC side of a VPN connection.
 
@@ -52,6 +58,8 @@ A virtual gateway is the access point on the VPC side of a VPN connection.
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/virtual_gateway).
 

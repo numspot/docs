@@ -2,6 +2,8 @@
 title: Create a route table
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -25,6 +27,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
    <TabItem value="console" default> 
 
+## console {#tabhead-console}
+
 <Walkthrough
   steps={[
     { img: "/img/walkthrough/en/route-table/list.png", text: "From the left-hand side menu, click Network → VPC → Route Tables.", hotspot: { x: 0, y: 0.579, w: 0.194, h: 0.0568 } },
@@ -43,6 +47,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 
    </TabItem>
    <TabItem value="api">
+
+## api {#tabhead-api}
+
    :::info
 Before you begin: create a VPC.
 :::
@@ -52,6 +59,9 @@ The `POST /compute/spaces/{spaceId}/routeTables` command creates a route table f
 [Example request: Creating a Route Table](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/routeTables)
    </TabItem>
    <TabItem value="terraform">
+
+## terraform {#tabhead-terraform}
+
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/route_table).
    </TabItem>
 </Tabs>

@@ -2,6 +2,8 @@
 title: Allocate or release a GPU
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -27,6 +29,8 @@ These actions require the following IAM (Identity and Access Management) permiss
 ## Allocate a GPU
 <Tabs>
    <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -55,6 +59,9 @@ These actions require the following IAM (Identity and Access Management) permiss
   </TabItem>
 
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
     The `POST /compute/spaces/{spaceId}/flexibleGpus` command allocates a flexible GPU (fGPU) to your account.
 You can then attach this fGPU to a VM.
 
@@ -76,6 +83,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 
 <Tabs>
   <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
 1. Open the Numspot console.
 2. From the left-hand side menu, click **Compute** → **GPU**.
 
@@ -95,6 +105,9 @@ The GPU is released from your account and a confirmation message appears at the 
     </TabItem>
 
     <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
         The `DELETE /compute/spaces/{spaceId}/flexibleGpus/{id}` command releases a flexible GPU (fGPU) from your account.
 The fGPU then becomes available for use by another user.
 

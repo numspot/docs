@@ -3,6 +3,8 @@ title: Edit the node configuration of a PostgreSQL cluster - Managed PostgreSQL
 sidebar_label: Edit the node configuration of a PostgreSQL cluster
 sidebar_position: 4.5
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -21,6 +23,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 :::
 <Tabs>
 <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
     1. From the left-hand side menu, click **Managed Services** → **PostgreSQL** → **Clusters** to access the list of PostgreSQL clusters.
 
     ![Managed Services menu](/img/console/managed-services/postgresql/en-menu-postgresql.png)
@@ -52,6 +57,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 </TabItem>
 
 <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
     The `PATCH /postgresql/spaces/{spaceId}/clusters/{clusterId}` request lets you change the node type — amount of RAM and number of vCPU (virtual CPU) —, the volume size and the number of replicas of a PostgreSQL cluster.
 
     ### Example request

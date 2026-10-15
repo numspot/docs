@@ -2,6 +2,8 @@
 title: Update a load balancer listener rule
 sidebar_position: 5
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -22,6 +24,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
   <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
 2. Click the name of the load balancer containing the rule to update.
 3. In the "Listeners" tab, click the listener containing the rule.
@@ -32,6 +36,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 
   </TabItem>
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
 
 The `PUT /compute/spaces/{spaceId}/listenerRules/{id}` command updates the listener rule pattern. This call updates the pattern-matching algorithm for inbound traffic.
 

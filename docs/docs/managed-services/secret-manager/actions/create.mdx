@@ -2,6 +2,8 @@
 title: Create a Secret Manager instance
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -36,6 +38,9 @@ The choice between a **Private** and a **Public** network determines who can acc
 <Tabs>
     
     <TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
         The `POST /secrets/spaces/{spaceId}/instances` request lets you create and launch a Secret Manager instance.
         The instance is in the `CREATING` and then `PENDING` state until it is created, then moves to the `RUNNING` state.
 

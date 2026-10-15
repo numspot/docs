@@ -3,6 +3,8 @@ title: Create a route for a VPN connection
 description: Add a static route to a VPN connection to route traffic between the virtual gateway and the client gateway.
 sidebar_position: 1
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -30,6 +32,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 :::warning
 **Before you begin:** Create a VPN connection.
 :::
@@ -45,6 +49,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 :::info
 Before you begin: Create a VPN connection.
 :::
@@ -55,6 +61,8 @@ The `POST /connectivity/spaces/{spaceId}/vpnConnections/{id}/routes` command cre
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection_route).
 

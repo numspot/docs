@@ -3,6 +3,8 @@ title: Delete an internet gateway - Numspot
 sidebar_label: Delete an internet gateway
 sidebar_position: 5
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -30,6 +32,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 
 <Tabs>
 <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -85,12 +89,16 @@ You can delete a single internet gateway or delete several in a single action.
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `DELETE /compute/spaces/{spaceId}/internetGateways/{id}` command deletes a specified internet gateway. Before deleting an internet service, you must detach it from any VPC to which it is attached.
 
 [Example request: Deleting an internet gateway ↗](/openapi/#tag/compute/DELETE/compute/spaces/%7BspaceId%7D/internetGateways/%7Bid%7D)
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/internet_gateway).
 

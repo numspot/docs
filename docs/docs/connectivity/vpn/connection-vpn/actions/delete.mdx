@@ -3,6 +3,8 @@ title: Delete a VPN connection
 description: Delete a secure VPN tunnel between your corporate network and a VPC.
 sidebar_position: 4
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -26,6 +28,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 1. Click inside the **VPN Connections** dashboard to display the tick boxes.
 2. Tick the box of the VPN connection you want to delete.
    The VPN connection is selected and an actions menu appears.
@@ -41,6 +45,8 @@ Deleted resources remain visible for 1 hour.
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `DELETE /connectivity/spaces/{spaceId}/vpnConnections/{id}` command deletes a specified VPN connection.
 If you want to delete a VPC and all its dependencies, it is recommended to detach the virtual gateway from the VPC and to delete the VPC before deleting the VPN connection. This allows you to delete the VPC without waiting for the VPN connection to be deleted.
 
@@ -48,6 +54,8 @@ If you want to delete a VPC and all its dependencies, it is recommended to detac
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection).
 

@@ -2,6 +2,8 @@
 title: Delete a Secret Manager instance
 sidebar_position: 9
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -25,6 +27,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
     
     <TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
         The `DELETE /secrets/spaces/{spaceId}/instances/{instanceId}` request deletes a Secret Manager instance.
         The instance switches to the `DELETING` status during the deletion.
 

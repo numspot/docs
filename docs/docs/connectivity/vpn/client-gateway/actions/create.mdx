@@ -3,6 +3,8 @@ title: Create a client gateway
 description: Create a client gateway to identify a resource in your corporate network.
 sidebar_position: 1
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -30,6 +32,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 
 <Tabs>
 <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -61,6 +65,8 @@ IPv6 addresses are not supported. You must use an IPv4 address.
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `POST /connectivity/spaces/{spaceId}/clientGateways` command creates a client gateway.
 This action records information to identify the client gateway that you have deployed in your network.
 To establish a tunnel with the client gateway, you must provide the communication protocol type, the fixed public IP address of the gateway, and an autonomous system number (ASN).
@@ -69,6 +75,8 @@ To establish a tunnel with the client gateway, you must provide the communicatio
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/client_gateway).
 

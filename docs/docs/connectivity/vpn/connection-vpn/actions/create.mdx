@@ -3,6 +3,8 @@ title: Create a VPN connection
 description: Create a secure VPN tunnel between your corporate network and a VPC in the Numspot Cloud.
 sidebar_position: 1
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -35,6 +37,8 @@ Before you begin:
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 <Walkthrough
   steps={[
     { img: "/img/walkthrough/en/vpn-connection/create-01-list.png", text: "From the left-hand side menu, click VPN → VPN Connections.", hotspot: { x: 0, y: 0.679, w: 0.194, h: 0.0457 } },
@@ -54,6 +58,8 @@ The VPN connection is created.
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `POST /connectivity/spaces/{spaceId}/vpnConnections` command creates a VPN connection between a specified virtual gateway and a specified client gateway.
 You can create only one VPN connection between a virtual gateway and a client gateway.
 
@@ -61,6 +67,8 @@ You can create only one VPN connection between a virtual gateway and a client ga
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection).
 

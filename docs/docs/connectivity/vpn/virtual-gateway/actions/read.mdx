@@ -3,6 +3,8 @@ title: Get information about your virtual gateways
 description: View the information and status of your virtual gateways.
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -26,10 +28,14 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 View the **Virtual Gateways** dashboard to see the list of your virtual gateways and their information.
 
 </TabItem>
 <TabItem value="api" label="API">
+
+## API {#tabhead-api}
 
 The `GET /connectivity/spaces/{spaceId}/virtualGateways` command lists the virtual gateways.
 
@@ -41,6 +47,8 @@ The `GET /connectivity/spaces/{spaceId}/virtualGateways/{id}` command retrieves 
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/virtual_gateway).
 
