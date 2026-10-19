@@ -4,10 +4,11 @@ sidebar_label: Delete a PostgreSQL cluster
 sidebar_position: 12
 draft: false
 last_update:
-  date: 2026-10-01
+  date: 2026-10-19
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Walkthrough from '@site/src/components/Walkthrough';
 
 # Delete a PostgreSQL cluster
 
@@ -28,17 +29,23 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 <TabItem value="console" label="Console" default>
 
-1. From the left-hand side menu, click **Managed Services** → **PostgreSQL** → **Clusters** to access the list of PostgreSQL clusters.
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/postgresql/delete-01-list.png", text: "From the left-hand side menu, click Managed Services → PostgreSQL → Clusters.", hotspot: { x: 0, y: 0.4642, w: 0.1944, h: 0.12 } },
+    { img: "/img/walkthrough/en/postgresql/delete-02-actions-menu.png", text: "On the row of the cluster to delete, open the “Actions” menu, then click “Delete” (also available from the details page).", hotspot: { x: 0.7807, y: 0.4888, w: 0.1748, h: 0.2249 } },
+    { img: "/img/walkthrough/en/postgresql/delete-03-modal.png", text: "Enter the exact name of the cluster, then click “Delete permanently”. This action cannot be undone.", hotspot: { x: 0.5392, y: 0.7041, w: 0.1108, h: 0.0494 } },
+  ]}
+/>
 
-   ![Managed Services menu](/img/console/managed-services/postgresql/en-menu-postgresql.png)
+1. From the left-hand side menu, click **Managed Services** → **PostgreSQL** → **Clusters** to access the list of PostgreSQL clusters.
 
 2. In the list, locate the cluster to delete, click the **Actions** button on its row, then click **Delete**.
 
-   You can also open the cluster details page and click the **Delete** button at the top right.
+   You can also open the cluster details page, click the **⋮** button at the top right, then click **Delete the cluster**.
 
-3. In the "Delete the cluster" window, enter the exact name of the cluster in the "Strong confirmation" field, then click **Delete**.
+3. In the “Cluster deletion” window, enter the exact name of the cluster in the “Name of cluster” field, then click **Delete permanently**.
 
-   The cluster switches to the "Deleting" status in the list.
+   The cluster switches to the “Deleting” status in the list.
 
 </TabItem>
 

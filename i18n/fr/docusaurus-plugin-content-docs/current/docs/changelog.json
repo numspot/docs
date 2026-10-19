@@ -24,6 +24,16 @@
     {
       "service": "PostgreSQL",
       "status": "changed",
+      "date": "2026-10-19",
+      "title": "Page de suppression d'un cluster PostgreSQL alignée sur la console",
+      "description": "La page Supprimer un cluster PostgreSQL reflète désormais la console actuelle : la fenêtre de confirmation (« Suppression du cluster ») demande de saisir le nom du cluster dans le champ « Nom du cluster » et se confirme avec « Supprimer définitivement » ; sur la page de détails du cluster, la suppression se trouve dans le menu ⋮. Le pas-à-pas console a été ajouté à la page anglaise et toutes les captures d'écran ont été actualisées.",
+      "components": [
+        "docs"
+      ]
+    },
+    {
+      "service": "PostgreSQL",
+      "status": "changed",
       "date": "2026-10-12",
       "title": "Limites de connexions PostgreSQL documentées",
       "description": "La page auto-tuning documente désormais les limites de connexions des clusters PostgreSQL managés : max_connections fixé à 100 par instance avec 3 emplacements réservés à la plateforme, toutes les connexions clientes passant par le pooler PgBouncer intégré (3 réplicas, mode session), jusqu'à 300 connexions clientes simultanées (max_client_conn de 100 par réplique) et 60 sessions actives simultanées (default_pool_size de 20 par base et utilisateur), avec fermeture des connexions clientes inactives après 10 minutes.",

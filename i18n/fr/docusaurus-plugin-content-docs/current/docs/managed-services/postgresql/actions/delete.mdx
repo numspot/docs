@@ -4,7 +4,7 @@ sidebar_label: Supprimer un cluster PostgreSQL
 sidebar_position: 12
 draft: false
 last_update:
-  date: 2026-10-01
+  date: 2026-10-19
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -33,9 +33,9 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 <Walkthrough
   steps={[
-    { img: "/img/walkthrough/postgresql/list.png", text: "Depuis le menu latéral gauche, cliquez sur Services Managés → PostgreSQL → Clusters.", hotspot: { x: 0, y: 0.5136, w: 0.1931, h: 0.0568 } },
-    { img: "/img/walkthrough/postgresql/actions-menu.png", text: "Sur la ligne du cluster à supprimer, ouvrez le menu « Actions », puis cliquez sur « Supprimer » (possible aussi depuis la page de détails).", hotspot: { x: 0.875, y: 0.4691, w: 0.0884, h: 0.0457 } },
-    { img: "/img/walkthrough/postgresql/delete-modal.png", text: "Confirmation forte : saisissez le nom exact du cluster, puis cliquez sur « Supprimer ». La suppression est définitive.", hotspot: { x: 0.6221, y: 0.7513, w: 0.064, h: 0.0494 } },
+    { img: "/img/walkthrough/postgresql/list.png", text: "Depuis le menu latéral gauche, cliquez sur Services Managés → PostgreSQL → Clusters.", hotspot: { x: 0, y: 0.4642, w: 0.1944, h: 0.12 } },
+    { img: "/img/walkthrough/postgresql/actions-menu.png", text: "Sur la ligne du cluster à supprimer, ouvrez le menu « Actions », puis cliquez sur « Supprimer » (possible aussi depuis la page de détails).", hotspot: { x: 0.7807, y: 0.4888, w: 0.1748, h: 0.2249 } },
+    { img: "/img/walkthrough/postgresql/delete-modal.png", text: "Saisissez le nom exact du cluster, puis cliquez sur « Supprimer définitivement ». Cette action ne peut pas être annulée.", hotspot: { x: 0.5141, y: 0.7041, w: 0.1359, h: 0.0494 } },
   ]}
 />
 
@@ -43,11 +43,11 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
 
 2. Dans la liste, repérez le cluster à supprimer, cliquez sur le bouton **Actions** situé sur sa ligne, puis sur **Supprimer**.
 
-   Vous pouvez aussi ouvrir la page de détails du cluster et cliquer sur le bouton **Supprimer** situé en haut à droite.
+   Vous pouvez aussi ouvrir la page de détails du cluster, cliquer sur le bouton **⋮** situé en haut à droite, puis sur **Supprimer le cluster**.
 
-3. Dans la fenêtre "Supprimer le cluster", saisissez le nom exact du cluster dans le champ de "Confirmation forte", puis cliquez sur **Supprimer**.
+3. Dans la fenêtre « Suppression du cluster », saisissez le nom exact du cluster dans le champ « Nom du cluster », puis cliquez sur **Supprimer définitivement**.
 
-   Le cluster passe à l'état "Suppression en cours" dans la liste.
+   Le cluster passe à l'état « Suppression en cours » dans la liste.
 
 </TabItem>
 

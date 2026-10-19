@@ -24,6 +24,16 @@
     {
       "service": "PostgreSQL",
       "status": "changed",
+      "date": "2026-10-19",
+      "title": "Delete a PostgreSQL cluster page aligned with the console",
+      "description": "The Delete a PostgreSQL cluster action page now reflects the current console: the confirmation dialog (\"Delete cluster\") asks to type the cluster name in the \"Name of cluster\" field and confirms with \"Delete permanently\", and on the cluster details page the delete action lives in the ⋮ menu. A step-by-step console walkthrough was added to the English page and all console screenshots were refreshed.",
+      "components": [
+        "docs"
+      ]
+    },
+    {
+      "service": "PostgreSQL",
+      "status": "changed",
       "date": "2026-10-12",
       "title": "PostgreSQL connection limits documented",
       "description": "The auto-tuning page now documents the connection limits of managed PostgreSQL clusters: max_connections fixed at 100 per instance with 3 slots reserved for the platform, all client connections going through the built-in PgBouncer pooler (3 replicas, session mode), up to 300 concurrent client connections (max_client_conn of 100 per replica) and 60 simultaneously active sessions (default_pool_size of 20 per database and user pool), with idle client connections closed after 10 minutes.",
