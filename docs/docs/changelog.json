@@ -1,6 +1,16 @@
 {
   "entries": [
     {
+      "service": "Kubernetes",
+      "status": "changed",
+      "date": "2026-10-19",
+      "title": "Delete a Kubernetes cluster page aligned with the console",
+      "description": "The Delete a Kubernetes cluster action page now reflects the current console: the confirmation dialog (\"Cluster deletion\") asks to type the cluster name in the \"Name of cluster\" field and confirms with \"Delete permanently\". A step-by-step console walkthrough with hotspot highlighting was added to the English and French pages, replacing the previous static screenshots.",
+      "components": [
+        "docs"
+      ]
+    },
+    {
       "service": "IAM",
       "status": "changed",
       "date": "2026-10-16",
