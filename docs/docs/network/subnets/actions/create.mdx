@@ -2,6 +2,8 @@
 title: Create a subnet in a VPC
 sidebar_position: 1
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -24,6 +26,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 :::
 <Tabs>
    <TabItem value="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -76,12 +80,17 @@ If you create several subnets in a VPC, their CIDR blocks must not overlap.
    </TabItem> 
    <TabItem value="API">
 
+## API {#tabhead-api}
+
 The `POST /compute/spaces/{spaceId}/subnets` command creates a subnet in an existing network.
 To create a subnet in a network, you must provide the ID of the network and the IP address range for the subnet (its network range). Once the subnet is created, you can no longer modify its IP address range.
 
 [Request example: Creating a subnet](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/subnets)
   </TabItem>
   <TabItem value="Terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/subnet).
   </TabItem>
 </Tabs>

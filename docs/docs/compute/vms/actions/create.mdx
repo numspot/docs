@@ -3,7 +3,7 @@ title: Create a VM
 sidebar_position: 3
 draft: false
 last_update:
-  date: 2026-10-02
+  date: 2026-10-15
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -27,6 +27,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 :::
 <Tabs>
    <TabItem value="console" label="Console" default> 
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -196,6 +198,9 @@ Save this file carefully. It cannot be recovered from Numspot if lost. Backing u
   - When the creation is complete, you can return to the list of VM.
 </TabItem>
 <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
     The `POST /compute/spaces/{spaceId}/vms` command lets you create and launch a VM from an image.
 The VM is in a `pending` state until it is created, then moves to the `running` state.
 The default security group is used if none is specified.
@@ -204,6 +209,9 @@ The metadata server lets you obtain the public key provided at launch for passwo
 [Example request: Creating a VM](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/vms)
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
   The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vm).
 </TabItem>
 </Tabs>

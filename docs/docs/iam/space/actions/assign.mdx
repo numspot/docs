@@ -2,6 +2,8 @@
 title: Assign an identity to a space - IAM
 sidebar_label: Assign an identity to a space
 sidebar_position: 3
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from "@theme/Tabs";
@@ -22,6 +24,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 :::
 <Tabs>
 <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -55,6 +59,8 @@ You can also assign users or service accounts from the details page of a space.
 
 </TabItem>
 <TabItem value="api" label="API">
+
+## API {#tabhead-api}
 
 To assign a user account to a space with the API, you need to know the UUID (Universally Unique Identifier) of the space. A variant in the URL lets you act on a user or on a service account.
 
@@ -106,6 +112,8 @@ curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/serviceAccounts/{ser
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/space).
 

@@ -3,6 +3,8 @@ title: Create a DHCP options set - Numspot
 sidebar_label: Create a DHCP options set
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -28,6 +30,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 1. From the left-hand side menu, click **Network** → **DHCP Options** to access the list of DHCP options sets.
 2. Click the **Create DHCP options** button.
 3. (Optional) In the "Domain name" field, enter the domain name of the DHCP options set. Leave the field empty to use the Numspot domain name.
@@ -50,12 +54,16 @@ Specifying the same information as an existing DHCP options set creates a new se
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `POST /compute/spaces/{spaceId}/dhcpOptions` command creates a DHCP options set, which you can then associate with a network using the method to modify a VPC.
 
 [Request example: Creating a DHCP options set ↗](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/dhcpOptions)
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/dhcp_options).
 

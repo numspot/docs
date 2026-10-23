@@ -2,6 +2,8 @@
 title: Delete a key pair
 sidebar_position: 6
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -25,6 +27,8 @@ Deleting a key pair does not delete the private key saved on your computer, and 
 
 <Tabs>
 <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -52,6 +56,9 @@ Deleting a key pair does not delete the private key saved on your computer, and 
 
 </TabItem>
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
 The `DELETE /compute/spaces/{spaceId}/keypairs/{id}` command deletes the specified key pair. This action deletes the public key stored by Numspot, which results in the deletion of the key pair.
 
 [Example request: Deleting a key pair](/openapi/#tag/compute/delete/compute/spaces/{spaceId}/keypairs/{id})

@@ -3,6 +3,8 @@ title: Modify the DHCP options set associated with a VPC - Numspot
 sidebar_label: Modify the DHCP options set associated with a VPC
 sidebar_position: 4
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -28,6 +30,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 :::info
 **Prerequisites**
 - [Create a VPC ↗](/docs/network/vpc/actions/create)
@@ -45,12 +49,16 @@ A confirmation message appears at the bottom of the page indicating that the DHC
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `PUT /compute/spaces/{spaceId}/vpcs/{id}` command associates a DHCP options set with a specified network.
 
 [Example request: Associate a DHCP options set with a network ↗](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/vpcs/{id})
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/dhcp_options).
 

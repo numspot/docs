@@ -3,6 +3,8 @@ title: Delete a client gateway
 description: Delete a client gateway that is no longer associated with a VPN connection.
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -30,6 +32,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 1. Click inside the **Client Gateways** dashboard to display the checkboxes.
 2. Tick the checkbox of the client gateway you want to delete.
    The client gateway is selected and an actions menu appears.
@@ -45,6 +49,8 @@ Deleted resources remain visible for 1 hour.
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `DELETE /connectivity/spaces/{spaceId}/clientGateways/{id}` command deletes a specified client gateway.
 You must delete the VPN connection before deleting the client gateway.
 
@@ -52,6 +58,8 @@ You must delete the VPN connection before deleting the client gateway.
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/client_gateway).
 

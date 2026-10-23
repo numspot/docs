@@ -2,6 +2,8 @@
 title: Get information about your Compute Bridges
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -29,6 +31,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 <Tabs>
 <TabItem value="api" label="API" default>
 
+## API {#tabhead-api}
+
 The `GET /connectivity/spaces/{spaceId}/computeBridges` command lists one or more connections between two [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/).
 
 [Example request: List all Compute Bridges](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/computeBridges)
@@ -39,6 +43,8 @@ The `GET /connectivity/spaces/{spaceId}/computeBridges/{id}` command retrieves t
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/compute_bridge).
 

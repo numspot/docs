@@ -3,6 +3,8 @@ title: Create PostgreSQL clusters - Managed PostgreSQL
 sidebar_label: Create PostgreSQL clusters
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -25,6 +27,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 
 <Tabs>
 <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -101,6 +105,9 @@ To finalize the cluster creation, click the **Create** button.
 You are redirected to the cluster details page. Your cluster is then being created and will be operational within a few minutes.
 </TabItem> 
 <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
     The `POST /postgresql/spaces/{spaceId}/clusters` request lets you create and launch a PostgreSQL cluster.
     The cluster moves to the "creating" state until it is created, then to "pending" while the pods are managed, then to the "active" state.
 

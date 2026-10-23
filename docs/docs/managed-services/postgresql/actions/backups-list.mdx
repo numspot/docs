@@ -3,6 +3,8 @@ title: List the backups of a PostgreSQL cluster - Managed PostgreSQL
 sidebar_label: List the backups of a PostgreSQL cluster
 sidebar_position: 7
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -31,6 +33,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 
 <TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
     The `GET /postgresql/spaces/{spaceId}/clusters/{clusterId}/backups` request lets you list all the backups of a PostgreSQL cluster.
 
     **Parameters**

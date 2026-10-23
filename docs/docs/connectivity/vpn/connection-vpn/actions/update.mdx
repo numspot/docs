@@ -3,6 +3,8 @@ title: Update a VPN connection
 description: Update the attributes of an existing VPN connection.
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -24,6 +26,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 1. In the **VPN Connections** dashboard, click the ID of the VPN connection to update.
 2. Update the required attributes.
 3. Click **Save**.
@@ -33,12 +37,16 @@ The VPN connection is updated.
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `PUT /connectivity/spaces/{spaceId}/vpnConnections/{id}` command updates the specified attributes of a VPN connection.
 
 [Request example: Updating a VPN Connection](/openapi/#tag/connectivity/PUT/connectivity/spaces/{spaceId}/vpnConnections/{id})
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/vpn_connection).
 

@@ -3,6 +3,8 @@ title: Register a VM with a load balancer - Numspot
 sidebar_label: Register a VM with a load balancer
 sidebar_position: 5
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -23,6 +25,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
   <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
 2. Click the name of the load balancer for which you want to register a VM.
 3. In the "Backend VM" tab, click **Register a VM**.
@@ -38,11 +42,15 @@ Multi-selection is available.
   </TabItem>
   <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `PUT /compute/spaces/{spaceId}/loadBalancers/{id}/backendMachines/link` command attaches a VM to a load balancer.
 
 [Example request: Attach a VM to a load balancer](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/loadBalancers/{id}/backendMachines/link)
   </TabItem>
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
 

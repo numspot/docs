@@ -3,6 +3,8 @@ title: Get the details of a node pool of a Kubernetes cluster - Managed Kubernet
 sidebar_label: Get the details of a node pool of a Kubernetes cluster
 sidebar_position: 7
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -21,6 +23,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 :::
 <Tabs>
 <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
     1. From the left-hand side menu, click **Managed Services** → **Kubernetes** to access the list of Kubernetes clusters.
 
     ![Managed Services menu](/img/console/managed-services/en-menu-managed-services.png)
@@ -42,6 +47,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 </TabItem>
 
 <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
     Use the `GET /kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools/{nodePoolId}` route to get the information of a node pool of a managed Kubernetes cluster.
 
     **Example response**

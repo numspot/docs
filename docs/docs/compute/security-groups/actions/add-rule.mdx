@@ -2,6 +2,8 @@
 title: Add rules to a security group
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -31,6 +33,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 :::
 <Tabs>
    <TabItem value="console" label="Console" default> 
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -74,6 +78,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 
    </TabItem> 
   <TabItem value='api' label='API'>
+
+## API {#tabhead-api}
+
 The `POST /compute/spaces/{spaceId}/securityGroups/{id}/rules` command adds one or more rules to a security group. Use the **flow** parameter to indicate whether you want an inbound rule or an outbound rule.
 
 - An inbound rule allows the security group to receive traffic:
@@ -93,6 +100,9 @@ By default, traffic between two security groups is authorized via both public IP
 [Example request: Creating a rule for a Security Group](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/securityGroups/{id}/rules)
   </TabItem>
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
     The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/security_group_rule).
   </TabItem>
 </Tabs>
