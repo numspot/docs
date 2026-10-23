@@ -1,6 +1,16 @@
 {
   "entries": [
     {
+      "service": "PostgreSQL",
+      "status": "changed",
+      "date": "2026-10-19",
+      "title": "Comportement des connexions et timeouts documentés",
+      "description": "Un nouveau guide PostgreSQL décrit le comportement des connexions aux clusters PostgreSQL managés : le timeout d'inactivité de 60 secondes appliqué par le point de connexion, les limites de pooling PgBouncer et max_connections, l'impact sur les opérations longues sans retour de données et les requêtes qui continuent côté serveur après une déconnexion, avec des recommandations et un tableau de diagnostic.",
+      "components": [
+        "docs"
+      ]
+    },
+    {
       "service": "IAM",
       "status": "changed",
       "date": "2026-10-16",

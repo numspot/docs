@@ -1,0 +1,96 @@
+---
+title: "Comportement des connexions et timeouts - PostgreSQL Managé"
+sidebar_label: "Connexions et timeouts"
+sidebar_position: 5
+description: Comment les connexions clientes atteignent un cluster PostgreSQL managé, et les limites de connexion et timeouts d'inactivité qui s'appliquent (timeout d'inactivité de 60 secondes, pooling PgBouncer, max_connections).
+last_update:
+  date: 2026-10-19
+draft: false
+---
+
+# Connexions et timeouts
+
+Cette page décrit le chemin suivi par les connexions clientes vers un [cluster PostgreSQL](/fr/docs/managed-services/postgresql/concepts/), les limites de connexion qui s'appliquent le long de ce chemin, et le comportement attendu lorsqu'une connexion reste inactive ou lorsqu'une opération s'exécute longtemps.
+
+## Le chemin d'une connexion
+
+Chaque connexion cliente — publique (visibilité EXTERNAL) ou privée (visibilité INTERNAL) — traverse trois couches avant d'atteindre la base de données :
+
+| Couche | Rôle | Limites principales |
+|--------|------|---------------------|
+| Point de connexion ([load balancer](/docs/network/load-balancer/concepts)) | Transmet les connexions clientes au pooler | Ferme les connexions sans trafic après 60 secondes |
+| PgBouncer (pooler de connexions) | Mutualise les sessions clientes vers PostgreSQL | `max_client_conn` 100 par réplique (3 répliques), `default_pool_size` 20 par pool base de données et utilisateur, `client_idle_timeout` 600 s |
+| Instance PostgreSQL | Exécute les requêtes | `max_connections` 100 par instance (3 emplacements réservés à la plateforme) |
+
+Les limites PgBouncer et PostgreSQL sont détaillées sur la page [auto-tuning](/docs/managed-services/postgresql/guides/auto-tuning/).
+
+## Timeout d'inactivité des connexions (60 secondes)
+
+Une connexion qui ne transporte **aucun trafic réseau pendant environ 60 secondes** est fermée par le load balancer situé devant le pooler. Cela s'applique aussi bien aux points de connexion publics que privés.
+
+### Symptômes
+
+- Le client signale une connexion rompue, par exemple `SSL error: unexpected eof while reading` ou `server closed the connection unexpectedly`.
+- Des outils comme pgbench signalent `perhaps the backend died while processing` lorsqu'un client est coupé en pleine requête.
+- Le cluster reste en bonne santé : l'instance ne redémarre pas et `pg_postmaster_start_time()` ne change pas.
+
+### Ce qui est impacté
+
+- **Les connexions inactives** : les sessions sans requête en cours — typiquement les connexions maintenues ouvertes par les pools applicatifs (HikariCP, SQLAlchemy, JDBC, ODBC…) — sont fermées après 60 secondes d'inactivité.
+- **Les opérations longues sans retour de données** : `CREATE INDEX`, certains `VACUUM` / `ANALYZE`, les instructions uniques longues pendant `pg_restore` et les requêtes analytiques silencieuses plus de 60 secondes sont coupées avant leur achèvement.
+- **Les clients en attente sur un pool saturé** : lorsque le pool PgBouncer est plein, les clients en file d'attente plus de 60 secondes sont coupés.
+
+:::warning
+Les keepalives TCP configurés côté client n'empêchent **pas** la coupure : ils ne rafraîchissent que la jambe côté client, pas la jambe entre le load balancer et le pooler.
+:::
+
+### Ce qui maintient une connexion active
+
+Toute donnée circulant sur la connexion réinitialise le délai, dans les deux sens :
+
+- une requête qui renvoie des lignes, même peu nombreuses ;
+- une requête qui émet des messages de progression (`NOTICE`, `WARNING`…) ;
+- tout trafic applicatif.
+
+Par exemple, un `SELECT pg_sleep(90)` sans autre trafic est coupé à 60 secondes, alors que la même requête émettant un `NOTICE` toutes les 10 secondes s'achève. Les keepalives TCP côté client, quel que soit leur intervalle, ne maintiennent pas la connexion ouverte.
+
+### Impact sur les opérations longues
+
+Lorsqu'une connexion cliente est coupée, la requête en cours **n'est pas annulée** : elle continue côté serveur jusqu'à son achèvement (ou jusqu'à ce qu'elle soit terminée depuis une autre session). Conséquences :
+
+- un `CREATE INDEX` coupé peut se terminer en arrière-plan : vérifiez l'état de l'index (par exemple avec `\d` dans psql ou `pg_index.indisvalid`) avant de le relancer ;
+- un `pg_restore` coupé peut laisser un chargement partiel : vérifiez les données et reprenez depuis un point cohérent ;
+- une requête coupée continue de consommer des ressources et de détenir des verrous jusqu'à son achèvement : identifiez-la avec `pg_stat_activity` et terminez-la avec `pg_terminate_backend(pid)` si nécessaire.
+
+### Recommandations
+
+- **Pools applicatifs** : configurez un keepalive inférieur à 60 secondes — chaque connexion du pool doit exécuter périodiquement une requête légère telle que `SELECT 1`. Par exemple, réglez `keepaliveTime` sur 30 secondes dans HikariCP, ou planifiez une validation périodique équivalente dans les autres frameworks. Fermez les connexions inutiles au lieu de les laisser inactives.
+- **Opérations longues** : privilégiez les opérations qui produisent une sortie régulière (chargements par lots, `COPY` par morceaux) aux instructions uniques longues et silencieuses. Après une coupure, vérifiez côté serveur que l'opération n'a pas abouti avant de la relancer.
+- **Timeouts applicatifs** : si votre framework impose des timeouts agressifs, alignez-les avec les limites décrites sur cette page.
+
+:::info
+Le timeout d'inactivité de 60 secondes est un réglage de la plateforme qui ne peut pas être modifié par cluster. Si votre charge de travail nécessite des opérations longues silencieuses ou un délai relevé, contactez le support Numspot.
+:::
+
+## Autres limites de connexion
+
+| Limite | Valeur | Effet |
+|--------|--------|-------|
+| `client_idle_timeout` (PgBouncer) | 600 s (10 min) | Les connexions clientes inactives sont fermées par le pooler après 10 minutes |
+| `max_client_conn` (PgBouncer) | 100 par réplique (300 par cluster) | La 101e connexion cliente simultanée est refusée |
+| `default_pool_size` (PgBouncer) | 20 par pool base de données et utilisateur (60 par cluster et par pool) | Au-delà de 60 sessions actives simultanées, les clients sont mis en file d'attente jusqu'à libération d'une connexion serveur |
+| `max_connections` (PostgreSQL) | 100 par instance (3 emplacements réservés à la plateforme) | Limite stricte côté serveur, inaccessible aux clients (mutualisés par PgBouncer) |
+
+:::note
+Le timeout d'inactivité de 60 secondes s'applique **avant** le `client_idle_timeout` de 10 minutes de PgBouncer : une connexion inactive est d'abord coupée par le load balancer à 60 secondes.
+:::
+
+## Diagnostic des symptômes courants
+
+| Symptôme | Cause probable | Action |
+|----------|----------------|--------|
+| `SSL error: unexpected eof while reading` après ~60 s d'inactivité | Timeout d'inactivité du point de connexion | Configurez un keepalive inférieur à 60 secondes dans votre pool de connexions |
+| `perhaps the backend died while processing` (pgbench, requête longue) | Client coupé par le timeout d'inactivité du point de connexion | Vérifiez côté serveur si la requête a abouti ; privilégiez les opérations à sortie régulière |
+| Connexion refusée ou fermée lors de l'ouverture de nombreuses connexions simultanées | `max_client_conn` (300) atteint ou pool saturé | Réduisez la taille du pool côté client ; voir l'[auto-tuning](/docs/managed-services/postgresql/guides/auto-tuning/) |
+| Connexion cliente fermée après ~10 min d'inactivité | `client_idle_timeout` de PgBouncer | Activez un keepalive applicatif inférieur à 10 minutes, ou réduisez les connexions inactives |
+| Requête toujours en cours alors que le client a été déconnecté | Les requêtes serveur ne sont pas annulées lors d'une déconnexion | Consultez `pg_stat_activity` et terminez la requête avec `pg_terminate_backend(pid)` si nécessaire |

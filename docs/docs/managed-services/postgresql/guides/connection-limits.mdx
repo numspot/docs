@@ -1,0 +1,96 @@
+---
+title: "Connection behaviour and timeouts - Managed PostgreSQL"
+sidebar_label: "Connections and timeouts"
+sidebar_position: 5
+description: How client connections reach a managed PostgreSQL cluster, and the connection limits and idle timeouts that apply along the way (60-second idle timeout, PgBouncer pooling limits, max_connections).
+last_update:
+  date: 2026-10-19
+draft: false
+---
+
+# Connections and timeouts
+
+This page describes the path followed by client connections to a [PostgreSQL cluster](/docs/managed-services/postgresql/concepts/), the connection limits that apply along that path, and the behaviour you can expect when connections stay idle or when operations run for a long time.
+
+## The connection path
+
+Every client connection — public (EXTERNAL visibility) or private (INTERNAL visibility) — goes through three layers before reaching the database:
+
+| Layer | Role | Key limits |
+|-------|------|------------|
+| Connection endpoint ([load balancer](/docs/network/load-balancer/concepts)) | Forwards client connections to the pooler | Closes connections with no traffic after 60 seconds |
+| PgBouncer (connection pooler) | Pools and multiplexes client sessions toward PostgreSQL | `max_client_conn` 100 per replica (3 replicas), `default_pool_size` 20 per database and user pool, `client_idle_timeout` 600 s |
+| PostgreSQL instance | Runs the queries | `max_connections` 100 per instance (3 slots reserved for the platform) |
+
+The PgBouncer and PostgreSQL limits are detailed in the [auto-tuning page](/docs/managed-services/postgresql/guides/auto-tuning/).
+
+## Idle connection timeout (60 seconds)
+
+A connection that carries **no network traffic for about 60 seconds** is closed by the load balancer in front of the pooler. This applies to both public and private endpoints.
+
+### Symptoms
+
+- The client reports a broken connection, for example `SSL error: unexpected eof while reading` or `server closed the connection unexpectedly`.
+- Tools such as pgbench report `perhaps the backend died while processing` when a client is cut mid-statement.
+- The cluster stays healthy: the instance does not restart, and `pg_postmaster_start_time()` does not change.
+
+### What is affected
+
+- **Idle connections**: sessions with no running statement — typically connections kept open by application connection pools (HikariCP, SQLAlchemy, JDBC, ODBC…) — are closed after 60 seconds of inactivity.
+- **Long operations that return no data until completion**: `CREATE INDEX`, some `VACUUM` / `ANALYZE` runs, long single statements during `pg_restore`, and analytical queries that stay silent for more than 60 seconds are cut before they finish.
+- **Clients waiting on a saturated pool**: when the PgBouncer pool is full, clients queued for longer than 60 seconds are cut while waiting for a server connection.
+
+:::warning
+TCP keepalives configured on the client side do **not** prevent the cutoff: they only refresh the client-facing leg of the connection, not the leg between the load balancer and the pooler.
+:::
+
+### What keeps a connection alive
+
+Any data flowing on the connection resets the timeout, in both directions:
+
+- a query returning rows, even few;
+- a query emitting progress messages (`NOTICE`, `WARNING`…);
+- any application-level traffic.
+
+For example, a `SELECT pg_sleep(90)` with no other traffic is cut at 60 seconds, while the same query emitting a `NOTICE` every 10 seconds completes. Client-side TCP keepalives (whatever the interval) do not keep the connection open.
+
+### Impact on long-running operations
+
+When a client connection is cut, the statement that was running is **not cancelled**: it continues server-side until it completes (or is terminated from another session). This has the following consequences:
+
+- a cut `CREATE INDEX` may still finish in the background: check the index state (for example with `\d` in psql or `pg_index.indisvalid`) before retrying it;
+- a cut `pg_restore` may leave a partial load: check the data and resume from a consistent point;
+- a cut statement keeps consuming resources and holding locks until it completes: identify lingering statements with `pg_stat_activity` and terminate them with `pg_terminate_backend(pid)` when needed.
+
+### Recommendations
+
+- **Application pools**: configure a keepalive below 60 seconds — each pooled connection should periodically run a lightweight statement such as `SELECT 1`. For example, set `keepaliveTime` to 30 seconds on HikariCP, or schedule an equivalent periodic validation on other frameworks. Close connections that are not needed instead of keeping them idle.
+- **Long operations**: prefer operations that produce regular output (batched loads, chunked `COPY`) over single long silent statements. After a disconnection, verify server-side whether the operation completed before retrying it.
+- **Statement timeouts**: if your framework enforces aggressive timeouts, align them with the limits described on this page.
+
+:::info
+The 60-second idle timeout is a platform setting and cannot currently be configured per cluster. If your workload requires long silent operations or a raised timeout, contact Numspot support.
+:::
+
+## Other connection limits
+
+| Limit | Value | Effect |
+|-------|-------|--------|
+| PgBouncer `client_idle_timeout` | 600 s (10 min) | Idle client connections are closed by the pooler after 10 minutes |
+| PgBouncer `max_client_conn` | 100 per replica (300 cluster-wide) | A 101st concurrent client connection is refused |
+| PgBouncer `default_pool_size` | 20 per database and user pool (60 cluster-wide per pool) | Beyond 60 simultaneously active sessions, clients are queued until a server connection is released |
+| PostgreSQL `max_connections` | 100 per instance (3 slots reserved for the platform) | Hard limit on the server side, not reachable by clients (pooled by PgBouncer) |
+
+:::note
+The 60-second idle timeout applies **before** the 10-minute PgBouncer `client_idle_timeout`: an idle connection is first cut by the load balancer at 60 seconds.
+:::
+
+## Troubleshooting common symptoms
+
+| Symptom | Likely cause | What to do |
+|---------|--------------|------------|
+| `SSL error: unexpected eof while reading` after ~60 s of inactivity | Endpoint idle timeout | Configure a keepalive below 60 seconds on your connection pool |
+| `perhaps the backend died while processing` (pgbench, long query) | Client cut at the endpoint idle timeout | Verify server-side whether the statement completed; use regular-output operations |
+| Connection refused or closed when opening many concurrent connections | `max_client_conn` (300) or pool saturation reached | Reduce the client-side pool size; see [auto-tuning](/docs/managed-services/postgresql/guides/auto-tuning/) |
+| Client connection closed after ~10 min of inactivity | PgBouncer `client_idle_timeout` | Enable application-level keepalive below 10 minutes, or reduce idle connections |
+| Statement still running although the client was disconnected | Server-side statements are not cancelled on disconnect | Check `pg_stat_activity` and terminate with `pg_terminate_backend(pid)` if needed |

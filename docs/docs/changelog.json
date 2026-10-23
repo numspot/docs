@@ -1,6 +1,16 @@
 {
   "entries": [
     {
+      "service": "PostgreSQL",
+      "status": "changed",
+      "date": "2026-10-19",
+      "title": "Connection behaviour and timeouts documented",
+      "description": "A new PostgreSQL guide documents the connection behaviour of managed clusters: the 60-second idle connection timeout applied by the connection endpoint (idle sessions, long silent operations such as CREATE INDEX, VACUUM or pg_restore are cut, while client-side TCP keepalives do not prevent the disconnect), the fact that a cut statement keeps running server-side, and a consolidated view of the connection limits (PgBouncer pooling limits, max_connections) with troubleshooting guidance.",
+      "components": [
+        "docs"
+      ]
+    },
+    {
       "service": "IAM",
       "status": "changed",
       "date": "2026-10-16",

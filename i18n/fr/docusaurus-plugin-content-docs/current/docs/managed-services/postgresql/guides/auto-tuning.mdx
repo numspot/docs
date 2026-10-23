@@ -4,7 +4,7 @@ sidebar_label: Configuration automatique des paramètres PostgreSQL (Auto-tuning
 sidebar_position: 4
 description: Réglage automatique des paramètres PostgreSQL (mémoire, requêtes parallèles, autovacuum, stockage, WAL) et limites de connexions des clusters managés (max_connections et pooler PgBouncer intégré).
 last_update:
-  date: 2026-10-12
+  date: 2026-10-19
 draft: false
 ---
 
@@ -90,6 +90,8 @@ Conséquences pour la conception des applications :
 - les connexions mises en pool s'exécutent toujours sur l'instance primaire (point d'accès read-write) : les réplicas de lecture n'ajoutent pas de capacité de connexion ;
 - au-delà de 60 sessions actives simultanées (3 × 20 par pool), les clients supplémentaires sont mis en file d'attente sur PgBouncer jusqu'à la libération d'une connexion serveur — les transactions longues et les sessions inactives dans une transaction prolongent l'attente ;
 - pour éviter les timeouts de file d'attente, fermez les connexions inactives et dimensionnez les pools côté client en conséquence : un pool borné de quelques dizaines de connexions par instance applicative est recommandé.
+
+Pour le comportement complet des connexions — le timeout d'inactivité de 60 secondes appliqué par le point de connexion et son impact sur les opérations longues et les pools applicatifs — voir [Connexions et timeouts](/docs/managed-services/postgresql/guides/connection-limits/).
 
 ## Paramètres PostgreSQL
 

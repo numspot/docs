@@ -4,7 +4,7 @@ sidebar_label: Automatic configuration of PostgreSQL parameters (Auto-tuning)
 sidebar_position: 4
 description: Automatic tuning of PostgreSQL parameters (memory, parallel queries, autovacuum, storage, WAL) and connection limits of managed clusters (max_connections and built-in PgBouncer pooling).
 last_update:
-  date: 2026-10-12
+  date: 2026-10-19
 draft: false
 ---
 
@@ -90,6 +90,8 @@ Consequences for application design:
 - pooled connections always run on the primary instance (read-write endpoint): the read replicas do not add connection capacity;
 - beyond 60 simultaneously active sessions (3 × 20 per pool), additional clients are queued on PgBouncer until a server connection is released — long-running transactions and idle-in-transaction sessions extend the wait;
 - to avoid queue timeouts, close idle connections and size client-side pools accordingly: a bounded pool with a few dozen connections per application instance is recommended.
+
+For the full connection behaviour — the 60-second idle connection timeout applied by the connection endpoint and its impact on long operations and application pools — see [Connections and timeouts](/docs/managed-services/postgresql/guides/connection-limits/).
 
 ## PostgreSQL parameters
 
