@@ -20,6 +20,8 @@ When a session detects a problem, it must not recur:
 | i18n parity / French text leaking into EN pages    | `linter/tests/parity.test.js`, `linter/tests/french-residuals.test.js` |
 | Last-updated-date test flaky around UTC midnight (test lookahead built from `Date.now()` straddling two UTC dates) | Fixed in `linter/tests/last-updated-date.test.js` — the "tomorrow" fixture is derived from UTC midnight + 26h |
 | Search: REQUIRED clause on an index-removed stopword (`"base de données"`, `"mot de passe"`, `pare-feu`…) voids the whole lunr query → 0 results; a stopword lookup key in the synonym `TOKEN_INDEX` fired unrelated synonym queries on nearly every French input | `linter/tests/search.test.js` (quoted-phrase/synonym stopword regression) + `scripts/validate-search-synonyms.js` (post-build, wired after `yarn build`) — the parser drops stopwords from REQUIRED word lists and normalizes synonym members through the index tokenizer |
+| MCP `get_conventions` silently ignoring a mistyped argument (`pageType` instead of `type`) — the caller was served the action golden page with no warning, believing it held its own page-type model | `mcp/tests/server.test.js` — unknown-argument rejection (fails loudly and names the expected `type` parameter) |
+| MCP `search_docs` serving a stale corpus to a long-lived session (corpus built once and cached, so edits made during the session never showed up — contradicting the tool's "uncommitted edits visible" contract) | `mcp/lib/search.js` — corpus rebuilt on every call, never cached; no-cache guard in `mcp/tests/server.test.js` |
 | Multiple unit commits piling up in one PR          | Not lintable — see "One commit per Pull Request" below      |
 
 ## Branching — always start from up-to-date `main` (not lintable)
@@ -55,6 +57,7 @@ Diff-based linter tests (e.g. `page-deletion.test.js`) shell out to `git` to res
 
 - **A CI job running git-dependent tests must provide git and the full history**: in GitHub Actions this is `actions/checkout` with `fetch-depth: 0` — without it, the diff base can sit beyond a shallow clone and the test fails loudly.
 - **Diff-based tests must degrade gracefully**: resolve the diff base through a git call wrapped in try/catch — `ENOENT` (no git binary) → skip cleanly; an unresolvable configured ref (shallow clone, typo) → fail loudly. Never let a raw `execFileSync('git', …)` error escape a test (see `page-deletion.test.js` `diffBase()`).
+- **Tooling that shells out to `git diff <base>` follows the same rule, but degrades SILENTLY when it serves an agent**: `mcp/lib/lint.js` (`prepare_pr` with `lint: true`) resolves the base through `git rev-parse --verify` over `[requested, 'origin/main', 'main']` and returns a structured `{ error }` result instead of throwing when none resolves — the PR checklist stays usable on a shallow checkout, only the lint part is marked unavailable. The CI `tests` job carries `fetch-depth: 0` because it now runs those git-dependent MCP tests too.
 
 ## Dependency maintenance — findings pending action (not lintable)
 

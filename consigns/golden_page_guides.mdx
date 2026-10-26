@@ -1,0 +1,108 @@
+---
+title: "Connection behaviour and timeouts - Managed PostgreSQL"
+sidebar_label: "Connections and timeouts"
+sidebar_position: 5
+description: "One-sentence summary of what the page answers, with the key figures — this is the meta description."
+last_update:
+  date: 2026-10-26
+draft: false
+---
+
+<!--
+  GOLDEN PAGE — exemplar guide page (English version).
+
+  Guides are INFORMATIONAL pages: they explain behaviour, limits,
+  best practices or troubleshooting WITHOUT documenting a Numspot API,
+  Console or Terraform action (that is what Actions/ pages are for).
+  They live in <service>/guides/ (menu position 3).
+
+  Structure (extracted from the connection-limits guide, PR #27):
+
+    H1 (topic, not an action) → intro paragraph: what the page covers,
+      with a link to the service concept page
+    → H2 sections organised by USER NEED (not by internal architecture):
+      - one concept explained per H2, with a reference table when limits
+        or values stack up (| Item | Value | Effect |)
+      - H3 sub-slices: Symptoms / What is affected / What keeps it alive /
+        Recommendations — concrete symptoms (error messages in `code`)
+        before generalities
+    → :::warning / :::info when a behaviour surprises users (max ONE
+      admonition per H2 section, linter-enforced)
+    → Troubleshooting H2: a closing table (| Symptom | Likely cause |
+      What to do |) linking to related guides
+
+  No Tabs, no API action, no Permissions panel: guides describe, they
+  do not operate. Cross-link action pages and concepts instead of
+  duplicating them.
+  See consigns/standards.md for the full writing rules.
+
+  Do not route this file; mirror its structure instead.
+-->
+
+# Connections and timeouts
+
+<!-- H1 names the TOPIC, not an action. The intro states what the page
+     covers and links the concept page of the service at first occurrence. -->
+
+This page describes the path followed by client connections to a [PostgreSQL cluster](/docs/managed-services/postgresql/concepts/), the connection limits that apply along that path, and the behaviour you can expect when connections stay idle or when operations run for a long time.
+
+## The connection path
+
+<!-- First H2 gives the mental model. Stacked values go in a reference
+     table; every limit carries its unit and its effect. -->
+
+| Layer | Role | Key limits |
+|-------|------|------------|
+| Connection endpoint | Forwards client connections to the pooler | Closes connections with no traffic after 60 seconds |
+| Connection pooler | Pools and multiplexes client sessions | `max_client_conn` 100 per replica |
+| Database instance | Runs the queries | `max_connections` 100 per instance |
+
+The limits are detailed in the [related guide](/docs/managed-services/postgresql/guides/auto-tuning/).
+
+## Idle connection timeout (60 seconds)
+
+<!-- One behaviour per H2. Lead with the figure the user will observe. -->
+
+A connection that carries **no network traffic for about 60 seconds** is closed. This applies to both public and private endpoints.
+
+### Symptoms
+
+<!-- What the user actually sees: real error messages, in `code`. -->
+
+- The client reports a broken connection, for example `SSL error: unexpected eof while reading`.
+- The cluster stays healthy: the instance does not restart.
+
+### What is affected
+
+- **Idle connections**: sessions with no running statement;
+- **Long operations that return no data until completion**: `CREATE INDEX`, long single statements.
+
+:::warning
+TCP keepalives configured on the client side do **not** prevent the cutoff.
+:::
+
+### What keeps a connection alive
+
+- a query returning rows, even few;
+- any application-level traffic.
+
+### Recommendations
+
+<!-- Actionable, concrete: name the frameworks and the values to set. -->
+
+- **Application pools**: configure a keepalive below 60 seconds — for example, set `keepaliveTime` to 30 seconds on HikariCP;
+- **Long operations**: prefer operations that produce regular output (batched loads, chunked `COPY`).
+
+:::info
+The 60-second idle timeout is a platform setting and cannot currently be configured per cluster. If your workload requires a raised timeout, contact Numspot support.
+:::
+
+## Troubleshooting common symptoms
+
+<!-- Closing reference table: the symptom as the user sees it, the likely
+     cause, the immediate action. Link to the related guides. -->
+
+| Symptom | Likely cause | What to do |
+|---------|--------------|------------|
+| `SSL error: unexpected eof while reading` after ~60 s of inactivity | Endpoint idle timeout | Configure a keepalive below 60 seconds on your connection pool |
+| Connection refused when opening many concurrent connections | Pool saturation reached | Reduce the client-side pool size; see [auto-tuning](/docs/managed-services/postgresql/guides/auto-tuning/) |

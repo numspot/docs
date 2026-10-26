@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "doc-contrib": {
+      "command": "node",
+      "args": ["mcp/server.js"]
+    }
+  }
+}

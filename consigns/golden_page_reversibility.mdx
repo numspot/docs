@@ -1,0 +1,92 @@
+---
+title: Reversibility of managed <Service>
+sidebar_label: <Service>
+description: How to export your data and exit the managed <Service> — exportable data, tools, open formats and exit procedure
+sidebar_position: 2
+draft: false
+last_update:
+  date: 2026-10-26
+---
+
+<!--
+  GOLDEN PAGE — exemplar service reversibility page (English version).
+
+  Reversibility pages document how a customer leaves a managed service:
+  what is exportable, with which tools, in which formats, and the exit
+  procedure. They live in support/reversibility/<service>.mdx (menu
+  position 2+ of the Réversibilité section) and MUST come with the
+  redirect stub at managed-services/<service>/reversibility.mdx (see
+  "Support — Réversibilité Menu Structure" in AGENTS.md).
+
+  The GENERAL policy page (support/reversibility/global-reversibility-policy.mdx,
+  menu position 1) states the principles once — SWIPO alignment, shared
+  responsibility, standard formats. Service pages do NOT restate them:
+  they apply them to one service and link the general policy instead.
+
+  Structure (extracted from the managed Kubernetes page):
+
+    H1 "Reversibility of managed <Service>" → one intro sentence linking
+      the service concept page and the general policy
+    → H2 Exportable data: what leaves the service (resources, data,
+      configuration) and in which form
+    → H2 Reversibility tools: one H3 per tool/flow, with the concrete
+      commands or console steps, in `code` where literal
+    → H2 Open formats: the standards the export relies on (and why they
+      keep the data usable elsewhere)
+    → H2 Exit procedure: the numbered end-to-end sequence, in order
+    → state the RESPONSIBILITY SPLIT (customer-run export, Numspot-side
+      availability) in one admonition at most
+
+  Be factual and complete: reversibility pages are contractual-adjacent,
+  reviewed like product pages. No marketing tone.
+  See consigns/standards.md for the full writing rules.
+
+  Do not route this file; mirror its structure instead.
+-->
+
+# Reversibility of managed Kubernetes
+
+<!-- Link the general policy once instead of restating its principles. -->
+
+This page describes how to export your data and leave the [managed Kubernetes](/docs/managed-services/kubernetes/concepts/) service, in application of the [general reversibility policy](/docs/support/reversibility/global-reversibility-policy).
+
+## Exportable data
+
+<!-- Everything the customer can take away: resources, data, configuration.
+     Name the formats (YAML manifests, database dumps…). -->
+
+- the cluster resources (deployments, services, config maps), exported as YAML manifests;
+- the persistent data, through the storage backup mechanisms;
+- the `kubeconfig` file, to reconnect the same tooling elsewhere.
+
+## Reversibility tools
+
+### Exporting Kubernetes resources
+
+<!-- One H3 per tool. Concrete commands in `code`, prerequisites linked. -->
+
+```bash
+kubectl get <resource> -n <namespace> -o yaml > <resource>.yaml
+```
+
+### Backup and restore with Velero
+
+<!-- Name the tool, link its documentation, scope what it covers. -->
+
+## Open formats
+
+<!-- Why the export stays usable outside Numspot: standard APIs, common
+     image formats, no proprietary lock-in on the data. -->
+
+## Exit procedure
+
+<!-- The numbered sequence, end to end. Order matters: what to export
+     first, what to shut down last. -->
+
+1. Export the cluster resources and verify the manifests;
+2. Back up the persistent data and test the restore on the target platform;
+3. Delete the cluster when the migration is confirmed.
+
+:::info
+The export is customer-run: Numspot provides standard tooling and open formats but does not operate the migration. See the [general reversibility policy](/docs/support/reversibility/global-reversibility-policy) for the responsibility split.
+:::
