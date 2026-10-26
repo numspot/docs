@@ -1,0 +1,68 @@
+---
+title: "Glossary"
+sidebar_label: "Glossary"
+sidebar_position: 1
+hide_feedback: true
+last_update:
+  date: 2026-10-26
+---
+
+<!--
+  GOLDEN PAGE — exemplar glossary page (English version).
+
+  The glossary is the public-facing definition page of the cloud terms
+  used across the documentation. It lives at docs/docs/glossary/index.mdx
+  (standalone top-level menu entry, direct link, see D-018) and is the
+  human-readable twin of consigns/glossary.json — the machine-readable
+  source of truth the linter enforces. A term exists in one of the two,
+  ideally both, with the SAME correct form (D-011: the glossary.json
+  changes only through a logged naming decision).
+
+  Structure (extracted from the glossary page):
+
+    H1 "Glossary" → one intro sentence
+    → H2 per letter ("## A"), alphabetical, one section per initial
+    → H4 per term ("#### <Term> (<ACRONYM>)") — full name first, acronym
+      in parentheses; H4 keeps terms out of the sidebar and the TOC
+    → definition: 2-4 sentences, self-sufficient, no marketing tone;
+      acronym expansion, then what it means for a Numspot user
+    → "Find out more:" line with an external reference when a public
+      authority defines the term (no private links)
+  → a term added to glossary.json (correct_form, meaning) should appear
+    here too, in the right letter section
+
+  Do not route this file; mirror its structure instead.
+-->
+
+# Glossary
+
+This glossary has been designed to give you a clear and concise understanding of the key terms used in the cloud field, making it easier for you to navigate and use it.
+
+## A
+
+<!-- H2 = letter. Alphabetical order within the section, case-insensitive. -->
+
+#### Access Control List (ACL)
+
+<!-- H4 = term. Full name first, acronym in parentheses at first
+     occurrence — the reverse of body pages, where the acronym comes
+     first and expands once. Here the term IS the entry. -->
+
+Reference to granular permissions, which specify which users or system processes have access to a given object or resource, as well as the operations they are authorized to perform.
+
+#### Application Programming Interface (API)
+
+A set of rules and protocols that allows different software applications to communicate with each other, making it easier to exchange data and functionality.  
+Find out more: [What is an API? | api.gouv.fr](https://api.gouv.fr/guides/api-definition)
+
+## B
+
+#### Block Storage
+
+<!-- "Find out more:" links only to public, vendor-neutral references. -->
+
+A data storage system that divides information into fixed-size blocks, each with a unique address, enabling fast and efficient access.
+
+## C
+
+<!-- One H2 per letter, including for a single term. Never merge letters. -->

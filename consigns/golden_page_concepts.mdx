@@ -1,0 +1,82 @@
+---
+title: "Kubernetes - Concepts"
+sidebar_label: "Concepts"
+sidebar_position: 1
+draft: false
+last_update:
+  date: 2026-10-26
+---
+
+<!--
+  GOLDEN PAGE — exemplar concept page (English version).
+
+  Concept pages are the reference page of a service or component: they
+  define WHAT it is before any how-to. They sit at <service>/concepts.mdx
+  (menu position 1 of every managed service) and are the link target of
+  the resource type everywhere else in the documentation (see the
+  "resource type must link to its concept page" linter rule).
+
+  Structure (extracted from the Kubernetes concept page):
+
+    H1 "About the <service> managed service" → optional <ActionsSummary />
+      (theme component listing the service actions) → H2 Introduction:
+      2-3 sentences — what it is, what the user does with it, which
+      service it belongs to, concept links at first occurrence
+    → H2 Key features: one H3 per feature (numbered), each with a short
+      paragraph and possibly a table for dimensions/limits
+    → H2 Use cases (optional): numbered H3, one use case each, 2-3 lines
+    → H2 Worker/Platform security, responsibilities (when relevant):
+      who manages what — Numspot vs customer
+    → H2 Best practices (optional): short, cross-linked
+
+  Write in prose, not steps: a concept page explains and links, it never
+  walks through a wizard (that is the job of Actions pages and guides).
+  Keep it the STABLE entry point: version specifics belong to the
+  "Versions et lifecycle" page, how-tos belong to Actions/ and guides/.
+
+  Do not route this file; mirror its structure instead.
+-->
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# About the Kubernetes managed service
+
+<!-- Optional: lists the service's action pages, kept in sync by the theme. -->
+
+<ActionsSummary />
+
+## Introduction
+
+The Kubernetes managed service enables customers to deploy, manage and scale containerized applications in a high-availability cloud environment.
+This service is used to create a cluster Kubernetes in a **Service cluster** without managing the underlying infrastructure.
+Users can also manage node pools, retrieve the `kubeconfig` file, and use [GPU](/docs/compute/gpu/concept/) (Graphics Processing Unit) for compute-intensive workloads.
+
+### Benefits of the Kubernetes managed service
+
+<!-- 3-5 bullets, one benefit per line, semicolons; last one ends with a period. -->
+
+- High availability: clusters are designed to minimize downtime;
+- Simplified management: no need to manage the Kubernetes infrastructure;
+- Scalability: addition or removal of nodes according to needs.
+
+## Key features
+
+### 1. Creating a high-availability cluster
+
+<!-- One H3 per feature. Explain the behaviour and the guarantees, not the
+     clicks. Quantify when possible (AZ replication, limits…). -->
+
+A high-availability cluster Kubernetes is designed to provide optimal service continuity.
+
+The control plane is redundant by design at Numspot.
+The master node of the control plane is replicated in each of the available AZ in the region.
+
+## Use cases
+
+### 1. Deploying critical applications
+
+<!-- Short concrete scenarios. Each maps the user need to the features above. -->
+
+## Best practices
+
+<!-- Cross-link the guides instead of duplicating them. -->

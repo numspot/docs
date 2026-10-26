@@ -27,7 +27,8 @@
     "lint:docs:all": "node linter/cli.js docs/docs/",
     "lint:docs:all:ci": "node linter/cli.js docs/docs/ --ci",
     "validate:search": "node scripts/validate-search-synonyms.js",
-    "test": "node --test linter/tests/*.test.js"
+    "test": "node --test linter/tests/*.test.js mcp/tests/*.test.js",
+    "mcp": "node mcp/server.js"
   },
   "dependencies": {
     "@babel/core": "^7.29.0",

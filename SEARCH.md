@@ -3,8 +3,7 @@
 The site search is powered by
 [`@easyops-cn/docusaurus-search-local`](https://github.com/easyops-cn/docusaurus-search-local),
 configured in the `themes` array of `docusaurus.config.ts`. It is entirely
-self-hosted: no query ever leaves the visitor's browser, which is a hard
-requirement for a sovereign cloud provider.
+self-hosted: the index is built at build time and served with the site.
 
 ## Why it replaced `docusaurus-lunr-search`
 

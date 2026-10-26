@@ -4,12 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const { lintPage, calculateScore } = require('./index');
+const { DOC_ROOTS } = require('./utils/doc-roots');
 
 const DEFAULT_GLOSSARY = path.resolve(__dirname, '..', 'consigns', 'glossary.json');
-
-// Roots scanned for empty categories, mirroring the two documentation trees
-// the CLI lints (FR source + EN translation).
-const DOC_ROOTS = ['docs/docs', 'i18n/fr/docusaurus-plugin-content-docs/current/docs'];
 
 // A directory holding a _category_.json but no doc page at all (no direct
 // .md/.mdx page, no subdirectory) renders as an empty section in the docs
