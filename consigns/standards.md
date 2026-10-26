@@ -108,6 +108,13 @@ Numbered list:
     b. Valeur 4.
   3. Third line.
 ## **Content structure**
+### **Action page layout**
+- The `<Tabs>` block (console / api / terraform) comes **directly after** the Permissions panel — nothing in between. Time-to-action first: auxiliary choices (network type…) are documented below the tabs or inside the relevant tab (D-012).
+- **Console tab** (default): the `<Walkthrough>` component (screenshots + hotspots) comes first, then the optional prerequisites info panel (↗ links, new tab), then the numbered steps — one H2 per wizard step.
+- **API tab** opens with `## API {#tabhead-api}` and follows the standard order: one-sentence summary → prerequisites info panel → endpoint in `code` → link to the OpenAPI page → **Parameters table** (`Parameter | Location | Required | Type | Example | Description`) → link to the [Parameter types](/docs/reference/parameter-types) page → **Example** (curl) with the variables table (`Variable | Represents | Where to find its value`) → **Response** (status + fields table). Keep the `{#tabhead-api}` anchor: it feeds the in-page table of contents.
+- **Terraform tab** opens with `## Terraform {#tabhead-terraform}` and follows the standard order: provider resource intro → prerequisites info panel → **Example** (HCL) with the variables table → **Arguments table** (`Argument | Required | Type | Example | Description`) → Parameter types link → **Import** section for pre-existing resources.
+- The reference model is `consigns/golden_page_actions.mdx`; every new or reworked action page mirrors it.
+* * *
 ### **Prerequisites**
 - Prerequisites must:
   - Be placed in an **information panel** (note type)
