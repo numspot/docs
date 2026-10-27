@@ -4,7 +4,7 @@ sidebar_label: Create a Container Registry instance
 sidebar_position: 2
 draft: false
 last_update:
-  date: 2026-10-15
+  date: 2026-10-23
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -37,6 +37,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 :::
 <Tabs>
     <TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
         The `POST /registry/spaces/{spaceId}/registries` request lets you create and launch a Harbor registry.
         The Container Registry is in a `PENDING` state until it is created, then moves to the `RUNNING` state.
 

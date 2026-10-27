@@ -2,6 +2,8 @@
 title: Export the catalog
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 # Export the catalog
@@ -20,6 +22,8 @@ No IAM (Identity and Access Management) permission is required to perform this a
 <Tabs>
   <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 1. From the left-hand side menu, go to **Catalog**.
 2. Click **Export** in the top right of the page.
 3. Select the desired filters (domain, type, region).
@@ -27,6 +31,8 @@ No IAM (Identity and Access Management) permission is required to perform this a
 
   </TabItem>
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
 
 **Endpoint**: `GET /catalogue/export/csv`
 
@@ -56,6 +62,8 @@ The CSV file contains the following columns for each product:
 
   </TabItem>
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 Exporting the catalog via Terraform is not available. Use the console or the API to export the catalog in CSV format.
 

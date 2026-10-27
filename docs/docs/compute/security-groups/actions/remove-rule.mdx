@@ -2,6 +2,8 @@
 title: Remove rules from a security group
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -23,6 +25,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 
 <Tabs>
    <TabItem value="console" label="Console" default> 
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -46,6 +50,9 @@ This action requires the following IAM (Identity and Access Management) permissi
    6. The selected rule is deleted and the dialog box closes. 
    </TabItem> 
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
 The `DELETE /compute/spaces/{spaceId}/securityGroups/{id}/rules` command deletes one or more inbound or outbound rules of a security group. For the rule to be deleted, the values specified in the deletion request must match exactly those of the existing rule.
 
 In the case of the TCP (Transmission Control Protocol) and UDP (User Datagram Protocol) protocols, you must indicate the destination port or the port range. In the case of the ICMP (Internet Control Message Protocol) protocol, you must specify the ICMP type and code numbers.
@@ -57,6 +64,9 @@ To remove outbound access to a destination security group, it is recommended to 
 [Example request: Deleting a rule from a Security Group](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/securityGroups/{id}/rules)
   </TabItem>
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
     The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/security_group_rule).
   </TabItem>
 </Tabs>

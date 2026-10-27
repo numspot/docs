@@ -2,6 +2,8 @@
 title: Create a key pair
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -35,6 +37,8 @@ Only RSA key pairs can decrypt the password of a Windows VM.
 
 <Tabs>
 <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -73,6 +77,8 @@ Only RSA key pairs can decrypt the password of a Windows VM.
 
 </TabItem>
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
 
 The `POST /compute/spaces/{spaceId}/keypairs` command creates a key pair to use with your VM. You can use this method in two different ways:
 

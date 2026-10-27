@@ -3,6 +3,8 @@ title: Get information about your nat gateways - Numspot
 sidebar_label: Get information about your nat gateways
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -24,6 +26,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 <Tabs>
   <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 <Walkthrough
   steps={[
     { img: "/img/walkthrough/en/nat/list.png", text: "From the left-hand side menu, click Network → VPC → NAT Gateways.", hotspot: { x: 0, y: 0.6926, w: 0.194, h: 0.0568 } },
@@ -40,6 +44,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
   </TabItem>
   <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `GET /compute/spaces/{spaceId}/natGateways` command lists the nat gateways.
 
 [Example request: List all nat gateways ↗](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/natGateways)
@@ -50,6 +56,8 @@ The `GET /compute/spaces/{spaceId}/natGateways/{id}` command retrieves informati
 
   </TabItem>
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/nat_gateway).
 

@@ -4,7 +4,7 @@ sidebar_label: Delete a PostgreSQL cluster
 sidebar_position: 12
 draft: false
 last_update:
-  date: 2026-10-19
+  date: 2026-10-23
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -29,6 +29,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 <Walkthrough
   steps={[
     { img: "/img/walkthrough/en/postgresql/delete-01-list.png", text: "From the left-hand side menu, click Managed Services → PostgreSQL → Clusters.", hotspot: { x: 0, y: 0.4642, w: 0.1944, h: 0.12 } },
@@ -50,6 +52,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 </TabItem>
 
 <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
     The `DELETE /postgresql/spaces/{spaceId}/clusters/{clusterId}` request deletes a PostgreSQL cluster.
     The cluster switches to the `DELETING` status during the deletion.
 

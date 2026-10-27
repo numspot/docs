@@ -2,6 +2,8 @@
 title: Delete an image
 sidebar_position: 4
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -24,9 +26,15 @@ This action requires the following IAM (Identity and Access Management) permissi
 
 <Tabs>
   <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
     Deleting an image from the console is not available yet. Use the API or Terraform.
   </TabItem>
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
     The `DELETE /compute/spaces/{spaceId}/images/{id}` command deletes an image.
 
 :::info
@@ -37,6 +45,9 @@ You can still use the [VM (Virtual Machine)](/docs/compute/concept/) already lau
 :::
   </TabItem>
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
     The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/image).
   </TabItem>
 </Tabs>

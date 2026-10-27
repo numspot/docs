@@ -3,6 +3,8 @@ title: Attach a virtual gateway
 description: Attach a virtual gateway to a VPC to enable VPN connections.
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -35,6 +37,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 1. Click in the **Virtual Gateways** dashboard to display the checkboxes.
 2. Select the checkbox of the virtual gateway you want to attach to a VPC.
    The virtual gateway is selected and an actions menu appears.
@@ -47,6 +51,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `POST /connectivity/spaces/{spaceId}/virtualGateways/{id}/link` command attaches a virtual gateway to a VPC.
 
 :::warning
@@ -57,6 +63,8 @@ This action can only be performed if the virtual gateway is in the `available` s
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/virtual_gateway).
 

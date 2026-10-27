@@ -3,6 +3,8 @@ title: Release a public IP from your account - Numspot
 sidebar_label: Release a public IP from your account
 sidebar_position: 5
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -23,6 +25,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 :::
 <Tabs>
   <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -58,6 +62,9 @@ To release public IP, make sure you have first dissociated them from any other r
     A confirmation message "The Public IP have been released" appears.
   </TabItem>
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
 :::info
 **Before you begin:**
 
@@ -73,6 +80,9 @@ You can only release the public IP associated with your account. The `DELETE /co
 [Example request: Release a public IP](/openapi/#tag/compute/DELETE/compute/spaces/%7BspaceId%7D/publicIps/%7Bid%7D)
   </TabItem>
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/public_ip).
   </TabItem>
 </Tabs>

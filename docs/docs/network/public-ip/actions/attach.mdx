@@ -3,6 +3,8 @@ title: Associate a public IP with a VM or a network interface - Numspot
 sidebar_label: Associate a public IP with a VM or a network interface
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -28,6 +30,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 
 <Tabs>
 <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 <Walkthrough
   steps={[
@@ -62,6 +66,8 @@ From the console, you can associate a public IP with a VM or with a NIC.
 </TabItem>
 <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 :::info
 **Before you begin**: To associate a public IP with a VM or with a network interface card (NIC) in a VPC, make sure that the VPC has an [internet gateway](/docs/network/internet-gateway/concepts/) attached.
 :::
@@ -76,6 +82,8 @@ You can associate a public IP with a network address translation (NAT) service o
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/public_ip).
 

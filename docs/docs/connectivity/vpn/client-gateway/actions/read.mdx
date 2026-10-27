@@ -3,6 +3,8 @@ title: View the information of your client gateways
 description: Obtain information about one or more of your client gateways.
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -26,6 +28,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
 <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 1. In the console, navigate to **Network** → **[VPC](/docs/network/vpc/concepts)** → **Client Gateways**.
 2. The list of all your client gateways is displayed with their main information:
    - ID
@@ -35,6 +39,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 
 </TabItem>
 <TabItem value="api" label="API">
+
+## API {#tabhead-api}
 
 The `GET /connectivity/spaces/{spaceId}/clientGateways` command lists the client gateways.
 
@@ -46,6 +52,8 @@ The `GET /connectivity/spaces/{spaceId}/clientGateways/{id}` command retrieves i
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/client_gateway).
 

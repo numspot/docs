@@ -3,6 +3,8 @@ title: Delete a load balancer - Numspot
 sidebar_label: Delete a load balancer
 sidebar_position: 4
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -24,6 +26,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 <Tabs>
   <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 <Walkthrough
   steps={[
     { img: "/img/walkthrough/en/load-balancer/lb-01-list.png", text: "From the left-hand side menu, click Network → Load Balancers.", hotspot: { x: 0, y: 0.6136, w: 0.194, h: 0.0568 } },
@@ -43,6 +47,8 @@ The load balancer is deleted.
   </TabItem>
   <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 :::info
 Before you begin: Ensure that the [security groups](/docs/compute/security-groups/concepts/concept-sg/) of your backend [VM](/docs/compute/concept/) (Virtual Machine) allow traffic from a source other than the load balancer.
 :::
@@ -52,6 +58,8 @@ The `DELETE /compute/spaces/{spaceId}/loadBalancers/{id}` command deletes a spec
 [Example request: Deleting a load balancer](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/loadBalancers/{id})
   </TabItem>
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
 

@@ -3,6 +3,8 @@ title: Delete a nat gateway - Numspot
 sidebar_label: Delete a nat gateway
 sidebar_position: 4
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -24,6 +26,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 :::
 <Tabs>
   <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
 
 You can delete a single nat gateway or delete several of them in a single action.
 
@@ -57,6 +61,8 @@ You can delete a single nat gateway or delete several of them in a single action
   </TabItem>
   <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `DELETE /compute/spaces/{spaceId}/natGateways/{id}` command deletes a specified nat gateway.
 This action dissociates the public IP from the nat gateway, but does not release this public IP address from your account.
 However, it does not remove the routes of the nat gateway from your route tables.
@@ -64,6 +70,8 @@ However, it does not remove the routes of the nat gateway from your route tables
 [Example request: Deleting a nat gateway](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/natGateways/{id})
   </TabItem>
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/nat_gateway).
 

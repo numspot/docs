@@ -3,6 +3,8 @@ title: Add a node pool to a Kubernetes cluster - Managed Kubernetes
 sidebar_label: Add a node pool to a Kubernetes cluster
 sidebar_position: 6
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -21,6 +23,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 :::
 <Tabs>
 <TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
     1. From the left-hand side menu, click **Managed services** → **Kubernetes** to access the list of Kubernetes clusters.
 
     ![Managed services menu](/img/console/managed-services/en-menu-managed-services.png)
@@ -87,6 +92,9 @@ This action requires the following IAM (Identity and Access Management) permissi
 </TabItem>
 
 <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
     Use the `POST /kubernetes/spaces/{spaceId}/clusters/{clusterId}/nodePools` route to add a node pool to a Kubernetes cluster.
 
     **Example request**

@@ -3,6 +3,8 @@ title: Supprimer un utilisateur DLP - DLP managé
 sidebar_label: Supprimer un utilisateur DLP
 sidebar_position: 13
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -22,7 +24,7 @@ Cette action nécessite le rôle [DLP](/docs/managed-services/dlp/concepts) (Dat
 :::
 
 :::warning
-Le compte interne `numspot` ne peut pas être supprimé. Le dernier compte admin ne peut pas être supprimé — assurez-vous qu'il reste au moins un admin après la suppression.
+Le compte interne Numspot ne peut pas être supprimé. Le dernier compte admin ne peut pas être supprimé — assurez-vous qu'il reste au moins un admin après la suppression.
 :::
 
 <Tabs>
@@ -44,11 +46,13 @@ Le compte interne `numspot` ne peut pas être supprimé. Le dernier compte admin
 
 ### Restrictions
 
-- Le compte interne **numspot** ne peut pas être supprimé ;
+- Le compte interne **Numspot** ne peut pas être supprimé ;
 - Le dernier compte **admin** ne peut pas être supprimé. Si vous devez supprimer le dernier admin, attribuez d'abord le rôle admin à un autre utilisateur.
 
 </TabItem>
 <TabItem value="api" label="API">
+
+## API {#tabhead-api}
 
 La requête `DELETE /api/v1/users/{id}` permet de supprimer un utilisateur.
 
@@ -60,7 +64,7 @@ HTTP/1.1 204 No Content
 
 ### Restrictions
 
-- La suppression du compte interne `numspot` renvoie une erreur `403 Forbidden` ;
+- La suppression du compte interne Numspot renvoie une erreur `403 Forbidden` ;
 - La suppression du dernier admin renvoie une erreur `409 Conflict`.
 
 </TabItem>

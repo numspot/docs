@@ -2,6 +2,8 @@
 title: Delete a volume
 sidebar_position: 6
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -22,6 +24,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 
 <Tabs>
 <TabItem value="Console" default>
+
+## Console {#tabhead-console}
 
 1. Log in to the Numspot console.
 
@@ -50,6 +54,8 @@ This action requires the following **IAM** (Identity and Access Management) perm
 </TabItem>
 <TabItem value="API">
 
+## API {#tabhead-api}
+
 :::info
 **Before you begin**: Make sure that you no longer need the data stored on the `volume` that you want to delete, or that it is backed up elsewhere (on another `volume` or in a snapshot), as it will not be possible to recover the deleted `volume`.
 :::
@@ -60,6 +66,8 @@ The `DELETE /compute/spaces/{spaceId}/volumes/{id}` command deletes a specified 
 
 </TabItem>
 <TabItem value="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/volume).
 

@@ -3,6 +3,8 @@ title: Modify an attribute of a load balancer - Numspot
 sidebar_label: Modify an attribute of a load balancer
 sidebar_position: 3
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -23,6 +25,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
   <TabItem value="console" label="Console" default>
 
+## Console {#tabhead-console}
+
 1. From the left-hand side menu, click **Network** → **Load Balancers** to access the list of load balancers.
 2. Click the name of the load balancer that you want to modify.
 3. Click **Modify** at the top right of the screen.
@@ -33,6 +37,8 @@ This action requires the following IAM (Identity and Access Management) permissi
   </TabItem>
   <TabItem value="api" label="API">
 
+## API {#tabhead-api}
+
 The `PUT /compute/spaces/{spaceId}/loadBalancers/{id}` command modifies the specified attribute of a load balancer. You can specify only one attribute at a time.
 
 You can set a new SSL certificate for an SSL or HTTPS listener of a load balancer. This certificate replaces any certificate used on the same load balancer and port.
@@ -42,6 +48,8 @@ You can also replace the policy currently enabled for the load balancer with ano
 [Request example: Modifying a load balancer](/openapi/#tag/compute/PUT/compute/spaces/{spaceId}/loadBalancers/{id})
   </TabItem>
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
 
 The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/load_balancer).
 

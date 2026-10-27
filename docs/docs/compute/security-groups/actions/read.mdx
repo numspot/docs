@@ -2,6 +2,8 @@
 title: Get information about your security groups
 sidebar_position: 4
 draft: false
+last_update:
+  date: 2026-10-15
 ---
 
 import Tabs from '@theme/Tabs';
@@ -25,6 +27,8 @@ This action requires the following IAM (Identity and Access Management) permissi
 <Tabs>
    <TabItem value="console" label="Console" default> 
 
+## Console {#tabhead-console}
+
 <Walkthrough
   steps={[
     { img: "/img/walkthrough/en/security-group/list.png", text: "From the left-hand side menu, click Compute → Security Groups.", hotspot: { x: 0, y: 0.5568, w: 0.1944, h: 0.0457 } },
@@ -41,6 +45,9 @@ This action requires the following IAM (Identity and Access Management) permissi
    4. The "Security Group Details" page appears. 
    </TabItem> 
   <TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
 The `GET /compute/spaces/{spaceId}/securityGroups` command lets you list your security groups.
 
 [Example request: Listing all your Security Groups](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/securityGroups)
@@ -50,6 +57,9 @@ The `GET /compute/spaces/{spaceId}/securityGroups/{id}` command lets you retriev
 [Example request: Retrieving the information of a Security Group](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/securityGroups/{id})
   </TabItem>
   <TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
     The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/security_group).
   </TabItem>
 </Tabs>
