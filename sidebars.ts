@@ -30,7 +30,7 @@ const sidebars: SidebarsConfig = {
       className: "section-title openapi",
       collapsed: true,
       items: [
-        { type: "link", label: "Global", href: "/openapi/" },
+        { type: "link", label: "Platform & Infrastructure", href: "/openapi/" },
         { type: "link", label: "Object Storage", href: "/openapi-object-storage/" },
         { type: "link", label: "Data Loss Prevention", href: "/openapi-dlp/" },
       ],
