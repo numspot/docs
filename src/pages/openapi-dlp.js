@@ -1,6 +1,5 @@
 // This custom openapi is a workaround to get Scalar to work with Docusaurus without using the Docusaurus integration.
 // The Docusaurus integration is not working, when loading Scalar for the first time it works but when coming back to the page we get a zod error and Scalar fails to load.
-// Maintained by: Numspot
 
 import { useEffect, useRef, useState } from "react";
 import Layout from "@theme/Layout";
