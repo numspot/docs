@@ -98,6 +98,32 @@ article:has(.home-hero) .theme-doc-breadcrumbs {
   margin-left: 0;
 }
 
+/* The syntax-help swizzle (src/theme/SearchBar) wraps the plugin container
+   in .navbar__searchWithSyntax — here the generic block-forcing rule above
+   would stack the "?" button under the input. Keep it a flex row: the input
+   column stretches, the "?" button sits at its right on the same line. The
+   !important pair (same shape as the rules above) beats them for the
+   wrapper only; the input inside keeps its full width. */
+.home-search > .navbar__searchWithSyntax {
+  display: flex !important;
+  align-items: center;
+  gap: var(--ns-space-2);
+}
+
+.home-search .navbar__searchWithSyntax > .navbar__search {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto !important;
+}
+
+/* Narrow screens: keep the row tight — the button must not eat input width
+   it does not need. */
+.home-search .search-syntax__toggle {
+  flex: 0 0 auto;
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
 .home-search .navbar__search-input,
 .home-search .navbar__search-input:hover,
 .home-search .navbar__search-input:focus,
@@ -132,14 +158,18 @@ article:has(.home-hero) .theme-doc-breadcrumbs {
 /* Most-searched keywords: compact chips, one single line (silent
    horizontal scroll on narrow screens). Double class + tag: outranks the
    .markdown ul / li rules from content.css that would otherwise indent the
-   row and space the chips. */
+   row and space the chips.
+   overflow-x: auto turns the row into a scroll container that clips at its
+   PADDING box — the chips' hover lift (translateY(-1px) below) pushed their
+   top border into the clip and shaved it off. The 3px top padding gives the
+   lift headroom; the margin trims by the same amount to keep the rhythm. */
 .home-search ul.home-search__keywords {
   display: flex;
   flex-wrap: nowrap;
   gap: 6px;
   list-style: none;
-  margin: var(--ns-space-3) 0 0;
-  padding: 0;
+  margin: calc(var(--ns-space-3) - 3px) 0 0;
+  padding: 3px 0 0;
   overflow-x: auto;
   scrollbar-width: none; /* Firefox */
 }

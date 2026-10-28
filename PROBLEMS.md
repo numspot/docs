@@ -19,6 +19,7 @@ When a session detects a problem, it must not recur:
 | Theme i18n overrides hardcoding dynamic values (stale footer copyright year) | `linter/tests/theme-i18n-overrides.test.js` |
 | i18n parity / French text leaking into EN pages    | `linter/tests/parity.test.js`, `linter/tests/french-residuals.test.js` |
 | Last-updated-date test flaky around UTC midnight (test lookahead built from `Date.now()` straddling two UTC dates) | Fixed in `linter/tests/last-updated-date.test.js` — the "tomorrow" fixture is derived from UTC midnight + 26h |
+| Search: REQUIRED clause on an index-removed stopword (`"base de données"`, `"mot de passe"`, `pare-feu`…) voids the whole lunr query → 0 results; a stopword lookup key in the synonym `TOKEN_INDEX` fired unrelated synonym queries on nearly every French input | `linter/tests/search.test.js` (quoted-phrase/synonym stopword regression) + `scripts/validate-search-synonyms.js` (post-build, wired after `yarn build`) — the parser drops stopwords from REQUIRED word lists and normalizes synonym members through the index tokenizer |
 | Multiple unit commits piling up in one PR          | Not lintable — see "One commit per Pull Request" below      |
 
 ## Branching — always start from up-to-date `main` (not lintable)

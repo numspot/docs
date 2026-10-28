@@ -36,3 +36,131 @@ article mark {
   padding: 0 0.1em;
   border-radius: var(--ns-radius-sm);
 }
+
+/* Search syntax help (D-023) — rendered by src/components/SearchSyntaxHelp,
+   used by the navbar SearchBar swizzle AND the /search results page. Plain
+   class names (site code, no CSS-module hash): they are stable. Hover opens
+   it like a tooltip, click pins it (touch), Escape or an outside click
+   closes it. The wrapper (navbar) or the row (/search) provides the
+   position: relative anchoring context. */
+.search-syntax {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.search-syntax__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--ns-radius-full);
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color var(--ns-transition-hover),
+    background-color var(--ns-transition-hover);
+}
+
+.search-syntax__toggle svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+}
+
+.search-syntax__toggle:hover,
+.search-syntax__toggle[aria-expanded="true"] {
+  color: var(--accent-primary);
+  background-color: var(--bg-active);
+}
+
+.search-syntax__toggle:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 1px;
+}
+
+.search-syntax__popover {
+  position: absolute;
+  top: calc(100% + var(--ns-space-2));
+  right: 0;
+  z-index: calc(var(--ifm-z-index-fixed) + 1);
+  width: min(360px, 90vw);
+  padding: var(--ns-space-4);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--ns-radius-md);
+  box-shadow: 0 8px 24px rgba(4, 19, 29, 0.16);
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.search-syntax__title {
+  margin: 0 0 var(--ns-space-2);
+  font-size: 0.78rem;
+  font-weight: var(--ns-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+.search-syntax__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.search-syntax__list li {
+  margin: var(--ns-space-1) 0;
+  font-size: 0.82rem;
+  color: var(--text-primary);
+}
+
+.search-syntax__list code {
+  font-family: var(--ns-font-mono);
+  font-size: 0.76rem;
+  white-space: nowrap;
+}
+
+.search-syntax__footnote {
+  margin: var(--ns-space-3) 0 0;
+  padding-top: var(--ns-space-2);
+  border-top: 1px solid var(--border-secondary);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Navbar: the swizzle wrapper keeps the plugin field and the "?" button on
+   one line; the field stretches, the button hugs the right edge. */
+.navbar__searchWithSyntax {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--ns-space-1);
+}
+
+/* The plugin's search root keeps its own width; the button sits beside it
+   without stretching the field. */
+.navbar__searchWithSyntax > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* /search results page: the big input shares its line with the "?" button.
+   The plugin input carries margin-bottom: 1rem (field-to-results rhythm) —
+   the row takes the spacing over so both controls align. */
+.search-query-row {
+  display: flex;
+  align-items: center;
+  gap: var(--ns-space-2);
+  margin-bottom: 1rem;
+}
+
+.search-query-row input[class*="searchQueryInput"] {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-bottom: 0;
+}

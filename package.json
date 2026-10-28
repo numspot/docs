@@ -26,6 +26,7 @@
     "lint:docs:ci": "node linter/cli.js --diff main --ci",
     "lint:docs:all": "node linter/cli.js docs/docs/",
     "lint:docs:all:ci": "node linter/cli.js docs/docs/ --ci",
+    "validate:search": "node scripts/validate-search-synonyms.js",
     "test": "node --test linter/tests/*.test.js"
   },
   "dependencies": {

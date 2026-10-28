@@ -48,3 +48,6 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn typecheck
       - run: yarn build
+      # The synonym map is query-side only: nothing fails at build time if a
+      # member can never match. Validate it against the real built index.
+      - run: yarn validate:search
