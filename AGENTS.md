@@ -7,6 +7,27 @@
 
 Public documentation website for Numspot, a sovereign cloud provider. Built with [Docusaurus](https://docusaurus.io/).
 
+## Contribution Through the Doc MCP
+
+This repository ships its own MCP server — the **doc-contrib MCP** (`mcp/`,
+auto-discovered through the committed `.mcp.json`). **All AI-agent
+contribution actions to the public documentation go through it whenever it is
+available**: search the sources with `search_docs` (not raw grep), read this
+rulebook with `get_contribution_process`, fetch the standards, glossary and
+golden pages with `get_conventions`, validate pages with `lint_page`, and
+prepare the pull request with `prepare_pr`. Only the page edits themselves use
+the agent's file tools, applying the rules the MCP serves.
+
+Contributed content must also be grounded in the **public sources of truth** —
+never in internal systems or memory alone: the **public Terraform registry**
+(`registry.terraform.io/providers/numspot/numspot`), the **public OpenAPI
+specifications** served by this site (`static/files/*.yaml`, rendered on the
+OpenAPI reference pages), and the **production console**
+(`console.eu-west-2.numspot.com`). Verify what you write against them.
+
+Details and agent setup: `mcp/README.md` and the "Doc MCP Server" section
+below (decision D-028).
+
 ## Tech Stack
 
 - **Framework**: Docusaurus 3.10
@@ -39,8 +60,11 @@ yarn serve
 # Lint changed documentation files
 yarn lint:docs
 
-# Linter regression tests
+# Linter + MCP server regression tests
 yarn test
+
+# Start the doc MCP server (see mcp/README.md)
+yarn mcp
 ```
 
 ## Project Structure
@@ -56,6 +80,7 @@ yarn test
 ├── consigns/                # Normative reference files (standards, glossary…)
 ├── conventions/             # Operational deep-dives (slugs…)
 ├── linter/                  # Documentation compliance linter
+├── mcp/                     # Doc MCP server (AI agent contribution tooling)
 ├── src/                     # React components & CSS
 │   └── css/
 │       ├── custom.css
@@ -197,7 +222,8 @@ The `consigns/` directory holds the **normative** reference files the linter, th
 
 - **`consigns/standards.md`** — the writing standards (titles, tone, terminology, backticks, tabs, slugs, structure…). Edit it **only when a new writing rule is adopted** (user decision — log it in `DECISIONS.md`), then update the matching linter rule(s) and the affected pages. Session problems never edit it directly.
 - **`consigns/glossary.json`** — official terminology. Edit when a term's official form changes or a wrong form is identified (with a `DECISIONS.md` entry when it is a real naming choice, e.g. D-003).
-- **`consigns/tone_of_voice.json`**, **`consigns/golden_page_actions.mdx`** — tone and the reference action page (English model; mirror its structure for FR pages); edit only through a logged decision.
+- **`consigns/tone_of_voice.json`** — the Numspot tone of voice (criteria, do/don't examples per language); edit only through a logged decision.
+- **`consigns/golden_page_<type>.mdx`** — the reference page per documentation type: `actions`, `guides`, `concepts`, `faq`, `reversibility`, `glossary`, `quickstart`, `changelog` (English models; mirror their structure for FR pages); edit only through a logged decision. The `get_conventions` MCP tool serves them per page type.
 - **`PROBLEMS.md`** / **`DECISIONS.md`** — session knowledge (see above).
 
 ### Conventions directory — `conventions/`
@@ -319,7 +345,7 @@ The glossary is auto-detected at `consigns/glossary.json`. Override with `--glos
 GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request and push to `main`, with three jobs:
 
 - **`lint`** — on pull requests, only files changed vs `main` are linted (`node linter/cli.js --diff origin/main --ci`); on pushes to `main`, all documentation files are linted (English and French trees). No `yarn install` is needed — the linter has zero external dependencies.
-- **`tests`** — the linter regression tests (`node --test linter/tests/*.test.js`).
+- **`tests`** — the linter regression tests and the MCP server smoke tests (`node --test linter/tests/*.test.js mcp/tests/*.test.js`).
 - **`build`** — `yarn install --frozen-lockfile`, then `yarn typecheck` and `yarn build`.
 
 - **Partials** (files/directories whose name starts with `_`, e.g. `_components/`, `_quickstart.mdx`) are excluded from linting, since Docusaurus excludes them from routing.
@@ -329,6 +355,33 @@ The `lint` job fails (non-zero exit) if any documentation file scores below 90%.
 ### Adding Rules
 
 Create a file in `linter/rules/` exporting `check(content, frontmatter, glossaryIndex, pageType, filePath)` returning an array of violation objects. Register it in `linter/index.js`. See `linter/README.md` for details.
+
+## Doc MCP Server (`mcp/`)
+
+A zero-dependency MCP server (`mcp/server.js`, stdio transport) exposing the
+contribution toolchain to AI agents — the first use case of the MCP
+contribution roadmap ("the corrector": detect an error in the public docs,
+fix it compliantly, open the PR). Details and agent setup: `mcp/README.md`.
+
+Contribution rule: the tools below are the **mandatory interface** for
+AI-agent contribution actions to the public docs, and contributed content is
+verified against the public sources of truth (Terraform registry, OpenAPI
+specifications, production console) — see "Contribution Through the Doc MCP"
+and decision D-028.
+
+| Tool                       | Purpose                                                                        |
+| -------------------------- | ------------------------------------------------------------------------------ |
+| `search_docs`              | Full-text search of the Markdown sources (EN + FR), working-tree accurate      |
+| `get_contribution_process` | The `AGENTS.md` rulebook, full text or a single `##` section                   |
+| `get_conventions`          | Standards, tone of voice, glossary and the golden page of the given type       |
+| `lint_page`                | Run `linter/cli.js` on a page/directory and return score + violations          |
+| `prepare_pr`               | Pre-PR checklist (D-007..D-021) + optional changed-files lint vs a base ref    |
+
+Discovery: `.mcp.json` at the repository root registers the server for agents
+that support the convention; OpenCode users copy the snippet from
+`mcp/README.md` into `opencode.json`. Acceptance criterion of the first use
+case: a correction request leads to a compliant PR — or a redirect to the
+existing content when the request is a question, not a correction.
 
 ## Sidebar Menu Ordering — Highlight + Alphabetical
 
