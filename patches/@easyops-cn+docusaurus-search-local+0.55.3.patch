@@ -1,8 +1,52 @@
+diff --git a/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/SearchBar/SearchBar.jsx b/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/SearchBar/SearchBar.jsx
+index 10ef222..f2d9356 100644
+--- a/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/SearchBar/SearchBar.jsx
++++ b/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/SearchBar/SearchBar.jsx
+@@ -15,6 +15,11 @@ import { normalizeContextByPath } from "../../utils/normalizeContextByPath";
+ import { searchResultLimits } from "../../utils/proxiedGeneratedConstants";
+ import { parseKeymap, matchesKeymap, getKeymapHints } from "../../utils/keymap";
+ import { isMacPlatform } from "../../utils/platform";
++// NUMSPOT (analytics) — shared analytics helpers (site code, @site webpack
++// alias): the dropdown marks its entry point ("See all results") for the
++// /search page and reports picked results itself (those navigations never
++// reach /search).
++import { markSearchSource, trackSearch, } from "@site/src/utils/analytics";
+ import styles from "./SearchBar.module.css";
+ async function fetchAutoCompleteJS() {
+     const autoCompleteModule = await import("@easyops-cn/autocomplete.js");
+@@ -173,6 +178,11 @@ export default function SearchBar({ handleSearchBarToggle, }) {
+             a.addEventListener("click", (e) => {
+                 if (!e.ctrlKey && !e.metaKey) {
+                     e.preventDefault();
++                    // NUMSPOT (analytics) — the user left the dropdown for the
++                    // full results page: mark the entry point so /search
++                    // reports this run as "see_all_results" (emptyResults
++                    // tells whether the dropdown had anything to show).
++                    markSearchSource({ method: "see_all_results", emptyResults: isEmpty });
+                     search.current?.autocomplete.close();
+                     history.push(url);
+                 }
+@@ -240,6 +250,9 @@ export default function SearchBar({ handleSearchBarToggle, }) {
+         ])
+             .on("autocomplete:selected", function (event, { document: { u, h }, type, tokens }) {
+             searchBarRef.current?.blur();
++            // NUMSPOT (analytics) — a picked result is a satisfied search: report
++            // it here, this navigation goes to a doc page, never to /search.
++            trackSearch(tokens.join(" "), "dropdown");
+             if (type === SearchDocumentType.AskAI && askAi) {
+                 askAIWidgetRef.current?.openWithNewSession(tokens.join(""));
+                 return;
 diff --git a/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/SearchPage/SearchPage.jsx b/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/SearchPage/SearchPage.jsx
-index 2efb8b4..8eb142f 100644
+index 2efb8b4..55f4bd9 100644
 --- a/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/SearchPage/SearchPage.jsx
 +++ b/node_modules/@easyops-cn/docusaurus-search-local/dist/client/client/theme/SearchPage/SearchPage.jsx
-@@ -17,6 +17,14 @@ import { concatDocumentPath } from "../../utils/concatDocumentPath";
+@@ -1,4 +1,4 @@
+-import React, { useCallback, useEffect, useMemo, useState } from "react";
++import React, { useCallback, useEffect, useMemo, useRef, useState, } from "react";
+ import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+ import Layout from "@theme/Layout";
+ import Head from "@docusaurus/Head";
+@@ -17,6 +17,18 @@ import { concatDocumentPath } from "../../utils/concatDocumentPath";
  import { Mark, searchContextByPaths, useAllContextsWithNoSearchContext, } from "../../utils/proxiedGenerated";
  import styles from "./SearchPage.module.css";
  import { normalizeContextByPath } from "../../utils/normalizeContextByPath";
@@ -10,6 +54,10 @@ index 2efb8b4..8eb142f 100644
 +// popover), site component imported through the @site webpack alias so the
 +// navbar swizzle and this page render the exact same help.
 +import SearchSyntaxHelp from "@site/src/components/SearchSyntaxHelp";
++// NUMSPOT (analytics) — shared analytics helpers (site code, @site webpack
++// alias): the search page reports the site-search `search` event once per settled
++// query, naming the entry point it consumed from the marker.
++import { consumeSearchSource, trackSearch, trackSearchNoResults, } from "@site/src/utils/analytics";
 +// NUMSPOT — result cap for the full results page. When the search
 +// reaches the cap the label displays "> N documents found" instead of the
 +// truncated exact count, so a capped list is never presented as complete.
@@ -17,7 +65,18 @@ index 2efb8b4..8eb142f 100644
  export default function SearchPage() {
      return (<Layout>
        <SearchPageContent />
-@@ -46,7 +54,11 @@ function SearchPageContent() {
+@@ -29,6 +41,10 @@ function SearchPageContent() {
+     const [searchQuery, setSearchQuery] = useState(searchValue);
+     const [searchResults, setSearchResults] = useState();
+     const versionUrl = `${baseUrl}${searchVersion}`;
++    // NUMSPOT (analytics) — debounce handle and latest results for the analytics
++    // events fired from the query effect below.
++    const ga4Timer = useRef(null);
++    const ga4Results = useRef(undefined);
+     const pageTitle = useMemo(() => searchQuery
+         ? translate({
+             id: "theme.SearchPage.existingResultsTitle",
+@@ -46,13 +62,48 @@ function SearchPageContent() {
          updateSearchPath(searchQuery);
          if (searchQuery) {
              (async () => {
@@ -27,10 +86,47 @@ index 2efb8b4..8eb142f 100644
 +                // found" (see below). The search bar dropdown keeps its own
 +                // smaller limit.
 +                const results = await searchByWorker(versionUrl, searchContext, searchQuery, SEARCH_RESULT_LIMIT);
++                // NUMSPOT (analytics) — keep the latest results for the debounced
++                // analytics callback below (state may lag one render).
++                ga4Results.current = results;
                  setSearchResults(results);
              })();
++            // NUMSPOT (analytics) — one `search` event per SETTLED query: typing
++            // in the page input re-runs this effect on every keystroke, so
++            // the event is debounced (trailing) and only the query the user
++            // settled on is reported. The entry point (home chip, "See all
++            // results" link or a direct URL) comes from the sessionStorage
++            // marker written at click time; without a marker this is a
++            // plain "search_page" run.
++            if (ga4Timer.current != null) {
++                clearTimeout(ga4Timer.current);
++            }
++            ga4Timer.current = setTimeout(() => {
++                ga4Timer.current = null;
++                const source = consumeSearchSource();
++                trackSearch(searchQuery, (source === null || source === void 0 ? void 0 : source.method) ?? "search_page", source === null || source === void 0 ? void 0 : source.emptyResults);
++                // Strongest "did not find" signal: the settled query came
++                // back empty (skip the not-yet-answered state — a loading
++                // search is not a failed one).
++                if (Array.isArray(ga4Results.current) && ga4Results.current.length === 0) {
++                    trackSearchNoResults(searchQuery);
++                }
++            }, 1000);
          }
-@@ -95,7 +107,12 @@ function SearchPageContent() {
+         else {
+             setSearchResults(undefined);
+         }
++        // NUMSPOT (analytics) — a pending debounce never outlives the page or the
++        // query it belongs to.
++        return () => {
++            if (ga4Timer.current != null) {
++                clearTimeout(ga4Timer.current);
++            }
++        };
+         // `updateSearchPath` should not be in the deps,
+         // otherwise will cause call stack overflow.
+     }, [searchQuery, versionUrl, searchContext]);
+@@ -95,7 +146,12 @@ function SearchPageContent() {
              "col--9": Array.isArray(searchContextByPaths),
              "col--12": !Array.isArray(searchContextByPaths),
          })}>
@@ -44,7 +140,7 @@ index 2efb8b4..8eb142f 100644
            </div>
            {Array.isArray(searchContextByPaths) ? (<div className={clsx("col", "col--3", "padding-left--none", styles.searchContextColumn)}>
                <select name="search-context" className={styles.searchContextInput} id="context-selector" value={searchContext} onChange={(e) => updateSearchContext(e.target.value)}>
-@@ -125,7 +142,15 @@ function SearchPageContent() {
+@@ -125,7 +181,15 @@ function SearchPageContent() {
                      id: "theme.SearchPage.documentsFound.plurals",
                      message: "1 document found|{count} documents found",
                      description: 'Pluralized label for "{count} documents found". Use as much plural forms (separated by "|") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)',
