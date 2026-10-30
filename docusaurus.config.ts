@@ -137,7 +137,7 @@ const config: Config = {
         theme: {
           customCss: ["./src/css/custom.css", "./src/css/changelog.css"],
         },
-        // Google Analytics (GA4). The plugin injects the gtag.js tag into the
+        // Site analytics tag (gtag). The plugin injects the tag into the
         // <head> of ALL pages and tracks route changes (SPA).
         // Active only in the production build (`docusaurus build`),
         // not in `docusaurus start`.
