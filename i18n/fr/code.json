@@ -90,6 +90,24 @@
   "changelog.status.security": {
     "message": "Sécurité"
   },
+  "consent.accept": {
+    "message": "Accepter"
+  },
+  "consent.aria": {
+    "message": "Consentement aux cookies de mesure d'audience"
+  },
+  "consent.decline": {
+    "message": "Refuser"
+  },
+  "consent.learn_more": {
+    "message": "Politique de cookies"
+  },
+  "consent.message": {
+    "message": "Ce site utilise un cookie de mesure d'audience pour améliorer la documentation. Aucune donnée n'est collectée sans votre accord."
+  },
+  "consent.reopen.aria": {
+    "message": "Modifier votre choix pour les cookies de mesure d'audience"
+  },
   "feedback.modal.back": {
     "message": "Passer",
     "description": "Button to send the no vote without leaving a comment"

@@ -20,6 +20,10 @@ const config: Config = {
   clientModules: [
     "./src/client/sidebar-accordion.ts",
     "./src/client/sticky-doc-title.ts",
+    // Consent-gated GA4 (decision D-030): loads the tag ONLY after the
+    // visitor's consent (banner or stored consent), then reports SPA
+    // pageviews — same contract as the removed preset gtag plugin.
+    "./src/client/ga4-consent.ts",
   ],
 
   trailingSlash: true,
@@ -137,14 +141,9 @@ const config: Config = {
         theme: {
           customCss: ["./src/css/custom.css", "./src/css/changelog.css"],
         },
-        // Google Analytics (GA4). The plugin injects the gtag.js tag into the
-        // <head> of ALL pages and tracks route changes (SPA).
-        // Active only in the production build (`docusaurus build`),
-        // not in `docusaurus start`.
-        gtag: {
-          trackingID: "G-QG7XN3BDKR",
-          anonymizeIP: true,
-        },
+        // No `gtag` preset option here: the tag would be injected
+        // unconditionally into every page. The GA4 tag is consent-gated
+        // instead (decision D-030): see src/client/ga4-consent.ts.
       } satisfies Preset.Options,
     ],
   ],
