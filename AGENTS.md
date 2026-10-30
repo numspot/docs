@@ -343,8 +343,8 @@ build time by `src/components/sidebar-order.js`, consumed by the
    paths below the docs root. Current highlights: Terraform and Services
    Managés (level 0); every top-level "Concepts" entry, Kubernetes and VM
    (level 1) — see the module. OpenAPI is pinned first by `sidebars.ts`
-   (highlighting it would be a no-op) and its "Global" child is ordered
-   manually in `sidebars.ts`.
+   (highlighting it would be a no-op) and its "Platform & Infrastructure" child
+   is ordered manually in `sidebars.ts`.
 3. Visual groups ("Ressources & outils", "Nos services", "Management &
    gouvernance") stay contiguous blocks, sorted internally. Accueil and
    OpenAPI are pinned (explicit `sidebars.ts` items).

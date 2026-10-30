@@ -79,9 +79,9 @@
     "message": "Inventaire",
     "description": "The label for category 'Inventaire' in sidebar 'docsSidebar'"
   },
-  "sidebar.docsSidebar.link.Global": {
-    "message": "Global",
-    "description": "The label for link 'Global' in sidebar 'docsSidebar', linking to '/openapi/'"
+  "sidebar.docsSidebar.link.Platform & Infrastructure": {
+    "message": "Plateforme & Infrastructure",
+    "description": "The label for link 'Platform & Infrastructure' in sidebar 'docsSidebar', linking to '/openapi/'"
   },
   "sidebar.docsSidebar.link.Object Storage": {
     "message": "Object Storage",

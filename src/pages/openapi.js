@@ -164,11 +164,11 @@ function OpenApi() {
 
   return (
     <Layout
-      title="Référence de l'API Numspot — Global"
+      title="Référence de l'API Numspot — Plateforme & Infrastructure"
       description="Référence complète de l'API Numspot : endpoints, paramètres et exemples de requêtes pour Compute, Réseau, Stockage, Connectivité, IAM et services managés."
     >
       <h1 className="sr-only">
-        Référence de l'API Numspot — Global
+        Référence de l'API Numspot — Plateforme & Infrastructure
       </h1>
       {isLoading && (
         <div className="loader-container">
