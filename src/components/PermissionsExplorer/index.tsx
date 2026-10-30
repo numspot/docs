@@ -65,7 +65,7 @@ const DOMAIN_META: Record<string, DomainMeta> = {
   },
   secrets: {
     label: { fr: 'Secret Manager', en: 'Secret Manager' },
-    tag: 'secret-manager',
+    tag: 'secret',
   },
 };
 
