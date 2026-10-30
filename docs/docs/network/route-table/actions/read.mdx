@@ -3,7 +3,7 @@ title: Get information about your route tables
 sidebar_position: 3
 draft: false
 last_update:
-  date: 2026-10-15
+  date: 2026-10-30
 ---
 
 import Tabs from '@theme/Tabs';
@@ -59,7 +59,7 @@ This action requires the following **IAM** (Identity and Access Management) perm
 The `GET /compute/spaces/{spaceId}/routeTables` command lists the route tables.
 In your VPC, each subnet must be associated with a route table. If a subnet is not explicitly associated with a route table, it is implicitly associated with the main route table of the VPC.
 
-[Sample request: List all route tables](/openapi/#tag/compute/POST/compute/spaces/{spaceId}/routeTables)
+[Sample request: List all route tables](/openapi/#tag/compute/GET/compute/spaces/{spaceId}/routeTables)
 
 The `GET /compute/spaces/{spaceId}/routeTables/{id}` command retrieves information about a route table.
 

@@ -2,6 +2,8 @@
 title: Assigner une identité à un espace - IAM
 sidebar_label: Assigner une identité à un espace
 sidebar_position: 3
+last_update:
+  date: 2026-10-30
 ---
 
 import Tabs from "@theme/Tabs";
@@ -17,7 +19,10 @@ Assignez des utilisateurs ou des comptes de service à un espace pour leur donne
 :::info
 Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
 
-- **iam.role.create**
+- **iam.user.create**
+- **iam.user.delete**
+- **iam.serviceAccount.create**
+- **iam.serviceAccount.delete**
 
 :::
 <Tabs>

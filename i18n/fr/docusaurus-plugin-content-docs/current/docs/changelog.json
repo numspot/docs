@@ -1,6 +1,47 @@
 {
   "entries": [
     {
+      "service": "IAM",
+      "status": "fixed",
+      "date": "2026-10-30",
+      "title": "Référence des permissions alignée sur l'API",
+      "description": "La référence des permissions correspond désormais à l'API réelle : le miroir OpenAPI qui alimente la page a été rafraîchi (ajout des endpoints AK/SK, IAM policy, organisation, profils de nœuds Kubernetes, reset de mot de passe du registry, instances et token Secret Manager et catalogue ; retrait de deux opérations PostgreSQL supprimées de l'API), 24 endpoints documentés (GET de listes comme images, VPC, subnets, load balancers, utilisateurs et comptes de service IAM, tâches d'export, token admin Secret Manager) sont désormais rattachés à la permission que déclarent les pages d'action correspondantes, les liens Secret Manager de l'explorateur pointent vers le bon tag de la référence API, et l'onglet API de la page de suppression d'espace ne documente plus un endpoint qui n'existe pas — la suppression passe par le support. Les pages d'action ne déclarent plus de familles de permissions erronées : les pages des passerelles et routes VPN déclarent connectivity.vpnconnection.* (elles portaient la famille bridge), les pages d'affectation d'un space déclarent les vraies permissions iam.space.*, iam.user.* et iam.serviceAccount.* au lieu de celles des rôles, les pages appelant les endpoints IAM policy auxiliaires déclarent iam.getPolicy/iam.createPolicy, et les pages des node pools Kubernetes, sauvegardes PostgreSQL, reset de mot de passe du registry, GPU flexibles et listeners de load balancer déclarent les permissions réellement exigées par l'API.",
+      "components": [
+        "api",
+        "console"
+      ]
+    },
+    {
+      "service": "Secret Manager",
+      "status": "fixed",
+      "date": "2026-10-30",
+      "title": "Le token admin documenté sur son véritable endpoint",
+      "description": "La page du token admin d'une instance Secret Manager documentait un chemin `GET .../password` qui n'existe pas dans l'API. Elle documente désormais l'appel réel `GET /secrets/spaces/{spaceId}/instances/{instanceId}/token`, avec un lien fonctionnel vers la référence API.",
+      "components": [
+        "api"
+      ]
+    },
+    {
+      "service": "PostgreSQL",
+      "status": "fixed",
+      "date": "2026-10-30",
+      "title": "Le reset de mot de passe retourne le nouveau mot de passe",
+      "description": "L'appel de reset du mot de passe d'un cluster répond avec le nouveau mot de passe généré automatiquement (actif une fois que le statut du cluster n'est plus RESETTING_PASSWORD) ; la référence à une route de récupération séparée que l'API n'expose plus a été retirée.",
+      "components": [
+        "api"
+      ]
+    },
+    {
+      "service": "Compute",
+      "status": "fixed",
+      "date": "2026-10-30",
+      "title": "Lien d'exemple de suppression de route table corrigé",
+      "description": "La page de suppression d'une route table pointait son exemple API vers l'endpoint de collection au lieu de l'opération unitaire ; le lien profond ouvre désormais la véritable opération DELETE dans la référence API.",
+      "components": [
+        "api"
+      ]
+    },
+    {
       "service": "PostgreSQL",
       "status": "changed",
       "date": "2026-10-19",

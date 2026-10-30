@@ -3,7 +3,7 @@ title: Assign an identity to a space - IAM
 sidebar_label: Assign an identity to a space
 sidebar_position: 3
 last_update:
-  date: 2026-10-15
+  date: 2026-10-30
 ---
 
 import Tabs from "@theme/Tabs";
@@ -19,7 +19,10 @@ Assign users or service accounts to a space to give them access to the resources
 :::info
 This action requires the following IAM (Identity and Access Management) permissions:
 
-- **iam.role.create**
+- **iam.user.create**
+- **iam.user.delete**
+- **iam.serviceAccount.create**
+- **iam.serviceAccount.delete**
 
 :::
 <Tabs>

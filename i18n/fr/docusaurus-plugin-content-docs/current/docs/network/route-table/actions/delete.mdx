@@ -3,7 +3,7 @@ title: Supprimer une route table
 sidebar_position: 4
 draft: false
 last_update:
-  date: 2026-10-15
+  date: 2026-10-30
 ---
 
 import Tabs from '@theme/Tabs';
@@ -69,7 +69,7 @@ Cette action nécessite les permissions **IAM** (Identity and Access Management)
    :::
   La commande `DELETE /compute/spaces/{spaceId}/routeTables/{id}` supprime une route table spécifiée. Avant de supprimer une route table, vous devez la dissocier de tout subnet. Vous ne pouvez pas supprimer la route table principale.
 
-  [Exemple de requête : Suppression d'une route table](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/routeTables)
+  [Exemple de requête : Suppression d'une route table](/openapi/#tag/compute/DELETE/compute/spaces/{spaceId}/routeTables/{id})
   </TabItem>
   <TabItem value="terraform" label="Terraform">
 
