@@ -1,0 +1,111 @@
+/* Fixed consent banner (bottom of the viewport). Sober: surface color,
+   primary accents — the same design language as the PageFeedback modal. */
+.banner {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 350;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0.9rem 1.25rem;
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.message {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--ifm-font-color-base);
+}
+
+.link {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  flex: none;
+  gap: 0.6rem;
+}
+
+.primary,
+.secondary {
+  padding: 0.45rem 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.primary {
+  color: #fff;
+  background: var(--ifm-color-primary);
+  border: 1px solid var(--ifm-color-primary);
+}
+
+.primary:hover {
+  background: var(--ifm-color-primary-dark);
+}
+
+.secondary {
+  color: var(--ifm-color-emphasis-800);
+  background: transparent;
+  border: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.secondary:hover {
+  background: var(--ifm-color-emphasis-200);
+}
+
+/* Persistent reopen pill (consent revocability), bottom-left, discreet.
+   Emoji-only button: the emoji brings its own color (OS emoji font). */
+.pill {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 350;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.55rem;
+  font-size: 1.15rem;
+  line-height: 1;
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.pill:hover {
+  border-color: var(--ifm-color-primary);
+  transform: scale(1.1);
+}
+
+.pillEmoji {
+  display: inline-block;
+}
+
+/* Mobile: stack message and buttons. */
+@media (max-width: 640px) {
+  .banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    text-align: left;
+  }
+
+  .actions {
+    justify-content: flex-end;
+  }
+}
