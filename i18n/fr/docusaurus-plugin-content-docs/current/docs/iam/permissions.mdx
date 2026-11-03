@@ -4,7 +4,7 @@ sidebar_label: Permissions et API
 sidebar_position: 6
 description: "Pour chaque permission de la plateforme, les API qui l'utilisent, son UUID et les rôles standard qui l'accordent, avec recherche et filtres par tenant et par rôle."
 last_update:
-  date: 2026-10-07
+  date: 2026-11-03
 ---
 
 import PermissionsExplorer from '@site/src/components/PermissionsExplorer';
@@ -19,7 +19,7 @@ Les permissions sont regroupées par niveau de tenant :
 - **Espace** : permissions exercées au sein d'un espace — une permission disponible aux deux niveaux apparaît dans chaque groupe.
 
 :::note
-La plateforme applique le moindre privilège : une action peut nécessiter plusieurs permissions. Chaque page d'action de cette documentation précise, dans sa section Permissions, les permissions requises pour l'action correspondante. Certaines permissions n'ont pas d'endpoint public : l'action correspondante est réalisée depuis la console Numspot.
+La plateforme applique le moindre privilège : une action peut nécessiter plusieurs permissions. Chaque page d'action de cette documentation précise, dans sa section Permissions, les permissions requises pour l'action correspondante. Les permissions sans aucune API documentée (réalisées depuis la console Numspot ou livrées par une API à venir) ne sont pas listées sur cette page.
 :::
 
 Utilisez la recherche pour filtrer la liste par permission ou par API, les pastilles de tenant pour ne conserver qu'un seul niveau, et le menu déroulant des rôles standard pour afficher les permissions accordées par un rôle par défaut. Cliquez sur un endpoint pour consulter sa définition dans la référence OpenAPI.

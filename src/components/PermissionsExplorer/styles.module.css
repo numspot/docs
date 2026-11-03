@@ -448,16 +448,6 @@
   border: 1px solid #bfe8cf;
 }
 
-.consoleNote {
-  color: #8a6d1d;
-  background: #fff8e1;
-  border: 1px solid #f2e3a4;
-  border-radius: 8px;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.88rem;
-  margin: 0.3rem 0 0.5rem;
-}
-
 /* ——— Domain heading ——— */
 
 .domain {
@@ -693,12 +683,6 @@ mark {
   background: #16311f;
   color: #6fdc94;
   border-color: #245136;
-}
-
-[data-theme='dark'] .consoleNote {
-  background: #2d2510;
-  border-color: #5a4a1a;
-  color: #e5c96a;
 }
 
 [data-theme='dark'] .activeFilterClear {

@@ -265,9 +265,10 @@ After making changes:
 1. Run `yarn start` to preview locally
 2. Run `yarn typecheck` to verify TypeScript
 3. Run `yarn lint:docs` to check compliance
-4. Check for broken links (Docusaurus throws on broken links)
-5. Verify admonition count per H2 section
-6. Ensure file naming follows rules
+4. Run `yarn test` — the linter regression tests include the page-deletion, last-update-date, permissions-mapping (D-029) and OpenAPI-anchor guards
+5. Check for broken links (Docusaurus throws on broken links)
+6. Verify admonition count per H2 section
+7. Ensure file naming follows rules
 
 ## Doc Compliance Linter
 
@@ -389,6 +390,21 @@ When adding a new managed service, you must create the full structure: `concepts
 - If the page documents a Numspot API/Console/Terraform action → place in `actions/`.
 - If the page is a guide, tutorial, best practice, or informational → place in `guides/`.
 - Never place loose `.mdx` files at the service root (except `concepts.mdx`, `reversibility.mdx`, `supported-versions.mdx`).
+- If the page documents a Numspot API action → its permissions must be mapped in the permissions reference (see [Permissions Mapping](#permissions-mapping---the-docsiampermissions-reference) below); the `permissions-mapping` guard fails otherwise.
+
+## Permissions Mapping — the `/docs/iam/permissions/` Reference
+
+The permissions reference (`docs/docs/iam/permissions.mdx`) is rendered by the `PermissionsExplorer` component from `src/components/PermissionsExplorer/permissions.json` (permission name, tenant level, IAM UUID, mapped endpoints) and `roles.json` (standard roles). It is the single place where readers check which permission an action requires and which role grants it — so **any page that documents a Numspot API action** (new managed service, new action page, new endpoint on an existing page) must ship with its permissions mapped, in the same PR:
+
+1. The page declares, in its **Permissions** section, the permissions the API actually enforces — the backend per-domain specs are the source of truth for the permission ↔ endpoint arbitration (D-029), not the page's neighbours.
+2. Every endpoint the page documents is mapped to a permission in `permissions.json` (`endpoints` array: `method` + `path`).
+
+Rules:
+
+- **Creating a new managed service** = adding its whole permission domain to `permissions.json` (every endpoint of its API) alongside the pages. A service whose actions are documented but unmapped is an incomplete deliverable.
+- The coherence guard `linter/tests/permissions-mapping.test.js` (decision D-029, run by `yarn test` and the CI `tests` job) fails the suite on a documented endpoint mapped to no permission, on a declared permission owning none of the page's endpoints, and on any mapping absent from the OpenAPI mirror. **Never extend the baseline fixture** (`linter/tests/fixtures/permissions-mapping-baseline.json`) to make a new page pass — it holds API-side drift only; map the permission instead.
+- The `tenant` and `uuid` metadata of `permissions.json` are regenerated from the IAM API with `scripts/generate-permissions-data.mjs`; the permission → endpoints mapping is maintained by hand and guarded as above.
+- To audit what the platform actually grants (roles, permissions, ACLs of a space), use the public [numspot/space-permission-extractor](https://github.com/numspot/space-permission-extractor) TUI referenced by the access-audit page. The `numspot/space-permission-extractor-cli` repository is **private**: never link it from a documentation page (Prohibited URLs rule).
 
 ## Source Comment Language
 
