@@ -3,7 +3,15 @@ title: Créer un Hybrid Bridge
 description: Créez un bridge entre un VPC et les services managés de votre espace
 sidebar_position: 1
 draft: false
+last_update:
+  date: 2026-11-05
 ---
+
+:::warning
+
+**Les Hybrid Bridges sont dépréciés.** L'API Bridges unique couvre les deux cas d'usage — VPC vers VPC et VPC vers services managés — et doit être utilisée pour les nouveaux déploiements : voir [À propos des Bridges](/docs/connectivity/bridges/concepts/) et [Créer un bridge](/docs/connectivity/bridges/actions/create/). Les endpoints et ressources Terraform documentés ci-dessous continuent de fonctionner.
+
+:::
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -36,7 +44,7 @@ Dans les route table associées aux subnet (sous-réseaux) de votre VPC, créez 
 * l'`ipRange` en destination ;
 * le `gatewayId` en target.
 
-### Configuration Security Group associé aux VM de votre VPC
+### Configuration Security Group associé aux [VM (Virtual Machine)](/docs/compute/concept/) de votre VPC
 
 Ajoutez les règles suivantes :
 * une ou plusieurs règles autorisant les flux sortants vers les services managés ;

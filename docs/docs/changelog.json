@@ -1,6 +1,17 @@
 {
   "entries": [
     {
+      "service": "Connectivity",
+      "status": "deprecated",
+      "date": "2026-11-05",
+      "title": "Bridges documented — Compute Bridges and Hybrid Bridges deprecated",
+      "description": "A new Bridges section documents the single bridge API (POST /connectivity/spaces/{spaceId}/bridges) and its two use cases: VPC-to-VPC private peering (compute to compute) and the VPC-to-managed-services connection (compute to managedservice), which connects a VPC to all the managed services of a space at once. The Compute Bridge and Hybrid Bridge pages are now marked deprecated. The guide \"Connect a VM to a managed Kubernetes cluster\" was corrected accordingly: the bridge targets the space identifier (not a cluster identifier), readiness is signaled by the populated routes array, and the route target value (gatewayId in the bridge response) is passed in the vpcPeeringId parameter of the Create a route command.",
+      "components": [
+        "api",
+        "docs"
+      ]
+    },
+    {
       "service": "Container Registry",
       "status": "added",
       "date": "2026-11-04",

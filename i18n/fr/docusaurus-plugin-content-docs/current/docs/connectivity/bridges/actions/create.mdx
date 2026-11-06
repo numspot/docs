@@ -1,0 +1,98 @@
+---
+title: Créer un bridge
+description: Connectez deux VPC (peering) ou un VPC à l'ensemble des services managés d'un espace avec l'API Bridges.
+sidebar_position: 1
+draft: false
+last_update:
+  date: 2026-11-05
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Créer un bridge
+
+Vous pouvez créer un bridge entre deux ressources Numspot : deux [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) pour qu'ils communiquent entre eux, ou un VPC et les services managés de l'espace pour que les [VM (Virtual Machine)](/docs/compute/concept/) du VPC accèdent à l'ensemble des services managés d'un coup.
+
+La création est asynchrone : l'API retourne un code **202 Accepted** et l'objet bridge avec un tableau `routes` vide. Le bridge est prêt à être routé lorsque son tableau `routes` est rempli — voir [Lire les bridges](/docs/connectivity/bridges/actions/read/).
+
+## Permissions
+
+:::info
+Cette action nécessite la permission **IAM** (Identity and Access Management) suivante :
+
+- **connectivity.bridge.create**
+
+:::
+
+## Configuration nécessaire au fonctionnement du bridge
+
+Vous devez configurer votre VPC pour autoriser le trafic depuis et vers son bridge. Cela inclut la configuration de la [route table (table de routage)](/docs/network/route-table/concepts/), et la mise à jour des règles des [security groups (groupes de sécurité)](/docs/compute/security-groups/concepts/concept-sg/).
+
+### Configuration Route Table
+
+Dans la route table associée aux subnets de votre VPC, créez une route par entrée du tableau `routes` du bridge :
+
+- l'`ipRange` de l'entrée en destination ;
+- le `gatewayId` de l'entrée en cible — dans la commande `POST /compute/spaces/{spaceId}/routeTables/{id}/routes`, cette valeur se transmet dans le paramètre `vpcPeeringId`.
+
+:::warning
+Attendez que le tableau `routes` du bridge soit rempli avant de créer les routes.
+:::
+
+### Configuration Security Group associé aux VM de votre VPC
+
+Ajoutez les règles suivantes :
+
+- une ou plusieurs règles autorisant les flux sortants vers la ressource connectée ;
+- une ou plusieurs règles autorisant les flux entrants depuis la ressource connectée, si nécessaire.
+
+Votre bridge est configuré, et les ressources connectées peuvent communiquer par une connexion privée.
+
+<Tabs>
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+La commande `POST /connectivity/spaces/{spaceId}/bridges` crée le bridge. Les deux extrémités sont décrites par un objet `left` et un objet `right`, portant chacun un `id` et un `type` — compute pour un VPC, managedservice pour les services managés de l'espace.
+
+### Cas 1 — bridge entre deux VPC
+
+```json
+{
+  "left": {
+    "id": "vpc-12345678",
+    "type": "compute"
+  },
+  "right": {
+    "id": "vpc-87654321",
+    "type": "compute"
+  }
+}
+```
+
+Les deux VPC doivent appartenir au même espace et leurs blocs CIDR ne doivent pas se chevaucher.
+
+### Cas 2 — bridge entre un VPC et les services managés de l'espace
+
+```json
+{
+  "left": {
+    "id": "vpc-12345678",
+    "type": "compute"
+  },
+  "right": {
+    "id": "0194f0c4-8452-77d1-aaaf-516a9731ce9e",
+    "type": "managedservice"
+  }
+}
+```
+
+:::info
+Dans le cas `managedservice`, le `right.id` est **l'identifiant de l'espace** (`spaceId`), et non l'identifiant d'un service tel qu'un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts). Le bridge connecte le VPC à l'ensemble des services managés de cet espace, qui doivent exposer leurs services de manière privée (`visibility: INTERNAL`).
+:::
+
+[Exemple de requête : Création d'un Bridge](/openapi/#tag/connectivity/POST/connectivity/spaces/{spaceId}/bridges)
+
+</TabItem>
+</Tabs>

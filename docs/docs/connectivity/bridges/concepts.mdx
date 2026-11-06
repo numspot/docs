@@ -1,0 +1,78 @@
+---
+title: "Bridges - Concepts"
+sidebar_label: "Concepts"
+description: Bridges connect two Numspot resources through a private connection — two VPC (peering) or a VPC and the managed services of a space.
+sidebar_position: 1
+draft: false
+last_update:
+  date: 2026-11-05
+---
+
+import ActionsSummary from '@site/src/components/ActionsSummary';
+
+# About Bridges
+
+<ActionsSummary />
+
+A bridge connects two Numspot resources through a private connection using private IPs. Depending on the type of its two ends, a bridge serves two purposes:
+
+- **[VPC](/docs/network/vpc/concepts/) to [VPC](/docs/network/vpc/concepts/)** (compute to compute): a private peering between two of your VPC, so the [VM](/docs/compute/concept/) (Virtual Machine) of each VPC can reach the other VPC.
+- **VPC to managed services** (compute to managedservice): a private connection between one of your VPC and *all* the managed services of the space at once — Kubernetes, PostgreSQL, Container Registry. Once the bridge exists, the VPC does not need one bridge per service.
+
+Both ends are created with the same API command, `POST /connectivity/spaces/{spaceId}/bridges`, described in the [Create a Bridge](/docs/connectivity/bridges/actions/create/) action.
+
+:::info
+Bridges replace the former Compute Bridges and Hybrid Bridges. Both are still documented for reference — see [Compute Bridges](/docs/connectivity/compute-bridge/concepts/) and [Hybrid Bridges](/docs/connectivity/hybrid-bridge/concepts/) — but new deployments should use Bridges.
+:::
+
+## General information
+
+### Compute to compute (VPC peering)
+
+You can create several connections for each of your VPC. However, you cannot create more than one connection between the same two VPC at the same time.
+
+The CIDR blocks of the VPC connected by a bridge must not overlap.
+
+:::tip
+Example of two CIDR blocks that do not overlap: 172.16.0.0/20, 172.16.16.0/20
+:::
+
+The connected VPC must belong to the same space; however, their subnets can be located in different AZ.
+
+A bridge is a direct, individual and non-transitive connection: two VPC that are each connected to the same third VPC cannot use it as a transit point to access each other.
+
+:::warning
+Each VPC must contain at least one [VM](/docs/compute/concept/) (Virtual Machine) before the bridge is created.
+:::
+
+### Compute to managed services (VPC to the services of a space)
+
+The VPC and the managed services must belong to the same space. A bridge between a VPC and a managed service whose IP ranges overlap cannot be created.
+
+The managed service must be exposed privately (`visibility: INTERNAL` for a managed [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/)) to communicate with a VPC through a bridge.
+
+Traffic is bidirectional between the VPC and the managed services, except for Kubernetes: the containers of the worker nodes of a managed cluster Kubernetes can access the VPC, but a VM of the VPC cannot reach a container of the cluster through the bridge.
+
+## Lifecycle
+
+Creation is asynchronous: the API returns a **202 Accepted** code and the bridge object is returned with an empty `routes` array.
+
+The bridge object carries no state field: a bridge is ready to be routed when its `routes` array is populated — one entry per network of the connected resource, each with an `ipRange` (the network to reach) and a `gatewayId` (the private connection identifier). Read the bridge with the [read action](/docs/connectivity/bridges/actions/read/) until the `routes` array is populated, then create the matching routes in your route tables.
+
+The bridge can be deleted at any time through the [delete action](/docs/connectivity/bridges/actions/delete/).
+
+## Network configuration
+
+### Route table
+
+Once the bridge is ready, you must update the [route tables](/docs/network/route-table/concepts/) associated with the subnets of your VPC: create one route per entry of the bridge's `routes` array:
+
+- the `ipRange` of the entry as the destination;
+- the `gatewayId` of the entry as the target — in the [Create a route](/docs/network/route-table/actions/route/create/) API command, this value is passed in the `vpcPeeringId` parameter.
+
+### Security group
+
+You must update the [security groups](/docs/compute/security-groups/concepts/concept-sg/) associated with the VM of your VPC to allow the traffic across the bridge:
+
+- one or more rules allowing outbound traffic to the connected resource;
+- one or more rules allowing inbound traffic from the connected resource, if required.

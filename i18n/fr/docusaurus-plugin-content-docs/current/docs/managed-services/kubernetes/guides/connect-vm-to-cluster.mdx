@@ -1,23 +1,25 @@
 ---
 title: Connecter une VM à un cluster Kubernetes managé - Kubernetes managé
 sidebar_label: Connecter une VM à un cluster Kubernetes
-description: Joindre l'API d'un cluster Kubernetes managé depuis une VM d'un VPC via un Hybrid Bridge, avec les routes, les règles firewall et le fichier kubeconfig
+description: Joindre l'API d'un cluster Kubernetes managé depuis une VM d'un VPC via un bridge, avec les routes, les règles firewall et le fichier kubeconfig
 sidebar_position: 5
 draft: false
+last_update:
+  date: 2026-11-05
 ---
 
 # Connecter une VM à un cluster Kubernetes managé
 
 À la création d'un [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) managé, le choix du réseau détermine l'exposition du serveur d'API : réseau **Public** (`"visibility": "EXTERNAL"`) ou réseau **Privé** (`"visibility": "INTERNAL"`). Avec un réseau Privé, le serveur d'API n'est joignable que depuis le réseau interne Numspot : pour l'administrer avec `kubectl` depuis une [VM (Virtual Machine)](/docs/compute/concept/), connectez la VM au réseau du cluster par une connexion privée.
 
-Ce guide décrit le cheminement complet depuis une VM placée dans un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) : création du [Hybrid Bridge](/docs/connectivity/hybrid-bridge/concepts/), mise à jour du routage, ouverture des flux, déploiement du fichier kubeconfig puis connexion avec `kubectl`.
+Ce guide décrit le cheminement complet depuis une VM placée dans un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) : création du [Bridge](/docs/connectivity/bridges/concepts/), mise à jour du routage, ouverture des flux, déploiement du fichier kubeconfig puis connexion avec `kubectl`.
 
 ## Prérequis
 
 :::info
 - [Avoir un cluster Kubernetes Numspot opérationnel ↗](/docs/managed-services/kubernetes/concepts/)
 - [Avoir créé un VPC et une VM opérationnelle dans ce VPC ↗](/docs/compute/vms/actions/create/)
-- [Créer un Hybrid Bridge ↗](/docs/connectivity/hybrid-bridge/actions/create/)
+- [Créer un bridge ↗](/docs/connectivity/bridges/actions/create/)
 - [Télécharger le fichier kubeconfig ↗](/docs/managed-services/kubernetes/actions/kubeconfig/)
 - `kubectl` installé sur la VM
 :::
@@ -26,20 +28,33 @@ Ce guide décrit le cheminement complet depuis une VM placée dans un [VPC (Virt
 
 ### Étape 1 : Créer le bridge entre le VPC et l'espace
 
-Un bridge connecte un VPC à l'ensemble des services managés de l'espace. La gestion des Hybrid Bridges s'effectue uniquement par API : suivez la procédure [Créer un Hybrid Bridge ↗](/docs/connectivity/hybrid-bridge/actions/create/).
+Un bridge connecte un VPC à l'ensemble des services managés de l'espace. La gestion des Bridges s'effectue uniquement par API : suivez la procédure [Créer un bridge ↗](/docs/connectivity/bridges/actions/create/).
 
-La commande `POST /connectivity/spaces/{spaceId}/bridges` crée le bridge : `left` désigne le VPC, `right` désigne l'espace.
+La commande `POST /connectivity/spaces/{spaceId}/bridges` crée le bridge : `left` désigne le VPC, `right` désigne les services managés de l'espace — identifiés par le `spaceId` lui-même, **et non** par l'identifiant du cluster :
 
-La création est asynchrone : l'API retourne un code **202 Accepted** et le bridge atteint ensuite un état `READY`. Attendez cet état avant de poursuivre.
+```json
+{
+  "left": {
+    "id": "vpc-12345678",
+    "type": "compute"
+  },
+  "right": {
+    "id": "<spaceId>",
+    "type": "managedservice"
+  }
+}
+```
+
+La création est asynchrone : l'API retourne un code **202 Accepted** et l'objet bridge avec un tableau `routes` vide. L'objet bridge ne porte aucun champ d'état : le bridge est prêt lorsque son tableau `routes` est rempli. Interrogez l'[action de lecture](/docs/connectivity/bridges/actions/read/) jusqu'à ce que ce soit le cas.
 
 ### Étape 2 : Ajouter les routes vers les services managés
 
-Une fois le bridge créé, lisez sa configuration : chaque entrée du tableau `routes` du bridge contient l'`ipRange` du réseau à joindre et l'identifiant `vpcPeeringId` à utiliser comme cible de route.
+Une fois le bridge prêt, lisez sa configuration : chaque entrée du tableau `routes` du bridge contient l'`ipRange` du réseau à joindre et un identifiant `gatewayId` — l'identifiant de la connexion privée.
 
 Créez une route pour chaque entrée, dans la [route table (table de routage)](/docs/network/route-table/concepts/) associée au subnet (sous-réseau) de la VM :
 
 - l'`ipRange` du bridge en destination ;
-- le `vpcPeeringId` du bridge en cible de type VPC peering (peering VPC).
+- le `gatewayId` du bridge en cible de type VPC peering (peering VPC) : dans la commande `POST /compute/spaces/{spaceId}/routeTables/{id}/routes`, cette valeur se transmet dans le paramètre `vpcPeeringId`.
 
 Suivez la procédure [Créer une route ↗](/docs/network/route-table/actions/route/create/) dans la console ou via l'API `POST /compute/spaces/{spaceId}/routeTables/{id}/routes`.
 
@@ -97,7 +112,7 @@ Vous pouvez ensuite déployer vos charges de travail et les joindre depuis la VM
 
 **Solution** : vérifiez dans l'ordre :
 
-1. l'état du bridge, qui doit être `READY` ;
+1. le tableau `routes` du bridge, qui doit être rempli (relisez le bridge pour le vérifier) ;
 2. l'existence d'une route par entrée du tableau `routes` du bridge, dans la route table associée au subnet de la VM ;
 3. la règle sortante du security group de la VM, qui autorise l'`ipRange` du control plane vers le port `443`.
 

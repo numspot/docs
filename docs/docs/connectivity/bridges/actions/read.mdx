@@ -1,0 +1,69 @@
+---
+title: Get information about your Bridges
+description: List your Bridges and read their routes to configure the routing towards the connected resources.
+sidebar_position: 2
+draft: false
+last_update:
+  date: 2026-11-05
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Get information about your Bridges
+
+You can get information about one or more bridges.
+
+By default, this action describes all your bridges.
+
+The read response is also the way to know when a bridge is ready to be routed: a freshly created bridge returns an empty `routes` array, and a ready bridge returns one entry per network of the connected resource.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permission:
+
+- **connectivity.bridge.get**
+
+:::
+
+<Tabs>
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+The `GET /connectivity/spaces/{spaceId}/bridges` command lists one or more bridges.
+
+[Example request: List all Bridges](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/bridges)
+
+The `GET /connectivity/spaces/{spaceId}/bridges/{id}` command retrieves the details of a bridge, including its `routes` array:
+
+```json
+{
+  "id": "0194f0c4-7a1b-7c3d-9e4f-5a6b7c8d9e0f",
+  "left": {
+    "id": "vpc-12345678",
+    "type": "compute"
+  },
+  "right": {
+    "id": "0194f0c4-8452-77d1-aaaf-516a9731ce9e",
+    "type": "managedservice"
+  },
+  "routes": [
+    {
+      "gatewayId": "pcx-50619f07",
+      "ipRange": "10.180.0.0/16"
+    }
+  ]
+}
+```
+
+Each entry of the `routes` array describes a network of the connected resource:
+
+- `ipRange` — the network to reach, to use as the route destination;
+- `gatewayId` — the identifier of the private connection, to use as the route target (parameter `vpcPeeringId` of the [Create a route](/docs/network/route-table/actions/route/create/) command).
+
+[Example request: Retrieve the information of a Bridge](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/bridges/{id})
+
+</TabItem>
+</Tabs>
