@@ -1,6 +1,8 @@
 ---
 title: Configurer la réplication Harbor
 sidebar_position: 2
+last_update:
+  date: 2026-11-04
 draft: false
 ---
 
@@ -240,7 +242,7 @@ External Registry          Numspot Container Registry
    **Mode de déclenchement :**
 
    - **Manual** : Migration ponctuelle
-   - **Scheduled** : Synchronisation périodique (ex : `0 2 * * *` quotidien à 2h du matin)
+   - **Scheduled** : Synchronisation périodique (ex : `0 0 2 * * *` quotidien à 02h00 UTC — le cron Harbor comporte 6 champs, secondes incluses)
 
    **Avancé :**
 
@@ -663,7 +665,7 @@ curl -X POST "https://reg-{registryIdPrefix}.space-{spaceIdPrefix}.hcp.cloudgouv
     "trigger": {
       "type": "scheduled",
       "trigger_settings": {
-        "cron": "0 2 * * *"
+        "cron": "0 0 2 * * *"
       }
     },
     "filters": [
@@ -936,7 +938,7 @@ Content-Type: application/json
   "trigger": {
     "type": "manual | scheduled | event_based",
     "trigger_settings": {
-      "cron": "0 0 * * *",
+      "cron": "0 0 0 * * *",
       "replicate_deletion": true
     }
   },

@@ -1,6 +1,8 @@
 ---
 title: Configure Harbor replication
 sidebar_position: 2
+last_update:
+  date: 2026-11-04
 draft: false
 ---
 
@@ -240,7 +242,7 @@ External Registry          Numspot Container Registry
    **Trigger mode:**
 
    - **Manual**: one-off migration
-   - **Scheduled**: periodic synchronization (e.g. `0 2 * * *` daily at 2 a.m.)
+   - **Scheduled**: periodic synchronization (e.g. `0 0 2 * * *` daily at 02:00 UTC — the Harbor cron uses 6 fields, seconds included)
 
    **Advanced:**
 
@@ -663,7 +665,7 @@ curl -X POST "https://registry-{registryId}.hcp.cloudgouv-eu-west-1.numspot.com/
     "trigger": {
       "type": "scheduled",
       "trigger_settings": {
-        "cron": "0 2 * * *"
+        "cron": "0 0 2 * * *"
       }
     },
     "filters": [
@@ -936,7 +938,7 @@ Content-Type: application/json
   "trigger": {
     "type": "manual | scheduled | event_based",
     "trigger_settings": {
-      "cron": "0 0 * * *",
+      "cron": "0 0 0 * * *",
       "replicate_deletion": true
     }
   },
