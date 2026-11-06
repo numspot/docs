@@ -1,0 +1,241 @@
+---
+title: Replicate images with Artifactory or Docker Hub
+description: Step-by-step guide to pull/push replication between the Numspot Container Registry and an external registry (JFrog Artifactory, Docker Hub, or a second Numspot instance), and to caching with the proxy cache.
+sidebar_position: 3.5
+last_update:
+  date: 2026-11-06
+draft: false
+---
+
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Replicate images with Artifactory or Docker Hub
+
+This step-by-step guide shows how to connect the Numspot Container Registry to an external container registry:
+
+- **Pull replication**: import images from an external registry (JFrog Artifactory, Docker Hub, …) into your Numspot instance, for a migration or image centralization.
+- **Push replication**: automatically propagate every image published on your Numspot instance to an external registry, for reversibility or multi-cloud distribution.
+- **Proxy cache**: act as a pull-through cache for Docker Hub images without having to store them permanently.
+
+For detailed references to the native Harbor API, see [Configuring Harbor replication](/docs/managed-services/registry/guides/harbor-replication/) and [Configuring the proxy cache](/docs/managed-services/registry/guides/proxy-cache/).
+
+:::info
+**Demo environment**: in the screenshots, the role of the external registry is played by a **second Numspot Container Registry instance**. The screens and steps are strictly identical with JFrog Artifactory or Docker Hub: only the endpoint **adapter type** and the **credentials** change. Variants are indicated at each step.
+:::
+
+## Prerequisites
+
+- A **Numspot Container Registry** instance (referred to as "instance A" in this guide), with **System Admin** access. See [Create an instance](/docs/managed-services/registry/actions/create/).
+- An **external registry** (referred to as "instance B"): JFrog Artifactory, Docker Hub, or a second Numspot Registry instance to reproduce the demo.
+- **Docker** installed on your machine.
+- Instance A must be able to reach the external registry over **HTTPS (port 443)**.
+
+Define the environment variables used in this guide:
+
+```bash
+export REG_A="https://<instance-a-host>"   # Numspot Container Registry
+export REG_B="https://<instance-b-host>"   # External registry (Artifactory, Docker Hub, …)
+export PW_A="<instance-A-admin-password>"
+```
+
+## Demo overview
+
+| Role | Instance | Projects used |
+| --- | --- | --- |
+| Numspot Container Registry | A | `poc-pull-replication` (pull replication target), `poc-push-replication` (push replication source), `poc-proxy-cache` (cache) |
+| External registry | B | `poc-upstream-images` (source images), `poc-push-mirror` (push replication mirror) |
+
+The three flows of the demo:
+
+- **Pull**: `poc-upstream-images` on B → `poc-pull-replication` on A (scheduled trigger)
+- **Push**: `poc-push-replication` on A → `poc-push-mirror` on B (event-based trigger)
+- **Proxy cache**: Docker Hub or B → `poc-proxy-cache` project on A
+
+## Step 1 — Access the interface
+
+The Harbor administration interface is reached through the instance URL, displayed in the Numspot console.
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/registry/01-login.png", text: "Open the URL of your Container Registry instance: the Harbor login page appears. Sign in with a System Admin account.", alt: "Harbor login page" },
+  ]}
+/>
+
+## Step 2 — Prepare the source images
+
+If your external registry already contains your images, skip this step. To reproduce the demo, publish a test image to the external registry (instance B):
+
+```bash
+# Sample image pulled from Docker Hub
+docker pull nginx:1.27-alpine
+docker tag nginx:1.27-alpine $REG_B/poc-upstream-images/poc-app:1.0.0
+
+docker login $REG_B
+docker push $REG_B/poc-upstream-images/poc-app:1.0.0
+```
+
+:::info
+**Artifactory variant**: a repository path includes the JFrog repository name, for example `$REG_B/poc-documentation/poc-app:1.0.0`. **Docker Hub variant**: your images are already on `docker.io`, no preparation is needed.
+:::
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/registry/02-projects.png", text: "After signing in, the list of projects on instance A appears. The demo uses three projects: poc-pull-replication, poc-push-replication and poc-proxy-cache.", alt: "Project list on instance A" },
+    { img: "/img/walkthrough/en/registry/03-source-artifact.png", text: "On the external registry (instance B), the source image poc-app is available in the poc-upstream-images project. Note its digest (sha256:…): it will be compared after replication.", alt: "Source artifact on instance B" },
+  ]}
+/>
+
+## Step 3 — Create the robot account on the source registry
+
+Instance A will authenticate to the external registry with a dedicated account:
+
+- **Numspot (Harbor)-type external registry**: create a robot account. For push replication, a **system**-level robot is mandatory (see [Points of attention](#points-of-attention)).
+- **JFrog Artifactory**: create a dedicated user or an identity token with read permissions on the source repository (and write permissions for push replication).
+- **Docker Hub**: use a dedicated Personal Access Token.
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/registry/04-robot-accounts-system.png", text: "On instance B, a system-level robot is created from Administration → Robot Accounts. Copy its secret right away: it is not displayed again afterwards.", alt: "System robot account on instance B" },
+  ]}
+/>
+
+## Step 4 — Declare the external registry (endpoint)
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/registry/05-registries.png", text: "On instance A, open Administration → Registries: this is where external registries (endpoints) are declared.", alt: "External registries list" },
+    { img: "/img/walkthrough/en/registry/06-registries-new-endpoint.png", text: "Click NEW ENDPOINT: enter a name, the external registry URL, the robot name and its secret, then select the provider (Harbor for a Numspot instance, JFrog Artifactory for Artifactory, Docker Hub for Docker Hub). The TEST CONNECTION button validates the URL and the credentials.", alt: "Creating the endpoint to the external registry" },
+  ]}
+/>
+
+The equivalent call on the instance's native Harbor API:
+
+```bash
+curl -X POST "$REG_A/api/v2.0/registries" \
+  -u "admin:$PW_A" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "artifactory-endpoint",
+    "type": "jfrog-artifactory",
+    "url": "https://<your-instance>.jfrog.io",
+    "access_key": "<user-or-robot>",
+    "access_secret": "<password-or-token>",
+    "insecure": false
+  }'
+```
+
+:::info
+Through the API, the `type` field must be exact: `jfrog-artifactory` for Artifactory, `docker-hub` for Docker Hub, `harbor` for a Harbor or Numspot instance. An invalid type returns an HTTP 500 error.
+:::
+
+## Step 5 — Create the pull replication rule
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/registry/07-replication-rules.png", text: "Open Replications: the list of replication rules of the instance appears. The demo uses two rules: a scheduled pull-based rule and an event-based push-based rule.", alt: "Replication rules list" },
+    { img: "/img/walkthrough/en/registry/08-replication-new-rule-pull.png", text: "Click NEW REPLICATION RULE: name the rule (pull-from-registry-b), choose the Pull-based mode, select the source registry (the endpoint created in the previous step), filter on poc-upstream-images/**, enter the destination namespace poc-pull-replication, then choose the Scheduled trigger with a cron expression.", alt: "Creating the pull replication rule" },
+  ]}
+/>
+
+:::info
+The cron expression of the scheduled trigger has **6 fields** (seconds included) and is interpreted in **UTC**: `0 0 2 * * *` means every day at 02:00 UTC.
+:::
+
+## Step 6 — Run the replication and verify
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/registry/10-replication-execution-manual.png", text: "For an immediate first synchronization, select the rule and click REPLICATE. The manual execution detail shows every task (source to destination, copy operation) and its Succeeded status.", alt: "Manual replication execution detail" },
+    { img: "/img/walkthrough/en/registry/09-replication-execution-scheduled.png", text: "At each cron schedule, a scheduled execution runs automatically and synchronizes the filtered artifacts.", alt: "Scheduled replication execution detail" },
+  ]}
+/>
+
+Check that the image digest is identical on both registries:
+
+```bash
+docker buildx imagetools inspect "$REG_B/poc-upstream-images/poc-app:1.0.0"
+docker buildx imagetools inspect "$REG_A/poc-pull-replication/poc-app:1.0.0"
+# Both commands display the same sha256:… digest
+```
+
+## Step 7 — Replicate to the external registry (push)
+
+Push replication propagates to the external registry every image published on your Numspot instance: this is the key mechanism for **reversibility**.
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/registry/11-replication-new-rule-push.png", text: "Create a second rule in Push-based mode: destination registry = the external endpoint, filter on poc-push-replication/**, destination poc-push-mirror, Event based trigger to propagate every push as soon as it arrives.", alt: "Creating the push replication rule" },
+  ]}
+/>
+
+Then publish an image normally: the replication triggers by itself.
+
+```bash
+docker login $REG_A
+docker tag nginx:1.27-alpine $REG_A/poc-push-replication/poc-app:2.1.0
+docker push $REG_A/poc-push-replication/poc-app:2.1.0
+# The push-to-registry-b rule execution triggers automatically
+```
+
+```bash
+# Verification on the external registry
+docker buildx imagetools inspect "$REG_B/poc-push-mirror/poc-app:2.1.0"
+```
+
+:::info
+**Numspot (Harbor)-type destination**: the account used as the endpoint credential must be a **system**-level robot — a project-level robot is rejected with the 403 error "Only system level robot can create project" during push replication. **Artifactory destination**: use a user with deploy permissions on the target repository.
+:::
+
+## Step 8 — Cache Docker Hub with the proxy cache
+
+The proxy cache avoids Docker Hub rate limits and speeds up pulls from your environments: the first request is served from the upstream (miss), the following ones from the cache (hit).
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/registry/13-proxy-cache.png", text: "Create a project with the Proxy Cache option checked, selecting the upstream registry (here the instance B endpoint; select Docker Hub for a docker.io cache). The project summary displays the upstream endpoint.", alt: "Proxy cache project and upstream endpoint" },
+    { img: "/img/walkthrough/en/registry/14-proxy-cache-repositories.png", text: "The first pull through the proxy path (proxy-project/upstream-path/repository) is served from the upstream and then cached: the poc-upstream-images/poc-app repository then appears in the project repository list.", alt: "Repository cached in the proxy cache project" },
+  ]}
+/>
+
+```bash
+# Cache an official Docker Hub image through the proxy cache
+docker login $REG_A
+docker pull $REG_A/poc-proxy-cache/library/nginx:1.27-alpine
+
+# Cache an image from the external registry of the demo
+docker pull $REG_A/poc-proxy-cache/poc-upstream-images/poc-app:1.0.0
+```
+
+:::info
+The cached repository only appears in the project list **after the first pull**. Pushes to a proxy cache project are rejected: the project only mirrors the upstream.
+:::
+
+## Step 9 — Create a robot account for CI (optional)
+
+To consume replicated images from your CI without using the administrator account, create a dedicated robot account.
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/registry/12-robot-accounts.png", text: "On instance A, open the relevant project then the Robot Accounts tab: create a project-level robot limited to the pull permission. Use its name and secret for docker login.", alt: "Project robot account for CI" },
+  ]}
+/>
+
+For more details, see [Robot accounts](/docs/managed-services/registry/guides/robot-accounts/).
+
+## Points of attention
+
+The API endpoints mentioned in this section (`/api/v2.0/...`, `/v2/`) are those of the **native Harbor API** exposed directly by your Container Registry instance (`https://<instance-host>/api/v2.0/...`). They are not part of the Numspot API, which manages Registry instances at the platform level (creation, deletion, admin password reset, …).
+
+- **JFrog Artifactory adapter**: only **Manual** and **Scheduled** triggers are available; event-based is not supported by this adapter.
+- **System robot mandatory for push destinations** (Harbor-type registry): a project-level robot fails with 403 "Only system level robot can create project".
+- **6-field cron, in UTC**: `0 0 2 * * *`, not `0 0 2 * *`.
+- **Editing an endpoint through the API**: `PUT /api/v2.0/registries/{id}` silently ignores credentials nested in `credential` — also send `access_key` and `access_secret` flat in the request body.
+- **Robot account API (Harbor 2.14)**: creation goes through `POST /api/v2.0/robots` with `"level": "project"` or `"system"` (the legacy `POST /projects/{id}/robots` endpoint no longer exists). `PUT /api/v2.0/robots/{id}` requires `level` and `name` in the body; to change permissions, create a new robot then delete the old one.
+- **Scan report tied to the digest**: if a vulnerability scan failed on a digest, the state persists for that digest even after re-replicating the same image.
+- **Registry availability check**: `GET /v2/` returns 401 with a Bearer challenge even with valid credentials (normal Harbor behavior); use `GET /api/v2.0/ping`, which answers 200 without authentication.
+
+## Going further
+
+- [Configuring Harbor replication](/docs/managed-services/registry/guides/harbor-replication/): API reference for modes, filters and triggers.
+- [Configuring the proxy cache](/docs/managed-services/registry/guides/proxy-cache/): detailed pull-through cache behavior.
+- [Robot accounts](/docs/managed-services/registry/guides/robot-accounts/): creating and managing project and system robots.
