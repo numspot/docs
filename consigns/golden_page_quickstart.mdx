@@ -1,0 +1,89 @@
+---
+title: "VM - Quickstart"
+sidebar_label: "Quickstart"
+sidebar_position: 1
+last_update:
+  date: 2026-10-26
+---
+
+<!--
+  GOLDEN PAGE — exemplar quickstart page (English version).
+
+  A quickstart is a guided END-TO-END tutorial: from nothing to a working
+  setup, in one path, with the console as the primary surface. They live
+  at <service>/<resource>/quickstart.mdx (menu position 1 of the
+  resource) and deliberately cover SEVERAL resources — the complements
+  live in the per-resource Actions pages.
+
+  Structure (extracted from the VM quickstart):
+
+    H1 "Quickstart" → intro: what the reader will have built by the end
+      ("By following this tutorial, you will…"), the global architecture
+      diagram (one image), what each component is for — links to concept
+      pages at first occurrence
+    → H2 numbered sections "## 1. <Action>" — each section is one
+      milestone of the tutorial, ordered so the reader succeeds end to end
+    → each milestone: the <Walkthrough> component (screenshots + hotspots,
+      one entry per screen) THEN the same steps as a numbered list with
+      screenshots — the walkthrough is the fast path, the list is the
+      fallback (and the accessible path)
+    → optional H3 per wizard step within a milestone
+    → closing section: what to do next (links to the next quickstart or
+      to the service concepts)
+
+  Rule of thumb: a quickstart is read top to bottom in one sitting and
+  ends with working resources. Every decision the reader must make is
+  explained inline (default vs custom), with the cost impact when relevant.
+
+  Do not route this file; mirror its structure instead.
+-->
+
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Quickstart
+
+<!-- Intro: what the reader builds, the big picture, the diagram. -->
+
+Numspot lets you create virtual machines ([VM](/docs/compute/concept/)) and connect to them remotely using SSH (Secure Shell).
+
+By following this tutorial, you will implement some of the components needed to build an application ranging from simple to very complex, in a secure way. Before getting started, take a look at the diagram below. It reveals all the components you will need to create your own VM at Numspot.
+
+![Quickstart VM](/img/console/compute/general/en-quickstart_vm.png)
+
+## 1. Create a VM
+
+<!-- Milestone section. The <Walkthrough> first: one entry per screen,
+     text phrased as the action to perform, hotspot on the control. -->
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/vm/create-00-list.png", text: "From the left-hand side menu, click Compute → VMs.", hotspot: { x: 0, y: 0.4123, w: 0.194, h: 0.0457 } },
+    { img: "/img/walkthrough/en/vm/create-00-list.png", text: "Click “Create VM” to launch the 7-step wizard.", hotspot: { x: 0.8732, y: 0.2329, w: 0.088, h: 0.0494 } },
+  ]}
+/>
+
+<!-- Then the fallback: numbered steps + screenshots, one H3 per wizard
+     step. Bold for console UI elements, quotation marks for fields. -->
+
+1. From the console, in the left-hand menu, click **Compute** → **VM** to access the list of VM.
+
+2. Click the **Create a VM** button at the top right of the screen to launch the VM creation wizard.
+
+Creating a VM on the Numspot cloud is simplified by a creation wizard that guides you through each configuration step.
+
+Here are the steps to create a VM using the wizard:
+
+### Choose an image
+
+1. Select the OS image you want to use for your VM.
+2. Click **Continue**.
+
+## 2. Create the resources needed for the VM
+
+<!-- Milestone 2+ — same pattern. Order the milestones so that each one
+     only depends on the previous ones. -->
+
+## Next steps
+
+<!-- Close with what to do with the resources just created: links to the
+     relevant guides or the service concepts page. -->

@@ -1,0 +1,66 @@
+---
+title: "Changelog - Golden entry"
+sidebar_label: "Changelog"
+---
+
+<!--
+  GOLDEN PAGE — reference entry for the changelogs (English version).
+
+  The changelog tells END USERS what is new or different in the products
+  and services Numspot documents — never what happened inside the docs
+  project. Two files, kept ISO in the same commit:
+
+    - English (source of truth): docs/docs/changelog.json
+    - French: i18n/fr/docusaurus-plugin-content-docs/current/docs/changelog.json
+
+  Timing (D-007): entries land WHEN THE PAGES BECOME PUBLIC — one
+  consolidated entry per PR, written in the PR that ships the change,
+  never one per unit commit.
+
+  Scope (D-006): product and service changes ONLY.
+    ✅ new service/feature/capability documented, page or section
+       added/modified/deleted for a product, product renames, content
+       corrections that change product facts
+    ❌ linter rules and tests, CI, build/deps, i18n plumbing, internal
+       scripts, site UI and cosmetics, meta announcements about the docs
+
+  Enforcement: linter/tests/changelog-sync.test.js (FR/EN alignment),
+  changelog-format.test.js (canonical serialization, D-020),
+  changelog-scope.test.js (product scope).
+
+  Do not route this file; mirror the structure below instead.
+-->
+
+<!--
+  CANONICAL ENTRY — copy this shape, in the canonical JSON serialization
+  (JSON.stringify(parsed, null, 2) + "\n": 2-space indent, scalar arrays
+  inlined). Entries are PREPENDED to the "entries" array, newest first,
+  identically in both files (same order, same date/status/components).
+-->
+{
+  "service": "PostgreSQL",
+  "status": "changed",
+  "date": "2026-10-19",
+  "title": "Connection behaviour and timeouts documented",
+  "description": "A new PostgreSQL guide documents the connection behaviour of managed clusters: the 60-second idle connection timeout applied by the connection endpoint (idle sessions, long silent operations such as CREATE INDEX, VACUUM or pg_restore are cut, while client-side TCP keepalives do not prevent the disconnect), the fact that a cut statement keeps running server-side, and a consolidated view of the connection limits (PgBouncer pooling limits, max_connections) with troubleshooting guidance.",
+  "components": [
+    "docs"
+  ]
+}
+
+<!--
+  FIELD RULES
+
+  service     Registered product/service name (EN in the EN file; the FR
+              file translates registered service names via the
+              SERVICE_TRANSLATIONS map of changelog-sync.test.js).
+  status      added | changed | deprecated | fixed | removed | security.
+              A page DELETION is "removed" (D-021: dated, FR+EN, must
+              reference the page title or slug).
+  date        YYYY-MM-DD — the day the change goes public on main.
+  title       One line, product perspective ("what changes for you"),
+              not the doc task ("we wrote a page").
+  description One paragraph: what is new/different, the concrete values
+              or behaviours, where to read more. No internal links.
+  components  ["api", "console"] — the surfaces affected, inline array.
+-->
