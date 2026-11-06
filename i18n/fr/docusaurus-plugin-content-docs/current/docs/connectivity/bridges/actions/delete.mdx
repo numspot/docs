@@ -1,0 +1,38 @@
+---
+title: Supprimer un bridge
+description: Supprimez un bridge pour mettre fin à la connexion privée entre deux VPC ou entre un VPC et les services managés d'un espace.
+sidebar_position: 3
+draft: false
+last_update:
+  date: 2026-11-05
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Supprimer un bridge
+
+Vous pouvez supprimer un bridge pour mettre fin à la communication entre les deux ressources connectées.
+
+Avant de supprimer un bridge, retirez de vos [route tables (tables de routage)](/docs/network/route-table/concepts/) les routes qui le ciblent, sinon le trafic vers la connexion supprimée reste en trou noir.
+
+## Permissions
+
+:::info
+Cette action nécessite la permission **IAM** (Identity and Access Management) suivante :
+
+- **connectivity.bridge.delete**
+
+:::
+
+<Tabs>
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+La commande `DELETE /connectivity/spaces/{spaceId}/bridges/{id}` supprime le bridge.
+
+[Exemple de requête : Suppression d'un Bridge](/openapi/#tag/connectivity/DELETE/connectivity/spaces/{spaceId}/bridges/{id})
+
+</TabItem>
+</Tabs>

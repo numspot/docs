@@ -1,0 +1,69 @@
+---
+title: Obtenir des informations sur vos Bridges
+description: Listez vos Bridges et lisez leurs routes pour configurer le routage vers les ressources connectées.
+sidebar_position: 2
+draft: false
+last_update:
+  date: 2026-11-05
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Obtenir des informations sur vos Bridges
+
+Vous pouvez obtenir des informations sur un ou plusieurs bridges.
+
+Par défaut, cette action décrit tous vos bridges.
+
+La lecture est aussi le moyen de savoir quand un bridge est prêt à être routé : un bridge fraîchement créé renvoie un tableau `routes` vide, un bridge prêt renvoie une entrée par réseau de la ressource connectée.
+
+## Permissions
+
+:::info
+Cette action nécessite la permission **IAM** (Identity and Access Management) suivante :
+
+- **connectivity.bridge.get**
+
+:::
+
+<Tabs>
+<TabItem value="api" label="API" default>
+
+## API {#tabhead-api}
+
+La commande `GET /connectivity/spaces/{spaceId}/bridges` permet de lister un ou plusieurs bridges.
+
+[Exemple de requête : Lister tous les Bridges](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/bridges)
+
+La commande `GET /connectivity/spaces/{spaceId}/bridges/{id}` permet de récupérer le détail d'un bridge, dont son tableau `routes` :
+
+```json
+{
+  "id": "0194f0c4-7a1b-7c3d-9e4f-5a6b7c8d9e0f",
+  "left": {
+    "id": "vpc-12345678",
+    "type": "compute"
+  },
+  "right": {
+    "id": "0194f0c4-8452-77d1-aaaf-516a9731ce9e",
+    "type": "managedservice"
+  },
+  "routes": [
+    {
+      "gatewayId": "pcx-50619f07",
+      "ipRange": "10.180.0.0/16"
+    }
+  ]
+}
+```
+
+Chaque entrée du tableau `routes` décrit un réseau de la ressource connectée :
+
+- `ipRange` — le réseau à joindre, à utiliser en destination de la route ;
+- `gatewayId` — l'identifiant de la connexion privée, à utiliser en cible de la route (paramètre `vpcPeeringId` de la commande [Créer une route](/docs/network/route-table/actions/route/create/)).
+
+[Exemple de requête : Récupérer les informations d'un Bridge](/openapi/#tag/connectivity/GET/connectivity/spaces/{spaceId}/bridges/{id})
+
+</TabItem>
+</Tabs>

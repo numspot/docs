@@ -1,6 +1,17 @@
 {
   "entries": [
     {
+      "service": "Connectivité",
+      "status": "deprecated",
+      "date": "2026-11-05",
+      "title": "Bridges documentés — Compute Bridges et Hybrid Bridges dépréciés",
+      "description": "Une nouvelle section Bridges documente l'API bridge unique (POST /connectivity/spaces/{spaceId}/bridges) et ses deux cas d'usage : le peering privé entre deux VPC (compute vers compute) et la connexion VPC vers services managés (compute vers managedservice), qui relie un VPC à l'ensemble des services managés d'un espace. Les pages Compute Bridge et Hybrid Bridge sont désormais marquées dépréciées. Le guide « Connecter une VM à un cluster Kubernetes managé » a été corrigé en conséquence : le bridge cible l'identifiant de l'espace (et non celui d'un cluster), l'état prêt est signalé par le remplissage du tableau routes, et la valeur cible de la route (gatewayId dans la réponse du bridge) se transmet dans le paramètre vpcPeeringId de la commande Créer une route.",
+      "components": [
+        "api",
+        "docs"
+      ]
+    },
+    {
       "service": "Container Registry",
       "status": "added",
       "date": "2026-11-04",
