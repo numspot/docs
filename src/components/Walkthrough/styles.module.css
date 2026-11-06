@@ -1,5 +1,12 @@
 .wrap {
   margin: 1.25rem 0 1.75rem;
+  /* Atomic stacking context: the tip's z-index (3) must stay LOCAL to the
+     walkthrough. Without this, it escapes to the root stacking context
+     (no ancestor creates one) and paints OVER the sticky doc-page title
+     (z-index: 2, custom.css) when the stage scrolls under it — DOC-669.
+     The sticky title must always win over the whole walkthrough, like any
+     in-flow content. Fullscreen is unaffected (Fullscreen API = top layer). */
+  isolation: isolate;
 }
 
 /* Fullscreen mode: the stage is centered on a dark background, the controls
