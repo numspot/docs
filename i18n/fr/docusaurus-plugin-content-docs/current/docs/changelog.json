@@ -1,6 +1,27 @@
 {
   "entries": [
     {
+      "service": "Secret Manager",
+      "status": "added",
+      "date": "2026-11-07",
+      "title": "Guide : synchronisation des secrets avec un HashiCorp Vault",
+      "description": "Nouveau guide pas à pas couvrant la synchronisation bidirectionnelle entre un HashiCorp Vault et une instance Secret Manager (CLI Vault officielle, vérification par empreinte, External Secrets Operator avec rotation continue). L'opérateur s'authentifie avec des jetons JWT/OIDC de courte durée (aucun identifiant statique), et le guide documente la gestion de l'expiration des jetons. Validé de bout en bout sur OpenBao 2.5.4.",
+      "components": [
+        "docs"
+      ]
+    },
+    {
+      "service": "Secret Manager",
+      "status": "fixed",
+      "date": "2026-11-07",
+      "title": "Route du token admin corrigée",
+      "description": "La page Obtenir le token admin documente désormais la route réelle GET /secrets/spaces/{spaceId}/instances/{instanceId}/token. La route /password précédemment documentée n'existe plus sur l'API.",
+      "components": [
+        "api",
+        "docs"
+      ]
+    },
+    {
       "service": "Connectivité",
       "status": "deprecated",
       "date": "2026-11-05",
