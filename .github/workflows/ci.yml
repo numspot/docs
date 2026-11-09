@@ -27,14 +27,19 @@ jobs:
           node linter/cli.js i18n/fr/docusaurus-plugin-content-docs/current/docs/ --ci
 
   tests:
-    name: Linter regression tests
+    name: Regression tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The MCP prepare_pr tool and the diff-based linter tests resolve the
+          # PR diff base through git: a shallow checkout carries no branch ref
+          # (see PROBLEMS.md, "Diff-based tests need git in their CI job").
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-      - run: node --test linter/tests/*.test.js
+      - run: node --test linter/tests/*.test.js mcp/tests/*.test.js
 
   build:
     name: Typecheck and build
