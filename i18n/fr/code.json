@@ -854,10 +854,6 @@
     "message": "copié",
     "description": "Feedback after copying a permission UUID"
   },
-  "permexplorer.console": {
-    "message": "Aucune API publique pour cette permission : l'action est réalisée depuis la console Numspot.",
-    "description": "Note shown on permissions without a public endpoint"
-  },
   "permexplorer.role.filterHint": {
     "message": "Filtrer par ce rôle",
     "description": "Hint on a clickable standard role tag"
