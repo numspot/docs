@@ -22,6 +22,7 @@ When a session detects a problem, it must not recur:
 | Search: REQUIRED clause on an index-removed stopword (`"base de données"`, `"mot de passe"`, `pare-feu`…) voids the whole lunr query → 0 results; a stopword lookup key in the synonym `TOKEN_INDEX` fired unrelated synonym queries on nearly every French input | `linter/tests/search.test.js` (quoted-phrase/synonym stopword regression) + `scripts/validate-search-synonyms.js` (post-build, wired after `yarn build`) — the parser drops stopwords from REQUIRED word lists and normalizes synonym members through the index tokenizer |
 | Walkthrough coachmark painting over the sticky doc title on scroll (tip z-index escaping to the root stacking context — DOC-669) | `linter/tests/walkthrough-stacking.test.js` (source pins: `isolation: isolate` on `.wrap`, tip keeps a local z-index, sticky title keeps sticky/z-index/opaque background) |
 | Multiple unit commits piling up in one PR          | Not lintable — see "One commit per Pull Request" below      |
+| Guide commands claimed as "validated end to end" but never run as published (PR #42 review) | Not lintable — see "Guide commands must be executed as published" below |
 
 ## Branching — always start from up-to-date `main` (not lintable)
 
@@ -56,6 +57,22 @@ Diff-based linter tests (e.g. `page-deletion.test.js`) shell out to `git` to res
 
 - **A CI job running git-dependent tests must provide git and the full history**: in GitHub Actions this is `actions/checkout` with `fetch-depth: 0` — without it, the diff base can sit beyond a shallow clone and the test fails loudly.
 - **Diff-based tests must degrade gracefully**: resolve the diff base through a git call wrapped in try/catch — `ENOENT` (no git binary) → skip cleanly; an unresolvable configured ref (shallow clone, typo) → fail loudly. Never let a raw `execFileSync('git', …)` error escape a test (see `page-deletion.test.js` `diffBase()`).
+
+## Guide commands must be executed as published before claiming validation (not lintable)
+
+PR #42 (Secret Manager Vault synchronization guide, merged 2026-11-09) claimed in its description that every command was "validated end to end", yet a review reproduced two failures in the published commands as written:
+
+1. **Environment variables silently ignored** — the guide defined the instance credentials in `BAO_ADDR`/`BAO_TOKEN` and stated that bare `vault` commands "send their requests to `$BAO_ADDR`". The official HashiCorp Vault CLI ignores `BAO_*` (those are the OpenBao CLI variables): with only `BAO_*` exported it falls back to its default address, and with `VAULT_ADDR` also exported it hits the *client* Vault. Every command "worked" in the validating session's shell while silently targeting the wrong server as published.
+2. **File form fed with the API envelope** — `vault kv put … @file.json` stores the file verbatim as the secret data map, and the guide piped the raw `vault kv get -format=json` output (the full API response: `request_id`, `lease_id`, `data`, …) into it. The command exits 0; the failure only surfaces later at the guide's own SHA-256 digest check (`Field "key" not present in secret`).
+
+The session had validated a *variant* of the commands (differently-configured shell, values passed inline), then re-dressed them for publication — renaming variables, switching to the file form — without re-running them. Both failures share the signature: the command succeeds while doing the wrong thing.
+
+Rules:
+
+- **Validate commands exactly as they will be published** — same variables, same file forms, same paths, same order. A validated variant is not validation of the published text.
+- **Run the guide's own verification steps to the end** (digest comparisons, expected outputs such as `Seal Type`/`Version`) — "the command succeeded" is not end-to-end validation.
+- **Silent-success behavior is the high-risk zone** — CLI env fallbacks, `@file` ingestion, `jq` filters: verify which server a command touched and what data it stored, not just its exit code.
+- Reviewers: for guides, reproduce before approving — here it caught what the linter, CI and the author's session all missed.
 
 ## Dependency maintenance — findings pending action (not lintable)
 
