@@ -120,6 +120,11 @@
           "method": "GET",
           "path": "/compute/spaces/{spaceId}/dhcpOptions/{id}",
           "summary": "Get information about DHCP options"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/dhcpOptions",
+          "summary": "List DHCP option(s)"
         }
       ]
     },
@@ -242,6 +247,26 @@
           "method": "GET",
           "path": "/compute/spaces/{spaceId}/images/{id}",
           "summary": "Get information about an Image"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/imageExportTasks",
+          "summary": "List Image Export Tasks"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/imageExportTasks/{id}",
+          "summary": "Get information about a Image Export Task"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/images",
+          "summary": "List Images"
+        },
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/imageExportTasks",
+          "summary": "Creates an image export task"
         }
       ]
     },
@@ -290,6 +315,11 @@
           "method": "GET",
           "path": "/compute/spaces/{spaceId}/internetGateways/{id}",
           "summary": "Get information about an Internet Gateway"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/internetGateways",
+          "summary": "List Internet Gateway(s)"
         }
       ]
     },
@@ -427,6 +457,21 @@
           "method": "GET",
           "path": "/compute/spaces/{spaceId}/loadBalancers/{id}/vmsHealth",
           "summary": "Read VMs health"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/listenerRules",
+          "summary": "List Listener Rule(s)"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/loadBalancersTags",
+          "summary": "List Load Balancer Tag(s)"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/loadBalancers",
+          "summary": "List Load Balancer(s)"
         }
       ]
     },
@@ -478,6 +523,16 @@
           "method": "POST",
           "path": "/compute/spaces/{spaceId}/loadBalancers/{id}/policies",
           "summary": "Create Load Balancer Policy"
+        },
+        {
+          "method": "PATCH",
+          "path": "/compute/spaces/{spaceId}/bulk/loadBalancersTags",
+          "summary": "Create Load Balancer Tag(s)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/compute/spaces/{spaceId}/bulk/loadBalancersTags",
+          "summary": "Delete Load Balancer Tag(s)"
         }
       ]
     },
@@ -526,6 +581,11 @@
           "method": "GET",
           "path": "/compute/spaces/{spaceId}/natGateways/{id}",
           "summary": "Get information about a NAT Gateway"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/natGateways",
+          "summary": "List Nat Gateway(s)"
         }
       ]
     },
@@ -658,6 +718,11 @@
           "method": "GET",
           "path": "/compute/spaces/{spaceId}/publicIps/{id}",
           "summary": "Get Information of a Public IP"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/publicIps",
+          "summary": "List Public IP(s)"
         }
       ]
     },
@@ -723,6 +788,11 @@
         "space"
       ],
       "endpoints": [
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/routeTables",
+          "summary": "List Route Tables"
+        },
         {
           "method": "GET",
           "path": "/compute/spaces/{spaceId}/routeTables/{id}",
@@ -816,6 +886,11 @@
           "method": "GET",
           "path": "/compute/spaces/{spaceId}/securityGroups/{id}",
           "summary": "Get information about a Security Group"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/securityGroups",
+          "summary": "List Security Group(s)"
         }
       ]
     },
@@ -949,6 +1024,16 @@
           "method": "GET",
           "path": "/compute/spaces/{spaceId}/snapshots/{id}",
           "summary": "Get information about a Snapshot"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/snapshotExportTasks/{id}",
+          "summary": "Get information about a Snapshot Export Task"
+        },
+        {
+          "method": "POST",
+          "path": "/compute/spaces/{spaceId}/snapshotExportTasks",
+          "summary": "Create a snaphot export task"
         }
       ]
     },
@@ -997,6 +1082,11 @@
           "method": "GET",
           "path": "/compute/spaces/{spaceId}/subnets/{id}",
           "summary": "Get information about a Subnet"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/subnets",
+          "summary": "List Subnet(s)"
         }
       ]
     },
@@ -1150,6 +1240,11 @@
           "method": "GET",
           "path": "/compute/spaces/{spaceId}/vpcs/{id}",
           "summary": "Get information about a VPC"
+        },
+        {
+          "method": "GET",
+          "path": "/compute/spaces/{spaceId}/vpcs",
+          "summary": "List VPC(s)"
         }
       ]
     },
@@ -1244,6 +1339,16 @@
           "method": "GET",
           "path": "/connectivity/spaces/{spaceId}/hybridBridges/{id}",
           "summary": "Read a hybrid bridge"
+        },
+        {
+          "method": "GET",
+          "path": "/connectivity/spaces/{spaceId}/computeBridges",
+          "summary": "List compute bridges"
+        },
+        {
+          "method": "GET",
+          "path": "/connectivity/spaces/{spaceId}/bridges",
+          "summary": "List bridges"
         }
       ]
     },
@@ -1403,13 +1508,28 @@
         },
         {
           "method": "GET",
+          "path": "/connectivity/spaces/{spaceId}/clientGateways",
+          "summary": "List client gateways"
+        },
+        {
+          "method": "GET",
           "path": "/connectivity/spaces/{spaceId}/virtualGateways/{id}",
           "summary": "Read virtual gateway"
         },
         {
           "method": "GET",
+          "path": "/connectivity/spaces/{spaceId}/virtualGateways",
+          "summary": "List virtual gateways"
+        },
+        {
+          "method": "GET",
           "path": "/connectivity/spaces/{spaceId}/vpnConnections/{id}",
           "summary": "Read a VPN connection"
+        },
+        {
+          "method": "GET",
+          "path": "/connectivity/spaces/{spaceId}/vpnConnections",
+          "summary": "List VPN connections"
         }
       ]
     },
@@ -1767,6 +1887,16 @@
           "method": "GET",
           "path": "/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}",
           "summary": "Get service account details in space"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/organisations/{organisationId}/serviceAccounts",
+          "summary": "List service accounts in organisation"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/spaces/{spaceId}/serviceAccounts",
+          "summary": "List service accounts in space"
         }
       ]
     },
@@ -1839,6 +1969,11 @@
         "organisation"
       ],
       "endpoints": [
+        {
+          "method": "GET",
+          "path": "/organisations/{organisationId}/spaces",
+          "summary": "List the spaces of the organisation"
+        },
         {
           "method": "GET",
           "path": "/organisations/{organisationId}/spaces/{spaceId}",
@@ -1946,6 +2081,16 @@
           "method": "GET",
           "path": "/iam/spaces/{spaceId}/users/{userId}",
           "summary": "Retrieve an existing user"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/organisations/{organisationId}/users",
+          "summary": "List users in an organisation"
+        },
+        {
+          "method": "GET",
+          "path": "/iam/spaces/{spaceId}/users",
+          "summary": "List users or get an existing user by email"
         }
       ]
     },
@@ -2595,7 +2740,13 @@
       "tenant": [
         "space"
       ],
-      "endpoints": []
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/secrets/spaces/{spaceId}/instances",
+          "summary": "Create Secret instance."
+        }
+      ]
     },
     {
       "name": "secrets.instance.delete",
@@ -2605,7 +2756,13 @@
       "tenant": [
         "space"
       ],
-      "endpoints": []
+      "endpoints": [
+        {
+          "method": "DELETE",
+          "path": "/secrets/spaces/{spaceId}/instances/{instanceId}",
+          "summary": "Delete a Secret instance."
+        }
+      ]
     },
     {
       "name": "secrets.instance.get",
@@ -2615,7 +2772,23 @@
       "tenant": [
         "space"
       ],
-      "endpoints": []
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/secrets/spaces/{spaceId}/instances",
+          "summary": "List Secret instances."
+        },
+        {
+          "method": "GET",
+          "path": "/secrets/spaces/{spaceId}/instances/{instanceId}",
+          "summary": "Get Secret instance information."
+        },
+        {
+          "method": "GET",
+          "path": "/secrets/spaces/{spaceId}/instances/{instanceId}/token",
+          "summary": "Get Secret instance admin token."
+        }
+      ]
     },
     {
       "name": "secrets.password.get",

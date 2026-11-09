@@ -5,7 +5,7 @@ sidebar_label: Delete a space
 sidebar_position: 5
 draft: false
 last_update:
-  date: 2026-09-18
+  date: 2026-10-30
 ---
 
 import Tabs from "@theme/Tabs";
@@ -56,19 +56,7 @@ From the console, deleting a space is not performed directly: it is a request su
 
 ## API {#tabhead-api}
 
-
-https://docs.numspot.com/openapi/#tag/identity-access-management/DELETE/organisations/{organisationId}/spaces/{spaceId}
-
-### Example
-
-```bash
-curl 'https://api.{region}.numspot.com/organisations/{organisationId}/spaces/{spaceId}' \
-  --request DELETE
-```
-
-:::info
-See the [API usage page](/docs/iam/concepts/api/) for details.
-:::
+Space deletion is not available through the public API: the `DELETE` endpoint does not exist in the [API reference](/openapi/). Deletion goes through Numspot support as a safeguard, once every resource in the space has been deleted — submit the request from the console (**Console** tab) with your organisation ID and the ID of the space.
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
