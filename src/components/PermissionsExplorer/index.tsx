@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import styles from './styles.module.css';
 import data from './permissions.json';
 import rolesData from './roles.json';
+import publicData from './public-endpoints.json';
 
 type TenantType = 'organisation' | 'space';
 
@@ -31,6 +32,14 @@ type Role = {
   description: string;
   tenantType: TenantType[];
   permissions: string[];
+};
+
+type PublicEndpoint = {
+  method: Endpoint['method'];
+  path: string;
+  summary: string;
+  /** OpenAPI tag slug, for the /openapi/#tag/... deep links. */
+  tag: string;
 };
 
 type DomainMeta = {
@@ -65,14 +74,26 @@ const DOMAIN_META: Record<string, DomainMeta> = {
   },
   secrets: {
     label: { fr: 'Secret Manager', en: 'Secret Manager' },
-    tag: 'secret-manager',
+    tag: 'secret',
   },
 };
 
 const TENANT_ORDER: TenantType[] = ['organisation', 'space'];
 
-const permissions = data.permissions as Permission[];
+const permissions = (data.permissions as Permission[]).filter(
+  // A permission without any documented endpoint is not displayed: it is
+  // performed from the Numspot console or ships with an upcoming API. The
+  // catalog keeps the entry (roles and UUIDs stay coherent with the IAM
+  // API), the page simply does not render it.
+  (permission) => permission.endpoints.length > 0,
+);
 const roles = (rolesData.roles ?? []) as Role[];
+
+// Endpoints the API exposes without any IAM permission (spec: `security: []`).
+// They are not permissions — they render in their own section below the tenant
+// sections. Kept in sync with the OpenAPI mirror by
+// linter/tests/permissions-mapping.test.js.
+const publicEndpoints = (publicData.publicEndpoints ?? []) as PublicEndpoint[];
 
 function endpointMatches(endpoint: Endpoint, query: string): boolean {
   return (
@@ -234,8 +255,6 @@ export default function PermissionsExplorer(): ReactNode {
       const endpoints = nameHit
         ? permission.endpoints
         : permission.endpoints.filter((endpoint) => endpointMatches(endpoint, q));
-      // Console-only permissions (no public endpoint) still match by name:
-      // they must be listed with their "performed from the console" note.
       if (endpoints.length > 0 || nameHit) {
         result.push({ permission, endpoints, nameHit });
         apiTotal += endpoints.length;
@@ -271,6 +290,19 @@ export default function PermissionsExplorer(): ReactNode {
         ),
       })),
     [domainGroups, tenantFilter],
+  );
+
+  // Public endpoints follow the search query only: they carry no permission,
+  // so the tenant and role filters do not apply to them.
+  const publicMatches = useMemo(
+    () =>
+      q
+        ? publicEndpoints.filter(
+            (endpoint) =>
+              endpointMatches(endpoint, q) || endpoint.tag.toLowerCase().includes(q),
+          )
+        : publicEndpoints,
+    [q],
   );
 
   const suggestions = useMemo(() => {
@@ -643,7 +675,7 @@ export default function PermissionsExplorer(): ReactNode {
         )}
       </p>
 
-      {matches.length === 0 && (
+      {matches.length === 0 && publicMatches.length === 0 && (
         <div className={styles.empty}>
           {translate({
             id: 'permexplorer.empty',
@@ -741,38 +773,27 @@ export default function PermissionsExplorer(): ReactNode {
                           {permission.description && (
                             <p className={styles.cardDesc}>{permission.description}</p>
                           )}
-                          {endpoints.length === 0 ? (
-                            <p className={styles.consoleNote}>
-                              {translate({
-                                id: 'permexplorer.console',
-                                message:
-                                  'No public API for this permission: the action is performed from the Numspot console.',
-                                description: 'Note shown on permissions without a public endpoint',
-                              })}
-                            </p>
-                          ) : (
-                            <ul className={styles.endpointList}>
-                              {endpoints.map((endpoint) => (
-                                <li
-                                  key={`${permission.name}-${endpoint.method}-${endpoint.path}`}
-                                  className={styles.endpoint}>
-                                  <span className={`${styles.method} ${styles[`method${endpoint.method}`]}`}>
-                                    {endpoint.method}
-                                  </span>
-                                  <a
-                                    className={styles.path}
-                                    href={`https://docs.numspot.com/openapi/#tag/${domainTag(permission.domain)}/${endpoint.method}/${endpoint.path}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    <Highlighted text={endpoint.path} query={nameHit ? '' : q} />
-                                  </a>
-                                  {endpoint.summary && (
-                                    <span className={styles.endpointSummary}>— {endpoint.summary}</span>
-                                  )}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
+                          <ul className={styles.endpointList}>
+                            {endpoints.map((endpoint) => (
+                              <li
+                                key={`${permission.name}-${endpoint.method}-${endpoint.path}`}
+                                className={styles.endpoint}>
+                                <span className={`${styles.method} ${styles[`method${endpoint.method}`]}`}>
+                                  {endpoint.method}
+                                </span>
+                                <a
+                                  className={styles.path}
+                                  href={`https://docs.numspot.com/openapi/#tag/${domainTag(permission.domain)}/${endpoint.method}/${endpoint.path}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer">
+                                  <Highlighted text={endpoint.path} query={nameHit ? '' : q} />
+                                </a>
+                                {endpoint.summary && (
+                                  <span className={styles.endpointSummary}>— {endpoint.summary}</span>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
                         </div>
                       </details>
                     );
@@ -781,6 +802,46 @@ export default function PermissionsExplorer(): ReactNode {
             ))}
           </section>
         ),
+      )}
+
+      {publicMatches.length > 0 && (
+        <section className={styles.tenantSection}>
+          <h2 className={styles.tenantHeading}>
+            {translate({
+              id: 'permexplorer.public.heading',
+              message: 'Public APIs — no permission required',
+              description: 'Heading of the public-endpoints section',
+            })}
+            <span className={styles.tenantHint}>
+              {translate({
+                id: 'permexplorer.public.hint',
+                message: 'these endpoints require no IAM permission',
+                description: 'Hint under the public endpoints section',
+              })}
+            </span>
+          </h2>
+          <ul className={styles.endpointList}>
+            {publicMatches.map((endpoint) => (
+              <li
+                key={`${endpoint.method}-${endpoint.path}`}
+                className={styles.endpoint}>
+                <span className={`${styles.method} ${styles[`method${endpoint.method}`]}`}>
+                  {endpoint.method}
+                </span>
+                <a
+                  className={styles.path}
+                  href={`https://docs.numspot.com/openapi/#tag/${endpoint.tag}/${endpoint.method}/${endpoint.path}`}
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  <Highlighted text={endpoint.path} query={q} />
+                </a>
+                {endpoint.summary && (
+                  <span className={styles.endpointSummary}>— {endpoint.summary}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
     </div>
   );

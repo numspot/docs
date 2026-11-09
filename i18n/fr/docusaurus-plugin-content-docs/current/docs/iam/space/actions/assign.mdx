@@ -3,7 +3,7 @@ title: Assigner une identité à un espace - IAM
 sidebar_label: Assigner une identité à un espace
 sidebar_position: 3
 last_update:
-  date: 2026-11-23
+  date: 2026-11-25
 ---
 
 import Tabs from "@theme/Tabs";
@@ -19,11 +19,18 @@ Assignez des utilisateurs ou des comptes de service à un espace pour leur donne
 :::info
 Cette action nécessite les permissions **IAM** (Identity and Access Management) suivantes :
 
-- **iam.role.create**
+- **iam.user.create**
+- **iam.user.delete**
+- **iam.serviceAccount.create**
+- **iam.serviceAccount.delete**
 
 Pour la variante depuis l'organisation décrite dans l'onglet API (assigner une identité à un espace depuis l'organisation), les permissions suivantes sont nécessaires à la place :
 
-- **iam.user.update** et **iam.serviceaccount.update**, ou **iam.space.update**
+- **iam.space.update**
+- **iam.user.update**
+- **iam.serviceAccount.update**
+
+L'assignation de l'identité requiert iam.space.update ; la modification des rôles et permissions de l'identité assignée requiert iam.user.update pour un compte utilisateur et iam.serviceAccount.update pour un compte de service.
 
 :::
 <Tabs>
@@ -118,7 +125,13 @@ Une fois l'identité assignée, ses rôles et permissions sur cet espace se modi
 
 ### Modifier les rôles et permissions de l'identité assignée
 
-https://docs.numspot.com/openapi/#tag/identity-access-management/PATCH/iam/organisations/%7BorganisationId%7D/spaces/%7BspaceId%7D/iampolicy/%7BsubjectType%7D/%7BsubjectId%7D
+Pour un compte utilisateur :
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PATCH/iam/organisations/%7BorganisationId%7D/spaces/%7BspaceId%7D/iampolicy/users/%7BsubjectId%7D
+
+Pour un compte de service :
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PATCH/iam/organisations/%7BorganisationId%7D/spaces/%7BspaceId%7D/iampolicy/serviceAccounts/%7BsubjectId%7D
 
 Le corps de la requête ajoute ou retire des rôles et des permissions via les clés `add` et `delete`. Une politique est créée implicitement si l'identité n'en a pas encore sur cet espace.
 

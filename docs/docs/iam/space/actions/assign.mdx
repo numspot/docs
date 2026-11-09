@@ -3,7 +3,7 @@ title: Assign an identity to a space - IAM
 sidebar_label: Assign an identity to a space
 sidebar_position: 3
 last_update:
-  date: 2026-11-23
+  date: 2026-11-25
 ---
 
 import Tabs from "@theme/Tabs";
@@ -19,11 +19,18 @@ Assign users or service accounts to a space to give them access to the resources
 :::info
 This action requires the following IAM (Identity and Access Management) permissions:
 
-- **iam.role.create**
+- **iam.user.create**
+- **iam.user.delete**
+- **iam.serviceAccount.create**
+- **iam.serviceAccount.delete**
 
 For the organisation-level variant described in the API tab (assigning an identity to a space from the organisation), the following permissions are required instead:
 
-- **iam.user.update** and **iam.serviceaccount.update**, or **iam.space.update**
+- **iam.space.update**
+- **iam.user.update**
+- **iam.serviceAccount.update**
+
+Assigning the identity requires iam.space.update; modifying the roles and permissions of the assigned identity requires iam.user.update for a user account and iam.serviceAccount.update for a service account.
 
 :::
 <Tabs>
@@ -133,7 +140,13 @@ Once the identity is assigned, its roles and permissions on the space can be mod
 
 ### Modify the roles and permissions of the assigned identity
 
-https://docs.numspot.com/openapi/#tag/identity-access-management/PATCH/iam/organisations/%7BorganisationId%7D/spaces/%7BspaceId%7D/iampolicy/%7BsubjectType%7D/%7BsubjectId%7D
+For a user account:
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PATCH/iam/organisations/%7BorganisationId%7D/spaces/%7BspaceId%7D/iampolicy/users/%7BsubjectId%7D
+
+For a service account:
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PATCH/iam/organisations/%7BorganisationId%7D/spaces/%7BspaceId%7D/iampolicy/serviceAccounts/%7BsubjectId%7D
 
 The request body adds or removes roles and permissions, under the `add` and `delete` keys. A policy is implicitly created if the subject does not have one yet on the space.
 

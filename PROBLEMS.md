@@ -23,6 +23,7 @@ When a session detects a problem, it must not recur:
 | Walkthrough coachmark painting over the sticky doc title on scroll (tip z-index escaping to the root stacking context — DOC-669) | `linter/tests/walkthrough-stacking.test.js` (source pins: `isolation: isolate` on `.wrap`, tip keeps a local z-index, sticky title keeps sticky/z-index/opaque background) |
 | Multiple unit commits piling up in one PR          | Not lintable — see "One commit per Pull Request" below      |
 | Guide commands claimed as "validated end to end" but never run as published (PR #42 review) | Not lintable — see "Guide commands must be executed as published" below |
+| Permissions reference drifting from the API: `permissions.json` mapping maintained by hand, action pages declaring wrong permission families, endpoints documented without mapping, dead OpenAPI anchors, OpenAPI mirror stale (audit of 2026-10-29) | `linter/tests/permissions-mapping.test.js` (pages ↔ permissions.json ↔ mirror, errors fail + new warns fail against `linter/tests/fixtures/permissions-mapping-baseline.json`) and `linter/tests/openapi-anchors.test.js` (every `/openapi/#tag/…` anchor resolves against the mirror). Known API-side drift lives in the baseline fixture, pruned as the teams fix it |
 
 ## Branching — always start from up-to-date `main` (not lintable)
 
