@@ -1,0 +1,60 @@
+---
+title: Parameter types
+description: Definitions and examples of the types used in the parameter tables of the Numspot API and Terraform provider.
+sidebar_position: 1
+draft: false
+last_update:
+  date: 2026-10-08
+---
+
+# Parameter types
+
+The parameter tables of the action pages (API and Terraform tabs) use the types described below. A single concept can carry two names depending on the context: the OpenAPI schema type on the API side, and the Terraform provider schema type on the Terraform side.
+
+## string
+
+A character string, UTF-8 encoded. Used for identifiers (`ami-…`, `subnet-…`, `i-…`), names, labels and free-form values.
+
+Examples: `ns-eco6-2c4r`, `keypair-example`.
+
+## UUID
+
+A character string in UUID format (universally unique identifier), made of 36 characters in the `8-4-4-4-12` hexadecimal pattern. Used for space and organisation identifiers.
+
+Example: `123e4567-e89b-12d3-a456-426614174000`.
+
+## integer
+
+A whole number, without a decimal part. Terraform equivalent: `number`.
+
+Examples: `10` (volume size), `100` (number of IOPS).
+
+## boolean
+
+A logical value with two states: `true` or `false`. Terraform equivalent: `bool`.
+
+Example: `deletionProtection` set to `true` prevents a [VM](/docs/compute/concept) from being deleted.
+
+## enum
+
+A character string restricted to a closed list of allowed values, defined by the API. Any other value is rejected.
+
+Example: `performance` only accepts `medium`, `high` or `highest`.
+
+## array
+
+An ordered list of values, which can contain duplicates. Terraform equivalent: `list`.
+
+Example: `securityGroupIds` holds one or more [security group](/docs/compute/security-groups/concepts/concept-sg) identifiers.
+
+## set
+
+A collection of unique values, with no guaranteed order: each value appears only once. Terraform equivalent: `set`.
+
+Example: the tags of a resource form a set of key/value pairs.
+
+## object
+
+A named data structure grouping several nested fields, each with its own type. Terraform equivalent: `object` (or `single_nested` in the provider schema).
+
+Example: `placement` groups `tenancy` and `availabilityZoneName`.
