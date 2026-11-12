@@ -540,3 +540,51 @@ test('the /search page carries the same syntax help next to its input', { skip: 
   assert.match(css, /\.search-query-row \{/,
     'the search page input row must be a flex line (input stretches, button right)');
 });
+
+// ---------------------------------------------------------------------------
+// Site-search analytics (decision D-028) — the patched SearchBar/SearchPage
+// report the standard `search` event, naming the entry point: chip
+// (home keywords), dropdown (picked suggestion), see_all_results (the user
+// left the dropdown for the full page) and search_page (typed directly).
+// JSX cannot be required from Node, so pin the source text like above.
+// ---------------------------------------------------------------------------
+
+test('the search page reports the search event per settled query', { skip: !hasDeps && 'node_modules absent' }, () => {
+  const src = read(path.join(PKG, 'dist/client/client/theme/SearchPage/SearchPage.jsx'));
+  assert.match(src, /import \{ consumeSearchSource, trackSearch, trackSearchNoResults, \} from "@site\/src\/utils\/analytics"/,
+    'the /search page must import the shared analytics helpers');
+  assert.match(src, /trackSearch\(searchQuery,/,
+    'the /search page must report the `search` event with the settled query');
+  assert.match(src, /consumeSearchSource\(\)/,
+    'the /search page must consume the entry-point marker written by the chips and the "See all results" link');
+  assert.match(src, /trackSearchNoResults\(searchQuery\)/,
+    'the /search page must report `search_no_results` when the settled query returns nothing');
+  // The event fires on a trailing debounce: typing re-runs the query effect
+  // on every keystroke, an event per keystroke would flood the reports.
+  assert.match(src, /ga4Timer\.current = setTimeout\(/,
+    'the search event must be debounced (one per settled query, not one per keystroke)');
+});
+
+test('the search bar marks the see-all intent and reports picked results', { skip: !hasDeps && 'node_modules absent' }, () => {
+  const src = read(path.join(PKG, 'dist/client/client/theme/SearchBar/SearchBar.jsx'));
+  assert.match(src, /import \{ markSearchSource, trackSearch, \} from "@site\/src\/utils\/analytics"/,
+    'the search bar must import the shared analytics helpers');
+  assert.match(src, /markSearchSource\(\{ method: "see_all_results", emptyResults: isEmpty \}\)/,
+    'the "See all results" link must mark the entry point before navigating to /search');
+  assert.match(src, /trackSearch\(tokens\.join\(" "\), "dropdown"\)/,
+    'picking a dropdown result must report the `search` event itself — that navigation goes to a doc page, never to /search');
+});
+
+test('home chips mark the search entry point', () => {
+  const homeSearch = read(path.join(REPO_ROOT, 'src', 'components', 'HomeSearch', 'index.tsx'));
+  assert.match(homeSearch, /markSearchSource\(\{ method: "chip" \}\)/,
+    'home keyword chips must mark the entry point so /search reports method "chip"');
+});
+
+test('the shared analytics helpers no-op without gtag', () => {
+  const analytics = read(path.join(REPO_ROOT, 'src', 'utils', 'analytics.ts'));
+  assert.match(analytics, /typeof gtag !== "function"\) return/,
+    'sendGtagEvent must no-op when gtag is absent (dev build, SSR) — same contract as PageFeedback');
+  assert.match(analytics, /sendGtagEvent\("search"/,
+    'the `search` event is the standard one, `search_term` is its param');
+});

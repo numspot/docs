@@ -10,18 +10,15 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
+import { sendGtagEvent } from "../../utils/analytics";
 import styles from "./styles.module.css";
 
 type Vote = "yes" | "no";
 
-// Sends the event to GA4 via gtag (injected by @docusaurus/plugin-google-gtag
-// only in the production build). In dev, gtag is absent: no-op.
+// Sends the event to the site analytics via gtag (injected by the docs gtag
+// plugin only in the production build). In dev, gtag is absent: no-op.
 function sendFeedbackEvent(page: string, helpful: Vote, comment?: string): void {
-  if (typeof window === "undefined") return;
-  const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void })
-    .gtag;
-  if (typeof gtag !== "function") return;
-  gtag("event", "page_feedback", {
+  sendGtagEvent("page_feedback", {
     page_path: page,
     helpful,
     ...(comment ? { comment } : {}),
@@ -65,7 +62,8 @@ export default function PageFeedback(): React.ReactNode {
   };
 
   // "Skip": the "No" vote is intentional, the user just chooses not to leave
-  // a comment. Record the "no" vote (without comment) in GA4, then close the
+  // a comment. Record the "no" vote (without comment) in the site analytics,
+  // then close the
   // modal and show the "Thank you" state.
   const skipComment = (): void => {
     sendFeedbackEvent(pathname, "no");
