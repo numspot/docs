@@ -99,6 +99,7 @@ Cette action nécessite les permissions IAM (Identity and Access Management) sui
 
     - la restauration crée un nouveau cluster ; le cluster source n'est pas modifié ;
     - les champs `databaseName`, `user` et `extensions` du corps de la requête sont ignorés et remplacés par les valeurs du cluster source ;
+    - les extensions installées par Numspot sont provisionnées dans le schéma dédié `extensions`, utilisable en lecture par tous les rôles — voir [Utiliser les extensions PostgreSQL](/docs/managed-services/postgresql/guides/extensions/) ;
     - le nouveau cluster est créé avec l'état `CREATING`, puis passe à l'état `RUNNING` une fois prêt.
 
 ### Exemple de réponse

@@ -1,0 +1,128 @@
+---
+title: Use PostgreSQL extensions - Managed PostgreSQL
+description: Where extensions live on managed PostgreSQL clusters, how to use them, and how dumps and restores behave
+sidebar_position: 10
+draft: false
+last_update:
+  date: 2026-11-13
+---
+
+# Use PostgreSQL extensions
+
+The managed PostgreSQL service ships a set of PostgreSQL extensions on every [cluster](/docs/managed-services/postgresql/concepts/). Some are provisioned and managed by Numspot, some are selected at cluster creation (see [Create a PostgreSQL cluster](/docs/managed-services/postgresql/actions/create/)), and some you can install yourself.
+
+All extensions installed by Numspot live in a dedicated PostgreSQL schema named `extensions`. This page explains where extensions live, how to use them and what to expect from `pg_dump` and restore operations.
+
+## The `extensions` schema
+
+Numspot installs every managed extension into the dedicated `extensions` schema instead of the default `public` schema:
+
+- the schema is owned and maintained by Numspot;
+- it is read-usable by every database role (`USAGE` privilege): you can query and call all extension objects, but you cannot create, replace or drop objects inside it;
+- the schema is present in every database of your cluster, including databases you create later.
+
+### Unqualified access keeps working
+
+The default `search_path` of every database is `"$user", public, extensions`, so you can use extension objects without any schema prefix:
+
+```sql
+-- resolves to the extensions schema
+SELECT * FROM pg_stat_statements;
+SELECT digest('data', 'sha256');
+```
+
+You can also reference extension objects explicitly:
+
+```sql
+SELECT * FROM extensions.pg_stat_statements;
+SELECT extensions.digest('data', 'sha256');
+```
+
+:::note
+Your own unqualified `CREATE TABLE`, `CREATE FUNCTION` and similar statements keep targeting the `public` schema: `extensions` is last in the `search_path` and you have no create rights on it.
+:::
+
+### Extensions installed by Numspot
+
+Two extensions are provisioned by Numspot in every database of every cluster and are managed by the platform:
+
+| Extension | Purpose |
+| --- | --- |
+| `pgaudit` | Audit logging of database activity (session and object level) |
+| `pg_stat_statements` | Query performance statistics |
+
+These extensions are owned by the platform: they cannot be dropped or moved by database users, and they are excluded from logical dumps of your databases as user objects.
+
+## Installing an extension yourself
+
+Trusted extensions are extensions that can be installed without superuser privileges: any role holding the `CREATE` privilege on the database can install them. Your primary admin user is not a superuser, but it holds this privilege (it owns the default database), so you can install these extensions yourself. Connect with this user and specify the target schema:
+
+```sql
+CREATE EXTENSION pgcrypto SCHEMA extensions;
+```
+
+An extension installed this way is created in the `extensions` schema, alongside the Numspot-managed ones. You can also install a trusted extension into one of your own schemas if you prefer to keep it separated from the platform objects:
+
+```sql
+CREATE SCHEMA my_app_extras;
+CREATE EXTENSION pg_trgm SCHEMA my_app_extras;
+```
+
+:::warning
+Omitting the `SCHEMA` clause installs the extension into your current default schema (`public`). Prefer an explicit `SCHEMA` clause so the placement does not depend on session settings.
+:::
+
+### Trusted extensions available for self-installation
+
+The following trusted extensions are available on PostgreSQL 16, 17 and 18 clusters and can be installed by your primary admin user:
+
+| Extension | Description |
+| --- | --- |
+| `btree_gin` | B-tree equivalent functions for GIN indexes |
+| `btree_gist` | B-tree equivalent functions for GiST indexes |
+| `citext` | Case-insensitive text type |
+| `cube` | Data type for multidimensional cubes |
+| `dict_int` | Example of a full-text search dictionary |
+| `fuzzystrmatch` | Fuzzy string matching (Levenshtein, Soundex, ...) |
+| `hstore` | Key-value pairs stored in a single column |
+| `intarray` | Integer arrays functions and operators |
+| `isn` | International standard numbers (ISBN, EAN13, ...) |
+| `lo` | Large object maintenance |
+| `ltree` | Hierarchical label trees |
+| `pg_trgm` | Trigram-based text similarity |
+| `pgcrypto` | Cryptographic functions |
+| `seg` | Floating-point intervals |
+| `tablefunc` | Crosstab and other table functions |
+| `tcn` | Triggered change notifications |
+| `tsm_system_rows` | TABLESAMPLE method (rows) |
+| `tsm_system_time` | TABLESAMPLE method (time) |
+| `unaccent` | Text search dictionary removing accents |
+| `uuid-ossp` | UUID generators |
+
+For the full catalog of PostgreSQL extensions and their documentation, refer to the [official PostgreSQL documentation](https://www.postgresql.org/docs/current/contrib.html).
+
+Other extensions (for example `pgvector` or `TimescaleDB`) are enabled through the cluster creation options; see [Create a PostgreSQL cluster](/docs/managed-services/postgresql/actions/create/). Extensions that are neither listed above nor available at creation time require Numspot to install them: contact support.
+
+## Dumps, restores and migrations
+
+`pg_dump` records where each extension is installed: a dump of your database contains the `extensions` schema and each extension with its target schema, for example:
+
+```sql
+CREATE SCHEMA extensions;
+CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA extensions;
+```
+
+Restoring such a dump recreates the same layout on a new managed PostgreSQL cluster, including restores performed by your own migration tooling.
+
+If your application uses schema-qualified references to extension objects, note that the location changes from `public` to `extensions` for the extensions that Numspot manages and installs. Update statements such as `public.pg_stat_statements` to unqualified references (recommended: the `search_path` handles the resolution) or to `extensions.pg_stat_statements`.
+
+:::info
+Unqualified references do not need any change: the `search_path` of every database resolves extension objects in the `extensions` schema automatically.
+:::
+
+## Limitations
+
+- You cannot create, alter or drop objects in the `extensions` schema: it is reserved for platform-managed objects and has `USAGE` access only.
+- Extensions managed by Numspot (`pgaudit`, `pg_stat_statements`) cannot be dropped, moved or re-installed by database users.
+- The extensions selectable at cluster creation ([TimescaleDB](/docs/managed-services/postgresql/actions/create/) and [Vector](/docs/managed-services/postgresql/actions/create/)) must be chosen when the cluster is created and cannot be added or removed afterwards; see [Create a PostgreSQL cluster](/docs/managed-services/postgresql/actions/create/).
+- TimescaleDB manages its own internal schemas and is not installed in the `extensions` schema.
