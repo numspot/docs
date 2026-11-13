@@ -1,6 +1,16 @@
 {
   "entries": [
     {
+      "service": "PostgreSQL",
+      "status": "added",
+      "date": "2026-11-13",
+      "title": "Guide : utiliser les extensions PostgreSQL et le schéma extensions dédié",
+      "description": "Un nouveau guide documente l'emplacement des extensions sur les clusters PostgreSQL managés : toutes les extensions installées par Numspot sont placées dans un schéma \"extensions\" dédié (utilisable en lecture par tous les rôles ; seuls la plateforme et l'installation d'extensions « trusted » peuvent y créer des objets), le search_path des bases les résout automatiquement, et les extensions « trusted » peuvent être installées par votre utilisateur admin principal (sans superutilisateur) avec une clause SCHEMA explicite. Le guide documente aussi le comportement de pg_dump : les dumps mémorisent le schéma extensions et le restaurent tel quel, y compris via les outils de migration des clients.",
+      "components": [
+        "docs"
+      ]
+    },
+    {
       "service": "Secret Manager",
       "status": "added",
       "date": "2026-11-07",

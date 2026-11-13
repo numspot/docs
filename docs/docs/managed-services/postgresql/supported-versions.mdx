@@ -56,6 +56,8 @@ Numspot notifies its customers **several months before the end of support** of a
 
 Major updates (for example, from PostgreSQL 17 to PostgreSQL 18) require the creation of a new cluster. Numspot recommends testing the compatibility of your applications before performing a major update.
 
+When you migrate your data to the new cluster (for example with `pg_dump`/`pg_restore`), note that the extensions installed by Numspot live in a dedicated `extensions` schema: unqualified references keep working, while references qualified with `public.` (for example `public.pg_stat_statements`) must be updated — see [Use PostgreSQL extensions](/docs/managed-services/postgresql/guides/extensions/).
+
 :::warning
 Numspot cannot guarantee backward compatibility between major versions. It is the customer's responsibility to verify that their applications are compatible with the new version before any migration.
 :::
