@@ -1,6 +1,16 @@
 {
   "entries": [
     {
+      "service": "PostgreSQL",
+      "status": "added",
+      "date": "2026-11-13",
+      "title": "Guide: use PostgreSQL extensions and the dedicated extensions schema",
+      "description": "A new guide documents where extensions live on managed PostgreSQL clusters: all extensions installed by Numspot are placed in a dedicated \"extensions\" schema (readable by every role; only the platform, or the installation of trusted extensions, can create objects there), the database search_path resolves them automatically, and trusted extensions can be installed by your primary admin user (no superuser required) with an explicit SCHEMA clause. The guide also documents the pg_dump behavior: dumps record the extensions schema and restore it as-is, including restores performed by migration tooling.",
+      "components": [
+        "docs"
+      ]
+    },
+    {
       "service": "Secret Manager",
       "status": "added",
       "date": "2026-11-07",
