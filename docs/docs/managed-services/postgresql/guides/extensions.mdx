@@ -4,7 +4,7 @@ description: Where extensions live on managed PostgreSQL clusters, how to use th
 sidebar_position: 10
 draft: false
 last_update:
-  date: 2026-11-13
+  date: 2026-11-16
 ---
 
 # Use PostgreSQL extensions
@@ -13,7 +13,7 @@ The managed PostgreSQL service ships a set of PostgreSQL extensions on every [cl
 
 All extensions installed by Numspot live in a dedicated PostgreSQL schema named `extensions`. This page explains where extensions live, how to use them and what to expect from `pg_dump` and restore operations.
 
-## The `extensions` schema
+## The extensions schema
 
 Numspot installs every managed extension into the dedicated `extensions` schema instead of the default `public` schema:
 
@@ -51,7 +51,7 @@ Two extensions are provisioned by Numspot in every database of every cluster and
 | `pgaudit` | Audit logging of database activity (session and object level) |
 | `pg_stat_statements` | Query performance statistics |
 
-These extensions are owned by the platform: they cannot be dropped or moved by database users, and they are excluded from logical dumps of your databases as user objects.
+These extensions are owned by the platform: they cannot be dropped or moved by database users. They are not silently omitted from your logical dumps either: `pg_dump` emits a `CREATE EXTENSION ... WITH SCHEMA extensions` statement and a `COMMENT ON EXTENSION` statement for each of them (see [Dumps, restores and migrations](#dumps-restores-and-migrations)).
 
 ## Installing an extension yourself
 
@@ -114,6 +114,20 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA extensions;
 
 Restoring such a dump recreates the same layout on a new managed PostgreSQL cluster, including restores performed by your own migration tooling.
 
+### Expected errors during a restore
+
+Every managed database already contains the `extensions` schema and the platform-managed extensions. A restore therefore reports a small, expected set of errors — they are harmless and can be ignored in continue mode (`pg_restore` without `--exit-on-error`, `psql` without `ON_ERROR_STOP`):
+
+- `schema "extensions" already exists` — emitted by the `CREATE SCHEMA extensions` statement of the dump, because the platform pre-provisions the schema on every database;
+- `must be owner of extension <name>` — emitted by the `COMMENT ON EXTENSION` statements, because the platform-managed extensions are owned by Numspot.
+
+Restores performed with `pg_restore --clean` additionally report, for the same reasons:
+
+- `must be owner of extension <name>` on the emitted `DROP EXTENSION` statements;
+- `must be owner of schema extensions` on the emitted `DROP SCHEMA extensions` statement — `pg_dump` archives a `DROP` for the pre-provisioned schema.
+
+Strict modes (`pg_restore --exit-on-error`, `psql -v ON_ERROR_STOP=1`) abort at the first of these errors. Run a strict restore only if you can tolerate the abort, and treat any error outside the list above as a real problem worth investigating.
+
 If your application uses schema-qualified references to extension objects, note that the location changes from `public` to `extensions` for the extensions that Numspot manages and installs. Update statements such as `public.pg_stat_statements` to unqualified references (recommended: the `search_path` handles the resolution) or to `extensions.pg_stat_statements`.
 
 :::info
@@ -125,4 +139,4 @@ Unqualified references do not need any change: the `search_path` of every databa
 - You cannot create, alter or drop objects in the `extensions` schema: it is reserved for platform-managed objects and has `USAGE` access only.
 - Extensions managed by Numspot (`pgaudit`, `pg_stat_statements`) cannot be dropped, moved or re-installed by database users.
 - The extensions selectable at cluster creation ([TimescaleDB](/docs/managed-services/postgresql/actions/create/) and [Vector](/docs/managed-services/postgresql/actions/create/)) must be chosen when the cluster is created and cannot be added or removed afterwards; see [Create a PostgreSQL cluster](/docs/managed-services/postgresql/actions/create/).
-- TimescaleDB manages its own internal schemas and is not installed in the `extensions` schema.
+- TimescaleDB is installed in the `public` schema (pinned placement — it cannot be relocated to `extensions`) and manages its own internal schemas (`_timescaledb_*`).
