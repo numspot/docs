@@ -297,12 +297,10 @@
     },
     "gpu": {
       "type": [
-        "ACRONYM",
-        "RESOURCE"
+        "ACRONYM"
       ],
       "correct_form": "GPU",
-      "meaning": "Graphics Processing Unit",
-      "concept_page": "/docs/compute/gpu/concept"
+      "meaning": "Graphics Processing Unit"
     },
     "health_check": {
       "type": [

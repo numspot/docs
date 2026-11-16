@@ -1,6 +1,8 @@
 ---
 title: Types de VM
 sidebar_position: 4
+last_update:
+  date: 2026-11-16
 ---
 
 # Types de VM
@@ -137,7 +139,7 @@ Ces VM offrent généralement un nombre élevé de cœurs de processeur et une c
 
 ### Usage inférence (Inference)  
 Les VM d'inférence sont optimisées pour les charges de travail d'inférence, en offrant des performances élevées pour l'exécution de modèles d'intelligence artificielle en production.
-Elles exploitent des processeurs haute performance — CPU ou [GPU (Graphics Processing Unit)](/docs/compute/gpu/concept/) selon les besoins — afin de garantir une latence minimale et un débit élevé lors du traitement de grandes volumétries de requêtes.
+Elles exploitent des processeurs haute performance — CPU ou GPU (Graphics Processing Unit) selon les besoins — afin de garantir une latence minimale et un débit élevé lors du traitement de grandes volumétries de requêtes.
 Ces VM sont particulièrement adaptées aux cas d'usage tels que la prédiction en temps réel, l'analyse de données embarquée, le traitement d'images ou de langage naturel, ainsi que le déploiement de modèles d'apprentissage automatique optimisés pour l'inférence à grande échelle. 
 
 | Type de VM       | Taille de la VM    | Description         | vCPU | Mémoire (Gio) | Indice de performance |
@@ -148,16 +150,3 @@ Ces VM sont particulièrement adaptées aux cas d'usage tels que la prédiction 
 | Usage inférence  | ns-inf7-32c256r-2l40g | 32vCPU / 256GB / 2x L40 | 32 | 256 | La plus élevée (1) |
 | Usage inférence  | ns-inf7-16c128r-1l40g | 16vCPU / 128GB / 1x L40 | 16 | 128 | La plus élevée (1) |
 
-{/* ## VM GPU
-
-Les VM équipées de processeurs graphiques (GPU) sont des instances de calcul optimisées pour les charges de travail nécessitant une puissance de traitement graphique importante, telles que l'apprentissage automatique, le rendu 3D et l'analyse de données volumineuses.
-
-Les VM GPU sont équipées de cartes graphiques dédiées et de mémoire dédiée pour le traitement graphique, ce qui leur permet de gérer des charges de travail graphiques importantes sans affecter les performances du reste de l'instance. Elles sont disponibles dans différentes tailles et configurations, en fonction des besoins de votre application.
-
-| Type de VM       | Taille de la VM    | Description         | vCPU | Mémoire (Gio) | GPU Qty | GPU type       |
-| ---------------- | ------------------ | ------------------- | ---- | ------------ | ------- | -------------- |
-| GPU              | ns-gpu6@p6-2c16r   | 2vCPU / 16GB - p6   | 2    | 16           | 2       | Nvidia P6      |
-| GPU              | ns-gpu6@p100-2c16r | 2vCPU / 16GB - p100 | 2    | 16           | 2       | Nvidia P100    |
-| GPU              | ns-gpu6@v100-2c16r | 2vCPU / 16GB - v100 | 2    | 16           | 2       | Nvidia V100    |
-| GPU              | ns-gpu6@a100-2c16r | 2vCPU / 16GB - a100 | 2    | 16           | 2       | Nvidia A100-80 |
-| GPU              | ns-gpu6@h100-2c16r | 2vCPU / 16GB - H100 | 2    | 16           | 2       | Nvidia H100    | */}

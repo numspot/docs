@@ -1,6 +1,8 @@
 ---
 title: VM types
 sidebar_position: 4
+last_update:
+  date: 2026-11-16
 ---
 
 # VM types
@@ -137,7 +139,7 @@ These VM generally offer a high number of processor cores and increased processi
 
 ### Inference use (Inference)  
 Inference VM are optimized for inference workloads, offering high performance for running artificial-intelligence models in production.
-They use high-performance processors — CPU or [GPU (Graphics Processing Unit)](/docs/compute/gpu/concept/) as needed — to ensure minimal latency and high throughput when processing large volumes of requests.
+They use high-performance processors — CPU or GPU (Graphics Processing Unit) as needed — to ensure minimal latency and high throughput when processing large volumes of requests.
 These VM are particularly suited to use cases such as real-time prediction, embedded data analysis, image or natural-language processing, as well as the deployment of machine learning models optimized for inference at scale. 
 
 | VM type          | VM size            | Description         | vCPU | Memory (GiB)  | Performance index     |
@@ -148,16 +150,3 @@ These VM are particularly suited to use cases such as real-time prediction, embe
 | Inference use    | ns-inf7-32c256r-2l40g | 32vCPU / 256GB / 2x L40 | 32 | 256 | Highest (1) |
 | Inference use    | ns-inf7-16c128r-1l40g | 16vCPU / 128GB / 1x L40 | 16 | 128 | Highest (1) |
 
-{/* ## GPU VMs
-
-VMs equipped with graphics processing units (GPUs) are compute instances optimized for workloads that require significant graphics processing power, such as machine learning, 3D rendering and large-scale data analysis.
-
-GPU VMs are equipped with dedicated graphics cards and dedicated memory for graphics processing, which lets them handle heavy graphics workloads without affecting the performance of the rest of the instance. They are available in different sizes and configurations, depending on your application's needs.
-
-| VM type          | VM size            | Description         | vCPU | Memory (GiB)  | GPU Qty | GPU type       |
-| ---------------- | ------------------ | ------------------- | ---- | ------------ | ------- | -------------- |
-| GPU              | ns-gpu6@p6-2c16r   | 2vCPU / 16GB - p6   | 2    | 16           | 2       | Nvidia P6      |
-| GPU              | ns-gpu6@p100-2c16r | 2vCPU / 16GB - p100 | 2    | 16           | 2       | Nvidia P100    |
-| GPU              | ns-gpu6@v100-2c16r | 2vCPU / 16GB - v100 | 2    | 16           | 2       | Nvidia V100    |
-| GPU              | ns-gpu6@a100-2c16r | 2vCPU / 16GB - a100 | 2    | 16           | 2       | Nvidia A100-80 |
-| GPU              | ns-gpu6@h100-2c16r | 2vCPU / 16GB - H100 | 2    | 16           | 2       | Nvidia H100    | */}

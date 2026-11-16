@@ -1,6 +1,17 @@
 {
   "entries": [
     {
+      "service": "Compute",
+      "status": "removed",
+      "date": "2026-11-16",
+      "title": "GPU documentation removed",
+      "description": "The Compute GPU section is removed from the documentation: the GPU concepts page (gpu/concept) and the three action pages — allocating-releasing, attaching-detaching and modifying — no longer exist. Each removed URL keeps answering as a noindex redirect to the Compute concepts page.",
+      "components": [
+        "api",
+        "docs"
+      ]
+    },
+    {
       "service": "Secret Manager",
       "status": "added",
       "date": "2026-11-07",

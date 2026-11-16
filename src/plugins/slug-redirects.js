@@ -61,6 +61,27 @@ const DELETED_PAGES = [
   // the docs home carries `slug: /`, so /en/ was the English homepage and
   // now answers at /.
   ["en", ""],
+  // Compute GPU section removed (flexible GPU no longer offered): the four
+  // pages keep answering as noindex redirects to the Compute concepts page,
+  // which still exists in every locale.
+  ["docs/compute/gpu/concept", "docs/compute/concept"],
+  ["docs/compute/gpu/actions/allocating-releasing", "docs/compute/concept"],
+  ["docs/compute/gpu/actions/attaching-detaching", "docs/compute/concept"],
+  ["docs/compute/gpu/actions/modifying", "docs/compute/concept"],
+  // Pre-flip English URLs of the same pages (the English site lived under
+  // /en/docs/<slug> before the default-locale flip, internal PR #3, and the
+  // /docs/en/<slug> shape is seen in the wild): registered explicitly so
+  // each one answers with a DIRECT noindex redirect instead of the two-hop
+  // chain that the LOCALE_PREFIX_REDIRECTS mirroring would produce through
+  // the stubs above.
+  ["en/docs/compute/gpu/concept", "docs/compute/concept"],
+  ["en/docs/compute/gpu/actions/allocating-releasing", "docs/compute/concept"],
+  ["en/docs/compute/gpu/actions/attaching-detaching", "docs/compute/concept"],
+  ["en/docs/compute/gpu/actions/modifying", "docs/compute/concept"],
+  ["docs/en/compute/gpu/concept", "docs/compute/concept"],
+  ["docs/en/compute/gpu/actions/allocating-releasing", "docs/compute/concept"],
+  ["docs/en/compute/gpu/actions/attaching-detaching", "docs/compute/concept"],
+  ["docs/en/compute/gpu/actions/modifying", "docs/compute/concept"],
 ];
 
 /**

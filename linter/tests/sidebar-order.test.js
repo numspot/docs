@@ -65,7 +65,6 @@ test('level 1: highlighted child first, then alphabetical (compute/vms, compute/
   const items = [
     cat('Compute', 'section-title compute', [
       cat('VM', undefined, [doc('docs/compute/vms/quickstart')]),
-      cat('GPU', undefined, [doc('docs/compute/gpu/concept')]),
       doc('docs/compute/concept', 'Concepts'),
     ]),
   ];
@@ -76,7 +75,7 @@ test('level 1: highlighted child first, then alphabetical (compute/vms, compute/
   );
   assert.deepStrictEqual(
     result[0].items.map((i) => i.label ?? i.id),
-    ['Concepts', 'VM', 'GPU'],
+    ['Concepts', 'VM'],
   );
 });
 
