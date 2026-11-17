@@ -13,6 +13,8 @@ const path = require('node:path');
 
 const {
   sortSidebarEntries,
+  injectSidebarLinks,
+  EXTERNAL_SIDEBAR_LINKS,
   HIGHLIGHTED_SIDEBAR_ENTRIES,
 } = require('../../src/components/sidebar-order.js');
 
@@ -168,4 +170,88 @@ test('every highlight key resolves to a real docs entry (typo = silent no-op)', 
     }
   }
   assert.deepStrictEqual(problems, [], `invalid highlight keys:\n${problems.join('\n')}`);
+});
+
+test('external links are injected at level 0, right after their anchor', () => {
+  // Real generator shape: doc items carry NO `label` (the sort keys on the
+  // id segment) — the link must NOT take part in that sort; it is spliced
+  // right after its anchor entry.
+  const items = [
+    cat('Support', 'section-title support', [doc('docs/support/general')]),
+    cat('FAQ', 'section-title faq', [doc('docs/faq/general')]),
+  ];
+  const docs = [
+    { id: 'docs/support/general', sourceDirName: 'docs/support' },
+    { id: 'docs/faq/general', sourceDirName: 'docs/faq' },
+  ];
+
+  const en = structuredClone(items);
+  injectSidebarLinks(en, docs, 'en');
+  // Level 0: the link is spliced right below its anchor (Support), leaving
+  // the sorted order of the other entries untouched — "Console demo" is a
+  // standalone tool entry, not a sibling doc page.
+  assert.deepStrictEqual(
+    en.map((i) => i.label),
+    ['Support', 'Console demo', 'FAQ'],
+  );
+  assert.deepStrictEqual(
+    en[1],
+    { type: 'link', label: 'Console demo', href: 'https://console-demo.eu-west-2.numspot.com/en/dashboard' },
+  );
+});
+
+test('external link labels and hrefs are locale-aware', () => {
+  const items = [
+    cat('Support', 'section-title support', [doc('docs/support/general')]),
+  ];
+  const docs = [{ id: 'docs/support/general', sourceDirName: 'docs/support' }];
+  injectSidebarLinks(items, docs, 'fr');
+
+  assert.deepStrictEqual(
+    items[1],
+    {
+      type: 'link',
+      label: 'Démo console',
+      href: 'https://console-demo.eu-west-2.numspot.com/fr/dashboard',
+    },
+  );
+});
+
+test('an unknown afterKey is skipped silently (no crash, no link)', () => {
+  const items = [cat('Support', 'section-title support', [])];
+  const docs = [{ id: 'docs/support/general', sourceDirName: 'docs/support' }];
+  injectSidebarLinks(items, docs, 'en', [
+    { afterKey: 'renamed-away', label: { default: 'X' }, href: { default: 'https://example.com' } },
+  ]);
+  assert.deepStrictEqual(items.map((i) => i.label), ['Support']);
+});
+
+test('every external link anchor resolves to a real docs entry (typo = silent no-op)', () => {
+  // Same guard as HIGHLIGHTED_SIDEBAR_ENTRIES, walking every segment so a
+  // typo at any depth fails loudly.
+  for (const { afterKey } of EXTERNAL_SIDEBAR_LINKS) {
+    const problems = [];
+    const segments = afterKey.split('/');
+    let dir = DOCS_DIR;
+    for (const [index, segment] of segments.entries()) {
+      const isLast = index === segments.length - 1;
+      const asDir =
+        fs.existsSync(path.join(dir, segment)) &&
+        fs.statSync(path.join(dir, segment)).isDirectory();
+      const asPage = ['.md', '.mdx'].some((ext) =>
+        fs.existsSync(path.join(dir, `${segment}${ext}`)),
+      );
+      if (isLast) {
+        if (!asDir && !asPage) {
+          problems.push(`${afterKey}: "${segment}" matches no folder or page in ${dir.replace(`${ROOT}/`, '')}`);
+        }
+      } else if (!asDir) {
+        problems.push(`${afterKey}: "${segment}" is not a folder in ${dir.replace(`${ROOT}/`, '')}`);
+        break;
+      } else {
+        dir = path.join(dir, segment);
+      }
+    }
+    assert.deepStrictEqual(problems, [], `invalid external link anchors:\n${problems.join('\n')}`);
+  }
 });
