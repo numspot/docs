@@ -1,6 +1,17 @@
 {
   "entries": [
     {
+      "service": "Block Storage",
+      "status": "fixed",
+      "date": "2026-11-19",
+      "title": "Volume resize works on running VMs and tier change documented",
+      "description": "The Increase the size of a volume page now states that resizing works while the volume is attached to a running VM (hot modification) and documents the asynchronous behavior (previous value and taskId returned, new size applied within seconds to minutes). A new Change the volume tier section documents switching between the Magnetic, Performance and Enterprise tiers at any time, with or without a running VM, including the IOPS requirement for Enterprise volumes (100 to 13,000 IOPS, maximum ratio of 300 IOPS per GB). A snapshot recommendation before any modification and a note that volumes cannot be shrunk were added, and the guest OS file system extension steps were clarified (growpart, resize2fs, xfs_growfs on the mount point).",
+      "components": [
+        "console",
+        "docs"
+      ]
+    },
+    {
       "service": "Secret Manager",
       "status": "added",
       "date": "2026-11-07",
