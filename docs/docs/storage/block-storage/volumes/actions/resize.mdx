@@ -3,7 +3,7 @@ title: Increase the size of a volume
 sidebar_position: 4
 draft: false
 last_update:
-  date: 2026-10-15
+  date: 2026-11-20
 ---
 
 import Tabs from '@theme/Tabs';
@@ -16,8 +16,24 @@ You can increase the storage capacity of an existing `volume` without losing the
 You can modify the size of any type of `volume`, whether it is a system `volume` on which the operating system of the [VM (Virtual Machine)](/docs/compute/concept/) is installed, or a secondary `volume` of the VM.
 
 :::info
-For VM created from an Image, the cloud-init package automatically adjusts the file system of the system `volume` after its size has been modified. For more information, see the official cloud-init documentation (in English).
+The modification works whether the `volume` is attached to a running VM (**hot** modification) or not (**cold** modification). It is asynchronous: the API returns the previous value and a `taskId`, and the new size is applied within a few seconds to a few minutes. You can check the current size of the `volume` at any time from the **Volumes** dashboard or with the `ReadVolumes` method. You can only increase the size of a `volume`: it is not possible to reduce it.
 :::
+
+:::warning
+Before modifying a `volume`, we recommend that you create a [snapshot](/docs/storage/block-storage/snapshots/actions/create/) of it, in case a problem occurs during the process.
+:::
+
+## Change the volume tier
+
+You can also change the **tier** of a `volume` (Magnetic, Performance or Enterprise) at any time, whether the `volume` is attached to a running VM or not:
+
+1. From the left-hand side menu, click **Storage** → **[Block Storage](/docs/storage/block-storage/concepts/)** → **Volumes**.
+2. Select the `volume` and click **Modify** (or **Change tier**).
+3. In the "Type" field, select the new tier.
+4. If you select **Enterprise**, you must also set the number of **IOPS** (from `100` to `13,000`, with a maximum performance ratio of 300 IOPS per GB).
+5. Click **Modify**.
+
+The `volume` is then modified with the performance characteristics and the billing of the new tier. For more information, see the [catalog](/docs/catalog/concepts/).
 
 ## Permissions
 
@@ -33,101 +49,70 @@ This action requires the following **IAM** (Identity and Access Management) perm
 
 ## Linux {#tabhead-linux}
 
-## Increase the size of a system volume in Linux
+### Increase the size of a volume
 
-1. Stop the VM.
-2. From the left-hand side menu, click **Storage** → **[Block Storage](/docs/storage/block-storage/concepts/)** → **Volumes**.
-3. Select the system `volume`.
-4. Click **Modify**.
-5. In the "Size" field, enter the new size of the `volume`.
-6. Click **Modify**.
-7. Start the VM.
+1. From the left-hand side menu, click **Storage** → **[Block Storage](/docs/storage/block-storage/concepts/)** → **Volumes**.
+2. Select the `volume`.
+3. Click **Modify**.
+4. In the "Size" field, enter the new size of the `volume` (greater than the current size).
+5. Click **Modify**.
 
-## Increase the size of a secondary volume in Linux
+    The modification is asynchronous: the new size is applied within a few seconds to a few minutes, whether the `volume` is attached to a running VM or not.
 
-### Unmount the volume
+### Extend the file system inside the VM
 
-1. Connect to the VM.
-2. (optional) To obtain the device name corresponding to the `volume` you want to unmount, run the following command to display the list of devices attached to the VM:
+The platform-side modification does not extend the file system of the `volume`. Inside the VM:
+
+1. (optional) To display the block devices and their sizes, run the following command:
     ```bash
     $ lsblk
     ```
-3. To unmount the `volume`, run the following command:
+2. If the `volume` uses a partition table, grow the partition (example for the first partition of the device):
     ```bash
-    $ sudo umount /dev/DEVICE_NAME
+    $ sudo growpart /dev/DEVICE_NAME 1
     ```
-
-### Increase the size of the volume
-
-1. Detach the `volume` from the VM.
-2. Modify the size of the `volume`.
-3. Reattach the `volume` to the VM.
-
-##### Configure the file system of the volume
-
-1. Inside the VM, to remount the `volume` on /MOUNT_POINT, run the following command:
-    ```bash
-    $ sudo mount /dev/DEVICE_NAME /MOUNT_POINT
-    ```
-2. Modify the size of the file system of the `volume`:
-    - To modify the size of an ext4 file system, run the following command:
+3. Resize the file system:
+    - To resize an ext4 file system, run the following command:
     ```bash
     $ sudo resize2fs /dev/DEVICE_NAME
     ```
-    - To modify the size of an XFS file system, run the following command:
+    - To resize an XFS file system, run the following command:
     ```bash
-    $ sudo xfs_growfs /dev/DEVICE_NAME
+    $ sudo xfs_growfs /MOUNT_POINT
     ```
-    - (optional) Run the `df -hT` command to view the sizes of your file systems.
+4. (optional) Run the `df -hT` command to view the sizes of your file systems.
 
 The file system of the `volume` is configured.
+
+:::info
+For VM created from an Image, the cloud-init package automatically adjusts the file system of the system `volume` at the next boot after its size has been modified. For more information, see the official cloud-init documentation (in English).
+:::
 
 </TabItem>
 <TabItem value="Windows">
 
 ## Windows {#tabhead-windows}
 
-## Increase the size of a system volume in Windows
+### Increase the size of a volume
 
-### Increase the size of the volume
+1. From the left-hand side menu, click **Storage** → **[Block Storage](/docs/storage/block-storage/concepts/)** → **Volumes**.
+2. Select the `volume`.
+3. Click **Modify**.
+4. In the "Size" field, enter the new size of the `volume` (greater than the current size).
+5. Click **Modify**.
 
-1. Stop the VM.
-2. Modify the size of the `volume`. 
-3. Start the VM.
+    The modification is asynchronous: the new size is applied within a few seconds to a few minutes, whether the `volume` is attached to a running VM or not.
 
-### Configure the file system of the volume
+### Extend the file system inside the VM
 
 1. Connect to your VM.
 2. Click the **Start** menu, type "diskmgmt.msc" and click the program that appears.
 3. Right-click the `volume` and select **Extend Volume**.
 
-   The **Extend Volume Wizard** appears.
+    The **Extend Volume Wizard** appears.
 
 4. Keep the default information and click **Next**.
 5. Click **Finish** to confirm.
-
-    The `volume` is configured and its file system appears in the "Disk Management" list.
-
-## Increase the size of a secondary volume in Windows
-
-### Increase the size of the volume
-
-1. Connect to your VM.
-2. Click the **Start** menu, type "diskmgmt.msc" and click the program that appears.
-3. In the bottom left-hand panel, right-click the disk corresponding to the `volume` you want to unmount, then click **Offline**.
-4. Detach the `volume` from the VM.
-5. Modify the size of the `volume`.
-6. Reattach the `volume` to the VM. For more information, see Attach a `volume` to a VM.
-
-### Configure the file system of the volume
-
-1. Inside the VM, in the bottom left-hand panel, right-click the disk corresponding to the `volume` you want to mount, then click **Online**.
-2. Right-click the `volume` and select **Extend Volume**.
-
-    The **Extend Volume Wizard** appears.
-
-3. Keep the default information and click **Next**.
-4. Click **Finish** to confirm.
 
     The `volume` is configured and its file system appears in the "Disk Management" list.
 

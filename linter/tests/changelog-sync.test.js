@@ -27,6 +27,7 @@ const FR_PATH = path.join(
 // Approved FR -> EN service name translations. A new service must be added
 // here in the same commit that introduces it in the changelogs.
 const SERVICE_TRANSLATIONS = {
+  'Block Storage': 'Block Storage',
   Compute: 'Compute',
   Connectivité: 'Connectivity',
   'Container Registry': 'Container Registry',

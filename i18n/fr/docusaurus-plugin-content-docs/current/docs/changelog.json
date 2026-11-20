@@ -1,6 +1,17 @@
 {
   "entries": [
     {
+      "service": "Block Storage",
+      "status": "fixed",
+      "date": "2026-11-19",
+      "title": "Redimensionnement à chaud et changement de type documentés",
+      "description": "La page Augmenter la taille d'un volume indique désormais que le redimensionnement fonctionne sur un volume attaché à une VM démarrée (modification à chaud) et documente le comportement asynchrone (valeur précédente et taskId renvoyés, nouvelle taille appliquée en quelques secondes à quelques minutes). Une nouvelle section Changer le type d'un volume documente le passage entre les types Magnetic, Performance et Enterprise à tout moment, avec ou sans VM démarrée, y compris l'exigence d'IOPS pour les volumes Enterprise (100 à 13 000 IOPS, ratio maximum de 300 IOPS par Go). Une recommandation de snapshot avant modification et une note sur l'impossibilité de réduire la taille ont été ajoutées, et les étapes d'extension du système de fichiers côté OS ont été précisées (growpart, resize2fs, xfs_growfs sur le point de montage).",
+      "components": [
+        "console",
+        "docs"
+      ]
+    },
+    {
       "service": "Secret Manager",
       "status": "added",
       "date": "2026-11-07",
