@@ -97,6 +97,60 @@ const GROUP_HEAD_CLASS = [undefined, 'group-head-services', 'group-head-governan
 // nondeterministic. "fr" also sorts EN labels correctly for ASCII input.
 const collator = new Intl.Collator('fr', { sensitivity: 'base', numeric: true });
 
+// External links injected as LEVEL-0 entries, right after an existing
+// top-level entry, AFTER sorting — the demo console is a standalone tool,
+// not a support page (PR #46 review): `afterKey` names the locale-stable
+// entry (same keys as HIGHLIGHTED_SIDEBAR_ENTRIES) the link is spliced
+// below.
+//
+// `href` AND `label` are locale-aware: keyed by locale with a `default`
+// fallback. The demo console serves /fr/ and /en/ URL prefixes, so a
+// locale-aware href sends each reader to their language (user decision,
+// 2026-11-16); at level 0 the label sits next to translated FR labels
+// ("Glossaire", "Foire aux questions"), so it is localized too.
+const EXTERNAL_SIDEBAR_LINKS = [
+  {
+    afterKey: 'support',
+    label: { default: 'Console demo', fr: 'Démo console' },
+    href: {
+      default: 'https://console-demo.eu-west-2.numspot.com/en/dashboard',
+      fr: 'https://console-demo.eu-west-2.numspot.com/fr/dashboard',
+    },
+  },
+];
+
+/**
+ * Splice each external link into the top-level slice, right after the entry
+ * named by `afterKey` — AFTER the alphabetical sort, so the link is pinned
+ * to its anchor and does not take part in the ordering (it is a standalone
+ * tool, not a sibling doc page). An unknown `afterKey` is skipped silently
+ * rather than failing the build. The locale selects the label and the href
+ * among their locale maps (`default` for the fallback).
+ *
+ * @param {SidebarSortItem[]} items top-level sidebar slice, already sorted
+ * @param {readonly SidebarSortDoc[]} docs docs metadata from the generator args
+ * @param {string} currentLocale locale of the running build
+ * @param {typeof EXTERNAL_SIDEBAR_LINKS} [links] injectable for tests
+ * @returns {void} mutates `items` in place
+ */
+function injectSidebarLinks(items, docs, currentLocale, links = EXTERNAL_SIDEBAR_LINKS) {
+  const ctx = {
+    docsById: new Map(docs.map((doc) => [doc.id, doc])),
+    depth: 1,
+    highlighted: new Set(),
+  };
+  for (const { afterKey, label, href } of links) {
+    const index = items.findIndex((item) => keyOf(item, ctx) === afterKey);
+    if (index !== -1) {
+      items.splice(index + 1, 0, {
+        type: 'link',
+        label: label[currentLocale] ?? label.default,
+        href: href[currentLocale] ?? href.default,
+      });
+    }
+  }
+}
+
 /**
  * Locale-stable identity of an entry:
  *  - doc  → last id segment ("changelog" from "docs/changelog");
@@ -255,8 +309,10 @@ function sortSidebarEntries(items, docs, highlighted = HIGHLIGHTED_SIDEBAR_ENTRI
 }
 
 module.exports = {
+  EXTERNAL_SIDEBAR_LINKS,
   HIGHLIGHTED_SIDEBAR_ENTRIES,
   SIDEBAR_GROUPS,
   GROUP_HEAD_CLASS,
+  injectSidebarLinks,
   sortSidebarEntries,
 };
