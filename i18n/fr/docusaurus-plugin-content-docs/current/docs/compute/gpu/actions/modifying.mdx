@@ -2,12 +2,19 @@
 title: Modifier le comportement d'un GPU
 sidebar_position: 4
 draft: false
+last_update:
+  date: 2026-11-20
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import DeprecatedBanner from '@site/src/components/DeprecatedBanner';
 
 # Modifier le comportement d'un GPU
+
+<DeprecatedBanner title="L'offre GPU flexible est en cours d'abandon">
+**Cette page sera bientôt supprimée.** Pour vos charges de travail GPU, utilisez les [VM inférence](/docs/compute/vms/types/#inference-use-inference) : leurs GPU sont intégrés à la VM et ne nécessitent pas d'allocation préalable.
+</DeprecatedBanner>
 
 Vous pouvez spécifier si un [GPU (Graphics Processing Unit)](/docs/compute/gpu/concept/) est automatiquement libéré de votre compte lorsque la [VM (Virtual Machine)](/docs/compute/concept/) sur laquelle il est attaché est terminée.
 

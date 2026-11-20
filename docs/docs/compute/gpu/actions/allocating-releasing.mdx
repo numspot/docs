@@ -3,14 +3,19 @@ title: Allocate or release a GPU
 sidebar_position: 2
 draft: false
 last_update:
-  date: 2026-10-15
+  date: 2026-11-20
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Walkthrough from '@site/src/components/Walkthrough';
+import DeprecatedBanner from '@site/src/components/DeprecatedBanner';
 
 # Allocate or release a GPU
+
+<DeprecatedBanner title="Flexible GPU is being phased out">
+**This page will soon be removed.** For GPU workloads, use the [inference VM](/docs/compute/vms/types/#inference-use-inference) instead: their GPU are integrated into the VM and require no prior allocation.
+</DeprecatedBanner>
 
 :::note info
 You can reserve a [GPU](/docs/compute/gpu/concept/) (Graphics Processing Unit) for your account and release it at your convenience. <br/>
