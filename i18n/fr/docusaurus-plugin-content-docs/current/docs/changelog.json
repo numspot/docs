@@ -24,6 +24,17 @@
       ]
     },
     {
+      "service": "Compute",
+      "status": "deprecated",
+      "date": "2026-11-20",
+      "title": "Offre GPU flexible dépréciée : utilisez les VM inférence",
+      "description": "L'offre fGPU (flexible GPU, GPU flexible) est en cours d'abandon. Les quatre pages Compute/GPU (À propos des GPU, Allouer ou libérer, Attacher ou détacher, Modifier le comportement) affichent désormais un bandeau de dépréciation qui renvoie vers la section Usage inférence de la page Types de VM : les VM inférence embarquent des GPU intégrés (nvidia-l40, nvidia-h100, nvidia-h200), ne nécessitent pas d'allocation préalable et sont directement disponibles sur la VM. Les pages GPU restent en ligne jusqu'à leur suppression et ne sont plus maintenues.",
+      "components": [
+        "console",
+        "docs"
+      ]
+    },
+    {
       "service": "Block Storage",
       "status": "fixed",
       "date": "2026-11-19",
