@@ -4,6 +4,17 @@
       "service": "IAM",
       "status": "added",
       "date": "2026-11-23",
+      "title": "Nouvelles pages IAM : consulter et modifier votre organisation",
+      "description": "Deux nouvelles pages de la section Organisation et gestion des espaces documentent les endpoints organisation de la Client Facing Gateway : Consulter votre organisation (GET /iam/organisations, renvoie l'organisation assignée à l'identité authentifiée sous forme de liste à un élément) et Modifier votre organisation (PATCH /iam/organisations/{organisationId}, pour modifier le nom, la description et l'originalUserId), avec des exemples de requête et de réponse et les permissions requises iam.organisation.get et iam.organisation.update.",
+      "components": [
+        "api",
+        "docs"
+      ]
+    },
+    {
+      "service": "IAM",
+      "status": "added",
+      "date": "2026-11-23",
       "title": "Nouvelle page IAM : auditer les permissions d'une organisation ou d'un espace",
       "description": "Une nouvelle page d'action documente les endpoints d'audit des permissions de la Client Facing Gateway (priorité 4 de la livraison IAM, ENAB-3005/3077/3873) : lister les identités d'une organisation ou d'un espace et leurs rôles, permissions et ACL, vues depuis l'organisation, depuis l'espace lui-même ou pour un sujet précis, avec pagination (nextPageToken). La structure de la réponse (subjectId, subjectType, roles, permissions, acls) est documentée avec des exemples.",
       "components": [

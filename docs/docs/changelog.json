@@ -4,6 +4,17 @@
       "service": "IAM",
       "status": "added",
       "date": "2026-11-23",
+      "title": "New IAM pages: get and update your organisation",
+      "description": "Two new pages in the Organisation and space management section document the organisation endpoints of the Client Facing Gateway: Get your organisation (GET /iam/organisations, returns the organisation assigned to the authenticated identity as a single-element list) and Update your organisation (PATCH /iam/organisations/{organisationId}, to modify the name, the description and the originalUserId), with request and response examples and the required iam.organisation.get and iam.organisation.update permissions.",
+      "components": [
+        "api",
+        "docs"
+      ]
+    },
+    {
+      "service": "IAM",
+      "status": "added",
+      "date": "2026-11-23",
       "title": "New IAM page: audit the permissions of an organisation or a space",
       "description": "A new action page documents the permission-audit endpoints of the Client Facing Gateway (priority 4 of the IAM delivery note, ENAB-3005/3077/3873): listing the identities of an organisation or a space and their roles, permissions and ACLs, viewed from the organisation, from the space itself, or for one specific subject, with pagination (nextPageToken). The response structure (subjectId, subjectType, roles, permissions, acls) is documented with examples.",
       "components": [

@@ -1,0 +1,75 @@
+---
+title: Update your organisation - IAM
+description: "Update the name, description and original user of your Numspot organisation, via the API."
+sidebar_label: Update your organisation
+sidebar_position: 8
+draft: false
+last_update:
+  date: 2026-11-23
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Update your organisation
+
+You can update the administrative information of your organisation: its name, its description and the original user it is attached to (`originalUserId`).
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permission:
+
+- **iam.organisation.update**
+
+:::
+
+<Tabs>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+### Update your organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PATCH/iam/organisations/%7BorganisationId%7D
+
+Modifies the authenticated identity's organisation. The request body accepts any combination of `name`, `description` and `originalUserId`; omitted fields keep their current value. The response returns the updated organisation.
+
+### Example
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}' \
+  --request PATCH \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "name": "ACME Europe",
+    "description": "ACME European production organisation"
+  }'
+```
+
+### Response
+
+```json
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "name": "ACME Europe",
+  "description": "ACME production organisation",
+  "originalUserId": "123e4567-e89b-12d3-a456-426614174001",
+  "createdOn": "2026-01-15T08:45:00+00:00",
+  "updatedOn": "2026-11-23T09:07:15+00:00"
+}
+```
+
+:::info
+See the [API usage page](/docs/iam/concepts/api/) for details.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
+
+</TabItem>
+</Tabs>

@@ -1,0 +1,73 @@
+---
+title: Consulter votre organisation - IAM
+description: "Consultez l'organisation Numspot assignée à votre identité (compte utilisateur ou compte de service), avec son nom, sa description et ses dates de création, via l'API."
+sidebar_label: Consulter votre organisation
+sidebar_position: 7
+draft: false
+last_update:
+  date: 2026-11-23
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Consulter votre organisation
+
+Une organisation regroupe vos espaces et vos identités. Cette page présente la consultation de l'organisation assignée à l'identité authentifiée, avec son identifiant, son nom, sa description et ses dates de création.
+
+## Permissions
+
+:::info
+Cette action nécessite la permission **IAM** (Identity and Access Management) suivante :
+
+- **iam.organisation.get**
+
+:::
+
+<Tabs>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+### Consulter l'organisation de l'identité authentifiée
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations
+
+Renvoie l'organisation à laquelle l'identité authentifiée (compte utilisateur ou compte de service) est assignée. Une identité est assignée à une seule organisation : la réponse est une liste à un élément.
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations'
+```
+
+### Réponse
+
+```json
+{
+  "items": [
+    {
+      "id": "123e4567-e89b-12d3-a456-426614174000",
+      "name": "ACME",
+      "description": "Organisation de production ACME",
+      "originalUserId": "123e4567-e89b-12d3-a456-426614174001",
+      "createdOn": "2026-01-15T08:45:00+00:00",
+      "updatedOn": "2026-05-02T14:12:00+00:00"
+    }
+  ]
+}
+```
+
+:::info
+Consultez la [page d'utilisation de l'API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+La documentation Terraform est disponible sur le [registre Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
+
+</TabItem>
+</Tabs>
