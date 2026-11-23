@@ -1,0 +1,110 @@
+---
+title: Auditer les permissions d'une organisation ou d'un espace
+description: "Listez les identités (comptes utilisateurs et comptes de service) d'une organisation ou d'un espace Numspot et leurs rôles, permissions et ACL, via l'API."
+sidebar_label: Auditer les permissions
+sidebar_position: 5
+draft: false
+last_update:
+  date: 2026-11-23
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Auditer les permissions d'une organisation ou d'un espace
+
+L'audit des permissions permet de lister, pour une organisation ou un espace, l'ensemble des identités (comptes utilisateurs et comptes de service) et, pour chacune, les rôles assignés (uuid), les permissions (uuid) et les ACL (uuid de permission + uuid de ressource). Vous pouvez passer par l'API Numspot ou par l'outil space-permission-extractor.
+
+## Permissions
+
+:::info
+Cette action nécessite la permission **IAM** (Identity and Access Management) suivante :
+
+- **iam.getPolicy**
+
+:::
+
+<Tabs>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+### Lister les identités d'une organisation et leurs droits
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/%7BorganisationId%7D/iampolicy/%7BsubjectType%7D
+
+`subjectType` sélectionne le type d'identités : `users` ou `serviceAccounts`. La liste est paginée : parcourez-la avec les paramètres de requête `size` et `nextToken`.
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/iampolicy/users'
+```
+
+### Lister les identités d'un espace et leurs droits
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/%7BspaceId%7D/iampolicy/%7BsubjectType%7D
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/iampolicy/users'
+```
+
+### Lister les identités d'un espace, vu depuis l'organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/%7BorganisationId%7D/spaces/%7BspaceId%7D/iampolicy/%7BsubjectType%7D
+
+Même listing que pour un espace, adressé depuis l'organisation. Un administrateur d'organisation peut ainsi auditer un espace auquel il n'est pas lui-même assigné.
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/spaces/{spaceId}/iampolicy/users'
+```
+
+### Réponse
+
+```json
+{
+  "items": [
+    {
+      "subjectId": "123e4567-e89b-12d3-a456-426614174000",
+      "subjectType": "user",
+      "roles": ["123e4567-e89b-12d3-a456-426614174001"],
+      "permissions": ["123e4567-e89b-12d3-a456-426614174002"],
+      "acls": [
+        {
+          "permissionId": "123e4567-e89b-12d3-a456-426614174002",
+          "resourceId": "123e4567-e89b-12d3-a456-426614174003"
+        }
+      ]
+    }
+  ],
+  "nextPageToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+}
+```
+
+Chaque élément décrit une identité : son identifiant et son type (`user` ou `serviceAccount`), l'uuid de ses rôles, l'uuid de ses permissions, et ses ACL, chacune associant l'uuid d'une permission à l'uuid de la ressource à laquelle elle donne accès. Le champ `nextPageToken` est absent lorsque la liste est épuisée.
+
+### Lire la politique d'une identité précise
+
+Pour lire la politique d'une identité précise, ajoutez son uuid (`subjectId`) à l'un des trois chemins ci-dessus :
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/%7BorganisationId%7D/iampolicy/%7BsubjectType%7D/%7BsubjectId%7D
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/spaces/%7BspaceId%7D/iampolicy/%7BsubjectType%7D/%7BsubjectId%7D
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/iam/organisations/%7BorganisationId%7D/spaces/%7BspaceId%7D/iampolicy/%7BsubjectType%7D/%7BsubjectId%7D
+
+La réponse renvoie alors une politique unique, avec la même structure `roles`, `permissions` et `acls`. La variante par identité des endpoints organisation et espace est également documentée sur les pages d'information des [comptes utilisateur](/docs/iam/user/actions/get/) et des [comptes de service](/docs/iam/service-account/actions/get/).
+
+:::info
+Consultez la [page d'utilisation de l'API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+<TabItem value="github" label="GitHub">
+
+## GitHub {#tabhead-github}
+
+Avec une TUI (Terminal User Interface), l'outil [space-permission-extractor](https://github.com/numspot/space-permission-extractor) interroge l'API IAM pour extraire et consolider les accès d'un espace Numspot, afin d'en faciliter l'audit.
+
+Voir le [README du projet ↗](https://github.com/numspot/space-permission-extractor#readme) pour l'installation et l'utilisation.
+
+</TabItem>
+</Tabs>

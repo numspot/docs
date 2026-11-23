@@ -4,6 +4,17 @@
       "service": "IAM",
       "status": "added",
       "date": "2026-11-23",
+      "title": "Nouvelle page IAM : auditer les permissions d'une organisation ou d'un espace",
+      "description": "Une nouvelle page d'action documente les endpoints d'audit des permissions de la Client Facing Gateway (priorité 4 de la livraison IAM, ENAB-3005/3077/3873) : lister les identités d'une organisation ou d'un espace et leurs rôles, permissions et ACL, vues depuis l'organisation, depuis l'espace lui-même ou pour un sujet précis, avec pagination (nextPageToken). La structure de la réponse (subjectId, subjectType, roles, permissions, acls) est documentée avec des exemples.",
+      "components": [
+        "api",
+        "docs"
+      ]
+    },
+    {
+      "service": "IAM",
+      "status": "added",
+      "date": "2026-11-23",
       "title": "Nouvelle page espace IAM et assignation depuis l'organisation documentée",
       "description": "Une nouvelle page Consulter un espace documente GET /organisations/{organisationId}/spaces/{spaceId} (identifiant, nom, description et statut d'un espace), via la console ou l'API. La page Assigner une identité à un espace documente désormais la variante depuis l'organisation : POST /iam/organisations/{organisationId}/spaces/{spaceId}/{subjectType}/{subjectId} pour assigner un utilisateur ou un compte de service à un espace depuis l'organisation, et PATCH /iam/organisations/{organisationId}/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId} pour modifier ses rôles et permissions. Un administrateur d'organisation peut ainsi assigner une identité à un espace sans y être lui-même assigné, ce qui lève le cas du créateur d'organisation bloqué.",
       "components": [
