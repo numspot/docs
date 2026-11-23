@@ -3,7 +3,7 @@ title: Assign an identity to a space - IAM
 sidebar_label: Assign an identity to a space
 sidebar_position: 3
 last_update:
-  date: 2026-10-15
+  date: 2026-11-23
 ---
 
 import Tabs from "@theme/Tabs";
@@ -20,6 +20,10 @@ Assign users or service accounts to a space to give them access to the resources
 This action requires the following IAM (Identity and Access Management) permissions:
 
 - **iam.role.create**
+
+For the organisation-level variant described in the API tab (assigning an identity to a space from the organisation), the following permissions are required instead:
+
+- **iam.user.update** and **iam.serviceaccount.update**, or **iam.space.update**
 
 :::
 <Tabs>
@@ -61,6 +65,8 @@ You can also assign users or service accounts from the details page of a space.
 <TabItem value="api" label="API">
 
 ## API {#tabhead-api}
+
+### Assign an identity to a space
 
 To assign a user account to a space with the API, you need to know the UUID (Universally Unique Identifier) of the space. A variant in the URL lets you act on a user or on a service account.
 
@@ -109,6 +115,41 @@ At the end of this operation, the service account is no longer assigned to the s
 curl 'https://api.{region}.numspot.com/iam/spaces/{spaceId}/serviceAccounts/{serviceAccountId}' \
   --request DELETE
 ```
+
+### Assign an identity to a space from the organisation
+
+An organisation administrator can also assign a user account or a service account to a space directly from the organisation, without being assigned to that space. This is what unblocks the creation of an organisation: its original user can assign identities to any of its spaces, even though they are not assigned to those spaces themselves.
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/POST/iam/organisations/%7BorganisationId%7D/spaces/%7BspaceId%7D/%7BsubjectType%7D/%7BsubjectId%7D
+
+`subjectType` is `users` or `serviceAccounts`, and `subjectId` the identifier of the identity to assign. The request returns a 201 response with no content.
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/spaces/{spaceId}/users/{userId}' \
+  --request POST
+```
+
+Once the identity is assigned, its roles and permissions on the space can be modified with the IAM policy endpoint, addressed from the organisation as well:
+
+### Modify the roles and permissions of the assigned identity
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PATCH/iam/organisations/%7BorganisationId%7D/spaces/%7BspaceId%7D/iampolicy/%7BsubjectType%7D/%7BsubjectId%7D
+
+The request body adds or removes roles and permissions, under the `add` and `delete` keys. A policy is implicitly created if the subject does not have one yet on the space.
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}/spaces/{spaceId}/iampolicy/users/{userId}' \
+  --request PATCH \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "add": {
+      "roles": ["123e4567-e89b-12d3-a456-426614174001"],
+      "permissions": ["123e4567-e89b-12d3-a456-426614174002"]
+    }
+  }'
+```
+
+The request returns a 204 response with no content. The same operation is available for a service account by replacing `users` with `serviceAccounts` and `userId` with `serviceAccountId`.
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">

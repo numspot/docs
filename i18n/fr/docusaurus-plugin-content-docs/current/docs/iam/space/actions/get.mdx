@@ -1,0 +1,88 @@
+---
+title: Consulter un espace - IAM
+description: "Consultez le détail d'un espace IAM de votre organisation Numspot : identifiant, nom, description et statut, via la console ou l'API."
+sidebar_label: Consulter un espace
+sidebar_position: 6
+draft: false
+last_update:
+  date: 2026-11-23
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Consulter un espace
+
+Vous pouvez consulter le détail d'un espace : son identifiant, son nom, sa description et son statut.
+
+## Permissions
+
+:::info
+Cette action nécessite la permission **IAM** (Identity and Access Management) suivante :
+
+- **iam.space.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/space/create-01-list.png", text: "Depuis le menu latéral gauche, cliquez sur IAM → Espaces.", hotspot: { x: 0, y: 0.6963, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/space/create-01-list.png", text: "Dans le tableau « Espaces », cliquez sur l'identifiant de l'espace pour ouvrir sa page de détail.", hotspot: { x: 0.2229, y: 0.39, w: 0.3, h: 0.06 } },
+    { img: "/img/walkthrough/space/details.png", text: "La page de détail de l'espace affiche son nom, sa description, son identifiant et son statut.", hotspot: { x: 0.223, y: 0.32, w: 0.74, h: 0.2 } },
+  ]}
+/>
+
+1. Dans le menu **IAM**, cliquez sur **Espaces**.
+
+   Vous accédez au tableau **Espaces**, qui liste tous les espaces de votre organisation.
+
+2. Cliquez sur l'identifiant de l'espace dont vous voulez consulter le détail. La page de détail affiche son nom, sa description, son identifiant et son statut.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+### Consulter le détail d'un espace
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/organisations/%7BorganisationId%7D/spaces/%7BspaceId%7D
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/organisations/{organisationId}/spaces/{spaceId}'
+```
+
+### Réponse
+
+```json
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "organisationId": "123e4567-e89b-12d3-a456-426614174001",
+  "name": "Production",
+  "description": "Charges de travail de production",
+  "status": "READY",
+  "createdOn": "2026-01-15T08:45:00+00:00",
+  "updatedOn": "2026-05-02T14:12:00+00:00"
+}
+```
+
+:::info
+Consultez la [page d'utilisation de l'API](/fr/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+La documentation Terraform est disponible sur le [registre Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/space).
+
+</TabItem>
+</Tabs>

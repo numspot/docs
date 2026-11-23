@@ -1,0 +1,88 @@
+---
+title: Get a space - IAM
+description: "View the details of an IAM space of your Numspot organisation: identifier, name, description and status, via the console or the API."
+sidebar_label: Get a space
+sidebar_position: 6
+draft: false
+last_update:
+  date: 2026-11-23
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Walkthrough from '@site/src/components/Walkthrough';
+
+# Get a space
+
+You can view the details of a space: its identifier, its name, its description and its status.
+
+## Permissions
+
+:::info
+This action requires the following IAM (Identity and Access Management) permission:
+
+- **iam.space.get**
+
+:::
+
+<Tabs>
+<TabItem value="console" label="Console" default>
+
+## Console {#tabhead-console}
+
+<Walkthrough
+  steps={[
+    { img: "/img/walkthrough/en/space/list-01-list.png", text: "From the left-hand side menu, click IAM → Spaces.", hotspot: { x: 0, y: 0.6963, w: 0.1944, h: 0.0494 } },
+    { img: "/img/walkthrough/en/space/list-01-list.png", text: "In the “Spaces” table, click the space's ID to open its details page.", hotspot: { x: 0.2229, y: 0.39, w: 0.3, h: 0.06 } },
+    { img: "/img/walkthrough/en/space/details.png", text: "The space's details page displays its name, description, identifier and status.", hotspot: { x: 0.223, y: 0.32, w: 0.74, h: 0.2 } },
+  ]}
+/>
+
+1. In the **IAM** menu, click **Spaces**.
+
+   You access the **Spaces** table, which lists all the spaces of your organisation.
+
+2. Click the identifier of the space whose details you want to view. The space's details page displays its name, description, identifier and status.
+
+</TabItem>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+### Get the details of a space
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/GET/organisations/{organisationId}/spaces/{spaceId}
+
+### Example
+
+```bash
+curl 'https://api.{region}.numspot.com/organisations/{organisationId}/spaces/{spaceId}'
+```
+
+### Response
+
+```json
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "organisationId": "123e4567-e89b-12d3-a456-426614174001",
+  "name": "Production",
+  "description": "Production workloads",
+  "status": "READY",
+  "createdOn": "2026-01-15T08:45:00+00:00",
+  "updatedOn": "2026-05-02T14:12:00+00:00"
+}
+```
+
+:::info
+See the [API usage page](/docs/iam/concepts/api/) for details.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+The Terraform documentation is available on the [Numspot registry ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs/resources/space).
+
+</TabItem>
+</Tabs>
