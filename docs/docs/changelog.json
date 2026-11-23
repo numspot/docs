@@ -1,6 +1,18 @@
 {
   "entries": [
     {
+      "service": "IAM",
+      "status": "added",
+      "date": "2026-11-23",
+      "title": "New IAM space page and organisation-level assignment documented",
+      "description": "A new Get a space page documents GET /organisations/{organisationId}/spaces/{spaceId} (identifier, name, description and status of a space), via the console or the API. The Assign an identity to a space page now also documents the organisation-level variant: POST /iam/organisations/{organisationId}/spaces/{spaceId}/{subjectType}/{subjectId} to assign a user or a service account to a space from the organisation, and PATCH /iam/organisations/{organisationId}/spaces/{spaceId}/iampolicy/{subjectType}/{subjectId} to modify its roles and permissions. An organisation administrator can thus assign an identity to a space without being assigned to it, which resolves the organisation-creator lockout case.",
+      "components": [
+        "api",
+        "console",
+        "docs"
+      ]
+    },
+    {
       "service": "Block Storage",
       "status": "fixed",
       "date": "2026-11-19",
