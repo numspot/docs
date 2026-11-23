@@ -23,6 +23,7 @@ When a session detects a problem, it must not recur:
 | Walkthrough coachmark painting over the sticky doc title on scroll (tip z-index escaping to the root stacking context — DOC-669) | `linter/tests/walkthrough-stacking.test.js` (source pins: `isolation: isolate` on `.wrap`, tip keeps a local z-index, sticky title keeps sticky/z-index/opaque background) |
 | Multiple unit commits piling up in one PR          | Not lintable — see "One commit per Pull Request" below      |
 | Guide commands claimed as "validated end to end" but never run as published (PR #42 review) | Not lintable — see "Guide commands must be executed as published" below |
+| `git add -A` in a git worktree with a linked `node_modules` commits the symlink — CI dies with `EEXIST: mkdir node_modules` on `yarn install` | Not lintable — see "Never commit the worktree `node_modules` symlink" below |
 
 ## Branching — always start from up-to-date `main` (not lintable)
 
@@ -86,3 +87,13 @@ The PR #32 dependency security sweep (merged 2026-10-27) cleared all 81 `yarn au
 6. **Pre-existing broken anchor in the build output** — `yarn build` warns that the FR object-storage quickstart (`/fr/docs/storage/object-storage/quickstart/`) links to `/fr/openapi/#tag/identity-access-management/PUT/iam/token/convert`, an anchor that does not exist. Reproduces on `main`; was out of scope for the dependency sweep. **Action**: separate documentation-fix PR or ticket.
 
 None of these is lintable today; item 2 may graduate to an automated guard once the scheduled audit job exists.
+
+## Never commit the worktree `node_modules` symlink (not lintable)
+
+Two documentation PRs failed CI with `EEXIST: file already exists, mkdir /home/runner/work/docs/docs/node_modules` on `yarn install --frozen-lockfile`. Root cause: previewing the branches through git worktrees, each worktree had `node_modules` symlinked to the main checkout's directory — and a `git add -A` run while amending swept that symlink into the commit. On CI, `actions/checkout` recreated the symlink before yarn ran; `yarn install` then failed to create the directory. The `.gitignore` pattern (`node_modules/`, with a trailing slash) matches directories but **not symlinks**, which is why the guard never fired.
+
+Rules:
+
+- **Never run `git add -A` / `git commit -a` in a worktree with a linked `node_modules`** — stage explicit paths, or check `git status` for the symlink before committing.
+- The `.gitignore` pattern is `node_modules` (no trailing slash) so it also matches a symlink — keep it that way.
+- A branch that already contains the symlink: `git rm --cached node_modules`, then amend — and verify with `git ls-tree HEAD | grep 120000` (symlink mode), which must return nothing.
