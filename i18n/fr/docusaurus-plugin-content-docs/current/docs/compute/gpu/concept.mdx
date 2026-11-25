@@ -3,11 +3,20 @@ title: "GPU - Concepts"
 sidebar_label: "Concepts"
 sidebar_position: 1
 draft: false
+last_update:
+  date: 2026-11-20
 ---
 
 import ActionsSummary from '@site/src/components/ActionsSummary';
+import DeprecatedBanner from '@site/src/components/DeprecatedBanner';
 
 # À propos des GPU
+
+<DeprecatedBanner title="L'offre GPU flexible est en cours d'abandon">
+**Cette page sera bientôt supprimée.** Pour vos charges de travail GPU, utilisez les [VM inférence](/docs/compute/vms/types/#inference-use-inference) : leurs GPU sont intégrés à la VM et ne nécessitent pas d'allocation préalable.
+</DeprecatedBanner>
+
+<ActionsSummary />
 
 <ActionsSummary />
 
@@ -55,7 +64,7 @@ Numspot fournit différents modèles de GPU, avec différentes quantités de mé
 | nvidia-a100-80 | 80000 | 35 | 256 | v6, v7 | cloudgouv-eu-west-1 |
 
 :::tip
-Numspot propose également des **VM inférence** avec GPU intégrés (nvidia-l40, nvidia-h100, nvidia-h200). Contrairement aux fGPU (flexible GPU, GPU flexible), ces GPU ne nécessitent pas d'allocation préalable et sont directement disponibles sur la VM. Pour plus d'informations, consultez la page [Types de VM](/docs/compute/vms/types/#usage-inférence-inference).
+Numspot propose également des **VM inférence** avec GPU intégrés (nvidia-l40, nvidia-h100, nvidia-h200). Contrairement aux fGPU (flexible GPU, GPU flexible), ces GPU ne nécessitent pas d'allocation préalable et sont directement disponibles sur la VM. Pour plus d'informations, consultez la page [Types de VM](/docs/compute/vms/types/#inference-use-inference).
 :::
 
 ## Conversion de type de VM

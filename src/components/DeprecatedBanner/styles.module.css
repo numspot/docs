@@ -1,0 +1,30 @@
+/* Solid warning-orange block: far stronger than the tinted admonition
+   callouts (see src/css/components/admonitions.css). Readable in both
+   color modes: dark ink on the solid --ns-warning orange. */
+.banner {
+  margin: 1rem 0 2rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgb(0 0 0 / 20%);
+  border-left: 6px solid var(--ns-error);
+  border-radius: 0;
+  background: var(--ns-warning);
+  color: #231400;
+}
+
+.title {
+  margin: 0 0 0.35rem;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.body {
+  font-weight: 500;
+}
+
+.body a {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+}

@@ -24,6 +24,17 @@
       ]
     },
     {
+      "service": "Compute",
+      "status": "deprecated",
+      "date": "2026-11-20",
+      "title": "Flexible GPU offer deprecated: use inference VM",
+      "description": "The flexible GPU (fGPU) offer is being phased out. The four Compute/GPU pages (About GPU, Allocate or release, Attach or detach, Change the behavior) now display a deprecation banner directing readers to the inference VM section of the VM types page: inference VM carry integrated GPU (nvidia-l40, nvidia-h100, nvidia-h200), require no prior allocation and are directly available on the VM. The GPU pages remain online until their removal and are no longer maintained.",
+      "components": [
+        "console",
+        "docs"
+      ]
+    },
+    {
       "service": "Block Storage",
       "status": "fixed",
       "date": "2026-11-19",

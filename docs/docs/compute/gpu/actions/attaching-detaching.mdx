@@ -3,15 +3,20 @@ title: Attach or detach a GPU
 sidebar_position: 3
 draft: false
 last_update:
-  date: 2026-10-15
+  date: 2026-11-20
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import DeprecatedBanner from '@site/src/components/DeprecatedBanner';
 
 # Attach or detach a GPU
 
-You can attach a [GPU](/docs/compute/gpu/concept/) (Graphics Processing Unit) to a [VM](/docs/compute/concept/) (Virtual Machine), or detach it at any time. To attach a GPU, you must first allocate it to your account. For more information, see [Allocate or release a GPU](/docs/compute/gpu/actions/allocating-releasing/).
+<DeprecatedBanner title="Flexible GPU is being phased out">
+**This page will soon be removed.** For GPU workloads, use the [inference VM](/docs/compute/vms/types/#inference-use-inference) instead: their GPU are integrated into the VM and require no prior allocation.
+</DeprecatedBanner>
+
+You can attach a [GPU](/docs/compute/gpu/concept/) (Graphics Processing Unit) To attach a GPU, you must first allocate it to your account. For more information, see [Allocate or release a GPU](/docs/compute/gpu/actions/allocating-releasing/).
 
 ## Permissions
 
