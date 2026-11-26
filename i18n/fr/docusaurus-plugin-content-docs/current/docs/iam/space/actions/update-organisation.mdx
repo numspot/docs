@@ -1,0 +1,75 @@
+---
+title: Modifier votre organisation - IAM
+description: "Modifiez le nom, la description et l'utilisateur d'origine de votre organisation Numspot, via l'API."
+sidebar_label: Modifier votre organisation
+sidebar_position: 8
+draft: false
+last_update:
+  date: 2026-11-23
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Modifier votre organisation
+
+Vous pouvez modifier les informations administratives de votre organisation : son nom, sa description et l'utilisateur d'origine auquel elle est rattachée (`originalUserId`).
+
+## Permissions
+
+:::info
+Cette action nécessite la permission **IAM** (Identity and Access Management) suivante :
+
+- **iam.organisation.update**
+
+:::
+
+<Tabs>
+<TabItem value="api" label="API">
+
+## API {#tabhead-api}
+
+### Modifier votre organisation
+
+https://docs.numspot.com/openapi/#tag/identity-access-management/PATCH/iam/organisations/%7BorganisationId%7D
+
+Modifie l'organisation de l'identité authentifiée. Le corps de la requête accepte une combinaison quelconque de `name`, `description` et `originalUserId` ; les champs omis conservent leur valeur. La réponse renvoie l'organisation à jour.
+
+### Exemple
+
+```bash
+curl 'https://api.{region}.numspot.com/iam/organisations/{organisationId}' \
+  --request PATCH \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "name": "ACME Europe",
+    "description": "Organisation de production ACME"
+  }'
+```
+
+### Réponse
+
+```json
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "name": "ACME Europe",
+  "description": "Organisation de production ACME",
+  "originalUserId": "123e4567-e89b-12d3-a456-426614174001",
+  "createdOn": "2026-01-15T08:45:00+00:00",
+  "updatedOn": "2026-11-23T09:07:15+00:00"
+}
+```
+
+:::info
+Consultez la [page d'utilisation de l'API](/docs/iam/concepts/api/) pour la mise en œuvre.
+:::
+
+</TabItem>
+<TabItem value="terraform" label="Terraform">
+
+## Terraform {#tabhead-terraform}
+
+La documentation Terraform est disponible sur le [registre Numspot ↗](https://registry.terraform.io/providers/numspot/numspot/latest/docs).
+
+</TabItem>
+</Tabs>
