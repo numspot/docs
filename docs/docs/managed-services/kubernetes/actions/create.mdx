@@ -4,7 +4,7 @@ sidebar_label: Create Kubernetes clusters
 sidebar_position: 2
 draft: false
 last_update:
-  date: 2026-10-15
+  date: 2026-11-27
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -17,7 +17,7 @@ Create one or more [Kubernetes clusters](/docs/managed-services/kubernetes/conce
 During creation, define the characteristics of each cluster:
 - name
 - Kubernetes version
-- CIDR (Classless Inter Domain Routing)
+- CIDR (Classless Inter-Domain Routing)
 - visibility
 - default node pool profile: performance, RAM size and number of vCPU (virtual Central Processing Unit)
 
@@ -93,7 +93,9 @@ The choice between a **Private** and a **Public** network determines who can acc
             The IP address range is used to assign addresses to the cluster nodes. It must not overlap with another existing range to avoid network addressing conflicts. The subnet mask must be between /16 and /20.
 
             - **Expected format**: `IP address / subnet mask`
-            - **Common example**: `192.168.1.0/16`
+            - **Common example**: `192.168.0.0/16`
+
+            For help choosing this range, see [Choose the CIDR of a managed Kubernetes cluster ↗](/docs/managed-services/kubernetes/guides/choose-cluster-cidr/).
 
         3. Select the network type from the following options:
 
@@ -181,7 +183,7 @@ The choice between a **Private** and a **Public** network determines who can acc
         {
           "name": "my-cluster-kubernetes",
           "version": "1.34",
-          "cidr": "192.168.1.0/24",
+          "cidr": "192.168.0.0/16",
           "visibility": "EXTERNAL",
           "profile": "small"
         }
@@ -195,7 +197,7 @@ The choice between a **Private** and a **Public** network determines who can acc
           "name": "my-cluster-kubernetes",
           "version": "1.34",
           "fullVersion": "1.34.0",
-          "cidr": "192.168.1.0/24",
+          "cidr": "192.168.0.0/16",
           "visibility": "EXTERNAL",
           "profile": "small",
           "createdOn": "2026-04-05T10:30:00Z",

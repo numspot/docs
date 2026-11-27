@@ -3,6 +3,8 @@ title: Créer des clusters Kubernetes - Kubernetes managé
 sidebar_label: Créer des clusters Kubernetes
 sidebar_position: 2
 draft: false
+last_update:
+  date: 2026-11-27
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -88,7 +90,9 @@ Le choix entre réseau **Privé** et **Public** détermine qui peut accéder à 
             La plage d'adresses IP est utilisée pour attribuer des adresses aux nodes du cluster. Elle ne doit pas chevaucher une autre plage existante pour éviter les conflits d'adressage réseau. Le masque de sous-réseau doit être compris entre /16 et /20.
 
             - **Format attendu** : `adresse IP / masque de sous-réseau`
-            - **Exemple courant** : `192.168.1.0/16`
+            - **Exemple courant** : `192.168.0.0/16`
+
+            Pour vous aider à choisir cette plage, consultez [Choisir le CIDR d'un cluster Kubernetes managé ↗](/docs/managed-services/kubernetes/guides/choose-cluster-cidr/).
 
         3. Sélectionnez le type de réseau parmi les options suivantes :
 
@@ -175,7 +179,7 @@ Le choix entre réseau **Privé** et **Public** détermine qui peut accéder à 
         {
           "name": "mon-cluster-kubernetes",
           "version": "1.34",
-          "cidr": "192.168.1.0/24",
+          "cidr": "192.168.0.0/16",
           "visibility": "EXTERNAL",
           "profile": "small"
         }
@@ -189,7 +193,7 @@ Le choix entre réseau **Privé** et **Public** détermine qui peut accéder à 
           "name": "mon-cluster-kubernetes",
           "version": "1.34",
           "fullVersion": "1.34.0",
-          "cidr": "192.168.1.0/24",
+          "cidr": "192.168.0.0/16",
           "visibility": "EXTERNAL",
           "profile": "small",
           "createdOn": "2026-04-05T10:30:00Z",
