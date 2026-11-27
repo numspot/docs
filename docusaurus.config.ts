@@ -1,7 +1,13 @@
 import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
-import { sortSidebarEntries } from "./src/components/sidebar-order.js";
+import { injectSidebarLinks, sortSidebarEntries } from "./src/components/sidebar-order.js";
+
+// The site's default locale ("en" — US English, htmlLang en-US). Hoisted
+// because the sidebarItemsGenerator override below needs the fallback locale
+// (the generator args carry no locale; the running build exposes it through
+// DOCUSAURUS_CURRENT_LOCALE).
+const defaultLocale = "en";
 
 const config: Config = {
   title: "Numspot Documentation",
@@ -67,7 +73,7 @@ const config: Config = {
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: "en",
+    defaultLocale: defaultLocale,
     locales: ["en", "fr"],
     path: "i18n",
     localeConfigs: {
@@ -128,7 +134,16 @@ const config: Config = {
             const withoutExplicit = items.filter(
               (item) => !(item.type === "doc" && explicitIds.has(item.id)),
             );
-            return sortSidebarEntries(withoutExplicit, args.docs);
+            // The sorted slice carries the level-0/level-1 ordering; external
+            // links (e.g. Console demo) are spliced AFTER sorting, right
+            // below the anchor entry they are pinned to.
+            const sorted = sortSidebarEntries(withoutExplicit, args.docs);
+            injectSidebarLinks(
+              sorted,
+              args.docs,
+              process.env.DOCUSAURUS_CURRENT_LOCALE ?? defaultLocale,
+            );
+            return sorted;
           },
         },
         blog: false,
