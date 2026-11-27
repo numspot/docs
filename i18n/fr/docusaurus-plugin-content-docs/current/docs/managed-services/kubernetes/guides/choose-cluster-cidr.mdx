@@ -1,0 +1,72 @@
+---
+title: Choisir le CIDR d'un cluster Kubernetes managé
+description: Règles et pièges pour choisir la plage IP (CIDR) d'un cluster Kubernetes managé — plages autorisées, taille du masque, plages réservées, contrôles de chevauchement et immuabilité
+sidebar_position: 2.5
+draft: false
+last_update:
+  date: 2026-11-27
+---
+
+# Choisir le CIDR d'un cluster Kubernetes managé
+
+Lors de la [création d'un cluster](/docs/managed-services/kubernetes/actions/create/), l'un des paramètres obligatoires est le CIDR (Classless Inter-Domain Routing) du cluster. Cette page explique à quoi sert cette plage, les règles qu'elle doit respecter et une méthode simple pour la choisir correctement dès la première fois.
+
+## À quoi sert le CIDR du cluster
+
+Le CIDR du cluster est la plage d'adresses IP à partir de laquelle les nodes du [cluster Kubernetes](/docs/managed-services/kubernetes/concepts/) reçoivent leurs adresses réseau. Chaque node de chaque node pool prend une adresse dans cette plage.
+
+Ce choix se fait une seule fois, à la création : le CIDR **n'est pas modifiable ensuite**. Le modifier suppose de supprimer le cluster et de le recréer, puis de redéployer vos workloads. Choisissez-le en connaissance de cause avant de provisionner le premier node pool.
+
+## Règles
+
+| Règle           | Valeur                                                                                 |
+| --------------- | -------------------------------------------------------------------------------------- |
+| Famille d'IP    | IPv4 uniquement                                                                        |
+| Format          | CIDR valide, adresse réseau (pas de bits d'hôte positionnés)                           |
+| Masque          | Entre /16 et /20 inclus                                                                |
+| Plages autorisées | Plages privées RFC 1918 uniquement : `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16` |
+| Plage réservée  | `10.112.0.0/12` est réservée par Numspot : les clusters ne peuvent pas l'utiliser      |
+| Unicité         | Ne doit pas chevaucher le CIDR d'un autre cluster du même espace. Le flux de création exécute des contrôles automatiques, mais ils ne sont pas exhaustifs : gardez également votre propre inventaire |
+| Mutabilité      | Fixé à la création, non modifiable ensuite                                             |
+
+Le masque détermine le nombre d'adresses disponibles : /20 = 4 096 adresses, /19 = 8 192, /18 = 16 384, /17 = 32 768 et /16 = 65 536.
+
+## Pièges à éviter
+
+**La plage réservée.** Un CIDR de cluster qui chevauche `10.112.0.0/12` est rejeté par les contrôles automatiques. Écartez cette plage de vos candidates.
+
+**Le chevauchement avec vos réseaux.** Si vous prévoyez de connecter le cluster à un [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) — par exemple pour l'atteindre depuis une [VM (Virtual Machine)](/docs/compute/concept) — par un bridge ou un VPC peering, le CIDR du cluster ne doit pas chevaucher le CIDR de ce VPC ni celui de ses sous-réseaux. Le contrôle à la création ne couvre pas ces cas : un cluster peut être créé avec une plage en conflit, et le conflit de routage n'apparaît qu'au moment de connecter les réseaux. Répertoriez les plages que vous comptez relier avant de choisir, en suivant la procédure [Connecter une VM à un cluster Kubernetes managé ↗](/docs/managed-services/kubernetes/guides/connect-vm-to-cluster/).
+
+**L'immuabilité.** Le CIDR étant fixé à la création, dimensionnez-le en pensant à la croissance avant le premier node pool. Un node pool peut passer jusqu'à 20 nodes, et plusieurs node pools partagent le même CIDR de cluster.
+
+## Comment choisir en 4 étapes
+
+1. Répertoriez les blocs CIDR des réseaux que vous pourriez relier au cluster par un bridge ou un VPC peering : vos VPC, leurs sous-réseaux et les autres clusters de l'espace.
+2. Choisissez une plage privée (RFC 1918) qui ne chevauche aucune d'entre elles, en évitant `10.112.0.0/12`.
+3. Dimensionnez la plage : un /20 offre 4 096 adresses et convient à la plupart des clusters ; montez à /16 uniquement en cas de forte croissance des node pools.
+4. Créez le cluster. Si l'API répond 409 (chevauchement avec un autre cluster ou la plage réservée) ou 400 (format, masque ou plage invalides), ajustez la candidate selon le tableau des règles et relancez la création.
+
+:::tip
+Partir du plus petit VPC de votre espace est souvent la méthode la plus simple : choisissez une plage privée de même largeur, décalée d'un ou deux blocs, et vous gardez de la marge pour bridger sans chevauchement.
+:::
+
+## Exemples
+
+| CIDR             | Verdict  | Raison                                                |
+| ---------------- | -------- | ----------------------------------------------------- |
+| `10.0.0.0/16`    | Valide   | Plage privée, masque /16                              |
+| `172.16.32.0/20` | Valide   | Plage privée, masque /20                              |
+| `192.168.0.0/20` | Valide   | Plage privée, masque /20                              |
+| `10.112.0.0/16`  | Invalide | Dans la plage `10.112.0.0/12` réservée par Numspot    |
+| `10.0.0.0/8`     | Invalide | Masque hors /16–/20                                   |
+| `192.168.1.0/24` | Invalide | Masque hors /16–/20                                   |
+| `192.168.1.0/16` | Invalide | Bits d'hôte positionnés (adresse réseau : `192.168.0.0`) |
+
+## En cas d'échec de la création
+
+Deux familles d'erreurs renvoient au tableau des règles :
+
+- **400 – CIDR invalide** : la valeur n'est pas un CIDR IPv4 valide, le masque est hors /16–/20, la plage n'est pas privée (RFC 1918) ou l'adresse porte des bits d'hôte.
+- **409 – chevauchement** : la plage demandée chevauche le CIDR d'un autre cluster du même espace ou la plage réservée `10.112.0.0/12`.
+
+Dans les deux cas, choisissez une nouvelle candidate avec les [règles](#règles) et les [exemples](#exemples) ci-dessus, puis soumettez à nouveau la requête de création.

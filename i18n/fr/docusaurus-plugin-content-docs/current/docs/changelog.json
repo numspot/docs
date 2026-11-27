@@ -1,6 +1,16 @@
 {
   "entries": [
     {
+      "service": "Kubernetes",
+      "status": "added",
+      "date": "2026-11-27",
+      "title": "Guide : choisir le CIDR d'un cluster Kubernetes managé",
+      "description": "Un nouveau guide explique comment choisir la plage IP (CIDR) d'un cluster Kubernetes managé : plages privées RFC 1918 autorisées, masque entre /16 et /20, plage réservée par Numspot, contrôles de chevauchement avec les autres clusters de l'espace et immuabilité du choix après la création. Les exemples de CIDR invalides de la page de création de cluster sont également corrigés.",
+      "components": [
+        "docs"
+      ]
+    },
+    {
       "service": "IAM",
       "status": "added",
       "date": "2026-11-23",

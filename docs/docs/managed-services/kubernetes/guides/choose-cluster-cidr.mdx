@@ -1,0 +1,72 @@
+---
+title: Choose the CIDR of a managed Kubernetes cluster
+description: Rules and pitfalls for choosing the IP range (CIDR) of a managed Kubernetes cluster — allowed ranges, mask size, reserved ranges, overlap checks and immutability
+sidebar_position: 2.5
+draft: false
+last_update:
+  date: 2026-11-27
+---
+
+# Choose the CIDR of a managed Kubernetes cluster
+
+When you [create a cluster](/docs/managed-services/kubernetes/actions/create/), one of the required settings is the CIDR (Classless Inter-Domain Routing) of the cluster. This page explains what this range is used for, the rules it must follow and a simple method to choose it right the first time.
+
+## What the cluster CIDR is used for
+
+The cluster CIDR is the IP address range from which the [Kubernetes cluster](/docs/managed-services/kubernetes/concepts/) nodes get their network addresses. Every node of every node pool takes one address from this range.
+
+This choice is made once, at creation time: the CIDR **cannot be changed afterwards**. Changing it means deleting the cluster and recreating it, then redeploying your workloads. Choose it deliberately before provisioning the first node pool.
+
+## Rules
+
+| Rule           | Value                                                                                  |
+| -------------- | -------------------------------------------------------------------------------------- |
+| IP family      | IPv4 only                                                                              |
+| Format         | Valid CIDR, network address (no host bits set)                                         |
+| Subnet mask    | Between /16 and /20 inclusive                                                          |
+| Allowed ranges | RFC 1918 private ranges only: `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`          |
+| Reserved range | `10.112.0.0/12` is reserved by Numspot: clusters cannot use it                         |
+| Uniqueness     | Must not overlap the CIDR of another cluster of the same space. The creation flow runs automatic checks, but they are not exhaustive: keep your own inventory as well |
+| Mutability     | Fixed at creation, never editable                                                      |
+
+The mask size drives the number of available addresses: /20 = 4,096 addresses, /19 = 8,192, /18 = 16,384, /17 = 32,768 and /16 = 65,536.
+
+## Pitfalls to avoid
+
+**The reserved range.** A cluster CIDR that overlaps `10.112.0.0/12` is rejected by the automatic checks. Keep this range out of your candidates.
+
+**Overlap with your own networks.** If you plan to connect the cluster to a [VPC (Virtual Private Cloud)](/docs/network/vpc/concepts/) — for example to reach it from a [VM (Virtual Machine)](/docs/compute/concept) — through a bridge or a VPC peering, the cluster CIDR must not overlap the CIDR of that VPC or of its subnets. The creation check does not cover these cases: a cluster can be created with a conflicting range, and the routing conflict only appears later, when you connect the networks. Inventory the ranges you intend to connect before choosing, following the [Connect a VM to a managed Kubernetes cluster ↗](/docs/managed-services/kubernetes/guides/connect-vm-to-cluster/) procedure.
+
+**Immutability.** Because the CIDR is fixed at creation, size it with growth in mind before the first node pool. A node pool can scale up to 20 nodes, and several node pools share the same cluster CIDR.
+
+## How to choose in 4 steps
+
+1. List the CIDR blocks of the networks you may bridge or peer with the cluster: your VPC, their subnets, and any other cluster of the space.
+2. Pick a private (RFC 1918) range that overlaps none of them, and avoid `10.112.0.0/12`.
+3. Size the range: a /20 offers 4,096 addresses and fits most clusters; go up to /16 only if you plan heavy node-pool growth.
+4. Create the cluster. If the API answers 409 (overlap with another cluster or the reserved range) or 400 (invalid format, mask or range), adjust the candidate per the rules table and retry.
+
+:::tip
+Working from the smallest VPC of your space is often the simplest path: choose a private range of the same width, one or two blocks away, and you keep room to bridge without overlap.
+:::
+
+## Examples
+
+| CIDR             | Verdict | Reason                                           |
+| ---------------- | ------- | ------------------------------------------------ |
+| `10.0.0.0/16`    | Valid   | Private range, /16 mask                          |
+| `172.16.32.0/20` | Valid   | Private range, /20 mask                          |
+| `192.168.0.0/20` | Valid   | Private range, /20 mask                          |
+| `10.112.0.0/16`  | Invalid | Inside the Numspot-reserved `10.112.0.0/12`      |
+| `10.0.0.0/8`     | Invalid | Mask outside /16–/20                             |
+| `192.168.1.0/24` | Invalid | Mask outside /16–/20                             |
+| `192.168.1.0/16` | Invalid | Host bits set (network address is `192.168.0.0`) |
+
+## If creation fails
+
+Two families of errors map back to the rules table:
+
+- **400 – invalid CIDR**: the value is not a valid IPv4 CIDR, the mask is outside /16–/20, the range is not private (RFC 1918), or the address carries host bits.
+- **409 – overlap**: the requested range overlaps the CIDR of another cluster of the same space or the reserved range `10.112.0.0/12`.
+
+In both cases, pick a new candidate with the [rules](#rules) and the [examples](#examples) above, then submit the creation request again.

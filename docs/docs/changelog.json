@@ -1,6 +1,16 @@
 {
   "entries": [
     {
+      "service": "Kubernetes",
+      "status": "added",
+      "date": "2026-11-27",
+      "title": "Guide: choose the CIDR of a managed Kubernetes cluster",
+      "description": "A new guide explains how to choose the IP range (CIDR) of a managed Kubernetes cluster: allowed RFC 1918 ranges, /16 to /20 mask, the Numspot-reserved range, overlap checks with other clusters of the space, and the immutability of the choice after creation. The invalid CIDR examples of the cluster creation page were also corrected.",
+      "components": [
+        "docs"
+      ]
+    },
+    {
       "service": "IAM",
       "status": "added",
       "date": "2026-11-23",
