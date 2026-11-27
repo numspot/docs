@@ -23,6 +23,7 @@ When a session detects a problem, it must not recur:
 | Walkthrough coachmark painting over the sticky doc title on scroll (tip z-index escaping to the root stacking context — DOC-669) | `linter/tests/walkthrough-stacking.test.js` (source pins: `isolation: isolate` on `.wrap`, tip keeps a local z-index, sticky title keeps sticky/z-index/opaque background) |
 | Multiple unit commits piling up in one PR          | Not lintable — see "One commit per Pull Request" below      |
 | Guide commands claimed as "validated end to end" but never run as published (PR #42 review) | Not lintable — see "Guide commands must be executed as published" below |
+| Static OpenAPI mirror (`static/files/openapi.yaml`) drifting from the live spec — a stale mirror made live endpoints look undocumented | Not lintable — see "Static OpenAPI mirror drifts from the live spec" below |
 
 ## Branching — always start from up-to-date `main` (not lintable)
 
@@ -86,3 +87,15 @@ The PR #32 dependency security sweep (merged 2026-10-27) cleared all 81 `yarn au
 6. **Pre-existing broken anchor in the build output** — `yarn build` warns that the FR object-storage quickstart (`/fr/docs/storage/object-storage/quickstart/`) links to `/fr/openapi/#tag/identity-access-management/PUT/iam/token/convert`, an anchor that does not exist. Reproduces on `main`; was out of scope for the dependency sweep. **Action**: separate documentation-fix PR or ticket.
 
 None of these is lintable today; item 2 may graduate to an automated guard once the scheduled audit job exists.
+
+## Static OpenAPI mirror drifts from the live spec (not lintable)
+
+A session comparing a Confluence IAM delivery note against the documentation concluded that several live Client Facing Gateway endpoints were undocumented — the analysis had been run against `static/files/openapi.yaml`, which turned out to be ~5 months stale (version `2026-06-10` vs `2026-11-23`, 179 vs 197 paths): missing the organisation `PATCH`, the iampolicy list variants, the subject-space assignment `POST` and the AK/SK endpoints. Every "missing endpoint" actually existed in production documentation.
+
+Root cause: the `/openapi` page (`src/pages/openapi.js`) renders the **live** spec client-side on `docs.numspot.com` (`https://api.eu-west-2.numspot.com/openapi`), and only falls back to the committed mirror where the live spec is blocked by CORS (localhost, GitLab Pages previews). The mirror is a snapshot; the live spec is the source of truth (also linked from `docusaurus.config.ts`). The documented refresh command (`make spec-update`) did not exist — no Makefile in the repo.
+
+Rules:
+
+- **The mirror is a snapshot, not the source of truth** — for any endpoint-existence or documentation-gap analysis, read the live spec (`https://api.eu-west-2.numspot.com/openapi`, linked in `docusaurus.config.ts`), not the mirror.
+- **Refresh the mirror when the API surface changes** (`make spec-update`, or `yarn spec:update`) — in particular before shipping documentation that asserts the presence or absence of API endpoints.
+- The script refuses to overwrite the mirror on an invalid or empty live spec; treat a failure as an API-side incident, not a local nuisance.
