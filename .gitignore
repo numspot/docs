@@ -1,5 +1,5 @@
 # Dependencies
-node_modules/
+node_modules
 
 # This project uses Yarn exclusively (see yarn.lock).
 package-lock.json
