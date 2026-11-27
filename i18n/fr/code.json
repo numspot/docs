@@ -834,6 +834,14 @@
     "message": "permissions exercées au sein d'un espace",
     "description": "Hint under the space umbrella section"
   },
+  "permexplorer.public.heading": {
+    "message": "API publiques — aucune permission requise",
+    "description": "Heading of the public-endpoints section"
+  },
+  "permexplorer.public.hint": {
+    "message": "ces endpoints ne requièrent aucune permission IAM",
+    "description": "Hint under the public endpoints section"
+  },
   "permexplorer.filters.tenant": {
     "message": "Tenant :",
     "description": "Tenant filter label"
@@ -853,10 +861,6 @@
   "permexplorer.uuid.copied": {
     "message": "copié",
     "description": "Feedback after copying a permission UUID"
-  },
-  "permexplorer.console": {
-    "message": "Aucune API publique pour cette permission : l'action est réalisée depuis la console Numspot.",
-    "description": "Note shown on permissions without a public endpoint"
   },
   "permexplorer.role.filterHint": {
     "message": "Filtrer par ce rôle",

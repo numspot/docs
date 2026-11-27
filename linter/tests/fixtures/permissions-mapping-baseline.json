@@ -1,0 +1,6 @@
+{
+  "knownWarns": [],
+  "knownErrors": [
+    "roles.json [IAM Identity Admin] :: references unknown permission \"iam.serviceAccount.owner\""
+  ]
+}

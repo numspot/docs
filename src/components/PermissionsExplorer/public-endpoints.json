@@ -1,0 +1,58 @@
+{
+  "publicEndpoints": [
+    {
+      "method": "GET",
+      "path": "/catalogue",
+      "summary": "Get public catalogue",
+      "tag": "catalogue"
+    },
+    {
+      "method": "GET",
+      "path": "/catalogue/export/csv",
+      "summary": "Export catalogue to CSV",
+      "tag": "catalogue"
+    },
+    {
+      "method": "GET",
+      "path": "/catalogue/products/detail",
+      "summary": "Get a product by lookup tuple",
+      "tag": "catalogue"
+    },
+    {
+      "method": "GET",
+      "path": "/catalogue/products/{uuid}",
+      "summary": "Get a product by UUID",
+      "tag": "catalogue"
+    },
+    {
+      "method": "GET",
+      "path": "/catalogue/profiles",
+      "summary": "Get the available profiles for the public inventory",
+      "tag": "catalogue"
+    },
+    {
+      "method": "POST",
+      "path": "/iam/aksk/verify-sigv4",
+      "summary": "Verify AWS SigV4 Signature",
+      "tag": "identity-access-management"
+    },
+    {
+      "method": "POST",
+      "path": "/iam/frontend/self-service/settings",
+      "summary": "Complete Settings Flow",
+      "tag": "identity-access-management"
+    },
+    {
+      "method": "POST",
+      "path": "/iam/token",
+      "summary": "Generate Access Token",
+      "tag": "identity-access-management"
+    },
+    {
+      "method": "PUT",
+      "path": "/iam/token/convert",
+      "summary": "Convert Token to Access Key and Secret Key",
+      "tag": "identity-access-management"
+    }
+  ]
+}

@@ -5,7 +5,7 @@ sidebar_label: Supprimer un espace
 sidebar_position: 5
 draft: false
 last_update:
-  date: 2026-09-18
+  date: 2026-10-30
 ---
 
 import Tabs from "@theme/Tabs";
@@ -56,19 +56,7 @@ Depuis la console, la suppression d'un espace n'est pas réalisée directement :
 
 ## API {#tabhead-api}
 
-
-https://docs.numspot.com/openapi/#tag/identity-access-management/DELETE/organisations/{organisationId}/spaces/{spaceId}
-
-### Exemple
-
-```bash
-curl 'https://api.{region}.numspot.com/organisations/{organisationId}/spaces/{spaceId}' \
-  --request DELETE
-```
-
-:::info
-Consultez la [page sur l'utilisation des API](/docs/iam/concepts/api/) pour la mise en œuvre.
-:::
+La suppression d'un espace n'est pas disponible via l'API publique : elle est réalisée par le support Numspot par mesure de sécurité, une fois toutes les ressources de l'espace supprimées. Formulez la demande depuis la console (onglet **Console**), en fournissant votre identifiant d'organisation et l'identifiant de l'espace.
 
 </TabItem>
 <TabItem value="terraform" label="Terraform">
